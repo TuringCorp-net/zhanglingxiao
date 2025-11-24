@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Jump</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas" width="900" height="600"></canvas>
+    <div id="hud">
+      <div id="charge-bar">
+        <div id="charge-fill"></div>
+      </div>
+      <div id="jump-count">跳跃次数：0</div>
+    </div>
+    <div id="start-hint">按住空格或按住屏幕蓄力，松开跳跃</div>
+  </div>
+
+  <div id="overlay" class="hidden">
+    <div class="overlay-content">
+      <h2>游戏结束</h2>
+      <p id="final-stats">你完成了 0 次跳跃，超过了 0% 的玩家</p>
+      <div class="submit-row">
+        <input id="player-name" type="text" maxlength="20" placeholder="请输入姓名" />
+        <button id="submit-score">提交成绩</button>
+        <button id="restart">重新开始</button>
+      </div>
+      <h3>排行榜（Top 50）</h3>
+      <ol id="leaderboard"></ol>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

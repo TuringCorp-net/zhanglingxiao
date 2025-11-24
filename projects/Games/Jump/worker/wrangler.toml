@@ -1,0 +1,17 @@
+name = "jump-worker"
+main = "src/index.js"
+compatibility_date = "2024-07-01"
+
+routes = [
+  "zhanglingxiao.com/games/jump*",
+  "www.zhanglingxiao.com/games/jump*"
+]
+
+kv_namespaces = [
+  # 将在生产绑定真实的 KV namespace（Jump 专用）
+  { binding = "JUMP_KV", id = "1c13cf889e7d4ba7b8437a72fd117188", preview_id = "8411ef8503ee4db9aab1f98f334ce617" }
+]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"

@@ -1,0 +1,17 @@
+{
+  "name": "jump-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --remote --config worker/wrangler.toml",
+    "deploy": "wrangler deploy --config worker/wrangler.toml",
+    "logs": "wrangler tail --config worker/wrangler.toml",
+    "test": "vitest run",
+    "test:unit": "vitest run"
+  },
+  "devDependencies": {
+    "wrangler": "^3.78.0",
+    "vitest": "^1.6.0"
+  }
+}

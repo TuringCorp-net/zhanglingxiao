@@ -1,0 +1,20 @@
+{
+  "name": "zhanglingxiao-home",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal Cloudflare Worker serving zhanglingxiao.com/home",
+  "scripts": {
+    "dev": "wrangler dev --remote",
+    "deploy": "wrangler deploy",
+    "test": "vitest run --dir tests/unit",
+    "test:e2e": "vitest run --dir tests/e2e",
+    "deploy:all": "node scripts/deploy-all.mjs"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0",
+    "wrangler": "^4.42.2"
+  },
+  "dependencies": {
+    "pdfjs-dist": "3.11.174"
+  }
+}

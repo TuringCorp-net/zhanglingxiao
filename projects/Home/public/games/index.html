@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Games · 游戏目录</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+  <main class="card" role="main" aria-label="游戏目录">
+    <span class="badge">Games · 游戏目录</span>
+    <h1 class="title">作品集 · 游戏</h1>
+    <p class="subtitle">这里是游戏作品的目录页。欢迎体验！</p>
+    <div class="links">
+      <a class="link-card" href="/games/jump/" aria-label="访问 Jump 游戏">
+        <strong>Jump · 跳一跳</strong>
+        <div style="color: var(--muted-color);">/games/jump/</div>
+      </a>
+    </div>
+    <div class="footer">
+      <span>© <span id="year"></span> 张凌霄 · zhanglingxiao.com</span>
+      <a href="/home" aria-label="返回主页">/home</a>
+    </div>
+  </main>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

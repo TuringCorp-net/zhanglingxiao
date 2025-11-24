@@ -1,0 +1,43 @@
+name = "zhanglingxiao-home"
+main = "src/worker.ts"
+compatibility_date = "2024-09-10"
+zone_name = "zhanglingxiao.com"
+
+# 自定义域：将 apex 与 www 指向该 Worker
+routes = [
+  { pattern = "zhanglingxiao.com", custom_domain = true },
+  { pattern = "www.zhanglingxiao.com", custom_domain = true },
+  # 路径匹配：主页相关路径交由此 Worker（字符串形式，依赖 zone_name）
+  "zhanglingxiao.com/home*",
+  "www.zhanglingxiao.com/home*",
+  # 目录页：/games、/tools 与 /works 仅用于静态目录展示（非具体作品）
+  "zhanglingxiao.com/games",
+  "zhanglingxiao.com/games/",
+  "www.zhanglingxiao.com/games",
+  "www.zhanglingxiao.com/games/",
+  "zhanglingxiao.com/tools",
+  "zhanglingxiao.com/tools/",
+  "www.zhanglingxiao.com/tools",
+  "www.zhanglingxiao.com/tools/",
+  "zhanglingxiao.com/works",
+  "zhanglingxiao.com/works/",
+  "www.zhanglingxiao.com/works",
+  "www.zhanglingxiao.com/works/"
+]
+
+[observability]
+enabled = true
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[[services]]
+binding = "JUMP"
+service = "jump-worker"
+
+[[r2_buckets]]
+# R2 绑定：公开作品存储桶
+binding = "WORKS_R2"
+bucket_name = "zlxworks"
+preview_bucket_name = "zlxworks" # 预览开发沿用生产桶，便于快速验证 UI（谨慎写入）

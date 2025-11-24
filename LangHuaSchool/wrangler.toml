@@ -1,0 +1,24 @@
+name = "langhua-school"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+workers_dev = true
+routes = [
+	{ pattern = "LangHuaSchool.org", custom_domain = true }
+]
+
+[[rules]]
+type = "Text"
+globs = ["**/*.md"]
+fallthrough = true
+
+[[kv_namespaces]]
+binding = "BOARD_KV"
+id = "f51a4f2066ac43308aba52813559eff8"
+preview_id = "preview-BoardKV"
+
+[[r2_buckets]]
+binding = "ASSETS_BUCKET"
+bucket_name = "langhua-assets"
+
+[vars]
+SITE_TITLE = "浪花学校"

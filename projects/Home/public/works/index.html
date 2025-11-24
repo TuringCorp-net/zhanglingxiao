@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Artistic Works · 文艺作品目录</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+  <main class="card" role="main" aria-label="文艺作品目录">
+    <span class="badge">AIGC Artistic Works · AIGC文艺作品</span>
+    <h1 class="title">作品集 · AIGC 文艺作品</h1>
+    <p class="subtitle">个人与AI共同创作完成的作品列表，点击可内嵌阅读。</p>
+    <div id="works" class="links" aria-live="polite"></div>
+    <div class="footer">
+      <span>© <span id="year"></span> 张凌霄 · zhanglingxiao.com</span>
+      <a href="/home" aria-label="返回主页">/home</a>
+    </div>
+  </main>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    async function loadWorks() {
+      try {
+        const res = await fetch('/api/works');
+        const data = await res.json();
+        const container = document.getElementById('works');
+        if (!data.ok) {
+          container.innerHTML = '<div class="subtitle">加载失败：' + (data.error || '未知错误') + '</div>';
+          return;
+        }
+        const items = data.items || [];
+        if (items.length === 0) {
+          container.innerHTML = '<div class="subtitle">尚无作品。</div>';
+          return;
+        }
+        container.innerHTML = items.map(({ key, size, uploaded }) => {
+          const name = key.split('/').pop();
+          const viewUrl = '/works/view?key=' + encodeURIComponent(key);
+          const sizeMB = (Number(size || 0) / (1024*1024)).toFixed(1);
+          const dateStr = uploaded ? new Date(uploaded).toLocaleDateString('zh-CN') : '';
+          return `
+            <a class="link-card" href="${viewUrl}" aria-label="阅读 ${name}">
+              <strong>${name}</strong>
+              <div style="color: var(--muted-color);">${sizeMB} MB · ${dateStr}</div>
+            </a>
+          `;
+        }).join('');
+      } catch (err) {
+        document.getElementById('works').innerHTML = '<div class="subtitle">加载失败，请稍后重试。</div>';
+      }
+    }
+
+    loadWorks();
+  </script>
+</body>
+</html>
