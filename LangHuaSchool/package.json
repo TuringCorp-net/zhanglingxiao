@@ -1,0 +1,22 @@
+{
+  "name": "langhua-school",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "format": "prettier -w \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "hono": "^4.4.7",
+    "marked": "^17.0.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251014.0",
+    "@types/marked": "^5.0.2",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3",
+    "wrangler": "^4.45.2"
+  }
+}

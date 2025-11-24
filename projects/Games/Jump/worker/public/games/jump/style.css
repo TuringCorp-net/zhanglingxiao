@@ -1,0 +1,166 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: linear-gradient(180deg, #101820, #1f2a37);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  color: #fff;
+}
+
+#game-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden; /* 防止画面在窄屏下水平溢出 */
+}
+
+#game-canvas {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(180deg, #0b1220, #121a26);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  width: min(900px, 95vw); /* 移动端按视口宽度缩放 */
+  height: auto;
+  display: block;
+  touch-action: none; /* 避免触摸滚动影响操作 */
+  user-select: none;
+}
+
+#hud {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+#charge-bar {
+  width: 240px;
+  height: 12px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.1);
+  overflow: hidden;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.6);
+}
+#charge-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #2dd4bf, #14b8a6);
+}
+
+#jump-count {
+  background: rgba(255,255,255,0.08);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+#start-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(3px);
+  color: #e5e7eb;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 8px 12px;
+  border-radius: 999px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  pointer-events: none; /* 避免遮挡触摸 */
+}
+
+#overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+}
+#overlay.hidden { display: none; }
+.hidden { display: none; }
+
+.overlay-content {
+  width: 560px;
+  max-width: 90vw;
+  background: #111827;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.overlay-content h2, .overlay-content h3 { margin: 0 0 12px; }
+.submit-row { display: flex; gap: 8px; align-items: center; }
+#player-name {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: #0f172a;
+  color: #fff;
+}
+#submit-score, #restart {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #22c55e;
+  color: #06210f;
+  font-weight: 600;
+}
+#submit-score:disabled {
+  background: #6b7280; /* gray-500 */
+  color: #1f2937; /* gray-800 text */
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+#restart { background: #3b82f6; color: #0b1b36; }
+
+#leaderboard {
+  max-height: 240px;
+  overflow: auto;
+  padding-left: 20px;
+}
+
+#final-stats .stat-number {
+  font-size: 28px;
+  font-weight: 800;
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+#final-stats .stat-jumps {
+  color: #f59e0b; /* amber-500 */
+  background: rgba(245, 158, 11, 0.15);
+}
+#final-stats .stat-percent {
+  color: #22c55e; /* green-500 */
+  background: rgba(34, 197, 94, 0.15);
+}
+
+/* 小动效：数字轻微弹跳与闪烁 */
+@keyframes pulsePop {
+  0% { transform: scale(0.98); opacity: 0.9; }
+  50% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1.0); opacity: 1; }
+}
+#final-stats .stat-number {
+  animation: pulsePop 600ms ease-out;
+}
+@media (max-width: 768px) {
+  #hud { top: 8px; gap: 8px; }
+  #charge-bar { width: 60vw; }
+  .overlay-content { width: 92vw; padding: 16px; }
+  #leaderboard { max-height: 40vh; }
+}
+@media (max-width: 480px) {
+  #charge-bar { width: 70vw; }
+  #start-hint {
+    font-size: 12px;
+    padding: 6px 10px;
+    bottom: 12px;
+  }
+}
