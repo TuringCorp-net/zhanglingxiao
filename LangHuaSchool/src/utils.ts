@@ -1,15 +1,17 @@
+import ui from '../content/ui.json'
+
 export type Bindings = {
-    SITE_TITLE: string
-    BOARD_KV: KVNamespace
-    ASSETS_BUCKET: R2Bucket
+  SITE_TITLE: string
+  BOARD_KV: KVNamespace
+  ASSETS_BUCKET: R2Bucket
 }
 
 export function esc(s: string) {
-    return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!))
+  return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!))
 }
 
 export function layout(title: string, body: string) {
-    return `<!doctype html>
+  return `<!doctype html>
   <html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
@@ -202,20 +204,22 @@ export function layout(title: string, body: string) {
   <body>
     <header>
       <div class="container">
-        <h1>🌊 浪花学校</h1>
-        <nav>
-          <a href="/">🏠 首页</a>
-          <a href="/albums">📷 相册</a>
-          <a href="/board">📝 留言板</a>
-          <a href="/posts">📢 校董发布</a>
-        </nav>
+        <h1>${ui.site_title}</h1>
+          <nav>
+            <a href="/">${ui.nav_home}</a>
+            <a href="/albums">${ui.nav_albums}</a>
+            <a href="/board">${ui.nav_board}</a>
+            <a href="/posts">${ui.nav_posts}</a>
+            <a href="/board-members">${ui.nav_board_members}</a>
+            <a href="/sponsors">${ui.nav_sponsors}</a>
+          </nav>
       </div>
     </header>
     <main>
       ${body}
     </main>
     <footer>
-      <p>© 2024 浪花学校 | 由小学生设计与维护 🚀</p>
+      <p>${ui.footer_text}</p>
     </footer>
   </body>
   </html>`

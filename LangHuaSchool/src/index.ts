@@ -2,6 +2,9 @@ import { Hono } from 'hono'
 import type { Context } from 'hono'
 import { marked } from 'marked'
 import albums from '../content/albums.json'
+import events from '../content/events.json'
+import boardMembers from '../content/board_members.json'
+import sponsors from '../content/sponsors.json'
 import homeContent from '../content/home.md'
 import ui from '../content/ui.json'
 import { type Bindings, layout, esc } from './utils'
@@ -28,11 +31,30 @@ const app = new Hono<{ Bindings: Bindings }>()
 // 首页
 app.get('/', (c) => {
   const htmlContent = marked.parse(homeContent)
+  const eventList = (events as { title: string; link: string }[])
+    .map(
+      (e) => `
+      <li style="margin-bottom: 10px;">
+        <a href="${esc(e.link)}" target="_blank" style="font-size: 1.1rem; color: var(--text); text-decoration: none;">
+          👉 ${esc(e.title)}
+        </a>
+      </li>`
+    )
+    .join('')
+
   const body = `
     <div style="text-align: center; padding: 40px 0;">
       <div style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px; text-align: left;">
         ${htmlContent}
       </div>
+      
+      <div style="max-width: 600px; margin: 0 auto 40px; text-align: left; background: var(--white); padding: 20px; border-radius: 16px; box-shadow: var(--card-shadow);">
+        <h3 style="margin-top: 0;">${ui.events_title}</h3>
+        <ul style="list-style: none; padding: 0;">
+          ${eventList}
+        </ul>
+      </div>
+
       <div>
         <a class="btn" href="/albums" style="font-size: 1.2rem; padding: 15px 30px; margin: 10px;">${ui.btn_view_albums}</a>
         <a class="btn" href="/board" style="background: var(--secondary); font-size: 1.2rem; padding: 15px 30px; margin: 10px;">${ui.btn_view_board}</a>
@@ -267,6 +289,42 @@ app.post('/board', async (c) => {
   ])
 
   return c.redirect('/board')
+})
+
+// 校董风采
+app.get('/board-members', (c) => {
+  const members = (boardMembers as { id: string; name: string; intro: string }[])
+    .map(
+      (m) => `
+    <div class="card" style="margin-bottom: 20px;">
+      <div class="body">
+        <h3>${esc(m.name)}</h3>
+        <p>${esc(m.intro)}</p>
+      </div>
+    </div>`
+    )
+    .join('')
+  const body = `<h2>${ui.board_members_title}</h2><div class="grid">${members}</div>`
+  return c.html(layout(ui.site_title + ' · ' + ui.nav_board_members, body))
+})
+
+// 感谢墙
+app.get('/sponsors', (c) => {
+  const list = (sponsors as { id: string; name: string; intro: string; donation: string; message: string }[])
+    .map(
+      (s) => `
+    <div class="card" style="margin-bottom: 20px;">
+      <div class="body">
+        <h3>${esc(s.name)}</h3>
+        <p>${esc(s.intro)}</p>
+        <p><strong>${ui.sponsor_donation}</strong> ${esc(s.donation)}</p>
+        <p><strong>${ui.sponsor_message}</strong> ${esc(s.message)}</p>
+      </div>
+    </div>`
+    )
+    .join('')
+  const body = `<h2>${ui.sponsors_title}</h2><div class="grid">${list}</div>`
+  return c.html(layout(ui.site_title + ' · ' + ui.nav_sponsors, body))
 })
 
 export default app

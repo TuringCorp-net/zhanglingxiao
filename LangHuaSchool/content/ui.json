@@ -1,7 +1,7 @@
 {
     "site_title": "🌊 浪花学校",
     "nav_home": "🏠 首页",
-    "nav_albums": "📷 相册",
+    "nav_albums": "📷 学校相册",
     "nav_board": "📝 留言板",
     "nav_posts": "📢 校董发布",
     "footer_text": "© 2024 浪花学校 | 由小学生设计与维护 🚀",
@@ -24,5 +24,12 @@
     "album_no_images": "暂无图片，请稍后再来。",
     "posts_title": "📢 校董发布",
     "posts_no_content": "暂无发布",
-    "posts_read": "(点击阅读)"
+    "posts_read": "(点击阅读)",
+    "nav_board_members": "👔 校董风采",
+    "nav_sponsors": "💖 感谢墙",
+    "events_title": "📅 活动预告",
+    "board_members_title": "👔 校董风采",
+    "sponsors_title": "💖 感谢墙",
+    "sponsor_donation": "🎁 赞助：",
+    "sponsor_message": "💌 寄语："
 }
