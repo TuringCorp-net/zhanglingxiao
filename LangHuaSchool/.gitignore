@@ -10,3 +10,4 @@ temp/
 .mf/
 .wrangler/
 .cache/
+.assets-state.json
