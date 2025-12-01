@@ -65,9 +65,12 @@ app.get('/', (c) => {
 })
 
 // R2 对象读取（图片、PDF）
-app.get('/assets/*', async (c) => {
-  const key = c.req.param('*')
-  if (!key) return c.notFound()
+app.get('/assets/:path{.+}', async (c) => {
+  const rawKey = c.req.param('path')
+  console.log('Raw key:', rawKey)
+  if (!rawKey) return c.notFound()
+  const key = decodeURIComponent(rawKey)
+  console.log('Decoded key:', key)
 
   // Allow access to photos and reports
   // key might be "photos/album1/pic.jpg" or "reports/issue-1.pdf"

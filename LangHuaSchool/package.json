@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "upload-assets": "node scripts/upload-assets.js",
+    "deploy": "npm run upload-assets && wrangler deploy",
     "format": "prettier -w \"src/**/*.ts\""
   },
   "dependencies": {
