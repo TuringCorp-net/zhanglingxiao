@@ -23,18 +23,6 @@ async function calculateMD5(filePath) {
     return createHash('md5').update(content).digest('hex');
 }
 
-async function getR2Objects() {
-    try {
-        const { stdout } = await execAsync(`npx wrangler r2 object list ${BUCKET_NAME} --limit 1000`);
-        // Parse the output to extract object keys
-        // wrangler r2 object list doesn't have --json flag in this version
-        // We need to use a different approach - we'll track state locally instead
-        return null;
-    } catch (error) {
-        return null;
-    }
-}
-
 async function uploadFile(filePath, relativePath, md5) {
     console.log(`⬆️  Uploading ${relativePath}...`);
     try {

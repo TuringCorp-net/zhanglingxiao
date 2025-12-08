@@ -8,23 +8,7 @@ import sponsors from '../content/sponsors.json'
 import homeContent from '../content/home.md'
 import ui from '../content/ui.json'
 import { type Bindings, layout, esc } from './utils'
-
-type Album = {
-  slug: string
-  name: string
-  description?: string
-  prefix: string
-  cover?: string
-}
-
-type Message = {
-  id: string
-  author?: string
-  content: string
-  created_at: string
-  parent_id?: string
-  replies?: Message[]
-}
+import type { Album, Message } from './types'
 
 const app = new Hono<{ Bindings: Bindings }>()
 
@@ -64,24 +48,15 @@ app.get('/', (c) => {
   return c.html(layout(ui.site_title + ' · ' + ui.nav_home, body))
 })
 
-// R2 对象读取（图片、PDF）
+// R2对象读取（图片、PDF）
 app.get('/assets/:path{.+}', async (c) => {
   const rawKey = c.req.param('path')
-  console.log('Raw key:', rawKey)
   if (!rawKey) return c.notFound()
   const key = decodeURIComponent(rawKey)
-  console.log('Decoded key:', key)
-
-  // Allow access to photos and reports
-  // key might be "photos/album1/pic.jpg" or "reports/issue-1.pdf"
-  // The previous logic was direct access. Now we should ensure it matches expected prefixes if we want to be strict,
-  // but for simplicity, we just serve what's requested if it exists.
-  // However, the requirement says "assets/photos" and "assets/reports".
-  // The URL is /assets/..., so the key is the part after /assets/.
-  // If the file is stored as "photos/..." in R2, then key "photos/..." works.
 
   const obj = await c.env.ASSETS_BUCKET.get(key)
   if (!obj) return c.notFound()
+
   const ct = key.endsWith('.png')
     ? 'image/png'
     : key.endsWith('.jpg') || key.endsWith('.jpeg')
@@ -117,12 +92,10 @@ app.get('/albums', async (c) => {
 // 相册详情
 app.get('/albums/:slug', async (c) => {
   const slug = c.req.param('slug')
-  const list: Album[] = (albums as Album[]) || []
-  const album = list.find((a) => a.slug === slug)
+  const album = albums.find((a) => a.slug === slug)
   if (!album) return c.notFound()
   let items: string[] = []
   try {
-    // Update prefix to include "photos/"
     const prefix = `photos/${album.prefix}`
     const r = await c.env.ASSETS_BUCKET.list({ prefix: prefix, limit: 100 })
     items = (r.objects || [])
@@ -151,7 +124,6 @@ app.get('/albums/:slug', async (c) => {
 app.get('/posts', async (c) => {
   let posts: { key: string; title: string }[] = []
   try {
-    // Update prefix to "reports/"
     const r = await c.env.ASSETS_BUCKET.list({ prefix: 'reports/', limit: 100 })
     posts = (r.objects || [])
       .map((o: any) => o.key)
@@ -185,16 +157,6 @@ app.get('/board', async (c) => {
   } catch (e) {
     ids = []
   }
-  // Get all messages to build the tree (limit to last 100 for performance, but ideally we want all for threading)
-  // For simplicity, let's fetch the last 100 IDs and filter.
-  // If we want true threading, we might need a better data structure or fetch more.
-  // Let's fetch last 50 top-level messages + their replies?
-  // Current simple approach: fetch last 50 IDs, then fetch their content.
-
-  // Actually, let's just fetch the last 50 IDs. If a reply is not in the last 50, it won't show?
-  // Better: Store replies in the parent message object? No, concurrency issues.
-  // Better: Store `replies:PARENT_ID` list in KV?
-  // Let's stick to the flat list for now but filter for display.
 
   ids = Array.isArray(ids) ? ids.slice(-100).reverse() : []
   const rawMessages = await Promise.all(

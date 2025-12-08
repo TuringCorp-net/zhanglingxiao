@@ -17,6 +17,8 @@
     "skipLibCheck": true
   },
   "include": [
-    "src"
+    "src",
+    "src/types.d.ts",
+    "content"
   ]
 }
