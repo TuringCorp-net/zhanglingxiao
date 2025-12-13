@@ -1,1 +1,8 @@
 node_modules/
+
+# ---- ignore asset bundles uploaded to R2 ----
+LangHuaSchool/assets/
+langhuaschool/assets/
+.assets-state.json
+LangHuaSchool/.assets-state.json
+langhuaschool/.assets-state.json
