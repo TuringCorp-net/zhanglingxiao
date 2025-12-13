@@ -3,56 +3,54 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // Canonicalize scheme/domain: enforce HTTPS and apex domain
+    // 1. 规范化域名与协议：强制 HTTPS 和 Apex 域名 (zhanglingxiao.com)
     if (url.protocol === "http:" || url.hostname === "www.zhanglingxiao.com") {
       const canonicalHost = url.hostname === "www.zhanglingxiao.com" ? "zhanglingxiao.com" : url.hostname;
       return Response.redirect(`https://${canonicalHost}${url.pathname}${url.search}`, 301);
     }
 
+    // 2. 根路径重定向到 /home
     if (path === "/" || path === "") {
       return Response.redirect(url.origin + "/home", 302);
     }
 
-    // Ensure /home uses trailing slash so that /home/index.html resolves
-    if (path === "/home") {
-      return Response.redirect(url.origin + "/home/", 302);
-    }
+    // 3. 确保目录路径带斜杠 (Trailing Slash)，以便 index.html 正确解析相对路径
+    if (path === "/home") return Response.redirect(url.origin + "/home/", 302);
+    if (path === "/games") return Response.redirect(url.origin + "/games/", 302);
+    if (path === "/works") return Response.redirect(url.origin + "/works/", 302);
 
-    // Ensure /games uses trailing slash so that /games/index.html resolves
-    if (path === "/games") {
-      return Response.redirect(url.origin + "/games/", 302);
-    }
-
-    // Health check for any bound service via Service Binding: /health/{service}
+    // 4. 健康检查与 Service Binding 探测: /health/{service}
+    // 用于 Home 页展示子服务的连通性
     if (path.startsWith("/health/")) {
       const headers = new Headers({ "content-type": "application/json; charset=utf-8" });
       const service = path.replace("/health/", "").trim();
+      // 尝试获取 binding，支持大小写兼容
       const binding = (env as any)[service?.toUpperCase?.() === service ? service : service?.toUpperCase?.()] || (env as any)[service];
+
       if (!service || !binding || typeof binding.fetch !== "function") {
         return json({ ok: false, error: `Service binding not found: ${service}` }, headers, 404);
       }
       try {
-        // Convention: each service should expose /health or a cheap endpoint.
-        // For Jump we probe its leaderboard; for others, probe /health by default.
+        // 约定：每个服务应暴露 /health 接口。
+        // 特例：Jump 早期设计没有 /health，探测 /games/jump/api/leaderboard 代替
         const probePath = service.toLowerCase() === "jump" ? "/games/jump/api/leaderboard" : `/health`;
         const req = new Request(url.origin + probePath, { method: "GET" });
         const res = await binding.fetch(req);
+
+        // 解析响应以判断是否真的健康
         const text = await res.text();
         let data: any = null;
-        try { data = JSON.parse(text); } catch {}
+        try { data = JSON.parse(text); } catch { }
         const sampleCount = Array.isArray(data) ? data.length : (typeof data === 'object' && data ? 1 : null);
+
         return json({ ok: res.ok, status: res.status, sampleCount }, headers, res.ok ? 200 : 502);
       } catch (err: any) {
         return json({ ok: false, error: String(err) }, headers, 502);
       }
     }
 
-    // Ensure /works uses trailing slash so that /works/index.html resolves
-    if (path === "/works") {
-      return Response.redirect(url.origin + "/works/", 302);
-    }
-
-    // API: list works from R2 bucket (PDFs)
+    // 5. API: 获取作品列表 (读取 R2 Bucket)
+    // GET /api/works - 返回 PDF 文件列表
     if (path === "/api/works" || path === "/api/works/") {
       const headers = new Headers({ "content-type": "application/json; charset=utf-8", "cache-control": "no-cache" });
       try {
@@ -61,8 +59,9 @@ export default {
         }
         const items: any[] = [];
         let cursor: string | undefined = undefined;
+        // 分页列出所有 PDF
         do {
-          const res = await env.WORKS_R2.list({ prefix: "", limit: 100, cursor });
+          const res: any = await env.WORKS_R2.list({ prefix: "", limit: 100, cursor });
           for (const obj of res.objects || []) {
             if (obj.key && obj.key.toLowerCase().endsWith(".pdf")) {
               items.push({ key: obj.key, size: obj.size, uploaded: obj.uploaded });
@@ -76,7 +75,8 @@ export default {
       }
     }
 
-    // File: stream a specific work PDF from R2
+    // 6. 文件流: 从 R2 下载作品
+    // GET /works/file/{key}
     if (path.startsWith("/works/file/")) {
       try {
         const key = decodeURIComponent(path.replace("/works/file/", ""));
@@ -94,38 +94,32 @@ export default {
       }
     }
 
-    // View: PDF.js viewer page (desktop + mobile unified)
+    // 7. 视图: PDF 在线查看器
+    // GET /works/view?key={key}
     if (path.startsWith("/works/view")) {
       const u = new URL(request.url);
       const key = u.searchParams.get("key") || "";
       if (!key) {
         return Response.redirect(u.origin + "/works/", 302);
       }
-      // 兼容无斜杠路径，确保目录索引页正常加载
+      // 兼容无斜杠末尾，确保静态资源相对路径加载正确
       if (path === "/works/view") {
         return Response.redirect(u.origin + "/works/view/" + (u.search || ""), 302);
       }
-      // Serve static viewer page; front-end JS will read ?key and render
+      // 直接返回 ASSETS 中的静态 HTML (Vue/React SPA 或纯 HTML)
       return env.ASSETS.fetch(request);
     }
 
-
-    // Serve /home via static assets binding
-    if (path.startsWith("/home")) {
+    // 8. 静态资源托管 (ASSETS Binding)
+    // 负责 /home, /games, /works 以及其他 assets 目录的静态文件服务
+    if (path.startsWith("/home") ||
+      path.startsWith("/games") ||
+      path.startsWith("/works") ||
+      path.startsWith("/assets")) {
       return env.ASSETS.fetch(request);
     }
 
-    // Serve /games directory page via static assets binding
-    if (path === "/games/" || path === "/games" || path === "/games/index.html") {
-      return env.ASSETS.fetch(request);
-    }
-
-    // Serve /works directory page via static assets binding
-    if (path === "/works/" || path === "/works" || path === "/works/index.html") {
-      return env.ASSETS.fetch(request);
-    }
-
-    // Attempt to serve other static assets (e.g., /assets/*)
+    // 默认回退
     return env.ASSETS.fetch(request);
   }
 };

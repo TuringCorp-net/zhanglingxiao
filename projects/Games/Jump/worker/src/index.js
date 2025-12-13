@@ -3,34 +3,47 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // If path under /games/jump and not /api/*, serve static assets
+    // 1) 静态资源代理
+    // 将 /games/jump/ 下的静态请求转发到 Asset Binding (env.ASSETS)
+    // 兼容 /games/jump 和 /games/jump/ (映射到 index.html)
     if (!path.startsWith('/games/jump/api') && (path === '/games/jump' || path.startsWith('/games/jump/'))) {
-      // map /games/jump -> /games/jump/index.html
       const assetPath = path === '/games/jump' ? '/games/jump/index.html' : path;
       const r = new Request(new URL(assetPath, url.origin), request);
       return env.ASSETS.fetch(r);
     }
 
-    // CORS preflight
+    // CORS 预检请求处理
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: cors() });
     }
 
-    // Legacy: support bare /api/* when running under the routes
+    // 2) 获取排行榜 API
+    // 路径兼容: /games/jump/api/leaderboard 或 /api/leaderboard
     if (path === '/games/jump/api/leaderboard' || path === '/api/leaderboard') {
       if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, cors(), 405);
       const list = await getLeaderboard(env);
       return json(list, cors());
     }
+
+    // 3) 提交分数 API
+    // 路径兼容: /games/jump/api/submit 或 /api/submit
     if (path === '/games/jump/api/submit' || path === '/api/submit') {
       if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, cors(), 405);
-      const payload = await request.json();
-      const name = (payload.name || '').trim().slice(0, 20);
-      const score = Number(payload.score || 0);
-      if (!name) return json({ error: 'invalid_name' }, cors(), 400);
-      const result = await submitScore(env, name, score);
-      return json({ ok: true, result }, cors());
+      try {
+        const payload = await request.json();
+        const name = (payload.name || '').trim().slice(0, 20);
+        const score = Number(payload.score || 0);
+        if (!name) return json({ error: 'invalid_name' }, cors(), 400);
+
+        const result = await submitScore(env, name, score);
+        return json({ ok: true, result }, cors());
+      } catch (e) {
+        return json({ error: 'invalid_json' }, cors(), 400);
+      }
     }
+
+    // 4) 获取百分比排名 API
+    // 路径兼容: /games/jump/api/percentile 或 /api/percentile
     if (path.startsWith('/games/jump/api/percentile') || path.startsWith('/api/percentile')) {
       if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, cors(), 405);
       const score = Number(url.searchParams.get('score') || 0);
@@ -52,9 +65,17 @@ function cors() {
 }
 
 function json(data, headers, status = 200) {
+  // 如果调用时只传了 data 和 status (headers 是 status)
+  if (typeof headers === 'number') {
+    status = headers;
+    headers = undefined;
+  }
+  // 默认补上 CORS 头
+  if (!headers) headers = cors();
   return new Response(JSON.stringify(data), { headers, status });
 }
 
+// 辅助函数: 从 KV 获取排行榜
 async function getLeaderboard(env) {
   const raw = await env.JUMP_KV.get('leaderboard');
   const list = raw ? JSON.parse(raw) : [];
@@ -62,22 +83,29 @@ async function getLeaderboard(env) {
   return list.slice(0, 50);
 }
 
+// 辅助函数: 提交分数
 async function submitScore(env, name, score) {
   const raw = await env.JUMP_KV.get(`user:${name}`);
   const prev = raw ? JSON.parse(raw) : { name, score: 0 };
   const best = { name, score: Math.max(Number(prev.score || 0), Number(score || 0)) };
+
   await env.JUMP_KV.put(`user:${name}`, JSON.stringify(best));
+
   const rawLb = await env.JUMP_KV.get('leaderboard');
   let lb = rawLb ? JSON.parse(rawLb) : [];
+
   const idx = lb.findIndex(e => e.name === name);
   if (idx >= 0) lb[idx] = best; else lb.push(best);
-  lb.sort((a,b) => b.score - a.score);
+
+  lb.sort((a, b) => b.score - a.score);
   lb = lb.slice(0, 200);
+
   await env.JUMP_KV.put('leaderboard', JSON.stringify(lb));
   await bumpPlayerCount(env, name);
   return best;
 }
 
+// 辅助函数: 增加玩家计数
 async function bumpPlayerCount(env, name) {
   const raw = await env.JUMP_KV.get('players');
   let players = raw ? JSON.parse(raw) : { count: 0, names: {} };
@@ -85,10 +113,12 @@ async function bumpPlayerCount(env, name) {
   await env.JUMP_KV.put('players', JSON.stringify(players));
 }
 
+// 辅助函数: 计算击败百分比
 async function getPercentile(env, score) {
   const rawLb = await env.JUMP_KV.get('leaderboard');
   const lb = rawLb ? JSON.parse(rawLb) : [];
   if (lb.length === 0) return 0;
+
   const belowOrEqual = lb.filter(e => score >= Number(e.score || 0)).length;
   const percent = (belowOrEqual / lb.length) * 100;
   return Math.round(percent);

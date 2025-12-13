@@ -71,22 +71,22 @@ async function runE2ETestsWithoutServer() {
 async function main() {
   console.log('Unified pipeline start');
 
-  // 1) Unit tests: Home
+  // 1) 单元测试: Home
   await runScriptIfExists(HOME_DIR, ['test']);
 
-  // 2) Unit tests: Games
+  // 2) 单元测试: Games 子项目
   const games = await listSubprojects(GAMES_DIR);
   for (const proj of games) {
     await runScriptIfExists(proj, ['test:unit', 'test']);
   }
 
-  // 3) Unit tests: Tools
+  // 3) 单元测试: Tools 子项目
   const tools = await listSubprojects(TOOLS_DIR);
   for (const proj of tools) {
     await runScriptIfExists(proj, ['test:unit', 'test']);
   }
 
-  // 4) Deploy dependencies first: Games, Tools
+  // 4) 优先部署依赖项: Games 和 Tools
   for (const proj of games) {
     await runScriptIfExists(proj, ['deploy']);
   }
@@ -94,10 +94,10 @@ async function main() {
     await runScriptIfExists(proj, ['deploy']);
   }
 
-  // 5) Deploy Home last (depends on service bindings)
+  // 5) 最后部署 Home (因为它依赖 Service Bindings 指向 Games/Tools)
   await runScriptIfExists(HOME_DIR, ['deploy']);
 
-  // 6) Post-deploy: E2E tests (Verify Live Site)
+  // 6) 部署后: E2E 验证 (直接访问线上站点)
   console.log('\n=== Running E2E Verification (Live Site) ===');
   await runScriptIfExists(HOME_DIR, ['test:e2e']);
 

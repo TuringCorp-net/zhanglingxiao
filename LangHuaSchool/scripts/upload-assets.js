@@ -24,28 +24,28 @@ async function calculateMD5(filePath) {
 }
 
 async function uploadFile(filePath, relativePath, md5) {
-    console.log(`⬆️  Uploading ${relativePath}...`);
+    console.log(`⬆️  正在上传 ${relativePath}...`);
     try {
-        // Use single quotes and escape any single quotes in the paths
+        // 使用单引号并转义路径中的单引号
         const escapedPath = filePath.replace(/'/g, "'\\''");
         const escapedRelPath = relativePath.replace(/'/g, "'\\''");
         await execAsync(`npx wrangler r2 object put '${BUCKET_NAME}/${escapedRelPath}' --file '${escapedPath}' --remote`);
-        console.log(`✅ Uploaded ${relativePath}`);
+        console.log(`✅ 上传成功 ${relativePath}`);
         return { path: relativePath, md5 };
     } catch (error) {
-        console.error(`❌ Failed to upload ${relativePath}:`, error.message);
+        console.error(`❌ 上传失败 ${relativePath}:`, error.message);
         process.exit(1);
     }
 }
 
 async function deleteFile(key) {
-    console.log(`🗑️  Deleting ${key}...`);
+    console.log(`🗑️  正在删除 ${key}...`);
     try {
         const escapedKey = key.replace(/'/g, "'\\''");
         await execAsync(`npx wrangler r2 object delete '${BUCKET_NAME}/${escapedKey}' --remote`);
-        console.log(`✅ Deleted ${key}`);
+        console.log(`✅ 删除成功 ${key}`);
     } catch (error) {
-        console.error(`❌ Failed to delete ${key}:`, error.message);
+        console.error(`❌ 删除失败 ${key}:`, error.message);
     }
 }
 
@@ -66,19 +66,19 @@ async function saveState(state) {
 }
 
 async function main() {
-    console.log('Starting incremental asset sync...');
+    console.log('开始增量资源同步...');
 
-    // Load previous state
+    // 加载之前的状态
     const previousState = await loadState();
     const currentState = {};
 
-    // Get all local files
+    // 获取所有本地文件
     const files = await getFiles(ASSETS_DIR);
     const localFiles = new Map();
 
     for (const file of files) {
         const relativePath = relative(ASSETS_DIR, file);
-        // Skip hidden files
+        // 跳过隐藏文件
         if (relativePath.includes('.DS_Store') || relativePath.startsWith('.')) {
             continue;
         }
@@ -87,11 +87,11 @@ async function main() {
         localFiles.set(relativePath, { path: file, md5 });
     }
 
-    // Determine what to upload and what to delete
+    // 决定上传和删除的文件
     const toUpload = [];
     const toDelete = [];
 
-    // Check for new or modified files
+    // 检查新增或修改的文件
     for (const [relativePath, { path, md5 }] of localFiles.entries()) {
         if (!previousState[relativePath] || previousState[relativePath] !== md5) {
             toUpload.push({ path, relativePath, md5 });
@@ -99,36 +99,36 @@ async function main() {
         currentState[relativePath] = md5;
     }
 
-    // Check for deleted files
+    // 检查删除的文件
     for (const relativePath of Object.keys(previousState)) {
         if (!localFiles.has(relativePath)) {
             toDelete.push(relativePath);
         }
     }
 
-    // Report summary
-    console.log(`\n📊 Sync Summary:`);
-    console.log(`   New/Modified: ${toUpload.length}`);
-    console.log(`   To Delete: ${toDelete.length}`);
-    console.log(`   Unchanged: ${localFiles.size - toUpload.length}\n`);
+    // 报告摘要
+    console.log(`\n📊 同步摘要:`);
+    console.log(`   新增/修改: ${toUpload.length}`);
+    console.log(`   需删除:   ${toDelete.length}`);
+    console.log(`   未变更:   ${localFiles.size - toUpload.length}\n`);
 
-    // Upload new or modified files
+    // 执行上传
     for (const { path, relativePath, md5 } of toUpload) {
         await uploadFile(path, relativePath, md5);
     }
 
-    // Delete removed files
+    // 执行删除
     for (const key of toDelete) {
         await deleteFile(key);
     }
 
-    // Save current state
+    // 保存当前状态
     await saveState(currentState);
 
     if (toUpload.length === 0 && toDelete.length === 0) {
-        console.log('✨ All assets are up to date!');
+        console.log('✨ 所有资源已是最新！');
     } else {
-        console.log('\n✨ Asset sync complete!');
+        console.log('\n✨ 资源同步完成！');
     }
 }
 
