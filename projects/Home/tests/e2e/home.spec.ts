@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
-// E2E 测试通过远程边缘本地模式访问 dev 服务器
-const BASE = 'http://localhost:8787';
+// E2E 测试直接访问线上环境 (Smoke Test)
+const BASE = 'https://zhanglingxiao.com';
 
 describe('E2E: /home page', () => {
   it('serves /home/ with expected content', async () => {
