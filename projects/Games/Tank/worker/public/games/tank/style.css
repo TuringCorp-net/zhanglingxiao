@@ -1,0 +1,225 @@
+/**
+ * style.css — 坦克大战游戏样式
+ *
+ * 包含：基础布局、卡片式选择界面、HUD、动画效果、Game Over 战绩展示。
+ * 使用 Orbitron 字体增加科技感。
+ */
+
+/* ===== 基础 ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  overflow: hidden;
+  background: #0a0e27;
+  color: #f0f4ff;
+  font-family: 'Orbitron', system-ui, -apple-system, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ===== 游戏容器 ===== */
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#ui-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ===== 屏幕覆盖层（菜单/死亡/GameOver） ===== */
+.screen {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(8, 12, 32, 0.92);
+  padding: 2.5rem 3rem;
+  border-radius: 1.2rem;
+  text-align: center;
+  pointer-events: auto;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  box-shadow:
+    0 0 40px rgba(56, 189, 248, 0.08),
+    0 20px 40px rgba(0, 0, 0, 0.5);
+  max-width: 680px;
+  width: 92%;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: fadeIn 0.3s ease-out;
+  display: none; /* 默认隐藏，由JS控制显示 */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* ===== 标题 ===== */
+.title-glow {
+  color: #38bdf8;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
+  50% { text-shadow: 0 0 35px rgba(56, 189, 248, 0.8), 0 0 60px rgba(56, 189, 248, 0.3); }
+}
+
+.subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 1.8rem;
+  font-family: system-ui, sans-serif;
+}
+
+/* ===== 卡片式选择布局 ===== */
+.card-grid {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 1rem;
+  padding: 1.2rem 1rem;
+  width: 170px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+  color: #e2e8f0;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.card:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(30, 41, 59, 0.9);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.15);
+}
+
+.card:active {
+  transform: translateY(-1px);
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #38bdf8;
+}
+
+.card-desc {
+  font-family: system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+/* ===== 按钮 ===== */
+.btn-primary {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+  border: none;
+  padding: 0.85rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+}
+
+/* ===== Game Over 战绩统计 ===== */
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.8rem;
+  padding: 1rem 1.5rem;
+  min-width: 100px;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.stat-label {
+  font-family: system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.3rem;
+}
+
+/* ===== HUD（Canvas绘制，此处仅占位） ===== */
+.hud {
+  position: absolute;
+  top: 0; left: 0;
+  pointer-events: none;
+}
+
+/* ===== 升级提示 ===== */
+@keyframes floatUp {
+  0% { opacity: 0; transform: translate(-50%, 0); }
+  20% { opacity: 1; transform: translate(-50%, -20px); }
+  80% { opacity: 1; transform: translate(-50%, -40px); }
+  100% { opacity: 0; transform: translate(-50%, -60px); }
+}
+
+.upgrade-message {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: 1px solid #fbbf24;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 600px) {
+  .screen { padding: 1.5rem; }
+  .title-glow { font-size: 1.5rem; }
+  .card { width: 140px; padding: 1rem 0.8rem; }
+  .card-icon { font-size: 2rem; }
+  .stats-grid { gap: 0.8rem; }
+  .stat-item { padding: 0.8rem 1rem; min-width: 80px; }
+  .stat-value { font-size: 1.4rem; }
+}
