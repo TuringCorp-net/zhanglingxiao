@@ -37,6 +37,7 @@ export class Tank {
 
     this.facing = isPlayer ? 1 : -1; // 1=右, -1=左
     this.barrelAngle = 0;            // 炮管世界角度
+    this.barrelAngleOffset = 0;      // 炮管仰角偏移（玩家通过W/S控制）
     this.slopeAngle = 0;             // 当前所在位置的地形坡角（供渲染器使用）
 
     this.nextFireAt = 0;  // 下次可开火的时间戳
@@ -75,35 +76,49 @@ export class Tank {
       move = input.move || 0;
     }
 
-    if (move !== 0 && !this.isPlayer) this.facing = move;
+    // 更新朝向：玩家根据移动方向，敌人也根据移动方向
+    if (move !== 0) this.facing = move;
 
     // —— 移动逻辑（分坦克类型） ——
+    // 应用道具的速度乘数
+    const speedMult = this.speedMult || 1;
+    const effectiveSpeed = this.speed * speedMult;
+
     if (this.kind === 'wheel') {
       if (isSteep) {
         // 轮式在陡坡无法控制，快速下滑
         this.vx = Math.sign(angle) * this.slideSpeed;
       } else {
-        this.vx = move * this.speed;
+        this.vx = move * effectiveSpeed;
       }
     } else if (this.kind === 'track') {
       if (isSteep) {
         // 履带在陡坡缓慢下滑，但仍可加速/刹车/倒车
         const slide = Math.sign(angle) * this.slideSpeed;
-        this.vx = slide + (move * this.speed);
+        this.vx = slide + (move * effectiveSpeed);
       } else {
-        this.vx = move * this.speed;
+        this.vx = move * effectiveSpeed;
       }
     } else {
       // 机器人 — 不受陡坡影响
-      this.vx = move * this.speed;
+      this.vx = move * effectiveSpeed;
     }
 
     this.x += this.vx * dt;
-    this.y = terrain.sampleY(this.x);
+
+    // 飞行单位保持一定高度，不贴地
+    if (this.isFlying) {
+      this.y = terrain.sampleY(this.x) - CFG.w * 0.8; // 悬浮在地面上
+    } else {
+      this.y = terrain.sampleY(this.x);
+    }
 
     // —— 炮管朝向 ——
     // 基于地形坡度微调，facing 决定大方向
     const baseAngle = angle * 0.5;
-    this.barrelAngle = (this.facing > 0 ? 0 : Math.PI) + baseAngle;
+    // 玩家可以通过barrelAngleOffset控制仰角（仅玩家有效）
+    // 面向左时需要反转offset的符号，使上键抬头的行为一致
+    const aimOffset = this.isPlayer ? (this.barrelAngleOffset * this.facing) : 0;
+    this.barrelAngle = (this.facing > 0 ? 0 : Math.PI) + baseAngle + aimOffset;
   }
 }

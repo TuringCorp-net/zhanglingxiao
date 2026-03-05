@@ -25,6 +25,26 @@ export class Game {
     this.enemies = [];
     this.projectiles = [];
     this.medkits = [];
+    this.powerups = [];  // 道具数组
+
+    // 玩家当前激活的道具效果
+    this.playerEffects = {
+      speed: 0,      // 加速结束时间
+      shield: 0,     // 护盾结束时间
+      power: 0,      // 火力提升结束时间
+      rapid: 0,      // 快速装填结束时间
+      spread: 0      // 散射结束时间
+    };
+
+    // 关卡系统
+    this.level = 1;           // 当前关卡
+    this.waveKills = 0;      // 当前波击杀数
+    this.waveEnemies = 5;    // 当前波需要击杀的敌人数
+
+    // 连杀系统
+    this.comboCount = 0;      // 当前连杀数
+    this.lastKillTime = 0;    // 上次击杀时间
+    this.comboTimeout = 3000; // 连杀有效时间（3秒内）
 
     this.score = 0;
     this.lives = 3;
@@ -82,18 +102,31 @@ export class Game {
     this.particles.update(dt);
 
     // —— 玩家 ——
-    if (this.player && this.player.alive) {
-      const control = this.input.getControl();
+    if (this.player) {
+      if (this.player.alive) {
+        const control = this.input.getControl();
 
-      // 开火
-      if (control.fire && now >= this.player.nextFireAt) {
-        this.fire(this.player, now);
+        // 开火
+        if (control.fire && now >= this.player.nextFireAt) {
+          this.fire(this.player, now);
+        }
+
+        // 应用加速道具效果
+        const speedMult = Date.now() < this.playerEffects.speed ? 1.5 : 1;
+        this.player.speedMult = speedMult;
+
+        this.player.update(dt, this.terrain, this.input, now);
+
+        // 处理仰角控制
+        if (control.aim !== 0) {
+          this.player.barrelAngleOffset += control.aim * dt * 1.5;
+          // 限制在 -45° 到 +45° 之间 (约 ±0.785 弧度)
+          this.player.barrelAngleOffset = Math.max(-0.785, Math.min(0.785, this.player.barrelAngleOffset));
+        }
       }
 
-      this.player.update(dt, this.terrain, this.input, now);
-
-      // 检测死亡
-      if (this.player.hp <= 0 && this.player.alive) {
+      // 检测死亡（放在alive块外面，因为projectile可能先扣血再设alive=false）
+      if (this.player.hp <= 0 && this.state === 'playing') {
         this.player.alive = false;
         this.handleDeath();
       }
@@ -107,6 +140,9 @@ export class Game {
 
     // —— 医疗箱 ——
     this.updateMedkits(dt);
+
+    // —— 道具 ——
+    this.updatePowerups(dt);
 
     // —— 碰撞 ——
     this.resolveCollisions();
@@ -133,6 +169,9 @@ export class Game {
     // 医疗箱
     this.medkits.forEach(m => r.drawMedkit(m, this.camera));
 
+    // 道具
+    this.powerups.forEach(p => r.drawPowerup(p, this.camera));
+
     // 坦克
     const invuln = this.player && Date.now() < this.invulnUntil;
     if (this.player) r.drawTank(this.player, this.camera, invuln, ts);
@@ -153,17 +192,39 @@ export class Game {
 
     // HUD（仅在战斗中）
     if (this.state === 'playing' && this.player) {
-      r.drawHUD(this.player, this.lives, this.score, this.minionKills, ts);
+      r.drawHUD(this.player, this.lives, this.score, this.minionKills, ts, this.playerEffects, this.level);
     }
   }
 
   /* ========== 开火 ========== */
 
   fire(tank, now) {
+    // 获取道具效果乘数
+    const reloadMult = tank.isPlayer ? this.getReloadMultiplier() : 1;
+    const spread = tank.isPlayer ? this.hasSpread() : false;
+    const powerMult = tank.isPlayer ? this.getDamageMultiplier() : 1;
+
     if (tank.weapon === 'shell') {
-      tank.nextFireAt = now + CFG.shell.reload;
-      this.projectiles.push(new Projectile(tank, tank.x, tank.y - CFG.w * 0.35, 'shell'));
+      tank.nextFireAt = now + CFG.shell.reload * reloadMult;
+
+      // 散射：发射3发
+      if (spread) {
+        this.projectiles.push(new Projectile(tank, tank.x, tank.y - CFG.w * 0.35, 'shell', null, -15));
+        this.projectiles.push(new Projectile(tank, tank.x, tank.y - CFG.w * 0.35, 'shell', null, 0));
+        this.projectiles.push(new Projectile(tank, tank.x, tank.y - CFG.w * 0.35, 'shell', null, 15));
+      } else {
+        this.projectiles.push(new Projectile(tank, tank.x, tank.y - CFG.w * 0.35, 'shell'));
+      }
       this.audio.playShellFire();
+
+      // 应用火力提升效果
+      if (powerMult > 1) {
+        for (const p of this.projectiles) {
+          if (p.tank === tank && p.type === 'shell' && !p.damageBoosted) {
+            p.damageBoosted = true;
+          }
+        }
+      }
 
     } else if (tank.weapon === 'missile') {
       tank.nextFireAt = now + CFG.missile.reload;
@@ -214,9 +275,21 @@ export class Game {
         this.particles.shellImpact(result.x, result.y);
         this.audio.playExplosion(false);
         if (result.target) {
+          // 检查护盾
+          if (result.target.isPlayer && this.hasShield()) {
+            // 护盾激活，跳过伤害
+            this.particles.addPickupText(result.target.x, result.target.y - CFG.w * 0.6, '🛡 挡下了!');
+            continue;
+          }
+
+          // 计算实际伤害（考虑道具火力提升）
+          let actualDmg = p.type === 'shell' ? CFG.shell.damage : CFG.missile.damage;
+          if (p.damageBoosted) actualDmg *= 1.5;
+          actualDmg += (p.owner.damageBonus || 0);
+
           this.particles.addDamageText(
             result.target.x, result.target.y - CFG.w * 0.6,
-            p.type === 'shell' ? CFG.shell.damage : CFG.missile.damage
+            actualDmg
           );
           if (result.target.isPlayer) this.audio.playHurt();
         }
@@ -228,26 +301,96 @@ export class Game {
   /* ========== 敌人 AI ========== */
 
   updateEnemies(dt, now) {
+    // 获取玩家的所有活动炮弹
+    const playerProjectiles = this.projectiles.filter(p => p instanceof Projectile && p.owner === this.player && !p.dead);
+
     for (const e of this.enemies) {
       if (!e.alive) continue;
 
-      // AI: 朝玩家移动 + 射程内开火
+      // 躲避逻辑
+      if (playerProjectiles.length > 0 && e.evadeTimer <= 0) {
+        for (const p of playerProjectiles) {
+          const d = dist(e.x, e.y, p.x, p.y);
+          if (d < CFG.w * 2) { // 2w距离内检测到炮弹
+            e.evadeTimer = 1.0; // 触发1秒躲避
+            break;
+          }
+        }
+      }
+
+      // AI: 根据敌人类型和关卡有不同的行为
       const distToPlayer = e.x - this.player.x;
       const absDist = Math.abs(distToPlayer);
       const stopDist = CFG.w * 1.2;
 
       let move = 0;
-      if (absDist > stopDist) {
-        move = -Math.sign(distToPlayer);
+
+      // 如果正在躲避，向垂直于炮弹方向移动
+      if (e.evadeTimer > 0) {
+        e.evadeTimer -= dt;
+        // 简单躲避：远离玩家
+        move = Math.sign(e.x - this.player.x) * 0.8;
+      }
+
+      // 预测玩家下一个位置
+      const playerVx = dt > 0 ? (this.player.x - e.lastPlayerX) / dt : 0;
+      e.lastPlayerVx = playerVx;
+      e.predictX = this.player.x + playerVx * 0.5; // 预测0.5秒后的位置
+      e.lastPlayerX = this.player.x;
+
+      // 智能移动逻辑
+      const enemyType = e.enemyType || 'normal';
+      const isSniper = enemyType === 'sniper';
+      const isFast = enemyType === 'fast';
+      const isHeavy = enemyType === 'heavy';
+      const isBoss = e.kind === 'robot' && e.weapon === 'missile';
+
+      if (isSniper) {
+        // 狙击手：保持距离，在远处射击
+        const optimalRange = CFG.w * 15; // 从12改为15，保持更远距离
+        if (absDist > optimalRange + CFG.w * 2) {
+          move = -Math.sign(distToPlayer); // 靠近
+        } else if (absDist < optimalRange - CFG.w * 2) {
+          move = Math.sign(distToPlayer); // 后退保持距离
+        }
+      } else if (isHeavy) {
+        // 重型坦克：缓慢逼近，靠近后停止
+        if (absDist > stopDist * 2) {
+          move = -Math.sign(distToPlayer) * 0.5; // 缓慢移动
+        }
+      } else if (isFast) {
+        // 快速小兵：快速逼近
+        if (absDist > stopDist) {
+          move = -Math.sign(distToPlayer);
+        }
+      } else if (isBoss) {
+        // Boss：智能移动，包抄玩家
+        const angle = Math.atan2(
+          this.player.y - e.y,
+          this.player.x - e.x
+        );
+        // 简单的预判：向玩家预计位置移动
+        if (absDist > stopDist * 1.5) {
+          move = -Math.sign(distToPlayer);
+        }
+      } else {
+        // 普通敌人：标准逻辑
+        if (absDist > stopDist) {
+          move = -Math.sign(distToPlayer);
+        }
       }
 
       e.facing = -Math.sign(distToPlayer);
 
-      // 武器射程判定 — 进入射程即攻击（不需要停下来）
+      // 武器射程判定
       let wantFire = false;
-      const weaponRange = e.weapon === 'flame'
+      let weaponRange = e.weapon === 'flame'
         ? CFG.flame.range * CFG.w * 1.2
         : CFG.w * 8;
+
+      // 狙击手有更远的射程
+      if (isSniper) weaponRange = CFG.w * 15;
+
       if (absDist < weaponRange) {
         wantFire = true;
       }
@@ -280,6 +423,9 @@ export class Game {
         this.addScore(isBoss ? 30 : 15);
         this.totalKills++;
 
+        // 连杀检测
+        this.checkCombo();
+
         // 玩家升级逻辑：每击杀5个小兵
         if (!isBoss && this.minionKills > 0 && (this.minionKills + 1) % 5 === 0) {
            this.upgradePlayer();
@@ -288,6 +434,8 @@ export class Game {
         if (isBoss) {
           this.bossAlive = false;
           this.minionKills = 0;
+          // Boss死亡，进入下一关
+          this.levelUp();
         } else {
           this.minionKills++;
         }
@@ -377,22 +525,177 @@ export class Game {
   }
 
   spawnMinion() {
-    const x = this.camera.x + this.renderer.width * 1.3;
-    const kind = Math.random() < 0.5 ? 'wheel' : 'track';
-    const weapon = Math.random() < 0.5 ? 'shell' : 'flame';
+    // 随机选择从左边还是右边出现
+    const fromLeft = Math.random() < 0.5;
+
+    let x;
+    if (fromLeft) {
+      // 从左侧出现：在相机左侧 -0.3倍屏幕宽度
+      x = this.camera.x - this.renderer.width * 0.3;
+    } else {
+      // 从右侧出现：保持原有逻辑
+      x = this.camera.x + this.renderer.width * 1.3;
+    }
+
+    // 根据关卡和权重选择敌人类型
+    const enemyTypes = this.getAvailableEnemyTypes();
+    const rand = Math.random();
+    let cumsum = 0;
+    let selectedType = 'normal';
+
+    // 按权重选择
+    for (const type of enemyTypes) {
+      cumsum += CFG.enemyTypes[type].weight || 0.5;
+      if (rand < cumsum) {
+        selectedType = type;
+        break;
+      }
+    }
+
+    // 从enemyTypes配置中获取属性
+    const typeCfg = CFG.enemyTypes[selectedType];
+    const kind = typeCfg.speed > 0.8 ? 'wheel' : (typeCfg.hp > 35 ? 'robot' : 'track');
+    const randWeapon = Math.random();
+    let weapon;
+    if (randWeapon < 0.5) weapon = 'shell';
+    else if (randWeapon < 0.8) weapon = 'flame';
+    else weapon = 'missile';
+
     const t = new Tank(kind, false, weapon, x, this.terrain.sampleY(x));
+    // 应用敌人类型配置
+    t.enemyType = selectedType;
+    t.hp = typeCfg.hp;
+    t.maxHp = typeCfg.hp;
+    t.speed = typeCfg.speed * CFG.w;
+    t.damageBonus = typeCfg.damage - 8; // 基础伤害是8
+    t.color = typeCfg.color; // 用于渲染
+    t.isFlying = typeCfg.flying || false;
+
+    // 敌人状态新增属性
+    t.evadeTimer = 0;       // 躲避冷却
+    t.predictX = 0;         // 预测的玩家位置
+    t.lastPlayerX = this.player ? this.player.x : 0;  // 上次玩家位置
+    t.lastPlayerVx = 0;     // 玩家水平速度
+
     this.enemies.push(t);
   }
 
+  // 根据当前关卡获取可用的敌人类型
+  getAvailableEnemyTypes() {
+    const types = ['normal']; // 普通敌人始终可用
+
+    // 4-6关：快速小兵
+    if (this.level >= 4) types.push('fast');
+    // 7-9关：狙击手
+    if (this.level >= 7) types.push('sniper');
+    // 10关+：重型坦克
+    if (this.level >= 10) types.push('heavy');
+    // 12关+：飞行单位
+    if (this.level >= 12) types.push('flyer');
+
+    return types;
+  }
+
   spawnBoss() {
-    const x = this.camera.x + this.renderer.width * 1.3;
+    // 同样随机从左或右出现
+    const fromLeft = Math.random() < 0.5;
+    const x = fromLeft
+      ? this.camera.x - this.renderer.width * 0.3
+      : this.camera.x + this.renderer.width * 1.3;
     const t = new Tank('robot', false, 'missile', x, this.terrain.sampleY(x));
+    // Boss血量随关卡增加
+    t.hp = CFG.hpBoss + (this.level - 1) * 10;
+    t.maxHp = t.hp;
+    t.color = '#ef4444';
     this.enemies.push(t);
     this.bossAlive = true;
 
     // Boss 登场特效
     this.particles.triggerWarning(2.5);
     this.audio.playWarning();
+  }
+
+  // 关卡升级
+  levelUp() {
+    this.level++;
+    this.waveKills = 0;
+    // 每关增加敌人数量
+    this.waveEnemies = 5 + Math.floor((this.level - 1) * 2);
+
+    // 显示关卡过渡
+    this.showLevelTransition();
+  }
+
+  // 连杀检测
+  checkCombo() {
+    const now = Date.now();
+    if (now - this.lastKillTime < this.comboTimeout) {
+      this.comboCount++;
+    } else {
+      this.comboCount = 1;
+    }
+    this.lastKillTime = now;
+
+    // 显示连杀提示
+    if (this.comboCount >= 2) {
+      this.showComboText(this.comboCount);
+    }
+
+    // 屏幕震动增强（连杀时）
+    if (this.comboCount >= 3) {
+      this.particles.shake(5);
+    }
+  }
+
+  // 显示连杀文字
+  showComboText(count) {
+    const comboNames = ['', '', '双杀!', '三杀!', '四杀!', '五杀!', '超神!'];
+    const text = comboNames[Math.min(count, 6)];
+    if (text && this.player) {
+      this.particles.addPickupText(this.player.x, this.player.y - CFG.w, text);
+    }
+  }
+
+  // 显示关卡过渡动画
+  showLevelTransition() {
+    const overlay = document.createElement('div');
+    overlay.id = 'level-transition';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.5s ease;
+    `;
+    overlay.innerHTML = `
+      <h1 style="color: #fbbf24; font-size: 3em; margin: 0; text-shadow: 0 0 20px #fbbf24;">
+        第 ${this.level - 1} 关完成！
+      </h1>
+      <p style="color: #fff; font-size: 1.5em; margin: 20px 0;">
+        准备进入第 <span style="color: #22d3ee;">${this.level}</span> 关
+      </p>
+      <p style="color: #94a3b8; font-size: 1em;">
+        难度提升！敌人更强力
+      </p>
+    `;
+    document.body.appendChild(overlay);
+
+    // 2秒后进入下一关
+    setTimeout(() => {
+      overlay.style.animation = 'fadeOut 0.5s ease';
+      setTimeout(() => {
+        overlay.remove();
+        // 重新生成医疗箱和道具
+        this.spawnMedkits();
+      }, 500);
+    }, 2000);
   }
 
   spawnMedkits() {
@@ -412,6 +715,126 @@ export class Game {
       }
       tries++;
     }
+
+    // 生成道具
+    this.powerups = [];
+    const powerupTypes = Object.keys(CFG.powerups);
+    // 根据关卡解锁道具
+    const unlockedTypes = powerupTypes.filter((type, i) => this.level >= CFG.levelConfig.enemiesToUnlock[i] || i === 0);
+
+    let tries2 = 0;
+    while (this.powerups.length < 5 && tries2 < 500) {
+      const x = this.camera.x + Math.random() * this.renderer.width * 5 + this.renderer.width;
+      let ok = true;
+
+      // 检查与道具和医疗箱的距离
+      for (const p of this.powerups) {
+        if (Math.abs(p.x - x) < CFG.w * 8) ok = false;
+      }
+      for (const m of this.medkits) {
+        if (Math.abs(m.x - x) < CFG.w * 5) ok = false;
+      }
+
+      const ang = this.terrain.slopeAngle(x);
+      if (this.terrain.isSteep(ang)) ok = false;
+
+      if (ok && unlockedTypes.length > 0) {
+        // 根据稀有度选择道具类型
+        const rand = Math.random();
+        let cumsum = 0;
+        let selectedType = unlockedTypes[0];
+        for (const type of unlockedTypes) {
+          cumsum += CFG.powerups[type].rarity;
+          if (rand < cumsum) {
+            selectedType = type;
+            break;
+          }
+        }
+        this.powerups.push({
+          x,
+          y: this.terrain.sampleY(x),
+          type: selectedType,
+          alive: true
+        });
+      }
+      tries2++;
+    }
+  }
+
+  /* ========== 道具更新 ========== */
+
+  updatePowerups(dt) {
+    for (const p of this.powerups) {
+      if (!p.alive) continue;
+      p.y = this.terrain.sampleY(p.x);
+
+      // 玩家拾取
+      if (this.player && this.player.alive) {
+        if (dist(p.x, p.y, this.player.x, this.player.y) < CFG.w) {
+          this.applyPowerup(p.type);
+          p.alive = false;
+          this.particles.pickupFlash(p.x, p.y - CFG.w * 0.3);
+          this.particles.addPickupText(p.x, p.y - CFG.w * 0.5, this.getPowerupName(p.type));
+          this.audio.playPickup();
+        }
+      }
+
+      // 敌人推动
+      for (const e of this.enemies) {
+        if (!e.alive) continue;
+        const dx = p.x - e.x;
+        if (Math.abs(dx) < CFG.w) {
+          p.x += Math.sign(dx) * e.speed * dt * 0.5;
+        }
+      }
+    }
+    this.powerups = this.powerups.filter(p => p.alive);
+  }
+
+  // 应用道具效果
+  applyPowerup(type) {
+    const now = Date.now();
+    const cfg = CFG.powerups[type];
+    if (!cfg) return;
+
+    // 激活效果
+    if (cfg.speedMult) this.playerEffects.speed = now + cfg.duration;
+    if (cfg.invulnerable) this.playerEffects.shield = now + cfg.duration;
+    if (cfg.damageMult) this.playerEffects.power = now + cfg.duration;
+    if (cfg.reloadMult) this.playerEffects.rapid = now + cfg.duration;
+    if (cfg.spread) this.playerEffects.spread = now + cfg.duration;
+  }
+
+  // 获取道具名称
+  getPowerupName(type) {
+    const names = {
+      speed: '⚡ 加速',
+      shield: '🛡️ 护盾',
+      power: '🔥 火力',
+      rapid: '⚡ 速射',
+      spread: '🔱 散射'
+    };
+    return names[type] || type;
+  }
+
+  // 检查玩家是否有护盾
+  hasShield() {
+    return Date.now() < this.playerEffects.shield;
+  }
+
+  // 获取伤害乘数
+  getDamageMultiplier() {
+    return Date.now() < this.playerEffects.power ? 1.5 : 1;
+  }
+
+  // 获取装填乘数
+  getReloadMultiplier() {
+    return Date.now() < this.playerEffects.rapid ? 0.5 : 1;
+  }
+
+  // 是否散射
+  hasSpread() {
+    return Date.now() < this.playerEffects.spread;
   }
 
   /* ========== 升级 ========== */
@@ -544,11 +967,26 @@ export class Game {
     this.enemies = [];
     this.projectiles = [];
     this.medkits = [];
+    this.powerups = [];  // 清空道具
     this.score = 0;
     this.lives = 3;
     this.minionKills = 0;
     this.bossAlive = false;
     this.totalKills = 0;
+    this.level = 1;  // 重置关卡
+    this.waveKills = 0;
+    this.waveEnemies = 5;
+    // 清空连杀状态
+    this.comboCount = 0;
+    this.lastKillTime = 0;
+    // 清空道具效果
+    this.playerEffects = {
+      speed: 0,
+      shield: 0,
+      power: 0,
+      rapid: 0,
+      spread: 0
+    };
     this.terrain.gen(CFG.width, CFG.height);
     this.showTankSelection();
   }
@@ -627,6 +1065,7 @@ export class Game {
     // 创建玩家
     const startX = CFG.width * 0.2;
     this.player = new Tank(this.tempTankKind, true, weapon, startX, this.terrain.sampleY(startX));
+    this.player.barrelAngleOffset = 0; // 初始化仰角偏移
 
     this.spawnMedkits();
     this.enemies = [];

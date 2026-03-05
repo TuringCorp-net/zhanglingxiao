@@ -17,13 +17,16 @@ export class Projectile {
    * @param {number} y     - 发射位置 Y
    * @param {'shell'|'missile'} type - 弹药类型
    * @param {Tank} [target] - 导弹锁定目标
+   * @param {number} [angleOffset] - 额外角度偏移（度），用于散射
    */
-  constructor(owner, x, y, type, target) {
+  constructor(owner, x, y, type, target, angleOffset = 0) {
     this.owner = owner;
     this.x = x;
     this.y = y;
     this.type = type;
     this.target = target || null;
+    this.angleOffset = angleOffset; // 散射角度偏移
+    this.damageBoosted = false;
 
     this.vx = 0;
     this.vy = 0;
@@ -34,7 +37,7 @@ export class Projectile {
 
     if (type === 'shell') {
       // 炮弹从炮管尖端发射，沿炮管角度抛出
-      const angle = owner.barrelAngle;
+      const angle = owner.barrelAngle + (this.angleOffset * Math.PI / 180); // 应用角度偏移
       this.x += Math.cos(angle) * CFG.w * 0.6;
       this.y += Math.sin(angle) * CFG.w * 0.6;
       this.vx = Math.cos(angle) * this.speed;
@@ -69,19 +72,22 @@ export class Projectile {
 
     if (this.type === 'shell') {
       // —— 抛物线运动 ——
-      this.vy += CFG.gravity * dt;
+      this.vy += (CFG.gravity * 0.35) * dt;  // 减少重力影响，让炮弹飞得更远
       this.x += this.vx * dt;
       this.y += this.vy * dt;
 
       // 落地爆炸
       if (this.y >= terrain.sampleY(this.x)) {
         this.dead = true;
-        const hitResult = this.checkHit(enemies, player, CFG.shell.damage);
+        let baseDmg = CFG.shell.damage;
+        if (this.damageBoosted) baseDmg *= 1.5; // 火力提升
+        const hitResult = this.checkHit(enemies, player, baseDmg);
         return { hit: true, x: this.x, y: terrain.sampleY(this.x), target: hitResult };
       }
 
       // 直接命中检测
-      const dmg = CFG.shell.damage + (this.owner.damageBonus || 0);
+      let dmg = CFG.shell.damage + (this.owner.damageBonus || 0);
+      if (this.damageBoosted) dmg *= 1.5; // 火力提升
       const hitResult = this.checkHit(enemies, player, dmg);
       if (hitResult) {
         this.dead = true;
@@ -109,7 +115,8 @@ export class Projectile {
 
         // 命中判定
         if (d < CFG.w * 0.5) {
-          const dmg = CFG.missile.damage + (this.owner.damageBonus || 0);
+          let dmg = CFG.missile.damage + (this.owner.damageBonus || 0);
+          if (this.damageBoosted) dmg *= 1.5; // 火力提升
           this.target.hp -= dmg;
           if (this.target.hp <= 0) this.target.alive = false;
           this.dead = true;

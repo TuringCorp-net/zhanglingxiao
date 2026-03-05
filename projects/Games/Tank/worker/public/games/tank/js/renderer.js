@@ -196,11 +196,17 @@ export class Renderer {
     ctx.save();
     ctx.translate(x, y);
 
+    // Boss体型放大
+    const isBoss = !tank.isPlayer && tank.kind === 'robot' && tank.weapon === 'missile';
+    if (isBoss) {
+      ctx.save();
+      ctx.scale(CFG.boss.scale, CFG.boss.scale);
+    }
+
     // 根据地形坡度旋转整个坦克
     ctx.rotate(tank.slopeAngle);
-
-    const isBoss = !tank.isPlayer && tank.kind === 'robot' && tank.weapon === 'missile';
-    let baseColor = tank.isPlayer ? '#22d3ee' : (isBoss ? '#ef4444' : '#eab308');
+    // 使用enemyType的颜色，如果没有则使用默认颜色
+    let baseColor = tank.isPlayer ? '#22d3ee' : (isBoss ? '#ef4444' : (tank.color || '#eab308'));
 
     if (!tank.alive) {
       baseColor = '#4b5563';
@@ -331,6 +337,11 @@ export class Renderer {
       ctx.beginPath();
       ctx.roundRect(-barW / 2, barY, barW * hpPct, barH, 2);
       ctx.fill();
+    }
+
+    // Boss缩放恢复
+    if (isBoss) {
+      ctx.restore();
     }
 
     ctx.restore();
@@ -466,12 +477,80 @@ export class Renderer {
     ctx.restore();
   }
 
+  /* ========== 道具 ========== */
+
+  drawPowerup(p, camera) {
+    if (!p.alive) return;
+    const ctx = this.ctx;
+    const x = p.x - camera.x;
+    const y = p.y - camera.y;
+    const size = CFG.w * 0.4;
+
+    // 道具颜色配置
+    const colors = {
+      speed: '#f59e0b',     // 橙色加速
+      shield: '#3b82f6',   // 蓝色护盾
+      power: '#ef4444',    // 红色火力
+      rapid: '#22c55e',   // 绿色速射
+      spread: '#a855f7'    // 紫色散射
+    };
+
+    const color = colors[p.type] || '#ffffff';
+
+    ctx.save();
+    ctx.translate(x, y - size / 2);
+
+    // 浮动动画
+    const float = Math.sin(Date.now() / 200) * 3;
+    ctx.translate(0, float);
+
+    // 发光效果
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 15;
+
+    // 六边形背景
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = (i * Math.PI / 3) - Math.PI / 6;
+      const px = Math.cos(angle) * size / 2;
+      const py = Math.sin(angle) * size / 2;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // 中心亮色
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.25, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 道具图标
+    ctx.fillStyle = color;
+    ctx.font = `bold ${size * 0.4}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const icons = {
+      speed: '⚡',
+      shield: '🛡',
+      power: '🔥',
+      rapid: '⚡',
+      spread: '✦'
+    };
+    ctx.fillText(icons[p.type] || '?', 0, 0);
+
+    ctx.restore();
+  }
+
   /* ========== HUD ========== */
 
   /**
-   * 绘制 HUD（血量、生命、武器、装填进度、分数）
+   * 绘制 HUD（血量、生命、武器、装填进度、分数、道具状态、关卡）
    */
-  drawHUD(player, lives, score, minionKills, time) {
+  drawHUD(player, lives, score, minionKills, time, effects = {}, level = 1) {
     if (!player) return;
     const ctx = this.ctx;
     ctx.save();
@@ -547,7 +626,40 @@ export class Renderer {
     ctx.fillStyle = '#94a3b8';
     ctx.font = '14px "Orbitron", system-ui, sans-serif';
     ctx.fillText(`击杀 ${minionKills} / 5`, this.width - pad, pad + 38);
+
+    // 关卡显示
+    ctx.fillStyle = '#22d3ee';
+    ctx.font = 'bold 16px "Orbitron", system-ui, sans-serif';
+    ctx.fillText(`第 ${level} 关`, this.width - pad, pad + 58);
     ctx.textAlign = 'start';
+
+    // —— 道具效果状态 ——
+    const now = Date.now();
+    const activeEffects = [];
+    if (now < effects.speed) activeEffects.push({ type: 'speed', color: '#f59e0b', icon: '⚡' });
+    if (now < effects.shield) activeEffects.push({ type: 'shield', color: '#3b82f6', icon: '🛡' });
+    if (now < effects.power) activeEffects.push({ type: 'power', color: '#ef4444', icon: '🔥' });
+    if (now < effects.rapid) activeEffects.push({ type: 'rapid', color: '#22c55e', icon: '⚡' });
+    if (now < effects.spread) activeEffects.push({ type: 'spread', color: '#a855f7', icon: '✦' });
+
+    if (activeEffects.length > 0) {
+      ctx.font = 'bold 16px system-ui, sans-serif';
+      let effectX = pad;
+      for (const effect of activeEffects) {
+        // 计算剩余时间
+        let remaining = 0;
+        if (effect.type === 'speed') remaining = Math.ceil((effects.speed - now) / 1000);
+        else if (effect.type === 'shield') remaining = Math.ceil((effects.shield - now) / 1000);
+        else if (effect.type === 'power') remaining = Math.ceil((effects.power - now) / 1000);
+        else if (effect.type === 'rapid') remaining = Math.ceil((effects.rapid - now) / 1000);
+        else if (effect.type === 'spread') remaining = Math.ceil((effects.spread - now) / 1000);
+
+        // 绘制效果图标和倒计时
+        ctx.fillStyle = effect.color;
+        ctx.fillText(`${effect.icon} ${remaining}s`, effectX, this.height - pad - 20);
+        effectX += 70;
+      }
+    }
 
     ctx.restore();
   }

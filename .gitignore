@@ -6,3 +6,8 @@ langhuaschool/assets/
 .assets-state.json
 LangHuaSchool/.assets-state.json
 langhuaschool/.assets-state.json
+
+# ---- system ----
+.DS_Store
+.wrangler/
+
