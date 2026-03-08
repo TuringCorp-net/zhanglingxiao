@@ -419,6 +419,9 @@ export class Game {
         this.particles.explode(e.x, e.y, isBoss);
         this.audio.playExplosion(isBoss);
 
+        // 战利品掉落（医疗箱 + 道具）
+        this.spawnLootOnKill(e.x, e.y, isBoss);
+
         // 计分
         this.addScore(isBoss ? 30 : 15);
         this.totalKills++;
@@ -699,50 +702,40 @@ export class Game {
   }
 
   spawnMedkits() {
-    this.medkits = [];
-    let tries = 0;
-    while (this.medkits.length < 10 && tries < 1000) {
-      const x = this.camera.x + Math.random() * this.renderer.width * 5 + this.renderer.width;
-      let ok = true;
-      for (const m of this.medkits) {
-        if (Math.abs(m.x - x) < CFG.w * 5) ok = false;
-      }
-      // 不放在陡坡上
-      const ang = this.terrain.slopeAngle(x);
-      if (this.terrain.isSteep(ang)) ok = false;
-      if (ok) {
-        this.medkits.push({ x, y: this.terrain.sampleY(x), alive: true });
-      }
-      tries++;
-    }
+    // 不再在地面生成医疗箱和道具，改为击杀敌人时掉落
+    // 不清空现有道具，保留击杀掉落的战利品
+  }
 
-    // 生成道具
-    this.powerups = [];
+  // 击杀敌人时掉落战利品（医疗箱 + 道具）
+  spawnLootOnKill(x, y, isBoss) {
+    // 固定掉落：医疗箱或道具
+    const dropCount = isBoss ? 3 : 1;
+
+    // 获取已解锁的道具类型
     const powerupTypes = Object.keys(CFG.powerups);
-    // 根据关卡解锁道具
-    const unlockedTypes = powerupTypes.filter((type, i) => this.level >= CFG.levelConfig.enemiesToUnlock[i] || i === 0);
+    const unlockedTypes = powerupTypes.filter((type, i) =>
+      type !== 'dropConfig' &&
+      CFG.powerups[type].rarity &&
+      (this.level >= CFG.levelConfig.enemiesToUnlock[i] || i === 0)
+    );
 
-    let tries2 = 0;
-    while (this.powerups.length < 5 && tries2 < 500) {
-      const x = this.camera.x + Math.random() * this.renderer.width * 5 + this.renderer.width;
-      let ok = true;
+    for (let i = 0; i < dropCount; i++) {
+      // 50% 几率掉落医疗箱，50% 几率掉落道具
+      const isMedkit = Math.random() < 0.5;
 
-      // 检查与道具和医疗箱的距离
-      for (const p of this.powerups) {
-        if (Math.abs(p.x - x) < CFG.w * 8) ok = false;
-      }
-      for (const m of this.medkits) {
-        if (Math.abs(m.x - x) < CFG.w * 5) ok = false;
-      }
-
-      const ang = this.terrain.slopeAngle(x);
-      if (this.terrain.isSteep(ang)) ok = false;
-
-      if (ok && unlockedTypes.length > 0) {
-        // 根据稀有度选择道具类型
+      if (isMedkit && unlockedTypes.length > 0) {
+        // 掉落医疗箱
+        this.medkits.push({
+          x: x + (Math.random() - 0.5) * CFG.w * 2,
+          y,
+          alive: true
+        });
+      } else if (unlockedTypes.length > 0) {
+        // 根据稀有度选择道具
         const rand = Math.random();
         let cumsum = 0;
         let selectedType = unlockedTypes[0];
+
         for (const type of unlockedTypes) {
           cumsum += CFG.powerups[type].rarity;
           if (rand < cumsum) {
@@ -750,14 +743,15 @@ export class Game {
             break;
           }
         }
+
+        // 在敌人死亡位置生成道具
         this.powerups.push({
-          x,
-          y: this.terrain.sampleY(x),
+          x: x + (Math.random() - 0.5) * CFG.w * 2,
+          y,
           type: selectedType,
           alive: true
         });
       }
-      tries2++;
     }
   }
 

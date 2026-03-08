@@ -99,7 +99,7 @@ export class Projectile {
       const now = Date.now();
       if (now - this.spawnTime > this.duration) {
         this.dead = true; // 超时空爆
-        return null;
+        return { hit: true, x: this.x, y: this.y, target: null }; // 触发空爆效果
       }
 
       if (!this.target || !this.target.alive) {

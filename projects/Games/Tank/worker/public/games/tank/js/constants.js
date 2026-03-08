@@ -19,7 +19,7 @@ export const CFG = {
   // 武器参数 —— 与需求描述对齐
   shell: { damage: 10, reload: 3000, speed: 18, gravity: true },  // 炮弹：3秒装填
   flame: { damage: 4, interval: 500, range: 2, angle: 30 * Math.PI / 180 }, // 火焰：0.5秒4伤
-  missile: { damage: 13, reload: 4000, speed: 5, duration: 3000 },  // 导弹：4秒装填，3秒飞行
+  missile: { damage: 13, reload: 4000, speed: 5, duration: 2000 },  // 导弹：4秒装填，2秒飞行
 
   // 坦克种类属性（速度单位：w/s，slide：陡坡下滑速度）
   wheel: { speed: 1.5, slide: 1.0 },
@@ -35,11 +35,17 @@ export const CFG = {
   powerups: {
     // 常见道具
     speed: { duration: 10000, speedMult: 1.5, rarity: 0.4 },      // 加速：速度+50%
-    shield: { duration: 5000, invulnerable: true, rarity: 0.3 },  // 护盾：无敌5秒
+    shield: { duration: 10000, invulnerable: true, rarity: 0.3 },  // 护盾：无敌10秒
     // 稀有道具
     power: { duration: 15000, damageMult: 1.5, rarity: 0.15 },    // 火力提升：伤害+50%
     rapid: { duration: 10000, reloadMult: 0.5, rarity: 0.1 },     // 快速装填：装填速度-50%
-    spread: { duration: 10000, spread: true, rarity: 0.05 }       // 散射：三发同时发射
+    spread: { duration: 10000, spread: true, rarity: 0.05 },       // 散射：三发同时发射
+    // 道具掉落配置
+    dropConfig: {
+      minionChance: 0.15,    // 小兵掉落几率 15%
+      bossChance: 0.40,       // Boss掉落几率 40%
+      bossRarityBoost: 2.0    // Boss掉落时稀有道具概率翻倍
+    }
   },
 
   // 敌人类型
