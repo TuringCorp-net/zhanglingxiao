@@ -253,7 +253,7 @@ idea → in_review → approved → published → archived
 | O-F030-04 | P2 | ✅ | `content_production`表新增`version`和`parent_version_id`字段；发布时自动递增版本号并维护版本链 |
 | O-F030-05 | P1 | ✅ | `publishContent`增加发布前终检：校验topic状态为approved、disclosure声明存在 |
 | O-F030-06 | P1 | ✅ | `publishContent`增加disclosure验证：affiliate/sponsored类型内容必须包含disclosure字段，否则返回400错误 |
-| O-F030-07 | P3 | ✅ | wrangler.toml配置Cron Trigger：`0 9 * * 4`（每周四9am UTC）；`handleScheduledPublishing`自动发布已到时的approved选题 |
+| O-F030-07 | P3 | ✅ 已修复（2026-04-07） | wrangler.toml配置Cron Trigger：`0 9 * * 4`（每周四9am UTC）；`handleScheduledPublishing`自动发布已到时的approved选题；**已修复**：index.ts export default 中已注册 `scheduled` 方法，cron trigger 现可正常触发 |
 | O-F030-08 | P3 | ✅ | `getProductionStats`增加TOP3/BOTTOM3计算：按products_published排序，返回表现最好/最差的3个选题 |
 
 **F-030 新增API字段说明：**

@@ -5,7 +5,7 @@
 > **版本：** v1.7
 > **最后更新：** 2026-04-07 11:35 (Asia/Shanghai)
 > **审核时间：** 2026-04-07 11:35 (Asia/Shanghai)
-> **状态：** 🔨 进行中（第20次STR审核完成，F-030正式功能审核通过）
+> **状态：** 🔨 进行中（第20次STR审核完成，F-030正式功能审核通过；第21次STR审核发现O-F030-07 Cron未接线）
 
 ---
 
@@ -3463,3 +3463,175 @@ findora/src/ 目录结构：
 - 所有功能模块在 SRS 中状态为 🗓（需求已设计），无 🏗（功能已实现）标记
 
 **本次修复（第一次→第三次）：** 全部 18 端点 + 5 张表 + schema.ts 已实现
+
+---
+
+## 第21次审核 — 2026-04-07（F-030 O-F030-07 Cron接线验证）
+
+**审核时间：** 2026-04-07 12:33 (Asia/Shanghai)
+**审核范围：** F-030 观察项实现验证 + cron handler 接线检查
+**审核结论：** ❌ **不通过** — O-F030-07 Cron handler 未接线
+
+---
+
+### 审核方法
+
+1. 检查 `src/api/index.ts` export default 块是否包含 `scheduled` 方法
+2. 检查 `wrangler.toml` cron 配置是否与 `handleScheduledPublishing` 函数匹配
+3. 对照 SDS v0.36 O-F030-07 实现记录
+4. 验证 schema.ts 与 migration 009 字段一致性
+
+---
+
+### 1. Cron Handler 接线检查
+
+**wrangler.toml 配置（✅ 正确）：**
+```toml
+[triggers]
+crons = ["0 9 * * 4"]  # 每周四 9am UTC
+```
+
+**index.ts export default（❌ 缺失）：**
+```typescript
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    return handleRequest(env, request);
+  },
+  // ❌ 缺少 scheduled 方法！
+};
+```
+
+**handleScheduledPublishing 函数存在（✅ content.ts:711）：**
+```typescript
+export async function handleScheduledPublishing(env: Env): Promise<{ published: number; errors: string[] }> {
+  // 查找 scheduled_publish_at <= now 且 status = 'approved' 的选题
+  // 自动发布并记录审计日志
+}
+```
+
+**结论：** ❌ **O-F030-07 Cron handler 未接线** — `handleScheduledPublishing` 函数已实现但未在 worker export 中注册，cron trigger 不会触发任何操作
+
+---
+
+### 2. Schema 与 Migration 一致性检查
+
+**List 接口（schema.ts:63-75）缺少字段：**
+
+| 缺失字段 | 来源 | 说明 |
+|----------|------|------|
+| `content_type` | migration 009 | 联盟内容类型（organic/affiliate/sponsored） |
+| `disclosure` | migration 009 | 联盟披露声明 |
+
+**ContentTopic 接口（schema.ts:248-266）缺少字段：**
+
+| 缺失字段 | 来源 | 说明 |
+|----------|------|------|
+| `scheduled_publish_at` | migration 009 | 定时发布时间（O-F030-03） |
+
+**TopicProduct 接口（schema.ts:268-281）缺少字段：**
+
+| 缺失字段 | 来源 | 说明 |
+|----------|------|------|
+| `product_url` | migration 009 | 商品来源链接（O-F030-01） |
+| `highlight_tags` | migration 009 | 关键特征标签（O-F030-01） |
+| `comparison_notes` | migration 009 | 对比说明（O-F030-01） |
+
+**ContentProduction 接口（schema.ts:283-299）缺少字段：**
+
+| 缺失字段 | 来源 | 说明 |
+|----------|------|------|
+| `version` | migration 009 | 版本号（O-F030-04） |
+| `parent_version_id` | migration 009 | 父版本ID（O-F030-04） |
+
+**注：** content.ts 中定义的本地接口（ContentTopic/TopicProduct/ContentProduction）包含上述全部字段，但 schema.ts 中的接口未同步更新。
+
+**结论：** ⚠️ schema.ts 与 migration 009 字段不一致，但 TypeScript 编译仍然通过（因为 content.ts 使用 `as unknown as` 类型断言绕过了检查）
+
+---
+
+### 3. F-030 观察项实现对照
+
+| 观察项 | 优先级 | SDS记录 | 代码验证 | 结论 |
+|--------|--------|---------|----------|------|
+| O-F030-01 | P1 | 结构化字段（product_url/highlight_tags/comparison_notes） | content.ts:42-44 ✅ / schema.ts ❌ | ⚠️ 部分通过 |
+| O-F030-02 | P1 | 审核界面优化属前端任务 | N/A | N/A |
+| O-F030-03 | P2 | scheduled_publish_at 字段 + cron 处理器 | content.ts:26,315-318 ✅ / schema.ts ❌ | ⚠️ 部分通过 |
+| O-F030-04 | P2 | version + parent_version_id 字段 | content.ts:62-63 ✅ / schema.ts ❌ | ⚠️ 部分通过 |
+| O-F030-05 | P1 | publishContent 终检（topic 状态 + disclosure） | content.ts:441-451 ✅ | ✅ 通过 |
+| O-F030-06 | P1 | disclosure 验证（affiliate/sponsored 必填） | content.ts:441-451 ✅ | ✅ 通过 |
+| O-F030-07 | P3 | Cron Trigger 配置 + handleScheduledPublishing | wrangler.toml ✅ / index.ts ❌ | ❌ 不通过 |
+| O-F030-08 | P3 | TOP3/BOTTOM3 统计 | content.ts:643-660 ✅ | ✅ 通过 |
+
+---
+
+### 4. TypeScript 编译验证
+
+```
+$ npx tsc --noEmit
+→ 无错误输出
+```
+
+**结论：** ✅ TypeScript 编译通过（content.ts 使用 `as unknown as` 绕过了类型检查）
+
+---
+
+### 整改要求
+
+| 优先级 | 问题 | 整改方案 |
+|--------|------|----------|
+| **P1** | O-F030-07 Cron handler 未接线 | 在 index.ts export default 中添加 `scheduled` 方法 |
+| **P2** | schema.ts 字段缺失 | 更新 schema.ts 中 List/ContentTopic/TopicProduct/ContentProduction 接口 |
+
+---
+
+### 整改后预期代码
+
+**index.ts export default 应修改为：**
+```typescript
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    return handleRequest(env, request);
+  },
+  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+    // O-F030-07: Cron trigger for weekly scheduled publishing
+    const { handleScheduledPublishing } = await import('./admin/content');
+    await handleScheduledPublishing(env);
+  },
+};
+```
+
+**schema.ts List 接口应更新为：**
+```typescript
+export interface List {
+  // ... existing fields ...
+  content_type: string; // organic/affiliate/sponsored
+  disclosure: string | null; // 联盟披露声明
+}
+```
+
+---
+
+### 三态状态确认
+
+| 状态 | 含义 | 数量 |
+|------|------|------|
+| ✅ 功能已审核 | 代码实现 + STR人工审核通过 | 127项 |
+| 🏗 功能已实现 | 代码已合入主干，待审核 | 0项 |
+| ❌ 需整改 | 发现实现问题 | 1项（O-F030-07） |
+
+---
+
+### 交接说明
+
+本次审核为第二十一次审核，发现 **O-F030-07 Cron handler 未接线** 问题。
+
+**问题根因：** `handleScheduledPublishing` 函数已实现但未在 worker 的 `export default` 中注册 `scheduled` 方法，导致 wrangler.toml 中配置的 cron trigger 无法触发任何操作。
+
+**影响范围：** 每周四 9am UTC 的定时发布功能完全失效。
+
+**下一步：**
+1. 修复 index.ts export default，添加 scheduled 方法
+2. 更新 schema.ts 中的接口定义
+3. 重新执行 TypeScript 编译验证
+4. 重新部署并验证 cron trigger 实际触发
+

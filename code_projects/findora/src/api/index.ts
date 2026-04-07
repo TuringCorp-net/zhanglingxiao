@@ -649,4 +649,8 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     return handleRequest(env, request);
   },
+  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+    const { handleScheduledPublishing } = await import('./admin/content');
+    await handleScheduledPublishing(env);
+  },
 };
