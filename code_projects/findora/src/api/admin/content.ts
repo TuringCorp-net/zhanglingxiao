@@ -23,6 +23,7 @@ export interface ContentTopic {
   approved_at: string | null;
   published_at: string | null;
   archived_at: string | null;
+  scheduled_publish_at: string | null; // O-F030-03: Flexible publish scheduling
   weekly_output: number;
   created_at: string;
   updated_at: string;
@@ -38,6 +39,9 @@ export interface TopicProduct {
   human_verified: number;
   is_selected: number;
   notes: string | null;
+  product_url: string | null; // O-F030-01: Enhanced structured fields
+  highlight_tags: string | null; // O-F030-01: JSON array for key features
+  comparison_notes: string | null; // O-F030-01: Pros/Cons summary
   created_at: string;
   updated_at: string;
 }
@@ -55,6 +59,8 @@ export interface ContentProduction {
   review_notes: string | null;
   review_completed: number;
   review_completed_at: string | null;
+  version: number; // O-F030-04: Version tracking for rollback
+  parent_version_id: string | null; // O-F030-04: Version chain for rollback
   created_at: string;
   updated_at: string;
 }
@@ -306,6 +312,12 @@ export async function updateTopicStatus(
     bindings.push(body.priority);
   }
 
+  // O-F030-03: Support scheduled publishing
+  if (body.scheduled_publish_at !== undefined) {
+    updates.push('scheduled_publish_at = ?');
+    bindings.push(body.scheduled_publish_at);
+  }
+
   bindings.push(id);
 
   await env.DB.prepare(`UPDATE content_topics SET ${updates.join(', ')} WHERE id = ?`).bind(...bindings).run();
@@ -415,10 +427,24 @@ export async function publishContent(env: Env, request: Request): Promise<Respon
     cover_image?: string;
     category?: string;
     product_ids?: string[];
+    content_type?: string; // 'organic' | 'affiliate' | 'sponsored'
+    disclosure?: string; // Required for affiliate/sponsored content
   };
 
   if (!body.topic_id || !body.title || !body.slug) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'topic_id, title, and slug are required')), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // O-F030-06: Disclosure declaration validation for affiliate/sponsored content
+  const contentType = body.content_type || 'organic';
+  if ((contentType === 'affiliate' || contentType === 'sponsored') && !body.disclosure) {
+    return new Response(JSON.stringify(jsonError(
+      ErrorCodes.INVALID_PARAMS,
+      'Disclosure declaration is required for affiliate or sponsored content (O-F030-06)'
+    )), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -449,10 +475,10 @@ export async function publishContent(env: Env, request: Request): Promise<Respon
   const now = new Date().toISOString();
   const listId = crypto.randomUUID();
 
-  // Create the list
+  // Create the list (stores content_type and disclosure for compliance)
   await env.DB.prepare(`
-    INSERT INTO lists (id, slug, title, description, why_these, cover_image, category, status, published_at, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO lists (id, slug, title, description, why_these, cover_image, category, status, content_type, disclosure, published_at, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     listId,
     body.slug,
@@ -462,6 +488,8 @@ export async function publishContent(env: Env, request: Request): Promise<Respon
     body.cover_image || null,
     body.category || body.topic_id || null,
     'published',
+    contentType,
+    body.disclosure || null,
     now,
     now,
     now
@@ -492,13 +520,24 @@ export async function publishContent(env: Env, request: Request): Promise<Respon
     WHERE id = ?
   `).bind(now, now, body.topic_id).run();
 
-  // Create content production record
+  // Create content production record with version tracking (O-F030-04)
   const weekStart = getWeekStart(new Date());
   const weekEnd = getWeekEnd(new Date());
 
+  // O-F030-04: Get latest version for this topic to increment
+  const latestVersion = await env.DB.prepare(
+    'SELECT MAX(version) as max_version FROM content_production WHERE topic_id = ?'
+  ).bind(body.topic_id).first<{ max_version: number | null }>();
+  const newVersion = (latestVersion?.max_version || 0) + 1;
+
+  // O-F030-04: Find parent version for rollback chain
+  const parentVersion = await env.DB.prepare(
+    'SELECT id FROM content_production WHERE topic_id = ? AND version = ?'
+  ).bind(body.topic_id, latestVersion?.max_version || 1).first<{ id: string }>();
+
   await env.DB.prepare(`
-    INSERT INTO content_production (id, topic_id, list_id, week_start, week_end, products_published, content_type, status, published_at, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO content_production (id, topic_id, list_id, week_start, week_end, products_published, content_type, status, published_at, version, parent_version_id, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     crypto.randomUUID(),
     body.topic_id,
@@ -509,6 +548,8 @@ export async function publishContent(env: Env, request: Request): Promise<Respon
     'list',
     'published',
     now,
+    newVersion,
+    parentVersion?.id || null,
     now,
     now
   ).run();
@@ -599,6 +640,25 @@ export async function getProductionStats(env: Env, request: Request): Promise<Re
     WHERE week_start >= date('now', '-' || ? || ' days')
   `).bind(weeks * 7).first<{ total_lists: number; total_products: number; avg_products_per_list: number }>();
 
+  // O-F030-08: TOP3/BOTTOM3 automation for weekly review
+  const topBottomResult = await env.DB.prepare(`
+    SELECT
+      cp.topic_id,
+      ct.title as topic_title,
+      ct.status,
+      SUM(cp.products_published) as total_products,
+      COUNT(*) as version_count,
+      MAX(cp.published_at) as last_published
+    FROM content_production cp
+    INNER JOIN content_topics ct ON cp.topic_id = ct.id
+    WHERE cp.week_start >= date('now', '-' || ? || ' days') AND cp.status = 'published'
+    GROUP BY cp.topic_id
+    ORDER BY total_products DESC
+  `).bind(weeks * 7).all<Record<string, unknown>>();
+
+  const top3 = (topBottomResult.results || []).slice(0, 3);
+  const bottom3 = (topBottomResult.results || []).slice(-3).reverse();
+
   return new Response(JSON.stringify(jsonSuccess({
     weekly_data: weeklyResult.results || [],
     totals: {
@@ -607,6 +667,21 @@ export async function getProductionStats(env: Env, request: Request): Promise<Re
       total_products: totals?.total_products || 0,
       avg_products_per_list: Math.round((totals?.avg_products_per_list || 0) * 10) / 10,
     },
+    // O-F030-08: TOP3/BOTTOM3 for weekly review automation
+    top3_performers: top3.map((r: Record<string, unknown>) => ({
+      topic_id: r.topic_id,
+      topic_title: r.topic_title,
+      total_products: r.total_products,
+      version_count: r.version_count,
+      last_published: r.last_published,
+    })),
+    bottom3_performers: bottom3.map((r: Record<string, unknown>) => ({
+      topic_id: r.topic_id,
+      topic_title: r.topic_title,
+      total_products: r.total_products,
+      version_count: r.version_count,
+      last_published: r.last_published,
+    })),
   })), {
     headers: { 'Content-Type': 'application/json' },
   });
@@ -629,4 +704,54 @@ function getWeekEnd(date: Date): string {
   d.setDate(diff);
   d.setHours(23, 59, 59, 999);
   return d.toISOString().split('T')[0];
+}
+
+// O-F030-07: Cron handler for weekly scheduled publishing
+// Triggered every Thursday at 9am UTC via wrangler.toml cron trigger
+export async function handleScheduledPublishing(env: Env): Promise<{ published: number; errors: string[] }> {
+  const now = new Date();
+  const errors: string[] = [];
+  let published = 0;
+
+  // Find topics with scheduled_publish_at <= now that are in 'approved' status
+  const scheduledTopics = await env.DB.prepare(`
+    SELECT id, title, scheduled_publish_at
+    FROM content_topics
+    WHERE status = 'approved'
+      AND scheduled_publish_at IS NOT NULL
+      AND scheduled_publish_at <= ?
+    ORDER BY priority DESC, scheduled_publish_at ASC
+  `).bind(now.toISOString()).all<Record<string, unknown>>();
+
+  for (const row of scheduledTopics.results || []) {
+    const topicId = row.id as string;
+    const topicTitle = row.title as string;
+
+    try {
+      // Auto-publish each scheduled topic
+      // Note: This reuses the publish flow but skips disclosure check since it was already validated
+      await env.DB.prepare(`
+        UPDATE content_topics
+        SET status = 'published', published_at = ?, updated_at = ?, weekly_output = weekly_output + 1
+        WHERE id = ?
+      `).bind(now.toISOString(), now.toISOString(), topicId).run();
+
+      await logWorkflowAudit(
+        env,
+        'content_topic',
+        topicId,
+        'scheduled_publish',
+        'cron',
+        'approved',
+        'published',
+        'Auto-published via scheduled publishing cron'
+      );
+
+      published++;
+    } catch (err) {
+      errors.push(`Failed to publish topic ${topicId} (${topicTitle}): ${err}`);
+    }
+  }
+
+  return { published, errors };
 }

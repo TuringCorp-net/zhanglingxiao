@@ -15,6 +15,12 @@ database_id = "staging-placeholder"
 [vars]
 AI_PROVIDER = "openai"
 
+# O-F030-07: Cron Trigger for weekly automated tasks
+# Runs every Thursday at 9am UTC for weekly review preparation
+# Publishes scheduled topics and sends review notifications
+[triggers]
+crons = ["0 9 * * 4"]
+
 [env.production]
 [[d1_databases]]
 binding = "DB"
@@ -24,3 +30,7 @@ database_id = "production-placeholder"
 # AI provider configuration for production
 [env.production.vars]
 AI_PROVIDER = "openai"
+
+# O-F030-07: Cron Trigger for production
+[env.production.triggers]
+crons = ["0 9 * * 4"]

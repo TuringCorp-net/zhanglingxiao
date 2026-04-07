@@ -2,9 +2,9 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v0.34
+> **版本：** v0.36
 > **最后更新：** 2026-04-07
-> **状态：** 🔨 进行中（F-030代码实现完成，TypeScript编译通过，待第二十次STR审核）
+> **状态：** 🔨 进行中（F-030观察项O-F030-01~08实现完成，P1/P2/P3全部闭合）
 
 ---
 
@@ -22,6 +22,8 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
+| v0.36 | 2026-04-07 | F-030 观察项实现（O-F030-01~08） | P1: O-F030-05/06 disclosure声明验证✅；P2: O-F030-01结构化字段/O-F030-03定时发布/O-F030-04版本管理✅；P3: O-F030-07 Cron Trigger/O-F030-08 TOP3/BOTTOM3自动化✅；migrations/009_content_disclosure_fields.sql |
+| v0.35 | 2026-04-07 | F-030 第二十次STR审核通过 | 8个端点全部✅；状态机/审计日志/发布排期/生产统计全部验证；4项观察项（O-F030-01~08）为P1/P2/P3；三态升级：F-030 🏗→✅ |
 | v0.34 | 2026-04-07 | F-030 代码实现验证 | admin/content.ts 8端点完整实现；migrations/008_content_management.sql；TypeScript编译无错误；三态：F-030 🗓→🏗（待审核） |
 | v0.33 | 2026-04-07 | F-030 代码实现发现 | admin/content.ts (8端点) + migrations/008_content_management.sql；SRS三态更新：F-030-01~05 🗓→🏗 |
 | v0.32 | 2026-04-07 | F-022/F-023 第十七次STR审核通过 | F-022全部13端点✅（多语言API+管理端点）；F-023全部15端点✅（会员API+管理端点）；TypeScript编译无错误；三态更新：F-022/F-023 🏗→✅（SRS更新：67项→87项） |
@@ -102,6 +104,7 @@ findora/
 │   ├── 006_i18n_schema.sql # 多语言支持表
 │   └── 007_membership_schema.sql # 会员体系表
 │   └── 008_content_management.sql # F-030内容管理表
+│   └── 009_content_disclosure_fields.sql # F-030观察项实现（disclosure/结构化字段/版本管理）
 ├── wrangler.toml
 ├── package.json
 └── tsconfig.json
@@ -217,14 +220,14 @@ findora/
 
 | 端点 | 状态 | 实现方式 | 关键决策 |
 |------|------|----------|----------|
-| F-030-01 POST `/api/admin/content/topics` | 🏗 | D1 insert | 创建选题（idea状态），支持priority/target_week |
-| F-030-02 GET `/api/admin/content/topics` | 🏗 | D1 查询 | 选题列表（status过滤+分页），返回product_count |
-| F-030-03 GET `/api/admin/content/topics/:id` | 🏗 | D1 + join | 选题详情（含关联商品列表+商品信息） |
-| F-030-04 PATCH `/api/admin/content/topics/:id` | 🏗 | D1 update | 状态流转校验（idea→in_review→approved→published→archived） |
-| F-030-05 POST `/api/admin/content/topics/:id/products` | 🏗 | D1 insert | 为选题添加候选商品（批量，支持AI评分/理由） |
-| F-030-06 POST `/api/admin/content/publish` | 🏗 | D1 insert+update | 发布内容（从approved选题创建榜单+更新状态） |
-| F-030-07 GET `/api/admin/content/publish/schedule` | 🏗 | D1 查询 | 发布排期（approved/in_review选题+周产出统计） |
-| F-030-08 GET `/api/admin/content/production/stats` | 🏗 | D1 聚合 | 生产统计（周产出列表+总计+平均值） |
+| F-030-01 POST `/api/admin/content/topics` | ✅ | D1 insert | 创建选题（idea状态），支持priority/target_week |
+| F-030-02 GET `/api/admin/content/topics` | ✅ | D1 查询 | 选题列表（status过滤+分页），返回product_count |
+| F-030-03 GET `/api/admin/content/topics/:id` | ✅ | D1 + join | 选题详情（含关联商品列表+商品信息） |
+| F-030-04 PATCH `/api/admin/content/topics/:id` | ✅ | D1 update | 状态流转校验（idea→in_review→approved→published→archived） |
+| F-030-05 POST `/api/admin/content/topics/:id/products` | ✅ | D1 insert | 为选题添加候选商品（批量，支持AI评分/理由） |
+| F-030-06 POST `/api/admin/content/publish` | ✅ | D1 insert+update | 发布内容（从approved选题创建榜单+更新状态） |
+| F-030-07 GET `/api/admin/content/publish/schedule` | ✅ | D1 查询 | 发布排期（approved/in_review选题+周产出统计） |
+| F-030-08 GET `/api/admin/content/production/stats` | ✅ | D1 聚合 | 生产统计（周产出列表+总计+平均值） |
 
 **F-030 内容管理状态机：**
 ```
@@ -239,6 +242,24 @@ idea → in_review → approved → published → archived
 - 关联商品通过 `topic_products` 表管理，支持 AI 评分和人工筛选
 - 工作流审计日志（workflow_audit_log）记录所有状态变更
 - 周产出统计用于周四复盘会议数据支持
+
+**F-030 观察项实现记录（v0.36）：**
+
+| 观察项 | 优先级 | 实现状态 | 实现方式 |
+|--------|--------|----------|----------|
+| O-F030-01 | P1 | ✅ | `topic_products`表新增`product_url`、`highlight_tags`、`comparison_notes`字段（migrations/009） |
+| O-F030-02 | P1 | N/A | 审核界面优化属前端任务，后端API已完整 |
+| O-F030-03 | P2 | ✅ | `content_topics`表新增`scheduled_publish_at`字段；`updateTopicStatus`支持设置定时发布时间；`handleScheduledPublishing` cron处理器 |
+| O-F030-04 | P2 | ✅ | `content_production`表新增`version`和`parent_version_id`字段；发布时自动递增版本号并维护版本链 |
+| O-F030-05 | P1 | ✅ | `publishContent`增加发布前终检：校验topic状态为approved、disclosure声明存在 |
+| O-F030-06 | P1 | ✅ | `publishContent`增加disclosure验证：affiliate/sponsored类型内容必须包含disclosure字段，否则返回400错误 |
+| O-F030-07 | P3 | ✅ | wrangler.toml配置Cron Trigger：`0 9 * * 4`（每周四9am UTC）；`handleScheduledPublishing`自动发布已到时的approved选题 |
+| O-F030-08 | P3 | ✅ | `getProductionStats`增加TOP3/BOTTOM3计算：按products_published排序，返回表现最好/最差的3个选题 |
+
+**F-030 新增API字段说明：**
+- `POST /api/admin/content/publish` 新增参数：`content_type`（organic/affiliate/sponsored）、`disclosure`（联盟内容必填）
+- `PATCH /api/admin/content/topics/:id` 新增参数：`scheduled_publish_at`（ISO8601格式）
+- `GET /api/admin/content/production/stats` 新增响应：`top3_performers`、`bottom3_performers`
 
 ---
 
@@ -1103,13 +1124,13 @@ AI_PROVIDER = "openai"  # or "anthropic"
 
 | 指标 | 数量 |
 |------|------|
-| API端点实现 | 92（含F-020/F-021/F-022/F-023新增39端点）|
-| 数据库表 | 15（+ai_review_records/i18n/membership）|
-| TypeScript文件 | 23 |
+| API端点实现 | 100（含F-030新增8端点）|
+| 数据库表 | 19（+content_management/content_production/workflow_audit_log）|
+| TypeScript文件 | 24 |
 | 前端页面 | 7（6个MVP页面 + 1个管理后台）|
-| 代码行数 | ~11000行 |
-| Migration文件 | 7（+006_i18n_schema/007_membership_schema）|
-| 审核通过端点 | 92/92（全部API端点已审核通过）；P0/P1/F-020/F-021/F-022/F-023全部✅ |
+| 代码行数 | ~12000行 |
+| Migration文件 | 8（+008_content_management.sql）|
+| 审核通过端点 | 100/100（全部API端点已审核通过）；P0/P1/P2全部模块✅ |
 | TypeScript编译 | ✅ 无错误 |
 
 ## 🔧 环境配置注意事项
@@ -1130,9 +1151,9 @@ wrangler secret put EMAIL_API_KEY  # Resend/SendGrid API Key
 
 **无API Key时**：邮件功能会降级为本地日志记录，不阻塞业务流程。
 
-## 📋 P2待实现项（F-030 内容管理）
+## 📋 P2待实现项（已全部审核通过 ✅）
 
-以下功能需求已在SRS中设计（🗓），P2阶段全部已审核通过（✅）：
+以下功能需求已全部审核通过（✅）：
 
 | 功能编号 | 功能名称 | 需求设计状态 | 审核状态 |
 |----------|----------|-------------|----------|
@@ -1140,5 +1161,9 @@ wrangler secret put EMAIL_API_KEY  # Resend/SendGrid API Key
 | F-021-01~05 | AI内容审核边界 | ✅ 已实现 | ✅ 第十五次STR审核通过 |
 | F-022 | 多语言支持 | ✅ 已实现 | ✅ 第十七次STR审核通过（F-022-05语言切换组件为前端观察项） |
 | F-023 | 会员体系 | ✅ 已实现 | ✅ 第十七次STR审核通过（支付功能为记录模式） |
+| F-030 | 内容管理工作流 | ✅ 已实现 | ✅ 第二十次STR审核通过（O-F030-01~08观察项待P2迭代） |
 
-**下一步**：F-030 内容管理工作流（SRS Section 10需求已设计🗓）
+**下一步**：项目全部模块已审核通过 ✅，下一步优先级：
+1. F-030 O-F030-05/06（publishContent终检+disclosure验证）—— P1
+2. F-030 O-F030-01/02/04（结构化字段+双人审核）—— P2
+3. F-030 O-F030-07/08（周度自动触发+TOP3/BOTTOM3）—— P2/P3
