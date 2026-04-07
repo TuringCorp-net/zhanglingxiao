@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product - Findora</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --text: #1F2937;
+      --text-light: #6B7280;
+      --bg: #F9FAFB;
+      --white: #FFFFFF;
+      --border: #E5E7EB;
+      --success: #10B981;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+    
+    /* Header */
+    header { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+    header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    nav { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    nav a { color: var(--text); font-weight: 500; }
+    nav a:hover { color: var(--primary); text-decoration: none; }
+    .btn { display: inline-block; padding: 0.625rem 1.25rem; border-radius: 0.5rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-primary:hover { background: var(--primary-hover); text-decoration: none; }
+    .btn-outline { border: 1px solid var(--primary); color: var(--primary); background: transparent; }
+    .btn-outline:hover { background: var(--primary); color: var(--white); text-decoration: none; }
+    .btn-favorite { background: none; border: 1px solid var(--border); color: var(--text); }
+    .btn-favorite:hover { border-color: #EF4444; color: #EF4444; }
+    .btn-favorite.saved { background: #FEE2E2; border-color: #EF4444; color: #EF4444; }
+    
+    /* Breadcrumb */
+    .breadcrumb { padding: 1rem 0; font-size: 0.875rem; }
+    .breadcrumb a { color: var(--text-light); }
+    .breadcrumb span { color: var(--text-light); margin: 0 0.5rem; }
+    
+    /* Product Layout */
+    .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; padding: 2rem 0; }
+    @media (max-width: 768px) {
+      .product-layout { grid-template-columns: 1fr; gap: 2rem; }
+    }
+    
+    /* Image Gallery */
+    .product-images { position: sticky; top: 80px; }
+    .main-image { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 0.75rem; background: var(--white); }
+    .image-placeholder { width: 100%; aspect-ratio: 1; background: #E5E7EB; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+    
+    /* Product Info */
+    .product-info h1 { font-size: 1.75rem; margin-bottom: 1rem; line-height: 1.3; }
+    .product-meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; font-size: 0.875rem; color: var(--text-light); }
+    .product-meta span { background: var(--white); padding: 0.25rem 0.75rem; border-radius: 9999px; border: 1px solid var(--border); }
+    .price-tag { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 1.5rem; }
+    .price-tag .original { color: var(--text-light); text-decoration: line-through; font-size: 1rem; margin-left: 0.5rem; }
+    
+    /* CTA Buttons */
+    .cta-buttons { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .cta-buttons .btn { padding: 0.875rem 1.5rem; font-size: 1rem; flex: 1; min-width: 200px; text-align: center; }
+    
+    /* Sections */
+    .section { margin-bottom: 2rem; }
+    .section h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+    .section p { color: var(--text-light); }
+    
+    /* Pros/Cons */
+    .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 640px) { .pros-cons { grid-template-columns: 1fr; } }
+    .pros h3 { color: var(--success); }
+    .cons h3 { color: #EF4444; }
+    .pros-cons ul { list-style: none; margin-top: 0.5rem; }
+    .pros-cons li { padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+    .pros-cons li:last-child { border-bottom: none; }
+    .pros-cons li::before { content: '✓ '; font-weight: bold; }
+    .cons li::before { content: '✗ '; font-weight: bold; }
+    
+    /* Tags */
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag { background: var(--white); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; border: 1px solid var(--border); }
+    
+    /* Related Products */
+    .related-section { padding: 3rem 0; border-top: 1px solid var(--border); }
+    .related-section h2 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
+    .related-card { background: var(--white); border-radius: 0.75rem; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.2s; }
+    .related-card:hover { transform: translateY(-2px); }
+    .related-card img { width: 100%; height: 140px; object-fit: cover; }
+    .related-card-body { padding: 1rem; }
+    .related-card h3 { font-size: 0.875rem; margin-bottom: 0.5rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .related-card .price { font-weight: 600; color: var(--primary); }
+    
+    /* Loading & Error */
+    .loading { text-align: center; padding: 4rem; color: var(--text-light); }
+    .error-msg { background: #FEE2E2; color: #991B1B; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0; }
+    
+    /* Footer */
+    footer { background: var(--white); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 2rem; text-align: center; }
+    footer p { color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem; }
+    .disclaimer { background: #FEF3C7; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem; color: #92400E; }
+
+    @media (max-width: 640px) {
+      header .container { flex-direction: column; }
+      .product-images { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Findora</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/subscribe.html">Subscribe</a>
+        <a href="/about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="/">Home</a>
+      <span>›</span>
+      <a href="#" id="breadcrumb-category">Category</a>
+      <span>›</span>
+      <span id="breadcrumb-product">Product</span>
+    </nav>
+
+    <div id="product-content">
+      <div class="loading">Loading product details...</div>
+    </div>
+  </div>
+
+  <section class="related-section">
+    <div class="container">
+      <h2>✨ Related Picks</h2>
+      <div id="related-products" class="related-grid">
+        <div class="loading">Loading recommendations...</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Findora. All rights reserved.</p>
+      <div class="disclaimer">
+        <strong>Affiliate Disclosure:</strong> Findora may earn a commission when you purchase through links on our site, at no extra cost to you.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const API_BASE = '/api';
+
+    function getProductId() {
+      return new URLSearchParams(window.location.search).get('id') || '';
+    }
+
+    function getAnonymousId() {
+      let id = localStorage.getItem('findora_anonymous_id');
+      if (!id) {
+        id = 'anon_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('findora_anonymous_id', id);
+      }
+      return id;
+    }
+
+    async function fetchAPI(endpoint, options = {}) {
+      try {
+        const headers = { 'Content-Type': 'application/json' };
+        const email = localStorage.getItem('findora_user_email');
+        const anonId = getAnonymousId();
+        if (email) headers['X-User-Email'] = email;
+        headers['X-Anonymous-Id'] = anonId;
+        
+        const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error?.message || 'Request failed');
+        return json;
+      } catch (err) {
+        console.error('API Error:', err);
+        return null;
+      }
+    }
+
+    function getProductImage(product) {
+      const images = product.images;
+      if (Array.isArray(images) && images.length > 0) return images[0];
+      if (typeof images === 'string') {
+        try {
+          const arr = JSON.parse(images);
+          if (arr.length > 0) return arr[0];
+        } catch {}
+      }
+      return null;
+    }
+
+    function getTags(product) {
+      const tags = product.tags;
+      if (Array.isArray(tags)) return tags;
+      if (typeof tags === 'string') {
+        try { return JSON.parse(tags); } catch {}
+      }
+      return [];
+    }
+
+    function getPros(product) {
+      const pros = product.pros;
+      if (Array.isArray(pros)) return pros;
+      if (typeof pros === 'string') {
+        try { return JSON.parse(pros); } catch {}
+      }
+      return [];
+    }
+
+    function getCons(product) {
+      const cons = product.cons;
+      if (Array.isArray(cons)) return cons;
+      if (typeof cons === 'string') {
+        try { return JSON.parse(cons); } catch {}
+      }
+      return [];
+    }
+
+    function getUseCases(product) {
+      const uc = product.use_cases;
+      if (Array.isArray(uc)) return uc;
+      if (typeof uc === 'string') {
+        try { return JSON.parse(uc); } catch {}
+      }
+      return [];
+    }
+
+    function getTargetAudience(product) {
+      const ta = product.target_audience;
+      if (Array.isArray(ta)) return ta;
+      if (typeof ta === 'string') {
+        try { return JSON.parse(ta); } catch {}
+      }
+      return [];
+    }
+
+    function formatPrice(product) {
+      if (!product.price_min && !product.price_max) return 'View on merchant site';
+      const currency = product.currency || 'USD';
+      if (product.price_min && product.price_max) return `$${product.price_min.toFixed(0)} - $${product.price_max.toFixed(0)} ${currency}`;
+      return product.price_min ? `From $${product.price_min.toFixed(0)} ${currency}` : `Up to $${product.price_max.toFixed(0)} ${currency}`;
+    }
+
+    async function toggleFavorite(productId) {
+      const btn = document.getElementById('favorite-btn');
+      const isSaved = btn.classList.contains('saved');
+      
+      if (isSaved) {
+        // Note: API would need DELETE /api/favorites/:product_id
+        btn.classList.remove('saved');
+        btn.innerHTML = '🤍 Save';
+      } else {
+        const res = await fetchAPI('/favorites', {
+          method: 'POST',
+          body: JSON.stringify({ product_id: productId })
+        });
+        if (res?.ok) {
+          btn.classList.add('saved');
+          btn.innerHTML = '❤️ Saved';
+        }
+      }
+    }
+
+    function trackClick(product) {
+      // Track click via API
+      fetchAPI('/clicks', {
+        method: 'POST',
+        body: JSON.stringify({
+          product_id: product.id,
+          source: 'product_page',
+          utm_source: new URLSearchParams(window.location.search).get('utm_source'),
+          utm_medium: new URLSearchParams(window.location.search).get('utm_medium'),
+          utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign')
+        })
+      });
+      
+      // Redirect to affiliate URL with tracking
+      let redirectUrl = product.affiliate_url || product.source_url;
+      if (redirectUrl) {
+        // Add tracking parameters
+        const url = new URL(redirectUrl);
+        url.searchParams.set('utm_source', 'findora');
+        url.searchParams.set('utm_medium', 'affiliate');
+        url.searchParams.set('utm_content', product.id);
+        window.open(url.toString(), '_blank', 'noopener,noreferrer');
+      }
+    }
+
+    async function renderProduct(product) {
+      const tags = getTags(product);
+      const pros = getPros(product);
+      const cons = getCons(product);
+      const useCases = getUseCases(product);
+      const targetAudience = getTargetAudience(product);
+      const image = getProductImage(product);
+      
+      document.getElementById('breadcrumb-category').href = `/category.html?category=${product.category}`;
+      document.getElementById('breadcrumb-category').textContent = product.category.charAt(0).toUpperCase() + product.category.slice(1);
+      document.getElementById('breadcrumb-product').textContent = (product.rewritten_title || product.original_title).substring(0, 30) + '...';
+      document.title = (product.rewritten_title || product.original_title) + ' - Findora';
+      
+      const container = document.getElementById('product-content');
+      container.innerHTML = `
+        <div class="product-layout">
+          <div class="product-images">
+            ${image 
+              ? `<img src="${image}" alt="${product.rewritten_title || product.original_title}" class="main-image">`
+              : `<div class="image-placeholder">📦</div>`
+            }
+          </div>
+          <div class="product-info">
+            <h1>${product.rewritten_title || product.original_title}</h1>
+            <div class="product-meta">
+              <span>🏪 ${product.merchant_name || product.source_platform}</span>
+              <span>📂 ${product.category}${product.subcategory ? ' › ' + product.subcategory : ''}</span>
+            </div>
+            <div class="price-tag">${formatPrice(product)}</div>
+            <div class="cta-buttons">
+              <button class="btn btn-primary" onclick="trackClick(${JSON.stringify(product).replace(/"/g, '&quot;')})">
+                Buy Now${product.affiliate_url ? ' (Affiliate Link)' : ''}
+              </button>
+              <button id="favorite-btn" class="btn btn-favorite" onclick="toggleFavorite('${product.id}')">
+                🤍 Save
+              </button>
+            </div>
+            
+            ${product.summary ? `
+              <div class="section">
+                <h2>📝 Summary</h2>
+                <p>${product.summary}</p>
+              </div>
+            ` : ''}
+            
+            ${pros.length > 0 || cons.length > 0 ? `
+              <div class="section">
+                <h2>⭐ Why It Stands Out</h2>
+                <div class="pros-cons">
+                  ${pros.length > 0 ? `
+                    <div class="pros">
+                      <h3>✓ Good For</h3>
+                      <ul>${pros.map(p => `<li>${p}</li>`).join('')}</ul>
+                    </div>
+                  ` : ''}
+                  ${cons.length > 0 ? `
+                    <div class="cons">
+                      <h3>⚠ Watch-outs</h3>
+                      <ul>${cons.map(c => `<li>${c}</li>`).join('')}</ul>
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+            ` : ''}
+            
+            ${useCases.length > 0 ? `
+              <div class="section">
+                <h2>🎯 Good For</h2>
+                <p>${useCases.join(', ')}</p>
+              </div>
+            ` : ''}
+            
+            ${targetAudience.length > 0 ? `
+              <div class="section">
+                <h2>👥 Perfect For</h2>
+                <p>${targetAudience.join(', ')}</p>
+              </div>
+            ` : ''}
+            
+            ${tags.length > 0 ? `
+              <div class="section">
+                <h2>🏷️ Tags</h2>
+                <div class="tags">
+                  ${tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                </div>
+              </div>
+            ` : ''}
+            
+            ${product.shipping_notes ? `
+              <div class="section">
+                <h2>🚚 Shipping</h2>
+                <p>${product.shipping_notes}</p>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRelated(products) {
+      const container = document.getElementById('related-products');
+      if (!products || products.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-light)">No related products found.</p>';
+        return;
+      }
+      container.innerHTML = products.slice(0, 4).map(p => `
+        <a href="/product.html?id=${p.id}" class="related-card">
+          <img src="${getProductImage(p) || 'https://picsum.photos/400/400?grayscale'}" alt="${p.rewritten_title || p.original_title}" onerror="this.src='https://picsum.photos/400/400?grayscale'">
+          <div class="related-card-body">
+            <h3>${p.rewritten_title || p.original_title}</h3>
+            <div class="price">${formatPrice(p)}</div>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    async function init() {
+      const productId = getProductId();
+      if (!productId) {
+        document.getElementById('product-content').innerHTML = '<div class="error-msg">No product specified. <a href="/">Go back to home</a></div>';
+        return;
+      }
+      
+      const productData = await fetchAPI(`/products/${productId}`);
+      if (productData?.data) {
+        await renderProduct(productData.data);
+        
+        // Load recommendations (may fail without user identity, that's ok)
+        const recData = await fetchAPI(`/recommendations?limit=4`);
+        if (recData?.data) {
+          renderRelated(recData.data);
+        } else {
+          // Load recent products as fallback
+          const recentData = await fetchAPI(`/products?limit=4`);
+          if (recentData?.data) renderRelated(recentData.data);
+        }
+      } else {
+        document.getElementById('product-content').innerHTML = '<div class="error-msg">Product not found. <a href="/">Go back to home</a></div>';
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

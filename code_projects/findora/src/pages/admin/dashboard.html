@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Findora</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --text: #1F2937;
+      --text-light: #6B7280;
+      --bg: #F9FAFB;
+      --white: #FFFFFF;
+      --border: #E5E7EB;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --card-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* Auth overlay */
+    #auth-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    #auth-overlay.hidden { display: none; }
+    .auth-card { background: var(--white); padding: 2rem; border-radius: 12px; width: 360px; text-align: center; }
+    .auth-card h2 { margin-bottom: 1.5rem; color: var(--primary); }
+    .auth-card input { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1rem; font-size: 1rem; }
+    .auth-card button { width: 100%; padding: 0.75rem; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+    .auth-card button:hover { background: var(--primary-hover); }
+    .auth-card p { color: var(--danger); margin-top: 0.75rem; font-size: 0.875rem; }
+
+    /* Header */
+    header { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .btn-logout { background: none; border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.875rem; color: var(--text-light); }
+    .btn-logout:hover { background: var(--bg); }
+
+    /* Main */
+    main { padding: 2rem 0; }
+    h1 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+
+    /* KPI Cards */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .kpi-card { background: var(--white); border-radius: 12px; padding: 1.25rem; box-shadow: var(--card-shadow); }
+    .kpi-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light); margin-bottom: 0.5rem; }
+    .kpi-value { font-size: 1.75rem; font-weight: 700; color: var(--text); }
+    .kpi-sub { font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem; }
+
+    /* Charts */
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+    @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+    .chart-card { background: var(--white); border-radius: 12px; padding: 1.25rem; box-shadow: var(--card-shadow); }
+    .chart-title { font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; color: var(--text); }
+    .chart-wrap { position: relative; height: 260px; }
+
+    /* Table */
+    .table-card { background: var(--white); border-radius: 12px; box-shadow: var(--card-shadow); overflow: hidden; }
+    .table-card h2 { font-size: 0.875rem; font-weight: 600; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light); padding: 0.75rem 1.25rem; border-bottom: 1px solid var(--border); background: var(--bg); }
+    td { padding: 0.75rem 1.25rem; font-size: 0.875rem; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #F3F4F6; }
+    .rank { font-weight: 600; color: var(--text-light); }
+
+    /* Loading */
+    .loading { text-align: center; padding: 3rem; color: var(--text-light); }
+    .error-msg { background: #FEE2E2; color: var(--danger); padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.875rem; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- Auth Overlay -->
+<div id="auth-overlay">
+  <div class="auth-card">
+    <h2>🔐 Admin Access</h2>
+    <input type="password" id="admin-key" placeholder="Enter Admin Key" onkeydown="if(event.key==='Enter')submitKey()" />
+    <button onclick="submitKey()">Sign In</button>
+    <p id="auth-error"></p>
+  </div>
+</div>
+
+<header>
+  <div class="container">
+    <div class="logo">Findora Admin</div>
+    <div class="header-right">
+      <button class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div id="error-box" class="error-msg hidden"></div>
+  <h1>Analytics Dashboard</h1>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Daily UV</div>
+      <div class="kpi-value" id="kpi-daily-uv">—</div>
+      <div class="kpi-sub">Unique visitors today</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Weekly UV</div>
+      <div class="kpi-value" id="kpi-weekly-uv">—</div>
+      <div class="kpi-sub">Unique visitors (7 days)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Subscribers</div>
+      <div class="kpi-value" id="kpi-subscribers">—</div>
+      <div class="kpi-sub">Active subscribers</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Products</div>
+      <div class="kpi-value" id="kpi-products">—</div>
+      <div class="kpi-sub">Active products</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Clicks Today</div>
+      <div class="kpi-value" id="kpi-clicks">—</div>
+      <div class="kpi-sub">Affiliate clicks today</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">📊 30-Day Trends</div>
+      <div class="chart-wrap"><canvas id="trendsChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">🏷️ Category Traffic</div>
+      <div class="chart-wrap"><canvas id="categoryChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Top Products -->
+  <div class="table-card" style="margin-top:1.5rem;">
+    <h2>Top Products (by clicks)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Clicks</th>
+        </tr>
+      </thead>
+      <tbody id="top-products-body">
+        <tr><td colspan="5" class="loading">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+let adminKey = sessionStorage.getItem('admin_key');
+let trendsChart = null;
+let categoryChart = null;
+
+function submitKey() {
+  const key = document.getElementById('admin-key').value.trim();
+  if (!key) return;
+  adminKey = key;
+  sessionStorage.setItem('admin_key', key);
+  document.getElementById('auth-overlay').classList.add('hidden');
+  loadDashboard();
+}
+
+function logout() {
+  sessionStorage.removeItem('admin_key');
+  adminKey = null;
+  document.getElementById('auth-overlay').classList.remove('hidden');
+}
+
+function api(path) {
+  return fetch(path, {
+    headers: { 'X-Admin-Key': adminKey || '' }
+  });
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-box');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+
+async function loadDashboard() {
+  if (!adminKey) return;
+
+  try {
+    // Load overview + trends in parallel
+    const [overviewRes, trendsRes, categoriesRes] = await Promise.all([
+      api('/api/admin/analytics/overview'),
+      api('/api/admin/analytics/trends?days=30'),
+      api('/api/admin/analytics/categories'),
+    ]);
+
+    if (!overviewRes.ok) {
+      if (overviewRes.status === 401) logout();
+      showError('Failed to load dashboard data. Check your admin key.');
+      return;
+    }
+
+    const overview = await overviewRes.json();
+    const trends = await trendsRes.json();
+    const categories = await categoriesRes.json();
+
+    // KPIs
+    const d = overview.data || {};
+    document.getElementById('kpi-daily-uv').textContent = fmt(d.daily_uv);
+    document.getElementById('kpi-weekly-uv').textContent = fmt(d.weekly_uv);
+    document.getElementById('kpi-subscribers').textContent = fmt(d.total_subscribers);
+    document.getElementById('kpi-products').textContent = fmt(d.total_products);
+    document.getElementById('kpi-clicks').textContent = fmt(d.total_clicks_today);
+
+    // Trends line chart
+    const tData = (trends.data || []).slice(-30);
+    if (trendsChart) trendsChart.destroy();
+    trendsChart = new Chart(document.getElementById('trendsChart'), {
+      type: 'line',
+      data: {
+        labels: tData.map(r => r.date?.slice(5) || ''),
+        datasets: [
+          { label: 'UV', data: tData.map(r => r.uv), borderColor: '#4F46E5', backgroundColor: 'rgba(79,70,229,0.1)', fill: true, tension: 0.3 },
+          { label: 'Clicks', data: tData.map(r => r.clicks), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.3, yAxisID: 'y1' },
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxTicksLimit: 10, font: { size: 10 } } },
+          y: { position: 'left', grid: { color: '#F3F4F6' }, ticks: { font: { size: 10 } } },
+          y1: { position: 'right', grid: { display: false }, ticks: { font: { size: 10 } } }
+        }
+      }
+    });
+
+    // Category bar chart
+    const catData = (categories.data || []).slice(0, 8);
+    if (categoryChart) categoryChart.destroy();
+    categoryChart = new Chart(document.getElementById('categoryChart'), {
+      type: 'bar',
+      data: {
+        labels: catData.map(r => r.category || 'Unknown'),
+        datasets: [{ label: 'Clicks', data: catData.map(r => r.clicks), backgroundColor: '#4F46E5' }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: '#F3F4F6' }, ticks: { font: { size: 10 } } },
+          y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+
+    // Top products table (from categories, pick first product per category approximation)
+    // Since we don't have a direct top products endpoint, use categories overview data
+    const topCats = (categories.data || []).slice(0, 5);
+    const tbody = document.getElementById('top-products-body');
+    if (topCats.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-light)">No data yet</td></tr>';
+    } else {
+      tbody.innerHTML = topCats.map((r, i) => `
+        <tr>
+          <td class="rank">${i + 1}</td>
+          <td>${r.category || '—'}</td>
+          <td>${r.category || '—'}</td>
+          <td>—</td>
+          <td><strong>${fmt(r.clicks)}</strong></td>
+        </tr>
+      `).join('');
+    }
+
+  } catch (e) {
+    showError('Error loading dashboard: ' + e.message);
+  }
+}
+
+function fmt(n) {
+  if (n == null || isNaN(n)) return '—';
+  return n.toLocaleString();
+}
+
+// Auto-check auth on load
+if (adminKey) {
+  document.getElementById('admin-overlay')?.classList.add('hidden');
+  // Check if key is valid by attempting a load
+  fetch('/api/admin/analytics/overview', { headers: { 'X-Admin-Key': adminKey } })
+    .then(r => {
+      if (r.ok) {
+        document.getElementById('auth-overlay').classList.add('hidden');
+        loadDashboard();
+      } else {
+        logout();
+      }
+    }).catch(() => logout());
+} else {
+  document.getElementById('admin-key').focus();
+}
+</script>
+</body>
+</html>

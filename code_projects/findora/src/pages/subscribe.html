@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscribe - Findora</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --text: #1F2937;
+      --text-light: #6B7280;
+      --bg: #F9FAFB;
+      --white: #FFFFFF;
+      --border: #E5E7EB;
+      --success: #10B981;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 600px; margin: 0 auto; padding: 0 1rem; }
+    
+    /* Header */
+    header { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+    header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    nav { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    nav a { color: var(--text); font-weight: 500; }
+    nav a:hover { color: var(--primary); text-decoration: none; }
+    
+    /* Hero */
+    .hero { background: linear-gradient(135deg, var(--primary) 0%, #7C3AED 100%); color: var(--white); padding: 3rem 0; text-align: center; }
+    .hero h1 { font-size: 2rem; margin-bottom: 1rem; }
+    .hero p { opacity: 0.9; max-width: 500px; margin: 0 auto; }
+    
+    /* Form */
+    .form-section { padding: 3rem 0; }
+    .form-card { background: var(--white); border-radius: 0.75rem; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
+    .form-group label .required { color: #EF4444; }
+    .form-group input[type="email"] { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; font-size: 1rem; }
+    .form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+    
+    .form-group .hint { font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem; }
+    
+    /* Checkbox Grid */
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; }
+    .category-checkbox { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; background: var(--bg); border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .category-checkbox:hover { background: #E5E7EB; }
+    .category-checkbox input { width: 18px; height: 18px; cursor: pointer; }
+    .category-checkbox.selected { background: #EEF2FF; border: 1px solid var(--primary); }
+    
+    /* Select */
+    .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; font-size: 1rem; background: var(--white); cursor: pointer; }
+    .form-group select:focus { outline: none; border-color: var(--primary); }
+    
+    /* Submit Button */
+    .btn { display: inline-block; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s; font-size: 1rem; width: 100%; }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    
+    /* Success Message */
+    .success-message { 
+      background: #D1FAE5; 
+      color: #065F46; 
+      padding: 2rem; 
+      border-radius: 0.75rem; 
+      text-align: center;
+      display: none;
+    }
+    .success-message h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+    .success-message p { margin-bottom: 0.5rem; }
+    
+    /* Error */
+    .error-msg { background: #FEE2E2; color: #991B1B; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; display: none; }
+    
+    /* Unsubscribe Info */
+    .unsubscribe-info { background: var(--white); border-radius: 0.75rem; padding: 1.5rem; margin-top: 2rem; text-align: center; }
+    .unsubscribe-info h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+    .unsubscribe-info p { color: var(--text-light); font-size: 0.875rem; }
+    
+    /* Footer */
+    footer { background: var(--white); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 2rem; text-align: center; }
+    footer p { color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem; }
+    .disclaimer { background: #FEF3C7; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem; color: #92400E; }
+    
+    /* Loading */
+    .loading { text-align: center; padding: 2rem; color: var(--text-light); }
+    
+    @media (max-width: 640px) {
+      header .container { flex-direction: column; }
+      .hero { padding: 2rem 0; }
+      .hero h1 { font-size: 1.5rem; }
+      .category-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Findora</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Get Personalized Product Picks</h1>
+      <p>Subscribe to receive curated recommendations tailored to your interests. No spam, unsubscribe anytime.</p>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <div class="container">
+      <div id="subscribe-form-container" class="form-card">
+        <div id="error-message" class="error-msg"></div>
+        
+        <form id="subscribe-form">
+          <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            <p class="hint">We'll send recommendations to this address. We don't share your email.</p>
+          </div>
+          
+          <div class="form-group">
+            <label>Interested Categories</label>
+            <div id="categories-loading" class="loading">Loading categories...</div>
+            <div id="category-grid" class="category-grid"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="price-preference">Budget Preference</label>
+            <select id="price-preference" name="price_preference">
+              <option value="">No preference</option>
+              <option value="budget">💰 Budget-Friendly</option>
+              <option value="mid-range">💵 Mid-Range</option>
+              <option value="premium">💎 Premium</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="frequency">Update Frequency</label>
+            <select id="frequency" name="frequency_preference">
+              <option value="daily">Daily Picks</option>
+              <option value="weekly" selected>Weekly Digest</option>
+              <option value="biweekly">Every Two Weeks</option>
+              <option value="monthly">Monthly Roundup</option>
+            </select>
+          </div>
+          
+          <button type="submit" id="submit-btn" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+      
+      <div id="success-message" class="success-message">
+        <h2>🎉 You're All Set!</h2>
+        <p>Thank you for subscribing to Findora.</p>
+        <p>Check your inbox for a confirmation email.</p>
+        <p style="margin-top:1rem;"><a href="/">Continue Browsing →</a></p>
+      </div>
+      
+      <div class="unsubscribe-info">
+        <h3>Already Subscribed?</h3>
+        <p>To unsubscribe or update your preferences, email us at <a href="mailto:unsubscribe@findora.example">unsubscribe@findora.example</a> with your email address.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Findora. All rights reserved.</p>
+      <div class="disclaimer">
+        <strong>Affiliate Disclosure:</strong> Findora may earn a commission when you purchase through links in our emails, at no extra cost to you.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const API_BASE = '/api';
+
+    function getAnonymousId() {
+      let id = localStorage.getItem('findora_anonymous_id');
+      if (!id) {
+        id = 'anon_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('findora_anonymous_id', id);
+      }
+      return id;
+    }
+
+    async function fetchAPI(endpoint, options = {}) {
+      try {
+        const headers = { 'Content-Type': 'application/json' };
+        const email = localStorage.getItem('findora_user_email');
+        const anonId = getAnonymousId();
+        if (email) headers['X-User-Email'] = email;
+        headers['X-Anonymous-Id'] = anonId;
+        
+        const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+        const json = await res.json();
+        return json;
+      } catch (err) {
+        console.error('API Error:', err);
+        return { ok: false, error: { message: err.message } };
+      }
+    }
+
+    function renderCategories(categories) {
+      const container = document.getElementById('category-grid');
+      const loading = document.getElementById('categories-loading');
+      loading.style.display = 'none';
+      
+      if (!categories || categories.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-light)">No categories available.</p>';
+        return;
+      }
+      
+      container.innerHTML = categories.map(cat => `
+        <label class="category-checkbox">
+          <input type="checkbox" name="categories" value="${cat.name}">
+          <span>${cat.name.charAt(0).toUpperCase() + cat.name.slice(1)}</span>
+        </label>
+      `).join('');
+      
+      // Add click handlers for visual feedback
+      container.querySelectorAll('.category-checkbox').forEach(label => {
+        label.addEventListener('click', () => {
+          label.classList.toggle('selected');
+        });
+      });
+    }
+
+    function showError(message) {
+      const el = document.getElementById('error-message');
+      el.textContent = message;
+      el.style.display = 'block';
+    }
+
+    function hideError() {
+      document.getElementById('error-message').style.display = 'none';
+    }
+
+    function showSuccess() {
+      document.getElementById('subscribe-form-container').style.display = 'none';
+      document.getElementById('success-message').style.display = 'block';
+    }
+
+    async function loadCategories() {
+      const data = await fetchAPI('/categories');
+      if (data?.data) {
+        renderCategories(data.data);
+      } else {
+        // Show default categories if API fails
+        renderCategories([
+          { name: 'kitchen' }, { name: 'home' }, { name: 'beauty' },
+          { name: 'pets' }, { name: 'electronics' }, { name: 'fashion' }
+        ]);
+      }
+    }
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+      hideError();
+      
+      const email = document.getElementById('email').value.trim();
+      const pricePreference = document.getElementById('price-preference').value;
+      const frequencyPreference = document.getElementById('frequency').value;
+      
+      const selectedCategories = Array.from(
+        document.querySelectorAll('input[name="categories"]:checked')
+      ).map(cb => cb.value);
+      
+      if (!email) {
+        showError('Please enter your email address.');
+        return;
+      }
+      
+      if (!email.includes('@') || !email.includes('.')) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+      
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Subscribing...';
+      
+      const data = await fetchAPI('/subscribe', {
+        method: 'POST',
+        body: JSON.stringify({
+          email,
+          subscribed_categories: selectedCategories,
+          price_preference: pricePreference,
+          frequency_preference: frequencyPreference
+        })
+      });
+      
+      if (data?.ok) {
+        localStorage.setItem('findora_user_email', email);
+        showSuccess();
+      } else {
+        if (data?.error?.code === 'ALREADY_SUBSCRIBED') {
+          showError('This email is already subscribed. Check your inbox or contact us to update preferences.');
+        } else {
+          showError(data?.error?.message || 'Something went wrong. Please try again.');
+        }
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Subscribe';
+      }
+    }
+
+    async function init() {
+      await loadCategories();
+      document.getElementById('subscribe-form').addEventListener('submit', handleSubmit);
+    }
+
+    init();
+  </script>
+</body>
+</html>

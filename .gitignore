@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+*.pyc
+__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OpenClaw workspace state (per-agent)
+.openclaw/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
