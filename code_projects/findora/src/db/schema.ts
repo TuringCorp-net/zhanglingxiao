@@ -69,6 +69,8 @@ export interface List {
   cover_image: string | null;
   category: string | null;
   status: string;
+  content_type: string; // O-F030-06: organic | affiliate | sponsored
+  disclosure: string | null; // O-F030-06: Required for affiliate/sponsored
   published_at: string | null;
   created_at: string;
   updated_at: string;
@@ -260,6 +262,7 @@ export interface ContentTopic {
   approved_at: string | null;
   published_at: string | null;
   archived_at: string | null;
+  scheduled_publish_at: string | null; // O-F030-03: Flexible publish scheduling
   weekly_output: number;
   created_at: string;
   updated_at: string;
@@ -276,6 +279,9 @@ export interface TopicProduct {
   human_verified: number;
   is_selected: number;
   notes: string | null;
+  product_url: string | null; // O-F030-01: Enhanced structured fields
+  highlight_tags: string | null; // O-F030-01: JSON array for key features
+  comparison_notes: string | null; // O-F030-01: Pros/Cons summary
   created_at: string;
   updated_at: string;
 }
@@ -294,6 +300,8 @@ export interface ContentProduction {
   review_notes: string | null;
   review_completed: number;
   review_completed_at: string | null;
+  version: number; // O-F030-04: Version tracking for rollback
+  parent_version_id: string | null; // O-F030-04: Version chain for rollback
   created_at: string;
   updated_at: string;
 }
