@@ -2,9 +2,9 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v0.32
+> **版本：** v0.34
 > **最后更新：** 2026-04-07
-> **状态：** 🔨 进行中（第十七次STR审核通过 — P0/P1/F-020/F-021全部✅，F-022/F-023全部✅）
+> **状态：** 🔨 进行中（F-030代码实现完成，TypeScript编译通过，待第二十次STR审核）
 
 ---
 
@@ -22,6 +22,8 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
+| v0.34 | 2026-04-07 | F-030 代码实现验证 | admin/content.ts 8端点完整实现；migrations/008_content_management.sql；TypeScript编译无错误；三态：F-030 🗓→🏗（待审核） |
+| v0.33 | 2026-04-07 | F-030 代码实现发现 | admin/content.ts (8端点) + migrations/008_content_management.sql；SRS三态更新：F-030-01~05 🗓→🏗 |
 | v0.32 | 2026-04-07 | F-022/F-023 第十七次STR审核通过 | F-022全部13端点✅（多语言API+管理端点）；F-023全部15端点✅（会员API+管理端点）；TypeScript编译无错误；三态更新：F-022/F-023 🏗→✅（SRS更新：67项→87项） |
 | v0.31 | 2026-04-07 | F-022/F-023 代码实现 | F-022多语言支持(13端点)、F-023会员体系(15端点)；migrations/006_i18n_schema.sql、migrations/007_membership_schema.sql；TypeScript编译无错误；三态更新：F-022/F-023 🗓→🏗 |
 | v0.30 | 2026-04-07 | F-020/F-021 第十五次STR审核通过 | 6项AI内容生成全部✅；10项AI审核工作流全部✅；migrations/005_ai_review_records.sql审核通过；TypeScript编译无错误；三态升级🏗→✅（SRS更新：52项→67项） |
@@ -75,7 +77,8 @@ findora/
 │   │   ├── i18n.ts          # F-022 多语言支持 (7端点)
 │   │   ├── membership.ts     # F-023 会员体系 (13端点)
 │   │   └── admin/
-│   │       └── subscribers.ts # F-040-26~27 (F-013-08/09)
+│   │       ├── subscribers.ts # F-040-26~27 (F-013-08/09)
+│   │       └── content.ts # F-030 内容管理 (8端点)
 │   ├── pages/               # 静态HTML前端页面
 │   │   ├── index.html       # F-001 首页
 │   │   ├── category.html    # F-002 分类页
@@ -98,6 +101,7 @@ findora/
 │   ├── 005_ai_review_records.sql # AI审核记录表
 │   ├── 006_i18n_schema.sql # 多语言支持表
 │   └── 007_membership_schema.sql # 会员体系表
+│   └── 008_content_management.sql # F-030内容管理表
 ├── wrangler.toml
 ├── package.json
 └── tsconfig.json
@@ -208,6 +212,33 @@ findora/
 | F-023-06 POST `/api/admin/membership/exclusive-content` | ✅ | D1 upsert | 标记内容为会员专属（指定required_tier） |
 | F-023-06 GET `/api/admin/membership/exclusive-content` | ✅ | D1 查询 | 专属内容列表（content_type过滤） |
 | F-023-06 GET `/api/admin/membership/stats` | ✅ | D1 聚合 | 会员统计数据（按tier分布/收入/即将过期） |
+
+### 内容管理端点（F-030）
+
+| 端点 | 状态 | 实现方式 | 关键决策 |
+|------|------|----------|----------|
+| F-030-01 POST `/api/admin/content/topics` | 🏗 | D1 insert | 创建选题（idea状态），支持priority/target_week |
+| F-030-02 GET `/api/admin/content/topics` | 🏗 | D1 查询 | 选题列表（status过滤+分页），返回product_count |
+| F-030-03 GET `/api/admin/content/topics/:id` | 🏗 | D1 + join | 选题详情（含关联商品列表+商品信息） |
+| F-030-04 PATCH `/api/admin/content/topics/:id` | 🏗 | D1 update | 状态流转校验（idea→in_review→approved→published→archived） |
+| F-030-05 POST `/api/admin/content/topics/:id/products` | 🏗 | D1 insert | 为选题添加候选商品（批量，支持AI评分/理由） |
+| F-030-06 POST `/api/admin/content/publish` | 🏗 | D1 insert+update | 发布内容（从approved选题创建榜单+更新状态） |
+| F-030-07 GET `/api/admin/content/publish/schedule` | 🏗 | D1 查询 | 发布排期（approved/in_review选题+周产出统计） |
+| F-030-08 GET `/api/admin/content/production/stats` | 🏗 | D1 聚合 | 生产统计（周产出列表+总计+平均值） |
+
+**F-030 内容管理状态机：**
+```
+idea → in_review → approved → published → archived
+  ↑       ↓           ↓
+  └───────┴───────────┘ (打回)
+```
+
+**F-030 关键设计决策：**
+- 选题状态转换需校验合法流转路径，不允许跳态
+- 发布时自动创建榜单（lists表）并关联商品
+- 关联商品通过 `topic_products` 表管理，支持 AI 评分和人工筛选
+- 工作流审计日志（workflow_audit_log）记录所有状态变更
+- 周产出统计用于周四复盘会议数据支持
 
 ---
 
