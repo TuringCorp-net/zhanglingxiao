@@ -4,7 +4,7 @@
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
 > **版本：** v0.36
 > **最后更新：** 2026-04-07
-> **状态：** 🔨 进行中（F-030观察项O-F030-01~08实现完成，P1/P2/P3全部闭合）
+> **状态：** 🔨 进行中（F-030观察项O-F030-01~09实现完成，P1/P2/P3全部闭合，O-F030-09为类型安全建议）
 
 ---
 
@@ -255,6 +255,7 @@ idea → in_review → approved → published → archived
 | O-F030-06 | P1 | ✅ | `publishContent`增加disclosure验证：affiliate/sponsored类型内容必须包含disclosure字段，否则返回400错误 |
 | O-F030-07 | P3 | ✅ 已修复（2026-04-07） | wrangler.toml配置Cron Trigger：`0 9 * * 4`（每周四9am UTC）；`handleScheduledPublishing`自动发布已到时的approved选题；**已修复**：index.ts export default 中已注册 `scheduled` 方法，cron trigger 现可正常触发 |
 | O-F030-08 | P3 | ✅ | `getProductionStats`增加TOP3/BOTTOM3计算：按products_published排序，返回表现最好/最差的3个选题 |
+| O-F030-09 | ⚠️ | 非阻塞 | `src/db/schema.ts` TypeScript 接口缺少 Migration 009 新增的6个字段（`content_topics.scheduled_publish_at`；`topic_products.product_url/highlight_tags/comparison_notes`；`content_production.version/parent_version_id`）—— 类型安全建议，不影响D1运行时行为 |
 
 **F-030 新增API字段说明：**
 - `POST /api/admin/content/publish` 新增参数：`content_type`（organic/affiliate/sponsored）、`disclosure`（联盟内容必填）
