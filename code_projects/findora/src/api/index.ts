@@ -37,6 +37,11 @@ import {
   getSubscription, markExclusiveContent, listExclusiveContent,
   listEntitlements, getMembershipStats
 } from './membership';
+import {
+  createTopic, listTopics, getTopic, updateTopicStatus,
+  addTopicProducts, publishContent, getPublishSchedule,
+  getProductionStats
+} from './admin/content';
 
 function isAdmin(request: Request): boolean {
   const adminKey = request.headers.get('X-Admin-Key');
@@ -582,6 +587,48 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       // GET /api/admin/membership/stats - Membership statistics
       if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'stats') {
         return getMembershipStats(env);
+      }
+
+      // === Content Management Routes (F-030) ===
+
+      // POST /api/admin/content/topics - Create topic
+      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'topics' && !segments[4]) {
+        return createTopic(env, request);
+      }
+
+      // GET /api/admin/content/topics - List topics
+      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'topics' && !segments[4]) {
+        return listTopics(env, request);
+      }
+
+      // GET /api/admin/content/topics/:id - Get topic details
+      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'topics' && segments[4]) {
+        return getTopic(env, request, segments[4]);
+      }
+
+      // PATCH /api/admin/content/topics/:id - Update topic status
+      if (request.method === 'PATCH' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'topics' && segments[4]) {
+        return updateTopicStatus(env, request, segments[4]);
+      }
+
+      // POST /api/admin/content/topics/:id/products - Add products to topic
+      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'topics' && segments[4] && segments[5] === 'products') {
+        return addTopicProducts(env, request, segments[4]);
+      }
+
+      // POST /api/admin/content/publish - Publish content
+      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'publish' && !segments[4]) {
+        return publishContent(env, request);
+      }
+
+      // GET /api/admin/content/publish/schedule - Get publish schedule
+      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'publish' && segments[4] === 'schedule') {
+        return getPublishSchedule(env, request);
+      }
+
+      // GET /api/admin/content/production/stats - Get production statistics
+      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'production' && segments[4] === 'stats') {
+        return getProductionStats(env, request);
       }
     }
 

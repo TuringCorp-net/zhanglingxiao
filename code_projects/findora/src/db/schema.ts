@@ -245,6 +245,73 @@ export interface Payment {
   created_at: string;
 }
 
+// Content Topic (F-030) - Content workflow选题
+export interface ContentTopic {
+  id: string;
+  title: string;
+  description: string | null;
+  category: string | null;
+  status: 'idea' | 'in_review' | 'approved' | 'published' | 'archived';
+  priority: number;
+  target_week: string | null;
+  created_by: string | null;
+  reviewed_by: string | null;
+  review_notes: string | null;
+  approved_at: string | null;
+  published_at: string | null;
+  archived_at: string | null;
+  weekly_output: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Topic-Product Association (F-030) - 候选商品
+export interface TopicProduct {
+  id: string;
+  topic_id: string;
+  product_id: string;
+  position: number;
+  ai_score: number | null;
+  ai_reason: string | null;
+  human_verified: number;
+  is_selected: number;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Content Production Tracking (F-030) - 周产出统计
+export interface ContentProduction {
+  id: string;
+  topic_id: string | null;
+  list_id: string | null;
+  week_start: string;
+  week_end: string;
+  products_published: number;
+  content_type: string;
+  status: 'draft' | 'published' | 'archived';
+  published_at: string | null;
+  review_notes: string | null;
+  review_completed: number;
+  review_completed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Workflow Audit Log (F-030) - 合规追踪
+export interface WorkflowAuditLog {
+  id: string;
+  entity_type: string;
+  entity_id: string;
+  action: string;
+  actor: string | null;
+  old_status: string | null;
+  new_status: string | null;
+  notes: string | null;
+  metadata: string | null;
+  created_at: string;
+}
+
 export interface Env {
   DB: D1Database;
   // Email provider settings (F-013-07)
