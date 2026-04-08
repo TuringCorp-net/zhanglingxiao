@@ -247,6 +247,101 @@ export interface Payment {
   created_at: string;
 }
 
+// === Enterprise Management System (EMS) ===
+
+// Enterprise - Organization/Company entity
+export interface Enterprise {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  logo_url: string | null;
+  website: string | null;
+  industry: string | null;
+  size: string | null; // 'startup' | 'small' | 'medium' | 'large' | 'enterprise'
+  status: 'active' | 'inactive' | 'suspended' | 'pending_verification';
+  verified_at: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// Enterprise Member - User membership in an enterprise
+export interface EnterpriseMember {
+  id: string;
+  enterprise_id: string;
+  user_id: string;
+  role: 'owner' | 'admin' | 'member' | 'viewer';
+  status: 'active' | 'inactive' | 'pending' | 'removed';
+  joined_at: string;
+  invited_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Record - Business record/document entity
+export interface Record {
+  id: string;
+  enterprise_id: string;
+  title: string;
+  description: string | null;
+  record_type: string; // 'document' | 'certificate' | 'license' | 'contract' | 'report' | 'other'
+  record_number: string | null;
+  issue_date: string | null;
+  expiry_date: string | null;
+  issuing_authority: string | null;
+  file_url: string | null;
+  file_hash: string | null;
+  metadata: string; // JSON object for flexible fields
+  status: 'draft' | 'active' | 'expired' | 'revoked' | 'archived';
+  created_by: string;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Audit Log - Tracks all actions for compliance
+export interface AuditLog {
+  id: string;
+  enterprise_id: string | null;
+  user_id: string | null;
+  action: string; // 'create' | 'update' | 'delete' | 'login' | 'logout' | 'access' | 'export' | 'approve' | 'reject'
+  resource_type: string; // 'enterprise' | 'member' | 'record' | 'user' | 'auth'
+  resource_id: string | null;
+  ip_address: string | null;
+  user_agent: string | null;
+  changes: string | null; // JSON object showing before/after values
+  metadata: string | null; // Additional context
+  created_at: string;
+}
+
+// User (EMS) - Enterprise system user
+export interface EMSUser {
+  id: string;
+  email: string;
+  password_hash: string | null;
+  name: string | null;
+  phone: string | null;
+  avatar_url: string | null;
+  status: 'active' | 'inactive' | 'suspended' | 'pending_verification';
+  email_verified_at: string | null;
+  last_login_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// User Session (EMS) - Active session tracking
+export interface UserSession {
+  id: string;
+  user_id: string;
+  token: string;
+  ip_address: string | null;
+  user_agent: string | null;
+  expires_at: string;
+  created_at: string;
+}
+
 // Content Topic (F-030) - Content workflow选题
 export interface ContentTopic {
   id: string;
