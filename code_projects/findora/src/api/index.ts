@@ -493,156 +493,156 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       // === Admin i18n Routes (F-022) ===
 
       // GET /api/admin/i18n/locales - List all locales
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'i18n' && segments[3] === 'locales' && !segments[4]) {
+      if (request.method === 'GET' && segments[1] === 'i18n' && segments[2] === 'locales' && !segments[3]) {
         return listLocales(env);
       }
 
       // POST /api/admin/i18n/locales - Add new locale
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'i18n' && segments[3] === 'locales') {
+      if (request.method === 'POST' && segments[1] === 'i18n' && segments[2] === 'locales') {
         return addLocale(env, request);
       }
 
       // PUT /api/admin/i18n/locales/:code - Update locale
-      if (request.method === 'PUT' && segments[1] === 'admin' && segments[2] === 'i18n' && segments[3] === 'locales' && segments[4]) {
-        return updateLocale(env, request, segments[4]);
+      if (request.method === 'PUT' && segments[1] === 'i18n' && segments[2] === 'locales' && segments[3]) {
+        return updateLocale(env, request, segments[3]);
       }
 
       // GET /api/admin/i18n/keys - List translation keys
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'i18n' && segments[3] === 'keys') {
+      if (request.method === 'GET' && segments[1] === 'i18n' && segments[2] === 'keys') {
         return listTranslationKeys(env, request);
       }
 
       // POST /api/admin/i18n/keys - Create translation key
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'i18n' && segments[3] === 'keys') {
+      if (request.method === 'POST' && segments[1] === 'i18n' && segments[2] === 'keys') {
         return createTranslationKey(env, request);
       }
 
       // POST /api/admin/i18n/translations - Save translation
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'i18n' && segments[3] === 'translations') {
+      if (request.method === 'POST' && segments[1] === 'i18n' && segments[2] === 'translations') {
         return saveTranslation(env, request);
       }
 
       // POST /api/admin/i18n/content - Save content translation
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'i18n' && segments[3] === 'content') {
+      if (request.method === 'POST' && segments[1] === 'i18n' && segments[2] === 'content') {
         return saveContentTranslation(env, request);
       }
 
       // GET /api/admin/i18n/sync - Get sync queue
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'i18n' && segments[3] === 'sync') {
+      if (request.method === 'GET' && segments[1] === 'i18n' && segments[2] === 'sync') {
         return getSyncQueue(env, request);
       }
 
       // POST /api/admin/i18n/sync - Queue content for re-translation
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'i18n' && segments[3] === 'sync') {
+      if (request.method === 'POST' && segments[1] === 'i18n' && segments[2] === 'sync') {
         return queueTranslationSync(env, request);
       }
 
       // PUT /api/admin/i18n/sync/:id - Update sync item status
-      if (request.method === 'PUT' && segments[1] === 'admin' && segments[2] === 'i18n' && segments[3] === 'sync' && segments[4]) {
-        return updateSyncItem(env, request, segments[4]);
+      if (request.method === 'PUT' && segments[1] === 'i18n' && segments[2] === 'sync' && segments[3]) {
+        return updateSyncItem(env, request, segments[3]);
       }
 
       // === Admin Membership Routes (F-023) ===
 
       // GET /api/admin/membership/tiers - List all tiers
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'tiers' && !segments[4]) {
+      if (request.method === 'GET' && segments[1] === 'membership' && segments[2] === 'tiers' && !segments[3]) {
         return adminListTiers(env);
       }
 
       // POST /api/admin/membership/tiers - Create tier
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'tiers') {
+      if (request.method === 'POST' && segments[1] === 'membership' && segments[2] === 'tiers') {
         return createTier(env, request);
       }
 
       // PUT /api/admin/membership/tiers/:code - Update tier
-      if (request.method === 'PUT' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'tiers' && segments[4]) {
-        return updateTier(env, request, segments[4]);
+      if (request.method === 'PUT' && segments[1] === 'membership' && segments[2] === 'tiers' && segments[3]) {
+        return updateTier(env, request, segments[3]);
       }
 
       // POST /api/admin/membership/subscribe - Create subscription
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'subscribe') {
+      if (request.method === 'POST' && segments[1] === 'membership' && segments[2] === 'subscribe') {
         return createSubscription(env, request);
       }
 
       // GET /api/admin/membership/subscriptions - List subscriptions
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'subscriptions' && !segments[4]) {
+      if (request.method === 'GET' && segments[1] === 'membership' && segments[2] === 'subscriptions' && !segments[3]) {
         return listSubscriptions(env, request);
       }
 
       // GET /api/admin/membership/subscriptions/:id - Get subscription details
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'subscriptions' && segments[4]) {
-        return getSubscription(env, request, segments[4]);
+      if (request.method === 'GET' && segments[1] === 'membership' && segments[2] === 'subscriptions' && segments[3]) {
+        return getSubscription(env, request, segments[3]);
       }
 
       // POST /api/admin/membership/subscriptions/:id/cancel - Cancel subscription
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'subscriptions' && segments[4] && segments[5] === 'cancel') {
-        return cancelSubscription(env, request, segments[4]);
+      if (request.method === 'POST' && segments[1] === 'membership' && segments[2] === 'subscriptions' && segments[3] && segments[4] === 'cancel') {
+        return cancelSubscription(env, request, segments[3]);
       }
 
       // POST /api/admin/membership/subscriptions/:id/renew - Renew subscription
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'subscriptions' && segments[4] && segments[5] === 'renew') {
-        return renewSubscription(env, request, segments[4]);
+      if (request.method === 'POST' && segments[1] === 'membership' && segments[2] === 'subscriptions' && segments[3] && segments[4] === 'renew') {
+        return renewSubscription(env, request, segments[3]);
       }
 
       // GET /api/admin/membership/entitlements - List entitlements
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'entitlements') {
+      if (request.method === 'GET' && segments[1] === 'membership' && segments[2] === 'entitlements') {
         return listEntitlements(env, request);
       }
 
       // POST /api/admin/membership/exclusive-content - Mark content as exclusive
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'exclusive-content') {
+      if (request.method === 'POST' && segments[1] === 'membership' && segments[2] === 'exclusive-content') {
         return markExclusiveContent(env, request);
       }
 
       // GET /api/admin/membership/exclusive-content - List exclusive content
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'exclusive-content') {
+      if (request.method === 'GET' && segments[1] === 'membership' && segments[2] === 'exclusive-content') {
         return listExclusiveContent(env, request);
       }
 
       // GET /api/admin/membership/stats - Membership statistics
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'membership' && segments[3] === 'stats') {
+      if (request.method === 'GET' && segments[1] === 'membership' && segments[2] === 'stats') {
         return getMembershipStats(env);
       }
 
       // === Content Management Routes (F-030) ===
 
       // POST /api/admin/content/topics - Create topic
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'topics' && !segments[4]) {
+      if (request.method === 'POST' && segments[1] === 'content' && segments[2] === 'topics' && !segments[3]) {
         return createTopic(env, request);
       }
 
       // GET /api/admin/content/topics - List topics
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'topics' && !segments[4]) {
+      if (request.method === 'GET' && segments[1] === 'content' && segments[2] === 'topics' && !segments[3]) {
         return listTopics(env, request);
       }
 
       // GET /api/admin/content/topics/:id - Get topic details
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'topics' && segments[4]) {
-        return getTopic(env, request, segments[4]);
+      if (request.method === 'GET' && segments[1] === 'content' && segments[2] === 'topics' && segments[3]) {
+        return getTopic(env, request, segments[3]);
       }
 
       // PATCH /api/admin/content/topics/:id - Update topic status
-      if (request.method === 'PATCH' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'topics' && segments[4]) {
-        return updateTopicStatus(env, request, segments[4]);
+      if (request.method === 'PATCH' && segments[1] === 'content' && segments[2] === 'topics' && segments[3]) {
+        return updateTopicStatus(env, request, segments[3]);
       }
 
       // POST /api/admin/content/topics/:id/products - Add products to topic
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'topics' && segments[4] && segments[5] === 'products') {
-        return addTopicProducts(env, request, segments[4]);
+      if (request.method === 'POST' && segments[1] === 'content' && segments[2] === 'topics' && segments[3] && segments[4] === 'products') {
+        return addTopicProducts(env, request, segments[3]);
       }
 
       // POST /api/admin/content/publish - Publish content
-      if (request.method === 'POST' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'publish' && !segments[4]) {
+      if (request.method === 'POST' && segments[1] === 'content' && segments[2] === 'publish' && !segments[3]) {
         return publishContent(env, request);
       }
 
       // GET /api/admin/content/publish/schedule - Get publish schedule
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'publish' && segments[4] === 'schedule') {
+      if (request.method === 'GET' && segments[1] === 'content' && segments[2] === 'publish' && segments[3] === 'schedule') {
         return getPublishSchedule(env, request);
       }
 
       // GET /api/admin/content/production/stats - Get production statistics
-      if (request.method === 'GET' && segments[1] === 'admin' && segments[2] === 'content' && segments[3] === 'production' && segments[4] === 'stats') {
+      if (request.method === 'GET' && segments[1] === 'content' && segments[2] === 'production' && segments[3] === 'stats') {
         return getProductionStats(env, request);
       }
 

@@ -1,5 +1,5 @@
 // Record Module - Record CRUD operations
-import { Env, Record } from '../db/schema';
+import { Env, Record as RecordEntity } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
 import { verifyToken, createAuditLog } from './auth';
@@ -22,8 +22,8 @@ async function checkEnterpriseAccess(env: Env, userId: string, enterpriseId: str
 }
 
 // Helper to check record access
-async function getRecordWithAccessCheck(env: Env, recordId: string, userId: string, requiredRoles: string[]): Promise<Record<string, unknown> | null> {
-  const record = await env.DB.prepare('SELECT * FROM records WHERE id = ?').bind(recordId).first<Record<string, unknown>>();
+async function getRecordWithAccessCheck(env: Env, recordId: string, userId: string, requiredRoles: string[]): Promise<RecordEntity | null> {
+  const record = await env.DB.prepare('SELECT * FROM records WHERE id = ?').bind(recordId).first<RecordEntity>();
   if (!record) return null;
 
   const hasAccess = await checkEnterpriseAccess(env, userId, record.enterprise_id as string, requiredRoles);
@@ -48,7 +48,7 @@ export async function createRecord(env: Env, request: Request, enterpriseId: str
     });
   }
 
-  const body = await request.json() as Partial<Record>;
+  const body = await request.json() as Partial<RecordEntity>;
   if (!body.title || !body.record_type) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'Title and record_type are required')), {
       status: 400,
@@ -217,7 +217,7 @@ export async function updateRecord(env: Env, request: Request, enterpriseId: str
     });
   }
 
-  const body = await request.json() as Partial<Record>;
+  const body = await request.json() as Partial<RecordEntity>;
   const now = new Date().toISOString();
 
   const fields: string[] = ['updated_at = ?'];

@@ -2,9 +2,9 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.01
-> **最后更新：** 2026-04-08
-> **状态：** ✅ STR阻塞项已修复（C-01/C-02）；D1+R2主从分离架构待完成
+> **版本：** v3.02
+> **最后更新：** 2026-04-09
+> **状态:** ✅ TypeScript编译错误修复；路由挂载层级修复（C-01）；Seed数据修复
 
 ---
 
@@ -39,6 +39,7 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
+| v3.02 | 2026-04-09 | TypeScript编译错误修复 + 路由挂载层级修复 | 1) 修复`record.ts`中`Record`类型冲突（重命名为`RecordEntity`）；2) 修复`audit.ts`CSV导出类型问题；3) 修复`index.ts`中admin路由的segment索引错误（admin/i18n/membership/content路由）；4) 修复`migrations/003_seed_data.sql`中`list_products`INSERT缺少`id`和`created_at`字段 |
 | v3.01 | 2026-04-08 | STR阻塞项修复（C-01/C-02） | C-01: 修复`index.ts`路由挂载层级，恢复`/api/i18n/*`和`/api/membership/*`可达性；C-02: `handleScheduledPublishing`现在正确创建`lists`和`list_products`，实现完整的定时发布闭环 |
 | v0.36 | 2026-04-07 | F-030 观察项实现（O-F030-01~08） | P1: O-F030-05/06 disclosure声明验证✅；P2: O-F030-01结构化字段/O-F030-03定时发布/O-F030-04版本管理✅；P3: O-F030-07 Cron Trigger/O-F030-08 TOP3/BOTTOM3自动化✅；migrations/009_content_disclosure_fields.sql |
 | v0.35 | 2026-04-07 | F-030 第二十次STR审核通过 | 8个端点全部✅；状态机/审计日志/发布排期/生产统计全部验证；4项观察项（O-F030-01~08）为P1/P2/P3；三态升级：F-030 🏗→✅ |

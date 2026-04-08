@@ -302,8 +302,9 @@ export async function exportAuditLogs(env: Env, request: Request, enterpriseId: 
     const headers = ['id', 'enterprise_id', 'user_id', 'action', 'resource_type', 'resource_id', 'ip_address', 'created_at'];
     const csvRows = [headers.join(',')];
     for (const log of logs) {
+      const logRecord = log as Record<string, unknown>;
       csvRows.push(headers.map(h => {
-        const val = log[h];
+        const val = logRecord[h];
         if (val === null || val === undefined) return '';
         if (typeof val === 'string' && (val.includes(',') || val.includes('"'))) {
           return `"${val.replace(/"/g, '""')}"`;

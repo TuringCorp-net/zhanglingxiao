@@ -375,15 +375,15 @@ INSERT INTO lists (id, slug, title, description, why_these, cover_image, categor
   );
 
 -- Associate products with lists
-INSERT INTO list_products (list_id, product_id, position) VALUES
-  ('list-001', 'prod-001', 1),
-  ('list-001', 'prod-002', 2),
-  ('list-001', 'prod-003', 3),
-  ('list-002', 'prod-004', 1),
-  ('list-002', 'prod-005', 2),
-  ('list-002', 'prod-006', 3),
-  ('list-003', 'prod-008', 1),
-  ('list-003', 'prod-009', 2);
+INSERT INTO list_products (id, list_id, product_id, position, created_at) VALUES
+  ('lp-001', 'list-001', 'prod-001', 1, datetime('now')),
+  ('lp-002', 'list-001', 'prod-002', 2, datetime('now')),
+  ('lp-003', 'list-001', 'prod-003', 3, datetime('now')),
+  ('lp-004', 'list-002', 'prod-004', 1, datetime('now')),
+  ('lp-005', 'list-002', 'prod-005', 2, datetime('now')),
+  ('lp-006', 'list-002', 'prod-006', 3, datetime('now')),
+  ('lp-007', 'list-003', 'prod-008', 1, datetime('now')),
+  ('lp-008', 'list-003', 'prod-009', 2, datetime('now'));
 
 -- ============================================
 -- USERS (F-013) - Sample User Data
