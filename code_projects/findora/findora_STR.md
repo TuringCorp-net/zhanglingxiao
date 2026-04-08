@@ -2,29 +2,29 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.00
-> **最后更新：** 2026-04-08
-> **审核时间：** 2026-04-08
-> **状态：** 🔴 **存在阻塞项（以“当前有效结论”章节为准）**
+> **版本：** v3.01
+> **最后更新：** 2026-04-09
+> **审核时间：** 2026-04-09 00:37
+> **状态：** 🔴 **存在阻塞项（以”当前有效结论”章节为准）**
 
 ---
 
-## 当前有效结论（v3.00 基线）
+## 当前有效结论（v3.01 基线）
 
-> 本章节是唯一有效的当前结论。后续历史轮次记录仅作为审计归档，不再与本章节并列作为“最终状态”。
+> 本章节是唯一有效的当前结论。后续历史轮次记录仅作为审计归档，不再与本章节并列作为”最终状态”。
 
 ### 1) 本轮结论摘要
 
-- 当前代码仍有阻塞上线问题，主要集中在路由挂载层级与定时发布闭环。
-- Admin Key 已切换为环境变量读取，`schema.ts` 的 `Env` 接口冲突标记已清理。
-- `list_products` 在迁移层存在双定义漂移风险，应收敛为单一事实来源。
+- 代码存在 10 项 TypeScript 编译错误，阻塞 CI/CD。
+- `migrations/003_seed_data.sql` 中 `list_products` INSERT 缺少必填字段（`id`, `created_at`），阻塞迁移加载。
+- SRS v3.03 中报告的 C-01（路由挂载层级）和 C-02（定时发布闭环）问题已确认修复。
 
 ### 2) 当前阻塞项（按优先级）
 
 | 等级 | 问题 | 位置 | 现状 |
 |------|------|------|------|
-| 🔴 CRITICAL | 路由挂载层级错误导致可达性异常 | `src/api/index.ts` | 在 `segments[0] === 'admin'` 分支中处理 `segments[1] === 'admin'` 及公共 `i18n/membership` 路由，导致 `/api/admin/*` 与部分公共路由可达性异常 |
-| 🔴 CRITICAL | 定时发布未复用完整发布闭环 | `src/api/admin/content.ts` | `handleScheduledPublishing` 仅更新 topic 状态，未创建 `lists` 与 `list_products`，与 `publishContent` 业务闭环不一致 |
+| 🔴 CRITICAL | TypeScript 编译错误（10项） | `src/api/record.ts` + `src/api/audit.ts` | `Record` 类型冲突 + `audit.ts` 索引类型不匹配，阻塞 CI/CD |
+| 🔴 CRITICAL | Seed Data INSERT 缺少必填字段 | `migrations/003_seed_data.sql:378` | `INSERT INTO list_products` 缺少 `id` 和 `created_at`，阻塞迁移加载 |
 | 🟡 HIGH | `list_products` 迁移模型漂移 | `migrations/001_initial_schema.sql` + `migrations/010_list_products.sql` | 001 与 010 对同表定义不一致，需统一字段与主键策略 |
 
 ### 3) 需求与架构一致性审计发现（Business Concept & System Design）
