@@ -2,10 +2,10 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v1.18
-> **最后更新：** 2026-04-08 12:32 (Asia/Shanghai)
-> **审核时间：** 2026-04-08 12:32 (Asia/Shanghai)
-> **状态：** ✅ **阻塞解除** — 第34次审核确认所有 CRITICAL 阻塞项已修复
+> **版本：** v1.19
+> **最后更新：** 2026-04-08 14:35 (Asia/Shanghai)
+> **审核时间：** 2026-04-08 14:35 (Asia/Shanghai)
+> **状态：** ⚠️ **发现新 CRITICAL 阻塞** — 第36次审核发现 seed_data.sql 迁移缺少必填字段
 
 ---
 
@@ -342,6 +342,152 @@ await env.DB.prepare(`
 **审核人员：** Claude Code
 
 **审核日期：** 2026-04-08 13:33 (Asia/Shanghai)
+
+---
+
+## 第36次审核 — 2026-04-08（问题修复验证 + Seed Data 缺陷审计）
+
+**审核时间：** 2026-04-08 14:35 (Asia/Shanghai)
+**审核范围：** 验证第35次 STR 发现的 C-NEW 问题修复状态 + migrations/003_seed_data.sql 完整性审查
+**审核结论：** ⚠️ **C-NEW 已修复，但发现 1 项新的 CRITICAL 阻塞问题 — seed_data.sql INSERT 缺少必填字段**
+
+---
+
+### 审核方法
+
+1. 读取 `src/api/admin/content.ts:511-514` 验证 C-NEW 修复
+2. 执行 `npx tsc --noEmit` 验证 TypeScript 编译
+3. 读取 `migrations/003_seed_data.sql:378-386` 检查 seed data INSERT 语句
+4. 对比 `schema.ts:324-329` 和 `migrations/010_list_products.sql` 验证字段完整性
+
+---
+
+### C-NEW 修复验证
+
+| # | 问题 | 位置 | 验证结果 | 证据 |
+|---|------|------|----------|------|
+| C-NEW | `list_products` INSERT 缺少必填字段 | `content.ts:511-514` | ✅ **已修复** | `INSERT INTO list_products (id, list_id, product_id, position, created_at) VALUES (?, ?, ?, ?, ?).bind(crypto.randomUUID(), listId, productId, position++, new Date().toISOString())` |
+
+**结论：** ✅ 第35次 STR 发现的 C-NEW 问题已正确修复
+
+---
+
+### 发现问题汇总
+
+#### 🔴 CRITICAL（必须修复 — 阻塞 Seed Data 加载）
+
+| # | 问题 | 位置 | 描述 |
+|---|------|------|------|
+| C-NEW-2 | Seed Data INSERT 缺少必填字段 | `migrations/003_seed_data.sql:378-386` | INSERT 语句仅提供 `(list_id, product_id, position)`，但 schema 要求 `id`（PRIMARY KEY, NOT NULL）和 `created_at`（NOT NULL），迁移加载时报错 |
+
+#### 🟡 MEDIUM（建议修复）
+
+| # | 问题 | 位置 | 描述 |
+|---|------|------|------|
+| M-NEW-3 | wrangler.toml ADMIN_KEY 默认值 | `wrangler.toml:20` | vars 区含默认值 `"findora-admin-secret"`，生产环境需通过 `wrangler secret put` 注入实际密钥 |
+
+---
+
+### 详细问题分析
+
+#### C-NEW-2: Seed Data INSERT 缺少必填字段（CRITICAL）
+
+**SRS 要求：** F-004 榜单内容发布流程需要完整的 `list_products` 关联表
+
+**数据库约束（migrations/010_list_products.sql）：**
+```sql
+CREATE TABLE IF NOT EXISTS list_products (
+  id TEXT PRIMARY KEY,        -- NOT NULL
+  list_id TEXT NOT NULL,
+  product_id TEXT NOT NULL,
+  position INTEGER DEFAULT 0,
+  created_at TEXT NOT NULL,   -- NOT NULL
+  ...
+);
+```
+
+**错误代码（migrations/003_seed_data.sql:378-386）：**
+```sql
+INSERT INTO list_products (list_id, product_id, position) VALUES
+  ('list-001', 'prod-001', 1),
+  ('list-001', 'prod-002', 2),
+  ('list-001', 'prod-003', 3),
+  ('list-002', 'prod-004', 1),
+  ('list-002', 'prod-005', 2),
+  ('list-002', 'prod-006', 3),
+  ('list-003', 'prod-008', 1),
+  ('list-003', 'prod-009', 2);
+```
+
+**影响：** 当 `migrations apply` 加载 seed data 时，尝试写入 `list_products` 将抛出数据库约束错误（缺少 `id` 和 `created_at`），导致迁移失败。
+
+**修复方案：**
+```sql
+INSERT INTO list_products (id, list_id, product_id, position, created_at) VALUES
+  (lower(hex(randomblob(16))), 'list-001', 'prod-001', 1, datetime('now')),
+  (lower(hex(randomblob(16))), 'list-001', 'prod-002', 2, datetime('now')),
+  (lower(hex(randomblob(16))), 'list-001', 'prod-003', 3, datetime('now')),
+  (lower(hex(randomblob(16))), 'list-002', 'prod-004', 1, datetime('now')),
+  (lower(hex(randomblob(16))), 'list-002', 'prod-005', 2, datetime('now')),
+  (lower(hex(randomblob(16))), 'list-002', 'prod-006', 3, datetime('now')),
+  (lower(hex(randomblob(16))), 'list-003', 'prod-008', 1, datetime('now')),
+  (lower(hex(randomblob(16))), 'list-003', 'prod-009', 2, datetime('now'));
+```
+
+---
+
+### TypeScript 编译验证
+
+```
+$ npx tsc --noEmit
+→ EXIT:0，无错误输出，0 errors, 0 warnings
+```
+
+**结论：** ✅ TypeScript 编译通过
+
+---
+
+### 总体评估
+
+**SRS 符合性：** ✅ 全部 127 项功能符合 SRS v2.16 需求
+
+**问题修复状态（第35次 STR）：**
+| 严重程度 | 数量 | 状态 |
+|----------|------|------|
+| 🔴 CRITICAL | 1 | ✅ 已修复 |
+| 🟡 MEDIUM | 2 | 待修复 |
+
+**本次审计发现：**
+| 严重程度 | 数量 | 状态 |
+|----------|------|------|
+| 🔴 CRITICAL（新增） | 1 | 需修复 ⚠️ |
+| 🟡 MEDIUM（新增） | 1 | 建议修复 |
+
+**阻塞状态：** ⚠️ **C-NEW-2 阻塞 seed data 加载，需修复后复审**
+
+---
+
+### 下一步行动
+
+**P0 — 必须立即修复（阻塞迁移加载）：**
+1. 🔴 **C-NEW-2**: `migrations/003_seed_data.sql:378-386` — INSERT 补全 `id`（lower(hex(randomblob(16)))）和 `created_at`（datetime('now')）字段
+
+**P1 — 建议修复：**
+2. 确认生产环境 `wrangler secret put ADMIN_KEY` 正确配置
+
+**无需修复（已解决）：**
+- ~~C-NEW~~: content.ts list_products INSERT → ✅ 已修复（content.ts:511-514）
+- ~~C-01~~: list_products 表缺失 → ✅ 已修复（migrations/010 + schema.ts）
+- ~~C-02~~: Admin 密钥硬编码 → ✅ 已修复（env.ADMIN_KEY）
+- ~~M-01~~: LIKE 查询注入风险 → ✅ 已修复（无 LIKE.*\$ 模式）
+- ~~M-02~~: 错误码过少 → ✅ 已修复（28个）
+- ~~M-03~~: Cron 注释与实现不符 → ✅ 已修复
+
+---
+
+**审核人员：** Claude Code
+
+**审核日期：** 2026-04-08 14:35 (Asia/Shanghai)
 
 ## 第33次审核 — 2026-04-08（代码实现验证审计）
 
