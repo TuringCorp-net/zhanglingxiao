@@ -2,10 +2,230 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v1.15
-> **最后更新：** 2026-04-08 06:32 (Asia/Shanghai)
-> **审核时间：** 2026-04-08 06:32 (Asia/Shanghai)
-> **状态：** ✅ 完成（全部127项审核通过，第31次审核通过，无阻塞项）
+> **版本：** v1.16
+> **最后更新：** 2026-04-08 07:32 (Asia/Shanghai)
+> **审核时间：** 2026-04-08 07:32 (Asia/Shanghai)
+> **状态：** ⚠️ 待修复（第32次审核发现 2 CRITICAL + 3 MEDIUM + 4 LOW 问题）
+
+---
+
+## 第32次审核 — 2026-04-08（代码实现审计 + 深度审核）
+
+**审核时间：** 2026-04-08 07:32 (Asia/Shanghai)
+**审核范围：** src/ 目录代码全面审计 + TypeScript 编译验证 + SRS v2.13 符合性复核 + 安全审查
+**审核结论：** ⚠️ **发现 8 项问题（2 CRITICAL, 3 MEDIUM, 4 LOW）— 需要修复后复审**
+
+---
+
+### 审核方法
+
+1. 执行 `npx tsc --noEmit` 验证 TypeScript 编译
+2. 读取所有 `src/api/` 和 `src/api/admin/` 文件（共 22 个 API 模块）
+3. 读取 `src/db/schema.ts` 验证 TypeScript 接口与数据库 Schema 对齐
+4. 读取 `wrangler.toml` 验证 Cron Trigger 和环境配置
+5. 读取 `src/lib/response.ts` 和 `src/lib/errors.ts` 验证统一响应和错误处理
+6. 对照 SRS v2.13 进行符合性复核
+7. 安全审查：SQL注入、鉴权、错误处理
+
+---
+
+### 1. TypeScript 编译验证
+
+```
+$ npx tsc --noEmit
+→ 无错误输出，0 errors, 0 warnings
+```
+
+**结论：** ✅ TypeScript 编译稳定通过
+
+---
+
+### 2. API 端点清点
+
+| 类别 | 数量 | 说明 |
+|------|------|------|
+| 公共端点 | ~20 | F-040-01~05 及扩展 |
+| 用户端点 | ~13 | 订阅/收藏/偏好/推荐/解释 |
+| Admin 端点 | ~65 | CMS/商品/标签/分析/AI/内容管理 |
+| **合计** | **~98** | 超过 SRS 声称的 53 端点（因 F-020~F-023 扩展） |
+
+**结论：** ✅ 端点数量充足，覆盖全部 SRS 功能模块
+
+---
+
+### 3. 发现问题汇总
+
+#### 🔴 CRITICAL（必须修复）
+
+| # | 问题 | 位置 | 描述 |
+|---|------|------|------|
+| C-01 | `list_products` 表缺失 | `lists.ts:35`, `content.ts:512` | 代码引用 `list_products` 表但 schema.ts 中未定义，运行时会报错 |
+| C-02 | Admin 密钥硬编码 | `index.ts:48` | `findora-admin-secret` 硬编码在源码中，应使用 `env.ADMIN_KEY` 环境变量 |
+
+#### 🟡 MEDIUM（建议修复）
+
+| # | 问题 | 位置 | 描述 |
+|---|------|------|------|
+| M-01 | LIKE 注入风险 | `tags.ts:111`, `email.ts:349`, `subscribers.ts:165` | 用户输入直接拼入 LIKE 模式，未转义 regex 元字符 |
+| M-02 | 错误码过少 | `errors.ts` 仅 5 个 | 85+ 端点仅 5 个错误码，部分端点混用字符串字面量 |
+| M-03 | Cron 注释与实现不符 | `wrangler.toml` | 注释称"发送 review notifications"，实际只实现了 publish topics |
+
+#### 🟢 LOW（可选修复）
+
+| # | 问题 | 位置 | 描述 |
+|---|------|------|------|
+| L-01 | User 接口缺字段 | `schema.ts:30-47` | 缺少 `disliked_tags`、`price_preference` 字段（behavior.ts 和 recommendations.ts 引用） |
+| L-02 | List 插入缺字段 | `lists.ts:66-72` | INSERT 未包含 `content_type`、`disclosure` 字段（schema 定义了但未写入） |
+| L-03 | 类型断言过多 | 多文件 | 大量 `as unknown as X` 绕过类型检查，降低类型安全性 |
+| L-04 | AI prompt 泄露 | `explain.ts:226-236` | BANNED_WORDS 直接内嵌在 prompt 中，响应可能泄露禁止词列表 |
+
+---
+
+### 4. 详细问题分析
+
+#### C-01: `list_products` 表缺失（CRITICAL）
+
+**SRS 要求：** F-004 榜单详情（含商品条目）需要 `list_products` 关联表
+**代码引用：**
+```sql
+-- lists.ts:35
+SELECT p.* FROM products p
+INNER JOIN list_products lp ON p.id = lp.product_id
+WHERE lp.list_id = ? AND p.status = ?
+
+-- content.ts:512
+INSERT INTO list_products (list_id, product_id, position, created_at)
+VALUES (?, ?, ?, ?)
+```
+**问题：** `schema.ts` 中无 `ListProduct` 接口定义，无 Migration 创建此表
+**影响：** 榜单商品关联功能运行时报错
+**修复建议：** 在 `schema.ts` 添加 `ListProduct` 接口，并在 Migration 中创建表
+
+---
+
+#### C-02: Admin 密钥硬编码（CRITICAL）
+
+**SRS 要求：** C-04 高风险操作需安全管理
+**当前代码：**
+```typescript
+// index.ts:46-49
+function isAdmin(request: Request): boolean {
+  const adminKey = request.headers.get('X-Admin-Key');
+  return adminKey === 'findora-admin-secret';  // 硬编码！
+}
+```
+**问题：** 密钥在源码中明文存储，泄露风险高
+**修复建议：** 改为 `env.ADMIN_KEY` 读取，支持密钥轮换和环境隔离
+
+---
+
+#### M-01: LIKE 注入风险（MEDIUM）
+
+**当前代码：**
+```typescript
+// tags.ts:111
+.bind(`%\${existing.name}"%`)  // name 包含 . * ? 等regex元字符会破坏LIKE语义
+
+// email.ts:349
+subscribersQuery += ' AND subscribed_categories LIKE ?';
+subscriberBindings.push(`%\${body.category}"%`);  // category 未经转义
+```
+**影响：** 用户输入 `.` 或 `*` 可能导致意外匹配行为
+**修复建议：** 转义 LIKE 元字符或改用 JSON 数组查询
+
+---
+
+#### M-02: 错误码过少（MEDIUM）
+
+**当前状态：** `errors.ts` 仅定义 5 个错误码（INVALID_PARAMS, NOT_FOUND, ALREADY_SUBSCRIBED, NOT_SUBSCRIBED, INTERNAL_ERROR）
+**混用示例：**
+```typescript
+// index.ts:57
+jsonError('NOT_FOUND', 'Not found')  // 字符串字面量
+
+// index.ts:182
+jsonError(ErrorCodes.INVALID_PARAMS, 'Admin authorization required')  // 枚举
+```
+**影响：** 错误追踪和监控困难
+**修复建议：** 扩展到 15+ 错误码，统一使用 `ErrorCodes` 枚举
+
+---
+
+#### M-03: Cron 注释与实现不符（MEDIUM）
+
+**wrangler.toml 注释：**
+```toml
+# 周四早上9点执行: 发布待发布内容 + 发送审核通知
+```
+**实际实现（index.ts:652-655）：**
+```typescript
+async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+  const { handleScheduledPublishing } = await import('./admin/content');
+  await handleScheduledPublishing(env);  // 仅发布内容，无通知逻辑
+}
+```
+**修复建议：** 补充 review 通知实现或更新注释
+
+---
+
+### 5. 符合项确认（与 SRS v2.13 对照）
+
+| SRS 模块 | 需求数 | 审核结果 | 说明 |
+|----------|--------|----------|------|
+| F-040 API端点 | 53项 | ✅ | 98端点覆盖全部需求，含F-020~F-023扩展 |
+| F-030 内容管理 | 8端点 | ✅ | 7端点实现，1端点命名差异 |
+| F-020 AI辅助能力 | 6项 | ✅ | 端点完整 |
+| F-021 AI边界限制 | 10项 | ✅ | 端点完整 |
+| F-022 多语言支持 | 5项 | ✅ | 端点完整 |
+| F-023 会员体系 | 6项 | ✅ | 端点完整 |
+| F-050 数据模型 | schema.ts | ⚠️ | C-01 list_products缺失 |
+| SQL注入防护 | 全部 | ⚠️ | LIKE模式存在风险（M-01） |
+| Cron Trigger | O-F030-07 | ⚠️ | M-03 注释与实现不符 |
+
+---
+
+### 6. 总体评估
+
+**SRS 符合性：** ⚠️ 主体功能符合，但存在 2 项 CRITICAL 阻塞
+
+**问题统计：**
+| 严重程度 | 数量 | 状态 |
+|----------|------|------|
+| 🔴 CRITICAL | 2 | 必须修复 |
+| 🟡 MEDIUM | 3 | 建议修复 |
+| 🟢 LOW | 4 | 可选修复 |
+| **合计** | **8** | |
+
+**代码质量：**
+| 指标 | 结果 |
+|------|------|
+| TypeScript编译 | ✅ 0 errors, 0 warnings |
+| SQL参数化 | ✅ 大部分使用 .bind() |
+| Admin鉴权 | ⚠️ 密钥硬编码（需修复） |
+| 错误处理 | ⚠️ 错误码过少 |
+| 响应格式 | ✅ jsonSuccess/jsonError统一 |
+
+---
+
+### 7. 下一步行动
+
+**必须修复（阻塞 P0）：**
+1. **C-01**: 在 `schema.ts` 添加 `ListProduct` 接口，创建 Migration `010_list_products.sql`
+2. **C-02**: 将 Admin 密钥改为 `env.ADMIN_KEY` 环境变量读取
+
+**建议修复（P1）：**
+3. **M-01**: LIKE 查询转义处理
+4. **M-02**: 扩展 `ErrorCodes` 到 15+ 个
+
+**可选优化（P2）：**
+5. **M-03**: 统一 Cron 注释与实现
+6. **L-01~L-04**: 字段补全、类型断言优化、AI prompt 分离
+
+---
+
+**审核人员：** Claude Code
+
+**审核日期：** 2026-04-08 07:32 (Asia/Shanghai)
 
 ---
 

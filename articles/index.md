@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-08
+- **文件**: 20260408-2604.04898-qed-nano.md
+- **标题**: 4B参数打败300B：一个"小个子"如何踢开IMO金牌的大门
+- **论文来源**: arXiv:2604.04898 | QED-Nano: Teaching a Tiny Model to Prove Hard Theorems
+- **作者**: LM-Provers团队（CMU、Hugging Face、ETH Zurich、Project Numina）
+- **撰写日期**: 2026-04-08（北京时间）
+- **备注**: 40亿参数小模型在IMO证明题上接近Gemini 3 Pro水平；三阶段训练（SFT+RL+推理缓存）；IMO-ProofBench 57% vs Nomos-1 30B的30%；开源全部模型、数据集和代码
+
 ### 2026-04-07
 - **文件**: 20260407-2604.03173-citation-hallucination.md
 - **标题**: 当AI给你一个"死链接"：大模型引用幻觉问题有多严重？
