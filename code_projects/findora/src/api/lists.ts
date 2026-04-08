@@ -1,5 +1,5 @@
 // Lists API - F-040-03, F-040-04, F-040-18
-import { Env, List, Product } from '../db/schema';
+import { Env, List, ListProduct } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
 
@@ -64,11 +64,12 @@ export async function createList(env: Env, request: Request): Promise<Response> 
   const published_at = status === 'published' ? now : null;
 
   await env.DB.prepare(`
-    INSERT INTO lists (id, slug, title, description, why_these, cover_image, category, status, published_at, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO lists (id, slug, title, description, why_these, cover_image, category, status, content_type, disclosure, published_at, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     id, body.slug, body.title, body.description || null, body.why_these || null,
-    body.cover_image || null, body.category || null, status, published_at, now, now
+    body.cover_image || null, body.category || null, status,
+    body.content_type || 'organic', body.disclosure || null, published_at, now, now
   ).run();
 
   return new Response(JSON.stringify(jsonSuccess({ id })), {

@@ -43,9 +43,10 @@ import {
   getProductionStats
 } from './admin/content';
 
-function isAdmin(request: Request): boolean {
+function isAdmin(request: Request, env: Env): boolean {
   const adminKey = request.headers.get('X-Admin-Key');
-  return adminKey === 'findora-admin-secret';
+  if (!adminKey || !env.ADMIN_KEY) return false;
+  return adminKey === env.ADMIN_KEY;
 }
 
 async function handleRequest(env: Env, request: Request): Promise<Response> {
@@ -176,7 +177,7 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
     // === Admin Endpoints (require admin auth) ===
 
     if (segments[0] === 'admin') {
-      if (!isAdmin(request)) {
+      if (!isAdmin(request, env)) {
         return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'Admin authorization required')), {
           status: 401,
           headers: { 'Content-Type': 'application/json' },
