@@ -322,6 +322,7 @@ export interface WorkflowAuditLog {
 
 export interface Env {
   DB: D1Database;
+  ASSETS: Fetcher;
   // Email provider settings (F-013-07)
   EMAIL_PROVIDER?: 'resend' | 'sendgrid';
   EMAIL_API_KEY?: string;

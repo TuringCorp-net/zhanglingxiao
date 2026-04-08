@@ -1,36 +1,22 @@
-name = "findora-api"
+name = "findora_api"
 main = "src/api/index.ts"
 compatibility_date = "2024-12-05"
 
-[site]
-bucket = "./dist"
+routes = [
+  { pattern = "findora.turingcorp.net", custom_domain = true }
+]
 
 [[d1_databases]]
 binding = "DB"
-database_name = "findora-staging"
-database_id = "staging-placeholder"
+database_name = "findora_db"
+database_id = "67e67029-725a-499f-b4d6-f2969a3f8073"
+migrations_dir = "migrations"
 
-# AI provider configuration (F-020, F-021)
-# Set via `wrangler secret put AI_API_KEY` for production
+[assets]
+directory = "src/pages"
+
 [vars]
 AI_PROVIDER = "openai"
 
-# O-F030-07: Cron Trigger for weekly automated tasks
-# Runs every Thursday at 9am UTC for weekly review preparation
-# Publishes scheduled topics and sends review notifications
 [triggers]
-crons = ["0 9 * * 4"]
-
-[env.production]
-[[d1_databases]]
-binding = "DB"
-database_name = "findora-production"
-database_id = "production-placeholder"
-
-# AI provider configuration for production
-[env.production.vars]
-AI_PROVIDER = "openai"
-
-# O-F030-07: Cron Trigger for production
-[env.production.triggers]
 crons = ["0 9 * * 4"]

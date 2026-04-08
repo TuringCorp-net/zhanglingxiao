@@ -54,10 +54,8 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
 
   // API prefix required
   if (!pathname.startsWith('/api/')) {
-    return new Response(JSON.stringify(jsonError('NOT_FOUND', 'Not found')), {
-      status: 404,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    // If not an API request, let Cloudflare Assets handle it
+    return env.ASSETS.fetch(request);
   }
 
   const path = pathname.slice(4); // Remove '/api'
