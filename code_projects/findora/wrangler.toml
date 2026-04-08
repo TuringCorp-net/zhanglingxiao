@@ -12,6 +12,10 @@ database_name = "findora_db"
 database_id = "67e67029-725a-499f-b4d6-f2969a3f8073"
 migrations_dir = "migrations"
 
+[[r2_buckets]]
+binding = "PRODUCTS_BUCKET"
+bucket_name = "findora-products"
+
 [assets]
 directory = "src/pages"
 
