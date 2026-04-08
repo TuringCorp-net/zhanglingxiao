@@ -2,9 +2,9 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v0.36
-> **最后更新：** 2026-04-07
-> **状态：** 🔨 进行中（F-030观察项O-F030-01~08实现完成，P1/P2/P3全部闭合，O-F030-02为前端界面优化N/A）
+> **版本：** v3.00
+> **最后更新：** 2026-04-08
+> **状态：** 🔨 架构重构中（D1+R2 主从分离，AI Agent 原生友好）
 
 ---
 
@@ -16,12 +16,30 @@
 - 如果SRS中某功能已是✅状态（已审核通过），则跳过该功能不要重复实现
 - 每次迭代完成后在此处记录进度
 
+> 🔄 **v3.0 重构特别说明**：
+> 根据最新 `system_design.md`，本项目底层已确立 **“D1建索引 + R2存Markdown内容 + 统一数据API”** 架构。所有涉及商品内容读写的端点（如 `/api/products`）及其关联实现状态已回退为 🗓 待重构。
+
+### v3.0 架构硬约束（执行基线）
+
+1. 所有外部访问必须经 Cloudflare Workers 数据 API 层，前端与 Agent 禁止直连 D1/R2。
+2. D1 仅存结构化索引与关系字段；R2 存 Markdown 内容与媒体资产。
+3. API 需同时满足人类用户与 Agent 用户的一致数据口径，优先提供机器可读响应。
+4. 用户会话必须有失效时间（Session TTL）与失效回收机制，避免长期有效凭据。
+5. **内部调用性能优化**：如果涉及到 Cloudflare Worker 之间的内部互相调用，且在同一个一级域名下，优先使用 Service Bindings（而不是 http fetch）。
+
+### 阶段策略对齐（Business Concept + System Design）
+
+- MVP：匿名优先，不强制登录；保持“内容 + 推荐 + 跳转”主路径。
+- 演进期：支持注册/登录/注销，会话采用 TTL + 续期 + 回收闭环。
+- 两阶段统一要求：只通过数据 API 层访问 D1/R2。
+
 ---
 
 ## 🔄 版本记录
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
+| v3.00 | 2026-04-08 | 架构重构 | 引入 R2 存储 Markdown；D1 剥离内容字段；API 增加内容协商 (Content Negotiation) ；鉴权改为 `env.ADMIN_KEY` |
 | v0.36 | 2026-04-07 | F-030 观察项实现（O-F030-01~08） | P1: O-F030-05/06 disclosure声明验证✅；P2: O-F030-01结构化字段/O-F030-03定时发布/O-F030-04版本管理✅；P3: O-F030-07 Cron Trigger/O-F030-08 TOP3/BOTTOM3自动化✅；migrations/009_content_disclosure_fields.sql |
 | v0.35 | 2026-04-07 | F-030 第二十次STR审核通过 | 8个端点全部✅；状态机/审计日志/发布排期/生产统计全部验证；4项观察项（O-F030-01~08）为P1/P2/P3；三态升级：F-030 🏗→✅ |
 | v0.34 | 2026-04-07 | F-030 代码实现验证 | admin/content.ts 8端点完整实现；migrations/008_content_management.sql；TypeScript编译无错误；三态：F-030 🗓→🏗（待审核） |
@@ -102,9 +120,10 @@ findora/
 │   ├── 004_price_history.sql # 价格历史表
 │   ├── 005_ai_review_records.sql # AI审核记录表
 │   ├── 006_i18n_schema.sql # 多语言支持表
-│   └── 007_membership_schema.sql # 会员体系表
-│   └── 008_content_management.sql # F-030内容管理表
-│   └── 009_content_disclosure_fields.sql # F-030观察项实现（disclosure/结构化字段/版本管理）
+│   ├── 007_membership_schema.sql # 会员体系表
+│   ├── 008_content_management.sql # F-030内容管理表
+│   ├── 009_content_disclosure_fields.sql # F-030观察项实现（disclosure/结构化字段/版本管理）
+│   └── 010_list_products.sql # list_products结构补齐与索引
 ├── wrangler.toml
 ├── package.json
 └── tsconfig.json
@@ -114,17 +133,36 @@ findora/
 
 ## 🔌 API模块实现详情（F-040）
 
+### 访问边界与会话策略（v3.0）
+
+| 主题 | 设计要求 | 当前状态 |
+|------|----------|----------|
+| 统一入口 | 所有请求必须经过 Worker API 层，禁止前端/Agent 直连 D1、R2 | 🏗 |
+| 数据主从 | D1 存结构化索引；R2 存 Markdown 内容与媒体资产 | 🏗 |
+| 内容协商 | 关键读取端点支持 `Accept` 协商（JSON/Markdown） | 🗓 |
+| 会话TTL | 用户登录态需定义 `expires_at`、续期与失效回收策略 | 🗓 |
+| 身份策略 | MVP 匿名优先，演进期支持登录态；两者并存且口径一致 | 🏗 |
+| 管理鉴权 | `/api/admin/*` 使用 `X-Admin-Key` + `env.ADMIN_KEY` | ✅ |
+
 ### 公共端点（无需鉴权）
 
 | 端点 | 状态 | 实现方式 | 关键决策 |
 |------|------|----------|----------|
-| F-040-01 GET `/api/products` | ✅ | D1 SQL查询 + 分页 | 按category/subcategory/tags/price_min/price_max过滤 |
-| F-040-02 GET `/api/products/:id` | ✅ | D1 get by id | 关联查询tags JSON解析 |
+| F-040-01 GET `/api/products` | 🗓 | API聚合：D1 查索引 + 分页 | 按category/tags/price过滤，不再包含全量文本 |
+| F-040-02 GET `/api/products/:id` | 🗓 | API聚合：D1 获取 r2_key + R2 获取 Markdown | **内容协商**：`Accept: text/markdown` 则直接返回 R2 内容；否则解析 Frontmatter 吐 JSON |
 | F-040-03 GET `/api/lists` | ✅ | D1 list查询 | 支持status过滤 |
 | F-040-04 GET `/api/lists/:id` | ✅ | D1 + list_products关联表 | 返回榜单+关联商品列表 ✅（已通过 list_products 关联表实现） |
 | F-040-05 GET `/api/categories` | ✅ | D1 tags表查询 | 按layer=category筛选 |
 
 ### 用户端点（email/anonymous_id关联）
+
+### 会话生命周期实现约束（Session TTL）
+
+- 默认 TTL：24 小时，可配置范围 15 分钟 ~ 7 天
+- 续期策略：仅在“到期前窗口”触发滑动续期，不允许无限延长
+- 鉴权策略：每次请求检查 `expires_at`，过期立即拒绝
+- 回收策略：通过定时任务清理过期会话并保留审计日志
+- 错误语义：统一返回会话过期错误码，前端/Agent 均按同一规则处理
 
 | 端点 | 状态 | 实现方式 | 关键决策 |
 |------|------|----------|----------|
@@ -141,13 +179,14 @@ findora/
 
 | 端点 | 状态 | 实现方式 | 关键决策 |
 |------|------|----------|----------|
-| F-040-14 POST `/api/admin/products` | ✅ | D1 insert products | 状态默认为draft（body.status || 'draft'） |
-| F-040-15 PUT `/api/admin/products/:id` | ✅ | D1 update products | 全量字段更新 |
+| F-040-14 POST `/api/admin/products` | 🗓 | 拆分存储：D1 写入索引 + R2 写入 Markdown | 提取 Frontmatter 写 D1，正文写 R2 |
+| F-040-15 PUT `/api/admin/products/:id` | 🗓 | D1 更新索引 + R2 更新 Markdown | 拆分处理结构化与非结构化字段 |
 | F-040-16 PATCH `/api/admin/products/:id/status` | ✅ | D1 update status | 接受active/inactive/archived，无流转规则校验（STR观察项O-01） |
-| F-040-17 POST `/api/admin/tags` | ✅ | D1 insert tags | slug唯一性校验，layer 已统一为 TEXT 类型 |
-| F-040-17a GET `/api/admin/tags` | ✅ | D1 select tags | 可选 ?layer= 过滤；v0.16补全 |
-| F-040-17b PUT `/api/admin/tags/:id` | ✅ | D1 update tags | 支持 name/layer/parent_id 部分更新；v0.16补全 |
-| F-040-17c DELETE `/api/admin/tags/:id` | ✅ | D1 delete tags | 删除前检查关联商品数；v0.16补全 |
+| F-040-17 POST `/api/admin/tags` | ✅ | D1 insert tags | slug唯一性校验，支持 dimension_level 和 featured_products |
+| F-040-17a GET `/api/admin/tags` | ✅ | D1 select tags | 可选 ?layer= 或 ?dimension_level= 过滤 |
+| F-040-17b PUT `/api/admin/tags/:id` | ✅ | D1 update tags | 支持 name/layer/parent_id/dimension_level 部分更新 |
+| F-040-17c DELETE `/api/admin/tags/:id` | ✅ | D1 delete tags | 删除前检查关联商品数 |
+| F-040-17d PATCH `/api/admin/tags/:id/featured` | 🗓 | D1 update tags | 依据 system_design.md，专用于更新特定标签的推荐 item list (featured_products) |
 | F-040-18 POST `/api/admin/lists` | ✅ | D1 insert lists | slug唯一性校验 |
 | F-040-19 GET `/api/admin/analytics/overview` | ✅ | D1 聚合查询 | 日UV/周UV/订阅总数/商品总数/今日点击/类目Top5 |
 | F-040-20 GET `/api/admin/analytics/uv` | ✅ | D1 聚合查询 | UV时序（支持日/周/月）|
@@ -161,7 +200,7 @@ findora/
 | F-040-28 PATCH `/api/admin/products/:id/tags` | ✅ | D1 update | 单个商品打标（替换标签数组）|
 | F-040-29 POST `/api/admin/products/batch` | ✅ | D1 batch | 批量添加/移除标签、批量更新类目 |
 | F-040-30 GET `/api/admin/tags/stats` | ✅ | D1 聚合查询 | 各标签下商品数量统计 |
-| F-040-31 POST `/api/admin/products/import` | ✅ | D1 batch insert | 批量导入商品（JSON数组，支持partial validation）；v0.20新增 |
+| F-040-31 POST `/api/admin/products/import` | 🗓 | 批量处理 | 拆分解析批量 Markdown/JSON 并异步写入 R2 + D1 |
 | F-012-05 POST `/api/conversions/callback` | ✅ | D1 insert | 接收affiliate转化回调，记录event_type/revenue/partner；路由已注册（✅STR第九次审核通过）|
 | F-012-05a GET `/api/admin/conversions` | ✅ | D1 查询 | 转化数据列表（status/product_id/partner过滤+分页）；路由已注册（✅STR第九次审核通过）|
 | F-012-05b GET `/api/admin/conversions/stats` | ✅ | D1 聚合查询 | 按event_type/partner/daily趋势统计；路由已注册（✅STR第九次审核通过）|
@@ -220,14 +259,14 @@ findora/
 
 | 端点 | 状态 | 实现方式 | 关键决策 |
 |------|------|----------|----------|
-| F-030-01 POST `/api/admin/content/topics` | ✅ | D1 insert | 创建选题（idea状态），支持priority/target_week |
-| F-030-02 GET `/api/admin/content/topics` | ✅ | D1 查询 | 选题列表（status过滤+分页），返回product_count |
-| F-030-03 GET `/api/admin/content/topics/:id` | ✅ | D1 + join | 选题详情（含关联商品列表+商品信息） |
-| F-030-04 PATCH `/api/admin/content/topics/:id` | ✅ | D1 update | 状态流转校验（idea→in_review→approved→published→archived） |
-| F-030-05 POST `/api/admin/content/topics/:id/products` | ✅ | D1 insert | 为选题添加候选商品（批量，支持AI评分/理由） |
-| F-030-06 POST `/api/admin/content/publish` | ✅ | D1 insert+update | 发布内容（从approved选题创建榜单+更新状态） |
-| F-030-07 GET `/api/admin/content/publish/schedule` | ✅ | D1 查询 | 发布排期（approved/in_review选题+周产出统计） |
-| F-030-08 GET `/api/admin/content/production/stats` | ✅ | D1 聚合 | 生产统计（周产出列表+总计+平均值） |
+| F-030-01 POST `/api/admin/content/topics` | 🗓 | D1 insert | 创建选题，关联 R2 草稿路径 |
+| F-030-02 GET `/api/admin/content/topics` | 🗓 | D1 查询 | 选题列表（status过滤+分页），返回product_count |
+| F-030-03 GET `/api/admin/content/topics/:id` | 🗓 | 聚合：D1+R2 | 选题详情（含关联商品列表+R2中的Markdown草稿） |
+| F-030-04 PATCH `/api/admin/content/topics/:id` | 🗓 | D1+R2 | 状态流转校验，支持 R2 草稿内容同步更新 |
+| F-030-05 POST `/api/admin/content/topics/:id/products` | 🗓 | D1 insert | 为选题添加候选商品（关联 R2 商品节点） |
+| F-030-06 POST `/api/admin/content/publish` | 🗓 | 异步发布 | 发布内容（将选题从 R2 草稿状态转移至 R2 正式发布路径，并创建榜单） |
+| F-030-07 GET `/api/admin/content/publish/schedule` | 🗓 | D1 查询 | 发布排期（approved/in_review选题+周产出统计） |
+| F-030-08 GET `/api/admin/content/production/stats` | 🗓 | D1 聚合 | 生产统计（周产出列表+总计+平均值） |
 
 **F-030 内容管理状态机：**
 ```
@@ -268,12 +307,14 @@ idea → in_review → approved → published → archived
 
 ### D1 Migration: 001_initial_schema.sql
 
-**设计决策：**
+**设计决策（v3.0 重构）：**
 
-- JSON字段（tags/pros/cons/images等）存储为TEXT，运行时JSON.parse
-- ip_country从CF-IP-Country头获取，不存储完整IP（合规要求C-06）
-- users.email使用散列存储（简单base64，不需外部服务）
-- clicks表90天自动清理策略在后续实现（通过CF Timer Trigger）
+- **内容剥离**：摒弃将大段文本（pros/cons/images/summary等）序列化为 JSON 存入 D1 的老旧设计。
+- **主从分离**：核心表仅保存 `r2_object_key` 作为外键指针，R2 存 Markdown。**注意**：为了避免列表页（`GET /api/products`）出现 N+1 读取 R2 的严重性能问题，D1 的 `products` 表保留了 `title` 和 `cover_image` 字段，专门用于快速列表呈现。
+- ip_country从CF-IP-Country头获取，不存储完整IP（合规要求C-06）。
+- users.email使用散列存储（简单base64，不需外部服务）。
+- **用户会话**：会话生命周期由 `user_sessions.expires_at` 管理，满足 `system_design.md` 的 TTL 机制要求。
+- **标签维度**：`tags` 表新增 `dimension_level` (1或2) 和 `featured_products`，直接映射 `system_design.md` 对于“一级/二级维度”和“更新特定标签推荐item list”的要求。
 
 ### D1 Migration: 002_add_missing_indexes.sql（v0.12 新增）
 
@@ -333,6 +374,10 @@ d1_databases = [{ binding = "DB", database_name = "findora-staging" }]
 [env.production]
 name = "findora-api-production"
 d1_databases = [{ binding = "DB", database_name = "findora-production" }]
+# 配置自定义域名（依据需求要求）
+routes = [
+  { pattern = "findora.turingcorp.net/*", custom_domain = true }
+]
 ```
 
 ### 部署流程
@@ -1103,21 +1148,17 @@ AI_PROVIDER = "openai"  # or "anthropic"
 
 ---
 
-## 🔑 关键设计决策
+## 🔑 关键设计决策 (v3.0)
 
-1. **JSON字段处理**：存储为TEXT而非D1 JSON类型，简化迁移兼容性
-2. **用户识别**：支持anonymous_id（未登录）和email两种方式，不强制登录
-3. **追踪合规**：不存储完整IP，仅存国家代码（C-06）
-4. **路由设计**：switch/case简单路由，无重量级框架
-5. **D1绑定**：通过wrangler.toml环境变量区分staging/production
-6. **邮件抽象**：Provider模式支持多邮件服务商，无Key时本地日志降级
-7. **行为推荐降级**：冷启动用户（<5行为）降级纯规则推荐，保证可用性
-8. **MMR贪心策略**：多样性控制在O(n)内完成，50ms内可中断
-9. **推荐解释缓存**：D1表替代KV，分层TTL控制缓存成本
-10. **AI扩展可选**：无AI API Key时纯模板降级，不阻塞功能
-11. **AI内容必须审核**：所有AI生成内容必须经过五步人工审核流程才能发布（F-021）
-12. **高风险类目二次审核**：medical/beauty/kids/electronics类目内容需双人签字审核
-13. **禁止词过滤**：AI内容必须经过禁止词检查（best/safest/guaranteed等13词），不通过禁止词检查的内容不允许发布
+1. **D1+R2 主从分离存储**：核心表仅保留结构化索引（ID/Price/Tags），内容型数据（Summary/Pros/Images等）写入 R2 并存为 Markdown 格式。
+2. **AI Agent 内容协商**：API 统一对外暴露，基于 `Accept: text/markdown` 直接透传 R2 Markdown 内容，实现 Agent 免解析读取；默认返回组装好的 JSON 给前端。
+3. **数据隔离与安全**：强制所有业务流量通过统一数据 API 层流转，利用 `env.ADMIN_KEY` 或 Token 进行鉴权，严格禁止前端/外部 Agent 直连 D1 或 R2。
+4. **用户识别**：支持 anonymous_id（未登录）和 email 两种方式，不强制登录。
+5. **追踪合规**：不存储完整IP，仅存国家代码（C-06）。
+6. **推荐解释缓存**：D1表替代KV，分层TTL控制缓存成本。
+7. **AI扩展可选**：无AI API Key时纯模板降级，不阻塞功能。
+8. **AI内容必须审核**：所有AI生成内容必须经过人工审核（高风险双签）。
+9. **禁止词过滤**：AI内容强制经过禁止词拦截过滤。
 
 ---
 
@@ -1152,19 +1193,14 @@ wrangler secret put EMAIL_API_KEY  # Resend/SendGrid API Key
 
 **无API Key时**：邮件功能会降级为本地日志记录，不阻塞业务流程。
 
-## 📋 P2待实现项（已全部审核通过 ✅）
+## 📋 下一步优先重构项 (v3.0 Action Items)
 
-以下功能需求已全部审核通过（✅）：
+由于宏观架构已升级为 **D1+R2 主从分离存储**，当前 P0/P1 的首要任务是完成底层重构：
 
-| 功能编号 | 功能名称 | 需求设计状态 | 审核状态 |
-|----------|----------|-------------|----------|
-| F-020-01~06 | AI辅助内容生成 | ✅ 已实现 | ✅ 第十五次STR审核通过 |
-| F-021-01~05 | AI内容审核边界 | ✅ 已实现 | ✅ 第十五次STR审核通过 |
-| F-022 | 多语言支持 | ✅ 已实现 | ✅ 第十七次STR审核通过（F-022-05语言切换组件为前端观察项） |
-| F-023 | 会员体系 | ✅ 已实现 | ✅ 第十七次STR审核通过（支付功能为记录模式） |
-| F-030 | 内容管理工作流 | ✅ 已实现 | ✅ 第二十次STR审核通过（O-F030-01~08观察项待P2迭代） |
-
-**下一步**：项目全部模块已审核通过 ✅，下一步优先级：
-1. F-030 O-F030-05/06（publishContent终检+disclosure验证）—— P1
-2. F-030 O-F030-01/02/04（结构化字段+双人审核）—— P2
-3. F-030 O-F030-07/08（周度自动触发+TOP3/BOTTOM3）—— P2/P3
+| 任务 | 描述 | 状态 |
+|------|------|------|
+| **DB Schema 改造** | 修改 `schema.ts` 和 migration 脚本，从 products 表剔除内容字段，增加 `r2_object_key` | 🗓 待处理 |
+| **R2 Bucket 集成** | 在 `wrangler.toml` 绑定 R2 Bucket，并在业务代码中封装 R2 读写 Service | 🗓 待处理 |
+| **API 内容协商** | 重构 `GET /api/products/:id`，根据 `Accept: text/markdown` 决定返回 JSON 还是原生 R2 Markdown | 🗓 待处理 |
+| **运营接口改造** | 重构 `POST/PUT /api/admin/products`，实现“D1写索引+R2写文件”的双写逻辑 | 🗓 待处理 |
+| **历史数据迁移** | （如有）编写脚本将现存的 JSON 商品数据提取并转换为 Markdown 写入 R2 | 🗓 待处理 |

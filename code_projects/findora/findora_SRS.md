@@ -2,31 +2,32 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v2.17（本次迭代：CRITICAL阻塞项修复确认 + SRS状态同步）
-> **最后更新：** 2026-04-08 18:02
-> **状态：** ✅ 2项CRITICAL阻塞项已修复（详见Section 3.1.8）
+> **版本：** v3.00（本次迭代：宏观架构升级，D1+R2主从分离，AI Agent原生友好）
+> **最后更新：** 2026-04-08
+> **状态：** 🔄 架构重构中（基于最新 system_design.md）
 
 ---
 
-## 📌 交接说明（v2.16 — 2026-04-08 12:55）
+## 📌 交接说明（v3.00 — 2026-04-08）
 
 > 📌 详细交接说明请参见本文档末尾。历史STR审核记录（1-34次）请参见 findora_STR.md。
 
-**本次完成内容（第34次迭代 — SRS完整性验证）：**
+**本次完成内容（第35次迭代 — 宏观架构重构）：**
 
-> ✅ 本次完成 business_concept.md 全量映射验证，确认SRS各章节覆盖完整。
+> 🔄 本次基于 `system_design.md` 进行了底层架构代差级重构：确立了 **D1存结构化索引 + R2存Markdown内容** 以及 **AI Agent原生友好** 的核心基调。所有涉及商品内容读写的端点状态回退为 🗓 或 🏗 待重构。
 
 **修正内容：**
-1. **版本更新**：v2.15→v2.16
-2. **完整性验证**：business_concept.md 17章节全量映射至SRS各章节
+1. **版本更新**：v2.16→v3.00
+2. **架构校准**：以 `system_design.md` 为准，固化“统一数据API层 + D1/R2主从分离”
+3. **完整性验证**：business_concept.md 17章节全量映射至SRS各章节
 
 
-### 已完成骨架（v0.4–v2.16）
+### 已完成骨架（v0.4–v3.00）
 
 - ✅ Section 1 引言：项目定义、三态体系完整
-- ✅ Section 2 总体描述：功能模块总览、API 53端点、数据字典、CI/CD、变更追踪、**用例流程图（UC-1~4）**
-- ✅ Section 3 功能需求：API接口设计（F-040 53端点）、统一响应格式、错误码体系
-- ✅ Section 4 数据字典：schema.ts 大部分审核通过（⚠️ list_products关联表待补充，见Section 4.5）
+- ✅ Section 2 总体描述：功能模块总览、API基线与扩展矩阵、数据字典、CI/CD、变更追踪、**用例流程图（UC-1~4）**
+- ✅ Section 3 功能需求：API接口设计（F-040 扩展端点体系）、统一响应格式、内容协商
+- ✅ Section 4 数据字典：D1 结构化索引模型 + R2 内容对象映射
 - ✅ Section 5 CI/CD流程：完整流程定义
 - ✅ Section 6 页面功能（F-001~F-006）— ✅ 已审核（第五次STR）
 - ✅ Section 7 核心业务（F-010~F-017）— ✅ 全部通过审核
@@ -37,30 +38,25 @@
 - ✅ Section 12 90天迭代计划：分阶段目标与里程碑
 - ✅ Section 13 KPI指标体系：内容/流量/行为/商业指标 + 测量规范
 - ✅ Section 14 合规要求：C-01~C-07 全量
-- ✅ Section 15 后续迭代说明：全部模块已完成
+- ✅ Section 15 后续迭代说明：已建立迭代框架（持续演进）
 
-### 下次接力建议（v2.16 优先级排序）
+### 下次接力建议（v3.00 优先级排序）
 
-> ⚠️ **阻塞项提醒**：2项CRITICAL阻塞项须先修复，详见 Section 3.1.8。
+> ⚠️ **阻塞项提醒**：当前阻塞项以 `findora_STR.md` 顶部“当前有效结论”章节为准。
 
 **P0 — 必须立即修复（阻塞上线）：**
-1. **C-01**: `list_products` 表缺失修复（schema.ts + migrations/010）
-2. **C-02**: Admin 密钥改为 `env.ADMIN_KEY` 环境变量
+1. 修复 `src/api/index.ts` 路由挂载层级与分段索引错误，恢复 `/api/admin/*`、`/api/i18n/*`、`/api/membership/*` 可达性。
+2. 定时发布逻辑复用 `publishContent` 闭环（创建 `lists` 与 `list_products`），避免仅更新选题状态。
+3. 清理并统一 `list_products` 在迁移、类型、文档中的单一事实来源，避免双定义漂移。
 
-**P1 — 建议修复（安全/质量）：**
-3. **M-01**: LIKE 查询转义 regex 元字符
-4. **M-02**: 扩展 ErrorCodes 到 15+ 个
-5. **M-03**: wrangler.toml 注释与实现对齐
+**P1 — 建议修复（一致性/安全）：**
+4. 增加“用户登录失效时间（Session TTL）”需求条款与验收标准，并与会员/用户接口统一。
+5. 将“统一数据API层 + 禁止直连 D1/R2”补充为可审计的非功能约束。
+6. 统一 SRS/SDS/STR 的“当前有效结论”机制，避免历史轮次结论互相覆盖。
 
 **P2 — 可选优化：**
-6. **L-02**: lists.ts INSERT 补全 `content_type`、`disclosure`
-7. **L-03**: 类型断言优化
-8. **L-04**: AI BANNED_WORDS 分离到独立配置
-
-> ⚠️ 重要提醒：
-> - 127项功能需求设计状态不变（🗓✅），但2项CRITICAL代码缺陷影响实际上线
-> - C-01/C-02修复后可推进 STR 复审
-> - 第21次STR审核确认：F-030 9项观察项全部实现或可接受
+7. 将 API 规模描述由固定端点数改为“核心能力清单 + 扩展矩阵”，降低文档频繁失真。
+8. 为 AI Agent 增加稳定机器可读契约（字段级 schema 与错误码稳定集）。
 
 ---
 
@@ -68,6 +64,7 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
+| v3.00 | 2026-04-08 | 架构基线重构（统一数据API层 + D1/R2主从 + Session TTL需求） | 基于 system_design.md 校准SRS基线 |
 | v0.4 | 2026-04-06 | 全局结构、MVP页面功能、商品库基础、标签体系、AI能力边界 | 初始构建 |
 | v0.5 | 2026-04-06 | API设计（18端点）、数据字典（5张表 + 状态机）、CI/CD流程、功能三态固化 | API与数据模型框架 |
 | v0.6 | 2026-04-06 | 数据字典对齐(字段类型/enum值)、F-013订阅细化(邮件触发)、F-020 AI审核细化、变更追踪表 | 设计质量提升 |
@@ -135,6 +132,11 @@ Findora 是一个以内容与推荐为前台、以第三方商家成交为后台
 - 前期：联盟佣金 / CPS
 - 中期：会员订阅
 - 后期：广告位、商家合作、数据与品牌复合变现
+
+**阶段范围对齐（business_concept + system_design）**：
+- MVP 阶段采用匿名优先（`anonymous_id`），不强制用户登录
+- 演进阶段支持注册/登录/注销，并启用会话生命周期管理（Session TTL）
+- 两阶段均必须通过统一数据 API 层访问，禁止前端/Agent 直连 D1/R2
 
 ### 1.3 定义、首字母缩写和缩略语
 
@@ -310,9 +312,10 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 
 **技术约束**：
 - 所有能力基于 Cloudflare 边缘网络，不做自建服务器
-- 使用 Cloudflare D1 存储结构化数据（用户/标签/日志）
-- 使用 Cloudflare R2 存储图片缓存和素材
-- 使用 Cloudflare Workers 部署 API 和静态页面
+- 遵循“AI Agent原生友好”原则，建立统一的数据 API 层
+- 严格实行读写分离：使用 Cloudflare D1 存储核心结构化索引数据（关系、ID、状态等）
+- 严格实行内容分离：使用 Cloudflare R2 存储所有的 Markdown 内容和图片缓存
+- 前端与 Agent 必须通过统一数据 API 层交互，禁止直连底层 D1/R2
 
 **合规约束**：
 - 所有含联盟链接页面必须有 disclosure 声明（C-01）
@@ -406,11 +409,11 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 
 | 类别 | 端点数量 | 作用域 |
 |------|----------|--------|
-| 公共端点 | 5 | 无鉴权，前台内容获取 |
-| 用户端点 | 8 | 订阅、收藏、偏好管理 |
-| 内部管理端点 | 5 | CMS、商品、标签管理 |
+| 公共端点 | 基线5 + 扩展 | 前台内容获取、多语言、会员公开查询 |
+| 用户端点 | 基线8 + 扩展 | 订阅、收藏、偏好、行为追踪与推荐 |
+| 内部管理端点 | 扩展集（持续演进） | CMS、商品、标签、分析、AI、内容生产、会员与国际化管理 |
 
-所有端点基于 Cloudflare Workers REST API，返回统一 JSON 格式。
+所有端点基于 Cloudflare Workers REST API，统一经数据 API 层访问；客户端与 Agent 均不得直连 D1/R2。
 
 **三态说明**：🗓 需求已设计 → 🏗 功能已实现 → ✅ 功能已审核（不得跳态）
 
@@ -447,15 +450,21 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 | F-040-17 | POST | `/api/admin/tags` | 创建标签 | F-011-01 | 🗓 | 🏗 | ✅ |
 | F-040-18 | POST | `/api/admin/lists` | 创建榜单 | F-004 | 🗓 | 🏗 | ✅ |
 
-### 3.1.4 统一响应格式
-
-```json
-// 成功
-{ "ok": true, "data": { ... }, "meta": { "page": 1, "total": 100 } }
-
-// 错误
-{ "ok": false, "error": { "code": "PRODUCT_NOT_FOUND", "message": "商品不存在" } }
-```
+### 3.1.4 统一响应格式与内容协商 (Content Negotiation)
+ 
+ 遵循 **AI Agent原生友好** 架构，API层支持通过 `Accept` 标头返回不同格式：
+ 
+ **1. 结构化 JSON 响应（用于前端 Web、普通应用，`Accept: application/json` 或未指定）**
+ ```json
+ // 成功
+ { "ok": true, "data": { ... }, "meta": { "page": 1, "total": 100 } }
+ 
+ // 错误
+ { "ok": false, "error": { "code": "PRODUCT_NOT_FOUND", "message": "商品不存在" } }
+ ```
+ 
+ **2. 原生 Markdown 响应（用于 AI Agent 抓取/阅读，`Accept: text/markdown`）**
+ 当请求 `GET /api/products/:id` 时，如果头带 `text/markdown`，直接返回 R2 中存储的 Markdown Item Card（Frontmatter 包含 UUID、价格等，正文为 `summary`/`pros`），以达到对 Agent 零解析成本的最佳适配。
 
 ### 3.1.5 外部系统接口（F-040-20~23）
 
@@ -548,40 +557,41 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 | F-017 | F-040-12 |
 | F-020 | F-040-22 |
 
-### 3.1.8 STR 阻塞项（v2.15 新增）
+### 3.1.8 STR 阻塞项（v3.00 基线）
 
-> ⚠️ **来源**：第32次+第33次STR审核（2026-04-08）发现以下CRITICAL/MEDIUM问题，须修复后才能推进对应功能的状态升级。
+> ⚠️ **来源**：以 `findora_STR.md` 顶部“当前有效结论”章节为唯一基线，以下条目用于与需求侧联动追踪。
 
 #### 🔴 CRITICAL — 必须修复（P0）
 
 | # | 问题编号 | 位置 | 描述 | 关联功能 | 修复要求 |
 |---|----------|------|------|----------|----------|
-| C-01 | `list_products` 表缺失 | `schema.ts` + `migrations/` | `lists.ts:35-41` 和 `content.ts:508-512` 引用 `list_products` 关联表，但 schema.ts 无 ListProduct 接口，migrations 无对应 SQL | F-004 榜单详情 | 在 `schema.ts` 添加 ListProduct 接口，创建 `migrations/010_list_products.sql` 建表 |
-| C-02 | Admin 密钥硬编码 | `index.ts:48` | `findora-admin-secret` 硬编码在源码中，未使用 `env.ADMIN_KEY` 环境变量 | 所有 Admin 端点 | 改为 `env.ADMIN_KEY` 读取，支持密钥轮换 |
+| C-01 | 路由挂载层级错误 | `src/api/index.ts` | 在 `segments[0] === 'admin'` 分支中处理 `segments[1] === 'admin'` 与公共路由，导致部分 `/api/admin/*`、`/api/i18n/*`、`/api/membership/*` 可达性异常 | F-040 | 修正分段索引与路由挂载层级，恢复端点可达性 |
+| C-02 | 定时发布闭环断裂 | `src/api/admin/content.ts` | `handleScheduledPublishing` 仅更新选题状态，未创建 `lists` 与 `list_products` | F-030/F-004 | 复用或抽象 `publishContent` 主流程，保证定时发布产出完整内容实体 |
 
 #### 🟡 MEDIUM — 建议修复（P1）
 
 | # | 问题编号 | 位置 | 描述 | 关联功能 | 修复要求 |
 |---|----------|------|------|----------|----------|
-| M-01 | LIKE 查询注入风险 | `tags.ts:111`, `email.ts:349`, `subscribers.ts:165` | 用户输入直接拼入 LIKE 模式，未转义 regex 元字符（`.` `*` `?` 等） | F-011, F-013 | 转义 LIKE 元字符或改用 JSON 数组查询 |
-| M-02 | 错误码过少 | `errors.ts` | 仅5个错误码（INVALID_PARAMS/NOT_FOUND/ALREADY_SUBSCRIBED/NOT_SUBSCRIBED/INTERNAL_ERROR），85+端点混用字符串字面量 | 全部 | 扩展到15+错误码，统一使用 ErrorCodes 枚举 |
-| M-03 | Cron 注释与实现不符 | `wrangler.toml:20` | 注释称"发送审核通知"，但 `handleScheduledPublishing` 仅发布内容，无通知逻辑 | F-030 | 补充通知实现或更正注释 |
+| M-01 | `list_products` 双迁移漂移 | `migrations/001` + `migrations/010` | 同一表存在两套结构定义，且运行时会受首个迁移落地结果影响 | F-004/F-050 | 统一主键与字段策略，明确唯一标准并补充迁移修正脚本 |
+| M-02 | API规模描述失真风险 | Section 3.1 概述 | 固定端点数量易过时，导致需求与实现长期偏离 | F-040 | 使用“基线+扩展矩阵”描述并按版本维护 |
+| M-03 | 会话失效要求缺验收闭环 | Section 8.2 | 已提出 Session TTL，但缺少明确验收条款（会话信息统一由 `user_sessions.expires_at` 管理） | F-023/用户链路 | 增加 TTL 值范围、续期策略、失效回收的验收标准 |
 
 #### 🟢 LOW — 可选优化（P2）
 
 | # | 问题编号 | 位置 | 描述 | 关联功能 | 修复要求 |
 |---|----------|------|------|----------|----------|
-| L-02 | List 插入缺字段 | `lists.ts:66-72` | INSERT 未包含 `content_type`、`disclosure` 字段（schema 定义了但未写入） | F-004 | 补全 INSERT 字段 |
-| L-03 | 类型断言过多 | 多文件 | 大量 `as unknown as X` 绕过类型检查，降低类型安全性 | 全部 | 逐文件优化类型断言 |
-| L-04 | AI prompt 泄露 | `explain.ts:226-236` | BANNED_WORDS 直接内嵌在 prompt 中，响应可能泄露禁止词列表 | F-020 | 分离 BANNED_WORDS 到独立配置 |
+| L-01 | 文档历史结论并存 | SRS/SDS/STR 多章节 | 历史轮次与当前结论并列，易导致执行基线歧义 | 全部 | 明确“当前有效结论”章节为唯一执行基线 |
+| L-02 | Agent 机器可读契约待固化 | API 设计章节 | 仅有内容协商说明，缺字段级稳定契约 | F-040/F-016 | 增加关键端点 schema 与错误码稳定集 |
+| L-03 | 旧观察项描述可收敛 | 历史维护章节 | 部分观察项已转入主约束，重复维护成本高 | 全部 | 将已收敛项迁入稳定章节，历史章节只保留审计索引 |
 
 > **注**：L-01（User接口缺字段）经验证不成立 — `schema.ts:35,37` 已有 `price_preference` 和 `disliked_tags` 字段。
 
 #### 修复后状态更新规则
 
 C-01/C-02 修复并经STR复审通过后：
-- F-004（榜单详情）三态维持 ✅，但需在数据字典中补充 ListProduct 接口说明
-- Admin 鉴权相关端点（F-040-14~18）三态维持 ✅，但需在 Section 8 非功能需求中补充安全约束说明
+- F-040（路由与端点可达性）恢复为稳定可验收状态
+- F-030/F-004（定时发布与榜单产出）恢复为闭环一致状态
+- 再推进 Session TTL 与数据主从约束的验收补齐
 
 ---
 
@@ -589,32 +599,27 @@ C-01/C-02 修复并经STR复审通过后：
 
 > 本节定义核心业务实体的数据库 Schema，基于 Cloudflare D1。
 
-### 4.1 products（商品表）
+### 4.1 products（商品表 - 核心索引）
+
+> ⚠️ **v3.0 重构**：依据 `system_design.md`，内容型字段（如图片、描述、优缺点）已全部剥离至 R2 存储为 Markdown，D1 仅保留结构化索引。
 
 | 字段名 | 类型 | 约束 | 说明 |
 |--------|------|------|------|
 | id | TEXT | PRIMARY KEY | Snowflake UUID |
+| title | TEXT | NOT NULL | 商品标题（用于列表页快速展示，避免N+1读取R2） |
+| cover_image | TEXT | | 商品主图（用于列表页快速展示） |
 | source_platform | TEXT | NOT NULL | 1688 / alibaba / amazon / temu |
 | source_url | TEXT | NOT NULL | 原始商品链接 |
-| original_title | TEXT | | 原始标题 |
-| rewritten_title | TEXT | | 重写标题（用户视角） |
 | category | TEXT | NOT NULL, INDEX | 主类目 slug |
 | subcategory | TEXT | INDEX | 子类目 slug |
 | tags | TEXT | JSON 数组 | 标签 ID 列表 |
 | price_min | REAL | | 价格区间低 |
 | price_max | REAL | | 价格区间高 |
 | currency | TEXT | DEFAULT 'USD' | 币种 |
-| images | TEXT | JSON 数组 | 图片 URL 列表 |
-| summary | TEXT | | 一句话总结 |
-| pros | TEXT | JSON 数组 | 优点列表 |
-| cons | TEXT | JSON 数组 | 缺点列表 |
-| use_cases | TEXT | JSON 数组 | 使用场景 |
-| target_audience | TEXT | JSON 数组 | 目标人群 |
-| shipping_notes | TEXT | | 物流说明 |
-| merchant_name | TEXT | | 商家名称 |
+| r2_object_key | TEXT | NOT NULL | R2 中的对象路径（例如 `items/uuid.md`），关联详情内容 |
 | affiliate_url | TEXT | | 联盟追踪跳转 URL |
 | last_checked_at | TEXT | | ISO 8601 |
-| status | TEXT | DEFAULT 'active' | active / inactive / archived（与代码 schema.ts 对齐）|
+| status | TEXT | DEFAULT 'active' | active / inactive / archived |
 | created_at | TEXT | NOT NULL | ISO 8601 |
 | updated_at | TEXT | NOT NULL | ISO 8601 |
 
@@ -640,6 +645,18 @@ C-01/C-02 修复并经STR复审通过后：
 | status | TEXT | DEFAULT 'active' | active / unsubscribed / dormant |
 | created_at | TEXT | NOT NULL | ISO 8601 |
 | updated_at | TEXT | NOT NULL | ISO 8601 |
+
+### 4.2.1 user_sessions（用户会话表）
+
+| 字段名 | 类型 | 约束 | 说明 |
+|--------|------|------|------|
+| id | TEXT | PRIMARY KEY | 会话 ID |
+| user_id | TEXT | NOT NULL, FK | 关联用户 ID |
+| token | TEXT | UNIQUE, NOT NULL | 会话令牌 |
+| ip_address | TEXT | | 登录 IP（可空） |
+| user_agent | TEXT | | 客户端标识（可空） |
+| expires_at | TEXT | NOT NULL | 会话过期时间（Session TTL） |
+| created_at | TEXT | NOT NULL | ISO 8601 |
 
 ### 4.3 clicks（点击日志表）
 
@@ -677,33 +694,35 @@ C-01/C-02 修复并经STR复审通过后：
 | created_at | TEXT | NOT NULL | ISO 8601 |
 | updated_at | TEXT | NOT NULL | ISO 8601 |
 
-### 4.5 list_products（榜单商品关联表）⚠️ 待补充
+### 4.5 list_products（榜单商品关联表）⚠️ 结构待统一
 
-> ⚠️ **C-01 阻塞项**：此表在 `migrations/` 中尚未创建（STR第33次审核确认），代码引用存在于 `lists.ts:35-41` 和 `content.ts:508-512`。**Schema定义待补入 `schema.ts`，建表SQL待创建 `migrations/010_list_products.sql`。**
+> ⚠️ **当前问题**：`001_initial_schema.sql` 与 `010_list_products.sql` 对 `list_products` 给出了两套结构。v3.00 要求统一为单一数据模型，并通过迁移修正消除历史漂移。
 
 | 字段名 | 类型 | 约束 | 说明 |
 |--------|------|------|------|
+| id | TEXT | PRIMARY KEY | 关联记录 ID |
 | list_id | TEXT | NOT NULL, FK | 关联榜单 ID |
 | product_id | TEXT | NOT NULL, FK | 关联商品 ID |
 | position | INTEGER | NOT NULL | 榜单内排序位置 |
 | created_at | TEXT | NOT NULL | ISO 8601 |
 
-**主键**：`PRIMARY KEY (list_id, product_id)`
+**主键**：`PRIMARY KEY (id)`，并对 `(list_id, product_id)` 建唯一索引
 **索引**：`list_id`, `product_id`
 
-**预期 Migration（待实现）**：
+**目标 Migration（统一后）**：
 ```sql
 CREATE TABLE IF NOT EXISTS list_products (
+  id TEXT PRIMARY KEY,
   list_id TEXT NOT NULL,
   product_id TEXT NOT NULL,
   position INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL,
-  PRIMARY KEY (list_id, product_id),
   FOREIGN KEY (list_id) REFERENCES lists(id),
   FOREIGN KEY (product_id) REFERENCES products(id)
 );
 CREATE INDEX IF NOT EXISTS idx_list_products_list_id ON list_products(list_id);
 CREATE INDEX IF NOT EXISTS idx_list_products_product_id ON list_products(product_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_list_products_list_product ON list_products(list_id, product_id);
 ```
 
 ### 4.6 tags（标签表）
@@ -714,6 +733,8 @@ CREATE INDEX IF NOT EXISTS idx_list_products_product_id ON list_products(product
 | name | TEXT | NOT NULL | 标签名 |
 | slug | TEXT | UNIQUE | URL slug |
 | layer | TEXT | NOT NULL | category / function / audience / style / price |
+| dimension_level | INTEGER | DEFAULT 2 | 1(一级维度) 或 2(二级维度)，依据 system_design.md |
+| featured_products | TEXT | JSON 数组 | 特定标签的推荐 item list（人工/Agent 精选商品 ID） |
 | parent_id | TEXT | | 父标签 ID（子类目用） |
 | created_at | TEXT | NOT NULL | ISO 8601 |
 
@@ -736,6 +757,17 @@ active → unsubscribed
 active → dormant (90天无互动)
 dormant → active (重新互动)
 ```
+
+### 4.8 全局配置表 (global_configs)
+
+> 新增：满足 `system_design.md` 中对于全局参数配置的需求（也可使用 KV 实现，目前纳入 D1 设计）。
+
+| 字段名 | 类型 | 约束 | 说明 |
+|--------|------|------|------|
+| key | TEXT | PRIMARY KEY | 配置键名（如 `home_tags`, `token_expiry`） |
+| value | TEXT | NOT NULL | 配置值（JSON 格式存储复杂配置） |
+| description | TEXT | | 配置说明 |
+| updated_at | TEXT | NOT NULL | ISO 8601 |
 
 ---
 
@@ -1402,6 +1434,14 @@ score_behavior(product_id) =
 | S-05 | 不在客户端存储明文敏感数据 | 全部前端 |
 | S-06 | HTTPS 全站加密，强制重定向 HTTP → HTTPS | 部署配置 |
 | S-07 | CORS 配置仅允许已知域名 | API 配置 |
+| S-08 | 用户会话必须配置失效时间（Session TTL），并支持续期/失效回收 | F-023 / 用户访问链路 |
+| S-09 | API 层必须作为唯一对外入口，前端/Agent 禁止直连 D1/R2 | F-040 / 部署架构 |
+
+**S-08 验收标准**：
+- 默认 Session TTL = 24 小时，允许配置范围 15 分钟 ~ 7 天
+- 仅允许“接近过期窗口”续期，不允许无限续期
+- 每次鉴权必须校验 `expires_at`，过期立即拒绝并返回统一错误码
+- 过期会话需在后台任务中定期回收，并记录审计日志
 
 **隐私保护**：
 - 点击日志不记录完整 IP，仅记录国家（ip_country）
@@ -2167,11 +2207,13 @@ AI 生成内容中出现以下词汇，自动标记为需人工复核：
 
 | 项目 | 说明 | 状态 |
 |------|------|------|
-| 域名注册 | .com 域名，check trademark | 🗓 |
+| 域名注册 | 已分配自定义域名：`findora.turingcorp.net` | ✅ |
 | CDN 部署 | Cloudflare Pages 或 Workers | 🗓 |
 | SSL 证书 | 自动 via Cloudflare | 🗓 |
 
-**架构约束**：不做自建服务器，所有能力基于 Cloudflare 边缘网络。
+**架构约束**：
+1. 不做自建服务器，所有能力基于 Cloudflare 边缘网络。
+2. 如果涉及到 Cloudflare Worker 之间的内部互相调用（且在同一个一级域名下），优先使用 Service Bindings（而非 HTTP fetch）以提升内部调用性能。
 
 ---
 
@@ -2354,7 +2396,9 @@ AI 生成内容中出现以下词汇，自动标记为需人工复核：
 - ⚠️ 第33次STR（2026-04-08 08:34）：发现2 CRITICAL + 3 MEDIUM + 2 LOW 新问题
 - ✅ 第34次迭代（2026-04-08 12:55）：SRS完整性验证 + 版本更新v2.16
 
-### 当前整体进度
+### 当前整体进度（历史归档：v2.16）
+
+> 本节为 v2.x 轮次归档，仅用于审计追溯；当前执行基线请以文档前部 v3.00 章节与 `findora_STR.md` 顶部“当前有效结论”为准。
 
 | 类别 | 项目数 | 已审核(✅) | 已实现(🏗) | 需求设计(🗓) | 阻塞 |
 |------|--------|-----------|-----------|-------------|------|
@@ -2375,7 +2419,7 @@ AI 生成内容中出现以下词汇，自动标记为需人工复核：
 | 会员体系 | F-023（6项） | 6 | 0 | 0 | 0 |
 | 内容管理 | F-030（5项+9观察项） | 5 | 0 | 0 | 0 |
 
-**整体完成度：100%设计（127/127需求✅）— 但含2项CRITICAL代码缺陷待修复**
+**整体完成度（历史口径）**：v2.16 轮次记录为“127项需求已审核”；该统计不代表 v3.00 架构重构后的实时交付状态。
 
 ### 三态状态汇总（v2.15）
 

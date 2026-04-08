@@ -2,12 +2,65 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v1.20
-> **最后更新：** 2026-04-08 16:32 (Asia/Shanghai)
-> **审核时间：** 2026-04-08 16:32 (Asia/Shanghai)
-> **状态：** 🔴 **发现 CRITICAL 阻塞** — 第37次审核发现 C-NEW-2 未修复 + 10项 TypeScript 编译错误
+> **版本：** v3.00
+> **最后更新：** 2026-04-08
+> **审核时间：** 2026-04-08
+> **状态：** 🔴 **存在阻塞项（以“当前有效结论”章节为准）**
 
 ---
+
+## 当前有效结论（v3.00 基线）
+
+> 本章节是唯一有效的当前结论。后续历史轮次记录仅作为审计归档，不再与本章节并列作为“最终状态”。
+
+### 1) 本轮结论摘要
+
+- 当前代码仍有阻塞上线问题，主要集中在路由挂载层级与定时发布闭环。
+- Admin Key 已切换为环境变量读取，`schema.ts` 的 `Env` 接口冲突标记已清理。
+- `list_products` 在迁移层存在双定义漂移风险，应收敛为单一事实来源。
+
+### 2) 当前阻塞项（按优先级）
+
+| 等级 | 问题 | 位置 | 现状 |
+|------|------|------|------|
+| 🔴 CRITICAL | 路由挂载层级错误导致可达性异常 | `src/api/index.ts` | 在 `segments[0] === 'admin'` 分支中处理 `segments[1] === 'admin'` 及公共 `i18n/membership` 路由，导致 `/api/admin/*` 与部分公共路由可达性异常 |
+| 🔴 CRITICAL | 定时发布未复用完整发布闭环 | `src/api/admin/content.ts` | `handleScheduledPublishing` 仅更新 topic 状态，未创建 `lists` 与 `list_products`，与 `publishContent` 业务闭环不一致 |
+| 🟡 HIGH | `list_products` 迁移模型漂移 | `migrations/001_initial_schema.sql` + `migrations/010_list_products.sql` | 001 与 010 对同表定义不一致，需统一字段与主键策略 |
+
+### 3) 需求与架构一致性审计发现（Business Concept & System Design）
+
+基于最新的 `business_concept.md` 和 `system_design.md` 深度比对，发现历史文档在“过度主从分离”时丢失了部分关键能力，现已在 SRS/SDS v3.00 中纠正：
+1. **性能缺陷风险（已修正）**：过度剥离 D1 内容导致 `products` 表丢失 `title` 和 `cover_image`。如果不保留这两个字段，列表页（如榜单或类目流）将面临严重的 N+1 次 R2 请求性能灾难。
+2. **标签层级与精选能力（已修正）**：`system_design.md` 明确要求“标签一级/二级维度”和“特定标签的推荐 item list”。原 `tags` 表缺少此映射，现已补充 `dimension_level` 和 `featured_products` 字段，并新增 `PATCH /api/admin/tags/:id/featured` 端点。
+3. **Session TTL 闭环（已修正）**：架构要求用户会话具备失效时间，会话由 `user_sessions.expires_at` 管理。
+4. **个性化推荐逻辑对齐（确认一致）**：`business_concept.md` 提出“多维度叠加计算个性化推荐，而非单用户个体服务”。SDS 中 `behavior.ts` 的混合评分和 MMR 逻辑完全契合这一低成本、高效的推荐指导思想。
+
+### 4) 本轮确认已收敛项
+
+| 项目 | 位置 | 结果 |
+|------|------|------|
+| Admin 鉴权读取方式 | `src/api/index.ts` | ✅ `isAdmin(request, env)` 使用 `env.ADMIN_KEY` |
+| Env 类型冲突标记 | `src/db/schema.ts` | ✅ 冲突标记已清理，`ASSETS` 与 `ADMIN_KEY` 同时保留 |
+
+### 5) 后续执行顺序建议
+
+1. 先修复路由挂载层级与分段索引问题，恢复端点可达性。
+2. 再修复定时发布闭环，确保 `scheduled` 与手动发布行为一致。
+3. 最后统一 `list_products` 迁移/类型/文档模型，补一次端到端回归。
+
+### 6) 与 Business Concept / System Design 对齐结论
+
+- **产品形态**：保持“内容 + 推荐 + 跳转成交”，不引入履约链路（对齐 business_concept）。
+- **数据边界**：统一数据 API 层为唯一入口，禁止前端/Agent 直连 D1/R2（对齐 system_design）。
+- **身份策略**：MVP 匿名优先；演进期支持登录/会话 TTL（对齐 business_concept §MVP 与 system_design 用户类接口）。
+- **内部调用优化**：针对 Worker 间的相互调用，确立 Service Bindings 为首选规范，避免 HTTP Fetch 性能损耗。
+- **自定义域名**：项目已确认并配置自定义域名 `findora.turingcorp.net`。
+
+---
+
+## 历史审核归档（仅供追溯）
+
+> 历史章节中的“已修复/已通过/旧阻塞项”仅代表当时轮次结果，不代表当前状态；当前状态只以本文档顶部“当前有效结论”章节为准。
 
 ## 第34次审核 — 2026-04-08（阻塞项验证 + P0~P1 修复确认）
 
@@ -7877,4 +7930,3 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 | 错误码体系 | ⚠️ M-02 | ✅ 已修复 | ✅ |
 
 ---
-
