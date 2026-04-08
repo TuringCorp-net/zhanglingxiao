@@ -715,7 +715,7 @@ export async function handleScheduledPublishing(env: Env): Promise<{ published: 
 
   // Find topics with scheduled_publish_at <= now that are in 'approved' status
   const scheduledTopics = await env.DB.prepare(`
-    SELECT id, title, scheduled_publish_at
+    SELECT id, title, slug, description, category, target_week
     FROM content_topics
     WHERE status = 'approved'
       AND scheduled_publish_at IS NOT NULL
@@ -726,15 +726,90 @@ export async function handleScheduledPublishing(env: Env): Promise<{ published: 
   for (const row of scheduledTopics.results || []) {
     const topicId = row.id as string;
     const topicTitle = row.title as string;
+    const topicSlug = (row as Record<string, unknown>).slug as string || row.id as string;
+    const topicDescription = (row as Record<string, unknown>).description as string | null;
+    const topicCategory = (row as Record<string, unknown>).category as string | null;
 
     try {
-      // Auto-publish each scheduled topic
-      // Note: This reuses the publish flow but skips disclosure check since it was already validated
+      // Get selected products for this topic
+      const selectedProducts = await env.DB.prepare(
+        'SELECT product_id FROM topic_products WHERE topic_id = ? AND is_selected = 1'
+      ).bind(topicId).all<Record<string, unknown>>();
+      const productIds = (selectedProducts.results || []).map(r => (r as Record<string, unknown>).product_id as string);
+
+      if (productIds.length === 0) {
+        errors.push(`Topic ${topicId} (${topicTitle}): No selected products to publish`);
+        continue;
+      }
+
+      // Generate a slug from title if not provided
+      const slug = topicSlug || topicTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + topicId.slice(0, 8);
+
+      // Create the list (similar to publishContent but auto-generated)
+      const listId = crypto.randomUUID();
+      await env.DB.prepare(`
+        INSERT INTO lists (id, slug, title, description, category, status, content_type, published_at, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        listId,
+        slug,
+        topicTitle,
+        topicDescription,
+        topicCategory,
+        'published',
+        'organic', // Default content type for scheduled content
+        now.toISOString(),
+        now.toISOString(),
+        now.toISOString()
+      ).run();
+
+      // Add products to list_products
+      let position = 0;
+      for (const productId of productIds) {
+        await env.DB.prepare(`
+          INSERT INTO list_products (id, list_id, product_id, position, created_at)
+          VALUES (?, ?, ?, ?, ?)
+        `).bind(crypto.randomUUID(), listId, productId, position++, now.toISOString()).run();
+      }
+
+      // Update topic status to published
       await env.DB.prepare(`
         UPDATE content_topics
         SET status = 'published', published_at = ?, updated_at = ?, weekly_output = weekly_output + 1
         WHERE id = ?
       `).bind(now.toISOString(), now.toISOString(), topicId).run();
+
+      // Create content production record (O-F030-04: version tracking)
+      const weekStart = getWeekStart(new Date());
+      const weekEnd = getWeekEnd(new Date());
+
+      const latestVersion = await env.DB.prepare(
+        'SELECT MAX(version) as max_version FROM content_production WHERE topic_id = ?'
+      ).bind(topicId).first<{ max_version: number | null }>();
+      const newVersion = (latestVersion?.max_version || 0) + 1;
+
+      const parentVersion = await env.DB.prepare(
+        'SELECT id FROM content_production WHERE topic_id = ? AND version = ?'
+      ).bind(topicId, latestVersion?.max_version || 1).first<{ id: string }>();
+
+      await env.DB.prepare(`
+        INSERT INTO content_production (id, topic_id, list_id, week_start, week_end, products_published, content_type, status, published_at, version, parent_version_id, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        crypto.randomUUID(),
+        topicId,
+        listId,
+        weekStart,
+        weekEnd,
+        productIds.length,
+        'list',
+        'published',
+        now.toISOString(),
+        newVersion,
+        parentVersion?.id || null,
+        now.toISOString(),
+        now.toISOString()
+      ).run();
 
       await logWorkflowAudit(
         env,
@@ -744,7 +819,7 @@ export async function handleScheduledPublishing(env: Env): Promise<{ published: 
         'cron',
         'approved',
         'published',
-        'Auto-published via scheduled publishing cron'
+        `Auto-published via scheduled publishing cron, created list ${listId} with ${productIds.length} products`
       );
 
       published++;

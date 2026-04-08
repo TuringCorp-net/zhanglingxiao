@@ -190,6 +190,40 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       return explainScenarios(env, request, segments[1]);
     }
 
+    // === Public i18n Routes (F-022) - moved outside admin block ===
+
+    // GET /api/i18n/locales - Get supported locales
+    if (request.method === 'GET' && segments[0] === 'i18n' && segments[1] === 'locales' && !segments[2]) {
+      return getSupportedLocales(env);
+    }
+
+    // GET /api/i18n/translations/:locale - Get translations for a locale
+    if (request.method === 'GET' && segments[0] === 'i18n' && segments[1] === 'translations' && segments[2]) {
+      return getTranslations(env, request, segments[2]);
+    }
+
+    // GET /api/i18n/content/:type/:id/:locale/:field - Get translated content
+    if (request.method === 'GET' && segments[0] === 'i18n' && segments[1] === 'content' && segments[2] && segments[3] && segments[4] && segments[5]) {
+      return getContentTranslation(env, segments[2], segments[3], segments[4], segments[5]);
+    }
+
+    // === Public Membership Routes (F-023) - moved outside admin block ===
+
+    // GET /api/membership/tiers - List membership tiers
+    if (request.method === 'GET' && segments[0] === 'membership' && segments[1] === 'tiers') {
+      return listMembershipTiers(env);
+    }
+
+    // GET /api/membership/my - Get current user's membership
+    if (request.method === 'GET' && segments[0] === 'membership' && segments[1] === 'my') {
+      return getMyMembership(env, request);
+    }
+
+    // POST /api/membership/check - Check feature entitlement
+    if (request.method === 'POST' && segments[0] === 'membership' && segments[1] === 'check') {
+      return checkEntitlement(env, request);
+    }
+
     // === Admin Endpoints (require admin auth) ===
 
     if (segments[0] === 'admin') {
@@ -454,40 +488,6 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       // GET /api/admin/price-check/:product_id - Get price history for specific product
       if (request.method === 'GET' && segments[1] === 'price-check' && segments[2]) {
         return getPriceHistory(env, request, segments[2]);
-      }
-
-      // === i18n Routes (F-022) ===
-
-      // GET /api/i18n/locales - Get supported locales
-      if (request.method === 'GET' && segments[1] === 'i18n' && segments[2] === 'locales' && !segments[3]) {
-        return getSupportedLocales(env);
-      }
-
-      // GET /api/i18n/translations/:locale - Get translations for a locale
-      if (request.method === 'GET' && segments[1] === 'i18n' && segments[2] === 'translations' && segments[3]) {
-        return getTranslations(env, request, segments[3]);
-      }
-
-      // GET /api/i18n/content/:type/:id/:locale/:field - Get translated content
-      if (request.method === 'GET' && segments[1] === 'i18n' && segments[2] === 'content' && segments[3] && segments[4] && segments[5] && segments[6]) {
-        return getContentTranslation(env, segments[3], segments[4], segments[5], segments[6]);
-      }
-
-      // === Membership Routes (F-023) ===
-
-      // GET /api/membership/tiers - List membership tiers
-      if (request.method === 'GET' && segments[1] === 'membership' && segments[2] === 'tiers') {
-        return listMembershipTiers(env);
-      }
-
-      // GET /api/membership/my - Get current user's membership
-      if (request.method === 'GET' && segments[1] === 'membership' && segments[2] === 'my') {
-        return getMyMembership(env, request);
-      }
-
-      // POST /api/membership/check - Check feature entitlement
-      if (request.method === 'POST' && segments[1] === 'membership' && segments[2] === 'check') {
-        return checkEntitlement(env, request);
       }
 
       // === Admin i18n Routes (F-022) ===

@@ -2,9 +2,9 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.00
+> **版本：** v3.01
 > **最后更新：** 2026-04-08
-> **状态：** 🔨 架构重构中（D1+R2 主从分离，AI Agent 原生友好）
+> **状态：** ✅ STR阻塞项已修复（C-01/C-02）；D1+R2主从分离架构待完成
 
 ---
 
@@ -39,7 +39,7 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
-| v3.00 | 2026-04-08 | 架构重构 | 引入 R2 存储 Markdown；D1 剥离内容字段；API 增加内容协商 (Content Negotiation) ；鉴权改为 `env.ADMIN_KEY` |
+| v3.01 | 2026-04-08 | STR阻塞项修复（C-01/C-02） | C-01: 修复`index.ts`路由挂载层级，恢复`/api/i18n/*`和`/api/membership/*`可达性；C-02: `handleScheduledPublishing`现在正确创建`lists`和`list_products`，实现完整的定时发布闭环 |
 | v0.36 | 2026-04-07 | F-030 观察项实现（O-F030-01~08） | P1: O-F030-05/06 disclosure声明验证✅；P2: O-F030-01结构化字段/O-F030-03定时发布/O-F030-04版本管理✅；P3: O-F030-07 Cron Trigger/O-F030-08 TOP3/BOTTOM3自动化✅；migrations/009_content_disclosure_fields.sql |
 | v0.35 | 2026-04-07 | F-030 第二十次STR审核通过 | 8个端点全部✅；状态机/审计日志/发布排期/生产统计全部验证；4项观察项（O-F030-01~08）为P1/P2/P3；三态升级：F-030 🏗→✅ |
 | v0.34 | 2026-04-07 | F-030 代码实现验证 | admin/content.ts 8端点完整实现；migrations/008_content_management.sql；TypeScript编译无错误；三态：F-030 🗓→🏗（待审核） |
