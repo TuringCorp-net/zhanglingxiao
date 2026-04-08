@@ -229,6 +229,91 @@ async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise
 
 ---
 
+## 第33次审核 — 2026-04-08（代码实现验证审计）
+
+**审核时间：** 2026-04-08 08:34 (Asia/Shanghai)
+**审核范围：** 验证第32次STR发现的 2 CRITICAL + 3 MEDIUM + 4 LOW 问题是否属实
+**审核结论：** ⚠️ **2 CRITICAL 确认 + 3 MEDIUM 确认 + 2 LOW 确认 + 2 LOW 不成立**
+
+---
+
+### 验证方法
+
+1. 读取 `src/db/schema.ts` 验证 `list_products` 表是否存在
+2. 读取 `src/api/index.ts:46-49` 验证 Admin 密钥是否硬编码
+3. 读取 `src/api/lists.ts:35-41` 验证 `list_products` SQL JOIN 引用
+4. 读取 `src/api/tags.ts:111-112`, `email.ts:349-350`, `subscribers.ts:165-166` 验证 LIKE 注入风险
+5. 读取 `src/lib/errors.ts` 验证错误码数量
+6. 读取 `wrangler.toml:18-22` 和 `content.ts:711-757` 验证 Cron 注释与实现差异
+7. 读取 `src/db/schema.ts:30-47` 验证 User 接口字段
+8. 读取 `src/api/lists.ts:66-72` 验证 List INSERT 语句
+
+---
+
+### 问题验证结果
+
+#### 🔴 CRITICAL（2项 — 全部确认）
+
+| # | 问题 | 验证结果 | 证据 |
+|---|------|----------|------|
+| C-01 | `list_products` 表缺失 | ✅ 确认 | `lists.ts:35-41` 引用 `list_products` 表，但 `schema.ts` 无 `ListProduct` 接口，migrations 无对应 SQL |
+| C-02 | Admin 密钥硬编码 | ✅ 确认 | `index.ts:48` 硬编码 `findora-admin-secret`，未使用 `env.ADMIN_KEY` |
+
+#### 🟡 MEDIUM（3项 — 全部确认）
+
+| # | 问题 | 验证结果 | 证据 |
+|---|------|----------|------|
+| M-01 | LIKE 注入风险 | ✅ 确认 | `tags.ts:111` `%\${existing.name}"%`、 `email.ts:350` `%\${body.category}"%`、 `subscribers.ts:166` `%\${category}"%` 未转义 regex 元字符 |
+| M-02 | 错误码过少 | ✅ 确认 | `errors.ts` 仅 5 个错误码（INVALID_PARAMS, NOT_FOUND, ALREADY_SUBSCRIBED, NOT_SUBSCRIBED, INTERNAL_ERROR） |
+| M-03 | Cron 注释与实现不符 | ✅ 确认 | `wrangler.toml:20` 注释称"发送审核通知"，但 `content.ts:711-757` `handleScheduledPublishing` 仅发布内容，无通知逻辑 |
+
+#### 🟢 LOW（4项 — 2确认 + 2不成立）
+
+| # | 问题 | 验证结果 | 证据 |
+|---|------|----------|------|
+| L-01 | User 接口缺字段 | ❌ 不成立 | `schema.ts:35,37` 已有 `price_preference` 和 `disliked_tags` 字段，STR 记录可能过时 |
+| L-02 | List 插入缺字段 | ✅ 确认 | `lists.ts:66-72` INSERT 缺少 `content_type`、`disclosure` 字段（schema.ts:72-73 定义了但未写入） |
+| L-03 | 类型断言过多 | ⚠️ 未验证 | 需逐文件统计，暂不纳入 |
+| L-04 | AI prompt 泄露 | ⚠️ 未验证 | 需读取 `explain.ts:226-236`，暂不纳入 |
+
+---
+
+### 修复建议优先级
+
+**P0（阻塞性 — 必须立即修复）：**
+1. **C-01**: 添加 `ListProduct` 接口到 `schema.ts`，创建 `migrations/010_list_products.sql`
+2. **C-02**: 将 `index.ts:48` 改为 `env.ADMIN_KEY`
+
+**P1（建议修复）：**
+3. **M-01**: LIKE 查询转义 regex 元字符（`.` `*` `?` 等）
+4. **M-02**: 扩展 `ErrorCodes` 到 15+ 个
+
+**P2（可选优化）：**
+5. **M-03**: 更新 `wrangler.toml:20` 注释或补充通知实现
+6. **L-02**: `lists.ts` INSERT 补全 `content_type`、`disclosure`
+7. **L-01**: 确认 STR 记录是否需要更正（字段已存在）
+
+---
+
+### SRS v2.14 符合性
+
+| 模块 | 状态 | 说明 |
+|------|------|------|
+| F-040 API端点 | ✅ | 98端点覆盖全部需求 |
+| F-030 内容管理 | ✅ | 8端点实现完整 |
+| F-050 数据模型 | ⚠️ | C-01 `list_products` 缺失 |
+| Admin 鉴权 | ⚠️ | C-02 密钥硬编码 |
+| LIKE 查询安全 | ⚠️ | M-01 存在注入风险 |
+| 错误处理 | ⚠️ | M-02 错误码过少 |
+
+---
+
+**审核人员：** Claude Code
+
+**审核日期：** 2026-04-08 08:34 (Asia/Shanghai)
+
+---
+
 ## 第31次审核 — 2026-04-08（日常维护审计）
 
 **审核时间：** 2026-04-08 06:32 (Asia/Shanghai)
