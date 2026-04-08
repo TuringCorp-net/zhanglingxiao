@@ -26,7 +26,7 @@
 **涉及文件**：[index.ts](file:///Users/lizhang/Documents/GitHub/ClawKangKang/code_projects/findora/src/api/index.ts), [schema.ts](file:///Users/lizhang/Documents/GitHub/ClawKangKang/code_projects/findora/src/db/schema.ts), [lib/](file:///Users/lizhang/Documents/GitHub/ClawKangKang/code_projects/findora/src/lib/)
 
 ### 1. 代码实现与分析
-*   `schema.ts` 定义了 16 张核心业务表，接口定义清晰，字段类型与 D1 SQL 完全对齐，包含了丰富的 JSON 序列化字段。
+*   `schema.ts` 定义了核心业务实体接口，但当前 `Env` 段落仍残留 Git 冲突标记，且 `ListProduct` 的字段定义与现有 Migration 并未完全对齐，说明类型层仍有收口问题。
 *   `index.ts` 作为单入口路由，处理了超过 100 个 API 端点的分发，并集成了 Cloudflare Cron Trigger 的 `scheduled` 方法。
 
 ### 2. 优点
@@ -34,8 +34,8 @@
 *   `lib/response.ts` 统一了全局的 JSON 响应格式，`lib/errors.ts` 规范了业务错误码。
 
 ### 3. 改进建议与 Bug (🔴 / 🟡)
-*   **🔴 致命 Bug (Admin 鉴权硬编码)**：`index.ts` 中 `isAdmin` 函数直接硬编码了 `adminKey === 'findora-admin-secret'`。必须立刻重构为使用 `env.ADMIN_KEY`。
-*   **🔴 致命 Bug (Admin 路由分段索引错误)**：`index.ts` 在 `segments[0] === 'admin'` 分支内，后续大量条件却写成 `segments[1] === 'admin'`（尤其 i18n / membership / content 管理端）。这会导致一批 `/api/admin/...` 端点无法命中，实际可用性与 SRS/SDS 标记不一致。
+*   **🟡 结论修正（与既有 STR/Report 冲突）**：`index.ts` 中 `isAdmin` 已改为读取 `env.ADMIN_KEY`，源码里已不存在 `findora-admin-secret` 硬编码；但 `schema.ts` 的 `Env` 接口仍保留 `ASSETS` / `ADMIN_KEY` 的 Git 冲突标记，说明该修复尚未在类型层完全收口。
+*   **🔴 致命 Bug (路由挂载层级错误)**：`index.ts` 在 `segments[0] === 'admin'` 分支内，后续不仅把管理端路由写成 `segments[1] === 'admin'`，还把公共 `/api/i18n/*`、`/api/membership/*` 路由一并放进了 admin 分支。这会导致对应公共端点与管理端点均无法命中，实际可用性明显低于 SRS/SDS 标记。
 *   **🟡 架构缺陷 (巨石路由)**：长达 650 行的 `index.ts` 使用庞大的 `if/else` 链进行路由匹配，缺乏动态参数解析和中间件支持。建议引入 **Hono** 框架进行现代化重构。
 
 ---
@@ -53,8 +53,8 @@
 *   内容发布引入了防误操作的锁机制和审核记录。
 
 ### 3. 改进建议与 Bug (🔴 / 🟡)
-*   **🟡 结论修正（与既有 STR 冲突）**：`list_products` 表在 `migrations/001_initial_schema.sql` 中已存在，并非“数据库表缺失”；真实问题是 `schema.ts` 中缺少对应 TypeScript 接口（类型层不完整），以及 STR 中该条结论存在误报。
-*   **🟡 潜在 SQL 注入 (LIKE 查询)**：在 `products.ts` 和 `tags.ts` 中，`tags LIKE ?` 绑定了未经转义的用户输入，容易引发 SQL 语法错误或恶意扫描。
+*   **🟡 结论修正（与既有 STR 冲突）**：`list_products` 表在 `migrations/001_initial_schema.sql` 中已存在，并非“数据库表缺失”；当前真实问题已经演变为 `001_initial_schema.sql` 与 `010_list_products.sql` 对同一张表给出了两套不一致结构，而 `schema.ts` 的 `ListProduct` 又更接近 `010` 版本，导致文档、类型和真实库结构三方漂移。
+*   **🟡 查询语义与性能风险（非 SQL 注入）**：`products.ts`、`tags.ts`、`email.ts`、`admin/subscribers.ts` 中大量使用 `LIKE ?` + JSON 字符串匹配；由于这里使用的是参数绑定，并不存在传统 SQL 注入，但仍会带来通配符误匹配、全表扫描和标签/类目语义不稳定的问题。
 *   **🔴 致命 Bug (定时发布闭环不完整)**：`handleScheduledPublishing` 仅更新 `content_topics` 状态，没有复用 `publishContent` 的榜单创建流程（`lists` / `list_products` / `content_production`），会导致“已发布但无实际榜单产物”的数据不一致。
 
 ---
@@ -133,10 +133,10 @@
 ## 八、 交叉验证与冲突裁决（二次复核）
 
 ### 1. 与现有结论重合项（完全确认成立）
-*   **Admin 路由分段索引错误**：`index.ts` 中 `segments[1] === 'admin'` 的条件判断完全错误。因为外层已经判断了 `segments[0] === 'admin'`，内层的 `segments[1]` 实际上应该是具体的业务模块（如 `'i18n'`, `'membership'`）。这导致所有这些接口返回 404。结论 100% 成立。
+*   **路由分段索引错误**：`index.ts` 中 `segments[1] === 'admin'` 的条件判断完全错误。因为外层已经判断了 `segments[0] === 'admin'`，内层的 `segments[1]` 实际上应该是具体的业务模块（如 `'i18n'`, `'membership'`）。这不仅会让一批 `/api/admin/...` 接口返回 404，也会让被错误挂在 admin 分支里的 `/api/i18n/...`、`/api/membership/...` 公共端点不可达。结论 100% 成立。
 *   **定时发布闭环断裂**：`admin/content.ts` 中的 `handleScheduledPublishing` 函数仅仅执行了 `UPDATE content_topics SET status = 'published'`，完全跳过了正常 `publishContent` 函数中创建 `lists`、`list_products` 和 `content_production` 的逻辑。这是一个严重的数据不一致 Bug。结论 100% 成立。
-*   **Admin Key 硬编码**：`index.ts` 第 47 行 `adminKey === 'findora-admin-secret'` 是硬编码。结论 100% 成立。
-*   **`list_products` 表缺失问题**：`schema.ts` 确实缺少 `ListProduct` 接口定义，但数据库 Migration 001 中确实有建表语句。原报告的裁决完全正确。
+*   **`explain.ts` 缓存过期比较错误**：`expires_at` 使用 ISO8601 写入，而读取时用 SQLite `datetime('now')` 进行字符串比较，导致缓存过期判断失真。结论 100% 成立。
+*   **`behavior.ts` 负反馈统计偏差**：`dislike_count` 统计没有做“商品 tags 与用户 disliked_tags 交集”匹配，导致存在全局误伤。结论 100% 成立。
 
 ### 2. 深度验证发现的补充细节（强化现有结论）
 *   **🔴 致命 Bug (时间字段比较导致缓存失效失效)**：原报告指出的“时间字段一致性风险”实际上是一个**严重的运行期 Bug**。在 `explain.ts` 中，写入的 `expires_at` 是 `now.toISOString()`（格式如 `2026-04-08T12:00:00.000Z`），而查询时使用 `expires_at > datetime('now')`（格式如 `2026-04-08 12:00:00`）。由于 ASCII 码中 `T` (84) 大于空格 ` ` (32)，`'2026-04-08T00:00:00' > '2026-04-08 23:59:59'` 永远为真！这意味着在同一天内，缓存永远不会过期。
@@ -144,8 +144,9 @@
 *   **🔴 致命 Bug (Anthropic 解析兼容缺陷)**：在 `explain.ts` 第 278 行，即便是选择了 Anthropic provider，代码仍然使用 OpenAI 的格式 `result?.choices?.[0]?.message?.content` 来解析响应。而实际上 `ai_content.ts` 中的正确解析方式应该是 `result?.content?.[0]?.text`。这会导致 Anthropic 的解释生成永远返回 `null`。
 
 ### 3. 本次新增发现
-*   **🟡 潜在的安全风险 (批量导入无严格限制)**：在 `products.ts` 的 `importProducts` 接口中，缺乏对单次导入数量的严格上限控制（如最大 1000 条），如果传入超大 JSON 数组，可能会导致 Worker 内存溢出或 D1 写入超时。
-*   **🟡 缺失的联级删除机制**：数据库中 `topic_products` 等关联表在设计时未体现 `ON DELETE CASCADE`，如果在代码层不小心删除了 topic，可能会留下孤儿数据。
+*   **🔴 发布阻断问题（未解决的 Git 冲突标记）**：`schema.ts` 当前仍存在 `<<<<<<< HEAD` / `=======` / `>>>>>>>` 冲突标记，位置正好落在 `Env` 接口定义处。无论 IDE 是否暂未报错，这都说明当前分支存在未清理的合并残留，发布前必须手工裁决并保留 `ASSETS` 与 `ADMIN_KEY` 两个字段。
+*   **🟡 数据模型漂移（`list_products` 双重迁移不一致）**：`001_initial_schema.sql` 已创建 `list_products(list_id, product_id, position)`，而 `010_list_products.sql` 又以“修复缺表”为由尝试创建带 `id`、`created_at`、`ON DELETE CASCADE` 的新结构；由于使用的是 `CREATE TABLE IF NOT EXISTS`，后者实际上不会修正旧表结构，导致 STR、Migration、TypeScript 接口三者长期不一致。
+*   **🟡 潜在的稳定性风险（批量导入无严格限制）**：在 `products.ts` 的 `importProducts` 接口中，缺乏对单次导入数量的严格上限控制（如最大 1000 条），如果传入超大 JSON 数组，可能会导致 Worker 内存溢出或 D1 写入超时。
 
 ---
 
@@ -160,11 +161,11 @@ Findora 后端底座极其扎实，开发者出色地将复杂的业务逻辑翻
 - 状态流转顺序固定为：`未修改 → 已修改 → 已review`，不得跳步；若复审不通过，保持“已修改”并在事项后补充整改说明。
 
 **立即执行 (P0)**：
-1. [x] 未修改 / [ ] 已修改 / [ ] 已review — 修复 `index.ts` Admin 路由分段索引错误，恢复 `/api/admin/...` 端点可达性。
+1. [x] 未修改 / [ ] 已修改 / [ ] 已review — 修复 `index.ts` 路由挂载层级与分段索引错误，恢复 `/api/admin/...`、`/api/i18n/...`、`/api/membership/...` 端点可达性。
 2. [x] 未修改 / [ ] 已修改 / [ ] 已review — 修复 `handleScheduledPublishing`，复用发布主流程，确保定时发布会创建 `lists`、`list_products`、`content_production`。
-3. [x] 未修改 / [ ] 已修改 / [ ] 已review — 移除 `index.ts` 中的 `findora-admin-secret` 硬编码，改用环境变量（如 `env.ADMIN_KEY`）。
+3. [x] 未修改 / [ ] 已修改 / [ ] 已review — 清理 `schema.ts` 中 `Env` 接口的 Git 冲突标记，确认同时保留 `ASSETS` 与 `ADMIN_KEY`，确保现有鉴权修复可以稳定发布。
 4. [x] 未修改 / [ ] 已修改 / [ ] 已review — 修复时间格式比较 Bug，统一使用 `datetime()` 或 Epoch 时间戳，避免 `T` 字符引起的字符串比较错误。
-5. [x] 未修改 / [ ] 已修改 / [ ] 已review — 在 `schema.ts` 补充 `ListProduct` 类型接口（数据库 Migration 无需重复创建此表）。
+5. [x] 未修改 / [ ] 已修改 / [ ] 已review — 统一 `list_products` 的 Migration、`schema.ts` 接口与 STR 结论，消除 `001` / `010` 双版本结构漂移。
 
 **短期重构 (P1)**：
 1. [x] 未修改 / [ ] 已修改 / [ ] 已review — 引入 **Hono** 框架重构 API 路由层，替换臃肿的 `index.ts`。
@@ -172,3 +173,4 @@ Findora 后端底座极其扎实，开发者出色地将复杂的业务逻辑翻
 3. [x] 未修改 / [ ] 已修改 / [ ] 已review — 修正 `behavior.ts` 的 `dislike_count` 统计逻辑，按标签交集计算负反馈影响。
 4. [x] 未修改 / [ ] 已修改 / [ ] 已review — 修正 `explain.ts` 的 Anthropic 响应解析，使用 `result?.content?.[0]?.text`。
 5. [x] 未修改 / [ ] 已修改 / [ ] 已review — 补全 Cron Trigger 对邮件推送任务的调用（在 `index.ts` 的 `scheduled` 中注册）。
+6. [x] 未修改 / [ ] 已修改 / [ ] 已review — 为 `importProducts` 增加单批数量上限、分批写入或异步队列化策略，避免大批量导入拖垮 Worker / D1。
