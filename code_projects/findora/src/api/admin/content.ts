@@ -509,9 +509,9 @@ export async function publishContent(env: Env, request: Request): Promise<Respon
   let position = 0;
   for (const productId of productsToAdd) {
     await env.DB.prepare(`
-      INSERT INTO list_products (list_id, product_id, position)
-      VALUES (?, ?, ?)
-    `).bind(listId, productId, position++).run();
+      INSERT INTO list_products (id, list_id, product_id, position, created_at)
+      VALUES (?, ?, ?, ?, ?)
+    `).bind(crypto.randomUUID(), listId, productId, position++, new Date().toISOString()).run();
   }
 
   // Update topic status to published
