@@ -17,6 +17,7 @@ directory = "src/pages"
 
 [vars]
 AI_PROVIDER = "openai"
+ADMIN_KEY = "findora-admin-secret" # Set via: wrangler secret put ADMIN_KEY
 
 [triggers]
 crons = ["0 9 * * 4"]

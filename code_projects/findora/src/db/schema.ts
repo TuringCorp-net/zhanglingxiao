@@ -331,12 +331,9 @@ export interface ListProduct {
 
 export interface Env {
   DB: D1Database;
-<<<<<<< HEAD
   ASSETS: Fetcher;
-=======
   // Admin authentication (C-02: Admin key for admin endpoints)
   ADMIN_KEY?: string;
->>>>>>> 3352b90029061ba2f192f53e5b4bdc5ae46ba6f3
   // Email provider settings (F-013-07)
   EMAIL_PROVIDER?: 'resend' | 'sendgrid';
   EMAIL_API_KEY?: string;
