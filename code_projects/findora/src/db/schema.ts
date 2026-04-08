@@ -320,8 +320,19 @@ export interface WorkflowAuditLog {
   created_at: string;
 }
 
+// List-Product Association Table (F-004)
+export interface ListProduct {
+  id: string;
+  list_id: string;
+  product_id: string;
+  position: number;
+  created_at: string;
+}
+
 export interface Env {
   DB: D1Database;
+  // Admin authentication (C-02: Admin key for admin endpoints)
+  ADMIN_KEY?: string;
   // Email provider settings (F-013-07)
   EMAIL_PROVIDER?: 'resend' | 'sendgrid';
   EMAIL_API_KEY?: string;
