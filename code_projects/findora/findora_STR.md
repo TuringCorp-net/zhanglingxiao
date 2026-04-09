@@ -34,7 +34,22 @@
 
 ---
 
-## 三、 SRS 需求模块审核清单 (v3.06)
+## 三、 SRS 需求模块审核清单 (v3.10)
+
+### 第42次STR审核记录（2026-04-09）
+
+> 审核人：Claude Agent  
+> 审核范围：F-001-05/F-002-03/F-002-05/F-004-06四项新增API功能  
+> 审核结论：**全部通过 ✅**
+
+| SRS 编号 | 功能 | 代码实现 | 路由 | 审核结果 | 说明 |
+|----------|------|----------|------|----------|------|
+| F-001-05 | 趋势内容 API | `products.ts:getTrending` | `GET /api/trending` | ✅ | 7天点击量趋势商品+榜单，返回结构符合SRS |
+| F-002-03 | 子类目筛选 | `categories.ts:getCategorySubcategories` | `GET /api/categories/:category/subcategories` | ✅ | DISTINCT查询+ASC排序，返回子分类数组 |
+| F-002-05 | 排序功能 | `products.ts:listProducts` | `GET /api/products?sort_by=` | ✅ | 支持newest/popular/price_asc/price_desc四种模式 |
+| F-004-06 | 榜单收藏 | `favorites.ts:addFavoriteList/removeFavoriteList/listFavoriteLists` | `GET/POST/DELETE /api/favorites/lists` | ✅ | 三端点完整实现，用户识别与去重逻辑正确 |
+
+**遗留观察项**：F-016（4项）+ F-020（6项）仍需AI真实联调验证，待后续推进。
 
 以下为 Findora SRS 核心功能模块的当前审核状态清单。所有代码已完成实现并满足编译/基础运行要求，其中涉及 AI 调用或端到端联调的项需在后续流程中真实验证（✅：审核通过，🏗：已实现待联调）。
 
