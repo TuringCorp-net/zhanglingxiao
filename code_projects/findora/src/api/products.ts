@@ -73,47 +73,80 @@ export async function listProducts(env: Env, request: Request): Promise<Response
   const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 100);
   const offset = (page - 1) * limit;
 
-  let query = 'SELECT * FROM products WHERE status = ?';
+  // Sorting: newest, popular (clicks count in 30 days), price_asc, price_desc
+  const sortBy = url.searchParams.get('sort_by') || 'newest';
+
+  let selectFields = 'p.*';
+  let fromClause = 'FROM products p';
+  let joinClause = '';
+  let groupClause = '';
+
+  if (sortBy === 'popular') {
+    selectFields = 'p.*, COUNT(c.id) as click_count';
+    joinClause = 'LEFT JOIN clicks c ON p.id = c.product_id AND c.clicked_at > datetime(\'now\', \'-30 days\')';
+    groupClause = 'GROUP BY p.id';
+  }
+
+  let whereClause = 'WHERE p.status = ?';
   const bindings: (string | number)[] = ['active'];
 
   if (category) {
-    query += ' AND category = ?';
+    whereClause += ' AND p.category = ?';
     bindings.push(category);
   }
 
   const subcategory = url.searchParams.get('subcategory');
   if (subcategory) {
-    query += ' AND subcategory = ?';
+    whereClause += ' AND p.subcategory = ?';
     bindings.push(subcategory);
   }
 
   if (priceMin) {
-    query += ' AND price_min >= ?';
+    whereClause += ' AND p.price_min >= ?';
     bindings.push(parseFloat(priceMin));
   }
 
   if (priceMax) {
-    query += ' AND price_max <= ?';
+    whereClause += ' AND p.price_max <= ?';
     bindings.push(parseFloat(priceMax));
   }
 
   if (tag) {
-    query += ' AND tags LIKE ?';
+    whereClause += ' AND p.tags LIKE ?';
     bindings.push(`%"${tag}"%`);
   }
 
-  // Count query
-  const countQuery = query.replace('SELECT *', 'SELECT COUNT(*) as total');
-  const countResult = await env.DB.prepare(countQuery).bind(...bindings).first<{ total: number }>();
+  // Count query (without join/group for count)
+  const countQuery = `SELECT COUNT(*) as total FROM products p ${whereClause}`;
+  const countBindings = [...bindings];
+  const countResult = await env.DB.prepare(countQuery).bind(...countBindings).first<{ total: number }>();
   const total = countResult?.total || 0;
 
-  query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-  bindings.push(limit, offset);
+  // Build ORDER clause
+  let orderClause = 'ORDER BY p.created_at DESC';
+  switch (sortBy) {
+    case 'newest':
+      orderClause = 'ORDER BY p.created_at DESC';
+      break;
+    case 'popular':
+      orderClause = 'ORDER BY click_count DESC, p.created_at DESC';
+      break;
+    case 'price_asc':
+      orderClause = 'ORDER BY p.price_min ASC NULLS LAST';
+      break;
+    case 'price_desc':
+      orderClause = 'ORDER BY p.price_min DESC NULLS LAST';
+      break;
+  }
 
-  const result = await env.DB.prepare(query).bind(...bindings).all<Record<string, unknown>>();
+  // Build final query
+  const query = `SELECT ${selectFields} ${fromClause} ${joinClause} ${whereClause} ${groupClause} ${orderClause} LIMIT ? OFFSET ?`;
+  const finalBindings = [...bindings, limit, offset];
+
+  const result = await env.DB.prepare(query).bind(...finalBindings).all<Record<string, unknown>>();
   const products = (result.results || []).map(parseProduct);
 
-  return new Response(JSON.stringify(jsonSuccess(products, { page, total })), {
+  return new Response(JSON.stringify(jsonSuccess(products, { page, total, sort_by: sortBy })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }
@@ -456,6 +489,52 @@ export async function importProducts(env: Env, request: Request): Promise<Respon
     results
   })), {
     status: errorCount > 0 ? 207 : 201, // 207 Multi-Status if partial success
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+// GET /api/trending - F-001-05 (Trending Now content section)
+export async function getTrending(env: Env, request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  const limit = Math.min(parseInt(url.searchParams.get('limit') || '10'), 50);
+
+  // Get trending products based on click count in last 7 days, weighted by recency
+  const result = await env.DB.prepare(`
+    SELECT p.*,
+      COUNT(c.id) as click_count,
+      MAX(c.clicked_at) as last_clicked
+    FROM products p
+    LEFT JOIN clicks c ON p.id = c.product_id
+      AND c.clicked_at > datetime('now', '-7 days')
+    WHERE p.status = ?
+    GROUP BY p.id
+    HAVING click_count > 0
+    ORDER BY click_count DESC, last_clicked DESC
+    LIMIT ?
+  `).bind('active', limit).all<Record<string, unknown>>();
+
+  const products = (result.results || []).map(parseProduct);
+
+  // Also get trending lists (recently published with high click activity)
+  const trendingLists = await env.DB.prepare(`
+    SELECT l.*,
+      COUNT(c.id) as click_count
+    FROM lists l
+    LEFT JOIN list_products lp ON l.id = lp.list_id
+    LEFT JOIN clicks c ON lp.product_id = c.product_id
+      AND c.clicked_at > datetime('now', '-7 days')
+    WHERE l.status = 'published'
+    GROUP BY l.id
+    HAVING click_count > 0
+    ORDER BY click_count DESC
+    LIMIT 5
+  `).bind().all<Record<string, unknown>>();
+
+  return new Response(JSON.stringify(jsonSuccess({
+    products,
+    lists: trendingLists.results || [],
+    period_days: 7,
+  })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }

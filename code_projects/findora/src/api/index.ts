@@ -3,12 +3,12 @@
 import { Env } from '../db/schema';
 import { jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
-import { listProducts, getProduct, createProduct, updateProduct, toggleProductStatus, updateProductTags, batchUpdateProducts, importProducts } from './products';
+import { listProducts, getProduct, createProduct, updateProduct, toggleProductStatus, updateProductTags, batchUpdateProducts, importProducts, getTrending } from './products';
 import { listLists, getList, createList } from './lists';
 import { submitPriceCheck, submitBatchPriceCheck, getPriceHistory, listPriceChanges } from './price_check';
-import { getCategories } from './categories';
+import { getCategories, getCategorySubcategories } from './categories';
 import { subscribe, unsubscribe, updatePreferences } from './subscribe';
-import { addFavorite, removeFavorite, listFavorites } from './favorites';
+import { addFavorite, removeFavorite, listFavorites, addFavoriteList, removeFavoriteList, listFavoriteLists } from './favorites';
 import { recordClick } from './clicks';
 import { getRecommendations } from './recommendations';
 import { createTag, listTags, updateTag, deleteTag, getTagStats, updateTagFeaturedProducts } from './tags';
@@ -88,6 +88,11 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
   try {
     // === Public Endpoints ===
 
+    // GET /api/trending - F-001-05
+    if (request.method === 'GET' && segments[0] === 'trending') {
+      return getTrending(env, request);
+    }
+
     // GET /api/products - F-040-01
     if (request.method === 'GET' && segments[0] === 'products' && !segments[1]) {
       return listProducts(env, request);
@@ -113,6 +118,11 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       return getCategories(env);
     }
 
+    // GET /api/categories/:category/subcategories - F-002-03
+    if (request.method === 'GET' && segments[0] === 'categories' && segments[1] && segments[2] === 'subcategories') {
+      return getCategorySubcategories(env, segments[1]);
+    }
+
     // === User Endpoints (email/anonymous_id based) ===
 
     // POST /api/subscribe - F-040-06
@@ -135,14 +145,29 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       return addFavorite(env, request);
     }
 
+    // GET /api/favorites - F-040-11
+    if (request.method === 'GET' && segments[0] === 'favorites' && !segments[1]) {
+      return listFavorites(env, request);
+    }
+
+    // GET /api/favorites/lists - F-004-06
+    if (request.method === 'GET' && segments[0] === 'favorites' && segments[1] === 'lists') {
+      return listFavoriteLists(env, request);
+    }
+
+    // POST /api/favorites/lists/:list_id - F-004-06
+    if (request.method === 'POST' && segments[0] === 'favorites' && segments[1] === 'lists' && segments[2]) {
+      return addFavoriteList(env, request, segments[2]);
+    }
+
+    // DELETE /api/favorites/lists/:list_id - F-004-06
+    if (request.method === 'DELETE' && segments[0] === 'favorites' && segments[1] === 'lists' && segments[2]) {
+      return removeFavoriteList(env, request, segments[2]);
+    }
+
     // DELETE /api/favorites/:product_id - F-040-10
     if (request.method === 'DELETE' && segments[0] === 'favorites' && segments[1]) {
       return removeFavorite(env, request, segments[1]);
-    }
-
-    // GET /api/favorites - F-040-11
-    if (request.method === 'GET' && segments[0] === 'favorites') {
-      return listFavorites(env, request);
     }
 
     // POST /api/clicks - F-040-12

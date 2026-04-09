@@ -36,7 +36,7 @@
 
 | SRS 模块 | 范围 | 主要实现文件 | 简要说明 |
 |------|------|------|------|
-| F-001~F-006 页面功能 | 首页/类目/详情/榜单/订阅/静态页 | `src/api/products.ts`, `src/api/lists.ts`, `src/api/categories.ts`, `src/api/subscribe.ts` | 页面数据由 API 提供，前端展示层不在本文件展开 |
+| F-001~F-006 页面功能 | 首页/类目/详情/榜单/订阅/静态页 | `src/api/products.ts`, `src/api/lists.ts`, `src/api/categories.ts`, `src/api/subscribe.ts`, `src/api/favorites.ts` | F-001-05 趋势内容(/api/trending)、F-002-03 子类目筛选(/api/categories/:category/subcategories)、F-002-05 排序(sort_by 参数)、F-004-06 榜单收藏(/api/favorites/lists) |
 | F-010 商品库管理 | 创建/编辑/上下架/批量/价格检查 | `src/api/products.ts`, `src/api/price_check.ts` | 管理端商品全生命周期与价格变动链路 |
 | F-011 标签体系 | 标签 CRUD、打标、统计、精选 | `src/api/tags.ts`, `src/api/products.ts` | 支持标签层级与精选商品映射 |
 | F-012 联盟追踪 | 点击记录、去重、转化回调 | `src/api/clicks.ts`, `src/api/conversions.ts` | 追踪参数 + 点击/转化数据沉淀 |
@@ -58,9 +58,17 @@
 ## 4. F-040 端点覆盖（基线）
 
 以下为 SRS 基线端点集合（按能力归类）：
-- 公共读：`/api/products`, `/api/products/:id`, `/api/lists`, `/api/lists/:id`, `/api/categories`
-- 用户行为：`/api/subscribe`, `/api/subscribe/preferences`, `/api/favorites`, `/api/clicks`, `/api/recommendations`
+- 公共读：`/api/products`, `/api/products/:id`, `/api/lists`, `/api/lists/:id`, `/api/categories`, `/api/categories/:category/subcategories`, `/api/trending`
+- 用户行为：`/api/subscribe`, `/api/subscribe/preferences`, `/api/favorites`, `/api/favorites/lists`, `/api/favorites/lists/:list_id`, `/api/clicks`, `/api/recommendations`
 - 管理端基础：`/api/admin/products`, `/api/admin/products/:id`, `/api/admin/products/:id/status`, `/api/admin/tags`, `/api/admin/lists`
+
+**新增端点（v3.08 实现）：**
+- `GET /api/trending` - F-001-05 趋势内容（基于7天点击量）
+- `GET /api/categories/:category/subcategories` - F-002-03 子类目筛选
+- `GET /api/products?sort_by=newest|popular|price_asc|price_desc` - F-002-05 排序
+- `GET /api/favorites/lists` - F-004-06 收藏榜单列表
+- `POST /api/favorites/lists/:list_id` - F-004-06 收藏榜单
+- `DELETE /api/favorites/lists/:list_id` - F-004-06 取消收藏榜单
 
 扩展端点（F-013/F-015/F-016/F-017/F-020~F-023/F-030）在 `src/api/index.ts` 统一挂载，不再在本文逐条展开。
 

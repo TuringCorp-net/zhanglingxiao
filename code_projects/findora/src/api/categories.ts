@@ -1,6 +1,7 @@
-// Categories API - F-040-05
+// Categories API - F-040-05, F-002-03
 import { Env } from '../db/schema';
-import { jsonSuccess } from '../lib/response';
+import { jsonSuccess, jsonError } from '../lib/response';
+import { ErrorCodes } from '../lib/errors';
 
 // GET /api/categories - F-040-05
 export async function getCategories(env: Env): Promise<Response> {
@@ -26,6 +27,29 @@ export async function getCategories(env: Env): Promise<Response> {
   }));
 
   return new Response(JSON.stringify(jsonSuccess(tree)), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+// GET /api/categories/:category/subcategories - F-002-03
+export async function getCategorySubcategories(env: Env, category: string): Promise<Response> {
+  const result = await env.DB.prepare(`
+    SELECT DISTINCT subcategory
+    FROM products
+    WHERE category = ? AND status = ? AND subcategory IS NOT NULL
+    ORDER BY subcategory ASC
+  `).bind(category, 'active').all<{ subcategory: string }>();
+
+  const subcategories = (result.results || []).map(row => row.subcategory);
+
+  if (subcategories.length === 0) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Category not found or has no subcategories')), {
+      status: 404,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  return new Response(JSON.stringify(jsonSuccess(subcategories)), {
     headers: { 'Content-Type': 'application/json' },
   });
 }
