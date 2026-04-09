@@ -403,6 +403,15 @@ export async function importProducts(env: Env, request: Request): Promise<Respon
     });
   }
 
+  // P1-4: Add batch limit to prevent resource exhaustion (max 100 items per batch)
+  const MAX_BATCH_SIZE = 100;
+  if (body.products.length > MAX_BATCH_SIZE) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, `Maximum ${MAX_BATCH_SIZE} products per batch`)), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   const mode = body.mode === 'upsert' ? 'upsert' : 'insert';
   const results: { index: number; id?: string; status: 'success' | 'error'; error?: string }[] = [];
   const now = new Date().toISOString();

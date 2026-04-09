@@ -275,8 +275,15 @@ Language: English only.`;
       return null;
     }
 
-    const result = await response.json() as { choices?: { message?: { content?: string } }[] };
-    const aiText = result?.choices?.[0]?.message?.content?.trim();
+    const result = await response.json() as { choices?: { message?: { content?: string } }[]; content?: { type: string; text: string }[] };
+    let aiText: string | undefined;
+    if (aiProvider === 'anthropic') {
+      // Anthropic returns { content: [{ type: "text", text: "..." }] }
+      aiText = result?.content?.[0]?.text?.trim();
+    } else {
+      // OpenAI returns { choices: [{ message: { content: "..." } }] }
+      aiText = result?.choices?.[0]?.message?.content?.trim();
+    }
 
     if (!aiText) {
       return null;
@@ -306,6 +313,8 @@ Language: English only.`;
  *   - user_product: 24h
  *   - product_generic: 7d
  *   - ai_generated: 72h
+ * Note: generated_at and expires_at store Unix timestamps (seconds since epoch)
+ * for consistent time comparison across all D1 operations.
  */
 async function ensureExplanationCacheTable(env: Env): Promise<void> {
   await env.DB.prepare(`
@@ -352,10 +361,12 @@ async function getCachedExplanation(
   env: Env,
   cacheKey: string
 ): Promise<{ reason: string; ai_extended?: string | null; cached: boolean } | null> {
+  // Use Unix timestamp (seconds) for consistent time comparison
+  const nowUnix = Math.floor(Date.now() / 1000);
   const row = await env.DB.prepare(`
     SELECT reason, ai_extended FROM explanation_cache
-    WHERE cache_key = ? AND expires_at > datetime('now')
-  `).bind(cacheKey).first<{ reason: string; ai_extended: string | null }>();
+    WHERE cache_key = ? AND expires_at > ?
+  `).bind(cacheKey, nowUnix).first<{ reason: string; ai_extended: string | null }>();
 
   if (row) {
     // Increment hit count
@@ -382,8 +393,9 @@ async function setCachedExplanation(
   }
 ): Promise<void> {
   const ttlSeconds = getTTLForType(params.cacheType);
-  const now = new Date();
-  const expiresAt = new Date(now.getTime() + ttlSeconds * 1000);
+  // Use Unix timestamps (seconds) for consistent time storage and comparison
+  const nowUnix = Math.floor(Date.now() / 1000);
+  const expiresUnix = nowUnix + ttlSeconds;
 
   await env.DB.prepare(`
     INSERT OR REPLACE INTO explanation_cache
@@ -396,8 +408,8 @@ async function setCachedExplanation(
     params.explanationType,
     params.reason,
     params.aiExtended || null,
-    now.toISOString(),
-    expiresAt.toISOString()
+    nowUnix,
+    expiresUnix
   ).run();
 }
 

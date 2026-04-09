@@ -891,6 +891,17 @@ export default {
   },
   async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
     const { handleScheduledPublishing } = await import('./admin/content');
+    const { sendWeeklyNewsletter } = await import('./email');
+
+    // Run scheduled publishing tasks
     await handleScheduledPublishing(env);
+
+    // Send weekly newsletter (cron configured in wrangler.toml as "0 9 * * 4" - Thursday 9am)
+    const cronRequest = new Request('https://findora.turingcorp.net/api/admin/email/send-weekly', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    });
+    await sendWeeklyNewsletter(env, cronRequest);
   },
 };
