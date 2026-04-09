@@ -1,8 +1,8 @@
 # Findora SDS — 软件设计说明书（精简版）
 
 > **项目名称：** Findora  
-> **版本：** v3.05-clean  
-> **最后更新：** 2026-04-09  
+> **版本：** v3.06  
+> **最后更新：** 2026-04-10  
 > **维护方式：** Agent维护（仅保留与SRS对应关系及简要设计说明）
 
 ---
@@ -71,6 +71,19 @@
 - `DELETE /api/favorites/lists/:list_id` - F-004-06 取消收藏榜单
 
 扩展端点（F-013/F-015/F-016/F-017/F-020~F-023/F-030）在 `src/api/index.ts` 统一挂载，不再在本文逐条展开。
+
+**外部系统接口（v3.13 实现）：**
+- `POST /api/conversions/callback` - F-040-20 联盟追踪回调（Alibaba.com Affiliate等）
+- `POST /api/email/send-confirmation` - F-040-21 邮件发送（Resend/SendGrid）
+- `POST /api/admin/email/send-weekly` - F-040-21 周报邮件（定时cron触发）
+- `POST /api/admin/email/send-unsubscription-confirmation` - F-040-21 退订确认邮件
+- `POST /api/admin/email/send-reengagement` - F-040-21 召回邮件
+- `GET /api/admin/email/logs` - F-040-21 邮件发送日志查询
+- AI服务接口 - F-040-22 OpenAI/Anthropic生成式API（详见F-020/F-016）
+- `POST /api/admin/price-check` - F-040-23 价格监控（接收外部价格检查结果）
+- `POST /api/admin/price-check/batch` - F-040-23 批量价格检查
+- `GET /api/admin/price-check` - F-040-23 价格变动列表
+- `GET /api/admin/price-check/:product_id` - F-040-23 单商品价格历史
 
 ---
 
