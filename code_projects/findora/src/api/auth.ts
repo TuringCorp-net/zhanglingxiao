@@ -27,7 +27,7 @@ async function createToken(userId: string, expiresIn: number = 86400): Promise<s
   return `${header}.${payload}.${sig}`;
 }
 
-async function verifyToken(token: string): Promise<{ userId: string } | null> {
+async function verifyToken(token: string): Promise<{ userId: string; expiresAt: number } | null> {
   try {
     const [header, payload, signature] = token.split('.');
     if (!header || !payload || !signature) return null;
@@ -45,10 +45,21 @@ async function verifyToken(token: string): Promise<{ userId: string } | null> {
     const decoded = JSON.parse(atob(payload));
     if (decoded.exp < Math.floor(Date.now() / 1000)) return null;
 
-    return { userId: decoded.sub };
+    return { userId: decoded.sub, expiresAt: decoded.exp };
   } catch {
     return null;
   }
+}
+
+async function verifySessionToken(env: Env, token: string): Promise<{ userId: string } | null> {
+  const decoded = await verifyToken(token);
+  if (!decoded) return null;
+  const now = new Date().toISOString();
+  const session = await env.DB.prepare(
+    'SELECT user_id FROM user_sessions WHERE token = ? AND expires_at > ?'
+  ).bind(token, now).first<{ user_id: string }>();
+  if (!session || session.user_id !== decoded.userId) return null;
+  return { userId: decoded.userId };
 }
 
 function hashPassword(password: string): string {
@@ -225,7 +236,7 @@ export async function logout(env: Env, request: Request): Promise<Response> {
   }
 
   const token = authHeader.substring(7);
-  const decoded = await verifyToken(token);
+  const decoded = await verifySessionToken(env, token);
   if (!decoded) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Invalid token')), {
       status: 401,
@@ -253,7 +264,7 @@ export async function getCurrentUser(env: Env, request: Request): Promise<Respon
   }
 
   const token = authHeader.substring(7);
-  const decoded = await verifyToken(token);
+  const decoded = await verifySessionToken(env, token);
   if (!decoded) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Invalid or expired token')), {
       status: 401,
@@ -285,7 +296,7 @@ export async function changePassword(env: Env, request: Request): Promise<Respon
   }
 
   const token = authHeader.substring(7);
-  const decoded = await verifyToken(token);
+  const decoded = await verifySessionToken(env, token);
   if (!decoded) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Invalid or expired token')), {
       status: 401,
@@ -336,4 +347,4 @@ export async function changePassword(env: Env, request: Request): Promise<Respon
 }
 
 // Export verifyToken for use in other modules
-export { verifyToken, createAuditLog };
+export { verifySessionToken, createAuditLog };

@@ -75,6 +75,21 @@ function parseTopicProduct(row: Record<string, unknown>): TopicProduct {
   return row as unknown as TopicProduct;
 }
 
+type PublishInput = {
+  topic_id: string;
+  title: string;
+  slug: string;
+  description?: string | null;
+  why_these?: string | null;
+  cover_image?: string | null;
+  category?: string | null;
+  product_ids?: string[];
+  content_type?: string;
+  disclosure?: string | null;
+  action: 'publish' | 'scheduled_publish';
+  actor: string | null;
+};
+
 async function logWorkflowAudit(
   env: Env,
   entityType: string,
@@ -101,6 +116,110 @@ async function logWorkflowAudit(
     metadata,
     new Date().toISOString()
   ).run();
+}
+
+async function executePublish(env: Env, input: PublishInput): Promise<{ list_id: string; products_published: number }> {
+  const contentType = input.content_type || 'organic';
+  if ((contentType === 'affiliate' || contentType === 'sponsored') && !input.disclosure) {
+    throw new Error('Disclosure declaration is required for affiliate or sponsored content (O-F030-06)');
+  }
+
+  const topicResult = await env.DB.prepare('SELECT * FROM content_topics WHERE id = ?').bind(input.topic_id).first<Record<string, unknown>>();
+  if (!topicResult) {
+    throw new Error('Topic not found');
+  }
+  const topic = parseTopic(topicResult);
+  if (topic.status !== 'approved') {
+    throw new Error(`Topic must be in 'approved' status to publish. Current status: '${topic.status}'`);
+  }
+
+  let productsToAdd = input.product_ids || [];
+  if (productsToAdd.length === 0) {
+    const selectedProducts = await env.DB.prepare(
+      'SELECT product_id FROM topic_products WHERE topic_id = ? AND is_selected = 1'
+    ).bind(input.topic_id).all<Record<string, unknown>>();
+    productsToAdd = (selectedProducts.results || []).map((r) => (r as Record<string, unknown>).product_id as string);
+  }
+  if (productsToAdd.length === 0) {
+    throw new Error('No selected products to publish');
+  }
+
+  const now = new Date().toISOString();
+  const listId = crypto.randomUUID();
+
+  await env.DB.prepare(`
+    INSERT INTO lists (id, slug, title, description, why_these, cover_image, category, status, content_type, disclosure, published_at, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).bind(
+    listId,
+    input.slug,
+    input.title,
+    input.description || null,
+    input.why_these || null,
+    input.cover_image || null,
+    input.category || input.topic_id || null,
+    'published',
+    contentType,
+    input.disclosure || null,
+    now,
+    now,
+    now
+  ).run();
+
+  let position = 0;
+  for (const productId of productsToAdd) {
+    await env.DB.prepare(`
+      INSERT INTO list_products (id, list_id, product_id, position, created_at)
+      VALUES (?, ?, ?, ?, ?)
+    `).bind(crypto.randomUUID(), listId, productId, position++, now).run();
+  }
+
+  await env.DB.prepare(`
+    UPDATE content_topics SET status = 'published', published_at = ?, updated_at = ?, weekly_output = weekly_output + 1
+    WHERE id = ?
+  `).bind(now, now, input.topic_id).run();
+
+  const weekStart = getWeekStart(new Date());
+  const weekEnd = getWeekEnd(new Date());
+  const latestVersion = await env.DB.prepare(
+    'SELECT MAX(version) as max_version FROM content_production WHERE topic_id = ?'
+  ).bind(input.topic_id).first<{ max_version: number | null }>();
+  const newVersion = (latestVersion?.max_version || 0) + 1;
+  const parentVersion = await env.DB.prepare(
+    'SELECT id FROM content_production WHERE topic_id = ? AND version = ?'
+  ).bind(input.topic_id, latestVersion?.max_version || 1).first<{ id: string }>();
+
+  await env.DB.prepare(`
+    INSERT INTO content_production (id, topic_id, list_id, week_start, week_end, products_published, content_type, status, published_at, version, parent_version_id, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).bind(
+    crypto.randomUUID(),
+    input.topic_id,
+    listId,
+    weekStart,
+    weekEnd,
+    productsToAdd.length,
+    'list',
+    'published',
+    now,
+    newVersion,
+    parentVersion?.id || null,
+    now,
+    now
+  ).run();
+
+  await logWorkflowAudit(
+    env,
+    'content_topic',
+    input.topic_id,
+    input.action,
+    input.actor,
+    'approved',
+    'published',
+    `Published as list ${listId}`
+  );
+
+  return { list_id: listId, products_published: productsToAdd.length };
 }
 
 // === API Handlers ===
@@ -438,132 +557,40 @@ export async function publishContent(env: Env, request: Request): Promise<Respon
     });
   }
 
-  // O-F030-06: Disclosure declaration validation for affiliate/sponsored content
-  const contentType = body.content_type || 'organic';
-  if ((contentType === 'affiliate' || contentType === 'sponsored') && !body.disclosure) {
+  try {
+    const result = await executePublish(env, {
+      topic_id: body.topic_id,
+      title: body.title,
+      slug: body.slug,
+      description: body.description || null,
+      why_these: body.why_these || null,
+      cover_image: body.cover_image || null,
+      category: body.category || null,
+      product_ids: body.product_ids,
+      content_type: body.content_type || 'organic',
+      disclosure: body.disclosure || null,
+      action: 'publish',
+      actor: null
+    });
+    return new Response(JSON.stringify(jsonSuccess({
+      list_id: result.list_id,
+      topic_id: body.topic_id,
+      products_published: result.products_published,
+    })), {
+      status: 201,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Publish failed';
+    const status = message === 'Topic not found' ? 404 : 400;
     return new Response(JSON.stringify(jsonError(
-      ErrorCodes.INVALID_PARAMS,
-      'Disclosure declaration is required for affiliate or sponsored content (O-F030-06)'
+      status === 404 ? ErrorCodes.NOT_FOUND : ErrorCodes.INVALID_PARAMS,
+      message
     )), {
-      status: 400,
+      status,
       headers: { 'Content-Type': 'application/json' },
     });
   }
-
-  // Get topic
-  const topicResult = await env.DB.prepare('SELECT * FROM content_topics WHERE id = ?').bind(body.topic_id).first<Record<string, unknown>>();
-  if (!topicResult) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Topic not found')), {
-      status: 404,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const topic = parseTopic(topicResult);
-
-  // Check if topic is in correct state for publishing
-  if (topic.status !== 'approved') {
-    return new Response(JSON.stringify(jsonError(
-      ErrorCodes.INVALID_PARAMS,
-      `Topic must be in 'approved' status to publish. Current status: '${topic.status}'`
-    )), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const now = new Date().toISOString();
-  const listId = crypto.randomUUID();
-
-  // Create the list (stores content_type and disclosure for compliance)
-  await env.DB.prepare(`
-    INSERT INTO lists (id, slug, title, description, why_these, cover_image, category, status, content_type, disclosure, published_at, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).bind(
-    listId,
-    body.slug,
-    body.title,
-    body.description || null,
-    body.why_these || null,
-    body.cover_image || null,
-    body.category || body.topic_id || null,
-    'published',
-    contentType,
-    body.disclosure || null,
-    now,
-    now,
-    now
-  ).run();
-
-  // If specific product_ids provided, add them; otherwise use all selected products from topic
-  let productsToAdd = body.product_ids || [];
-
-  if (productsToAdd.length === 0) {
-    const selectedProducts = await env.DB.prepare(
-      'SELECT product_id FROM topic_products WHERE topic_id = ? AND is_selected = 1'
-    ).bind(body.topic_id).all<Record<string, unknown>>();
-    productsToAdd = (selectedProducts.results || []).map(r => (r as Record<string, unknown>).product_id as string);
-  }
-
-  // Add products to list_products
-  let position = 0;
-  for (const productId of productsToAdd) {
-    await env.DB.prepare(`
-      INSERT INTO list_products (id, list_id, product_id, position, created_at)
-      VALUES (?, ?, ?, ?, ?)
-    `).bind(crypto.randomUUID(), listId, productId, position++, new Date().toISOString()).run();
-  }
-
-  // Update topic status to published
-  await env.DB.prepare(`
-    UPDATE content_topics SET status = 'published', published_at = ?, updated_at = ?, weekly_output = weekly_output + 1
-    WHERE id = ?
-  `).bind(now, now, body.topic_id).run();
-
-  // Create content production record with version tracking (O-F030-04)
-  const weekStart = getWeekStart(new Date());
-  const weekEnd = getWeekEnd(new Date());
-
-  // O-F030-04: Get latest version for this topic to increment
-  const latestVersion = await env.DB.prepare(
-    'SELECT MAX(version) as max_version FROM content_production WHERE topic_id = ?'
-  ).bind(body.topic_id).first<{ max_version: number | null }>();
-  const newVersion = (latestVersion?.max_version || 0) + 1;
-
-  // O-F030-04: Find parent version for rollback chain
-  const parentVersion = await env.DB.prepare(
-    'SELECT id FROM content_production WHERE topic_id = ? AND version = ?'
-  ).bind(body.topic_id, latestVersion?.max_version || 1).first<{ id: string }>();
-
-  await env.DB.prepare(`
-    INSERT INTO content_production (id, topic_id, list_id, week_start, week_end, products_published, content_type, status, published_at, version, parent_version_id, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).bind(
-    crypto.randomUUID(),
-    body.topic_id,
-    listId,
-    weekStart,
-    weekEnd,
-    productsToAdd.length,
-    'list',
-    'published',
-    now,
-    newVersion,
-    parentVersion?.id || null,
-    now,
-    now
-  ).run();
-
-  await logWorkflowAudit(env, 'content_topic', body.topic_id, 'publish', null, 'approved', 'published', `Published as list ${listId}`);
-
-  return new Response(JSON.stringify(jsonSuccess({
-    list_id: listId,
-    topic_id: body.topic_id,
-    products_published: productsToAdd.length,
-  })), {
-    status: 201,
-    headers: { 'Content-Type': 'application/json' },
-  });
 }
 
 // GET /api/admin/content/publish/schedule - Get publish schedule (发布排期)
@@ -715,7 +742,7 @@ export async function handleScheduledPublishing(env: Env): Promise<{ published: 
 
   // Find topics with scheduled_publish_at <= now that are in 'approved' status
   const scheduledTopics = await env.DB.prepare(`
-    SELECT id, title, slug, description, category, target_week
+    SELECT id, title, description, category, target_week
     FROM content_topics
     WHERE status = 'approved'
       AND scheduled_publish_at IS NOT NULL
@@ -726,101 +753,21 @@ export async function handleScheduledPublishing(env: Env): Promise<{ published: 
   for (const row of scheduledTopics.results || []) {
     const topicId = row.id as string;
     const topicTitle = row.title as string;
-    const topicSlug = (row as Record<string, unknown>).slug as string || row.id as string;
     const topicDescription = (row as Record<string, unknown>).description as string | null;
     const topicCategory = (row as Record<string, unknown>).category as string | null;
 
     try {
-      // Get selected products for this topic
-      const selectedProducts = await env.DB.prepare(
-        'SELECT product_id FROM topic_products WHERE topic_id = ? AND is_selected = 1'
-      ).bind(topicId).all<Record<string, unknown>>();
-      const productIds = (selectedProducts.results || []).map(r => (r as Record<string, unknown>).product_id as string);
-
-      if (productIds.length === 0) {
-        errors.push(`Topic ${topicId} (${topicTitle}): No selected products to publish`);
-        continue;
-      }
-
-      // Generate a slug from title if not provided
-      const slug = topicSlug || topicTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + topicId.slice(0, 8);
-
-      // Create the list (similar to publishContent but auto-generated)
-      const listId = crypto.randomUUID();
-      await env.DB.prepare(`
-        INSERT INTO lists (id, slug, title, description, category, status, content_type, published_at, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `).bind(
-        listId,
+      const slug = `${topicTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}-${topicId.slice(0, 8)}`;
+      await executePublish(env, {
+        topic_id: topicId,
+        title: topicTitle,
         slug,
-        topicTitle,
-        topicDescription,
-        topicCategory,
-        'published',
-        'organic', // Default content type for scheduled content
-        now.toISOString(),
-        now.toISOString(),
-        now.toISOString()
-      ).run();
-
-      // Add products to list_products
-      let position = 0;
-      for (const productId of productIds) {
-        await env.DB.prepare(`
-          INSERT INTO list_products (id, list_id, product_id, position, created_at)
-          VALUES (?, ?, ?, ?, ?)
-        `).bind(crypto.randomUUID(), listId, productId, position++, now.toISOString()).run();
-      }
-
-      // Update topic status to published
-      await env.DB.prepare(`
-        UPDATE content_topics
-        SET status = 'published', published_at = ?, updated_at = ?, weekly_output = weekly_output + 1
-        WHERE id = ?
-      `).bind(now.toISOString(), now.toISOString(), topicId).run();
-
-      // Create content production record (O-F030-04: version tracking)
-      const weekStart = getWeekStart(new Date());
-      const weekEnd = getWeekEnd(new Date());
-
-      const latestVersion = await env.DB.prepare(
-        'SELECT MAX(version) as max_version FROM content_production WHERE topic_id = ?'
-      ).bind(topicId).first<{ max_version: number | null }>();
-      const newVersion = (latestVersion?.max_version || 0) + 1;
-
-      const parentVersion = await env.DB.prepare(
-        'SELECT id FROM content_production WHERE topic_id = ? AND version = ?'
-      ).bind(topicId, latestVersion?.max_version || 1).first<{ id: string }>();
-
-      await env.DB.prepare(`
-        INSERT INTO content_production (id, topic_id, list_id, week_start, week_end, products_published, content_type, status, published_at, version, parent_version_id, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `).bind(
-        crypto.randomUUID(),
-        topicId,
-        listId,
-        weekStart,
-        weekEnd,
-        productIds.length,
-        'list',
-        'published',
-        now.toISOString(),
-        newVersion,
-        parentVersion?.id || null,
-        now.toISOString(),
-        now.toISOString()
-      ).run();
-
-      await logWorkflowAudit(
-        env,
-        'content_topic',
-        topicId,
-        'scheduled_publish',
-        'cron',
-        'approved',
-        'published',
-        `Auto-published via scheduled publishing cron, created list ${listId} with ${productIds.length} products`
-      );
+        description: topicDescription,
+        category: topicCategory,
+        content_type: 'organic',
+        action: 'scheduled_publish',
+        actor: 'cron'
+      });
 
       published++;
     } catch (err) {

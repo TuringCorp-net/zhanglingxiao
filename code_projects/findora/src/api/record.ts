@@ -2,14 +2,14 @@
 import { Env, Record as RecordEntity } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
-import { verifyToken, createAuditLog } from './auth';
+import { verifySessionToken, createAuditLog } from './auth';
 
 // Helper to extract user ID from request
 async function getUserIdFromRequest(request: Request, env: Env): Promise<string | null> {
   const authHeader = request.headers.get('Authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
   const token = authHeader.substring(7);
-  const decoded = await verifyToken(token);
+  const decoded = await verifySessionToken(env, token);
   return decoded?.userId || null;
 }
 

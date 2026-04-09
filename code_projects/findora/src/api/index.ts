@@ -11,7 +11,7 @@ import { subscribe, unsubscribe, updatePreferences } from './subscribe';
 import { addFavorite, removeFavorite, listFavorites } from './favorites';
 import { recordClick } from './clicks';
 import { getRecommendations } from './recommendations';
-import { createTag, listTags, updateTag, deleteTag, getTagStats } from './tags';
+import { createTag, listTags, updateTag, deleteTag, getTagStats, updateTagFeaturedProducts } from './tags';
 import { getAnalyticsOverview, getAnalyticsUV, getAnalyticsCTR, getAnalyticsConversion, getAnalyticsCategories, getAnalyticsLists, getAnalyticsTrends } from './analytics';
 import { listSubscribers, exportSubscribers, getSubscriberSegments } from './admin/subscribers';
 import { recordConversion, listConversions, getConversionStats } from './conversions';
@@ -334,6 +334,11 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
         return updateTag(env, request, segments[2]);
       }
 
+      // PATCH /api/admin/tags/:id/featured - F-040-17d
+      if (request.method === 'PATCH' && segments[1] === 'tags' && segments[2] && segments[3] === 'featured') {
+        return updateTagFeaturedProducts(env, request, segments[2]);
+      }
+
       // DELETE /api/admin/tags/:id - F-011-01 delete
       if (request.method === 'DELETE' && segments[1] === 'tags' && segments[2]) {
         return deleteTag(env, request, segments[2]);
@@ -645,201 +650,201 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       if (request.method === 'GET' && segments[1] === 'content' && segments[2] === 'production' && segments[3] === 'stats') {
         return getProductionStats(env, request);
       }
+    }
 
-      // === EMS Auth Routes ===
+    // === EMS Auth Routes ===
 
-      // POST /api/auth/register
-      if (request.method === 'POST' && segments[1] === 'auth' && segments[2] === 'register') {
-        return register(env, request);
-      }
+    // POST /api/auth/register
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'register') {
+      return register(env, request);
+    }
 
-      // POST /api/auth/login
-      if (request.method === 'POST' && segments[1] === 'auth' && segments[2] === 'login') {
-        return login(env, request);
-      }
+    // POST /api/auth/login
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'login') {
+      return login(env, request);
+    }
 
-      // POST /api/auth/logout
-      if (request.method === 'POST' && segments[1] === 'auth' && segments[2] === 'logout') {
-        return logout(env, request);
-      }
+    // POST /api/auth/logout
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'logout') {
+      return logout(env, request);
+    }
 
-      // GET /api/auth/me
-      if (request.method === 'GET' && segments[1] === 'auth' && segments[2] === 'me') {
-        return getCurrentUser(env, request);
-      }
+    // GET /api/auth/me
+    if (request.method === 'GET' && segments[0] === 'auth' && segments[1] === 'me') {
+      return getCurrentUser(env, request);
+    }
 
-      // POST /api/auth/change-password
-      if (request.method === 'POST' && segments[1] === 'auth' && segments[2] === 'change-password') {
-        return changePassword(env, request);
-      }
+    // POST /api/auth/change-password
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'change-password') {
+      return changePassword(env, request);
+    }
 
-      // === EMS Enterprise Routes ===
+    // === EMS Enterprise Routes ===
 
-      // POST /api/enterprises
-      if (request.method === 'POST' && segments[1] === 'enterprises' && !segments[2]) {
-        return createEnterprise(env, request);
-      }
+    // POST /api/enterprises
+    if (request.method === 'POST' && segments[0] === 'enterprises' && !segments[1]) {
+      return createEnterprise(env, request);
+    }
 
-      // GET /api/enterprises
-      if (request.method === 'GET' && segments[1] === 'enterprises' && !segments[2]) {
-        return listEnterprises(env, request);
-      }
+    // GET /api/enterprises
+    if (request.method === 'GET' && segments[0] === 'enterprises' && !segments[1]) {
+      return listEnterprises(env, request);
+    }
 
-      // GET /api/enterprises/:id
-      if (request.method === 'GET' && segments[1] === 'enterprises' && segments[2]) {
-        return getEnterprise(env, request, segments[2]);
-      }
+    // GET /api/enterprises/:id
+    if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1]) {
+      return getEnterprise(env, request, segments[1]);
+    }
 
-      // PUT /api/enterprises/:id
-      if (request.method === 'PUT' && segments[1] === 'enterprises' && segments[2]) {
-        return updateEnterprise(env, request, segments[2]);
-      }
+    // PUT /api/enterprises/:id
+    if (request.method === 'PUT' && segments[0] === 'enterprises' && segments[1]) {
+      return updateEnterprise(env, request, segments[1]);
+    }
 
-      // DELETE /api/enterprises/:id
-      if (request.method === 'DELETE' && segments[1] === 'enterprises' && segments[2]) {
-        return deleteEnterprise(env, request, segments[2]);
-      }
+    // DELETE /api/enterprises/:id
+    if (request.method === 'DELETE' && segments[0] === 'enterprises' && segments[1]) {
+      return deleteEnterprise(env, request, segments[1]);
+    }
 
-      // GET /api/enterprises/:id/members
-      if (request.method === 'GET' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'members' && !segments[4]) {
-        return listEnterpriseMembers(env, request, segments[2]);
-      }
+    // GET /api/enterprises/:id/members
+    if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'members' && !segments[3]) {
+      return listEnterpriseMembers(env, request, segments[1]);
+    }
 
-      // POST /api/enterprises/:id/members
-      if (request.method === 'POST' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'members' && !segments[4]) {
-        return addEnterpriseMember(env, request, segments[2]);
-      }
+    // POST /api/enterprises/:id/members
+    if (request.method === 'POST' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'members' && !segments[3]) {
+      return addEnterpriseMember(env, request, segments[1]);
+    }
 
-      // GET /api/enterprises/:id/members/:memberId
-      if (request.method === 'GET' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'members' && segments[4]) {
-        return getEnterpriseMember(env, request, segments[2], segments[4]);
-      }
+    // GET /api/enterprises/:id/members/:memberId
+    if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'members' && segments[3]) {
+      return getEnterpriseMember(env, request, segments[1], segments[3]);
+    }
 
-      // PATCH /api/enterprises/:id/members/:memberId
-      if (request.method === 'PATCH' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'members' && segments[4]) {
-        return updateEnterpriseMember(env, request, segments[2], segments[4]);
-      }
+    // PATCH /api/enterprises/:id/members/:memberId
+    if (request.method === 'PATCH' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'members' && segments[3]) {
+      return updateEnterpriseMember(env, request, segments[1], segments[3]);
+    }
 
-      // DELETE /api/enterprises/:id/members/:memberId
-      if (request.method === 'DELETE' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'members' && segments[4]) {
-        return removeEnterpriseMember(env, request, segments[2], segments[4]);
-      }
+    // DELETE /api/enterprises/:id/members/:memberId
+    if (request.method === 'DELETE' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'members' && segments[3]) {
+      return removeEnterpriseMember(env, request, segments[1], segments[3]);
+    }
 
-      // === EMS Record Routes ===
+    // === EMS Record Routes ===
 
-      // POST /api/enterprises/:id/records
-      if (request.method === 'POST' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'records' && !segments[4]) {
-        return createRecord(env, request, segments[2]);
-      }
+    // POST /api/enterprises/:id/records
+    if (request.method === 'POST' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'records' && !segments[3]) {
+      return createRecord(env, request, segments[1]);
+    }
 
-      // GET /api/enterprises/:id/records
-      if (request.method === 'GET' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'records' && !segments[4]) {
-        return listRecords(env, request, segments[2]);
-      }
+    // GET /api/enterprises/:id/records
+    if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'records' && !segments[3]) {
+      return listRecords(env, request, segments[1]);
+    }
 
-      // GET /api/enterprises/:id/records/:recordId
-      if (request.method === 'GET' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'records' && segments[4]) {
-        return getRecord(env, request, segments[2], segments[4]);
-      }
+    // GET /api/enterprises/:id/records/:recordId
+    if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'records' && segments[3]) {
+      return getRecord(env, request, segments[1], segments[3]);
+    }
 
-      // PUT /api/enterprises/:id/records/:recordId
-      if (request.method === 'PUT' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'records' && segments[4]) {
-        return updateRecord(env, request, segments[2], segments[4]);
-      }
+    // PUT /api/enterprises/:id/records/:recordId
+    if (request.method === 'PUT' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'records' && segments[3]) {
+      return updateRecord(env, request, segments[1], segments[3]);
+    }
 
-      // DELETE /api/enterprises/:id/records/:recordId
-      if (request.method === 'DELETE' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'records' && segments[4]) {
-        return deleteRecord(env, request, segments[2], segments[4]);
-      }
+    // DELETE /api/enterprises/:id/records/:recordId
+    if (request.method === 'DELETE' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'records' && segments[3]) {
+      return deleteRecord(env, request, segments[1], segments[3]);
+    }
 
-      // PATCH /api/enterprises/:id/records/:recordId/status
-      if (request.method === 'PATCH' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'records' && segments[4] && segments[5] === 'status') {
-        return updateRecordStatus(env, request, segments[2], segments[4]);
-      }
+    // PATCH /api/enterprises/:id/records/:recordId/status
+    if (request.method === 'PATCH' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'records' && segments[3] && segments[4] === 'status') {
+      return updateRecordStatus(env, request, segments[1], segments[3]);
+    }
 
-      // POST /api/enterprises/:id/records/:recordId/review
-      if (request.method === 'POST' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'records' && segments[4] && segments[5] === 'review') {
-        return reviewRecord(env, request, segments[2], segments[4]);
-      }
+    // POST /api/enterprises/:id/records/:recordId/review
+    if (request.method === 'POST' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'records' && segments[3] && segments[4] === 'review') {
+      return reviewRecord(env, request, segments[1], segments[3]);
+    }
 
-      // GET /api/records/expiring
-      if (request.method === 'GET' && segments[1] === 'records' && segments[2] === 'expiring') {
-        return getExpiringRecords(env, request);
-      }
+    // GET /api/records/expiring
+    if (request.method === 'GET' && segments[0] === 'records' && segments[1] === 'expiring') {
+      return getExpiringRecords(env, request);
+    }
 
-      // === EMS Audit Routes ===
+    // === EMS Audit Routes ===
 
-      // GET /api/enterprises/:id/audit-logs
-      if (request.method === 'GET' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'audit-logs' && !segments[4]) {
-        return listAuditLogs(env, request, segments[2]);
-      }
+    // GET /api/enterprises/:id/audit-logs
+    if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'audit-logs' && !segments[3]) {
+      return listAuditLogs(env, request, segments[1]);
+    }
 
-      // GET /api/enterprises/:id/audit-logs/export
-      if (request.method === 'GET' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'audit-logs' && segments[4] === 'export') {
-        return exportAuditLogs(env, request, segments[2]);
-      }
+    // GET /api/enterprises/:id/audit-logs/export
+    if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'audit-logs' && segments[3] === 'export') {
+      return exportAuditLogs(env, request, segments[1]);
+    }
 
-      // GET /api/audit-logs
-      if (request.method === 'GET' && segments[1] === 'audit-logs' && !segments[2]) {
-        return listMyAuditLogs(env, request);
-      }
+    // GET /api/audit-logs
+    if (request.method === 'GET' && segments[0] === 'audit-logs' && !segments[1]) {
+      return listMyAuditLogs(env, request);
+    }
 
-      // GET /api/audit-logs/:id
-      if (request.method === 'GET' && segments[1] === 'audit-logs' && segments[2]) {
-        return getAuditLog(env, request, segments[2]);
-      }
+    // GET /api/audit-logs/:id
+    if (request.method === 'GET' && segments[0] === 'audit-logs' && segments[1]) {
+      return getAuditLog(env, request, segments[1]);
+    }
 
-      // GET /api/enterprises/:id/audit-logs/stats
-      if (request.method === 'GET' && segments[1] === 'enterprises' && segments[2] && segments[3] === 'audit-logs' && segments[4] === 'stats') {
-        return getAuditStats(env, request, segments[2]);
-      }
+    // GET /api/enterprises/:id/audit-logs/stats
+    if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'audit-logs' && segments[3] === 'stats') {
+      return getAuditStats(env, request, segments[1]);
+    }
 
-      // === EMS User Routes ===
+    // === EMS User Routes ===
 
-      // GET /api/users/profile
-      if (request.method === 'GET' && segments[1] === 'users' && segments[2] === 'profile') {
-        return getProfile(env, request);
-      }
+    // GET /api/users/profile
+    if (request.method === 'GET' && segments[0] === 'users' && segments[1] === 'profile') {
+      return getProfile(env, request);
+    }
 
-      // PUT /api/users/profile
-      if (request.method === 'PUT' && segments[1] === 'users' && segments[2] === 'profile') {
-        return updateProfile(env, request);
-      }
+    // PUT /api/users/profile
+    if (request.method === 'PUT' && segments[0] === 'users' && segments[1] === 'profile') {
+      return updateProfile(env, request);
+    }
 
-      // PATCH /api/users/profile/avatar
-      if (request.method === 'PATCH' && segments[1] === 'users' && segments[2] === 'profile' && segments[3] === 'avatar') {
-        return updateAvatar(env, request);
-      }
+    // PATCH /api/users/profile/avatar
+    if (request.method === 'PATCH' && segments[0] === 'users' && segments[1] === 'profile' && segments[2] === 'avatar') {
+      return updateAvatar(env, request);
+    }
 
-      // GET /api/users/search
-      if (request.method === 'GET' && segments[1] === 'users' && segments[2] === 'search') {
-        return searchUsers(env, request);
-      }
+    // GET /api/users/search
+    if (request.method === 'GET' && segments[0] === 'users' && segments[1] === 'search') {
+      return searchUsers(env, request);
+    }
 
-      // GET /api/users/:id
-      if (request.method === 'GET' && segments[1] === 'users' && segments[2]) {
-        return getUserById(env, request, segments[2]);
-      }
+    // GET /api/users/:id
+    if (request.method === 'GET' && segments[0] === 'users' && segments[1]) {
+      return getUserById(env, request, segments[1]);
+    }
 
-      // GET /api/users/sessions
-      if (request.method === 'GET' && segments[1] === 'users' && segments[2] === 'sessions' && !segments[3]) {
-        return listSessions(env, request);
-      }
+    // GET /api/users/sessions
+    if (request.method === 'GET' && segments[0] === 'users' && segments[1] === 'sessions' && !segments[2]) {
+      return listSessions(env, request);
+    }
 
-      // DELETE /api/users/sessions/:sessionId
-      if (request.method === 'DELETE' && segments[1] === 'users' && segments[2] === 'sessions' && segments[3]) {
-        return revokeSession(env, request, segments[3]);
-      }
+    // DELETE /api/users/sessions/:sessionId
+    if (request.method === 'DELETE' && segments[0] === 'users' && segments[1] === 'sessions' && segments[2]) {
+      return revokeSession(env, request, segments[2]);
+    }
 
-      // DELETE /api/users/sessions
-      if (request.method === 'DELETE' && segments[1] === 'users' && segments[2] === 'sessions' && !segments[3]) {
-        return revokeAllSessions(env, request);
-      }
+    // DELETE /api/users/sessions
+    if (request.method === 'DELETE' && segments[0] === 'users' && segments[1] === 'sessions' && !segments[2]) {
+      return revokeAllSessions(env, request);
+    }
 
-      // PATCH /api/users/status
-      if (request.method === 'PATCH' && segments[1] === 'users' && segments[2] === 'status') {
-        return updateUserStatus(env, request);
-      }
+    // PATCH /api/users/status
+    if (request.method === 'PATCH' && segments[0] === 'users' && segments[1] === 'status') {
+      return updateUserStatus(env, request);
     }
 
     return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Endpoint not found')), {

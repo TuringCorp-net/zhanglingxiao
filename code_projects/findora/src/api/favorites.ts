@@ -2,6 +2,7 @@
 import { Env, User } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parseProductContentFromRow, toClientProduct } from '../lib/product_content';
 
 function getUserIdentifier(request: Request): { email?: string; anonymous_id?: string } {
   const email = request.headers.get('X-User-Email');
@@ -152,7 +153,9 @@ export async function listFavorites(env: Env, request: Request): Promise<Respons
     `SELECT * FROM products WHERE id IN (${placeholders}) AND status = ?`
   ).bind(...savedItems, 'active').all<Record<string, unknown>>();
 
-  return new Response(JSON.stringify(jsonSuccess(products.results || [])), {
+  const normalizedProducts = (products.results || []).map(row => toClientProduct(row, parseProductContentFromRow(row)));
+
+  return new Response(JSON.stringify(jsonSuccess(normalizedProducts)), {
     headers: { 'Content-Type': 'application/json' },
   });
 }

@@ -5,7 +5,14 @@ import { ErrorCodes } from '../lib/errors';
 
 // POST /api/admin/tags - F-040-17
 export async function createTag(env: Env, request: Request): Promise<Response> {
-  const body = await request.json() as { name: string; slug: string; layer?: string; parent_id?: string };
+  const body = await request.json() as {
+    name: string;
+    slug: string;
+    layer?: string;
+    parent_id?: string;
+    dimension_level?: number;
+    featured_products?: string[];
+  };
 
   if (!body.name || !body.slug) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'name and slug are required')), {
@@ -34,11 +41,13 @@ export async function createTag(env: Env, request: Request): Promise<Response> {
 
   const id = crypto.randomUUID();
   const now = new Date().toISOString();
+  const dimensionLevel = body.dimension_level === 1 ? 1 : 2;
+  const featuredProducts = Array.isArray(body.featured_products) ? JSON.stringify(body.featured_products) : '[]';
 
   await env.DB.prepare(`
-    INSERT INTO tags (id, name, slug, layer, parent_id, created_at)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `).bind(id, body.name, body.slug, body.layer || 'function', body.parent_id || null, now).run();
+    INSERT INTO tags (id, name, slug, layer, dimension_level, parent_id, featured_products, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `).bind(id, body.name, body.slug, body.layer || 'function', dimensionLevel, body.parent_id || null, featuredProducts, now).run();
 
   return new Response(JSON.stringify(jsonSuccess({ id })), {
     status: 201,
@@ -50,14 +59,30 @@ export async function createTag(env: Env, request: Request): Promise<Response> {
 export async function listTags(env: Env, request: Request): Promise<Response> {
   const url = new URL(request.url);
   const layer = url.searchParams.get('layer');
+  const dimensionLevel = url.searchParams.get('dimension_level');
 
   let query = 'SELECT * FROM tags';
-  const bindings: string[] = [];
+  const bindings: (string | number)[] = [];
+  const conditions: string[] = [];
   if (layer) {
-    query += ' WHERE layer = ?';
+    conditions.push('layer = ?');
     bindings.push(layer);
   }
-  query += ' ORDER BY layer, name';
+  if (dimensionLevel) {
+    const parsed = Number.parseInt(dimensionLevel, 10);
+    if (![1, 2].includes(parsed)) {
+      return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'dimension_level must be 1 or 2')), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    conditions.push('dimension_level = ?');
+    bindings.push(parsed);
+  }
+  if (conditions.length > 0) {
+    query += ` WHERE ${conditions.join(' AND ')}`;
+  }
+  query += ' ORDER BY dimension_level ASC, layer, name';
 
   const rows = await env.DB.prepare(query).bind(...bindings).all<Record<string, unknown>>();
   return new Response(JSON.stringify(jsonSuccess(rows.results ?? [])), {
@@ -75,12 +100,27 @@ export async function updateTag(env: Env, request: Request, id: string): Promise
     });
   }
 
-  const body = await request.json() as { name?: string; layer?: string; parent_id?: string };
+  const body = await request.json() as {
+    name?: string;
+    layer?: string;
+    dimension_level?: number;
+    parent_id?: string;
+  };
   const sets: string[] = [];
-  const bindings: (string | null)[] = [];
+  const bindings: (string | number | null)[] = [];
 
   if (body.name !== undefined) { sets.push('name = ?'); bindings.push(body.name); }
   if (body.layer !== undefined) { sets.push('layer = ?'); bindings.push(body.layer); }
+  if (body.dimension_level !== undefined) {
+    if (body.dimension_level !== 1 && body.dimension_level !== 2) {
+      return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'dimension_level must be 1 or 2')), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    sets.push('dimension_level = ?');
+    bindings.push(body.dimension_level);
+  }
   if (body.parent_id !== undefined) { sets.push('parent_id = ?'); bindings.push(body.parent_id || null); }
 
   if (sets.length === 0) {
@@ -133,6 +173,36 @@ export async function getTagStats(env: Env): Promise<Response> {
   `).all<{ tag_name: string; product_count: number; layer: string }>();
 
   return new Response(JSON.stringify(jsonSuccess(rows.results ?? [])), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+// PATCH /api/admin/tags/:id/featured - F-040-17d
+export async function updateTagFeaturedProducts(env: Env, request: Request, id: string): Promise<Response> {
+  const existing = await env.DB.prepare('SELECT id FROM tags WHERE id = ?').bind(id).first();
+  if (!existing) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Tag not found')), {
+      status: 404,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const body = await request.json() as { featured_products: string[] };
+  if (!Array.isArray(body.featured_products)) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'featured_products must be an array')), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  await env.DB.prepare('UPDATE tags SET featured_products = ? WHERE id = ?')
+    .bind(JSON.stringify(body.featured_products), id)
+    .run();
+
+  return new Response(JSON.stringify(jsonSuccess({
+    id,
+    featured_products: body.featured_products,
+  })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }

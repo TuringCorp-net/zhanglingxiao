@@ -11,6 +11,7 @@
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parseProductContentFromRow, toClientProduct } from '../lib/product_content';
 
 // Price ranges for F-014-03
 const PRICE_RANGES = {
@@ -121,7 +122,8 @@ export async function getRecommendations(env: Env, request: Request): Promise<Re
       LIMIT ?
     `).bind(limit).all<Record<string, unknown>>();
 
-    return new Response(JSON.stringify(jsonSuccess(popular.results || [])), {
+    const popularProducts = (popular.results || []).map(row => toClientProduct(row, parseProductContentFromRow(row)));
+    return new Response(JSON.stringify(jsonSuccess(popularProducts)), {
       headers: { 'Content-Type': 'application/json' },
     });
   }
@@ -217,7 +219,8 @@ export async function getRecommendations(env: Env, request: Request): Promise<Re
 
   const recommendations = await env.DB.prepare(query).bind(...bindings).all<Record<string, unknown>>();
 
-  return new Response(JSON.stringify(jsonSuccess(recommendations.results || [])), {
+  const normalizedRecommendations = (recommendations.results || []).map(row => toClientProduct(row, parseProductContentFromRow(row)));
+  return new Response(JSON.stringify(jsonSuccess(normalizedRecommendations)), {
     headers: { 'Content-Type': 'application/json' },
   });
 }

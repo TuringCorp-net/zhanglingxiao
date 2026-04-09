@@ -2,6 +2,7 @@
 
 export interface Product {
   id: string;
+  title: string;
   source_platform: string;
   source_url: string;
   original_title: string;
@@ -12,6 +13,8 @@ export interface Product {
   price_min: number | null;
   price_max: number | null;
   currency: string;
+  cover_image: string | null;
+  r2_object_key: string;
   images: string; // JSON array
   summary: string | null;
   pros: string; // JSON array
@@ -41,6 +44,7 @@ export interface User {
   frequency_preference: string;
   subscribed_at: string | null;
   unsubscribed_at: string | null;
+  session_expires_at: string | null;
   status: string;
   created_at: string;
   updated_at: string;
@@ -81,7 +85,9 @@ export interface Tag {
   name: string;
   slug: string;
   layer: string;
+  dimension_level: number;
   parent_id: string | null;
+  featured_products: string;
   created_at: string;
 }
 
@@ -427,6 +433,7 @@ export interface ListProduct {
 export interface Env {
   DB: D1Database;
   ASSETS: Fetcher;
+  PRODUCTS_BUCKET: R2Bucket;
   // Admin authentication (C-02: Admin key for admin endpoints)
   ADMIN_KEY?: string;
   // Email provider settings (F-013-07)

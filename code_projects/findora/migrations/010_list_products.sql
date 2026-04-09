@@ -1,16 +1,31 @@
--- Findora D1 Schema Migration 010: F-004 list_products Association Table
--- C-01: Fix missing list_products table referenced by lists.ts and content.ts
+-- Findora D1 Schema Migration 010: Normalize list_products schema
+PRAGMA foreign_keys=off;
 
--- Create list_products association table
-CREATE TABLE IF NOT EXISTS list_products (
+ALTER TABLE list_products RENAME TO list_products_legacy;
+
+CREATE TABLE list_products (
   id TEXT PRIMARY KEY,
   list_id TEXT NOT NULL,
   product_id TEXT NOT NULL,
   position INTEGER DEFAULT 0,
   created_at TEXT NOT NULL,
+  UNIQUE(list_id, product_id),
   FOREIGN KEY (list_id) REFERENCES lists(id) ON DELETE CASCADE,
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
+
+INSERT INTO list_products (id, list_id, product_id, position, created_at)
+SELECT
+  lower(hex(randomblob(16))),
+  list_id,
+  product_id,
+  COALESCE(position, 0),
+  datetime('now')
+FROM list_products_legacy;
+
+DROP TABLE list_products_legacy;
+
+PRAGMA foreign_keys=on;
 
 -- Index for efficient list->products lookup
 CREATE INDEX IF NOT EXISTS idx_list_products_list_id ON list_products(list_id);

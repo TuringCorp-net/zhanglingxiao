@@ -1,7 +1,8 @@
 // Lists API - F-040-03, F-040-04, F-040-18
-import { Env, List, ListProduct } from '../db/schema';
+import { Env, List } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parseProductContentFromRow, toClientProduct } from '../lib/product_content';
 
 // GET /api/lists - F-040-03
 export async function listLists(env: Env): Promise<Response> {
@@ -40,9 +41,13 @@ export async function getList(env: Env, id: string): Promise<Response> {
     LIMIT 50
   `).bind(list.id, 'active').all<Record<string, unknown>>();
 
+  const products = (productsResult.results || []).map((row) => {
+    return toClientProduct(row, parseProductContentFromRow(row));
+  });
+
   return new Response(JSON.stringify(jsonSuccess({
     ...list,
-    products: productsResult.results || [],
+    products,
   })), {
     headers: { 'Content-Type': 'application/json' },
   });

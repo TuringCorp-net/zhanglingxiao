@@ -2,18 +2,64 @@
 import { Env, Product } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import {
+  buildProductContent,
+  getAcceptsMarkdown,
+  parseProductContentFromRow,
+  readProductContent,
+  readProductMarkdown,
+  resolveProductR2Key,
+  toClientProduct,
+  writeProductContent,
+} from '../lib/product_content';
 
 function parseProduct(row: Record<string, unknown>) {
-  const p = row as unknown as Product;
-  return {
-    ...p,
-    tags: parseJSON<string[]>(p.tags || '[]', []),
-    images: parseJSON<string[]>(p.images || '[]', []),
-    pros: parseJSON<string[]>(p.pros || '[]', []),
-    cons: parseJSON<string[]>(p.cons || '[]', []),
-    use_cases: parseJSON<string[]>(p.use_cases || '[]', []),
-    target_audience: parseJSON<string[]>(p.target_audience || '[]', []),
-  } as Product & { tags: string[]; images: string[]; pros: string[]; cons: string[]; use_cases: string[]; target_audience: string[] };
+  return toClientProduct(row, parseProductContentFromRow(row));
+}
+
+function normalizeStringArray(input: unknown): string[] {
+  if (Array.isArray(input)) {
+    return input.map(item => String(item)).filter(Boolean);
+  }
+  if (typeof input === 'string') {
+    const parsed = parseJSON<string[]>(input, []);
+    if (Array.isArray(parsed)) {
+      return parsed.map(item => String(item)).filter(Boolean);
+    }
+  }
+  return [];
+}
+
+function buildContentFromBody(body: Partial<Product>): ReturnType<typeof buildProductContent> {
+  return buildProductContent({
+    summary: typeof body.summary === 'string' ? body.summary : null,
+    images: normalizeStringArray(body.images),
+    pros: normalizeStringArray(body.pros),
+    cons: normalizeStringArray(body.cons),
+    use_cases: normalizeStringArray(body.use_cases),
+    target_audience: normalizeStringArray(body.target_audience),
+    shipping_notes: typeof body.shipping_notes === 'string' ? body.shipping_notes : null,
+  });
+}
+
+function resolveCoverImage(body: Partial<Product>, contentImages: string[]): string | null {
+  if (typeof body.cover_image === 'string' && body.cover_image.trim()) {
+    return body.cover_image.trim();
+  }
+  return contentImages[0] || null;
+}
+
+function resolveTitle(body: Partial<Product>): string {
+  if (typeof body.title === 'string' && body.title.trim()) {
+    return body.title.trim();
+  }
+  if (typeof body.rewritten_title === 'string' && body.rewritten_title.trim()) {
+    return body.rewritten_title.trim();
+  }
+  if (typeof body.original_title === 'string' && body.original_title.trim()) {
+    return body.original_title.trim();
+  }
+  return '';
 }
 
 // GET /api/products - F-040-01
@@ -83,7 +129,24 @@ export async function getProduct(env: Env, request: Request, id: string): Promis
     });
   }
 
-  return new Response(JSON.stringify(jsonSuccess(parseProduct(result))), {
+  const r2Key = resolveProductR2Key(result);
+  const markdownAccepted = getAcceptsMarkdown(request);
+  if (markdownAccepted) {
+    const markdown = await readProductMarkdown(env, r2Key);
+    if (markdown) {
+      return new Response(markdown, {
+        headers: { 'Content-Type': 'text/markdown; charset=utf-8' },
+      });
+    }
+  }
+
+  const contentFromR2 = await readProductContent(env, r2Key);
+  const content = contentFromR2 || parseProductContentFromRow(result);
+  if (!contentFromR2) {
+    await writeProductContent(env, r2Key, content);
+  }
+
+  return new Response(JSON.stringify(jsonSuccess(toClientProduct(result, content))), {
     headers: { 'Content-Type': 'application/json' },
   });
 }
@@ -104,24 +167,27 @@ export async function createProduct(env: Env, request: Request): Promise<Respons
   const id = crypto.randomUUID();
   const now = new Date().toISOString();
   const tags = Array.isArray(body.tags) ? JSON.stringify(body.tags) : (body.tags || '[]');
-  const images = Array.isArray(body.images) ? JSON.stringify(body.images) : (body.images || '[]');
-  const pros = Array.isArray(body.pros) ? JSON.stringify(body.pros) : (body.pros || '[]');
-  const cons = Array.isArray(body.cons) ? JSON.stringify(body.cons) : (body.cons || '[]');
-  const use_cases = Array.isArray(body.use_cases) ? JSON.stringify(body.use_cases) : (body.use_cases || '[]');
-  const target_audience = Array.isArray(body.target_audience) ? JSON.stringify(body.target_audience) : (body.target_audience || '[]');
+  const content = buildContentFromBody(body);
+  const coverImage = resolveCoverImage(body, content.images);
+  const title = resolveTitle(body);
+  const r2Key = (typeof body.r2_object_key === 'string' && body.r2_object_key.trim()) ? body.r2_object_key.trim() : `products/${id}.md`;
+
+  await writeProductContent(env, r2Key, content);
 
   await env.DB.prepare(`
-    INSERT INTO products (id, source_platform, source_url, original_title, rewritten_title, category, subcategory, tags, price_min, price_max, currency, images, summary, pros, cons, use_cases, target_audience, shipping_notes, merchant_name, affiliate_url, last_checked_at, status, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO products (id, title, source_platform, source_url, original_title, rewritten_title, category, subcategory, tags, price_min, price_max, currency, cover_image, r2_object_key, images, summary, pros, cons, use_cases, target_audience, shipping_notes, merchant_name, affiliate_url, last_checked_at, status, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
-    id, body.source_platform, body.source_url, body.original_title, body.rewritten_title || null,
+    id, title, body.source_platform, body.source_url, body.original_title, body.rewritten_title || null,
     body.category, body.subcategory || null, tags, body.price_min || null, body.price_max || null,
-    body.currency || 'USD', images, body.summary || null, pros, cons, use_cases, target_audience,
-    body.shipping_notes || null, body.merchant_name || null, body.affiliate_url || null,
+    body.currency || 'USD', coverImage, r2Key,
+    JSON.stringify(content.images), content.summary, JSON.stringify(content.pros), JSON.stringify(content.cons),
+    JSON.stringify(content.use_cases), JSON.stringify(content.target_audience), content.shipping_notes,
+    body.merchant_name || null, body.affiliate_url || null,
     now, body.status || 'draft', now, now
   ).run();
 
-  return new Response(JSON.stringify(jsonSuccess({ id })), {
+  return new Response(JSON.stringify(jsonSuccess({ id, r2_object_key: r2Key })), {
     status: 201,
     headers: { 'Content-Type': 'application/json' },
   });
@@ -129,7 +195,7 @@ export async function createProduct(env: Env, request: Request): Promise<Respons
 
 // PUT /api/admin/products/:id - F-040-15
 export async function updateProduct(env: Env, request: Request, id: string): Promise<Response> {
-  const existing = await env.DB.prepare('SELECT id FROM products WHERE id = ?').bind(id).first();
+  const existing = await env.DB.prepare('SELECT * FROM products WHERE id = ?').bind(id).first<Record<string, unknown>>();
   if (!existing) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Product not found')), {
       status: 404,
@@ -139,22 +205,47 @@ export async function updateProduct(env: Env, request: Request, id: string): Pro
 
   const body = await request.json() as Partial<Product>;
   const now = new Date().toISOString();
-  const tags = body.tags ? (Array.isArray(body.tags) ? JSON.stringify(body.tags) : body.tags) : undefined;
-  const images = body.images ? (Array.isArray(body.images) ? JSON.stringify(body.images) : body.images) : undefined;
-  const pros = body.pros ? (Array.isArray(body.pros) ? JSON.stringify(body.pros) : body.pros) : undefined;
-  const cons = body.cons ? (Array.isArray(body.cons) ? JSON.stringify(body.cons) : body.cons) : undefined;
-  const use_cases = body.use_cases ? (Array.isArray(body.use_cases) ? JSON.stringify(body.use_cases) : body.use_cases) : undefined;
-  const target_audience = body.target_audience ? (Array.isArray(body.target_audience) ? JSON.stringify(body.target_audience) : body.target_audience) : undefined;
+  const existingContent = await readProductContent(env, resolveProductR2Key(existing));
+  const mergedContent = buildProductContent({
+    ...(existingContent || parseProductContentFromRow(existing)),
+    ...(body.summary !== undefined ? { summary: body.summary } : {}),
+    ...(body.images !== undefined ? { images: normalizeStringArray(body.images) } : {}),
+    ...(body.pros !== undefined ? { pros: normalizeStringArray(body.pros) } : {}),
+    ...(body.cons !== undefined ? { cons: normalizeStringArray(body.cons) } : {}),
+    ...(body.use_cases !== undefined ? { use_cases: normalizeStringArray(body.use_cases) } : {}),
+    ...(body.target_audience !== undefined ? { target_audience: normalizeStringArray(body.target_audience) } : {}),
+    ...(body.shipping_notes !== undefined ? { shipping_notes: body.shipping_notes } : {}),
+  });
+  const r2Key = (typeof body.r2_object_key === 'string' && body.r2_object_key.trim())
+    ? body.r2_object_key.trim()
+    : resolveProductR2Key(existing);
+  const coverImage = resolveCoverImage({
+    ...existing,
+    ...body,
+  } as Partial<Product>, mergedContent.images);
+  const title = resolveTitle({
+    ...existing,
+    ...body,
+  } as Partial<Product>);
+
+  await writeProductContent(env, r2Key, mergedContent);
+  const tags = body.tags !== undefined ? (Array.isArray(body.tags) ? JSON.stringify(body.tags) : body.tags) : undefined;
 
   const fields: string[] = ['updated_at = ?'];
   const bindings: (string | number | null)[] = [now];
 
   const fieldMap: Record<string, unknown> = {
-    source_platform: body.source_platform, source_url: body.source_url, original_title: body.original_title,
+    title, source_platform: body.source_platform, source_url: body.source_url, original_title: body.original_title,
     rewritten_title: body.rewritten_title, category: body.category, subcategory: body.subcategory,
     price_min: body.price_min, price_max: body.price_max, currency: body.currency,
-    summary: body.summary, shipping_notes: body.shipping_notes, merchant_name: body.merchant_name,
+    cover_image: coverImage, r2_object_key: r2Key, summary: mergedContent.summary,
+    shipping_notes: mergedContent.shipping_notes, merchant_name: body.merchant_name,
     affiliate_url: body.affiliate_url, last_checked_at: body.last_checked_at, status: body.status,
+    images: JSON.stringify(mergedContent.images),
+    pros: JSON.stringify(mergedContent.pros),
+    cons: JSON.stringify(mergedContent.cons),
+    use_cases: JSON.stringify(mergedContent.use_cases),
+    target_audience: JSON.stringify(mergedContent.target_audience),
   };
 
   for (const [key, value] of Object.entries(fieldMap)) {
@@ -164,17 +255,12 @@ export async function updateProduct(env: Env, request: Request, id: string): Pro
     }
   }
 
-  if (tags) { fields.push('tags = ?'); bindings.push(tags); }
-  if (images) { fields.push('images = ?'); bindings.push(images); }
-  if (pros) { fields.push('pros = ?'); bindings.push(pros); }
-  if (cons) { fields.push('cons = ?'); bindings.push(cons); }
-  if (use_cases) { fields.push('use_cases = ?'); bindings.push(use_cases); }
-  if (target_audience) { fields.push('target_audience = ?'); bindings.push(target_audience); }
+  if (tags !== undefined) { fields.push('tags = ?'); bindings.push(tags); }
 
   bindings.push(id);
   await env.DB.prepare(`UPDATE products SET ${fields.join(', ')} WHERE id = ?`).bind(...bindings).run();
 
-  return new Response(JSON.stringify(jsonSuccess({ id })), {
+  return new Response(JSON.stringify(jsonSuccess({ id, r2_object_key: r2Key })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }
@@ -299,24 +385,60 @@ export async function importProducts(env: Env, request: Request): Promise<Respon
     }
 
     try {
-      const id = crypto.randomUUID();
+      let id = typeof p.id === 'string' && p.id ? p.id : crypto.randomUUID();
       const tags = Array.isArray(p.tags) ? JSON.stringify(p.tags) : (p.tags || '[]');
-      const images = Array.isArray(p.images) ? JSON.stringify(p.images) : (p.images || '[]');
-      const pros = Array.isArray(p.pros) ? JSON.stringify(p.pros) : (p.pros || '[]');
-      const cons = Array.isArray(p.cons) ? JSON.stringify(p.cons) : (p.cons || '[]');
-      const use_cases = Array.isArray(p.use_cases) ? JSON.stringify(p.use_cases) : (p.use_cases || '[]');
-      const target_audience = Array.isArray(p.target_audience) ? JSON.stringify(p.target_audience) : (p.target_audience || '[]');
+      let existingId: string | null = null;
+      if (mode === 'upsert') {
+        if (typeof p.id === 'string' && p.id) {
+          const existingById = await env.DB.prepare('SELECT id FROM products WHERE id = ?').bind(p.id).first<{ id: string }>();
+          existingId = existingById?.id || null;
+        }
+        if (!existingId) {
+          const existingBySource = await env.DB.prepare('SELECT id FROM products WHERE source_url = ?').bind(p.source_url as string).first<{ id: string }>();
+          existingId = existingBySource?.id || null;
+        }
+      }
 
-      await env.DB.prepare(`
-        INSERT INTO products (id, source_platform, source_url, original_title, rewritten_title, category, subcategory, tags, price_min, price_max, currency, images, summary, pros, cons, use_cases, target_audience, shipping_notes, merchant_name, affiliate_url, last_checked_at, status, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `).bind(
-        id, p.source_platform, p.source_url, p.original_title, p.rewritten_title || null,
-        p.category, p.subcategory || null, tags, p.price_min || null, p.price_max || null,
-        p.currency || 'USD', images, p.summary || null, pros, cons, use_cases, target_audience,
-        p.shipping_notes || null, p.merchant_name || null, p.affiliate_url || null,
-        now, p.status || 'draft', now, now
-      ).run();
+      if (existingId) {
+        id = existingId;
+      }
+
+      const content = buildContentFromBody(p);
+      const coverImage = resolveCoverImage(p, content.images);
+      const title = resolveTitle(p);
+      const r2Key = (typeof p.r2_object_key === 'string' && p.r2_object_key.trim())
+        ? p.r2_object_key.trim()
+        : `products/${id}.md`;
+      await writeProductContent(env, r2Key, content);
+
+      if (existingId) {
+        await env.DB.prepare(`
+          UPDATE products
+          SET title = ?, source_platform = ?, source_url = ?, original_title = ?, rewritten_title = ?, category = ?, subcategory = ?,
+              tags = ?, price_min = ?, price_max = ?, currency = ?, cover_image = ?, r2_object_key = ?, images = ?,
+              summary = ?, pros = ?, cons = ?, use_cases = ?, target_audience = ?, shipping_notes = ?, merchant_name = ?,
+              affiliate_url = ?, last_checked_at = ?, status = ?, updated_at = ?
+          WHERE id = ?
+        `).bind(
+          title, p.source_platform, p.source_url, p.original_title, p.rewritten_title || null,
+          p.category, p.subcategory || null, tags, p.price_min || null, p.price_max || null, p.currency || 'USD',
+          coverImage, r2Key, JSON.stringify(content.images), content.summary, JSON.stringify(content.pros),
+          JSON.stringify(content.cons), JSON.stringify(content.use_cases), JSON.stringify(content.target_audience),
+          content.shipping_notes, p.merchant_name || null, p.affiliate_url || null, now, p.status || 'draft', now, id
+        ).run();
+      } else {
+        await env.DB.prepare(`
+          INSERT INTO products (id, title, source_platform, source_url, original_title, rewritten_title, category, subcategory, tags, price_min, price_max, currency, cover_image, r2_object_key, images, summary, pros, cons, use_cases, target_audience, shipping_notes, merchant_name, affiliate_url, last_checked_at, status, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(
+          id, title, p.source_platform, p.source_url, p.original_title, p.rewritten_title || null,
+          p.category, p.subcategory || null, tags, p.price_min || null, p.price_max || null,
+          p.currency || 'USD', coverImage, r2Key, JSON.stringify(content.images), content.summary,
+          JSON.stringify(content.pros), JSON.stringify(content.cons), JSON.stringify(content.use_cases),
+          JSON.stringify(content.target_audience), content.shipping_notes, p.merchant_name || null, p.affiliate_url || null,
+          now, p.status || 'draft', now, now
+        ).run();
+      }
 
       results.push({ index: i, id, status: 'success' });
     } catch (err) {
