@@ -2,7 +2,7 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.06 (精简重置版)
+> **版本：** v3.07 (精简重置版)
 > **最后更新：** 2026-04-09
 > **状态：** 🟢 **全量绿灯（底层重构与业务数据模型已完全对齐 v3.0 架构）**
 
@@ -50,6 +50,33 @@
 | F-004-06 | 榜单收藏 | `favorites.ts:addFavoriteList/removeFavoriteList/listFavoriteLists` | `GET/POST/DELETE /api/favorites/lists` | ✅ | 三端点完整实现，用户识别与去重逻辑正确 |
 
 **遗留观察项**：F-016（4项）+ F-020（6项）仍需AI真实联调验证，待后续推进。
+
+### 第43次STR审核记录（2026-04-09）
+
+> 审核人：Claude Agent
+> 审核范围：复核第42次审核结果 + review_report.md 遗留问题验证
+> 审核结论：**4项全部复核通过 ✅，2项P0问题仍未修复 ⚠️**
+
+| SRS 编号 | 功能 | 代码实现 | 路由 | 审核结果 | 说明 |
+|----------|------|----------|------|----------|------|
+| F-001-05 | 趋势内容 API | `products.ts:getTrending` | `GET /api/trending` | ✅ | 第42次审核复核：7天点击量趋势商品+榜单，返回结构符合SRS |
+| F-002-03 | 子类目筛选 | `categories.ts:getCategorySubcategories` | `GET /api/categories/:category/subcategories` | ✅ | 第42次审核复核：DISTINCT查询+ASC排序，返回子分类数组 |
+| F-002-05 | 排序功能 | `products.ts:listProducts` | `GET /api/products?sort_by=` | ✅ | 第42次审核复核：支持newest/popular/price_asc/price_desc四种模式 |
+| F-004-06 | 榜单收藏 | `favorites.ts:addFavoriteList/removeFavoriteList/listFavoriteLists` | `GET/POST/DELETE /api/favorites/lists` | ✅ | 第42次审核复核：三端点完整实现，用户识别与去重逻辑正确 |
+
+**review_report.md 遗留问题验证：**
+
+| 问题编号 | 问题描述 | 状态 | 说明 |
+|----------|----------|------|------|
+| P0-1 | `explain.ts` 缓存 TTL 时间格式不一致 | ⚠️ 未修复 | `expires_at` 使用 `toISOString()`，查询使用 `datetime('now')`，格式混用 |
+| P0-2 | `explain.ts` Anthropic 响应按 OpenAI 路径取值 | ⚠️ 未修复 | 第278-279行仍使用 `result?.choices?.[0]?.message?.content` |
+| P1-3 | Cron 未接入周报邮件发送任务 | ⚠️ 未修复 | `scheduled` 仅调用 `handleScheduledPublishing`，未调用 `sendWeeklyNewsletter` |
+| P1-4 | `importProducts` 缺少批量上限 | ⚠️ 未修复 | 第399行仅校验非空数组，无最大批量限制 |
+| P1-5 | 标签/类目查询大量使用 LIKE | ⚠️ 未修复 | 多处使用 `LIKE ?` 字符串匹配 |
+| P1-6 | 时间存储与查询策略不统一 | ⚠️ 未修复 | 多处写入 `toISOString()`，查询用 `datetime('now')` |
+| P1-7 | 前端纯静态 HTML 模式 | ⚠️ 未修复 | 首屏依赖前端 `fetch` 拉取数据 |
+
+**遗留阻塞项**：无 CRITICAL/HIGH 阻塞项。
 
 以下为 Findora SRS 核心功能模块的当前审核状态清单。所有代码已完成实现并满足编译/基础运行要求，其中涉及 AI 调用或端到端联调的项需在后续流程中真实验证（✅：审核通过，🏗：已实现待联调）。
 
