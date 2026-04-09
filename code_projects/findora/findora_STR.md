@@ -2,9 +2,9 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.07 (精简重置版)
-> **最后更新：** 2026-04-09
-> **状态：** 🟢 **全量绿灯（底层重构与业务数据模型已完全对齐 v3.0 架构）**
+> **版本：** v3.08 (P0/P1缺陷修复版)
+> **最后更新：** 2026-04-10
+> **状态：** 🟢 **P0/P1 四项代码缺陷修复全量验证通过**
 
 ---
 
@@ -34,7 +34,7 @@
 
 ---
 
-## 三、 SRS 需求模块审核清单 (v3.10)
+## 三、 SRS 需求模块审核清单 (v3.08)
 
 ### 第42次STR审核记录（2026-04-09）
 
@@ -68,13 +68,28 @@
 
 | 问题编号 | 问题描述 | 状态 | 说明 |
 |----------|----------|------|------|
-| P0-1 | `explain.ts` 缓存 TTL 时间格式不一致 | ⚠️ 未修复 | `expires_at` 使用 `toISOString()`，查询使用 `datetime('now')`，格式混用 |
-| P0-2 | `explain.ts` Anthropic 响应按 OpenAI 路径取值 | ⚠️ 未修复 | 第278-279行仍使用 `result?.choices?.[0]?.message?.content` |
-| P1-3 | Cron 未接入周报邮件发送任务 | ⚠️ 未修复 | `scheduled` 仅调用 `handleScheduledPublishing`，未调用 `sendWeeklyNewsletter` |
-| P1-4 | `importProducts` 缺少批量上限 | ⚠️ 未修复 | 第399行仅校验非空数组，无最大批量限制 |
+| P0-1 | `explain.ts` 缓存 TTL 时间格式不一致 | ✅ 已修复 | `expires_at` 和 `generated_at` 改用 Unix 时间戳（秒），比较时也用 Unix 时间戳，格式混用已消除 |
+| P0-2 | `explain.ts` Anthropic 响应按 OpenAI 路径取值 | ✅ 已修复 | 第278-288行已区分 `anthropic`/`openai` 两种响应结构，`anthropic` 走 `result?.content?.[0]?.text` |
+| P1-3 | Cron 未接入周报邮件发送任务 | ✅ 已修复 | `scheduled` 第892-906行已同时调用 `handleScheduledPublishing` 和 `sendWeeklyNewsletter` |
+| P1-4 | `importProducts` 缺少批量上限 | ✅ 已修复 | 第407-410行新增 `MAX_BATCH_SIZE = 100`，超出返回 400 错误 |
 | P1-5 | 标签/类目查询大量使用 LIKE | ⚠️ 未修复 | 多处使用 `LIKE ?` 字符串匹配 |
 | P1-6 | 时间存储与查询策略不统一 | ⚠️ 未修复 | 多处写入 `toISOString()`，查询用 `datetime('now')` |
 | P1-7 | 前端纯静态 HTML 模式 | ⚠️ 未修复 | 首屏依赖前端 `fetch` 拉取数据 |
+
+### 第44次STR审核记录（2026-04-10）
+
+> 审核人：Claude Agent
+> 审核范围：P0-1/P0-2/P1-3/P1-4 四项代码缺陷修复验证
+> 审核结论：**4项全部修复验证通过 ✅，P1-5/P1-6/P1-7 仍待后续迭代**
+
+| 问题编号 | 问题描述 | 代码位置 | 审核结果 | 验证说明 |
+|----------|----------|----------|----------|----------|
+| P0-1 | 缓存 TTL 时间格式不一致 | `explain.ts` L360-L381, L396-L412 | ✅ | `expires_at`/`generated_at` 改用 Unix 秒时间戳，比较也用 `Math.floor(Date.now()/1000)`，格式统一 |
+| P0-2 | Anthropic 响应按 OpenAI 路径取值 | `explain.ts` L278-L286 | ✅ | 已区分 provider：Anthropic 用 `result?.content?.[0]?.text`，OpenAI 用 `result?.choices?.[0]?.message?.content` |
+| P1-3 | Cron 未接入周报邮件发送 | `index.ts` L892-L906 | ✅ | `scheduled` 函数同时调用 `handleScheduledPublishing` 和 `sendWeeklyNewsletter`，wrangler.toml 周报 cron 已接入 |
+| P1-4 | `importProducts` 无批量上限 | `products.ts` L407-L410 | ✅ | 新增 `MAX_BATCH_SIZE = 100`，超出返回 INVALID_PARAMS 400 错误 |
+
+**review_report.md 遗留问题（P1-5/P1-6/P1-7）**：仍为 ⚠️ 未修复状态，待后续迭代处理。
 
 **遗留阻塞项**：无 CRITICAL/HIGH 阻塞项。
 
