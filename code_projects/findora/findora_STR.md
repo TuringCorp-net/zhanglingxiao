@@ -2,9 +2,9 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.09 (第46次STR审核版)
+> **版本：** v3.09 (第47次STR审核版)
 > **最后更新：** 2026-04-10
-> **状态：** 🟢 **第46次STR审核通过：TypeScript 0错误，P0/P1缺陷修复持续验证，遗留3项P1优化项待后续迭代**
+> **状态：** 🟢 **第47次STR审核通过：TypeScript 0错误，核心模块逻辑复核通过，无新增阻塞项**
 
 ---
 
@@ -131,6 +131,27 @@
 | P1-5 LIKE 查询元字符转义 | 多模块 | ⚠️ 优化项 | 使用参数化查询 `LIKE ?`，但 JSON 数组匹配场景仍用字符串拼接；`recommendations.ts` 已使用 `json_each` 替代部分 LIKE；非阻塞项 |
 | P1-6 时间策略统一 | 多模块 | ⚠️ 优化项 | 写入用 `toISOString()`，查询用 `datetime('now')`；关键路径（explain.ts 缓存）已统一用 Unix 时间戳；非阻塞项 |
 | P1-7 前端 SSR | `src/pages/*.html` | ⚠️ 优化项 | 纯静态 HTML + 客户端 fetch；Cloudflare Pages SSR/SSG 方案待后续迭代；非阻塞项 |
+
+**review_report.md 遗留问题（P1-5/P1-6/P1-7）**：均为 ⚠️ 优化项（非阻塞），代码已实现，待后续工程化迭代优化。
+
+**遗留阻塞项**：无 CRITICAL/HIGH 阻塞项。
+
+### 第47次STR审核记录（2026-04-10）
+
+> 审核人：Claude Agent
+> 审核范围：代码全面复核 + TypeScript 编译验证 + 核心模块逻辑验证
+> 审核结论：**全部验证通过 ✅，TypeScript 编译 0 错误，无新增阻塞项**
+
+| 审核项 | 代码位置 | 审核结果 | 验证说明 |
+|--------|----------|----------|----------|
+| TypeScript 编译 | 全局 | ✅ | `npx tsc --noEmit` 0 错误 |
+| P0-1 缓存 TTL 时间格式复核 | `explain.ts` L364-L369, L396-L412 | ✅ | Unix 秒时间戳 `Math.floor(Date.now()/1000)`，`expires_at > nowUnix` 比较正确 |
+| P0-2 Anthropic 响应解析复核 | `explain.ts` L278-L286 | ✅ | `anthropic` 用 `result?.content?.[0]?.text`，`openai` 用 `result?.choices?.[0]?.message?.content` |
+| P1-3 Cron 周报邮件复核 | `index.ts` L892-L906 | ✅ | `scheduled` 同时调用 `handleScheduledPublishing` 和 `sendWeeklyNewsletter` |
+| P1-4 批量上限复核 | `products.ts` L407-L410 | ✅ | `MAX_BATCH_SIZE = 100`，超量返回 400 INVALID_PARAMS |
+| F-040 API 端点路由验证 | `index.ts` | ✅ | 全部端点路由定义正确，路由分发逻辑正常 |
+| schema.ts 数据模型验证 | `schema.ts` | ✅ | 数据类型定义与 D1 schema 一致 |
+| 推荐系统评分公式验证 | `recommendations.ts` | ✅ | `category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 + price_match×5 + recency_days×0.1` 公式正确 |
 
 **review_report.md 遗留问题（P1-5/P1-6/P1-7）**：均为 ⚠️ 优化项（非阻塞），代码已实现，待后续工程化迭代优化。
 
