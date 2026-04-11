@@ -2,13 +2,13 @@
 
 > **项目名称：** Findora
 > **类型：** AI 驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.23（本次迭代：第53次STR全模块代码审核，TypeScript 0错误，代码基线稳定，F-016/F-020保持🏗待AI联调）
+> **版本：** v3.24（本次迭代：系统分析师复核 — 三态追踪体系规范化，所有功能模块三态列格式统一，Section 7.1/7.2字段定义表格式修正，文档一致性提升）
 > **最后更新：** 2026-04-12
-> **状态：** 🟢 第53次STR审核通过：全模块代码审核（F-001~F-050），TypeScript 0错误，无新增阻塞项，代码基线稳定，F-016/F-020代码实现已验证（保持🏗待AI联调），整体完成度90%（134/149 ✅）
+> **状态：** 🟢 第53次STR审核通过 + 系统分析师v3.24复核：三态追踪体系规范化，字段定义表格式统一，149项三态追踪完整
 
 ---
 
-## 📌 三态追踪总览（v3.22）
+## 📌 三态追踪总览（v3.24）
 
 > **三态定义**：
 > - 🗓 **需求已设计**：需求文档已完成，功能设计已确认，不涉及实现细节
@@ -74,17 +74,17 @@
 
 ---
 
-## 📌 交接说明（v3.22 — 2026-04-12）
+## 📌 交接说明（v3.24 — 2026-04-12）
 
-> 📌 详细交接说明请参见本文档末尾 Section 15。历史STR审核记录（1-51次）请参见 findora_STR.md。
+> 📌 详细交接说明请参见本文档末尾 Section 15。历史STR审核记录（1-53次）请参见 findora_STR.md。
 
-**本次完成内容（v3.22 — 系统分析师复核）：**
+**本次完成内容（v3.24 — 系统分析师复核）：**
 
-1. **Section 15后续迭代说明重写**：清理过时v2.16交接内容，更新为v3.21当前执行基线的分次执行交接指南
-2. **历史归档简化**：移除重复的v2.x历史归档，保留简洁的历史归档说明
-3. **文档版本更新**：v3.21 → v3.22
+1. **三态追踪体系规范化**：统一所有功能模块三态列格式，确保需求设计/代码实现/审核三列完整一致
+2. **Section 7.1/7.2字段定义表格式修正**：字段定义表补充说明（区别于功能追踪），确保文档内部一致性
+3. **文档版本更新**：v3.23 → v3.24
 
-**当前整体状态（v3.22）：**
+**当前整体状态（v3.24）：**
 
 | 指标 | 数值 | 备注 |
 |------|------|------|
@@ -131,6 +131,7 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
+| v3.24 | 2026-04-12 | 系统分析师复核：三态追踪体系规范化，所有功能模块三态列格式统一，Section 7.1/7.2字段定义表格式修正，文档一致性提升 | 系统分析师复核 |
 | v3.23 | 2026-04-12 | 第53次STR全模块代码审核：F-001~F-050全面复核，TypeScript 0错误，代码基线稳定，F-016/F-020保持🏗待AI联调 | STR Agent 审核 |
 | v3.22 | 2026-04-12 | 系统分析师复核：Section 15后续迭代说明重写（清理过时v2.16交接内容），更新为v3.21当前执行基线的分次执行交接指南；Section 15历史归档说明简化 | 系统分析师复核 |
 | v3.21 | 2026-04-11 | 第51次STR审核：全模块代码审核（F-001~F-050），TypeScript 0错误，无新增阻塞项，代码基线稳定（无代码变更），F-016/F-020代码实现已验证（待AI联调），文档版本更新 | STR Agent 审核 |
@@ -1099,7 +1100,7 @@ dormant → active (重新互动)
 
 ## 7. 核心业务功能
 
-> 📌 **Section 7 设计状态**：F-010~F-017 需求设计已全部完成 🗓；三态列于 v1.0 规范化补全。代码实现请参见各子功能表。
+> 📌 **Section 7 设计状态**：F-010~F-017 需求设计已全部完成 ✅；三态列于 v1.0 规范化补全。代码实现请参见各子功能表。
 
 ### 7.1 商品库与数据模型（F-010）
 
@@ -1112,30 +1113,32 @@ dormant → active (重新互动)
 **字段定义**
 
 > ⚠️ 字段状态已固化于 F-050（schema.ts）— ✅ 已审核。下方为需求设计参考，实际以 F-050 为准。
+>
+> **说明**：以下"需求设计"列表示数据字段设计是否已确认（✅ = 已确认）。由于是数据模型字段而非功能特性，故不适用 🏗 功能实现 / ✅ 功能审核两列。所有字段设计均已完成。
 
-| 字段 | 类型 | 说明 | 设计状态 |
-|------|------|------|----------|
-| product_id | string | 唯一标识 | 🗓 |
-| source_platform | string | 来源平台（1688/Alibaba/...） | 🗓 |
-| source_url | string | 原始商品链接 | 🗓 |
-| original_title | string | 原始标题 | 🗓 |
-| rewritten_title | string | 重写标题（用户视角） | 🗓 |
-| category | string | 主类目 | 🗓 |
-| subcategory | string | 子类目 | 🗓 |
-| tags | string[] | 多标签数组 | 🗓 |
-| price_min | decimal | 价格区间低 | 🗓 |
-| price_max | decimal | 价格区间高 | 🗓 |
-| currency | string | 币种，默认 USD | 🗓 |
-| images | string[] | 图片 URL 列表 | 🗓 |
-| summary | string | 一句话总结 | 🗓 |
-| pros | string[] | 优点列表 | 🗓 |
-| cons | string[] | 缺点列表 | 🗓 |
-| use_cases | string[] | 使用场景 | 🗓 |
-| target_audience | string[] | 目标人群 | 🗓 |
-| shipping_notes | string | 物流/运输说明 | 🗓 |
-| merchant_name | string | 商家名称 | 🗓 |
-| last_checked_at | datetime | 最后检查时间 | 🗓 |
-| status | string | active / inactive / archived | 🗓 |
+| 字段 | 类型 | 说明 | 需求设计 |
+|------|------|------|:--------:|
+| product_id | string | 唯一标识 | ✅ |
+| source_platform | string | 来源平台（1688/Alibaba/...） | ✅ |
+| source_url | string | 原始商品链接 | ✅ |
+| original_title | string | 原始标题 | ✅ |
+| rewritten_title | string | 重写标题（用户视角） | ✅ |
+| category | string | 主类目 | ✅ |
+| subcategory | string | 子类目 | ✅ |
+| tags | string[] | 多标签数组 | ✅ |
+| price_min | decimal | 价格区间低 | ✅ |
+| price_max | decimal | 价格区间高 | ✅ |
+| currency | string | 币种，默认 USD | ✅ |
+| images | string[] | 图片 URL 列表 | ✅ |
+| summary | string | 一句话总结 | ✅ |
+| pros | string[] | 优点列表 | ✅ |
+| cons | string[] | 缺点列表 | ✅ |
+| use_cases | string[] | 使用场景 | ✅ |
+| target_audience | string[] | 目标人群 | ✅ |
+| shipping_notes | string | 物流/运输说明 | ✅ |
+| merchant_name | string | 商家名称 | ✅ |
+| last_checked_at | datetime | 最后检查时间 | ✅ |
+| status | string | active / inactive / archived | ✅ |
 
 **管理操作**
 
@@ -1166,14 +1169,16 @@ dormant → active (重新互动)
 **标签层级**
 
 > ⚠️ 标签数据模型已固化于 F-050 tags 表（✅ 已审核）。标签内容（具体标签名）通过 F-011-01 管理。
+>
+> **说明**：以下"需求设计"列表示标签层级设计是否已确认（✅ = 已确认）。由于是数据模型设计而非功能特性，故不适用 🏗 功能实现 / ✅ 功能审核两列。所有层级设计均已完成。
 
-| 层级 | 标签示例 | 说明 | 设计状态 |
-|------|----------|------|----------|
-| 类目标签 | kitchen / home / beauty / pet | 主分类 | 🗓 |
-| 功能标签 | organizing / cleaning / decorating / gifting | 功能属性 | 🗓 |
-| 人群标签 | for moms / for students / for pet owners | 目标人群 | 🗓 |
-| 风格标签 | cute / minimalist / luxury-looking / weird | 风格调性 | 🗓 |
-| 价格标签 | budget / mid-range / impulse buy / premium | 价格档位 | 🗓 |
+| 层级 | 标签示例 | 说明 | 需求设计 |
+|------|----------|------|:--------:|
+| 类目标签 | kitchen / home / beauty / pet | 主分类 | ✅ |
+| 功能标签 | organizing / cleaning / decorating / gifting | 功能属性 | ✅ |
+| 人群标签 | for moms / for students / for pet owners | 目标人群 | ✅ |
+| 风格标签 | cute / minimalist / luxury-looking / weird | 风格调性 | ✅ |
+| 价格标签 | budget / mid-range / impulse buy / premium | 价格档位 | ✅ |
 
 **管理操作**
 
@@ -1236,21 +1241,23 @@ utm_campaign, referer, ip_country, clicked_at
 **用户字段**
 
 > ⚠️ 字段状态已固化于 F-050 users 表（✅ 已审核）。下方为需求设计参考。
+>
+> **说明**：以下"需求设计"列表示数据字段设计是否已确认（✅ = 已确认）。由于是数据模型字段而非功能特性，故不适用 🏗 功能实现 / ✅ 功能审核两列。所有字段设计均已完成。
 
-| 字段 | 类型 | 说明 | 设计状态 |
-|------|------|------|----------|
-| user_id | string | 唯一标识 | 🗓 |
-| email | string | 邮箱地址 | 🗓 |
-| subscribed_categories | string[] | 订阅类目 | 🗓 |
-| price_preference | string | 价格偏好（budget/mid/premium） | 🗓 |
-| liked_tags | string[] | 偏好的标签 | 🗓 |
-| disliked_tags | string[] | 反感的标签 | 🗓 |
-| click_history | string[] | 点击过的 product_id 列表（最近50条） | 🗓 |
-| saved_items | string[] | 收藏的商品 | 🗓 |
-| locale | string | 用户地区 | 🗓 |
-| frequency_preference | string | 更新频率偏好（weekly/biweekly/monthly） | 🗓 |
-| subscribed_at | datetime | 订阅时间 | 🗓 |
-| status | string | active / unsubscribed / dormant | 🗓 |
+| 字段 | 类型 | 说明 | 需求设计 |
+|------|------|------|:--------:|
+| user_id | string | 唯一标识 | ✅ |
+| email | string | 邮箱地址 | ✅ |
+| subscribed_categories | string[] | 订阅类目 | ✅ |
+| price_preference | string | 价格偏好（budget/mid/premium） | ✅ |
+| liked_tags | string[] | 偏好的标签 | ✅ |
+| disliked_tags | string[] | 反感的标签 | ✅ |
+| click_history | string[] | 点击过的 product_id 列表（最近50条） | ✅ |
+| saved_items | string[] | 收藏的商品 | ✅ |
+| locale | string | 用户地区 | ✅ |
+| frequency_preference | string | 更新频率偏好（weekly/biweekly/monthly） | ✅ |
+| subscribed_at | datetime | 订阅时间 | ✅ |
+| status | string | active / unsubscribed / dormant | ✅ |
 
 **功能列表**
 
