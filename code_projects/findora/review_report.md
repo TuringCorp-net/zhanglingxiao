@@ -1,69 +1,71 @@
-# 重要说明
-- 本文为 2026-04-09 二次复核版。
-- 已删除不再适用、已被近期迭代修复或缺乏当前代码证据支持的结论。
-- 仅保留“当前代码仍可复现/可验证”的问题项。
+# Findora Review 报告
 
-# Findora Review 报告（仅保留有效问题）
-
-> 版本号：v3.07-revalidated  
-> 修改日期：2026-04-09
+> 版本号：v3.21-review-structure  
+> 修改日期：2026-04-11
 
 ---
 
-## 一、复核范围与结论
+## 1. review of SRS
 
-本次针对以下代码进行了逐项复核：`src/api/index.ts`、`src/api/explain.ts`、`src/api/products.ts`、`src/api/tags.ts`、`src/api/email.ts`、`src/api/membership.ts`、`src/pages/*.html`。
+**Note：**该章节主要 review 的内容是从 Business Concept + system design 到 Findora SRS 的系统分解设计，重点考察系统分解设计是否完美覆盖业务设想。
 
-结论：仍有 7 项需要继续优化，其中 P0（高优先级缺陷）2 项，P1（短期优化）5 项。
+### 1.1 结论
 
----
+- 覆盖结论：整体覆盖度高，SRS 已将业务目标分解为可执行功能编号体系（F-001~F-050）并形成三态追踪闭环。
+- 架构一致性：SRS 已同步 system_design 关键约束（统一数据 API 层、D1/R2 主从分离、Cloudflare 技术栈约束）。
+- 当前差距：F-016 / F-020 代码实现已完成，但仍保留“待 AI 联调”状态，业务验收尚未闭环到 ✅。
 
-## 二、仍成立的问题清单（已验证）
+### 1.2 仍需优化点
 
-### P0（高优先级）
-
-1. [ ] 未修改 / [ ] 已修改 / [ ] 已review — `explain.ts` 缓存 TTL 比较存在时间格式不一致风险  
-   - 现状：写入 `expires_at` 使用 `toISOString()`，读取比较使用 `expires_at > datetime('now')`。  
-   - 风险：ISO8601 与 SQLite `datetime` 字符串格式混用，缓存过期判断可能失真。  
-   - 位置：`src/api/explain.ts`（`getCachedExplanation` / `setCachedExplanation`）
-
-2. [ ] 未修改 / [ ] 已修改 / [ ] 已review — `explain.ts` 的 Anthropic 响应解析仍按 OpenAI 路径取值  
-   - 现状：统一解析 `result?.choices?.[0]?.message?.content`。  
-   - 风险：Anthropic `messages` 接口返回结构不同，可能导致 AI 解释为空。  
-   - 位置：`src/api/explain.ts`（`generateAIExplanation`）
-
-### P1（短期优化）
-
-3. [ ] 未修改 / [ ] 已修改 / [ ] 已review — Cron 未接入周报邮件发送任务  
-   - 现状：`scheduled` 只调用 `handleScheduledPublishing`，未调用 `sendWeeklyNewsletter`。  
-   - 风险：自动化运营链路不完整。  
-   - 位置：`src/api/index.ts`（`scheduled`）
-
-4. [ ] 未修改 / [ ] 已修改 / [ ] 已review — `importProducts` 缺少单批导入上限与分批机制  
-   - 现状：仅校验“非空数组”，未限制批量规模。  
-   - 风险：大 payload 可能触发 Worker 资源压力、D1 写入超时。  
-   - 位置：`src/api/products.ts`（`importProducts`）
-
-5. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 标签/类目相关查询仍大量使用 `LIKE` 字符串匹配  
-   - 现状：如 `products.tags LIKE ?`、`subscribed_categories LIKE ?`、`COUNT(*) FROM products WHERE tags LIKE ?`。  
-   - 风险：通配误匹配与查询性能不稳定；语义一致性依赖字符串格式。  
-   - 位置：`src/api/products.ts`、`src/api/tags.ts`、`src/api/email.ts`
-
-6. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 时间存储与查询比较策略不统一（不仅限 explain 模块）  
-   - 现状：多处写入 `toISOString()`，部分查询用 `datetime('now')` 直接比较。  
-   - 风险：跨模块出现时间边界偏差（有效期、窗口统计、到期判断）。  
-   - 位置：`src/api/membership.ts` 及其他时间敏感模块
-
-7. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 前端仍为纯静态 HTML + 客户端拉取数据模式  
-   - 现状：页面首屏主要靠前端 `fetch` 填充内容。  
-   - 风险：SEO、动态 OG/Twitter 卡片能力受限；公共结构复用成本高。  
-   - 位置：`src/pages/index.html` 及其他 `src/pages/*.html`
+1. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 为 F-016/F-020 增补“真实模型联调验收模板”
+   - 建议补充：成功率阈值、超时阈值、失败回退策略、人工复核抽样比例。
+2. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 将 SRS 中“代码实现已验证”和“功能审核通过”口径进一步拆分
+   - 目的：避免“已实现”与“可上线”在跨团队协作中被误读为同一状态。
 
 ---
 
-## 三、建议执行顺序
+## 2. review of SDS
 
-1. 先修复 P0（`explain.ts` 时间比较与 Anthropic 解析）。
-2. 其次补齐运营闭环（Cron 周报邮件）与导入保护（批量上限/分批）。
-3. 再推进一致性重构（时间策略统一、`LIKE` 语义改造）。
-4. 最后做前端工程化升级（在 Cloudflare 体系内优先考虑 Pages + 支持 SSR/SSG 的方案）。
+**Note：**该章节主要 review 的内容是根据 Findora SRS 系统设计，所有代码实现是否完美覆盖，findora SDS 的文档记录是否完整和准确。
+
+### 2.1 结论
+
+- 覆盖结论：SDS 的“模块映射”与当前代码主干基本一致，核心路由和主要模块落点正确。
+- 记录完整性：SDS 当前为“精简版”，对历史过程做了压缩，适合作为映射索引，但对“验证证据”记录较弱。
+- 当前准确性：存在文档基线版本滞后（SDS v3.06，SRS v3.20，STR v3.12），建议同步抬升版本并更新口径。
+
+### 2.2 已确认修复项（应从风险清单中移除）
+
+- `explain.ts` 时间比较已统一为 Unix 时间戳策略（原 P0-1 已修复）。
+- `explain.ts` 已区分 OpenAI/Anthropic 响应路径（原 P0-2 已修复）。
+- `scheduled` 已接入周报发送（原 P1-3 已修复）。
+- `importProducts` 已增加 `MAX_BATCH_SIZE = 100`（原 P1-4 已修复）。
+
+### 2.3 仍需优化点
+
+1. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 统一 SDS 与 SRS/STR 的版本基线与状态描述口径
+2. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 补充“映射验证证据”最小模板（如关键端点抽检、类型检查结果）
+3. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 持续收敛 `LIKE` 在 JSON 场景下的匹配语义风险（优先 tags/subscription 查询链路）
+   - 对应长期优化项：P1-5（非阻塞）
+4. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 分模块统一时间字段比较策略（逐步减少 ISO 与 `datetime('now')` 混用）
+   - 对应长期优化项：P1-6（非阻塞）
+5. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 推进前端工程化能力升级（SSR/SSG、动态 Meta、组件复用）
+   - 对应长期优化项：P1-7（非阻塞）
+
+---
+
+## 3. review of STR
+
+**Note：**该章节主要 review 的内容是根据 findora SRS 和 findora SDS 的代码实现，代码审核本身是否覆盖完整，STR 文档记录是否完整和准确。
+
+### 3.1 结论
+
+- 审核覆盖：STR 已形成多轮次审计链路，且近期轮次已覆盖关键修复项、核心路由和 TypeScript 编译检查。
+- 记录完整性：STR 记录较充分，能追溯“问题提出→修复→复核”的闭环过程。
+- 当前准确性：总体准确，但局部章节标题仍保留旧基线文案（例如正文中“当前基线状态(v3.06)”），建议与头部版本统一。
+
+### 3.2 仍需优化点
+
+1. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 统一 STR 内部版本标签（标题、章节名、结论摘要）避免跨版本混读
+2. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 将“已修复项”与“长期优化项（非阻塞）”拆分到独立小节
+3. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 为长期优化项补充量化验收标准（如查询性能阈值、SEO 指标目标）
