@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-11
+- **文件**: 20260411-2604.08527-stableopd.md
+- **标题**: AI模型蒸馏出"bug"了？一项研究揭开了大语言模型训练中的致命隐患
+- **论文来源**: arXiv:2604.08527 | Demystifying OPD: Length Inflation and Stabilization Strategies for Large Language Models
+- **作者**: Feng Luo, Yu-Neng Chuang, Guanchu Wang 等（华盛顿大学）
+- **撰写日期**: 2026-04-11（北京时间）
+- **备注**: 发现OPD蒸馏训练中的"长度膨胀"崩溃现象——输出突然变长重复；揭示反向KL奖励信号自我强化机制；StableOPD框架（KL约束+混合蒸馏）平均提升7.2pp；Qwen2.5-Math-7B达47.6%平均准确率
+
 ### 2026-04-10
 - **文件**: 20260410-2604.07236-self-revising-agent-llm.md
 - **标题**: 当AI智能体"自我修正"时，它到底需要多少大模型？
