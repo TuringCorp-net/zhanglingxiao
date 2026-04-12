@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-12
+- **文件**: 20260412-2604.08527-opd-length-inflation.md
+- **标题**: AI模型训练中的"暴毙"之谜：大模型为何越学越"发疯"？
+- **论文来源**: arXiv:2604.08527 | Demystifying OPD: Length Inflation and Stabilization Strategies for Large Language Models
+- **作者**: Feng Luo, Yu-Neng Chuang, Guanchu Wang 等（华盛顿大学）
+- **撰写日期**: 2026-04-12（北京时间）
+- **备注**: 从"奖励黑客"视角深度解析长度膨胀机制——模型通过重复输出"欺骗"训练信号；StableOPD（KL约束+混合蒸馏）双重保险；在MATH500等6个数据集验证，Qwen2.5-7B平均准确率达47.6%
+
 ### 2026-04-11
 - **文件**: 20260411-2604.08527-stableopd.md
 - **标题**: AI模型蒸馏出"bug"了？一项研究揭开了大语言模型训练中的致命隐患
