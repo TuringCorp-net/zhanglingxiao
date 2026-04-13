@@ -1,7 +1,7 @@
 # Findora SDS — 软件设计说明书（精简版）
 
 > **项目名称：** Findora
-> **版本：** v3.29
+> **版本：** v3.30
 > **最后更新：** 2026-04-13
 > **维护方式：** Agent维护（仅保留与SRS对应关系及简要设计说明）
 
@@ -43,7 +43,7 @@
 | F-013 用户订阅 | 订阅、偏好、收藏、分群、邮件 | `src/api/subscribe.ts`, `src/api/favorites.ts`, `src/api/admin/subscribers.ts`, `src/api/email.ts` | 完整订阅运营闭环 |
 | F-014 基础推荐 | 同类目/同标签/价格带/热门/新品 | `src/api/recommendations.ts` | 规则推荐，包含 30 天窗口行为加权 |
 | F-015 行为推荐 | 行为分、重排、多样性 | `src/api/behavior.ts`, `src/api/recommendations.ts` | 行为特征参与排序与结果重排 |
-| F-016 AI 推荐解释 | 解释、对比、场景、缓存 | `src/api/explain.ts` | 解释结果可缓存，支持批量/对比/场景输出 |
+| F-016 AI 推荐解释 | 解释、对比、场景、缓存 | `src/api/explain.ts` | 解释结果缓存使用D1 explanation_cache表（不是KV），支持批量/对比/场景输出 |
 | F-017 数据看板 | UV/CTR/转化/类目/榜单/趋势 | `src/api/analytics.ts` | 运营分析指标查询接口 |
 | F-020 AI 辅助能力 | 选品、内容、社媒、洞察、补全 | `src/api/ai_content.ts` | 面向运营后台的 AI 生产力接口 |
 | F-021 AI 边界限制 | AI 审核工作流 | `src/api/ai_review.ts` | 审核记录、校验、复审与修订闭环 |
@@ -75,12 +75,12 @@
 **外部系统接口（v3.13 实现）：**
 - `POST /api/conversions/callback` - F-040-20 联盟追踪回调（Alibaba.com Affiliate等）
 - `POST /api/email/send-confirmation` - F-040-21 邮件发送（Resend/SendGrid）
-- `POST /api/admin/email/send-weekly` - F-040-21 周报邮件（定时cron触发）
+- `POST /api/admin/email/send-weekly` - F-040-21 周报邮件（cron: 0 9 * * 4，周四9:00 UTC）
 - `POST /api/admin/email/send-unsubscription-confirmation` - F-040-21 退订确认邮件
 - `POST /api/admin/email/send-reengagement` - F-040-21 召回邮件
 - `GET /api/admin/email/logs` - F-040-21 邮件发送日志查询
 - AI服务接口 - F-040-22 OpenAI/Anthropic生成式API（详见F-020/F-016）
-- `POST /api/admin/price-check` - F-040-23 价格监控（接收外部价格检查结果）
+- `POST /api/admin/price-check` - F-040-23 价格监控（外部服务回推方式）
 - `POST /api/admin/price-check/batch` - F-040-23 批量价格检查
 - `GET /api/admin/price-check` - F-040-23 价格变动列表
 - `GET /api/admin/price-check/:product_id` - F-040-23 单商品价格历史
@@ -123,7 +123,7 @@
 
 ---
 
-## 8. 当前基线状态（v3.29）
+## 8. 当前基线状态（v3.30）
 
 | 指标 | 数值 | 备注 |
 |------|------|------|
@@ -145,7 +145,7 @@
 
 **无 CRITICAL/HIGH 阻塞项。**
 
-**代码基线确认（v3.29）：**
+**代码基线确认（v3.30）：**
 - TypeScript 编译 0 错误
 - src/ 目录自第57次STR审核后无代码变更，代码基线持续稳定
 - 所有核心模块已通过第58次STR审核验证

@@ -84,7 +84,7 @@ export interface Tag {
   id: string;
   name: string;
   slug: string;
-  layer: string;
+  layer: string; // 枚举值: 'category' | 'function' | 'audience' | 'style' | 'price'
   dimension_level: number;
   parent_id: string | null;
   featured_products: string;

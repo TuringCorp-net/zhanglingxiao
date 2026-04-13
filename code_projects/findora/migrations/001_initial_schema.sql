@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS tags (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
-  layer TEXT DEFAULT 'function',
+  layer TEXT DEFAULT 'function' CHECK(layer IN ('category', 'function', 'audience', 'style', 'price')),
   dimension_level INTEGER DEFAULT 2,
   parent_id TEXT,
   featured_products TEXT DEFAULT '[]',

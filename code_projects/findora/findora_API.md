@@ -264,9 +264,10 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 方法 | 路径 | 功能 |
 |------|------|------|
-| POST | `/api/auth/register` | 注册 |
-| POST | `/api/auth/login` | 登录 |
-| POST | `/api/auth/logout` | 登出 |
+| POST | `/api/auth/register` | 注册 | F-040-27 |
+| POST | `/api/auth/login` | 登录 | F-040-28 |
+| POST | `/api/auth/logout` | 登出 | F-040-29 |
+| POST | `/api/auth/refresh` | Session续期 | F-040-30 |
 | GET | `/api/auth/me` | 当前用户 |
 | POST | `/api/auth/change-password` | 修改密码 |
 

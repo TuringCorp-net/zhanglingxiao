@@ -113,14 +113,14 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       return getList(env, segments[1]);
     }
 
-    // GET /api/categories - F-040-05
-    if (request.method === 'GET' && segments[0] === 'categories') {
-      return getCategories(env);
-    }
-
     // GET /api/categories/:category/subcategories - F-002-03
     if (request.method === 'GET' && segments[0] === 'categories' && segments[1] && segments[2] === 'subcategories') {
       return getCategorySubcategories(env, segments[1]);
+    }
+
+    // GET /api/categories - F-040-05
+    if (request.method === 'GET' && segments[0] === 'categories' && !segments[1]) {
+      return getCategories(env);
     }
 
     // === User Endpoints (email/anonymous_id based) ===
@@ -175,8 +175,13 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       return recordClick(env, request);
     }
 
+    // GET /api/recommendations/behavioral - F-015 (behavior-enhanced recommendations, user-facing)
+    if (request.method === 'GET' && segments[0] === 'recommendations' && segments[1] === 'behavioral') {
+      return getBehavioralRecommendations(env, request);
+    }
+
     // GET /api/recommendations - F-040-13
-    if (request.method === 'GET' && segments[0] === 'recommendations') {
+    if (request.method === 'GET' && segments[0] === 'recommendations' && !segments[1]) {
       return getRecommendations(env, request);
     }
 
@@ -190,21 +195,6 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       return sendSubscriptionConfirmation(env, request);
     }
 
-    // GET /api/recommendations/behavioral - F-015 (behavior-enhanced recommendations, user-facing)
-    if (request.method === 'GET' && segments[0] === 'recommendations' && segments[1] === 'behavioral') {
-      return getBehavioralRecommendations(env, request);
-    }
-
-    // GET /api/explain/:product_id - F-016-01 (get explanation for a product)
-    if (request.method === 'GET' && segments[0] === 'explain' && segments[1]) {
-      return explainProduct(env, request, segments[1]);
-    }
-
-    // POST /api/explain/batch - F-016-01 (batch explanations)
-    if (request.method === 'POST' && segments[0] === 'explain' && segments[1] === 'batch') {
-      return explainBatch(env, request);
-    }
-
     // GET /api/explain/:product_id/comparison - F-016-02
     if (request.method === 'GET' && segments[0] === 'explain' && segments[1] && segments[2] === 'comparison') {
       return explainComparison(env, request, segments[1]);
@@ -213,6 +203,16 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
     // GET /api/explain/:product_id/scenarios - F-016-03
     if (request.method === 'GET' && segments[0] === 'explain' && segments[1] && segments[2] === 'scenarios') {
       return explainScenarios(env, request, segments[1]);
+    }
+
+    // GET /api/explain/:product_id - F-016-01 (get explanation for a product)
+    if (request.method === 'GET' && segments[0] === 'explain' && segments[1] && !segments[2]) {
+      return explainProduct(env, request, segments[1]);
+    }
+
+    // POST /api/explain/batch - F-016-01 (batch explanations)
+    if (request.method === 'POST' && segments[0] === 'explain' && segments[1] === 'batch') {
+      return explainBatch(env, request);
     }
 
     // === Public i18n Routes (F-022) - moved outside admin block ===
@@ -716,21 +716,6 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       return listEnterprises(env, request);
     }
 
-    // GET /api/enterprises/:id
-    if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1]) {
-      return getEnterprise(env, request, segments[1]);
-    }
-
-    // PUT /api/enterprises/:id
-    if (request.method === 'PUT' && segments[0] === 'enterprises' && segments[1]) {
-      return updateEnterprise(env, request, segments[1]);
-    }
-
-    // DELETE /api/enterprises/:id
-    if (request.method === 'DELETE' && segments[0] === 'enterprises' && segments[1]) {
-      return deleteEnterprise(env, request, segments[1]);
-    }
-
     // GET /api/enterprises/:id/members
     if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'members' && !segments[3]) {
       return listEnterpriseMembers(env, request, segments[1]);
@@ -754,6 +739,21 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
     // DELETE /api/enterprises/:id/members/:memberId
     if (request.method === 'DELETE' && segments[0] === 'enterprises' && segments[1] && segments[2] === 'members' && segments[3]) {
       return removeEnterpriseMember(env, request, segments[1], segments[3]);
+    }
+
+    // GET /api/enterprises/:id
+    if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1] && !segments[2]) {
+      return getEnterprise(env, request, segments[1]);
+    }
+
+    // PUT /api/enterprises/:id
+    if (request.method === 'PUT' && segments[0] === 'enterprises' && segments[1] && !segments[2]) {
+      return updateEnterprise(env, request, segments[1]);
+    }
+
+    // DELETE /api/enterprises/:id
+    if (request.method === 'DELETE' && segments[0] === 'enterprises' && segments[1] && !segments[2]) {
+      return deleteEnterprise(env, request, segments[1]);
     }
 
     // === EMS Record Routes ===
@@ -847,14 +847,14 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       return searchUsers(env, request);
     }
 
-    // GET /api/users/:id
-    if (request.method === 'GET' && segments[0] === 'users' && segments[1]) {
-      return getUserById(env, request, segments[1]);
-    }
-
     // GET /api/users/sessions
     if (request.method === 'GET' && segments[0] === 'users' && segments[1] === 'sessions' && !segments[2]) {
       return listSessions(env, request);
+    }
+
+    // GET /api/users/:id
+    if (request.method === 'GET' && segments[0] === 'users' && segments[1] && !segments[2]) {
+      return getUserById(env, request, segments[1]);
     }
 
     // DELETE /api/users/sessions/:sessionId
