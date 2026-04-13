@@ -45,6 +45,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 | 修改时间 | 修改内容 |
 |----------|----------|
 | 2026-04-13 | 新增 F-040-24~26 全局配置端点（GET /api/admin/configs、PUT /api/admin/configs/:key、GET /api/configs/:key）；补充外部运营 AI 数据更新接口说明（F-040-22） |
+| 2026-04-13 | 补充认证端点详细格式（POST /api/auth/register、POST /api/auth/login）；对齐 SRS §3.1.5 响应格式（user_id/session_token） |
 
 ---
 
@@ -291,6 +292,51 @@ Accept: text/markdown     # 返回Markdown格式内容
 | POST | `/api/auth/refresh` | Session续期 | F-040-30 |
 | GET | `/api/auth/me` | 当前用户 |
 | POST | `/api/auth/change-password` | 修改密码 |
+
+##### POST /api/auth/register - 用户注册 (F-040-27)
+
+**请求体**：
+```json
+{
+  "email": "user@example.com",
+  "password": "SecurePassword123"
+}
+```
+
+**响应格式**（对齐 SRS §3.1.5）：
+```json
+{
+  "ok": true,
+  "data": {
+    "user_id": "ems_xxx",
+    "email": "user@example.com",
+    "created_at": "2026-04-13T10:00:00Z"
+  }
+}
+```
+
+##### POST /api/auth/login - 用户登录 (F-040-28)
+
+**请求体**：
+```json
+{
+  "email": "user@example.com",
+  "password": "SecurePassword123"
+}
+```
+
+**响应格式**（对齐 SRS §3.1.5）：
+```json
+{
+  "ok": true,
+  "data": {
+    "user_id": "ems_xxx",
+    "email": "user@example.com",
+    "session_token": "sess_xxx",
+    "expires_at": "2026-04-14T10:00:00Z"
+  }
+}
+```
 
 #### 企业管理
 

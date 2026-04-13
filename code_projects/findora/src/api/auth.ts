@@ -150,9 +150,11 @@ export async function register(env: Env, request: Request): Promise<Response> {
 
   await createAuditLog(env, null, id, 'create', 'user', id, request);
 
-  const token = await createToken(id);
-
-  return new Response(JSON.stringify(jsonSuccess({ user: { id, email: body.email, name: body.name }, token })), {
+  return new Response(JSON.stringify(jsonSuccess({
+    user_id: id,
+    email: body.email.toLowerCase(),
+    created_at: now
+  })), {
     status: 201,
     headers: { 'Content-Type': 'application/json' },
   });
@@ -217,8 +219,9 @@ export async function login(env: Env, request: Request): Promise<Response> {
   await createAuditLog(env, null, user.id as string, 'login', 'auth', sessionId, request);
 
   return new Response(JSON.stringify(jsonSuccess({
-    user: { id: user.id, email: user.email, name: user.name },
-    token,
+    user_id: user.id,
+    email: user.email,
+    session_token: token,
     expires_at: expiresAt
   })), {
     headers: { 'Content-Type': 'application/json' },
