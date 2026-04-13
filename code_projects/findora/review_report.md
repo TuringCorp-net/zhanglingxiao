@@ -232,3 +232,38 @@
    - 建议动作：在每轮审计结论中显式标注“本轮仅审计F-040范围 / 或含全API范围”，避免外部读者误判覆盖度。
 6. [ ] 未修改 / [ ] 已修改 / [ ] 已review — 将“已修复问题”与“长期优化项”拆分为独立清单并绑定退出标准
    - 建议动作：维持 P0/P1 已修复清单冻结；对 P1-5/P1-6/P1-7 补充可量化退出阈值与复核频率，避免长期挂账但无收敛标准。
+
+---
+
+## 4. Review of API
+
+**Note：**该章节主要 review 的内容是 Findora API 文档（`findora_API.md`）对上游架构（Business Concept, System Design, SRS）的对齐情况，以及与下游实现（SDS, 代码）的一致性。
+
+### 4.1 结论
+
+- **向上对齐（Business Concept / System Design）**：API 文档在“统一 API 层、Cloudflare Worker 架构、外部运营AI可通过接口维护标签/Item Card/推荐文案”等主干方向上对齐较好。
+- **向上偏差（需收敛）**：仍不能认定“完全对齐”。`system_design.md` 要求的“全局参数配置接口（如首页推荐标签、登录失效时间）”在 API 文档端点清单中仍缺少显式路径；同时 Business Concept 的“无面向用户实时 LLM 调用”与当前 API/代码中可触发 AI 生成的能力（如 explain 的 `ai=true`）存在口径冲突风险。
+- **与 SRS 对齐结论**：API 文档总体跟随了当前实现口径，但与 SRS 仍有显著漂移（典型如 F-040-20 回调路径命名、F-040-23 调用方式定义），属于“API 文档与代码更一致，但与 SRS 未完全一致”的状态。
+- **与 SDS/代码对齐结论**：API 文档比 SDS 更接近实际路由全貌，并且已记录一部分真实缺陷；但对“路由可达性问题”的覆盖仍不完整（新增发现 `recommendations` 与 `explain` 路由遮蔽），且个别路径仍与代码不一致（如 `/api/price-check`）。
+
+### 4.2 与既有章节冲突处理（融合说明）
+
+本章节原有结论中“完美承接”“忠实反映”等表述过强。本轮复核后调整为“方向对齐、细节仍有偏差”，原因如下：
+
+1. [x] 已review — 认证口径冲突：API 文档写“用户端点用 `X-User-ID` 或 Bearer Token”，但主业务代码实际使用 `X-User-Email`/`X-Anonymous-Id`。
+2. [x] 已review — 路由可达性问题不仅限于文档已列项目：除 categories/EMS 外，`GET /api/recommendations/behavioral`、`GET /api/explain/:product_id/comparison`、`GET /api/explain/:product_id/scenarios` 也会被更宽泛父路由提前吞掉。
+3. [x] 已review — 外部价格接口路径不一致：API 文档列了 `/api/price-check` 与 `/api/price-check/batch`，代码仅实现 `/api/admin/price-check*`。
+4. [x] 已review — API 文档“已知问题”有价值，但部分描述仍需精确化：例如 categories 问题并非被 `/api/categories/:category` 遮蔽，而是被更宽泛的 `/api/categories` 条件直接吞掉。
+
+### 4.3 仍需优化点
+
+1. [x] 已review — 修复路由匹配顺序并回归 API 文档可达性清单（代码优先）
+   - 建议动作：按“更具体路径优先”重排 `src/api/index.ts`，至少覆盖 `categories/subcategories`、`recommendations/behavioral`、`explain/*/comparison|scenarios`、`enterprises/*`、`users/sessions`。
+2. [x] 已review — 统一 API 文档与代码的认证契约
+   - 建议动作：二选一处理——要么代码新增 `X-User-ID/Bearer` 支持，要么 API 文档改为 `X-User-Email`/`X-Anonymous-Id` 为准并说明演进计划。
+3. [x] 已review — 收敛外部系统路径口径（SRS / API / SDS / 代码）
+   - 建议动作：集中对齐 F-040-20/F-040-23：回调路径命名、是否 admin 前缀、是“主动轮询”还是“外部回推”。
+4. [x] 已review — 补齐 System Design 要求的“全局配置管理接口”映射
+   - 建议动作：明确 `global_configs` 的 API 契约（读写端点、鉴权、审计），并同步到 SRS/SDS/API 文档与实现。
+5. [x] 已review — 处理“无用户侧实时LLM”与当前 AI 接口能力的口径冲突
+   - 建议动作：若坚持 Business Concept 路线，需限制用户入口触发实时 AI 生成（如 explain 的 AI 开关），并在 API/SRS/SDS 中统一标注为“仅运营侧异步生成”。
