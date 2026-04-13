@@ -58,6 +58,8 @@ import {
   getProfile, updateProfile, updateAvatar, searchUsers, getUserById,
   listSessions, revokeSession, revokeAllSessions, updateUserStatus
 } from './user';
+import { listGlobalConfigs, updateGlobalConfig, createGlobalConfig } from './admin/configs';
+import { getGlobalConfig } from './configs';
 
 function isAdmin(request: Request, env: Env): boolean {
   const adminKey = request.headers.get('X-Admin-Key');
@@ -91,6 +93,11 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
     // GET /api/trending - F-001-05
     if (request.method === 'GET' && segments[0] === 'trending') {
       return getTrending(env, request);
+    }
+
+    // GET /api/configs/:key - F-040-26 (public config read)
+    if (request.method === 'GET' && segments[0] === 'configs' && segments[1]) {
+      return getGlobalConfig(env, segments[1]);
     }
 
     // GET /api/products - F-040-01
@@ -282,6 +289,16 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       // POST /api/admin/lists - F-040-18
       if (request.method === 'POST' && segments[1] === 'lists') {
         return createList(env, request);
+      }
+
+      // GET /api/admin/configs - F-040-24
+      if (request.method === 'GET' && segments[1] === 'configs' && !segments[2]) {
+        return listGlobalConfigs(env);
+      }
+
+      // PUT /api/admin/configs/:key - F-040-25
+      if (request.method === 'PUT' && segments[1] === 'configs' && segments[2]) {
+        return updateGlobalConfig(env, segments[2], request);
       }
 
       // GET /api/admin/analytics/overview - F-017

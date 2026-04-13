@@ -2,6 +2,10 @@
 -- Migration: 013_runtime_tables.sql
 -- Description: Formalize runtime-created tables as proper migrations
 -- Created: 2026-04-13
+--
+-- NOTE: price_history is defined in migrations/004_price_history.sql
+-- NOTE: ai_review_records is defined in migrations/005_ai_review_records.sql
+-- This migration only includes tables that were NOT already in prior migrations.
 
 -- This migration formalizes tables that were previously created at runtime
 -- via CREATE TABLE IF NOT EXISTS. Having them in a migration ensures
@@ -70,44 +74,3 @@ CREATE INDEX IF NOT EXISTS idx_email_logs_user_id ON email_logs(user_id);
 CREATE INDEX IF NOT EXISTS idx_email_logs_email ON email_logs(email);
 CREATE INDEX IF NOT EXISTS idx_email_logs_status ON email_logs(status);
 CREATE INDEX IF NOT EXISTS idx_email_logs_created_at ON email_logs(created_at);
-
--- Price history table - F-010-05
--- Tracks historical price data for products
-CREATE TABLE IF NOT EXISTS price_history (
-  id TEXT PRIMARY KEY,
-  product_id TEXT NOT NULL,
-  price_min REAL,
-  price_max REAL,
-  currency TEXT DEFAULT 'USD',
-  recorded_at TEXT NOT NULL,
-  source TEXT,
-  FOREIGN KEY (product_id) REFERENCES products(id)
-);
-
-CREATE INDEX IF NOT EXISTS idx_price_history_product_id ON price_history(product_id);
-CREATE INDEX IF NOT EXISTS idx_price_history_recorded_at ON price_history(recorded_at);
-
--- AI review records table - F-021
--- Tracks AI-generated content review workflow
-CREATE TABLE IF NOT EXISTS ai_review_records (
-  id TEXT PRIMARY KEY,
-  content_type TEXT NOT NULL,
-  content_id TEXT NOT NULL,
-  draft_content TEXT,
-  status TEXT DEFAULT 'draft',
-  current_step TEXT,
-  category TEXT,
-  is_high_risk INTEGER DEFAULT 0,
-  created_by TEXT NOT NULL,
-  reviewed_by TEXT,
-  review_notes TEXT,
-  rejection_reason TEXT,
-  approved_at TEXT,
-  published_at TEXT,
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_ai_review_content ON ai_review_records(content_type, content_id);
-CREATE INDEX IF NOT EXISTS idx_ai_review_status ON ai_review_records(status);
-CREATE INDEX IF NOT EXISTS idx_ai_review_created_at ON ai_review_records(created_at);

@@ -97,8 +97,9 @@
 | 榜单关联 | `migrations/010_list_products.sql` | 榜单与商品关联表 |
 | v3.0 架构补齐 | `migrations/011_products_r2_index.sql` | `products/tags/users` 关键字段补齐（含 R2 索引字段） |
 | EMS 企业管理 | `migrations/012_ems_schema.sql` | enterprises/enterprise_members/records/audit_logs/ems_users/user_sessions |
-| 运行时表正式化 | `migrations/013_runtime_tables.sql` | conversions/explanation_cache/email_logs/price_history/ai_review_records |
+| 运行时表正式化 | `migrations/013_runtime_tables.sql` | conversions/explanation_cache/email_logs（conversions/explanation_cache/email_logs三表正式化）|
 | 全局配置 | `migrations/014_global_configs.sql` | global_configs 表及默认配置项 |
+| 运行时建表策略 | 业务代码中的`CREATE TABLE IF NOT EXISTS` | 作为migration的fallback，确保新环境部署时自动建表 |
 
 ---
 
