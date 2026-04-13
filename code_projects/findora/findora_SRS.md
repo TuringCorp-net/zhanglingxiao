@@ -819,7 +819,7 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 
 ```
 触发条件：用户在商家页完成购买 → 联盟平台发起回调
-回调地址：POST /api/callbacks/affiliate
+回调地址：POST /api/conversions/callback
 验证方式：回调签名验证（platform provided secret）
 处理逻辑：
   1. 验证签名有效性
@@ -835,7 +835,7 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 服务商：Resend（推荐）或 SendGrid
 发送类型：
   - 订阅确认信（immediate）
-  - 周更推荐（每周五 10:00 UTC cron）
+  - 周更推荐（每周四 09:00 UTC cron，0 9 * * 4）
   - 退订确认（immediate）
   - 召回邮件（退订后30天触发）
 发送日志：记录 sent/opened/bounced 状态，保留12个月
@@ -856,15 +856,14 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 #### F-040-23 价格监控接口
 
 ```
-触发方式：每日定时任务（UTC 02:00）
-监控范围：status='active' 且 last_checked_at > 7天前 的商品
+触发方式：外部服务回推（POST /api/admin/price-check）
+监控范围：接收外部服务推送的价格变动数据
 处理逻辑：
-  1. 抓取 source_url 页面
-  2. 提取当前价格
-  3. 若价格变动 > 5%，更新 price_min/price_max + last_checked_at
+  1. 验证回推签名/权限
+  2. 解析价格变动数据
+  3. 更新 price_min/price_max + last_checked_at
   4. 若商品已下架，更新 status = 'inactive'
   5. 记录价格变动日志
-超时：单商品抓取超时 15s
 ```
 
 ### 3.1.6 错误码
@@ -1057,6 +1056,8 @@ C-01/C-02 修复并经STR复审通过后：
 | cover_image | TEXT | | 封面图 |
 | category | TEXT | INDEX | 主类目 |
 | status | TEXT | DEFAULT 'draft' | draft / published / archived |
+| content_type | TEXT | | organic / affiliate / sponsored（内容商业性质） |
+| disclosure | TEXT | | 联盟披露声明（required for affiliate/sponsored） |
 | published_at | TEXT | | ISO 8601 |
 | created_at | TEXT | NOT NULL | ISO 8601 |
 | updated_at | TEXT | NOT NULL | ISO 8601 |
@@ -1574,7 +1575,7 @@ utm_campaign, referer, ip_country, clicked_at
 
 **邮件触发流程**（周更推送为例）：
 ```
-[Cron: 每周五 10:00 UTC]
+[Cron: 每周四 09:00 UTC（0 9 * * 4）]
      │
      ▼
 [查询该周有新商品的类目]
@@ -1698,7 +1699,7 @@ score_behavior(product_id) =
 | F-016-01 推荐理由生成 | 规则模板 + AI 扩展 | 🗓 | ✅ | 🏗 | P2 |
 | F-016-02 商品对比说明 | 此商品 vs 同类热门对比 | 🗓 | ✅ | 🏗 | P2 |
 | F-016-03 场景化描述 | "适合 small-space setup"类 | 🗓 | ✅ | 🏗 | P2 |
-| F-016-04 解释缓存 | KV 缓存，TTL 分层 | 🗓 | ✅ | 🏗 | P2 |
+| F-016-04 解释缓存 | D1 explanation_cache 表，TTL 分层 | 🗓 | ✅ | 🏗 | P2 |
 
 #### F-016-01 推荐理由模板（按优先级匹配）
 

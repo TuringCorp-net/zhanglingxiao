@@ -285,6 +285,82 @@ export async function getCurrentUser(env: Env, request: Request): Promise<Respon
   });
 }
 
+// POST /api/auth/refresh - Session续期
+export async function refreshSession(env: Env, request: Request): Promise<Response> {
+  // 支持通过Authorization Bearer token或X-User-Email header认证
+  const authHeader = request.headers.get('Authorization');
+  const emailHeader = request.headers.get('X-User-Email');
+
+  if (!authHeader && !emailHeader) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'No token or email provided')), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  let userId: string | null = null;
+
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.substring(7);
+    const decoded = await verifySessionToken(env, token);
+    if (!decoded) {
+      return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Invalid or expired token')), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    userId = decoded.userId;
+  } else if (emailHeader) {
+    // 通过X-User-Email查找用户
+    const user = await env.DB.prepare('SELECT id FROM ems_users WHERE email = ?').bind(emailHeader.toLowerCase()).first<{ id: string }>();
+    if (!user) {
+      return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'User not found')), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    userId = user.id;
+  }
+
+  // 查询当前session
+  const now = new Date();
+  const nowISO = now.toISOString();
+  const session = await env.DB.prepare(
+    'SELECT * FROM user_sessions WHERE user_id = ? AND expires_at > ? ORDER BY created_at DESC LIMIT 1'
+  ).bind(userId, nowISO).first<{ id: string; expires_at: string }>();
+
+  if (!session) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'No valid session found')), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 检查是否在过期前1小时内允许续期
+  const expiresAt = new Date(session.expires_at);
+  const oneHourFromNow = new Date(now.getTime() + 3600 * 1000);
+  const isExpiringSoon = expiresAt < oneHourFromNow;
+
+  if (!isExpiringSoon) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'Session does not need refresh yet')), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 延长24小时
+  const newExpiresAt = new Date(now.getTime() + 86400 * 1000).toISOString();
+  await env.DB.prepare('UPDATE user_sessions SET expires_at = ? WHERE id = ?').bind(newExpiresAt, session.id).run();
+
+  await createAuditLog(env, null, userId, 'refresh', 'session', session.id, request);
+
+  return new Response(JSON.stringify(jsonSuccess({
+    expires_at: newExpiresAt
+  })), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 // POST /api/auth/change-password - Change password
 export async function changePassword(env: Env, request: Request): Promise<Response> {
   const authHeader = request.headers.get('Authorization');

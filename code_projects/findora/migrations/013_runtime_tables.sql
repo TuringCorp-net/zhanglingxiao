@@ -1,0 +1,113 @@
+-- Findora Runtime Tables Migration 013
+-- Migration: 013_runtime_tables.sql
+-- Description: Formalize runtime-created tables as proper migrations
+-- Created: 2026-04-13
+
+-- This migration formalizes tables that were previously created at runtime
+-- via CREATE TABLE IF NOT EXISTS. Having them in a migration ensures
+-- consistent schema across environments and makes deployment auditable.
+
+-- Conversions table - F-012-05
+-- Records conversion callbacks from affiliate networks
+CREATE TABLE IF NOT EXISTS conversions (
+  id TEXT PRIMARY KEY,
+  click_id TEXT,
+  product_id TEXT,
+  user_id TEXT,
+  anonymous_id TEXT,
+  event_type TEXT NOT NULL,
+  event_data TEXT,
+  revenue REAL,
+  currency TEXT DEFAULT 'USD',
+  partner TEXT,
+  partner_event_id TEXT,
+  reported_at TEXT,
+  received_at TEXT NOT NULL,
+  status TEXT DEFAULT 'pending',
+  FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_conversions_click_id ON conversions(click_id);
+CREATE INDEX IF NOT EXISTS idx_conversions_product_id ON conversions(product_id);
+CREATE INDEX IF NOT EXISTS idx_conversions_status ON conversions(status);
+CREATE INDEX IF NOT EXISTS idx_conversions_received_at ON conversions(received_at);
+
+-- Explanation cache table - F-016-04
+-- Caches AI-generated recommendation explanations
+CREATE TABLE IF NOT EXISTS explanation_cache (
+  cache_key TEXT PRIMARY KEY,
+  product_id TEXT NOT NULL,
+  user_id TEXT,
+  explanation_type TEXT NOT NULL,
+  reason TEXT NOT NULL,
+  ai_extended TEXT,
+  generated_at TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  hit_count INTEGER DEFAULT 0
+);
+
+CREATE INDEX IF NOT EXISTS idx_cache_product ON explanation_cache(product_id);
+CREATE INDEX IF NOT EXISTS idx_cache_expires ON explanation_cache(expires_at);
+
+-- Email logs table - F-013-07
+-- Tracks email delivery and engagement events
+CREATE TABLE IF NOT EXISTS email_logs (
+  id TEXT PRIMARY KEY,
+  user_id TEXT,
+  email TEXT NOT NULL,
+  event_type TEXT NOT NULL,
+  subject TEXT,
+  status TEXT DEFAULT 'pending',
+  provider_response TEXT,
+  sent_at TEXT,
+  opened_at TEXT,
+  clicked_at TEXT,
+  bounced_at TEXT,
+  created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_email_logs_user_id ON email_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_email_logs_email ON email_logs(email);
+CREATE INDEX IF NOT EXISTS idx_email_logs_status ON email_logs(status);
+CREATE INDEX IF NOT EXISTS idx_email_logs_created_at ON email_logs(created_at);
+
+-- Price history table - F-010-05
+-- Tracks historical price data for products
+CREATE TABLE IF NOT EXISTS price_history (
+  id TEXT PRIMARY KEY,
+  product_id TEXT NOT NULL,
+  price_min REAL,
+  price_max REAL,
+  currency TEXT DEFAULT 'USD',
+  recorded_at TEXT NOT NULL,
+  source TEXT,
+  FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_price_history_product_id ON price_history(product_id);
+CREATE INDEX IF NOT EXISTS idx_price_history_recorded_at ON price_history(recorded_at);
+
+-- AI review records table - F-021
+-- Tracks AI-generated content review workflow
+CREATE TABLE IF NOT EXISTS ai_review_records (
+  id TEXT PRIMARY KEY,
+  content_type TEXT NOT NULL,
+  content_id TEXT NOT NULL,
+  draft_content TEXT,
+  status TEXT DEFAULT 'draft',
+  current_step TEXT,
+  category TEXT,
+  is_high_risk INTEGER DEFAULT 0,
+  created_by TEXT NOT NULL,
+  reviewed_by TEXT,
+  review_notes TEXT,
+  rejection_reason TEXT,
+  approved_at TEXT,
+  published_at TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_ai_review_content ON ai_review_records(content_type, content_id);
+CREATE INDEX IF NOT EXISTS idx_ai_review_status ON ai_review_records(status);
+CREATE INDEX IF NOT EXISTS idx_ai_review_created_at ON ai_review_records(created_at);

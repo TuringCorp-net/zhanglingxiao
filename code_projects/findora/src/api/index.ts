@@ -42,7 +42,7 @@ import {
   addTopicProducts, publishContent, getPublishSchedule,
   getProductionStats
 } from './admin/content';
-import { register, login, logout, getCurrentUser, changePassword } from './auth';
+import { register, login, logout, getCurrentUser, changePassword, refreshSession } from './auth';
 import {
   createEnterprise, listEnterprises, getEnterprise, updateEnterprise, deleteEnterprise,
   listEnterpriseMembers, addEnterpriseMember, updateEnterpriseMember, removeEnterpriseMember, getEnterpriseMember
@@ -702,6 +702,11 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
     // POST /api/auth/change-password
     if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'change-password') {
       return changePassword(env, request);
+    }
+
+    // POST /api/auth/refresh
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'refresh') {
+      return refreshSession(env, request);
     }
 
     // === EMS Enterprise Routes ===
