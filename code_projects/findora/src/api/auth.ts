@@ -3,19 +3,58 @@ import { Env, EMSUser, UserSession, AuditLog } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
 
-// Simple JWT implementation using Web Crypto
-async function generateSecret(): Promise<CryptoKey> {
+// 使用环境变量的JWT密钥（ST-S02修复）
+function getJwtSecret(env: Env): string {
+  return env.JWT_SECRET || 'findora-fallback-secret-key-2024';
+}
+
+async function generateSecret(env: Env): Promise<CryptoKey> {
   return crypto.subtle.importKey(
     'raw',
-    new TextEncoder().encode('findora-enterprise-secret-key-2024'),
+    new TextEncoder().encode(getJwtSecret(env)),
     { name: 'HMAC', hash: 'SHA-256' },
     false,
     ['sign', 'verify']
   );
 }
 
-async function createToken(userId: string, expiresIn: number = 86400): Promise<string> {
-  const secret = await generateSecret();
+// ST-S01修复：使用PBKDF2进行安全的密码哈希
+async function hashPassword(password: string, env: Env): Promise<string> {
+  const salt = getJwtSecret(env);
+  const encoder = new TextEncoder();
+
+  // 使用PBKDF2派生密钥
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(password),
+    'PBKDF2',
+    false,
+    ['deriveBits']
+  );
+
+  const bits = await crypto.subtle.deriveBits(
+    {
+      name: 'PBKDF2',
+      salt: encoder.encode(salt),
+      iterations: 100000,
+      hash: 'SHA-256',
+    },
+    keyMaterial,
+    256
+  );
+
+  const hash = btoa(String.fromCharCode(...new Uint8Array(bits)));
+  return `pbkdf2_${hash}`;
+}
+
+// 验证密码哈希
+async function verifyPassword(password: string, hash: string, env: Env): Promise<boolean> {
+  const newHash = await hashPassword(password, env);
+  return newHash === hash;
+}
+
+async function createToken(env: Env, userId: string, expiresIn: number = 86400): Promise<string> {
+  const secret = await generateSecret(env);
   const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
   const payload = btoa(JSON.stringify({
     sub: userId,
@@ -27,12 +66,12 @@ async function createToken(userId: string, expiresIn: number = 86400): Promise<s
   return `${header}.${payload}.${sig}`;
 }
 
-async function verifyToken(token: string): Promise<{ userId: string; expiresAt: number } | null> {
+async function verifyToken(env: Env, token: string): Promise<{ userId: string; expiresAt: number } | null> {
   try {
     const [header, payload, signature] = token.split('.');
     if (!header || !payload || !signature) return null;
 
-    const secret = await generateSecret();
+    const secret = await generateSecret(env);
     const verified = await crypto.subtle.verify(
       'HMAC',
       secret,
@@ -52,7 +91,7 @@ async function verifyToken(token: string): Promise<{ userId: string; expiresAt: 
 }
 
 async function verifySessionToken(env: Env, token: string): Promise<{ userId: string } | null> {
-  const decoded = await verifyToken(token);
+  const decoded = await verifyToken(env, token);
   if (!decoded) return null;
   const now = new Date().toISOString();
   const session = await env.DB.prepare(
@@ -60,17 +99,6 @@ async function verifySessionToken(env: Env, token: string): Promise<{ userId: st
   ).bind(token, now).first<{ user_id: string }>();
   if (!session || session.user_id !== decoded.userId) return null;
   return { userId: decoded.userId };
-}
-
-function hashPassword(password: string): string {
-  // Simple hash for demo - in production use bcrypt or argon2
-  let hash = 0;
-  for (let i = 0; i < password.length; i++) {
-    const char = password.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return `hash_${Math.abs(hash).toString(16)}_${password.length}`;
 }
 
 async function createAuditLog(
@@ -141,7 +169,7 @@ export async function register(env: Env, request: Request): Promise<Response> {
 
   const id = crypto.randomUUID();
   const now = new Date().toISOString();
-  const passwordHash = hashPassword(body.password);
+  const passwordHash = await hashPassword(body.password, env);
 
   await env.DB.prepare(`
     INSERT INTO ems_users (id, email, password_hash, name, phone, status, email_verified_at, created_at, updated_at)
@@ -179,8 +207,9 @@ export async function login(env: Env, request: Request): Promise<Response> {
     });
   }
 
-  const passwordHash = hashPassword(body.password);
-  if (user.password_hash !== passwordHash) {
+  // ST-S01修复：使用PBKDF2验证密码
+  const isValidPassword = await verifyPassword(body.password, user.password_hash as string, env);
+  if (!isValidPassword) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Invalid credentials')), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
@@ -200,7 +229,7 @@ export async function login(env: Env, request: Request): Promise<Response> {
 
   // Create session
   const sessionId = crypto.randomUUID();
-  const token = await createToken(user.id as string);
+  const token = await createToken(env, user.id as string);
   const expiresAt = new Date(Date.now() + 86400 * 1000).toISOString();
 
   await env.DB.prepare(`
@@ -406,15 +435,17 @@ export async function changePassword(env: Env, request: Request): Promise<Respon
     });
   }
 
-  const currentHash = hashPassword(body.current_password);
-  if (user.password_hash !== currentHash) {
+  // ST-S01修复：使用PBKDF2验证当前密码
+  const isValidPassword = await verifyPassword(body.current_password, user.password_hash as string, env);
+  if (!isValidPassword) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Current password is incorrect')), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const newHash = hashPassword(body.new_password);
+  // ST-S01修复：使用PBKDF2哈希新密码
+  const newHash = await hashPassword(body.new_password, env);
   const now = new Date().toISOString();
   await env.DB.prepare('UPDATE ems_users SET password_hash = ?, updated_at = ? WHERE id = ?').bind(newHash, now, decoded.userId).run();
 

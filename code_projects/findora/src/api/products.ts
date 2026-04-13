@@ -111,9 +111,10 @@ export async function listProducts(env: Env, request: Request): Promise<Response
     bindings.push(parseFloat(priceMax));
   }
 
+  // ST-S03修复：使用json_each安全匹配标签，避免LIKE注入风险
   if (tag) {
-    whereClause += ' AND p.tags LIKE ?';
-    bindings.push(`%"${tag}"%`);
+    whereClause += ' AND EXISTS (SELECT 1 FROM json_each(p.tags) AS jt WHERE jt.value = ?)';
+    bindings.push(tag);
   }
 
   // Count query (without join/group for count)

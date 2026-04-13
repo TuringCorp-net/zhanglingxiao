@@ -436,6 +436,8 @@ export interface Env {
   PRODUCTS_BUCKET: R2Bucket;
   // Admin authentication (C-02: Admin key for admin endpoints)
   ADMIN_KEY?: string;
+  // JWT secret for token signing (ST-S02修复)
+  JWT_SECRET?: string;
   // Email provider settings (F-013-07)
   EMAIL_PROVIDER?: 'resend' | 'sendgrid';
   EMAIL_API_KEY?: string;

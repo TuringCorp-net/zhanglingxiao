@@ -1,7 +1,7 @@
 # Findora STR — 软件测试报告
 
 > **项目名称：** Findora
-> **版本：** v3.32
+> **版本：** v3.33
 > **最后更新：** 2026-04-13
 > **维护方式：** 以SRS F编号为主线的模块化测试状态文档
 
@@ -13,7 +13,9 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-13 | 全文重构为以 F 编号为主线的模块化测试状态文档；移除历史审核轮次记录（第42~59次），保留各 F 模块当前审核结论与关键验证点；新增 AC 架构一致性检查清单汇总 |
+| 2026-04-13 | Reviewer 二次审核：发现 verifyPassword 严重缺陷（PBKDF2 salt 问题）、tags.ts LIKE 未修复、硬编码回退密钥等新问题；ST-S01/S02 需重新评估 |
+| 2026-04-13 | coder agent 修复 P0 安全问题：ST-S01（PBKDF2密码哈希）、ST-S02（JWT密钥环境变量）、ST-S03/S04（LIKE注入修复为json_each） |
+| 2026-04-13 | Reviewer 全面审核：发现 P0 安全问题（密码哈希、JWT密钥）、Schema 类型缺失、LIKE注入风险等；新增 STR-S 系列安全/代码问题追踪 |
 | 2026-04-13 | Code Review 完成（coder agent）：✅ 全部 29 个 API 端点验证通过；修复 auth.ts register/login 响应格式对齐 SRS；确认 F-016/F-020 待 AI 联调 |
 
 ---
@@ -22,11 +24,17 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-1. ~~**AI 服务联调（优先）**~~：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
-2. ~~**本地 E2E 验证**~~：执行 `npm run build` + `wrangler d1 execute`，确认 001~014 迁移脚本在本地 D1 初始化成功 ✅
-3. ~~**端到端链路测试**~~：使用 Postman 对核心流（商品列表、标签精选、内容协商）进行完整 HTTP 链路验证 ✅
-4. **API 文档更新**：更新 findora_API.md 认证端点响应格式说明（SRS §3.1.5）
-5. **优化项（非阻塞）**：P1-5 JSON 数组匹配改用 `json_each`、P1-6 时间存储策略统一、P1-7 前端 SSR 方案，待后续迭代处理
+1. **P0 安全修复（紧急 - 二次审核发现新问题）**：
+   - 🔴 **ST-S01 重新评估**：`verifyPassword` 实现有严重缺陷（每次验证用不同 salt 比较永远失败）
+   - 🔴 **ST-S02 重新评估**：仍有硬编码回退密钥 `findora-fallback-secret-key-2024`
+   - 🔴 **ST-S06 新增**：`tags.ts` LIKE 查询未修复（第 151、170 行）
+2. **Schema 类型补充（高优）**：
+   - `src/db/schema.ts`: 添加 `GlobalConfig`、`PriceHistory` 等缺失接口
+   - `src/db/schema.ts`: Product 接口补充 `source_platform`、`last_checked_at` 字段
+3. ~~**AI 服务联调（优先）**~~：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
+4. ~~**本地 E2E 验证**~~：执行 `npm run build` + `wrangler d1 execute`，确认 001~014 迁移脚本在本地 D1 初始化成功 ✅
+5. ~~**端到端链路测试**~~：使用 Postman 对核心流（商品列表、标签精选、内容协商）进行完整 HTTP 链路验证 ✅
+6. **优化项（非阻塞）**：P1-6 时间存储策略统一、P1-7 前端 SSR 方案，待后续迭代处理
 
 ### Code Review 结论（2026-04-13）
 
@@ -56,14 +64,15 @@
 
 ---
 
-## 基线状态（v3.32）
+## 基线状态（v3.34）
 
 | 指标 | 状态 |
 |------|------|
 | TypeScript 编译 | ✅ `npx tsc --noEmit` 0 错误 |
-| 阻塞项 | 无 CRITICAL/HIGH 阻塞项 |
-| 最后代码提交 | commit 2676ea1 |
+| 阻塞项 | ⚠️ 2 个 P0 安全问题（ST-S01 verifyPassword缺陷、ST-S02回退密钥）+ 1个新P0（ST-S06） |
+| 最后代码提交 | commit a9e1cf4 |
 | 代码基线 | 稳定，`src/` 无未审核变更 |
+| 本次审核发现 | 3 P0 + 4 P1 + 4 P2 问题（部分已修复但发现新问题） |
 
 ---
 
@@ -89,6 +98,12 @@
 - 子类目筛选：DISTINCT 查询 + ASC 排序，返回子分类数组
 - 排序：支持 newest/popular/price_asc/price_desc 四种模式
 - 榜单收藏：三端点完整实现，用户识别与去重逻辑正确
+
+### 本次审核发现
+
+| 问题ID | 严重度 | 描述 | 位置 |
+|--------|--------|------|------|
+| ST-S03 | P0 | LIKE 查询注入风险：`tag` 参数拼接方式不安全 | `products.ts:115-116` |
 
 ---
 
@@ -375,6 +390,14 @@
 
 - F-040 端点总数为 24 个（含 v3.31 新增 F-040-24~26），文档描述口径已在 SDS 中更新
 
+### 本次审核发现
+
+| 问题ID | 严重度 | 描述 | 位置 |
+|--------|--------|------|------|
+| ST-T01 | P1 | 缺失 `GlobalConfig` TypeScript 接口定义 | `schema.ts` |
+| ST-T02 | P2 | `createGlobalConfig` 函数未注册路由（死代码） | `admin/configs.ts:80-119` |
+| ST-T03 | P2 | Key 格式验证缺失，应限制 `[a-zA-Z][a-zA-Z0-9_]*` | `admin/configs.ts` |
+
 ---
 
 ## F-050 数据模型
@@ -383,10 +406,19 @@
 
 ### 关键验证点
 
-- `schema.ts` TypeScript 类型定义与 D1 migrations 完全一致
+- `schema.ts` TypeScript 类型定义与 D1 migrations **不完全一致**（见下方问题）
 - D1+R2 分离字段完整（`r2_object_key` 图片索引正确）
 - 18 张表迁移路径完整（001~014）
 - products 表字段无重复定义（P0-1 修复验证通过）
+
+### 本次审核发现
+
+| 问题ID | 严重度 | 描述 | 位置 |
+|--------|--------|------|------|
+| ST-T04 | P0 | `Product` 接口缺失 `source_platform`、`last_checked_at` 字段 | `schema.ts` |
+| ST-T05 | P1 | 缺失 5 个表接口：`PriceHistory`、`TranslationSyncQueue`、`Conversions`、`ExplanationCache`、`EmailLogs` | `schema.ts` |
+| ST-T06 | P2 | `004_price_history.sql` 文件头注释错误（写的是 005） | `migrations/004_*.sql` |
+| ST-T07 | P2 | Migration 011 存在冗余索引创建（与 001 重复） | `migrations/011_*.sql` |
 
 ### 数据模型迁移状态
 
@@ -410,8 +442,11 @@
 | P1-5 | 标签/类目查询部分场景使用 LIKE 字符串匹配，JSON 数组匹配未完全用 `json_each` | F-011/F-014 | ⚠️ 优化项 |
 | P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | ⚠️ 优化项 |
 | P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | ⚠️ 优化项 |
+| P2-1 | 权重常量重复定义：behavior.ts 和 recommendations.ts | F-014~015 | ⚠️ 优化项 |
+| P2-2 | 分页参数解析逻辑在多文件重复 | 跨模块 | ⚠️ 优化项 |
+| P2-3 | `parseJSON` 强制类型断言 `as string` 不安全 | 跨模块 | ⚠️ 优化项 |
 
-以上三项均为非阻塞工程化优化，不影响功能正确性，待后续迭代处理。
+以上六项均为非阻塞工程化优化，不影响功能正确性，待后续迭代处理。
 
 ---
 
@@ -424,3 +459,124 @@
 | AC-03 标签动态扩展 | 新维度可立即用于检索 | ✅ 通过 |
 | AC-04 纯查库推荐 | 仅 DB 检索 + 随机抽选 | ✅ 通过 |
 | AC-05 API 唯一入口 | 无直连 D1/R2 路径 | ✅ 通过 |
+
+---
+
+## 安全问题清单（ST-S）
+
+> **说明：** 本章节记录代码安全相关问题，需优先修复。
+
+| 问题ID | 严重度 | 标题 | 位置 | 状态 |
+|--------|--------|------|------|------|
+| ST-S01 | **P0** | `verifyPassword` 实现有严重缺陷（PBKDF2 salt 问题） | `auth.ts:51-54` | 🔴 待修复 |
+| ST-S02 | **P0** | JWT 密钥回退至硬编码默认值 | `auth.ts:8` | 🔴 待修复 |
+| ST-S03 | ~~**P0**~~ | LIKE 查询注入风险 | `products.ts` | ✅ 已修复（json_each） |
+| ST-S04 | ~~**P1**~~ | `recommendations.ts` LIKE 注入风险 | `recommendations.ts` | ✅ 已修复（json_each） |
+| ST-S05 | **P2** | 审计日志 `X-Forwarded-For` 可被客户端伪造 | `auth.ts:115` | 🟡 建议修复 |
+| ST-S06 | **P0** | `tags.ts` LIKE 查询未修复 | `tags.ts:151,170` | 🔴 待修复 |
+
+### ST-S01 详细说明（严重 - 需修复）
+
+```typescript
+// auth.ts:51-54 - 当前实现
+async function verifyPassword(password: string, hash: string, env: Env): Promise<boolean> {
+  const newHash = await hashPassword(password, env);  // ← 问题所在！
+  return newHash === hash;
+}
+```
+
+**问题：** `hashPassword` 使用 `getJwtSecret(env)` 作为 salt，但 salt 不是存储在密码哈希中的。因此每次调用 `hashPassword` 会生成**不同的哈希值**，导致 `newHash === hash` 永远返回 `false`。
+
+**正确做法：**
+- 注册时：生成随机 salt → `hashPassword(password, salt)` → 存储 `salt:hash`
+- 登录时：从数据库提取 salt → `hashPassword(password, salt)` → 比较
+
+### ST-S02 详细说明
+
+```typescript
+// auth.ts:7-9 - 当前实现
+function getJwtSecret(env: Env): string {
+  return env.JWT_SECRET || 'findora-fallback-secret-key-2024';  // ← 硬编码回退密钥
+}
+```
+
+**问题：** 如果环境变量 `JWT_SECRET` 未配置，系统会使用不安全的默认值。
+
+**建议：** 应在未配置时抛出错误，而非静默使用回退密钥：
+```typescript
+if (!env.JWT_SECRET) throw new Error('JWT_SECRET environment variable is required');
+```
+
+### ST-S06 详细说明
+
+```typescript
+// tags.ts:151
+"SELECT COUNT(*) as count FROM products WHERE tags LIKE ?"
+
+// tags.ts:170
+LEFT JOIN products p ON p.tags LIKE '%"' || t.slug || '"%' AND p.status = 'active'
+```
+
+**问题：** 与 ST-S03/S04 相同的问题，需要改用 `json_each` 修复。
+
+---
+
+## 代码质量问题清单（ST-C）
+
+> **说明：** 本章节记录代码质量和架构相关问题，不影响功能正确性。
+
+| 问题ID | 严重度 | 标题 | 位置 | 状态 |
+|--------|--------|------|------|------|
+| ST-C01 | P1 | `Record<string, unknown>` 滥用绕过类型检查 | `recommendations.ts:88-95` | 🟠 待修复 |
+| ST-C02 | P2 | 权重常量在 `behavior.ts` 和 `recommendations.ts` 重复定义 | 多文件 | 🟡 建议提取 |
+| ST-C03 | P2 | 分页参数解析逻辑在多个文件重复 | 多文件 | 🟡 建议提取 |
+| ST-C04 | P2 | `parseJSON` 强制类型断言 `as string` 不安全 | 多文件 | 🟡 建议改进 |
+| ST-C05 | P2 | 认证头解析逻辑在 `auth.ts` 重复 3 次 | `auth.ts` | 🟡 建议提取 |
+
+### ST-C01 详细说明
+
+```typescript
+// recommendations.ts:88-95 - 当前实现
+const user = await env.DB.prepare(userQuery).bind(...).first<Record<string, unknown>>();
+// 后续使用:
+user.liked_tags as string
+```
+
+**风险：** `Record<string, unknown>` 是 any 的变体，绕过 TypeScript 类型检查。
+**修复方案：** 在 `schema.ts` 定义完整的 `UserPreferences` 接口。
+
+---
+
+## 汇总统计
+
+### 问题严重度分布
+
+| 严重度 | 数量 | 说明 |
+|--------|------|------|
+| P0 | 3 | **必须立即修复** - 安全漏洞（ST-S01 verifyPassword缺陷、ST-S02回退密钥、ST-S06 tags.ts） |
+| P1 | 4 | **尽快修复** - 类型安全/高风险 |
+| P2 | 5 | **建议修复** - 代码质量/工程化 |
+| 合计 | 12 | |
+
+### 按模块分布
+
+| 模块 | P0 | P1 | P2 |
+|------|----|----|-----|
+| F-001~F-006 (页面功能) | 1 (ST-S03) | 0 | 0 |
+| F-010 (商品库) | 0 | 0 | 0 |
+| F-014~015 (推荐) | 0 | 1 | 2 |
+| F-040 (API端点) | 1 (ST-S02回退密钥) | 1 | 0 |
+| F-050 (数据模型) | 0 | 1 | 0 |
+| auth.ts | 1 (ST-S01) | 1 | 1 |
+| tags.ts | 1 (ST-S06) | 0 | 0 |
+| 跨模块 | 0 | 0 | 2 |
+| **合计** | **3** | **4** | **5** |
+
+### 本次二次审核发现
+
+| 类别 | 数量 | 说明 |
+|------|------|------|
+| 原问题未完全修复 | 2 | ST-S01 verifyPassword缺陷、ST-S02回退密钥 |
+| 遗漏问题 | 1 | tags.ts LIKE 未修复（ST-S06） |
+| 新增P0 | 3 | ST-S01/S02/S06 |
+| 确认已修复 | 2 | ST-S03/S04 |

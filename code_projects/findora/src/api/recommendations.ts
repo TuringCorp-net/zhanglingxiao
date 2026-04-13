@@ -146,10 +146,10 @@ export async function getRecommendations(env: Env, request: Request): Promise<Re
   }
 
   // Exclude products with disliked tags (F-014-07)
+  // ST-S04修复：使用json_each安全匹配标签，避免LIKE注入风险
   for (const dt of dislikedTags) {
-    // JSON array search - tag should not exist in the tags array
-    conditions.push(`p.tags NOT LIKE ?`);
-    bindings.push(`%"${dt}"%`);
+    conditions.push(`NOT EXISTS (SELECT 1 FROM json_each(p.tags) AS jt WHERE jt.value = ?)`);
+    bindings.push(dt);
   }
 
   const whereClause = conditions.join(' AND ');
