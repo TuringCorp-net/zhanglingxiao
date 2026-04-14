@@ -3,9 +3,12 @@ import { Env, EMSUser, UserSession, AuditLog } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
 
-// 使用环境变量的JWT密钥（ST-S02修复）
+// ST-S02修复：JWT密钥必须从环境变量获取，不使用回退密钥
 function getJwtSecret(env: Env): string {
-  return env.JWT_SECRET || 'findora-fallback-secret-key-2024';
+  if (!env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable is required');
+  }
+  return env.JWT_SECRET;
 }
 
 async function generateSecret(env: Env): Promise<CryptoKey> {
@@ -18,9 +21,16 @@ async function generateSecret(env: Env): Promise<CryptoKey> {
   );
 }
 
-// ST-S01修复：使用PBKDF2进行安全的密码哈希
-async function hashPassword(password: string, env: Env): Promise<string> {
-  const salt = getJwtSecret(env);
+// ST-S01修复：正确实现PBKDF2密码哈希（salt存储在哈希值中）
+const ITERATIONS = 100000;
+
+function generateRandomSalt(): string {
+  const array = new Uint8Array(16);
+  crypto.getRandomValues(array);
+  return btoa(String.fromCharCode(...array));
+}
+
+async function hashPassword(password: string, salt: string): Promise<string> {
   const encoder = new TextEncoder();
 
   // 使用PBKDF2派生密钥
@@ -36,7 +46,7 @@ async function hashPassword(password: string, env: Env): Promise<string> {
     {
       name: 'PBKDF2',
       salt: encoder.encode(salt),
-      iterations: 100000,
+      iterations: ITERATIONS,
       hash: 'SHA-256',
     },
     keyMaterial,
@@ -44,13 +54,21 @@ async function hashPassword(password: string, env: Env): Promise<string> {
   );
 
   const hash = btoa(String.fromCharCode(...new Uint8Array(bits)));
-  return `pbkdf2_${hash}`;
+  // 存储格式: salt$hash
+  return `${salt}$${hash}`;
 }
 
-// 验证密码哈希
-async function verifyPassword(password: string, hash: string, env: Env): Promise<boolean> {
-  const newHash = await hashPassword(password, env);
-  return newHash === hash;
+// 验证密码哈希：从存储的哈希中提取salt，重新计算并比较
+async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
+  // 分离salt和hash（格式: salt$hash）
+  const parts = storedHash.split('$');
+  if (parts.length !== 2) {
+    // 兼容旧格式：如果不是新格式，直接返回false
+    return false;
+  }
+  const [salt, originalHash] = parts;
+  const newHash = await hashPassword(password, salt);
+  return newHash === storedHash;
 }
 
 async function createToken(env: Env, userId: string, expiresIn: number = 86400): Promise<string> {
@@ -169,7 +187,9 @@ export async function register(env: Env, request: Request): Promise<Response> {
 
   const id = crypto.randomUUID();
   const now = new Date().toISOString();
-  const passwordHash = await hashPassword(body.password, env);
+  // ST-S01修复：生成随机salt并使用PBKDF2哈希密码
+  const salt = generateRandomSalt();
+  const passwordHash = await hashPassword(body.password, salt);
 
   await env.DB.prepare(`
     INSERT INTO ems_users (id, email, password_hash, name, phone, status, email_verified_at, created_at, updated_at)
@@ -207,8 +227,8 @@ export async function login(env: Env, request: Request): Promise<Response> {
     });
   }
 
-  // ST-S01修复：使用PBKDF2验证密码
-  const isValidPassword = await verifyPassword(body.password, user.password_hash as string, env);
+  // ST-S01修复：使用PBKDF2验证密码（从存储的哈希中提取salt）
+  const isValidPassword = await verifyPassword(body.password, user.password_hash as string);
   if (!isValidPassword) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Invalid credentials')), {
       status: 401,
@@ -435,8 +455,8 @@ export async function changePassword(env: Env, request: Request): Promise<Respon
     });
   }
 
-  // ST-S01修复：使用PBKDF2验证当前密码
-  const isValidPassword = await verifyPassword(body.current_password, user.password_hash as string, env);
+  // ST-S01修复：使用PBKDF2验证当前密码（从存储的哈希中提取salt）
+  const isValidPassword = await verifyPassword(body.current_password, user.password_hash as string);
   if (!isValidPassword) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Current password is incorrect')), {
       status: 401,
@@ -444,8 +464,9 @@ export async function changePassword(env: Env, request: Request): Promise<Respon
     });
   }
 
-  // ST-S01修复：使用PBKDF2哈希新密码
-  const newHash = await hashPassword(body.new_password, env);
+  // ST-S01修复：使用PBKDF2哈希新密码（生成新的随机salt）
+  const newSalt = generateRandomSalt();
+  const newHash = await hashPassword(body.new_password, newSalt);
   const now = new Date().toISOString();
   await env.DB.prepare('UPDATE ems_users SET password_hash = ?, updated_at = ? WHERE id = ?').bind(newHash, now, decoded.userId).run();
 
