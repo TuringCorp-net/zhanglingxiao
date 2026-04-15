@@ -13,6 +13,7 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-15 | ST-T02/ST-T03 修复：注册 `POST /api/admin/configs` 路由（F-040-24a）；添加 key 格式验证 `[a-zA-Z][a-zA-Z0-9_]*`；删除 migration 011 冗余索引 |
 | 2026-04-13 | 全文重构为以 F 编号为主线的模块化结构；各模块补充端点映射表、实现文件说明与数据模型说明；新增关键实现约束汇总与当前基线状态 |
 
 ---
@@ -459,7 +460,7 @@ best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving
 | POST `/api/clicks` | 记录点击 |
 | GET `/api/recommendations` | 推荐feed |
 
-#### 管理端点（10个）
+#### 管理端点（11个）
 | 端点 | 说明 |
 |------|------|
 | POST `/api/admin/products` | 创建商品 |
@@ -470,7 +471,8 @@ best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving
 | POST `/api/admin/products/import` | 导入 |
 | POST `/api/admin/tags` | 创建标签 |
 | POST `/api/admin/lists` | 创建榜单 |
-| GET `/api/admin/configs` | 全局配置（F-040-24） |
+| GET `/api/admin/configs` | 全局配置列表（F-040-24） |
+| POST `/api/admin/configs` | 创建配置（F-040-24a） |
 | PUT `/api/admin/configs/:key` | 更新配置（F-040-25） |
 
 #### 外部系统接口（4个）

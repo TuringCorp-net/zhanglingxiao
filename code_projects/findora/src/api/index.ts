@@ -296,6 +296,11 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
         return listGlobalConfigs(env);
       }
 
+      // POST /api/admin/configs - F-040-24a (create new config)
+      if (request.method === 'POST' && segments[1] === 'configs') {
+        return createGlobalConfig(env, request);
+      }
+
       // PUT /api/admin/configs/:key - F-040-25
       if (request.method === 'PUT' && segments[1] === 'configs' && segments[2]) {
         return updateGlobalConfig(env, segments[2], request);

@@ -44,6 +44,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-15 | 新增 POST /api/admin/configs 端点（F-040-24a），支持创建全局配置；补充 key 格式验证说明（`[a-zA-Z][a-zA-Z0-9_]*`） |
 | 2026-04-13 | 新增 F-040-24~26 全局配置端点（GET /api/admin/configs、PUT /api/admin/configs/:key、GET /api/configs/:key）；补充外部运营 AI 数据更新接口说明（F-040-22） |
 | 2026-04-13 | 补充认证端点详细格式（POST /api/auth/register、POST /api/auth/login）；对齐 SRS §3.1.5 响应格式（user_id/session_token） |
 
@@ -808,6 +809,104 @@ Accept: text/markdown     # 返回Markdown格式内容
     "total_subscribers": 12000,
     "weekly_clicks": 3500,
     "conversion_rate": 0.023
+  }
+}
+```
+
+---
+
+### 全局配置 API
+
+#### GET /api/admin/configs - 获取配置列表 (F-040-24)
+
+获取所有全局配置项。
+
+**认证要求**：`X-Admin-Key` Header
+
+**响应示例**：
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "key": "site_name",
+      "value": "Findora",
+      "description": "网站名称",
+      "updated_at": "2026-04-15T10:00:00Z"
+    }
+  ]
+}
+```
+
+#### POST /api/admin/configs - 创建配置 (F-040-24a)
+
+创建新的全局配置项。
+
+**认证要求**：`X-Admin-Key` Header
+
+**请求体**：
+```json
+{
+  "key": "site_name",
+  "value": "Findora",
+  "description": "网站名称",
+  "created_by": "admin"
+}
+```
+
+**Key 格式要求**：`[a-zA-Z][a-zA-Z0-9_]*`
+- 必须以字母开头
+- 只能包含字母、数字和下划线
+- 示例：`site_name`、`max_upload_size`、`enable_feature_x`
+
+**响应示例**：
+```json
+{
+  "success": true,
+  "data": {
+    "id": "cfg_xxx",
+    "key": "site_name",
+    "value": "Findora"
+  }
+}
+```
+
+**错误响应**：
+```json
+{
+  "success": false,
+  "error": {
+    "code": "INVALID_PARAMS",
+    "message": "Key must start with a letter and contain only letters, numbers, and underscores"
+  }
+}
+```
+
+#### PUT /api/admin/configs/:key - 更新配置 (F-040-25)
+
+更新指定配置项的值。
+
+**认证要求**：`X-Admin-Key` Header
+
+**请求体**：
+```json
+{
+  "value": "New Site Name",
+  "updated_by": "admin"
+}
+```
+
+#### GET /api/configs/:key - 公开读取配置 (F-040-26)
+
+公开读取指定配置项（无需认证）。
+
+**响应示例**：
+```json
+{
+  "success": true,
+  "data": {
+    "key": "site_name",
+    "value": "Findora"
   }
 }
 ```

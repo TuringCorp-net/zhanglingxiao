@@ -23,6 +23,4 @@ SET title = CASE
   ELSE title
 END;
 
-CREATE INDEX IF NOT EXISTS idx_products_subcategory ON products(subcategory);
-CREATE INDEX IF NOT EXISTS idx_products_status_category ON products(status, category);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_products_r2_key_unique ON products(r2_object_key);

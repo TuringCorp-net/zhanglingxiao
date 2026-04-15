@@ -88,6 +88,15 @@ export async function createGlobalConfig(env: Env, request: Request): Promise<Re
       });
     }
 
+    // ST-T03: Key 格式验证 - 必须匹配 [a-zA-Z][a-zA-Z0-9_]*
+    const keyPattern = /^[a-zA-Z][a-zA-Z0-9_]*$/;
+    if (!keyPattern.test(body.key)) {
+      return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'Key must start with a letter and contain only letters, numbers, and underscores')), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // Check if already exists
     const existing = await env.DB.prepare(
       'SELECT id FROM global_configs WHERE key = ?'

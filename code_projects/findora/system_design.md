@@ -167,7 +167,7 @@
 | **审核决策 Agent** | 最终质量把关与上架 | 读取 **`/candidate`** 文件夹 | **`/pass`** 文件夹 (成功)<br>**`/notpass`** 文件夹 (失败)<br>**平台数据库** | 逐个决策商品是否具备爆款潜力。<br>• **通过**：归档至 `/pass`，并依据研发团队的 **API 文档** 上架至数据库。<br>• **拒绝**：归档至 `/notpass`，不上架仅做留存。（每个商品一个编号及一个markdown文件） |
 
 **运营流程简述：**
-`电商原始数据` → **选品 Agent** → `/selected` 文件夹 → **包装策划 Agent** → `/candidate_item` 文件夹 → **审核决策 Agent** → (`/pass`归档 + `数据库上架`) 或 (`/notpass` 归档)。
+`电商原始数据` → **选品 Agent** → `/selected` 文件夹 → **包装策划 Agent** → `/candidate` 文件夹 → **审核决策 Agent** → (`/pass`归档 + `数据库上架`) 或 (`/notpass` 归档)。
 
 ---
 
@@ -183,7 +183,7 @@
     │   └── STR_Report.md       (由 Reviewer 产出)
     └── operations/
         ├── selected/           (选品 Agent 产出)
-        ├── candidate_item/     (包装 Agent 产出)
+        ├── candidate/           (包装 Agent 产出)
         ├── pass/               (审核通过，待上架或已上架记录)
         └── notpass/            (审核未通过，仅归档)
     ```
