@@ -50,6 +50,17 @@ export interface User {
   updated_at: string;
 }
 
+// User preferences query result for recommendations
+export interface UserPreferences {
+  id: string;
+  subscribed_categories: string;
+  price_preference: string | null;
+  liked_tags: string;
+  disliked_tags: string;
+  saved_items: string;
+  click_history: string;
+}
+
 export interface Click {
   id: string;
   product_id: string;
@@ -428,6 +439,69 @@ export interface ListProduct {
   product_id: string;
   position: number;
   created_at: string;
+}
+
+// Price History (F-010-05)
+export interface PriceHistory {
+  id: string;
+  product_id: string;
+  price_min: number | null;
+  price_max: number | null;
+  currency: string;
+  checked_at: string;
+  created_at: string;
+}
+
+// Conversion Tracking (F-012)
+export interface Conversion {
+  id: string;
+  click_id: string | null;
+  product_id: string | null;
+  affiliate_network: string | null;
+  external_transaction_id: string | null;
+  commission: number | null;
+  currency: string | null;
+  sale_amount: number | null;
+  status: string;
+  reported_at: string | null;
+  created_at: string;
+}
+
+// Explanation Cache (F-016)
+export interface ExplanationCache {
+  id: string;
+  product_id: string;
+  user_id: string | null;
+  template_type: string;
+  content: string;
+  source: 'template' | 'ai' | 'fallback';
+  expires_at: number; // Unix timestamp in seconds
+  created_at: string;
+}
+
+// Email Log (F-013)
+export interface EmailLog {
+  id: string;
+  user_id: string | null;
+  email: string;
+  subject: string;
+  status: 'pending' | 'sent' | 'failed' | 'bounced';
+  provider: string | null;
+  provider_message_id: string | null;
+  error_message: string | null;
+  sent_at: string | null;
+  created_at: string;
+}
+
+// Global Config (F-040-24)
+export interface GlobalConfig {
+  id: string;
+  key: string;
+  value: string; // JSON string
+  description: string | null;
+  is_public: number;
+  updated_at: string;
+  updated_by: string | null;
 }
 
 export interface Env {

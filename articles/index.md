@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-15
+- **文件**: 20260415-2604.11791-looped-reasoning-llm.md
+- **标题**: 循环推理语言模型：AI的"思考"到底在脑子里转了几圈？
+- **论文来源**: arXiv:2604.11791 | A Mechanistic Analysis of Looped Reasoning Language Models
+- **作者**: Hugh Blayney, Álvaro Arroyo, Johan Obando-Ceron, Pablo Samuel Castro, Aaron Courville, Michael Bronstein, Xiaowen Dong（谷歌研究院 & 蒙特利尔大学）
+- **撰写日期**: 2026-04-15（北京时间）
+- **备注**: 首次深度解剖循环推理模型内部机制；发现每层趋向"固定点"——各层注意力模式迅速稳定；循环推理本质是让AI有更多时间去走完与传统模型相同的推理阶段（理解→推理→生成）；输入注入决定模型稳定性；Huginn-0125无法形成清晰推理阶段因归一化方式不同
+
 ### 2026-04-12
 - **文件**: 20260412-2604.08527-opd-length-inflation.md
 - **标题**: AI模型训练中的"暴毙"之谜：大模型为何越学越"发疯"？

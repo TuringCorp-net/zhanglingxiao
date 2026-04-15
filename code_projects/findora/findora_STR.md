@@ -13,6 +13,7 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-15 | 定时审查任务：确认ST-S01~S06全部修复；发现ST-T02（createGlobalConfig未注册路由）、ST-T03（Key格式验证缺失）；更新ST-C01状态为已修复 |
 | 2026-04-14 | coder agent 三次修复：ST-S01（salt存储在哈希中）、ST-S02（移除回退密钥）、ST-S06（tags.ts json_each） |
 | 2026-04-13 | Reviewer 二次审核：发现 verifyPassword 严重缺陷（PBKDF2 salt 问题）、tags.ts LIKE 未修复、硬编码回退密钥等新问题；ST-S01/S02 需重新评估 |
 | 2026-04-13 | coder agent 修复 P0 安全问题：ST-S01（PBKDF2密码哈希）、ST-S02（JWT密钥环境变量）、ST-S03/S04（LIKE注入修复为json_each） |
@@ -396,7 +397,9 @@
 
 | 问题ID | 严重度 | 描述 | 位置 |
 |--------|--------|------|------|
-| ST-T01 | P1 | 缺失 `GlobalConfig` TypeScript 接口定义 | `schema.ts` |
+| ST-T01 | ~~**P1**~~ | 缺失 `GlobalConfig` TypeScript 接口定义 | `schema.ts` | ✅ 已修复 |
+| ST-T02 | **P2** | `createGlobalConfig` 函数未注册路由（死代码） | `admin/configs.ts:80-119`, `index.ts` | 🟡 需修复 |
+| ST-T03 | **P2** | Key 格式验证缺失，应限制 `[a-zA-Z][a-zA-Z0-9_]*` | `admin/configs.ts` | 🟡 建议修复 |
 | ST-T02 | P2 | `createGlobalConfig` 函数未注册路由（死代码） | `admin/configs.ts:80-119` |
 | ST-T03 | P2 | Key 格式验证缺失，应限制 `[a-zA-Z][a-zA-Z0-9_]*` | `admin/configs.ts` |
 
@@ -416,11 +419,11 @@
 ### 本次审核发现
 
 | 问题ID | 严重度 | 描述 | 位置 |
-|--------|--------|------|------|
-| ST-T04 | P0 | `Product` 接口缺失 `source_platform`、`last_checked_at` 字段 | `schema.ts` |
-| ST-T05 | P1 | 缺失 5 个表接口：`PriceHistory`、`TranslationSyncQueue`、`Conversions`、`ExplanationCache`、`EmailLogs` | `schema.ts` |
-| ST-T06 | P2 | `004_price_history.sql` 文件头注释错误（写的是 005） | `migrations/004_*.sql` |
-| ST-T07 | P2 | Migration 011 存在冗余索引创建（与 001 重复） | `migrations/011_*.sql` |
+|--------|--------|------|------|------|
+| ST-T04 | ~~**P0**~~ | `Product` 接口缺失 `source_platform`、`last_checked_at` 字段 | `schema.ts` | ✅ 已修复 |
+| ST-T05 | ~~**P1**~~ | 缺失 5 个表接口：`PriceHistory`、`Conversions`、`ExplanationCache`、`EmailLogs`、`GlobalConfig` | `schema.ts` | ✅ 已修复 |
+| ST-T06 | P2 | `004_price_history.sql` 文件头注释错误（写的是 005） | `migrations/004_*.sql` | 🟡 建议修复 |
+| ST-T07 | P2 | Migration 011 存在冗余索引创建（与 001 重复） | `migrations/011_*.sql` | 🟡 建议修复 |
 
 ### 数据模型迁移状态
 
@@ -485,7 +488,7 @@
 
 | 问题ID | 严重度 | 标题 | 位置 | 状态 |
 |--------|--------|------|------|------|
-| ST-C01 | P1 | `Record<string, unknown>` 滥用绕过类型检查 | `recommendations.ts:88-95` | 🟠 待修复 |
+| ST-C01 | ✅ | `Record<string, unknown>` 滥用绕过类型检查 | `recommendations.ts` | ✅ 已修复（添加UserPreferences接口） |
 | ST-C02 | P2 | 权重常量在 `behavior.ts` 和 `recommendations.ts` 重复定义 | 多文件 | 🟡 建议提取 |
 | ST-C03 | P2 | 分页参数解析逻辑在多个文件重复 | 多文件 | 🟡 建议提取 |
 | ST-C04 | P2 | `parseJSON` 强制类型断言 `as string` 不安全 | 多文件 | 🟡 建议改进 |
@@ -512,9 +515,9 @@ user.liked_tags as string
 | 严重度 | 数量 | 说明 |
 |--------|------|------|
 | P0 | 0 | ✅ **全部修复** |
-| P1 | 4 | **尽快修复** - 类型安全/高风险 |
+| P1 | 1 | **尽快修复** - 类型安全/高风险（ST-C01已修复） |
 | P2 | 5 | **建议修复** - 代码质量/工程化 |
-| 合计 | 9 | |
+| 合计 | 6 | |
 
 ### 按模块分布
 

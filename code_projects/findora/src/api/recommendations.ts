@@ -8,7 +8,7 @@
 // F-014-05: 新品加权 ✅ (recency_days × 0.1, max 7 days = 0.7 boost)
 // F-014-06: 偏好标签推荐 ✅ (liked_tags filtering + likedTags × 3)
 // F-014-07: 屏蔽 disliked_tags ✅
-import { Env } from '../db/schema';
+import { Env, UserPreferences } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
 import { parseProductContentFromRow, toClientProduct } from '../lib/product_content';
@@ -92,7 +92,7 @@ export async function getRecommendations(env: Env, request: Request): Promise<Re
     userQuery += 'anonymous_id = ?';
   }
 
-  const user = await env.DB.prepare(userQuery).bind(email ? email.toLowerCase() : anonymous_id!).first<Record<string, unknown>>();
+  const user = await env.DB.prepare(userQuery).bind(email ? email.toLowerCase() : anonymous_id!).first<UserPreferences>();
 
   if (!user) {
     // Return popular products for unknown users (30-day window)
