@@ -38,6 +38,8 @@ CREATE INDEX IF NOT EXISTS idx_conversions_received_at ON conversions(received_a
 
 -- Explanation cache table - F-016-04
 -- Caches AI-generated recommendation explanations
+-- NOTE: generated_at and expires_at use INTEGER (Unix timestamp in seconds)
+-- for consistent time comparison across D1 operations (ST-P1修复)
 CREATE TABLE IF NOT EXISTS explanation_cache (
   cache_key TEXT PRIMARY KEY,
   product_id TEXT NOT NULL,
@@ -45,8 +47,8 @@ CREATE TABLE IF NOT EXISTS explanation_cache (
   explanation_type TEXT NOT NULL,
   reason TEXT NOT NULL,
   ai_extended TEXT,
-  generated_at TEXT NOT NULL,
-  expires_at TEXT NOT NULL,
+  generated_at INTEGER NOT NULL,
+  expires_at INTEGER NOT NULL,
   hit_count INTEGER DEFAULT 0
 );
 

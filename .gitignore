@@ -28,3 +28,5 @@ npm-debug.log*
 *.temp
 .cache/
 .claude/
+.wrangler/
+wrangler.toml

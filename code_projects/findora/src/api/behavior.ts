@@ -71,7 +71,8 @@ export function calculateBehaviorScore(
 export async function getProductBehaviorScores(
   env: Env,
   productIds: string[],
-  windowDays: number = 30
+  windowDays: number = 30,
+  userId?: string
 ): Promise<Map<string, { raw: number; decay: number }>> {
   if (productIds.length === 0) {
     return new Map();
@@ -100,19 +101,90 @@ export async function getProductBehaviorScores(
     GROUP BY je.value
   `).bind(...productIds, windowDays).all<{ product_id: string; favorite_count: number }>();
 
-  // Get dislike counts (from disliked_tags in users)
-  // Products disliked = if product's tags match any disliked_tags
-  const dislikeRows = await env.DB.prepare(`
-    SELECT
-      p.id as product_id,
-      COUNT(DISTINCT u.id) as dislike_count
-    FROM products p
-    JOIN users u ON u.status = 'active'
-    WHERE p.id IN (${placeholders})
-      AND u.disliked_tags IS NOT NULL
-      AND u.disliked_tags != '[]'
-    GROUP BY p.id
-  `).bind(...productIds).all<{ product_id: string; dislike_count: number }>();
+  // Get dislike counts - ST-C06 修复: 使用 json_each 匹配商品标签，并按用户过滤
+  // 只统计当前用户 disliked_tags 中含有该商品标签的情况
+  let dislikeRows;
+  if (userId) {
+    // 有用户ID时：只查询当前用户 dislike 的商品标签匹配情况
+    const userDislikedTagsQuery = await env.DB.prepare(`
+      SELECT disliked_tags FROM users WHERE id = ?
+    `).bind(userId).first<{ disliked_tags: string }>();
+
+    const userDislikedTags: string[] = userDislikedTagsQuery
+      ? parseJSON(userDislikedTagsQuery.disliked_tags, [])
+      : [];
+
+    if (userDislikedTags.length === 0) {
+      // 用户没有 disliked_tags，直接返回全0的Map
+      const clickMap = new Map<string, number>(
+        (clickRows.results || []).map(r => [r.product_id, r.click_count])
+      );
+      const favMap = new Map<string, number>(
+        (favRows.results || []).map(r => [r.product_id, r.favorite_count])
+      );
+      const lastActionRows = await env.DB.prepare(`
+        SELECT product_id, MAX(clicked_at) as last_action
+        FROM clicks
+        WHERE product_id IN (${placeholders})
+        GROUP BY product_id
+      `).bind(...productIds).all<{ product_id: string; last_action: string }>();
+
+      const lastActionMap = new Map<string, string>(
+        (lastActionRows.results || []).map(r => [r.product_id, r.last_action])
+      );
+
+      const scores = new Map<string, { raw: number; decay: number }>();
+      for (const productId of productIds) {
+        const clicks = clickMap.get(productId) || 0;
+        const favs = favMap.get(productId) || 0;
+        const lastAction = lastActionMap.get(productId);
+
+        let daysSinceLastAction = 30;
+        if (lastAction) {
+          const lastDate = new Date(lastAction);
+          const now = new Date();
+          daysSinceLastAction = Math.floor((now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+        }
+
+        const score = calculateBehaviorScore(clicks, favs, 0, 0, daysSinceLastAction);
+        scores.set(productId, score);
+      }
+      return scores;
+    }
+
+    // 查询商品标签是否匹配用户的disliked_tags
+    dislikeRows = await env.DB.prepare(`
+      SELECT
+        p.id as product_id,
+        1 as dislike_count
+      FROM products p
+      WHERE p.id IN (${placeholders})
+        AND (
+          ${userDislikedTags.map(tag =>
+            `p.tags LIKE '%' || ? || '%'`
+          ).join(' OR ')}
+        )
+    `).bind(...productIds, ...userDislikedTags).all<{ product_id: string; dislike_count: number }>();
+  } else {
+    // 无用户ID时：统计所有用户disliked_tags中包含该商品标签的商品
+    dislikeRows = await env.DB.prepare(`
+      SELECT
+        p.id as product_id,
+        COUNT(DISTINCT u.id) as dislike_count
+      FROM products p
+      JOIN users u ON u.status = 'active'
+      JOIN products p2 ON p2.id = p.id
+      WHERE p.id IN (${placeholders})
+        AND u.disliked_tags IS NOT NULL
+        AND u.disliked_tags != '[]'
+        AND EXISTS (
+          SELECT 1 FROM users u2, json_each(u2.disliked_tags) je
+          WHERE u2.id = u.id
+            AND p.tags LIKE '%' || je.value || '%'
+        )
+      GROUP BY p.id
+    `).bind(...productIds).all<{ product_id: string; dislike_count: number }>();
+  }
 
   // Get last action time per product for decay calculation
   const lastActionRows = await env.DB.prepare(`
@@ -129,7 +201,7 @@ export async function getProductBehaviorScores(
     (favRows.results || []).map(r => [r.product_id, r.favorite_count])
   );
   const dislikeMap = new Map<string, number>(
-    (dislikeRows.results || []).map(r => [r.product_id, r.dislike_count])
+    (dislikeRows?.results || []).map(r => [r.product_id, r.dislike_count])
   );
   const lastActionMap = new Map<string, string>(
     (lastActionRows.results || []).map(r => [r.product_id, r.last_action])
@@ -332,8 +404,8 @@ export async function getBehaviorEnhancedRecommendations(
     }));
   }
 
-  // Get behavior scores
-  const behaviorScores = await getProductBehaviorScores(env, productIds);
+// Get behavior scores (ST-C06修复：传入userId以正确过滤disliked_tags)
+  const behaviorScores = await getProductBehaviorScores(env, productIds, 30, userId);
 
   // Combine scores: rule × 0.6 + behavior × 0.4
   const combined: { product_id: string; combined_score: number; rule_score: number; behavior_score: number }[] = [];

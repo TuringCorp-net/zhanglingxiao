@@ -1,8 +1,8 @@
 # Findora SDS — 软件设计说明书
 
 > **项目名称：** Findora
-> **版本：** v3.31
-> **最后更新：** 2026-04-13
+> **版本：** v3.36
+> **最后更新：** 2026-04-16
 > **维护方式：** 以SRS F编号为主线的模块化设计文档
 
 ---
@@ -13,6 +13,7 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-16 | ST-C06修复：behavior.ts dislikes查询逻辑改进为按用户过滤（传入userId参数）；ST-P1修复：explanation_cache表generated_at/expires_at统一为INTEGER（Unix时间戳） |
 | 2026-04-15 | ST-T02/ST-T03 修复：注册 `POST /api/admin/configs` 路由（F-040-24a）；添加 key 格式验证 `[a-zA-Z][a-zA-Z0-9_]*`；删除 migration 011 冗余索引 |
 | 2026-04-13 | 全文重构为以 F 编号为主线的模块化结构；各模块补充端点映射表、实现文件说明与数据模型说明；新增关键实现约束汇总与当前基线状态 |
 
@@ -234,7 +235,7 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 
 | 文件 | 说明 |
 |------|------|
-| `src/api/behavior.ts` | 行为评分 |
+| `src/api/behavior.ts` | 行为评分（含ST-C06修复：dislikes查询按用户过滤） |
 | `src/api/recommendations.ts` | 结果重排 |
 
 ### 核心API端点
@@ -242,6 +243,11 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 | 端点 | 方法 | 说明 |
 |------|------|------|
 | `/api/recommendations/behavioral` | GET | 行为推荐（F-015） |
+
+### 行为评分计算
+- 评分公式：`click×1 + favorite×5 + save×3 - dislike×8`
+- 时间衰减：`e^(-0.1 × days_ago)`，30天窗口衰减至20%
+- **ST-C06修复**：dislikes查询现在按用户ID过滤，只统计当前用户disliked_tags中包含该商品标签的商品
 
 ### MMR多样性控制
 - 同一subcategory商品 ≤ 推荐结果30%
@@ -259,7 +265,7 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 
 | 文件 | 说明 |
 |------|------|
-| `src/api/explain.ts` | 解释生成/缓存 |
+| `src/api/explain.ts` | 解释生成/缓存（含ST-P1修复：时间戳类型统一为INTEGER） |
 
 ### 核心API端点
 
@@ -272,6 +278,7 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 
 ### 数据模型
 - `explanation_cache` 表 — 解释缓存（含TTL）
+- **ST-P1修复**：`generated_at`/`expires_at` 字段类型统一为 INTEGER（Unix时间戳秒数），确保时间比较一致性
 
 ### 模板优先级
 1. "Because you liked [类目] picks like [商品]"
@@ -502,7 +509,7 @@ best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving
 | `tags` | 标签表 | 001_initial_schema |
 | `user_sessions` | 会话表 | 012_ems_schema |
 | `conversions` | 转化记录 | 013_runtime_tables |
-| `explanation_cache` | 解释缓存 | 013_runtime_tables |
+| `explanation_cache` | 解释缓存（ST-P1修复：时间戳为INTEGER） | 013_runtime_tables |
 | `email_logs` | 邮件日志 | 013_runtime_tables |
 | `price_history` | 价格历史 | 004_price_history |
 | `ai_review_records` | AI审核记录 | 005_ai_review_records |

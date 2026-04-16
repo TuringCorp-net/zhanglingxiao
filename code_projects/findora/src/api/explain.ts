@@ -317,6 +317,7 @@ Language: English only.`;
  * for consistent time comparison across all D1 operations.
  */
 async function ensureExplanationCacheTable(env: Env): Promise<void> {
+  // NOTE: generated_at and expires_at use INTEGER (Unix timestamp) for consistent comparison
   await env.DB.prepare(`
     CREATE TABLE IF NOT EXISTS explanation_cache (
       cache_key TEXT PRIMARY KEY,
@@ -325,8 +326,8 @@ async function ensureExplanationCacheTable(env: Env): Promise<void> {
       explanation_type TEXT NOT NULL,
       reason TEXT NOT NULL,
       ai_extended TEXT,
-      generated_at TEXT NOT NULL,
-      expires_at TEXT NOT NULL,
+      generated_at INTEGER NOT NULL,
+      expires_at INTEGER NOT NULL,
       hit_count INTEGER DEFAULT 0
     )
   `).run();

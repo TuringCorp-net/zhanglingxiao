@@ -44,6 +44,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-16 | ST-P2修正：修正外部系统接口描述，`/api/email/send-confirmation` 实际在 `admin/` 下（需Admin Key）；`/api/price-check` 系列仅admin端点可用 |
 | 2026-04-15 | 新增 POST /api/admin/configs 端点（F-040-24a），支持创建全局配置；补充 key 格式验证说明（`[a-zA-Z][a-zA-Z0-9_]*`） |
 | 2026-04-13 | 新增 F-040-24~26 全局配置端点（GET /api/admin/configs、PUT /api/admin/configs/:key、GET /api/configs/:key）；补充外部运营 AI 数据更新接口说明（F-040-22） |
 | 2026-04-13 | 补充认证端点详细格式（POST /api/auth/register、POST /api/auth/login）；对齐 SRS §3.1.5 响应格式（user_id/session_token） |
@@ -109,12 +110,14 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 ### 外部系统接口
 
-| 方法 | 路径 | 功能 | F编号 |
-|------|------|------|-------|
-| POST | `/api/conversions/callback` | 联盟回调 | F-012-05 |
-| POST | `/api/email/send-confirmation` | 订阅确认邮件 | F-013-07 |
-| POST | `/api/price-check` | 价格监控回调 | F-010-05 |
-| POST | `/api/price-check/batch` | 批量价格更新 | F-010-05 |
+| 方法 | 路径 | 功能 | F编号 | 说明 |
+|------|------|------|-------|------|
+| POST | `/api/conversions/callback` | 联盟回调 | F-012-05 | 公开端点 |
+| POST | `/api/email/send-confirmation` | 订阅确认邮件 | F-013-07 | **ST-P2修正**：实际位于 `/api/email/send-confirmation`（公开） |
+| POST | `/api/admin/price-check` | 价格监控 | F-010-05 | **ST-P2修正**：仅admin端点 |
+| POST | `/api/admin/price-check/batch` | 批量价格 | F-010-05 | **ST-P2修正**：仅admin端点 |
+| GET | `/api/admin/price-check` | 价格变动列表 | F-010-05 | 仅admin端点 |
+| GET | `/api/admin/price-check/:product_id` | 商品价格历史 | F-010-05 | 仅admin端点 |
 
 ### 运营AI专属接口（需Admin Key）
 

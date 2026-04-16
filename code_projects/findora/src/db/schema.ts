@@ -475,7 +475,8 @@ export interface ExplanationCache {
   template_type: string;
   content: string;
   source: 'template' | 'ai' | 'fallback';
-  expires_at: number; // Unix timestamp in seconds
+  generated_at: number; // Unix timestamp in seconds (ST-P1修复)
+  expires_at: number; // Unix timestamp in seconds (ST-P1修复)
   created_at: string;
 }
 

@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-16
+- **文件**: 20260416-2604.13010-lightning-opd.md
+- **标题**: 训练AI大模型的新方法：把"在线老师"变成"离线老师"，效率提升4倍
+- **论文来源**: arXiv:2604.13010 | Lightning OPD: Efficient Post-Training for Large Reasoning Models with Offline On-Policy Distillation
+- **作者**: Yecheng Wu, Song Han, Hai Cai（Nvidia）
+- **撰写日期**: 2026-04-16（北京时间）
+- **备注**: 核心发现：SFT阶段和OPD阶段必须用同一个"老师"模型（老师一致性原则）；通过预计算老师log概率实现完全离线蒸馏；4倍效率提升（30 vs 120 GPU小时）；Qwen3-8B在AIME 2024达69.9%；让高校和中小企业也能训练强大推理模型
+
 ### 2026-04-15
 - **文件**: 20260415-2604.11791-looped-reasoning-llm.md
 - **标题**: 循环推理语言模型：AI的"思考"到底在脑子里转了几圈？

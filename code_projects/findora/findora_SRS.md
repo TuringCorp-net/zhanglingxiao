@@ -2,8 +2,8 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.34（SRS二次自动审查；完善F-040-22接口契约；同步STR发现项；统一端点统计口径）
-> **最后更新：** 2026-04-15
+> **版本：** v3.35（SRS三次自动审查；同步STR v3.35最新发现；补充F-021审核工作流端点；统一端点统计口径；禁用词表更新为12项）
+> **最后更新：** 2026-04-16
 > **状态：** 🟢 需求基线已重构：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
 ---
@@ -14,6 +14,7 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-16 | v3.35：SRS三次自动审查；同步STR v3.35最新发现（ST-C06 behavior.ts dislikes逻辑错误、ST-P1 cache类型不一致、ST-P2 API文档偏差4项）；补充F-021 AI审核工作流端点详情；统一端点统计口径（29核心端点 vs 40+含管理端点）；禁用词表从7项更新为12项（best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/officially/must-have/first-ever/game-changer）；ST-T02/T03路由修复状态同步 |
 | 2026-04-15 | v3.34：SRS二次自动审查；完善F-040-22接口契约（新增request_id规范、错误响应格式、数据校验规则）；同步STR发现项（ST-T02/ST-T03）；统一端点统计口径（29端点分类澄清）；澄清Section 2.2与3.1状态关系 |
 | 2026-04-15 | v3.33：SRS自动审查任务首次执行；同步更新system_design.md至v1.1.0，新增核心架构约束与运营AI接口说明 |
 
@@ -23,20 +24,42 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-1. **STR问题修复（高优）**：
-   - ST-T02：`createGlobalConfig` 需注册路由
-   - ST-T03：`GlobalConfig.Key` 格式验证缺失（需正则校验 `^[a-z_]+$`）
-2. **Schema类型补充（高优）**：
-   - `src/db/schema.ts`: 添加 `GlobalConfig`、`PriceHistory` 等缺失接口
-   - `src/db/schema.ts`: Product 接口补充 `source_platform`、`last_checked_at` 字段
-3. **AI 服务联调（优先）**：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
-4. **F-040-22接口契约补充（非阻塞）**：
-   - 补充request_id规范（UUID v4格式要求）
-   - 补充错误响应格式（字段级错误列表）
-   - 补充数据校验规则（禁用词、长度限制、枚举值）
+### 已完成项（v3.35同步）
+
+1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
+2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`
+3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误
+4. ✅ **架构约束验证**：AC-01~AC-06 全部通过
+5. ✅ **P0安全问题**：ST-S01~S06 全部修复
+
+### 待推进项（按优先级）
+
+1. **ST-C06 behavior.ts dislikes逻辑修复（高优）**：
+   - 问题：`getProductBehaviorScores` 中 dislike_count JOIN 条件未按用户ID过滤
+   - 影响：dislike_count 被高估，推荐结果中用户真正反感的商品未被充分降权
+   - 修复：改为 `json_each(u.disliked_tags)` 匹配商品标签，或增加 userId 参数纳入 JOIN 条件
+2. **ST-P1 explanation_cache 类型统一（中优）**：
+   - 问题：`expires_at`/`generated_at` 使用 Unix 秒整数，但 schema 定义为 TEXT
+   - 建议：schema 改为 INTEGER，或代码统一改为 ISO8601 字符串存储
+3. **ST-P2 API文档偏差修正（中优）**：
+   - `POST /api/email/send-confirmation` 文档描述为公开端点，实际注册在 admin/ 下
+   - `POST /api/admin/ai/explain` (F-020-04) 路由未在 index.ts 注册
+   - `GET /api/price-check` 及 `GET /api/price-check/:product_id` 未作为独立路由注册
+4. **AI 服务联调（优先）**：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
 5. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~014 迁移脚本在本地 D1 初始化成功
 6. **端到端链路测试**：使用 Postman 对核心流（商品列表、标签精选、内容协商）进行完整 HTTP 链路验证
-7. **优化项（非阻塞）**：P1-5 JSON 数组匹配改用 `json_each`、P1-6 时间存储策略统一、P1-7 前端 SSR 方案，待后续迭代处理
+
+### 非阻塞优化项（待迭代处理）
+
+| 编号 | 描述 | 涉及模块 | 严重度 |
+|------|------|----------|--------|
+| P1-5 | 标签/类目查询部分场景使用 LIKE 字符串匹配，JSON 数组匹配未完全用 `json_each` | F-011/F-014 | P2 |
+| P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | P2 |
+| P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | P2 |
+| P2-1 | 权重常量重复定义：behavior.ts 和 recommendations.ts | F-014~015 | P3 |
+| P2-2 | 分页参数解析逻辑在多文件重复 | 跨模块 | P3 |
+| P2-3 | `parseJSON` 强制类型断言 `as string` 不安全 | 跨模块 | P3 |
+| P2-4 | 审计日志 `X-Forwarded-For` 可被客户端伪造（ST-S05） | `auth.ts` | P2 |
 
 ---
 
@@ -80,7 +103,8 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
-| v3.34 | 2026-04-15 | SRS二次自动审查 | 完善F-040-22接口契约（request_id规范、错误响应格式、数据校验规则）；同步STR发现项；统一端点统计口径；澄清Section 2.2与3.1状态关系 |
+| v3.35 | 2026-04-16 | SRS三次自动审查 | 同步STR v3.35最新发现（ST-C06/STS-P1/ST-P2）；补充F-021审核工作流端点详情；禁用词表12项；端点口径统一 |
+| v3.34 | 2026-04-15 | SRS二次自动审查 | 完善F-040-22接口契约（request_id规范、错误响应格式、数据校验规则）；同步STR发现项（ST-T02/ST-T03）；统一端点统计口径（29端点分类澄清）；澄清Section 2.2与3.1状态关系 |
 | v3.33 | 2026-04-15 | SRS自动审查 | 同步system_design.md至v1.1.0，新增核心架构约束与运营AI接口说明 |
 | v3.32 | 2026-04-13 | Section 3.1编号规范化 | 重排子章节编号、增加端点汇总表（P1-1/P1-3修复） |
 | v3.31 | 2026-04-13 | SRS 架构基线重构 | 对齐 business_concept v1.1，清理过时”实时AI联调”叙述 |
@@ -394,7 +418,7 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 | 公共端点 | F-040-01~05 | 5 | ✅ 全部审核通过 |
 | 用户端点 | F-040-06~13 | 8 | ✅ 全部审核通过 |
 | 内部管理端点 | F-040-14~18 | 5 | ✅ 全部审核通过 |
-| 全局配置端点 | F-040-24~26 | 3 | ✅ 审核通过（ST-T02路由修复后） |
+| 全局配置端点 | F-040-24~26 | 3 | ✅ 审核通过 |
 | 身份认证端点 | F-040-27~30 | 4 | ✅ 审核通过 |
 | 外部系统接口 | F-040-20~23 | 4 | ✅ 全部审核通过 |
 | **合计** | | **29** | |
@@ -404,7 +428,7 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 > - **内部API（站内使用）**：公共(5) + 用户(8) + 管理(5) + 配置(3) + 认证(4) = **25个**
 > - **外部系统接口**：联盟回调(1) + 邮件服务(内部调用) + 运营AI入库(1) + 价格监控(1) = **4个**（部分为内部调用不计入路由）
 > - F-040-19 为预留编号，暂未启用
-> - ⚠️ **ST-T02修复提醒**：`createGlobalConfig` 需注册路由后方可计为完全审核通过
+> - ✅ **ST-T02/T03已修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现
 
 ### 3.1.1 公共端点（无需鉴权）
 
@@ -449,7 +473,7 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 | F-040-25 | PUT | `/api/admin/configs/:key` | 更新特定配置（管理员） | 配置管理 | ✅ | ✅ | ✅ |
 | F-040-26 | GET | `/api/configs/:key` | 公开获取特定配置 | 配置管理 | ✅ | ✅ | ✅ |
 
-> ⚠️ **ST-T02修复提醒**：`createGlobalConfig` 需注册路由后方可完全审核通过。当前GET/PUT端点已审核通过。
+> ✅ **ST-T02/T03已修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）。F-040-24~26 全局配置端点全部审核通过。
 
 #### F-040-24 GET /api/admin/configs - 获取全局配置列表（管理员）
 
@@ -739,7 +763,7 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 |--------|------|--------|
 | 标签名长度 | 1~50字符 | `INVALID_TAG_LENGTH` |
 | 商品标题长度 | 1~200字符 | `INVALID_TITLE_LENGTH` |
-| 禁用词检查 | 禁止出现：best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving | `FORBIDDEN_WORD_DETECTED` |
+| 禁用词检查 | 禁止出现：best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/officially/must-have/first-ever/game-changer（12项） | `FORBIDDEN_WORD_DETECTED` |
 | 价格范围 | >=0 且 <= 999999 | `INVALID_PRICE_RANGE` |
 | 图片URL格式 | 有效URL或R2对象路径 | `INVALID_IMAGE_URL` |
 | 日期格式 | ISO 8601 | `INVALID_DATE_FORMAT` |
@@ -2078,10 +2102,46 @@ score_behavior(product_id) =
 
 | 阶段 | 内容 |
 |------|------|
-| **输入** | AI生成内容；禁止词清单 |
+| **输入** | AI生成内容；禁止词清单（12项） |
 | **处理** | 1. 扫描禁止词出现情况 2. 评估是否违规 3. 判断是误报还是真的违规 |
 | **决策** | 标记"通过"/"需修改"/"误报" |
 | **输出** | 审核结果；如需修改，给出修改建议 |
+
+**禁用词表（12项）**：`best`, `safest`, `guaranteed`, `proven`, `clinically`, `miracle`, `revolutionary`, `lifesaving`, `officially`, `must-have`, `first-ever`, `game-changer`
+
+#### F-021 AI审核工作流端点（v3.35新增）
+
+> **说明**：以下端点已在 `src/api/admin/ai_review.ts` 中实现，审核工作流为5步：创建记录→提交→一审→二审（高风险）→语气审核→修订请求。
+
+| 端点 | 方法 | 路径 | 功能 | 审核状态 |
+|------|------|------|------|----------|
+| F-021-01 | POST | `/api/admin/ai/review/create` | 创建审核记录 | ✅ |
+| F-021-02 | GET | `/api/admin/ai/review` | 审核列表（支持分页/状态过滤） | ✅ |
+| F-021-03 | GET | `/api/admin/ai/review/pending-counts` | 各状态待审数量 | ✅ |
+| F-021-04 | POST | `/api/admin/ai/review/validate` | 内容校验（禁用词/高风险类目） | ✅ |
+| F-021-05 | GET | `/api/admin/ai/review/:id` | 审核详情 | ✅ |
+| F-021-06 | POST | `/api/admin/ai/review/:id/submit` | 提交审核（进入审核队列） | ✅ |
+| F-021-07 | POST | `/api/admin/ai/review/:id/review` | 一审（合规/品牌调性判断） | ✅ |
+| F-021-08 | POST | `/api/admin/ai/review/:id/high-risk-review` | 二审（高风险类目双人审核） | ✅ |
+| F-021-09 | POST | `/api/admin/ai/review/:id/tone-review` | 语气审核（夸张表述扫描） | ✅ |
+| F-021-10 | POST | `/api/admin/ai/review/:id/revision` | 请求修订（退回AI重新生成） | ✅ |
+
+**高风险类目双人审核触发条件**（对应 F-021-02 合规判断）：
+- 医疗/保健类（medical/health/supplement）
+- 美容/化妆品类（beauty/makeup/skincare）
+- 儿童用品类（kids/children/toys）
+- 电子产品类（electronics/gadgets requiring certification）
+
+**审核状态机**：
+```
+draft → submitted → in_review → high_risk_pending → approved
+                                    ↓
+                              revision_requested → resubmitted → in_review
+                                    ↓
+                                    rejected
+```
+
+> ⚠️ **端点路径偏差提醒（ST-P2）**：`POST /api/admin/ai/explain` (F-020-04) 实际对应 `/api/explain` 端点，需在API文档中修正映射关系。
 
 ### 9.6 F-020/F-021 三态追踪表
 
@@ -2649,7 +2709,7 @@ score_behavior(product_id) =
 
 | 编号 | 描述 | 当前状态 | 推进建议 |
 |------|------|----------|----------|
-| F-040-22 | 运营AI数据更新接口（API/CLI） | 🗓 | Token 鉴权已实现；契约已完善（request_id规范、错误格式、校验规则）；待ST-T02路由修复后完全可用 |
+| F-040-22 | 运营AI数据更新接口（API/CLI） | 🗓 | Token 鉴权已实现；契约已完善（request_id规范、错误格式、校验规则）；ST-T02/T03已修复，端点完全可用 |
 | F-020 | 运营AI异步生产能力接入规范 | 🗓 | 明确 payload 契约与失败重试策略 |
 | F-016 | 推荐解释检索化改造 | 🗓 | 移除实时生成分支，统一预生成文案检索 |
 | F-011 | 动态标签维度治理 | 🗓 | 增加维度生命周期管理与冲突检测 |
