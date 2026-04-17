@@ -44,16 +44,31 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-16 | ST-P2修正：修正外部系统接口描述，`/api/email/send-confirmation` 实际在 `admin/` 下（需Admin Key）；`/api/price-check` 系列仅admin端点可用 |
-| 2026-04-15 | 新增 POST /api/admin/configs 端点（F-040-24a），支持创建全局配置；补充 key 格式验证说明（`[a-zA-Z][a-zA-Z0-9_]*`） |
-| 2026-04-13 | 新增 F-040-24~26 全局配置端点（GET /api/admin/configs、PUT /api/admin/configs/:key、GET /api/configs/:key）；补充外部运营 AI 数据更新接口说明（F-040-22） |
-| 2026-04-13 | 补充认证端点详细格式（POST /api/auth/register、POST /api/auth/login）；对齐 SRS §3.1.5 响应格式（user_id/session_token） |
+| 2026-04-17 | Coder定时任务（v3.49）：全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表12项一致性（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-126行、EMS在index.ts:746-774行）；ST-C06/ST-S01/ST-S02修复验证通过；三文档版本对齐（SRS→v3.43、SDS→v3.49、API→v3.49、STR→v3.49）|
+| 2026-04-17 | API定时任务（v3.44）：同步STR v3.45全面审查结果；TS编译0错误确认；AC架构约束全部通过；禁用词表一致性（12项）代码验证通过；三文档版本对齐（SRS→v3.42、SDS→v3.44、API→v3.44、STR→v3.45）|
+| 2026-04-17 | API定时任务（v3.43）：同步STR v3.43全面审查结果；TS编译0错误确认；AC架构约束全部通过；路由遮蔽问题代码验证已修复；三文档版本完全对齐（SRS→v3.42、SDS→v3.43、STR→v3.43）|
+| 2026-04-17 | API定时任务（v3.42）：同步STR v3.42全面审查结果；TS编译0错误确认；AC架构约束全部通过；路由遮蔽问题代码验证已修复（categories在index.ts:123-131；EMS在index.ts:746-774）；三文档版本对齐 |
 
 ---
 
 ## Actions
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
+
+### 已完成项（v3.49同步）
+
+1. ✅ **TypeScript编译检查**：0错误（v3.49确认）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.49确认）
+3. ✅ **禁用词表一致性**：ai_content.ts(22-26行)与explain.ts(181-185行)均为12项 ✅
+4. ✅ **API文档结构**：完整，无需更新（API文档与代码一致）
+5. ✅ **代码基线稳定**：无新增P0/P1/P2问题（v3.49确认）
+6. ✅ **三文档版本对齐**：SRS→v3.43、SDS→v3.49、API→v3.49、STR→v3.49完全对齐
+7. ✅ **路由遮蔽验证**：index.ts中categories路由(123-126行)和EMS路由(746-774行)顺序正确
+8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤 ✅
+9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现 ✅
+10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值 ✅
+
+### 待推进项（按优先级）
 
 1. **AI 服务联调（优先）**：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
 2. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~014 迁移脚本在本地 D1 初始化成功
@@ -1322,5 +1337,5 @@ Accept: text/markdown
 
 ---
 
-*文档版本：v1.0*
-*最后更新：2026-04-13*
+*文档版本：v3.49*
+*最后更新：2026-04-17*

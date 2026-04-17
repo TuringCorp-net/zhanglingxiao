@@ -20,8 +20,12 @@ bucket_name = "findora-products"
 directory = "src/pages"
 
 [vars]
-AI_PROVIDER = "openai"
-ADMIN_KEY = "findora-admin-secret" # Set via: wrangler secret put ADMIN_KEY
+# AI_PROVIDER and ADMIN_KEY are managed via Cloudflare Dashboard Secrets
 
 [triggers]
 crons = ["0 9 * * 4"]
+
+[observability]
+[observability.logs]
+enabled = true
+invocation_logs = true

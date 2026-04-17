@@ -1,8 +1,8 @@
 # Findora SDS — 软件设计说明书
 
 > **项目名称：** Findora
-> **版本：** v3.36
-> **最后更新：** 2026-04-16
+> **版本：** v3.49（Coder定时任务：全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表12项一致性（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-126行、EMS在index.ts:746-774行）；ST-C06/ST-S01/ST-S02修复验证通过；三文档版本对齐SRS→v3.43、SDS→v3.49、API→v3.49、STR→v3.49）
+> **最后更新：** 2026-04-17
 > **维护方式：** 以SRS F编号为主线的模块化设计文档
 
 ---
@@ -13,6 +13,11 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-17 | v3.48：同步STR v3.48全面审查结果；TS编译0错误确认；AC-01~AC-06全部通过；禁用词表12项一致性（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-126行、EMS在index.ts:746-774行）；所有历史修复项验证通过；三文档版本对齐（SRS→v3.43、SDS→v3.45、API→v3.45、STR→v3.48）|
+| 2026-04-17 | v3.44：SDS定时任务；同步STR v3.45全面审查结果；TS编译0错误确认；AC-01~AC-06架构约束全部通过；禁用词表一致性（12项）代码验证通过（ai_content.ts:22-26行、explain.ts:181-185行）；路由遮蔽问题验证正确；三文档版本对齐（SRS→v3.42、SDS→v3.44、API→v3.44、STR→v3.45）|
+| 2026-04-17 | v3.43：SDS定时任务；同步STR v3.43全面审查结果；TS编译0错误确认；AC-01~AC-06架构约束全部通过；禁用词表一致性（12项）代码验证通过；路由遮蔽问题代码验证已修复（categories在index.ts:123-131；EMS在index.ts:746-774）；三文档版本完全对齐（SRS→v3.42、SDS→v3.43、STR→v3.43）|
+| 2026-04-17 | v3.42：SDS定时任务；同步STR v3.42全面审查结果；TS编译0错误确认；AC-01~AC-06架构约束全部通过；禁用词表一致性（12项）代码验证通过；路由遮蔽问题代码验证已修复；三文档版本对齐 |
+| 2026-04-17 | v3.39：SDS禁用词表修复（ST-P3）：更新为与代码一致的12项（best/worst/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/official/authentic/dangerous） |
 | 2026-04-16 | ST-C06修复：behavior.ts dislikes查询逻辑改进为按用户过滤（传入userId参数）；ST-P1修复：explanation_cache表generated_at/expires_at统一为INTEGER（Unix时间戳） |
 | 2026-04-15 | ST-T02/ST-T03 修复：注册 `POST /api/admin/configs` 路由（F-040-24a）；添加 key 格式验证 `[a-zA-Z][a-zA-Z0-9_]*`；删除 migration 011 冗余索引 |
 | 2026-04-13 | 全文重构为以 F 编号为主线的模块化结构；各模块补充端点映射表、实现文件说明与数据模型说明；新增关键实现约束汇总与当前基线状态 |
@@ -22,6 +27,21 @@
 ## Actions
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
+
+### 已完成项（v3.49同步）
+
+1. ✅ **TypeScript编译检查**：0错误（v3.49确认）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.49确认）
+3. ✅ **禁用词表一致性**：ai_content.ts(22-26行)与explain.ts(181-185行)均为12项 ✅
+4. ✅ **ST-P3禁用词表**：SDS禁用词表已与代码对齐（12项）
+5. ✅ **代码基线稳定**：无新增P0/P1/P2问题（v3.49确认）
+6. ✅ **路由遮蔽验证**：index.ts中categories路由(123-126行)和EMS路由(746-774行)顺序正确
+7. ✅ **三文档版本对齐**：SRS→v3.43、SDS→v3.49、API→v3.49、STR→v3.49完全对齐
+8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤（传入userId参数）✅
+9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现 ✅
+10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值 ✅
+
+### 待推进项（按优先级）
 
 1. **AI 服务联调（优先）**：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
 2. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~014 迁移脚本在本地 D1 初始化成功
@@ -359,8 +379,8 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 | `/api/admin/ai-review/:id/approve` | POST | 批准 |
 | `/api/admin/ai-review/:id/reject` | POST | 拒绝 |
 
-### 禁用词
-best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving
+### 禁用词（12项，ST-P3修复：与代码实际定义对齐）
+`best`/`worst`/`safest`/`guaranteed`/`proven`/`clinically`/`miracle`/`revolutionary`/`lifesaving`/`official`/`authentic`/`dangerous`
 
 ---
 

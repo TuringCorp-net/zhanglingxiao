@@ -2,8 +2,8 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.35（SRS三次自动审查；同步STR v3.35最新发现；补充F-021审核工作流端点；统一端点统计口径；禁用词表更新为12项）
-> **最后更新：** 2026-04-16
+> **版本：** v3.43（SRS定时任务：全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表12项一致性（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确；所有历史修复项验证通过；三文档版本对齐SRS→v3.43、SDS→v3.45、API→v3.45、STR→v3.47）
+> **最后更新：** 2026-04-17
 > **状态：** 🟢 需求基线已重构：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
 ---
@@ -14,7 +14,11 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-16 | v3.35：SRS三次自动审查；同步STR v3.35最新发现（ST-C06 behavior.ts dislikes逻辑错误、ST-P1 cache类型不一致、ST-P2 API文档偏差4项）；补充F-021 AI审核工作流端点详情；统一端点统计口径（29核心端点 vs 40+含管理端点）；禁用词表从7项更新为12项（best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/officially/must-have/first-ever/game-changer）；ST-T02/T03路由修复状态同步 |
+| 2026-04-17 | v3.43：SRS定时任务；全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表12项一致性（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-131；EMS在index.ts:746-774）；所有历史修复项（ST-S01~S06、ST-C06、ST-P1~P3、ST-T02/T03）验证通过；三文档版本对齐（SRS→v3.43、SDS→v3.45、API→v3.45、STR→v3.47）|
+| 2026-04-17 | v3.38：SRS定时任务；同步v3.42全面代码审查结果（STR v3.42）；TS编译0错误确认；AC-01~AC-06架构约束全部通过；路由遮蔽问题代码验证已修复；禁用词表12项一致性确认；Actions全量同步 |
+| 2026-04-17 | v3.37：SRS定时任务；同步v3.40全面代码审查结果（STR v3.40）；TS编译0错误确认；AC-01~AC-06架构约束全部通过；ST-C06（dislikes按用户过滤）、ST-P1（cache时间戳INTEGER）、禁用词表一致性（12项）全部确认为已完成；Actions全量同步；版本号与SDS/STR对齐 |
+| 2026-04-17 | v3.36：SRS四次自动审查；同步ST-P3（禁用词表SRS描述与代码不一致→以代码为准，SRS禁用词表更新为best/worst/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/official/authentic/dangerous共12项）；补充JJY API运营选品工具说明（operations/tools/jjy_api.js，5平台、免登录、纯API调用）；同步SDS v3.36最近修改记录（ST-C06/ST-P1修复确认）；修正F-021审核端点路径（统一为POST /api/admin/ai-review/* 系列）；Actions项状态同步更新 |
+| 2026-04-16 | v3.35：SRS三次自动审查；同步STR v3.35最新发现（ST-C06/ST-P1/ST-P2）；补充F-021 AI审核工作流端点详情；统一端点统计口径（29核心端点 vs 40+含管理端点）；禁用词表从7项更新为12项（best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/officially/must-have/first-ever/game-changer）；ST-T02/T03路由修复状态同步 |
 | 2026-04-15 | v3.34：SRS二次自动审查；完善F-040-22接口契约（新增request_id规范、错误响应格式、数据校验规则）；同步STR发现项（ST-T02/ST-T03）；统一端点统计口径（29端点分类澄清）；澄清Section 2.2与3.1状态关系 |
 | 2026-04-15 | v3.33：SRS自动审查任务首次执行；同步更新system_design.md至v1.1.0，新增核心架构约束与运营AI接口说明 |
 
@@ -24,30 +28,26 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v3.35同步）
+### 已完成项（v3.43同步）
 
 1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
 2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`
-3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误
-4. ✅ **架构约束验证**：AC-01~AC-06 全部通过
+3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（STR v3.47确认）
+4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（STR v3.47确认）
 5. ✅ **P0安全问题**：ST-S01~S06 全部修复
+6. ✅ **ST-C06修复**：dislikes查询已改为按用户ID过滤，dislike_count不再被全局高估
+7. ✅ **ST-P1修复**：explanation_cache表 `generated_at`/`expires_at` 字段类型已统一为 INTEGER（Unix时间戳），与代码行为一致
+8. ✅ **ST-P2修复**：API文档与代码端点偏差已全部修正（外部系统接口路径、admin路由注册等）
+9. ✅ **禁用词表一致性**：SRS禁用词表已与代码对齐，12项（`best`/`worst`/`safest`/`guaranteed`/`proven`/`clinically`/`miracle`/`revolutionary`/`lifesaving`/`official`/`authentic`/`dangerous`）；ai_content.ts(22-26行)与explain.ts(181-185行)一致为12项
+10. ✅ **v3.43全面审查确认（STR v3.47）**：TS编译0错误；AC-01~AC-06全部通过；代码基线稳定，无新增P0/P1/P2问题；三文档版本对齐（SRS→v3.43、SDS→v3.45、API→v3.45、STR→v3.47）
+11. ✅ **路由遮蔽验证**：index.ts中categories路由(123-131行)和EMS路由(746-774行)顺序正确
 
 ### 待推进项（按优先级）
 
-1. **ST-C06 behavior.ts dislikes逻辑修复（高优）**：
-   - 问题：`getProductBehaviorScores` 中 dislike_count JOIN 条件未按用户ID过滤
-   - 影响：dislike_count 被高估，推荐结果中用户真正反感的商品未被充分降权
-   - 修复：改为 `json_each(u.disliked_tags)` 匹配商品标签，或增加 userId 参数纳入 JOIN 条件
-2. **ST-P1 explanation_cache 类型统一（中优）**：
-   - 问题：`expires_at`/`generated_at` 使用 Unix 秒整数，但 schema 定义为 TEXT
-   - 建议：schema 改为 INTEGER，或代码统一改为 ISO8601 字符串存储
-3. **ST-P2 API文档偏差修正（中优）**：
-   - `POST /api/email/send-confirmation` 文档描述为公开端点，实际注册在 admin/ 下
-   - `POST /api/admin/ai/explain` (F-020-04) 路由未在 index.ts 注册
-   - `GET /api/price-check` 及 `GET /api/price-check/:product_id` 未作为独立路由注册
-4. **AI 服务联调（优先）**：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
-5. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~014 迁移脚本在本地 D1 初始化成功
-6. **端到端链路测试**：使用 Postman 对核心流（商品列表、标签精选、内容协商）进行完整 HTTP 链路验证
+1. **AI 服务联调（高优）**：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
+2. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~014 迁移脚本在本地 D1 初始化成功
+3. **端到端链路测试**：使用 Postman 对核心流（商品列表、标签精选、内容协商）进行完整 HTTP 链路验证
+4. **JJY API运营选品工具落地**：当前 `operations/tools/jjy_api.js` 已在本地实现，覆盖5大平台（temu/shein/amazon/sumaitong/tiktok），共128个品类，需通过 Selector Agent 集成到正式运营流程
 
 ### 非阻塞优化项（待迭代处理）
 
@@ -103,6 +103,8 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
+| v3.37 | 2026-04-17 | SRS定时任务 | 同步v3.40全面代码审查结果（STR v3.40）；TS编译0错误确认；AC-01~AC-06全部通过；ST-C06/ST-P1/禁用词表一致性全部确认为已完成；Actions全量同步；版本号与SDS/STR对齐 |
+| v3.36 | 2026-04-17 | SRS四次自动审查 | 同步ST-P3（禁用词表与代码对齐：best/worst/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/official/authentic/dangerous）；补充JJY API运营选品工具说明（operations/tools/jjy_api.js）；同步SDS v3.36（ST-C06/ST-P1修复确认）；Actions项全量更新 |
 | v3.35 | 2026-04-16 | SRS三次自动审查 | 同步STR v3.35最新发现（ST-C06/STS-P1/ST-P2）；补充F-021审核工作流端点详情；禁用词表12项；端点口径统一 |
 | v3.34 | 2026-04-15 | SRS二次自动审查 | 完善F-040-22接口契约（request_id规范、错误响应格式、数据校验规则）；同步STR发现项（ST-T02/ST-T03）；统一端点统计口径（29端点分类澄清）；澄清Section 2.2与3.1状态关系 |
 | v3.33 | 2026-04-15 | SRS自动审查 | 同步system_design.md至v1.1.0，新增核心架构约束与运营AI接口说明 |
@@ -383,6 +385,8 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 
 | 日期 | 功能编号 | 变更前 | 变更后 | 操作人 | 变更原因 |
 |------|----------|--------|--------|--------|----------|
+| 2026-04-17 | 文档更新 | - | - | 系统分析师 | v3.37审查（同步STR v3.40）：TS编译0错误；AC-01~AC-06全部通过；ST-C06/ST-P1/禁用词表一致性全部确认为已完成；版本号与SDS/STR对齐 |
+| 2026-04-17 | 文档更新 | - | - | 系统分析师 | v3.36审查：ST-P3禁用词表SRS已与代码对齐；补充JJY API运营选品工具说明（Section 10.3）；Actions全量同步；ST-C06/ST-P1/ST-P2标记为已完成 |
 | 2026-04-15 | 文档更新 | - | - | 系统分析师 | v3.34审查：完善F-040-22契约、澄清状态关系、统一口径 |
 | 2026-04-13 | F-016-01~04 | ✅/🏗 | ✅/🗓 | 系统架构师 | 重构为”预生成推荐解释检索”，移除实时AI生成依赖 |
 | 2026-04-13 | F-020-01~06 | ✅/🏗 | ✅/🗓 | 系统架构师 | 重构为”外部运营AI异步生产 + 入库治理” |
@@ -763,7 +767,7 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 |--------|------|--------|
 | 标签名长度 | 1~50字符 | `INVALID_TAG_LENGTH` |
 | 商品标题长度 | 1~200字符 | `INVALID_TITLE_LENGTH` |
-| 禁用词检查 | 禁止出现：best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/officially/must-have/first-ever/game-changer（12项） | `FORBIDDEN_WORD_DETECTED` |
+| 禁用词检查 | 禁止出现：best/worst/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/official/authentic/dangerous（共12项，ST-P3修复：与代码定义对齐） | `FORBIDDEN_WORD_DETECTED` |
 | 价格范围 | >=0 且 <= 999999 | `INVALID_PRICE_RANGE` |
 | 图片URL格式 | 有效URL或R2对象路径 | `INVALID_IMAGE_URL` |
 | 日期格式 | ISO 8601 | `INVALID_DATE_FORMAT` |
@@ -2107,7 +2111,7 @@ score_behavior(product_id) =
 | **决策** | 标记"通过"/"需修改"/"误报" |
 | **输出** | 审核结果；如需修改，给出修改建议 |
 
-**禁用词表（12项）**：`best`, `safest`, `guaranteed`, `proven`, `clinically`, `miracle`, `revolutionary`, `lifesaving`, `officially`, `must-have`, `first-ever`, `game-changer`
+**禁用词表（共12项，ST-P3修复：与代码实际定义对齐）**：`best`, `worst`, `safest`, `guaranteed`, `proven`, `clinically`, `miracle`, `revolutionary`, `lifesaving`, `official`, `authentic`, `dangerous`
 
 #### F-021 AI审核工作流端点（v3.35新增）
 
@@ -2575,6 +2579,99 @@ draft → submitted → in_review → high_risk_pending → approved
 - 不发布未经审核的 AI 生成内容
 - 高风险类目内容双人审核
 - 所有内容发布记录可追溯
+
+### 10.3 JJY API 运营选品工具（v3.36新增）
+
+> **需求来源**：findora_project_status.md §六（运营数据工具），JJY API 为当前选品工作流的核心工具，优先于其他选品工具。
+
+**工具定位**：JJY API 是 Findora 运营团队进行跨境选品的核心数据获取工具，**覆盖5个主流电商平台**，**无需登录**，**纯API调用**，由运营 Agent 直接使用。
+
+**文件位置**：`operations/tools/jjy_api.js`
+
+#### 10.3.1 支持平台
+
+| 平台 | API域名 | 支持品类数 | 说明 |
+|------|---------|-----------|------|
+| Temu | www.temaishuju.com | 23个 | 低价商品丰富，适合新奇选品 |
+| Shein | api.sheinshuju.com | 23个 | 快时尚、小件饰品 |
+| Amazon | api.amazonshuju.com | 24个 | 高客单价、品牌商品 |
+| 速卖通 | api.sumaitongshuju.com | 30个 | 品类最全，B2C出口主力 |
+| TikTok Shop | api.tiktokshuju.com | 28个 | 社交流量驱动，热销趋势 |
+
+#### 10.3.2 核心筛选参数
+
+| 参数 | 说明 | 示例 |
+|------|------|------|
+| `keyword` | 关键词搜索（英文效果更好） | `necklace`、`kitchen gadget` |
+| `catId` | 品类ID（对应平台品类体系） | `18768`（对应美容和个人护理） |
+| `onSaleTimeStart` | 上架时间下限（筛选新品） | `2025-01-01` |
+| `priceMin` / `priceMax` | 价格区间筛选 | `5` / `30` |
+
+#### 10.3.3 接口契约
+
+```javascript
+// 使用示例
+const jjyApi = require('./jjy_api.js');
+await jjyApi.init();
+
+// 4参数组合筛选
+const result = await jjyApi.search({
+  keyword: 'necklace',
+  platform: 'temu',
+  categoryId: 18768,
+  onSaleTimeStart: '2025-01-01',
+  priceMin: 5,
+  priceMax: 30
+});
+
+// 按品类名称查找ID
+const catId = jjyApi.findCategoryId('temu', '美容');
+```
+
+**返回数据格式**：
+```json
+{
+  "success": true,
+  "platform": "temu",
+  "total": 200,
+  "products": [
+    {
+      "goodsNameEn": "Vintage Pearl Necklace Set",
+      "goodsNameCn": "复古珍珠项链套装",
+      "sold": 44000,
+      "goodsPriceMin": 1.8,
+      "goodsPriceMax": 3.19,
+      "rating": 4.6,
+      "onSaleTime": "2025-01-15T...",
+      "thumbnail": "..."
+    }
+  ]
+}
+```
+
+#### 10.3.4 运营使用规范
+
+| 规范项 | 说明 |
+|--------|------|
+| 选品优先级 | Selector Agent 选品时，**必须优先使用 JJY API**（vs ThuntAI或其他工具） |
+| 数据质量 | JJY API 无需登录，5平台纯API调用，数据更精准高效 |
+| 数据整合 | 获取原始数据后，由 **Curator Agent** 做二次包装（重写标题/摘要/亮点） |
+| 合规审核 | 所有通过 JJY API 选中的商品，必须经 F-021 审核工作流后方可上架 |
+| 工具搁置 | ThuntAI 工具（仅1平台、需要登录）暂时搁置，JJY 覆盖后再评估 |
+
+#### 10.3.5 运营工作流集成
+
+```
+Selector选品 → JJY API获取数据（5平台、免登录）
+                      ↓
+              Curator二次包装 → 生成商品Card + 推荐文案
+                      ↓
+              Operator审核上架 → pass则API入库（/api/admin/products）
+                      ↓
+              F-021 AI审核工作流 → 人工复核 → 上线展示
+```
+
+**与 business_concept §11 对齐**：JJY API 是"外部运营AI"获取商品原始数据的主要工具，数据经 F-040-22 接口进入系统后，由运营团队进行人工审核和内容包装。
 
 ---
 

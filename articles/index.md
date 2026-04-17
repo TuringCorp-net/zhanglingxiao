@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-17
+- **文件**: 20260417-2604.14137-vibe-testing-llm.md
+- **标题**: 当你在"感觉"AI好不好时，其实你正在做一件很专业的事
+- **论文来源**: arXiv:2604.14137 | From Feelings to Metrics: Understanding and Formalizing How Users Vibe-Test LLMs
+- **作者**: Itay Itzhak, Eliya Habba, Gabriel Stanovsky, Yonatan Belinkov（以色列理工学院 & 耶路撒冷希伯来大学）
+- **撰写日期**: 2026-04-17（北京时间）
+- **备注**: 首次系统分析vibe-testing（感觉测试）；vibe-testing本质是"双personalization"（个性化输入+个性化评判）；把感觉测试形式化为可自动化pipeline；在编程任务上验证，个性化可翻转模型排名（GPT-5.1对初级用户在原始题目下输，但个性化后赢）；揭示benchmark与真实体验的鸿沟
+
 ### 2026-04-16
 - **文件**: 20260416-2604.13010-lightning-opd.md
 - **标题**: 训练AI大模型的新方法：把"在线老师"变成"离线老师"，效率提升4倍
