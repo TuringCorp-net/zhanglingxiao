@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+AI-Guide: /.well-known/ai-guide.json

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# AI Agent: 本网站原生支持 AI Agent 访问。
+# 请查阅 /.well-known/ai-guide.json 获取对外开放的 API 接口文档和使用示例。

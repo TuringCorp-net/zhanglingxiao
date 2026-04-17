@@ -1,0 +1,432 @@
+{
+  "name": "Findora",
+  "description": "AI驱动的跨境选品内容平台 API",
+  "version": "1.0.0",
+  "documentation": "/findora_external_api.md",
+  "baseUrl": "/api",
+
+  "authentication": {
+    "public": {
+      "description": "公开端点，无需认证即可访问",
+      "type": "none"
+    },
+    "user": {
+      "description": "用户端点，需要在请求头中传递 X-User-ID",
+      "type": "header",
+      "header": {
+        "name": "X-User-ID",
+        "example": "user_abc123",
+        "description": "用户唯一标识符"
+      }
+    }
+  },
+
+  "endpoints": {
+    "public": [
+      {
+        "method": "GET",
+        "path": "/trending",
+        "description": "获取热门商品列表",
+        "parameters": {}
+      },
+      {
+        "method": "GET",
+        "path": "/products",
+        "description": "获取商品列表",
+        "parameters": {
+          "query": {
+            "page": {"type": "integer", "example": 1, "description": "页码"},
+            "limit": {"type": "integer", "example": 20, "description": "每页数量"},
+            "category": {"type": "string", "example": "electronics", "description": "类目筛选"},
+            "tags": {"type": "string", "example": "trending,best-seller", "description": "标签筛选（逗号分隔）"},
+            "search": {"type": "string", "example": "wireless earbuds", "description": "搜索关键词"}
+          }
+        },
+        "example": "/api/products?page=1&limit=20&category=electronics"
+      },
+      {
+        "method": "GET",
+        "path": "/products/:id",
+        "description": "获取商品详情",
+        "parameters": {
+          "path": {
+            "id": {"type": "string", "example": "prod_12345", "description": "商品ID"}
+          }
+        },
+        "example": "/api/products/prod_12345"
+      },
+      {
+        "method": "GET",
+        "path": "/lists",
+        "description": "获取榜单列表",
+        "parameters": {}
+      },
+      {
+        "method": "GET",
+        "path": "/lists/:id",
+        "description": "获取榜单详情，包含榜单内的商品列表",
+        "parameters": {
+          "path": {
+            "id": {"type": "string", "example": "list_top10", "description": "榜单ID"}
+          }
+        },
+        "example": "/api/lists/list_top10"
+      },
+      {
+        "method": "GET",
+        "path": "/categories",
+        "description": "获取完整类目树结构",
+        "parameters": {}
+      },
+      {
+        "method": "GET",
+        "path": "/categories/:category/subcategories",
+        "description": "获取指定类目下的子类目",
+        "parameters": {
+          "path": {
+            "category": {"type": "string", "example": "electronics", "description": "类目名称"}
+          }
+        },
+        "example": "/api/categories/electronics/subcategories"
+      },
+      {
+        "method": "GET",
+        "path": "/configs/:key",
+        "description": "获取公开配置信息",
+        "parameters": {
+          "path": {
+            "key": {"type": "string", "example": "featured_categories", "description": "配置键名"}
+          }
+        },
+        "example": "/api/configs/featured_categories"
+      }
+    ],
+    "user": [
+      {
+        "method": "POST",
+        "path": "/subscribe",
+        "description": "订阅通知",
+        "parameters": {
+          "body": {
+            "email": {"type": "string", "example": "user@example.com", "description": "邮箱地址"},
+            "preferences": {"type": "object", "description": "订阅偏好设置"}
+          }
+        },
+        "example": {
+          "body": {
+            "email": "user@example.com",
+            "preferences": {"categories": ["electronics"], "frequency": "daily"}
+          }
+        }
+      },
+      {
+        "method": "DELETE",
+        "path": "/subscribe",
+        "description": "取消订阅",
+        "parameters": {}
+      },
+      {
+        "method": "PATCH",
+        "path": "/subscribe/preferences",
+        "description": "更新订阅偏好",
+        "parameters": {
+          "body": {
+            "categories": {"type": "array", "example": ["fashion", "beauty"], "description": "偏好类目"},
+            "frequency": {"type": "string", "example": "weekly", "description": "通知频率"}
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/favorites",
+        "description": "添加商品到收藏",
+        "parameters": {
+          "body": {
+            "product_id": {"type": "string", "example": "prod_12345", "description": "商品ID"}
+          }
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/favorites",
+        "description": "获取收藏列表",
+        "parameters": {
+          "query": {
+            "page": {"type": "integer", "example": 1},
+            "limit": {"type": "integer", "example": 20}
+          }
+        }
+      },
+      {
+        "method": "DELETE",
+        "path": "/favorites/:product_id",
+        "description": "移除收藏",
+        "parameters": {
+          "path": {
+            "product_id": {"type": "string", "example": "prod_12345", "description": "商品ID"}
+          }
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/favorites/lists",
+        "description": "获取收藏的榜单列表",
+        "parameters": {}
+      },
+      {
+        "method": "POST",
+        "path": "/favorites/lists/:list_id",
+        "description": "收藏榜单",
+        "parameters": {
+          "path": {
+            "list_id": {"type": "string", "example": "list_top10", "description": "榜单ID"}
+          }
+        }
+      },
+      {
+        "method": "DELETE",
+        "path": "/favorites/lists/:list_id",
+        "description": "取消收藏榜单",
+        "parameters": {
+          "path": {
+            "list_id": {"type": "string", "example": "list_top10", "description": "榜单ID"}
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/clicks",
+        "description": "记录用户点击行为",
+        "parameters": {
+          "body": {
+            "product_id": {"type": "string", "example": "prod_12345", "description": "商品ID"},
+            "source": {"type": "string", "example": "search", "description": "点击来源"}
+          }
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/recommendations",
+        "description": "获取个性化商品推荐",
+        "parameters": {
+          "query": {
+            "limit": {"type": "integer", "example": 10, "description": "推荐数量"}
+          }
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/recommendations/behavioral",
+        "description": "获取行为增强推荐（基于用户历史行为）",
+        "parameters": {
+          "query": {
+            "limit": {"type": "integer", "example": 10}
+          }
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/explain/:product_id",
+        "description": "获取商品AI解释（为什么推荐这个商品）",
+        "parameters": {
+          "path": {
+            "product_id": {"type": "string", "example": "prod_12345", "description": "商品ID"}
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/explain/batch",
+        "description": "批量获取商品AI解释",
+        "parameters": {
+          "body": {
+            "product_ids": {"type": "array", "example": ["prod_123", "prod_456"], "description": "商品ID列表"}
+          }
+        },
+        "example": {
+          "body": {
+            "product_ids": ["prod_123", "prod_456", "prod_789"]
+          }
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/explain/:product_id/comparison",
+        "description": "获取商品对比信息",
+        "parameters": {
+          "path": {
+            "product_id": {"type": "string", "example": "prod_12345", "description": "商品ID"}
+          }
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/explain/:product_id/scenarios",
+        "description": "获取商品适用场景",
+        "parameters": {
+          "path": {
+            "product_id": {"type": "string", "example": "prod_12345", "description": "商品ID"}
+          }
+        }
+      }
+    ],
+    "i18n_and_membership": [
+      {
+        "method": "GET",
+        "path": "/i18n/locales",
+        "description": "获取支持的语言列表",
+        "parameters": {},
+        "auth": "public"
+      },
+      {
+        "method": "GET",
+        "path": "/i18n/translations/:locale",
+        "description": "获取指定语言的翻译文本",
+        "parameters": {
+          "path": {
+            "locale": {"type": "string", "example": "zh-CN", "description": "语言代码"}
+          }
+        },
+        "auth": "public",
+        "example": "/api/i18n/translations/zh-CN"
+      },
+      {
+        "method": "GET",
+        "path": "/i18n/content/:type/:id/:locale/:field",
+        "description": "获取内容翻译",
+        "parameters": {
+          "path": {
+            "type": {"type": "string", "example": "product", "description": "内容类型"},
+            "id": {"type": "string", "example": "prod_12345", "description": "内容ID"},
+            "locale": {"type": "string", "example": "zh-CN", "description": "语言代码"},
+            "field": {"type": "string", "example": "description", "description": "字段名"}
+          }
+        },
+        "auth": "public",
+        "example": "/api/i18n/content/product/prod_12345/zh-CN/description"
+      },
+      {
+        "method": "GET",
+        "path": "/membership/tiers",
+        "description": "获取会员等级信息",
+        "parameters": {},
+        "auth": "public"
+      },
+      {
+        "method": "GET",
+        "path": "/membership/my",
+        "description": "获取当前用户的会员信息",
+        "parameters": {},
+        "auth": "user"
+      },
+      {
+        "method": "POST",
+        "path": "/membership/check",
+        "description": "检查用户是否享有特定权益",
+        "parameters": {
+          "body": {
+            "feature": {"type": "string", "example": "ai_explain", "description": "功能名称"}
+          }
+        },
+        "auth": "user"
+      }
+    ],
+    "external": [
+      {
+        "method": "POST",
+        "path": "/conversions/callback",
+        "description": "联盟营销转化回调（外部系统调用）",
+        "parameters": {
+          "body": {
+            "campaign_id": {"type": "string", "example": "camp_abc", "description": "活动ID"},
+            "conversion_id": {"type": "string", "example": "conv_123", "description": "转化ID"},
+            "product_id": {"type": "string", "example": "prod_12345", "description": "商品ID"},
+            "revenue": {"type": "number", "example": 99.99, "description": "转化金额"}
+          }
+        },
+        "auth": "public"
+      },
+      {
+        "method": "POST",
+        "path": "/email/send-confirmation",
+        "description": "发送订阅确认邮件（外部系统调用）",
+        "parameters": {
+          "body": {
+            "email": {"type": "string", "example": "user@example.com", "description": "邮箱地址"},
+            "token": {"type": "string", "example": "abc123", "description": "确认令牌"}
+          }
+        },
+        "auth": "public"
+      }
+    ]
+  },
+
+  "workflows": [
+    {
+      "name": "浏览热门商品",
+      "description": "用户首次访问时了解平台热门内容",
+      "steps": [
+        {"step": 1, "action": "获取热门商品", "endpoint": "GET /api/trending"},
+        {"step": 2, "action": "获取类目树了解商品分类", "endpoint": "GET /api/categories"},
+        {"step": 3, "action": "按类目筛选热门商品", "endpoint": "GET /api/products?category=electronics&tags=trending"}
+      ]
+    },
+    {
+      "name": "商品搜索与收藏",
+      "description": "用户搜索商品并收藏感兴趣的商品",
+      "steps": [
+        {"step": 1, "action": "搜索商品", "endpoint": "GET /api/products?search=wireless+earbuds"},
+        {"step": 2, "action": "查看商品详情", "endpoint": "GET /api/products/:id"},
+        {"step": 3, "action": "获取AI商品解释", "endpoint": "GET /api/explain/:product_id"},
+        {"step": 4, "action": "收藏商品", "endpoint": "POST /api/favorites", "header": "X-User-ID: <user_id>", "body": {"product_id": ":id"}}
+      ]
+    },
+    {
+      "name": "个性化推荐与订阅",
+      "description": "用户获取个性化推荐并订阅通知",
+      "steps": [
+        {"step": 1, "action": "记录点击行为（用于提升推荐质量）", "endpoint": "POST /api/clicks", "header": "X-User-ID: <user_id>", "body": {"product_id": ":product_id", "source": "recommendation"}},
+        {"step": 2, "action": "获取个性化推荐", "endpoint": "GET /api/recommendations", "header": "X-User-ID: <user_id>"},
+        {"step": 3, "action": "获取推荐解释", "endpoint": "GET /api/recommendations/behavioral", "header": "X-User-ID: <user_id>"},
+        {"step": 4, "action": "订阅每日推荐通知", "endpoint": "POST /api/subscribe", "header": "X-User-ID: <user_id>", "body": {"email": "user@example.com", "preferences": {"frequency": "daily"}}}
+      ]
+    },
+    {
+      "name": "榜单浏览与收藏",
+      "description": "用户浏览和收藏感兴趣的榜单",
+      "steps": [
+        {"step": 1, "action": "获取榜单列表", "endpoint": "GET /api/lists"},
+        {"step": 2, "action": "查看榜单详情", "endpoint": "GET /api/lists/:id"},
+        {"step": 3, "action": "收藏榜单", "endpoint": "POST /api/favorites/lists/:list_id", "header": "X-User-ID: <user_id>"}
+      ]
+    },
+    {
+      "name": "商品对比与场景分析",
+      "description": "用户对比多个商品并了解适用场景",
+      "steps": [
+        {"step": 1, "action": "获取商品A对比信息", "endpoint": "GET /api/explain/:product_id_A/comparison"},
+        {"step": 2, "action": "获取商品B对比信息", "endpoint": "GET /api/explain/:product_id_B/comparison"},
+        {"step": 3, "action": "批量获取AI解释", "endpoint": "POST /api/explain/batch", "body": {"product_ids": [":product_id_A", ":product_id_B"]}},
+        {"step": 4, "action": "查看商品适用场景", "endpoint": "GET /api/explain/:product_id/scenarios"}
+      ]
+    }
+  ],
+
+  "responseFormat": {
+    "success": {
+      "code": 200,
+      "data": "请求的数据",
+      "message": "success"
+    },
+    "error": {
+      "code": 400,
+      "error": "错误描述",
+      "message": "error"
+    }
+  },
+
+  "rateLimits": {
+    "public": "无限制",
+    "user": "每分钟100次请求"
+  }
+}
