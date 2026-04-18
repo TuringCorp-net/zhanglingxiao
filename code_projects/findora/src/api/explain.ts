@@ -178,10 +178,11 @@ export function generateExplanation(ctx: ExplanationContext): {
 // AI Extension (Optional Enhancement)
 // ============================================================
 
+// ST-P4修复：统一禁用词表为16项，与ai_content.ts/ai_review.ts保持一致
 const BANNED_WORDS = [
   'best', 'worst', 'safest', 'guaranteed', 'proven', 'clinically',
   'miracle', 'revolutionary', 'lifesaving', 'official', 'authentic',
-  'dangerous',
+  'dangerous', 'amazing', 'incredible', 'unbelievable', 'game-changing',
 ];
 
 /**

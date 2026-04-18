@@ -2,9 +2,9 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.43（SRS定时任务：全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表12项一致性（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确；所有历史修复项验证通过；三文档版本对齐SRS→v3.43、SDS→v3.45、API→v3.45、STR→v3.47）
-> **最后更新：** 2026-04-17
-> **状态：** 🟢 需求基线已重构：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
+> **版本：** v3.50（SRS定时任务：全面代码审查确认；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表12项一致性（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-126行、EMS在index.ts:746-774行）；ST-C06/ST-S01/ST-S02修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.50、SDS→v3.50、API→v3.49、STR→v3.50；代码基线稳定；无新增问题）
+> **最后更新：** 2026-04-18
+> **状态：** 🟢 需求基线稳定：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
 ---
 
@@ -14,6 +14,7 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-18 | v3.50：SRS定时任务；全面代码审查确认；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表12项一致性确认（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-126行、EMS在index.ts:746-774行）；ST-C06（behavior.ts dislikes按用户过滤）修复验证通过；ST-S01（auth.ts PBKDF2密码哈希）修复验证通过；ST-S02（auth.ts JWT密钥无回退）修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐（SRS→v3.50、SDS→v3.50、API→v3.49、STR→v3.50）；代码基线稳定；无新增问题 |
 | 2026-04-17 | v3.43：SRS定时任务；全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表12项一致性（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-131；EMS在index.ts:746-774）；所有历史修复项（ST-S01~S06、ST-C06、ST-P1~P3、ST-T02/T03）验证通过；三文档版本对齐（SRS→v3.43、SDS→v3.45、API→v3.45、STR→v3.47）|
 | 2026-04-17 | v3.38：SRS定时任务；同步v3.42全面代码审查结果（STR v3.42）；TS编译0错误确认；AC-01~AC-06架构约束全部通过；路由遮蔽问题代码验证已修复；禁用词表12项一致性确认；Actions全量同步 |
 | 2026-04-17 | v3.37：SRS定时任务；同步v3.40全面代码审查结果（STR v3.40）；TS编译0错误确认；AC-01~AC-06架构约束全部通过；ST-C06（dislikes按用户过滤）、ST-P1（cache时间戳INTEGER）、禁用词表一致性（12项）全部确认为已完成；Actions全量同步；版本号与SDS/STR对齐 |
@@ -28,19 +29,20 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v3.43同步）
+### 已完成项（v3.50同步）
 
 1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
 2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`
-3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（STR v3.47确认）
-4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（STR v3.47确认）
-5. ✅ **P0安全问题**：ST-S01~S06 全部修复
+3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v3.50确认）
+4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.50确认）
+5. ✅ **P0安全问题**：ST-S01~S06 全部修复并验证
 6. ✅ **ST-C06修复**：dislikes查询已改为按用户ID过滤，dislike_count不再被全局高估
 7. ✅ **ST-P1修复**：explanation_cache表 `generated_at`/`expires_at` 字段类型已统一为 INTEGER（Unix时间戳），与代码行为一致
 8. ✅ **ST-P2修复**：API文档与代码端点偏差已全部修正（外部系统接口路径、admin路由注册等）
 9. ✅ **禁用词表一致性**：SRS禁用词表已与代码对齐，12项（`best`/`worst`/`safest`/`guaranteed`/`proven`/`clinically`/`miracle`/`revolutionary`/`lifesaving`/`official`/`authentic`/`dangerous`）；ai_content.ts(22-26行)与explain.ts(181-185行)一致为12项
-10. ✅ **v3.43全面审查确认（STR v3.47）**：TS编译0错误；AC-01~AC-06全部通过；代码基线稳定，无新增P0/P1/P2问题；三文档版本对齐（SRS→v3.43、SDS→v3.45、API→v3.45、STR→v3.47）
-11. ✅ **路由遮蔽验证**：index.ts中categories路由(123-131行)和EMS路由(746-774行)顺序正确
+10. ✅ **v3.50全面审查确认（STR v3.50）**：TS编译0错误；AC-01~AC-06全部通过；ST-C06/ST-S01/ST-S02修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐（SRS→v3.50、SDS→v3.50、API→v3.49、STR→v3.50）；代码基线稳定；无新增问题
+11. ✅ **路由遮蔽验证**：index.ts中categories路由(123-126行)和EMS路由(746-774行)顺序正确
+12. ✅ **v3.49审查确认**：同v3.50全面审查全部通过
 
 ### 待推进项（按优先级）
 
@@ -103,6 +105,7 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
+| v3.50 | 2026-04-18 | SRS定时任务 | 全面代码审查确认；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表12项一致性确认；路由遮蔽问题验证正确；ST-C06/ST-S01/ST-S02修复验证通过；三文档版本对齐（SRS→v3.50、SDS→v3.50、API→v3.49、STR→v3.50）；代码基线稳定 |
 | v3.37 | 2026-04-17 | SRS定时任务 | 同步v3.40全面代码审查结果（STR v3.40）；TS编译0错误确认；AC-01~AC-06全部通过；ST-C06/ST-P1/禁用词表一致性全部确认为已完成；Actions全量同步；版本号与SDS/STR对齐 |
 | v3.36 | 2026-04-17 | SRS四次自动审查 | 同步ST-P3（禁用词表与代码对齐：best/worst/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/official/authentic/dangerous）；补充JJY API运营选品工具说明（operations/tools/jjy_api.js）；同步SDS v3.36（ST-C06/ST-P1修复确认）；Actions项全量更新 |
 | v3.35 | 2026-04-16 | SRS三次自动审查 | 同步STR v3.35最新发现（ST-C06/STS-P1/ST-P2）；补充F-021审核工作流端点详情；禁用词表12项；端点口径统一 |

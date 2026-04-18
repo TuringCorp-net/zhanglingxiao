@@ -19,10 +19,11 @@ import { ErrorCodes } from '../lib/errors';
 // Banned Words (F-021-05)
 // ============================================================
 
+// ST-P4修复：统一禁用词表为16项，与ai_review.ts保持一致
 export const BANNED_WORDS = [
   'best', 'worst', 'safest', 'guaranteed', 'proven', 'clinically',
   'miracle', 'revolutionary', 'lifesaving', 'official', 'authentic',
-  'dangerous',
+  'dangerous', 'amazing', 'incredible', 'unbelievable', 'game-changing',
 ] as const;
 
 export interface BannedWordResult {
