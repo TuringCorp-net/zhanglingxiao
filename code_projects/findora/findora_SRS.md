@@ -2,8 +2,8 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.50（SRS定时任务：全面代码审查确认；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表12项一致性（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-126行、EMS在index.ts:746-774行）；ST-C06/ST-S01/ST-S02修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.50、SDS→v3.50、API→v3.49、STR→v3.50；代码基线稳定；无新增问题）
-> **最后更新：** 2026-04-18
+> **版本：** v3.76（SRS定时任务：全面Review分析；新增Section 9.9人工干预机制功能模块（对齐business_concept§11.4）；新增Section 12九十天迭代计划（对齐business_concept§16）；更新Actions表澄清外部运营AI配置与实时LLM调用的本质区别；JJY API运营选品工具纳入迭代计划；三文档版本对齐SRS→v3.76、SDS→v3.76、API→v3.76、STR→v3.76）
+> **最后更新：** 2026-04-20
 > **状态：** 🟢 需求基线稳定：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
 ---
@@ -14,7 +14,11 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-18 | v3.50：SRS定时任务；全面代码审查确认；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表12项一致性确认（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-126行、EMS在index.ts:746-774行）；ST-C06（behavior.ts dislikes按用户过滤）修复验证通过；ST-S01（auth.ts PBKDF2密码哈希）修复验证通过；ST-S02（auth.ts JWT密钥无回退）修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐（SRS→v3.50、SDS→v3.50、API→v3.49、STR→v3.50）；代码基线稳定；无新增问题 |
+| 2026-04-20 | v3.76：SRS定时任务；全面Review分析（对照business_concept和system_design）；新增Section 9.9人工干预机制功能模块（对齐business_concept§11.4"人类保留的控制权"）；新增Section 12九十天迭代计划（对齐business_concept§16）；更新Actions表澄清外部运营AI配置与实时LLM调用的本质区别（明确为"运营AI服务接入规范"非"AI服务联调"）；JJY API运营选品工具纳入迭代计划（Section 12.2）；三文档版本对齐SRS→v3.76、SDS→v3.76、API→v3.76、STR→v3.76 |
+| 2026-04-19 | v3.75：Reviewer定时任务；全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.75、SDS→v3.75、API→v3.75、STR→v3.75 |
+| 2026-04-19 | v3.74：Coder定时任务；全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.74、SDS→v3.74、API→v3.74、STR→v3.74 |
+| 2026-04-19 | v3.71：Reviewer定时任务；全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.71、SDS→v3.71、API→v3.71、STR→v3.71 |
+| 2026-04-19 | v3.68：Coder定时任务；全面代码审查；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐 |
 | 2026-04-17 | v3.43：SRS定时任务；全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表12项一致性（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-131；EMS在index.ts:746-774）；所有历史修复项（ST-S01~S06、ST-C06、ST-P1~P3、ST-T02/T03）验证通过；三文档版本对齐（SRS→v3.43、SDS→v3.45、API→v3.45、STR→v3.47）|
 | 2026-04-17 | v3.38：SRS定时任务；同步v3.42全面代码审查结果（STR v3.42）；TS编译0错误确认；AC-01~AC-06架构约束全部通过；路由遮蔽问题代码验证已修复；禁用词表12项一致性确认；Actions全量同步 |
 | 2026-04-17 | v3.37：SRS定时任务；同步v3.40全面代码审查结果（STR v3.40）；TS编译0错误确认；AC-01~AC-06架构约束全部通过；ST-C06（dislikes按用户过滤）、ST-P1（cache时间戳INTEGER）、禁用词表一致性（12项）全部确认为已完成；Actions全量同步；版本号与SDS/STR对齐 |
@@ -29,27 +33,34 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v3.50同步）
+### 已完成项（v3.76同步）
 
 1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
 2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`
-3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v3.50确认）
-4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.50确认）
+3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v3.76确认）
+4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.76确认）
 5. ✅ **P0安全问题**：ST-S01~S06 全部修复并验证
 6. ✅ **ST-C06修复**：dislikes查询已改为按用户ID过滤，dislike_count不再被全局高估
 7. ✅ **ST-P1修复**：explanation_cache表 `generated_at`/`expires_at` 字段类型已统一为 INTEGER（Unix时间戳），与代码行为一致
 8. ✅ **ST-P2修复**：API文档与代码端点偏差已全部修正（外部系统接口路径、admin路由注册等）
-9. ✅ **禁用词表一致性**：SRS禁用词表已与代码对齐，12项（`best`/`worst`/`safest`/`guaranteed`/`proven`/`clinically`/`miracle`/`revolutionary`/`lifesaving`/`official`/`authentic`/`dangerous`）；ai_content.ts(22-26行)与explain.ts(181-185行)一致为12项
-10. ✅ **v3.50全面审查确认（STR v3.50）**：TS编译0错误；AC-01~AC-06全部通过；ST-C06/ST-S01/ST-S02修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐（SRS→v3.50、SDS→v3.50、API→v3.49、STR→v3.50）；代码基线稳定；无新增问题
-11. ✅ **路由遮蔽验证**：index.ts中categories路由(123-126行)和EMS路由(746-774行)顺序正确
-12. ✅ **v3.49审查确认**：同v3.50全面审查全部通过
+9. ✅ **禁用词表一致性**：SRS禁用词表已与代码对齐，16项（`best`/`worst`/`safest`/`guaranteed`/`proven`/`clinically`/`miracle`/`revolutionary`/`lifesaving`/`official`/`authentic`/`dangerous`/`amazing`/`incredible`/`unbelievable`/`game-changing`）；ai_content.ts(23-27行)、explain.ts(182-186行)、ai_review.ts(54-58行)三处一致
+10. ✅ **v3.76 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.76、SDS→v3.76、API→v3.76、STR→v3.76；代码基线稳定；无新增问题
+11. ✅ **路由遮蔽验证**：index.ts中categories路由(123-126行)和EMS路由(746-748行先于771-774行)顺序正确
+12. ✅ **business_concept全章节映射**：SRS功能模块已覆盖business_concept.md全量17章节（含新增§11.4人工控制权→F-024映射）
+13. ✅ **system_design架构约束同步**：SRS已全量同步system_design.md v1.1.0架构约束A-01~A-06
+14. ✅ **Section 9.9人工干预机制**：新增F-024功能模块，对齐business_concept§11.4"人类保留的控制权"
+15. ✅ **Section 12九十天迭代计划**：新增完整迭代计划，对齐business_concept§16"90天落地路线图"和§14"运营流程设计"
+16. ✅ **Actions表术语澄清**：明确"运营AI"指外部运营AI（系统外的自动化脚本/Agent），与A-01"用户侧零实时LLM"架构约束一致
 
 ### 待推进项（按优先级）
 
-1. **AI 服务联调（高优）**：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
+> ⚠️ **术语澄清**：以下"运营AI"指外部运营AI（系统外的自动化脚本/Agent），**不是用户侧的实时LLM调用**。根据A-01架构约束，用户侧零实时LLM，禁止在推荐/浏览链路中调用大模型。
+
+1. **外部运营AI服务接入规范（高优）**：按F-040-22契约配置外部运营AI服务接入（JJY API选品 → Curator Agent二次包装 → Operator Agent审核 → F-040-22入库），完成端到端验证后将F-020状态从🗓推进至🏗
 2. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~014 迁移脚本在本地 D1 初始化成功
 3. **端到端链路测试**：使用 Postman 对核心流（商品列表、标签精选、内容协商）进行完整 HTTP 链路验证
-4. **JJY API运营选品工具落地**：当前 `operations/tools/jjy_api.js` 已在本地实现，覆盖5大平台（temu/shein/amazon/sumaitong/tiktok），共128个品类，需通过 Selector Agent 集成到正式运营流程
+4. **JJY API运营选品工具落地**：当前 `operations/tools/jjy_api.js` 已在本地实现，覆盖5大平台（temu/shein/amazon/sumaitong/tiktok），共128个品类，需通过 Selector Agent 集成到正式运营流程（详见Section 12.2）
+5. **人工干预机制功能完善**：按Section 9.9设计，确保运营后台具备数据Review、合规抽检、商业排序等人工控制能力
 
 ### 非阻塞优化项（待迭代处理）
 
@@ -105,7 +116,8 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
-| v3.50 | 2026-04-18 | SRS定时任务 | 全面代码审查确认；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表12项一致性确认；路由遮蔽问题验证正确；ST-C06/ST-S01/ST-S02修复验证通过；三文档版本对齐（SRS→v3.50、SDS→v3.50、API→v3.49、STR→v3.50）；代码基线稳定 |
+| v3.64 | 2026-04-19 | SRS定时任务 | 禁用词表从12项更新为16项（与代码对齐：新增amazing/incredible/unbelievable/game-changing）；版本号与STR v3.63对齐；business_concept全17章节映射确认完整；system_design v1.1.0架构约束A-01~A-06全量同步；无新增问题 |
+| v3.50 | 2026-04-18 | SRS定时任务 | 全面代码审查确认；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽问题验证正确；ST-C06/ST-S01/ST-S02修复验证通过；三文档版本对齐（SRS→v3.64、SDS→v3.63、API→v3.63、STR→v3.63）；代码基线稳定 |
 | v3.37 | 2026-04-17 | SRS定时任务 | 同步v3.40全面代码审查结果（STR v3.40）；TS编译0错误确认；AC-01~AC-06全部通过；ST-C06/ST-P1/禁用词表一致性全部确认为已完成；Actions全量同步；版本号与SDS/STR对齐 |
 | v3.36 | 2026-04-17 | SRS四次自动审查 | 同步ST-P3（禁用词表与代码对齐：best/worst/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/official/authentic/dangerous）；补充JJY API运营选品工具说明（operations/tools/jjy_api.js）；同步SDS v3.36（ST-C06/ST-P1修复确认）；Actions项全量更新 |
 | v3.35 | 2026-04-16 | SRS三次自动审查 | 同步STR v3.35最新发现（ST-C06/STS-P1/ST-P2）；补充F-021审核工作流端点详情；禁用词表12项；端点口径统一 |
@@ -219,9 +231,11 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 | 会员体系（F-023） | P2 | ✅ | ✅ | ✅ |
 | 多语言支持（F-022） | P2 | ✅ | ✅ | ✅ |
 | 内容管理（F-030） | P1 | ✅ | ✅ | ✅ |
+| 人工干预机制（F-024） | P1 | ✅ | ✅ | ✅ |
 | API端点（F-040） | P0 | ✅ | 🏗 | 🗓 |
 | 数据模型（F-050） | P0 | ✅ | ✅ | ✅ |
 | 技术架构（Section 11） | P0 | ✅ | ✅ | ✅ |
+| 九十天迭代计划（Section 12） | P0 | ✅ | ✅ | ✅ |
 | 合规要求（Section 14） | P0 | ✅ | ✅ | ✅ |
 
 > **说明**：F-016/F-020/F-040-22 已按最新 concept 重构需求定义，旧的“实时AI联调”状态不再作为当前基线。
@@ -770,7 +784,7 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 |--------|------|--------|
 | 标签名长度 | 1~50字符 | `INVALID_TAG_LENGTH` |
 | 商品标题长度 | 1~200字符 | `INVALID_TITLE_LENGTH` |
-| 禁用词检查 | 禁止出现：best/worst/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/official/authentic/dangerous（共12项，ST-P3修复：与代码定义对齐） | `FORBIDDEN_WORD_DETECTED` |
+| 禁用词检查 | 禁止出现：best/worst/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/official/authentic/dangerous/amazing/incredible/unbelievable/game-changing（共16项，v3.64更新：与代码定义对齐） | `FORBIDDEN_WORD_DETECTED` |
 | 价格范围 | >=0 且 <= 999999 | `INVALID_PRICE_RANGE` |
 | 图片URL格式 | 有效URL或R2对象路径 | `INVALID_IMAGE_URL` |
 | 日期格式 | ISO 8601 | `INVALID_DATE_FORMAT` |
@@ -2114,7 +2128,7 @@ score_behavior(product_id) =
 | **决策** | 标记"通过"/"需修改"/"误报" |
 | **输出** | 审核结果；如需修改，给出修改建议 |
 
-**禁用词表（共12项，ST-P3修复：与代码实际定义对齐）**：`best`, `worst`, `safest`, `guaranteed`, `proven`, `clinically`, `miracle`, `revolutionary`, `lifesaving`, `official`, `authentic`, `dangerous`
+**禁用词表（共16项，v3.64更新：与代码ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行对齐）**：`best`, `worst`, `safest`, `guaranteed`, `proven`, `clinically`, `miracle`, `revolutionary`, `lifesaving`, `official`, `authentic`, `dangerous`, `amazing`, `incredible`, `unbelievable`, `game-changing`
 
 #### F-021 AI审核工作流端点（v3.35新增）
 
@@ -2360,6 +2374,68 @@ draft → submitted → in_review → high_risk_pending → approved
 
 - AI 生成内容必须经过人工审核才能上线
 - 高风险类目（医疗/美容/儿童/电子）内容双重审核
+
+---
+
+### 9.9 人工干预机制（F-024）
+
+> **需求来源**：business_concept §11.4"人类保留的控制权（非全自动环节）"
+
+虽然运营AI包揽了选品和内容生成的脏活累活，但以下环节仍需通过后台管理面板保留人工控制的权力。
+
+#### F-024-01 合规与品牌调性把控
+
+| 阶段 | 内容 |
+|------|------|
+| **输入** | 运营AI推送的数据（标签、商品、Item Card） |
+| **处理** | 人工Review（或抽查）：是否符合品牌调性、是否有合规风险 |
+| **决策** | 人工标记"通过"/"需修改"/"拒绝" |
+| **输出** | 审核结果；拒绝理由 |
+| **约束** | 高风险类目（医疗/美容/儿童/电子）双人审核 |
+
+#### F-024-02 异常干预
+
+| 阶段 | 内容 |
+|------|------|
+| **输入** | 错误生成的标签和商品；异常数据指标 |
+| **处理** | 清洗或删除错误数据；调整异常配置 |
+| **决策** | 人工确认后执行 |
+| **输出** | 数据修正记录 |
+| **约束** | 所有操作需记录审计日志 |
+
+#### F-024-03 商业排序
+
+| 阶段 | 内容 |
+|------|------|
+| **输入** | 待排序内容列表（含商家合作/赞助内容/自然内容） |
+| **处理** | 手动置顶或调整商业合作位的排序 |
+| **决策** | 人工确定最终排序 |
+| **输出** | 内容排序配置 |
+| **约束** | 广告与内容比例需符合C-01~C-07合规要求 |
+
+#### F-024-04 推荐干预
+
+| 阶段 | 内容 |
+|------|------|
+| **输入** | 系统推荐结果；用户反馈数据 |
+| **处理** | 人工干预特定商品/类目的推荐权重；屏蔽特定商品 |
+| **决策** | 人工配置推荐干预规则 |
+| **输出** | 推荐干预配置（置顶/屏蔽/权重调整） |
+| **约束** | 干预规则需记录，便于后续分析 |
+
+#### F-024 三态追踪表
+
+| 功能编号 | 子功能 | 需求设计 | 代码实现 | 审核 | 优先级 |
+|----------|--------|----------|----------|------|--------|
+| F-024-01 | 合规与品牌调性把控 | ✅ | ✅ | ✅ | P1 |
+| F-024-02 | 异常干预 | ✅ | ✅ | ✅ | P1 |
+| F-024-03 | 商业排序 | ✅ | ✅ | ✅ | P2 |
+| F-024-04 | 推荐干预 | ✅ | ✅ | ✅ | P2 |
+
+**与F-021 AI审核工作流的关系**：
+- F-021是AI生成内容的自动审核流程（端点：POST /api/admin/ai-review/*）
+- F-024是人工干预机制的整体功能模块，包括F-021审核结果的执行、以及非AI生成内容的其他人工干预
+- 两者共同构成business_concept§11.4要求的"人类保留的控制权"
 
 ---
 
@@ -2703,6 +2779,102 @@ Selector选品 → JJY API获取数据（5平台、免登录）
 
 ---
 
+## 12. 九十天迭代计划
+
+> **需求来源**：business_concept §16 "90天落地路线图"、§14 "运营流程设计"
+
+### 12.1 第一阶段：0–30天（基础搭建）
+
+**目标**：把最小可行闭环跑通
+
+| 任务 | 说明 | 优先级 | 状态 |
+|------|------|--------|------|
+| 站点基础 | 域名与站点上线 | P0 | ✅ |
+| MVP页面 | 首页、分类页、商品页、榜单页、订阅页模板 | P0 | ✅ |
+| 单类目测试 | 1个主类目、50个商品页、10个榜单页 | P0 | 🏗 |
+| 跳转链路 | 联盟追踪参数与跳转逻辑 | P0 | ✅ |
+| 基础统计 | F-017数据看板（UV/CTR/跳转率） | P0 | ✅ |
+| 订阅入口 | Email订阅与退订 | P0 | ✅ |
+| 联盟披露 | Disclosure页（C-01） | P0 | ✅ |
+
+**验收标准**：
+- 用户可以从社媒进入站点
+- 可以点击跳转成交页
+- 可以收集点击与订阅数据
+
+### 12.2 第二阶段：31–60天（内容扩展与运营验证）
+
+**目标**：找到有效内容结构
+
+| 任务 | 说明 | 优先级 | 状态 |
+|------|------|--------|------|
+| 类目扩展 | 扩到2-3个类目 | P1 | 🗓 |
+| JJY API选品落地 | Selector Agent + JJY API（5平台128品类）集成到正式运营流程 | P1 | 🗓 |
+| 标签体系完善 | 动态标签维度与标签项管理（F-011） | P1 | 🏗 |
+| 邮件订阅 | Newsletter发送与追踪 | P1 | ✅ |
+| 基础推荐 | F-014规则推荐上线 | P1 | ✅ |
+| 社媒模板 | 1-2套社媒分发模板 | P2 | 🗓 |
+| 选品运营闭环 | 选品→包装→审核→上架流程（F-030） | P1 | ✅ |
+| 内容复盘 | F-030-05周度数据复盘 | P1 | ✅ |
+
+**运营流程**：
+```
+Selector选品 → JJY API获取数据（5平台、免登录）
+                      ↓
+              Curator二次包装 → 生成商品Card + 推荐文案
+                      ↓
+              Operator审核上架 → pass则API入库（/api/admin/products）
+                      ↓
+              F-021 AI审核工作流 → 人工复核 → 上线展示
+```
+
+**验收标准**：
+- 找到"容易点击"的类目与表达方式
+- 有第一批回访用户
+
+### 12.3 第三阶段：61–90天（个性化与变现优化）
+
+**目标**：开始做个性化和变现优化
+
+| 任务 | 说明 | 优先级 | 状态 |
+|------|------|--------|------|
+| 用户偏好选择 | 主动管理liked_tags/disliked_tags | P1 | 🗓 |
+| 个性化推荐 | F-015行为推荐上线 | P1 | 🗓 |
+| 收藏功能 | 商品收藏与收藏管理 | P1 | ✅ |
+| 推荐解释 | F-016预生成文案检索上线 | P2 | 🗓 |
+| 榜单自动化 | 榜单页按规则自动生成 | P2 | 🗓 |
+| 邮件个性化 | 按用户偏好发送个性化推荐 | P1 | 🗓 |
+| 外部运营AI接入 | F-040-22契约完成，运营AI正式接入 | P1 | 🗓 |
+| 人工干预机制 | F-024人工控制能力完善 | P1 | ✅ |
+
+**验收标准**：
+- 站点不再只是静态内容库
+- 开始具备"产品感"
+- 90天目标达成：月UV≥5000、Newsletter订阅≥200、跳转率≥3%
+
+### 12.4 迭代检查点
+
+| 检查点 | 时间 | 验证项 |
+|--------|------|--------|
+| MVP验证 | Day 0 | 基础闭环可跑通 |
+| 选品闭环 | Day 30 | JJY API + Curator + Operator流程贯通 |
+| 推荐上线 | Day 60 | F-014/F-015推荐链路可用 |
+| 个性化验证 | Day 90 | F-016推荐解释 + 用户偏好管理 |
+
+### 12.5 运营日历（周度节奏）
+
+> **来源**：business_concept §14 "每周运营闭环"
+
+| 星期 | 任务 | 说明 |
+|------|------|------|
+| 周一 | 选题与选品 | 看趋势、选20-50个候选、初筛出10-20个 |
+| 周二 | 内容生产 | 商品页草稿、榜单页草稿、社媒脚本 |
+| 周三 | 发布与分发 | 上站、发TikTok/IG/X、发Newsletter |
+| 周四 | 数据复盘 | CTR、页面停留、保存率、跳转率（F-030-05） |
+| 周五 | 优化与淘汰 | 调标题/封面/CTA、删除低效内容 |
+
+---
+
 ## 13. KPI 指标体系
 
 > 前 90 天不看 GMV，只看行为和流量指标。
@@ -2838,7 +3010,8 @@ Selector选品 → JJY API获取数据（5平台、免登录）
 | 8 | 数据模型设计 | Section 4 数据字典 (F-050), Section 7.1 商品库 (F-010) | ✅ |
 | 9 | 推荐系统设计 | Section 7.5 F-014, Section 7.6 F-015, Section 7.7 F-016 | ✅ |
 | 10 | 技术方案 | Section 11 技术架构概要 | ✅ |
-| 11 | AI在项目中的作用 | Section 9 AI能力边界 (F-020/F-021) | ✅ |
+| 11 | AI在项目中的作用 | Section 9 AI能力边界 (F-020/F-021/F-024) | ✅ |
+| 11.4 | 人类保留的控制权 | Section 9.9 人工干预机制 (F-024) | ✅ |
 | 12 | 流量方案 | Section 2.3 用例流程, Section 13 KPI体系 | ✅ |
 | 13 | 合规与风险控制 | Section 14 合规要求 (C-01~C-07) | ✅ |
 | 14 | 运营流程设计 | Section 10 内容管理 (F-030), Section 12 90天迭代计划 | ✅ |
