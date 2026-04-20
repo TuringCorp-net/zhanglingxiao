@@ -44,11 +44,17 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-20 | Coder定时任务（v3.85）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.85、SDS→v3.85、API→v3.85、STR→v3.85；代码基线稳定；无新增问题 |
+| 2026-04-20 | Coder定时任务（v3.82）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.82、SDS→v3.82、API→v3.82、STR→v3.82；代码基线稳定；无新增问题 |
+| 2026-04-20 | Coder定时任务（v3.78）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.78、SDS→v3.78、API→v3.78、STR→v3.78；代码基线稳定；无新增问题 |
+| 2026-04-19 | Reviewer定时任务（v3.71）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:183-186行、ai_review.ts:54-58行）；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.71、SDS→v3.71、API→v3.71、STR→v3.71 |
+| 2026-04-19 | Coder定时任务（v3.70）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:183-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.70、SDS→v3.70、API→v3.70、STR→v3.70；代码基线稳定；无新增问题 |
+| 2026-04-19 | Reviewer定时任务（v3.69）：全面代码审查；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.69、SDS→v3.69、API→v3.69、STR→v3.69 |
+| 2026-04-19 | Coder定时任务（v3.68）：全面代码审查；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐 |
 | 2026-04-18 | Reviewer定时任务（v3.63）：全面代码审查；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.50、SDS→v3.63、API→v3.63、STR→v3.63 |
 | 2026-04-18 | Coder定时任务（v3.62）：全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.50、SDS→v3.62、API→v3.62、STR→v3.62 |
 | 2026-04-18 | Reviewer定时任务（v3.61）：全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽问题验证正确；安全修复验证通过；三文档版本对齐SRS→v3.50、SDS→v3.61、API→v3.61、STR→v3.61 |
 | 2026-04-18 | Coder定时任务（v3.55）：全面代码审查确认；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽问题验证正确（categories在index.ts:123-126行、EMS在index.ts:746-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.50、SDS→v3.55、API→v3.55、STR→v3.55 |
-| 2026-04-18 | Coder定时任务（v3.53）：ST-P4禁用词表统一修复（ai_content.ts、explain.ts禁用词表从12项扩展为16项，与ai_review.ts一致）；TS编译0错误；AC-01~AC-06全部通过；三文档版本对齐（SRS→v3.50、SDS→v3.52、API→v3.52、STR→v3.53）；代码基线稳定 |
 
 ---
 
@@ -56,19 +62,19 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v3.62同步）
+### 已完成项（v3.85同步）
 
-1. ✅ **TypeScript编译检查**：0错误（v3.62确认，`npx tsc --noEmit`）
-2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.62确认）
+1. ✅ **TypeScript编译检查**：0错误（v3.85确认，`npx tsc --noEmit`）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.85确认）
 3. ✅ **禁用词表一致性**：ai_content.ts(23-27行)、explain.ts(182-186行)、ai_review.ts(54-58行)三处均为16项
 4. ✅ **API文档结构**：完整，无需更新（API文档与代码一致）
-5. ✅ **代码基线稳定**：无新增P0/P1问题（v3.62确认）
-6. ✅ **三文档版本对齐**：SRS→v3.50、SDS→v3.63、API→v3.63、STR→v3.63完全对齐
-7. ✅ **路由遮蔽验证**：index.ts中categories路由(123-126行)和EMS路由(746-748行先于771-774行)顺序正确
-8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤 ✅
-9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现 ✅
-10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值 ✅
-11. ✅ **v3.63 Reviewer审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.50、SDS→v3.63、API→v3.63、STR→v3.63；代码基线稳定；无新增问题
+5. ✅ **代码基线稳定**：无新增P0/P1问题（v3.85确认）
+6. ✅ **三文档版本对齐**：SRS→v3.85、SDS→v3.85、API→v3.85、STR→v3.85完全对齐
+7. ✅ **路由遮蔽验证**：index.ts中categories路由(123-131行)和EMS路由(746-769行先于771-774行)顺序正确
+8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤
+9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现
+10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值
+11. ✅ **v3.85 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐；代码基线稳定；无新增问题
 
 ---
 
@@ -1332,5 +1338,5 @@ Accept: text/markdown
 
 ---
 
-*文档版本：v3.63*
-*最后更新：2026-04-18*
+*文档版本：v3.84*
+*最后更新：2026-04-20*

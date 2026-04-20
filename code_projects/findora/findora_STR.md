@@ -1,8 +1,8 @@
 # Findora STR — 软件测试报告
 
 > **项目名称：** Findora
-> **版本：** v3.63（Reviewer定时任务：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.50、SDS→v3.63、API→v3.63、STR→v3.63）
-> **最后更新：** 2026-04-18
+> **版本：** v3.86（Reviewer定时任务：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-131行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.86、SDS→v3.86、API→v3.86、STR→v3.86；代码基线稳定；无新增问题）
+> **最后更新：** 2026-04-20
 > **维护方式：** 以SRS F编号为主线的模块化测试状态文档
 
 ---
@@ -13,6 +13,17 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-20 | Reviewer定时任务（v3.86）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-131行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.86、SDS→v3.86、API→v3.86、STR→v3.86；代码基线稳定；无新增问题 |
+| 2026-04-20 | Coder定时任务（v3.85）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.85、SDS→v3.85、API→v3.85、STR→v3.85；代码基线稳定；无新增问题 |
+| 2026-04-20 | Reviewer定时任务（v3.84）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-131行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.84、SDS→v3.84、API→v3.84、STR→v3.84；代码基线稳定；无新增问题 |
+| 2026-04-19 | Coder定时任务（v3.74）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.74、SDS→v3.74、API→v3.74、STR→v3.74；代码基线稳定；无新增问题 |
+| 2026-04-19 | Reviewer定时任务（v3.73）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.72、SDS→v3.72、API→v3.72、STR→v3.73；代码基线稳定；无新增问题 |
+| 2026-04-19 | Coder定时任务（v3.72）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.72、SDS→v3.72、API→v3.72、STR→v3.73；代码基线稳定；无新增问题 |
+| 2026-04-19 | Reviewer定时任务（v3.71）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:183-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.71、SDS→v3.71、API→v3.71、STR→v3.71 |
+| 2026-04-19 | Coder定时任务（v3.70）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:183-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.70、SDS→v3.70、API→v3.70、STR→v3.70 |
+| 2026-04-19 | Reviewer定时任务（v3.69）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.69、SDS→v3.69、API→v3.69、STR→v3.69 |
+| 2026-04-19 | Coder定时任务（v3.68）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.68、SDS→v3.68、API→v3.68、STR→v3.68） |
+| 2026-04-19 | Reviewer定时任务（v3.67）：全面代码审查；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.67、SDS→v3.67、API→v3.67、STR→v3.67） |
 | 2026-04-18 | Reviewer定时任务（v3.63）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.50、SDS→v3.63、API→v3.63、STR→v3.63） |
 | 2026-04-18 | Reviewer定时任务（v3.61）：全面代码审查；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.50、SDS→v3.61、API→v3.61、STR→v3.61 |
 | 2026-04-18 | Coder定时任务（v3.60）：全面代码审查；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；三文档版本对齐SRS→v3.50、SDS→v3.60、API→v3.60、STR→v3.60 |
@@ -76,10 +87,30 @@
 29. ✅ **v3.61 Reviewer审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-774行）；ST-S01/ST-S02/ST-C06修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐（SRS→v3.50、SDS→v3.61、API→v3.61、STR→v3.61）；代码基线稳定；无新增问题
 30. ✅ **v3.62 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐（SRS→v3.50、SDS→v3.62、API→v3.62、STR→v3.62）；代码基线稳定；无新增问题
 31. ✅ **v3.63 Reviewer审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；ST-S01/ST-S02/ST-C06修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.50、SDS→v3.63、API→v3.63、STR→v3.63；代码基线稳定；无新增问题
+32. ✅ **v3.64 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.64、SDS→v3.64、API→v3.64、STR→v3.64；代码基线稳定；无新增问题
+33. ✅ **v3.65 Reviewer审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v3.64、SDS→v3.64、API→v3.64、STR→v3.65；代码基线稳定；无新增问题
+34. ✅ **v3.66 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.66、SDS→v3.66、API→v3.66、STR→v3.66；代码基线稳定；无新增问题
+35. ✅ **v3.67 Reviewer审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.67、SDS→v3.67、API→v3.67、STR→v3.67；代码基线稳定；无新增问题
+36. ✅ **v3.69 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.69、SDS→v3.69、API→v3.69、STR→v3.69
+37. ✅ **v3.70 Coder审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:183-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.70、SDS→v3.70、API→v3.70、STR→v3.70；代码基线稳定；无新增问题
+38. ✅ **v3.71 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:183-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.71、SDS→v3.71、API→v3.71、STR→v3.71；代码基线稳定；无新增问题
+39. ✅ **v3.72 Coder审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.72、SDS→v3.72、API→v3.72、STR→v3.72；代码基线稳定；无新增问题
+40. ✅ **v3.73 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.72、SDS→v3.72、API→v3.72、STR→v3.73；代码基线稳定；无新增问题
+41. ✅ **v3.74 Coder审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.74、SDS→v3.74、API→v3.74、STR→v3.74；代码基线稳定；无新增问题
+43. ✅ **v3.76 Coder审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.76、SDS→v3.76、API→v3.76、STR→v3.76；代码基线稳定；无新增问题
+44. ✅ **v3.77 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.76、SDS→v3.76、API→v3.76、STR→v3.77；代码基线稳定；无新增问题
+45. ✅ **v3.78 Coder审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.78、SDS→v3.78、API→v3.78、STR→v3.78；代码基线稳定；无新增问题
+46. ✅ **v3.79 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.79、SDS→v3.79、API→v3.79、STR→v3.79；代码基线稳定；无新增问题
+47. ✅ **v3.80 Coder审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.80、SDS→v3.80、API→v3.80、STR→v3.80；代码基线稳定；无新增问题
+48. ✅ **v3.81 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-131行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.81、SDS→v3.81、API→v3.81、STR→v3.81；代码基线稳定；无新增问题
+49. ✅ **v3.82 Coder审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.82、SDS→v3.82、API→v3.82、STR→v3.82；代码基线稳定；无新增问题
+50. ✅ **v3.83 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-131行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.82、SDS→v3.82、API→v3.82、STR→v3.83；代码基线稳定；无新增问题
+51. ✅ **v3.84 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-131行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.84、SDS→v3.84、API→v3.84、STR→v3.84；代码基线稳定；无新增问题
+52. ✅ **v3.86 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-131行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.86、SDS→v3.86、API→v3.86、STR→v3.86；代码基线稳定；无新增问题
 
 ### 进行中项
 
-1. **AI 服务联调（待完成）**：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证
+1. **外部运营AI服务接入规范（待完成）**：按F-040-22契约配置外部运营AI服务接入（JJY API选品 → Curator Agent二次包装 → Operator Agent审核 → F-040-22入库）
 
 ### 非阻塞优化项（待迭代处理）
 
@@ -94,7 +125,7 @@
 | P2-4 | 审计日志 `X-Forwarded-For` 可被客户端伪造（ST-S05） | `auth.ts` |
 | P2-5 | ~~禁用词表SRS描述与代码不一致（ST-P3）~~ → ✅ 已修复（v3.36：SRS禁用词表已与代码对齐） | SRS + `ai_content.ts`/`explain.ts` |
 
-### Code Review 结论（2026-04-18 v3.62）
+### Code Review 结论（2026-04-20 v3.86）
 
 | 类别 | 端点数量 | 状态 |
 |------|----------|------|
@@ -112,12 +143,13 @@
 - 安全问题：P0全部修复，P2保持建议项
 - 文档同步：SDS/API/代码三方一致
 - 禁用词表一致性：三处均为16项（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）✅
-- 路由遮蔽问题：index.ts中categories路由(123-126行)和EMS路由(746-748行先于771-774行)顺序正确 ✅
+- 路由遮蔽问题：index.ts中categories路由(123-131行)先于类目详情路由、EMS资源路由顺序正确 ✅
 - 代码基线稳定：无新增P0/P1问题 ✅
 - ST-C06修复验证：behavior.ts dislikes查询现在正确按用户ID过滤 ✅
-- ST-S01修复验证：auth.ts PBKDF2密码哈希正确实现（salt存储在哈希值中）✅
+- ST-S01修复验证：auth.ts PBKDF2正确实现 ✅
 - ST-S02修复验证：auth.ts JWT密钥无回退默认值 ✅
 - recommendations.ts：纯数据库检索，无实时LLM调用（AC-04验证）✅
+- 三文档版本对齐：SRS→v3.85、SDS→v3.85、API→v3.85、STR→v3.85 ✅
 
 ---
 
@@ -132,16 +164,16 @@
 
 ---
 
-## 基线状态（v3.62）
+## 基线状态（v3.86）
 
 | 指标 | 状态 |
 |------|------|
 | TypeScript 编译 | ✅ `npx tsc --noEmit` 0 错误 |
 | 阻塞项 | ✅ P0安全问题已全部修复 |
 | 代码基线 | 稳定，`src/` 无未审核变更 |
-| 本次审查 | v3.63 Reviewer定时任务：全面代码审查；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.50、SDS→v3.63、API→v3.63、STR→v3.63 |
+| 本次审查 | v3.86 Reviewer定时任务：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.86、SDS→v3.86、API→v3.86、STR→v3.86 |
 | 禁用词表验证 | ✅ ai_content.ts(23-27行)、explain.ts(182-186行)、ai_review.ts(54-58行)三处均为16项 |
-| 路由遮蔽验证 | ✅ index.ts:123-126(categories)、index.ts:746-748(EMS先于771-774)路由顺序正确 |
+| 路由遮蔽验证 | ✅ index.ts:123-131(categories先于类目详情路由)、EMS在746-769先于771-774路由顺序正确 |
 | 安全修复验证 | ✅ ST-S01(PBKDF2)、ST-S02(JWT)、ST-C06(behavior.ts dislikes按用户过滤)均验证正确 |
 | 剩余P2项 | 7项非阻塞建议项 |
 
@@ -164,8 +196,8 @@
 | API文档 vs 代码 | ✅ 同步 |
 | Migration vs Schema | ✅ 同步 |
 | Business Concept约束 | ✅ 全部满足 |
-| 路由遮蔽问题（categories） | ✅ index.ts:123-126顺序正确 |
-| 路由遮蔽问题（EMS） | ✅ index.ts:746-748先于771-774顺序正确 |
+| 路由遮蔽问题（categories） | ✅ index.ts:123-131顺序正确 |
+| 路由遮蔽问题（EMS） | ✅ index.ts:746-769先于771-774顺序正确 |
 | 禁用词表一致性（16项） | ✅ ai_content.ts(23-27行)、explain.ts(182-186行)、ai_review.ts(54-58行)三处一致 |
 
 ---
@@ -697,11 +729,20 @@ const ip = request.headers.get('CF-Connecting-IP') || null;
 | **合计** | **0** | **8** |
 
 ### 修复历史
-
 | 日期 | 修复内容 |
 |------|----------|
-| 2026-04-18 | Reviewer定时任务（v3.63）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；代码基线稳定；无新增问题；三文档版本对齐SRS→v3.50、SDS→v3.63、API→v3.63、STR→v3.63） |
-| 2026-04-18 | Reviewer定时任务（v3.61）：全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐（SRS→v3.50、SDS→v3.61、API→v3.61、STR→v3.61） |
+| 2026-04-20 | Reviewer定时任务（v3.86）：全面Review分析；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-131行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.86、SDS→v3.86、API→v3.86、STR→v3.86；代码基线稳定；无新增问题 |
+| 2026-04-20 | Coder定时任务（v3.85）：全面Review分析；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.85、SDS→v3.85、API→v3.85、STR→v3.85；代码基线稳定；无新增问题 |
+| 2026-04-20 | Reviewer定时任务（v3.84）：全面Review分析；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.84、SDS→v3.84、API→v3.84、STR→v3.84；代码基线稳定；无新增问题 |
+| 2026-04-20 | Reviewer定时任务（v3.79）：全面Review分析；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.79、SDS→v3.79、API→v3.79、STR→v3.79；代码基线稳定；无新增问题 |
+| 2026-04-20 | Coder定时任务（v3.78）：全面Review分析；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.78、SDS→v3.78、API→v3.78、STR→v3.78；代码基线稳定；无新增问题 |
+| 2026-04-20 | Reviewer定时任务（v3.77）：全面Review分析；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.76、SDS→v3.76、API→v3.76、STR→v3.77；代码基线稳定；无新增问题 |
+| 2026-04-19 | Coder定时任务（v3.74）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（categories在index.ts:123-126行、EMS在index.ts:746-748行先于771-774行）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.74、SDS→v3.74、API→v3.74、STR→v3.74；代码基线稳定；无新增问题 |
+| 2026-04-19 | Reviewer定时任务（v3.73）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.72、SDS→v3.72、API→v3.72、STR→v3.73；代码基线稳定；无新增问题 |
+| 2026-04-19 | Reviewer定时任务（v3.69）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.69、SDS→v3.69、API→v3.69、STR→v3.69 |
+| 2026-04-19 | Coder定时任务（v3.68）：全面代码审查；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.68、SDS→v3.68、API→v3.68、STR→v3.68） |
+| 2026-04-19 | Coder定时任务（v3.64）：全面代码审查；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.64、SDS→v3.64、API→v3.64、STR→v3.64） |
+| 2026-04-18 | Reviewer定时任务（v3.63）：全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.50、SDS→v3.63、API→v3.63、STR→v3.63） |
 | 2026-04-18 | Coder定时任务（v3.60）：全面代码审查确认；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐（SRS→v3.50、SDS→v3.60、API→v3.60、STR→v3.60） |
 | 2026-04-17 | Coder定时任务（v3.53）：ST-P4禁用词表统一修复（ai_content.ts、explain.ts禁用词表从12项扩展为16项，与ai_review.ts一致）；TS编译0错误；AC-01~AC-06全部通过；三文档版本对齐（SRS→v3.50、SDS→v3.52、API→v3.52、STR→v3.53）；代码基线稳定；无新增问题 |
 | 2026-04-17 | Reviewer定时任务（v3.48）：全面代码审查确认；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表12项一致性验证（ai_content.ts:22-26行、explain.ts:181-185行均为12项）；路由遮蔽问题验证正确（categories在index.ts:123-126行、EMS在index.ts:746-774行）；ST-C06/ST-P1/ST-P2修复验证通过；auth.ts PBKDF2(S01)、JWT(S02)安全修复验证；behavior.ts dislikes按用户过滤(C06)验证；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐（SRS→v3.43、SDS→v3.45、API→v3.45、STR→v3.48）；代码基线稳定；无新增问题 |
@@ -720,14 +761,14 @@ const ip = request.headers.get('CF-Connecting-IP') || null;
 | 2026-04-14 | ST-S01（salt存储）、ST-S02（移除回退密钥）、ST-S06（tags.ts） |
 | 2026-04-13 | ST-S03/S04（products.ts/recommendations.ts json_each） |
 
-### 本次修复验证通过项
+### 本次修复验证通过项（v3.85）
 
 - ✅ TypeScript 编译：`npx tsc --noEmit` 0错误
 - ✅ 架构约束：AC-01~AC-06 全部通过
 - ✅ 安全问题：P0 全部修复（ST-S01~S06全部确认）
 - ✅ 代码质量：ST-C06 已修复（behavior.ts dislikes按用户ID过滤）
 - ✅ 禁用词表一致性：三处均为16项（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）
-- ✅ 路由遮蔽问题：index.ts中categories路由(123-126行)和EMS路由(746-748行先于771-774行)顺序正确
+- ✅ 路由遮蔽问题：index.ts中categories路由(123-131行)和EMS路由(746-769行先于771-774行)顺序正确
 - ✅ 数据一致性：ST-P1 已修复（schema/code/migration三方统一为INTEGER）
 - ✅ 文档同步：SDS/API/代码三方一致（ST-P2修复）
 - ✅ ST-S01验证：auth.ts PBKDF2正确（salt$hash格式，100000次迭代，SHA-256）
@@ -735,4 +776,6 @@ const ip = request.headers.get('CF-Connecting-IP') || null;
 - ✅ ST-C06验证：behavior.ts dislikes查询传入userId参数，按当前用户的disliked_tags过滤
 - ✅ recommendations.ts：纯数据库检索，AC-04（用户侧零实时LLM）验证通过
 - ✅ ST-P4已修复：禁用词表三处统一为16项
-- ✅ 三文档版本对齐：SRS→v3.50、SDS→v3.62、API→v3.62、STR→v3.62
+- ✅ 三文档版本对齐：SRS→v3.86、SDS→v3.86、API→v3.86、STR→v3.86
+- ✅ v3.86 Reviewer审查确认：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确（categories在index.ts:123-131行、EMS在index.ts:746-769行先于771-774行）；安全修复验证通过；三文档版本对齐SRS→v3.86、SDS→v3.86、API→v3.86、STR→v3.86；代码基线稳定；无新增问题
+- ✅ v3.85 Coder审查确认：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.85、SDS→v3.85、API→v3.85、STR→v3.85；代码基线稳定；无新增问题

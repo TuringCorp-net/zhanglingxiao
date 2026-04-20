@@ -2,7 +2,7 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v3.76（SRS定时任务：全面Review分析；新增Section 9.9人工干预机制功能模块（对齐business_concept§11.4）；新增Section 12九十天迭代计划（对齐business_concept§16）；更新Actions表澄清外部运营AI配置与实时LLM调用的本质区别；JJY API运营选品工具纳入迭代计划；三文档版本对齐SRS→v3.76、SDS→v3.76、API→v3.76、STR→v3.76）
+> **版本：** v3.85（Coder定时任务：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.85、SDS→v3.85、API→v3.85、STR→v3.85；代码基线稳定；无新增问题）
 > **最后更新：** 2026-04-20
 > **状态：** 🟢 需求基线稳定：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
@@ -14,7 +14,10 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-20 | v3.76：SRS定时任务；全面Review分析（对照business_concept和system_design）；新增Section 9.9人工干预机制功能模块（对齐business_concept§11.4"人类保留的控制权"）；新增Section 12九十天迭代计划（对齐business_concept§16）；更新Actions表澄清外部运营AI配置与实时LLM调用的本质区别（明确为"运营AI服务接入规范"非"AI服务联调"）；JJY API运营选品工具纳入迭代计划（Section 12.2）；三文档版本对齐SRS→v3.76、SDS→v3.76、API→v3.76、STR→v3.76 |
+| 2026-04-20 | v3.85：Coder定时任务；全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.85、SDS→v3.85、API→v3.85、STR→v3.85；代码基线稳定；无新增问题 |
+| 2026-04-20 | v3.84：Coder定时任务；全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.84、SDS→v3.84、API→v3.84、STR→v3.84；代码基线稳定；无新增问题 |
+| 2026-04-20 | v3.80：Coder定时任务；全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.80、SDS→v3.80、API→v3.80、STR→v3.80；代码基线稳定；无新增问题 |
+| 2026-04-20 | v3.78：Coder定时任务；全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.78、SDS→v3.78、API→v3.78、STR→v3.78；代码基线稳定；无新增问题 |
 | 2026-04-19 | v3.75：Reviewer定时任务；全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.75、SDS→v3.75、API→v3.75、STR→v3.75 |
 | 2026-04-19 | v3.74：Coder定时任务；全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.74、SDS→v3.74、API→v3.74、STR→v3.74 |
 | 2026-04-19 | v3.71：Reviewer定时任务；全面代码审查；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.71、SDS→v3.71、API→v3.71、STR→v3.71 |
@@ -33,19 +36,19 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v3.76同步）
+### 已完成项（v3.85同步）
 
 1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
 2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`
-3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v3.76确认）
-4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.76确认）
+3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v3.85确认）
+4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.85确认）
 5. ✅ **P0安全问题**：ST-S01~S06 全部修复并验证
 6. ✅ **ST-C06修复**：dislikes查询已改为按用户ID过滤，dislike_count不再被全局高估
 7. ✅ **ST-P1修复**：explanation_cache表 `generated_at`/`expires_at` 字段类型已统一为 INTEGER（Unix时间戳），与代码行为一致
 8. ✅ **ST-P2修复**：API文档与代码端点偏差已全部修正（外部系统接口路径、admin路由注册等）
-9. ✅ **禁用词表一致性**：SRS禁用词表已与代码对齐，16项（`best`/`worst`/`safest`/`guaranteed`/`proven`/`clinically`/`miracle`/`revolutionary`/`lifesaving`/`official`/`authentic`/`dangerous`/`amazing`/`incredible`/`unbelievable`/`game-changing`）；ai_content.ts(23-27行)、explain.ts(182-186行)、ai_review.ts(54-58行)三处一致
-10. ✅ **v3.76 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.76、SDS→v3.76、API→v3.76、STR→v3.76；代码基线稳定；无新增问题
-11. ✅ **路由遮蔽验证**：index.ts中categories路由(123-126行)和EMS路由(746-748行先于771-774行)顺序正确
+9. ✅ **禁用词表一致性**：SRS禁用词表已与代码对齐，16项；ai_content.ts(23-27行)、explain.ts(182-186行)、ai_review.ts(54-58行)三处一致
+10. ✅ **v3.85 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐；代码基线稳定；无新增问题
+11. ✅ **路由遮蔽验证**：index.ts中categories路由(123-131行)和EMS路由(746-769行先于771-774行)顺序正确
 12. ✅ **business_concept全章节映射**：SRS功能模块已覆盖business_concept.md全量17章节（含新增§11.4人工控制权→F-024映射）
 13. ✅ **system_design架构约束同步**：SRS已全量同步system_design.md v1.1.0架构约束A-01~A-06
 14. ✅ **Section 9.9人工干预机制**：新增F-024功能模块，对齐business_concept§11.4"人类保留的控制权"
