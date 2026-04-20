@@ -448,20 +448,43 @@ class JJYAPITool {
       size = 20
     } = params;
 
+    // 不同平台的默认排序字段（销量相关）
+    const platformSortMap = {
+      'temu': 'sold',
+      'shein': 'sold',
+      'amazon': 'monthSold',
+      'sumaitong': 'totalSold',
+      'tiktok': 'totalSold'
+    };
+
+    // 如果用户没指定 sort，使用平台特定的默认值
+    const effectiveSort = sort || platformSortMap[platform] || 'sold';
+
+    // 将日期转为 RFC 1123 格式（用 + 代替空格，与浏览器行为一致）
+    function toRFC1123(dateStr) {
+      if (!dateStr) return null;
+      const date = new Date(dateStr);
+      return date.toUTCString().replace(/ /g, '+');
+    }
+
     // 构建查询参数
     const queryParts = [];
     if (keyword) queryParts.push(`keyword=${encodeURIComponent(keyword)}`);
     if (categoryId) queryParts.push(`catId=${categoryId}`);
-    if (onSaleTimeStart) queryParts.push(`onSaleTimeStart=${onSaleTimeStart}`);
-    if (onSaleTimeEnd) queryParts.push(`onSaleTimeEnd=${onSaleTimeEnd}`);
+    if (onSaleTimeStart) queryParts.push(`onSaleTimeMin=${toRFC1123(onSaleTimeStart)}`);
+    if (onSaleTimeEnd) queryParts.push(`onSaleTimeMax=${toRFC1123(onSaleTimeEnd)}`);
     if (priceMin !== null && priceMin !== undefined) queryParts.push(`priceMin=${priceMin}`);
     if (priceMax !== null && priceMax !== undefined) queryParts.push(`priceMax=${priceMax}`);
-    if (sort && keyword) {
-      queryParts.push(`sort=${sort}`);
+    if (effectiveSort) {
+      queryParts.push(`sort=${effectiveSort}`);
       if (order) queryParts.push(`order=${order}`);
     }
     queryParts.push(`page=${page}`);
     queryParts.push(`size=${size}`);
+    // sumaitong 和 tiktok 需要 siteId 参数
+    if (platform === 'sumaitong' || platform === 'tiktok') {
+      queryParts.push(`siteId=1`);
+    }
 
     const query = queryParts.join('&');
     const path = `/api/v1/goods/search?${query}`;
@@ -507,7 +530,7 @@ class JJYAPITool {
   }
 
   /**
-   * 解析商品数据 - 兼容不同平台的字段名
+   * 解析商品数据 - 兼容不同平台的字段名，保留所有原始字段
    */
   parseProduct(item, platform = 'temu') {
     // 不同平台的字段映射
@@ -562,14 +585,14 @@ class JJYAPITool {
     const map = fieldMap[platform] || fieldMap.temu;
 
     // 获取商品名称
-    let goodsNameEn = item[map.nameEn] || '';
+    let goodsNameEn = item[map.nameEn] || item.goodsNameEn || item.goodsName || '';
     const goodsNameCn = Array.isArray(item[map.nameCn])
       ? item[map.nameCn].map(c => c.catNameCn || c.catName).join(', ')
-      : (item[map.nameCn] || '');
+      : (item[map.nameCn] || item.goodsNameCn || item.goodsName || '');
 
-    // 获取价格
-    const goodsPriceMin = item[map.priceMin] || item.priceMin || item.minPrice || null;
-    const goodsPriceMax = item[map.priceMax] || item.priceMax || item.maxPrice || null;
+    // 获取价格（优先使用标准化字段名）
+    const goodsPriceMin = item.goodsPriceMin || item.minPrice || item.priceMin || null;
+    const goodsPriceMax = item.goodsPriceMax || item.maxPrice || item.priceMax || null;
 
     // 获取销量
     let sold = item[map.sold] || item.totalSold || item.sold || 0;
@@ -578,20 +601,37 @@ class JJYAPITool {
       sold = parseFloat(sold) * 10000;
     }
 
+    // 评分
+    const rating = item[map.rating] || item.rating || item.goodsScore || null;
+
+    // 评论数
+    const reviewNum = item[map.reviewNum] || item.reviewNum || 0;
+
+    // 销售额
+    const sales = item.sales || null;
+
+    // 返回完整字段
     return {
+      // 标准化字段
       goodsNameEn: goodsNameEn.substring(0, 200),
       goodsNameCn: goodsNameCn.substring(0, 100),
       thumbnail: item.thumbnail || '',
+      thumbnailCn: item.thumbnailCn || '',
       sold: sold,
+      sales: sales,
       goodsPriceMin: goodsPriceMin,
       goodsPriceMax: goodsPriceMax,
-      reviewNum: item[map.reviewNum] || item.reviewNum || 0,
-      rating: item[map.rating] || item.rating || item.goodsScore || null,
+      reviewNum: reviewNum,
+      rating: rating,
       mallOpenTime: item.mallOpenTime || null,
       onSaleTime: item.onSaleTime || null,
       goodsId: item.goodsId || item.id || null,
       detailUrl: item.detailUrl || item.goodsId || null,
-      platform
+      platform: platform,
+      // 保留原始 catItems 数组
+      catItems: item.catItems || null,
+      // 原始 goodsName 字段
+      goodsName: item.goodsName || null
     };
   }
 
