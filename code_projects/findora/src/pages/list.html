@@ -278,7 +278,7 @@
         tocList.innerHTML = products.map((p, i) => `
           <a href="#product-${p.id}">
             <span class="num">${i + 1}</span>
-            <span>${p.rewritten_title || p.original_title}</span>
+            <span>${p.title}</span>
           </a>
         `).join('');
         
@@ -286,9 +286,9 @@
         const productsSection = document.getElementById('products-section');
         productsSection.innerHTML = products.map((p, i) => `
           <div id="product-${p.id}" class="product-item">
-            <img src="${getProductImage(p)}" alt="${p.rewritten_title || p.original_title}" onerror="this.src='https://picsum.photos/200/200?grayscale'">
+            <img src="${getProductImage(p)}" alt="${p.title}" onerror="this.src='https://picsum.photos/200/200?grayscale'">
             <div>
-              <h3>${p.rewritten_title || p.original_title}</h3>
+              <h3>${p.title}</h3>
               <p class="desc">${p.summary || 'A curated product for you.'}</p>
               <div class="price">${formatPrice(p)}</div>
             </div>

@@ -509,9 +509,9 @@ export async function getExplanationsForProducts(
   if (userContext.clickHistory && userContext.clickHistory.length > 0) {
     const lastClickedId = userContext.clickHistory[userContext.clickHistory.length - 1];
     const lastClicked = await env.DB.prepare(
-      'SELECT rewritten_title, original_title FROM products WHERE id = ?'
-    ).bind(lastClickedId).first<{ rewritten_title: string | null; original_title: string }>();
-    similarProductTitle = lastClicked?.rewritten_title || lastClicked?.original_title;
+      'SELECT title FROM products WHERE id = ?'
+    ).bind(lastClickedId).first<{ title: string }>();
+    similarProductTitle = lastClicked?.title;
   }
 
   const explanations: ExplanationResult[] = [];
@@ -689,10 +689,10 @@ export async function explainProduct(env: Env, request: Request, productId: stri
 
   // Get product info
   const product = await env.DB.prepare(
-    'SELECT id, rewritten_title, original_title, category, tags FROM products WHERE id = ?'
+    'SELECT id, title, original_title, category, tags FROM products WHERE id = ?'
   ).bind(productId).first<{
     id: string;
-    rewritten_title: string | null;
+    title: string;
     original_title: string;
     category: string;
     tags: string;
@@ -738,7 +738,7 @@ export async function explainProduct(env: Env, request: Request, productId: stri
   const tags: string[] = parseJSON(product.tags, []);
   const ctx: ExplanationContext = {
     productId: product.id,
-    productTitle: product.rewritten_title || product.original_title,
+    productTitle: product.title,
     category: product.category,
     tags,
     ...userContext,
@@ -782,7 +782,7 @@ export async function explainBatch(env: Env, request: Request): Promise<Response
   // Get product details
   const placeholders = body.product_ids.map(() => '?').join(',');
   const products = await env.DB.prepare(
-    `SELECT id, rewritten_title, original_title, category, tags, use_cases, target_audience
+    `SELECT id, title, original_title, category, tags, use_cases, target_audience
      FROM products WHERE id IN (${placeholders})`
   ).bind(...body.product_ids).all<Record<string, unknown>>();
 
@@ -829,7 +829,7 @@ export async function explainBatch(env: Env, request: Request): Promise<Response
     env,
     products.results!.map(p => ({
       id: p.id as string,
-      title: (p.rewritten_title as string) || (p.original_title as string),
+      title: p.title as string,
       category: p.category as string,
       tags: parseJSON(p.tags as string, []),
     })),
@@ -859,10 +859,10 @@ export async function explainComparison(env: Env, request: Request, productId: s
 
   const [product, comparedTo] = await Promise.all([
     env.DB.prepare(
-      'SELECT id, rewritten_title, original_title, category, tags, price_min, price_max FROM products WHERE id = ?'
+      'SELECT id, title, original_title, category, tags, price_min, price_max FROM products WHERE id = ?'
     ).bind(productId).first<Record<string, unknown>>(),
     env.DB.prepare(
-      'SELECT id, rewritten_title, original_title, category, tags, price_min, price_max FROM products WHERE id = ?'
+      'SELECT id, title, original_title, category, tags, price_min, price_max FROM products WHERE id = ?'
     ).bind(compareWithId).first<Record<string, unknown>>(),
   ]);
 
@@ -876,7 +876,7 @@ export async function explainComparison(env: Env, request: Request, productId: s
   const comparison = generateComparisonExplanation(
     {
       id: product.id as string,
-      title: (product.rewritten_title as string) || (product.original_title as string),
+      title: product.title as string,
       category: product.category as string,
       tags: parseJSON(product.tags as string, []),
       price_min: product.price_min as number | null,
@@ -884,7 +884,7 @@ export async function explainComparison(env: Env, request: Request, productId: s
     },
     {
       id: comparedTo.id as string,
-      title: (comparedTo.rewritten_title as string) || (comparedTo.original_title as string),
+      title: comparedTo.title as string,
       category: comparedTo.category as string,
       tags: parseJSON(comparedTo.tags as string, []),
       price_min: comparedTo.price_min as number | null,
@@ -903,7 +903,7 @@ export async function explainComparison(env: Env, request: Request, productId: s
  */
 export async function explainScenarios(env: Env, request: Request, productId: string): Promise<Response> {
   const product = await env.DB.prepare(
-    'SELECT id, rewritten_title, original_title, category, tags, use_cases, target_audience FROM products WHERE id = ?'
+    'SELECT id, title, original_title, category, tags, use_cases, target_audience FROM products WHERE id = ?'
   ).bind(productId).first<Record<string, unknown>>();
 
   if (!product) {
@@ -915,7 +915,7 @@ export async function explainScenarios(env: Env, request: Request, productId: st
 
   const scenarios = generateScenarioDescriptions({
     id: product.id as string,
-    title: (product.rewritten_title as string) || (product.original_title as string),
+    title: product.title as string,
     tags: parseJSON(product.tags as string, []),
     use_cases: parseJSON(product.use_cases as string || '[]', []),
     target_audience: parseJSON(product.target_audience as string || '[]', []),

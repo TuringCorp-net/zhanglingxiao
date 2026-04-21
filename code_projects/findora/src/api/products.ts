@@ -53,9 +53,6 @@ function resolveTitle(body: Partial<Product>): string {
   if (typeof body.title === 'string' && body.title.trim()) {
     return body.title.trim();
   }
-  if (typeof body.rewritten_title === 'string' && body.rewritten_title.trim()) {
-    return body.rewritten_title.trim();
-  }
   if (typeof body.original_title === 'string' && body.original_title.trim()) {
     return body.original_title.trim();
   }
@@ -117,9 +114,59 @@ export async function listProducts(env: Env, request: Request): Promise<Response
     bindings.push(tag);
   }
 
-  // Count query (without join/group for count)
-  const countQuery = `SELECT COUNT(*) as total FROM products p ${whereClause}`;
-  const countBindings = [...bindings];
+  // ST-S03修复：countQuery需要与实际查询逻辑一致
+  // 当 sortBy === 'popular' 时，实际查询有LEFT JOIN和GROUP BY，countQuery也需要一致
+  // 注意：sortBy !== 'popular' 时，countQuery逻辑保持不变（与原代码一致）
+  let countQuery: string;
+  let countBindings: (string | number)[];
+
+  if (sortBy === 'popular') {
+    // 构建countQuery的筛选条件（与实际查询相同）
+    let countWhereClause = 'WHERE p.status = ?';
+    const tempBindings: (string | number)[] = ['active'];
+
+    if (category) {
+      countWhereClause += ' AND p.category = ?';
+      tempBindings.push(category);
+    }
+
+    const countSubcategory = url.searchParams.get('subcategory');
+    if (countSubcategory) {
+      countWhereClause += ' AND p.subcategory = ?';
+      tempBindings.push(countSubcategory);
+    }
+
+    if (priceMin) {
+      countWhereClause += ' AND p.price_min >= ?';
+      tempBindings.push(parseFloat(priceMin));
+    }
+
+    if (priceMax) {
+      countWhereClause += ' AND p.price_max <= ?';
+      tempBindings.push(parseFloat(priceMax));
+    }
+
+    if (tag) {
+      countWhereClause += ' AND EXISTS (SELECT 1 FROM json_each(p.tags) AS jt WHERE jt.value = ?)';
+      tempBindings.push(tag);
+    }
+
+    // 使用子查询来匹配实际查询的LEFT JOIN和GROUP BY逻辑
+    countQuery = `
+      SELECT COUNT(*) as total FROM (
+        SELECT p.id FROM products p
+        LEFT JOIN clicks c ON p.id = c.product_id AND c.clicked_at > datetime('now', '-30 days')
+        ${countWhereClause}
+        GROUP BY p.id
+      )
+    `;
+    countBindings = tempBindings;
+  } else {
+    // sortBy !== 'popular' 时，countQuery直接使用whereClause
+    countQuery = `SELECT COUNT(*) as total FROM products p ${whereClause}`;
+    countBindings = [...bindings];
+  }
+
   const countResult = await env.DB.prepare(countQuery).bind(...countBindings).first<{ total: number }>();
   const total = countResult?.total || 0;
 
@@ -204,21 +251,51 @@ export async function createProduct(env: Env, request: Request): Promise<Respons
   const content = buildContentFromBody(body);
   const coverImage = resolveCoverImage(body, content.images);
   const title = resolveTitle(body);
-  const r2Key = (typeof body.r2_object_key === 'string' && body.r2_object_key.trim()) ? body.r2_object_key.trim() : `products/${id}.md`;
 
+  // 如果提供了 source_md 和 source_filename，写入 R2 到分类路径
+  if (typeof body.source_md === 'string' && body.source_md.trim() && typeof body.source_filename === 'string' && body.source_filename.trim()) {
+    const yearMonth = now.substring(0, 7); // YYYY-MM
+    const r2Key = `${body.source_platform}/${body.category}/${yearMonth}/${body.source_filename.trim()}`;
+    await env.PRODUCTS_BUCKET.put(r2Key, body.source_md.trim(), {
+      httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+    });
+    // r2_object_key 有唯一索引约束，如已存在则先删除旧记录
+    await env.DB.prepare('DELETE FROM products WHERE r2_object_key = ?').bind(r2Key).run();
+    // 写入 D1，r2_object_key 使用新路径
+    await env.DB.prepare(`
+      INSERT INTO products (id, title, source_platform, source_url, original_title, category, subcategory, tags, price_min, price_max, currency, cover_image, r2_object_key, images, summary, pros, cons, use_cases, target_audience, shipping_notes, merchant_name, affiliate_url, last_checked_at, status, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      id, title, body.source_platform, body.source_url, body.original_title,
+      body.category, body.subcategory || null, tags, body.price_min || null, body.price_max || null,
+      body.currency || 'USD', coverImage, r2Key,
+      JSON.stringify(content.images), content.summary, JSON.stringify(content.pros), JSON.stringify(content.cons),
+      JSON.stringify(content.use_cases), JSON.stringify(content.target_audience), content.shipping_notes,
+      body.merchant_name || null, body.affiliate_url || null,
+      now, body.status || 'active', now, now
+    ).run();
+
+    return new Response(JSON.stringify(jsonSuccess({ id, r2_object_key: r2Key })), {
+      status: 201,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 原有逻辑：R2 使用 JSON frontmatter
+  const r2Key = (typeof body.r2_object_key === 'string' && body.r2_object_key.trim()) ? body.r2_object_key.trim() : `products/${id}.md`;
   await writeProductContent(env, r2Key, content);
 
   await env.DB.prepare(`
-    INSERT INTO products (id, title, source_platform, source_url, original_title, rewritten_title, category, subcategory, tags, price_min, price_max, currency, cover_image, r2_object_key, images, summary, pros, cons, use_cases, target_audience, shipping_notes, merchant_name, affiliate_url, last_checked_at, status, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO products (id, title, source_platform, source_url, original_title, category, subcategory, tags, price_min, price_max, currency, cover_image, r2_object_key, images, summary, pros, cons, use_cases, target_audience, shipping_notes, merchant_name, affiliate_url, last_checked_at, status, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
-    id, title, body.source_platform, body.source_url, body.original_title, body.rewritten_title || null,
+    id, title, body.source_platform, body.source_url, body.original_title,
     body.category, body.subcategory || null, tags, body.price_min || null, body.price_max || null,
     body.currency || 'USD', coverImage, r2Key,
     JSON.stringify(content.images), content.summary, JSON.stringify(content.pros), JSON.stringify(content.cons),
     JSON.stringify(content.use_cases), JSON.stringify(content.target_audience), content.shipping_notes,
     body.merchant_name || null, body.affiliate_url || null,
-    now, body.status || 'draft', now, now
+    now, body.status || 'active', now, now
   ).run();
 
   return new Response(JSON.stringify(jsonSuccess({ id, r2_object_key: r2Key })), {
@@ -270,7 +347,7 @@ export async function updateProduct(env: Env, request: Request, id: string): Pro
 
   const fieldMap: Record<string, unknown> = {
     title, source_platform: body.source_platform, source_url: body.source_url, original_title: body.original_title,
-    rewritten_title: body.rewritten_title, category: body.category, subcategory: body.subcategory,
+    category: body.category, subcategory: body.subcategory,
     price_min: body.price_min, price_max: body.price_max, currency: body.currency,
     cover_image: coverImage, r2_object_key: r2Key, summary: mergedContent.summary,
     shipping_notes: mergedContent.shipping_notes, merchant_name: body.merchant_name,
@@ -457,29 +534,29 @@ export async function importProducts(env: Env, request: Request): Promise<Respon
       if (existingId) {
         await env.DB.prepare(`
           UPDATE products
-          SET title = ?, source_platform = ?, source_url = ?, original_title = ?, rewritten_title = ?, category = ?, subcategory = ?,
+          SET title = ?, source_platform = ?, source_url = ?, original_title = ?, category = ?, subcategory = ?,
               tags = ?, price_min = ?, price_max = ?, currency = ?, cover_image = ?, r2_object_key = ?, images = ?,
               summary = ?, pros = ?, cons = ?, use_cases = ?, target_audience = ?, shipping_notes = ?, merchant_name = ?,
               affiliate_url = ?, last_checked_at = ?, status = ?, updated_at = ?
           WHERE id = ?
         `).bind(
-          title, p.source_platform, p.source_url, p.original_title, p.rewritten_title || null,
+          title, p.source_platform, p.source_url, p.original_title,
           p.category, p.subcategory || null, tags, p.price_min || null, p.price_max || null, p.currency || 'USD',
           coverImage, r2Key, JSON.stringify(content.images), content.summary, JSON.stringify(content.pros),
           JSON.stringify(content.cons), JSON.stringify(content.use_cases), JSON.stringify(content.target_audience),
-          content.shipping_notes, p.merchant_name || null, p.affiliate_url || null, now, p.status || 'draft', now, id
+          content.shipping_notes, p.merchant_name || null, p.affiliate_url || null, now, p.status || 'active', now, id
         ).run();
       } else {
         await env.DB.prepare(`
-          INSERT INTO products (id, title, source_platform, source_url, original_title, rewritten_title, category, subcategory, tags, price_min, price_max, currency, cover_image, r2_object_key, images, summary, pros, cons, use_cases, target_audience, shipping_notes, merchant_name, affiliate_url, last_checked_at, status, created_at, updated_at)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          INSERT INTO products (id, title, source_platform, source_url, original_title, category, subcategory, tags, price_min, price_max, currency, cover_image, r2_object_key, images, summary, pros, cons, use_cases, target_audience, shipping_notes, merchant_name, affiliate_url, last_checked_at, status, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).bind(
-          id, title, p.source_platform, p.source_url, p.original_title, p.rewritten_title || null,
+          id, title, p.source_platform, p.source_url, p.original_title,
           p.category, p.subcategory || null, tags, p.price_min || null, p.price_max || null,
           p.currency || 'USD', coverImage, r2Key, JSON.stringify(content.images), content.summary,
           JSON.stringify(content.pros), JSON.stringify(content.cons), JSON.stringify(content.use_cases),
           JSON.stringify(content.target_audience), content.shipping_notes, p.merchant_name || null, p.affiliate_url || null,
-          now, p.status || 'draft', now, now
+          now, p.status || 'active', now, now
         ).run();
       }
 
@@ -545,6 +622,34 @@ export async function getTrending(env: Env, request: Request): Promise<Response>
     lists: trendingLists.results || [],
     period_days: 7,
   })), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+// DELETE /api/admin/products/:id
+export async function deleteProduct(env: Env, id: string): Promise<Response> {
+  const existing = await env.DB.prepare('SELECT id, r2_object_key FROM products WHERE id = ?').bind(id).first();
+  if (!existing) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Product not found')), {
+      status: 404,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 删除 D1 记录
+  await env.DB.prepare('DELETE FROM products WHERE id = ?').bind(id).run();
+
+  // 删除 R2 对象（使用实际的 r2_object_key）
+  const r2Key = existing.r2_object_key as string;
+  if (r2Key) {
+    try {
+      await env.PRODUCTS_BUCKET.delete(r2Key);
+    } catch (r2Error) {
+      console.error('R2 delete warning:', r2Error);
+    }
+  }
+
+  return new Response(JSON.stringify(jsonSuccess({ id, deleted: true, mode: 'hard' })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }

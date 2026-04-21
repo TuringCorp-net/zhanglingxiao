@@ -378,7 +378,7 @@ export async function listPriceChanges(env: Env, request: Request): Promise<Resp
     const rows = await env.DB.prepare(`
       SELECT
         ph.*,
-        p.rewritten_title,
+        p.title,
         p.category,
         p.price_min as current_price_min,
         p.price_max as current_price_max,

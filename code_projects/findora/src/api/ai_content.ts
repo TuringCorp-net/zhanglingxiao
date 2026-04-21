@@ -256,7 +256,6 @@ export interface ContentGenerationInput {
 }
 
 export interface ContentGenerationResult {
-  rewritten_title?: string;
   summary?: string;
   pros?: string[];
   cons?: string[];
@@ -297,7 +296,6 @@ ${toneInstruction}
 Generate the following for this product (respond in JSON):
 
 {
-  "rewritten_title": "User-facing title (max 60 chars, not starting with 'Best')",
   "summary": "One-sentence summary (max 100 chars)",
   "pros": ["Positive point 1", "Positive point 2", "Positive point 3"],
   "cons": ["Negative point 1", "Negative point 2"],
@@ -325,7 +323,6 @@ Respond only with valid JSON, no additional text.`;
 
       // Validate against banned words
       const allContent = [
-        parsed.rewritten_title,
         parsed.summary,
         ...(parsed.pros || []),
         ...(parsed.cons || []),
@@ -337,7 +334,6 @@ Respond only with valid JSON, no additional text.`;
         banned_words_found: validation.banned_word ? [validation.banned_word] : [],
       };
 
-      result.rewritten_title = parsed.rewritten_title;
       result.summary = parsed.summary;
       result.pros = parsed.pros;
       result.cons = parsed.cons;
@@ -611,7 +607,7 @@ export async function generateProductCompletion(
 
   const prompt = `Analyze this product and fill in missing information.
 Product data:
-- Title: ${product.original_title || product.rewritten_title || 'N/A'}
+- Title: ${product.title || product.original_title || 'N/A'}
 - Category: ${product.category || 'N/A'}
 - Price: ${product.price_min || '?'} - ${product.price_max || '?'} ${product.currency || 'USD'}
 - Summary: ${product.summary || 'MISSING'}

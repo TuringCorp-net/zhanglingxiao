@@ -149,8 +149,36 @@
 | `/api/admin/price-check` | POST | 价格回推（F-010-05） |
 | `/api/admin/price-check/batch` | POST | 批量价格检查 |
 
+### F-010-01 创建商品接口详细说明
+
+**POST /api/admin/products**
+
+支持两种创建模式：
+
+1. **标准模式**：传入结构化字段（title, price_min, images等），系统生成R2路径
+2. **R2直传模式**：传入 `source_md` + `source_filename`，直接上传完整Markdown文档到R2
+
+**R2存储路径格式**（R2直传模式）：
+```
+{platform}/{category}/YYYY-MM/{source_filename}
+```
+例如：`temu/books/2026-04/C20260421-001.md`
+
+**关键字段**：
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| source_platform | string | ✅ | 商品平台：temu, shein, amazon, sumaitong, tiktok |
+| source_url | string | ✅ | 商品详情页URL |
+| original_title | string | ✅ | 原始商品标题 |
+| title | string | | 商品展示标题 |
+| category | string | ✅ | 商品类目 |
+| source_md | string | | 完整markdown文件内容（R2直传模式） |
+| source_filename | string | | 原始文件名（R2直传模式） |
+
+**r2_object_key唯一性**：R2路径字段有唯一索引，重复上传相同路径会替换已有记录。
+
 ### 数据模型
-- `products` 表 — 商品主表（含r2_object_key图片索引）
+- `products` 表 — 商品主表（含r2_object_key索引，格式为 `{platform}/{category}/YYYY-MM/{filename}`）
 
 ---
 

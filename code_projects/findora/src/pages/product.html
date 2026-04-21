@@ -308,20 +308,20 @@
       
       document.getElementById('breadcrumb-category').href = `/category.html?category=${product.category}`;
       document.getElementById('breadcrumb-category').textContent = product.category.charAt(0).toUpperCase() + product.category.slice(1);
-      document.getElementById('breadcrumb-product').textContent = (product.rewritten_title || product.original_title).substring(0, 30) + '...';
-      document.title = (product.rewritten_title || product.original_title) + ' - Findora';
+      document.getElementById('breadcrumb-product').textContent = (product.title).substring(0, 30) + '...';
+      document.title = (product.title) + ' - Findora';
       
       const container = document.getElementById('product-content');
       container.innerHTML = `
         <div class="product-layout">
           <div class="product-images">
             ${image 
-              ? `<img src="${image}" alt="${product.rewritten_title || product.original_title}" class="main-image">`
+              ? `<img src="${image}" alt="${product.title}" class="main-image">`
               : `<div class="image-placeholder">📦</div>`
             }
           </div>
           <div class="product-info">
-            <h1>${product.rewritten_title || product.original_title}</h1>
+            <h1>${product.title}</h1>
             <div class="product-meta">
               <span>🏪 ${product.merchant_name || product.source_platform}</span>
               <span>📂 ${product.category}${product.subcategory ? ' › ' + product.subcategory : ''}</span>
@@ -405,9 +405,9 @@
       }
       container.innerHTML = products.slice(0, 4).map(p => `
         <a href="/product.html?id=${p.id}" class="related-card">
-          <img src="${getProductImage(p) || 'https://picsum.photos/400/400?grayscale'}" alt="${p.rewritten_title || p.original_title}" onerror="this.src='https://picsum.photos/400/400?grayscale'">
+          <img src="${getProductImage(p) || 'https://picsum.photos/400/400?grayscale'}" alt="${p.title}" onerror="this.src='https://picsum.photos/400/400?grayscale'">
           <div class="related-card-body">
-            <h3>${p.rewritten_title || p.original_title}</h3>
+            <h3>${p.title}</h3>
             <div class="price">${formatPrice(p)}</div>
           </div>
         </a>

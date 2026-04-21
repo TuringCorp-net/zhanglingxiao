@@ -499,6 +499,102 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 | F-040-17 | POST | `/api/admin/tags` | 创建标签 | F-011-01 | ✅ | 🏗 | ✅ |
 | F-040-18 | POST | `/api/admin/lists` | 创建榜单 | F-004 | ✅ | 🏗 | ✅ |
 
+#### F-040-14 POST /api/admin/products - 创建商品
+
+**功能描述**：通过API创建商品，支持直接上传完整Markdown文档到R2存储。
+
+**认证要求**：`X-Admin-Key` Header
+
+**请求体参数**：
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `source_platform` | string | ✅ | 商品平台：temu, shein, amazon, sumaitong, tiktok |
+| `source_url` | string | ✅ | 商品详情页URL |
+| `original_title` | string | ✅ | 原始商品标题 |
+| `title` | string | | 商品展示标题（默认使用 original_title） |
+| `category` | string | ✅ | 商品类目 |
+| `subcategory` | string | | 商品子类目 |
+| `tags` | string[] | | 商品标签数组 |
+| `price_min` | number | | 最低价格 |
+| `price_max` | number | | 最高价格 |
+| `currency` | string | | 币种，默认 USD |
+| `cover_image` | string | | 封面图片URL |
+| `images` | string[] | | 商品图片URL数组 |
+| `summary` | string | | 商品简介 |
+| `pros` | string[] | | 商品优点 |
+| `cons` | string[] | | 商品缺点 |
+| `use_cases` | string[] | | 使用场景 |
+| `target_audience` | string[] | | 目标受众 |
+| `shipping_notes` | string | | 物流备注 |
+| `source_md` | string | | **完整markdown文件内容**（pass目录的.md源码） |
+| `source_filename` | string | | **原始文件名**（如 `C20260421-001.md`） |
+
+**R2存储路径格式**：
+
+如果传入 `source_md` 和 `source_filename`，商品内容会同时存入R2，路径格式为：
+```
+{platform}/{category}/YYYY-MM/{source_filename}
+```
+例如：`temu/books/2026-04/C20260421-001.md`
+
+> 注：r2_object_key 字段有唯一索引约束，重复上传相同文件会替换已有记录。
+
+**响应格式**：
+```json
+{
+  "ok": true,
+  "data": {
+    "id": "ff891c76-96a8-4e8d-ab9f-eabba848f65c",
+    "title": "Where Little Dreams Meet Big Colors",
+    "r2_object_key": "temu/books/2026-04/C20260421-001.md"
+  }
+}
+```
+
+#### F-040-15 PUT /api/admin/products/:id - 更新商品
+
+**功能描述**：更新商品信息，支持部分字段更新。
+
+**认证要求**：`X-Admin-Key` Header
+
+**请求体**：支持任意字段更新，仅更新传入的字段。
+
+**响应格式**：
+```json
+{
+  "ok": true,
+  "data": {
+    "id": "ff891c76-96a8-4e8d-ab9f-eabba848f65c",
+    "r2_object_key": "temu/books/2026-04/C20260421-001.md"
+  }
+}
+```
+
+#### F-040-16 PATCH /api/admin/products/:id/status - 上下架
+
+**功能描述**：切换商品上下架状态。
+
+**认证要求**：`X-Admin-Key` Header
+
+**请求体**：
+```json
+{
+  "status": "active" | "inactive" | "archived"
+}
+```
+
+**响应格式**：
+```json
+{
+  "ok": true,
+  "data": {
+    "id": "ff891c76-96a8-4e8d-ab9f-eabba848f65c",
+    "status": "active"
+  }
+}
+```
+
 ### 3.1.4 全局配置管理端点（F-040-24~26）
 
 > 新增章节 — 全局配置管理接口，支持运行时配置动态调整。
@@ -943,7 +1039,7 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 | price_max | REAL | | 价格区间高 |
 | currency | TEXT | DEFAULT 'USD' | 币种 |
 | cover_image | TEXT | | 商品主图 |
-| r2_object_key | TEXT | NOT NULL | R2 中的对象路径（例如 `items/uuid.jpg`），存储商品图片 |
+| r2_object_key | TEXT | NOT NULL, UNIQUE INDEX | R2 中的对象路径，格式为 `{platform}/{category}/YYYY-MM/{filename}`（例如 `temu/books/2026-04/C20260421-001.md`）；唯一索引约束确保同一R2路径不重复 |
 | images | TEXT | JSON 数组 | 商品图片列表 |
 | summary | TEXT | | 商品摘要/亮点 |
 | pros | TEXT | JSON 数组 | 优点列表 |

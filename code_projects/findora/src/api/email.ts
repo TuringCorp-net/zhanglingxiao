@@ -382,8 +382,8 @@ export async function sendWeeklyNewsletter(env: Env, request: Request): Promise<
         const image = images[0] || `${baseUrl}/placeholder.png`;
         return `
           <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px;">
-            <img src="${image}" alt="${p.rewritten_title || p.original_title}" style="width: 100%; max-width: 200px; border-radius: 8px;">
-            <h3 style="margin: 10px 0 5px;">${p.rewritten_title || p.original_title}</h3>
+            <img src="${image}" alt="${p.title || p.original_title}" style="width: 100%; max-width: 200px; border-radius: 8px;">
+            <h3 style="margin: 10px 0 5px;">${p.title || p.original_title}</h3>
             <p style="color: #4F46E5; font-weight: bold;">
               ${p.price_min ? `$${p.price_min}` : ''}${p.price_max ? ` - $${p.price_max}` : ''}
             </p>

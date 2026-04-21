@@ -3,7 +3,7 @@
 import { Env } from '../db/schema';
 import { jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
-import { listProducts, getProduct, createProduct, updateProduct, toggleProductStatus, updateProductTags, batchUpdateProducts, importProducts, getTrending } from './products';
+import { listProducts, getProduct, createProduct, updateProduct, deleteProduct, toggleProductStatus, updateProductTags, batchUpdateProducts, importProducts, getTrending } from './products';
 import { listLists, getList, createList } from './lists';
 import { submitPriceCheck, submitBatchPriceCheck, getPriceHistory, listPriceChanges } from './price_check';
 import { getCategories, getCategorySubcategories } from './categories';
@@ -274,6 +274,11 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
       // PUT /api/admin/products/:id - F-040-15
       if (request.method === 'PUT' && segments[1] === 'products' && segments[2]) {
         return updateProduct(env, request, segments[2]);
+      }
+
+      // DELETE /api/admin/products/:id
+      if (request.method === 'DELETE' && segments[1] === 'products' && segments[2]) {
+        return deleteProduct(env, segments[2]);
       }
 
       // PATCH /api/admin/products/:id/status - F-040-16

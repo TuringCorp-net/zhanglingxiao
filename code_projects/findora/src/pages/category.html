@@ -197,9 +197,9 @@
       }
       container.innerHTML = products.map(product => `
         <a href="/product.html?id=${product.id}" class="product-card">
-          <img src="${getProductImage(product)}" alt="${product.rewritten_title || product.original_title}" onerror="this.src='https://picsum.photos/400/400?grayscale'">
+          <img src="${getProductImage(product)}" alt="${product.title}" onerror="this.src='https://picsum.photos/400/400?grayscale'">
           <div class="product-card-body">
-            <h3>${product.rewritten_title || product.original_title}</h3>
+            <h3>${product.title}</h3>
             <div class="price">${formatPrice(product)}</div>
           </div>
         </a>

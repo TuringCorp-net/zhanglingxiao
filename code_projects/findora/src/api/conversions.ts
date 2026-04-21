@@ -162,7 +162,7 @@ export async function listConversions(env: Env, request: Request): Promise<Respo
   const total = countRow?.total ?? 0;
 
   const rows = await env.DB.prepare(`
-    SELECT c.*, p.rewritten_title as product_title
+    SELECT c.*, p.title as product_title
     FROM conversions c
     LEFT JOIN products p ON c.product_id = p.id
     ${where}

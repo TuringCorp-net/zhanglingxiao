@@ -98,9 +98,7 @@ export function toClientProduct(
 ): Record<string, unknown> {
   const title = typeof row.title === 'string' && row.title.trim()
     ? row.title.trim()
-    : (typeof row.rewritten_title === 'string' && row.rewritten_title.trim()
-      ? row.rewritten_title.trim()
-      : String(row.original_title || ''));
+    : String(row.original_title || '');
   const coverImage = typeof row.cover_image === 'string' ? row.cover_image : null;
   const images = content.images.length > 0 ? content.images : (coverImage ? [coverImage] : []);
   return {

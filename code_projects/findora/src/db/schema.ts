@@ -6,7 +6,6 @@ export interface Product {
   source_platform: string;
   source_url: string;
   original_title: string;
-  rewritten_title: string | null;
   category: string;
   subcategory: string | null;
   tags: string; // JSON array

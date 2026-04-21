@@ -493,7 +493,6 @@ Accept: text/markdown     # 返回Markdown格式内容
     "id": "prod_xxx",
     "title": "iPhone 15 Pro Max",
     "original_title": "Apple iPhone 15 Pro Max",
-    "rewritten_title": null,
     "category": "Electronics",
     "subcategory": "Smartphones",
     "tags": ["5G", "Camera", "Premium"],
@@ -713,11 +712,25 @@ Accept: text/markdown     # 返回Markdown格式内容
 **请求体**：
 ```json
 {
-  "rewritten_title": "Best Budget Laptop for Students",
   "summary": "An updated summary...",
   "pros": ["Lightweight", "Long battery"],
   "cons": ["Limited ports"],
   "target_audience": ["Students", "Travelers"]
+}
+```
+
+#### DELETE /api/admin/products/:id - 删除商品
+
+删除指定商品，包括R2存储的markdown内容。
+
+**响应**：
+```json
+{
+  "success": true,
+  "data": {
+    "id": "prod_xxx",
+    "deleted": true
+  }
 }
 ```
 
@@ -742,17 +755,167 @@ Accept: text/markdown     # 返回Markdown格式内容
   "products": [
     {
       "id": "prod_xxx",
-      "rewritten_title": "Updated Title 1",
+      "title": "Updated Title 1",
       "tags": ["Tag1", "Tag2"]
     },
     {
       "id": "prod_yyy",
-      "rewritten_title": "Updated Title 2",
+      "title": "Updated Title 2",
       "tags": ["Tag3"]
     }
   ]
 }
 ```
+
+---
+
+## 运营AI工作流 Use Case
+
+> 以下示例展示外部运营AI（Selector → Curator → Operator）如何通过API与Findora系统交互。
+
+### Use Case 1: 商品上架完整流程
+
+**背景**：Operator Agent从 `operations/candidate/` 读取已二次策划的商品，决定通过后上架到Findora。
+
+**Step 1: 创建商品**
+
+```bash
+curl -X POST "https://findora.turingcorp.net/api/admin/products" \
+  -H "X-Admin-Key: Findora-TuringCorp-13572468" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "source_platform": "temu",
+    "source_url": "https://www.temu.com/g-601101791195924.html",
+    "original_title": "32-Page Cute Girl Coloring Book for Ages 3+...",
+    "title": "Where Little Dreams Meet Big Colors",
+    "summary": "Give your little artist the gift of endless creativity! ...",
+    "category": "books",
+    "tags": ["tag-cat-books", "tag-func-creative", "tag-func-gift", "tag-price-budget"]
+  }'
+```
+
+**请求体参数**：
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `source_platform` | string | ✅ | 商品平台：temu, shein, amazon, sumaitong, tiktok |
+| `source_url` | string | ✅ | 商品详情页URL |
+| `original_title` | string | ✅ | 原始商品标题 |
+| `title` | string | | 商品展示标题（默认使用 original_title） |
+| `category` | string | ✅ | 商品类目 |
+| `subcategory` | string | | 商品子类目 |
+| `tags` | string[] | | 商品标签数组 |
+| `price_min` | number | | 最低价格 |
+| `price_max` | number | | 最高价格 |
+| `currency` | string | | 币种，默认 USD |
+| `cover_image` | string | | 封面图片URL |
+| `images` | string[] | | 商品图片URL数组 |
+| `summary` | string | | 商品简介 |
+| `pros` | string[] | | 商品优点 |
+| `cons` | string[] | | 商品缺点 |
+| `use_cases` | string[] | | 使用场景 |
+| `target_audience` | string[] | | 目标受众 |
+| `shipping_notes` | string | | 物流备注 |
+| `source_md` | string | | **完整markdown文件内容**（pass目录的.md源码） |
+| `source_filename` | string | | **原始文件名**（如 `C20260421-001.md`） |
+
+**上传markdown文件到R2**：
+
+如果传入 `source_md` 和 `source_filename`，商品内容会同时存入R2，路径格式为：
+```
+{platform}/{category}/YYYY-MM/{source_filename}
+```
+例如：`temu/books/2026-04/C20260421-001.md`
+
+**响应示例**：
+```json
+{
+  "ok": true,
+  "data": {
+    "id": "ff891c76-96a8-4e8d-ab9f-eabba848f65c",
+    "title": "Where Little Dreams Meet Big Colors",
+    "r2_object_key": "temu/books/2026-04/C20260421-001.md"
+  }
+}
+```
+
+**Step 2: 批量更新标签（如需要）**
+
+```bash
+curl -X PATCH "https://findora.turingcorp.net/api/admin/products/ff891c76-96a8-4e8d-ab9f-eabba848f65c/tags" \
+  -H "X-Admin-Key: Findora-TuringCorp-13572468" \
+  -H "Content-Type: application/json" \
+  -d '{"tags": ["tag-cat-books", "tag-func-creative", "tag-func-gift", "tag-aud-children"]}'
+```
+
+**响应示例**：
+```json
+{
+  "ok": true,
+  "data": {
+    "id": "ff891c76-96a8-4e8d-ab9f-eabba848f65c",
+    "tags": ["tag-cat-books", "tag-func-creative", "tag-func-gift", "tag-aud-children"]
+  }
+}
+```
+
+---
+
+### Use Case 2: 标签体系维护
+
+**背景**：Operator发现高频优质标签需要纳入平台标签体系。
+
+**创建新标签**：
+```bash
+curl -X POST "https://findora.turingcorp.net/api/admin/tags" \
+  -H "X-Admin-Key: Findora-TuringCorp-13572468" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Glow in Dark",
+    "slug": "glow-in-dark",
+    "layer": "function",
+    "dimension_level": 2
+  }'
+```
+
+**响应示例**：
+```json
+{
+  "ok": true,
+  "data": {
+    "id": "tag-func-glow-in-dark"
+  }
+}
+```
+
+**查询标签统计**：
+```bash
+curl -s "https://findora.turingcorp.net/api/admin/tags/stats" \
+  -H "X-Admin-Key: Findora-TuringCorp-13572468"
+```
+
+**响应示例**：
+```json
+{
+  "ok": true,
+  "data": [
+    {"tag_name": "Kitchen", "slug": "kitchen", "product_count": 5, "layer": "category"},
+    {"tag_name": "Organizing", "slug": "organizing", "product_count": 3, "layer": "function"}
+  ]
+}
+```
+
+---
+
+### 标签Layer说明
+
+| Layer值 | 含义 | 示例标签ID |
+|---------|------|-----------|
+| category | 类目标签 | tag-cat-kitchen, tag-cat-toys |
+| function | 功能标签 | tag-func-organizing, tag-func-gift |
+| style | 风格标签 | tag-style-minimalist, tag-style-cute |
+| price | 价格标签 | tag-price-budget, tag-price-premium |
+| audience | 人群标签 | tag-aud-moms, tag-aud-travelers |
 
 ---
 
@@ -989,8 +1152,8 @@ Accept: text/markdown     # 返回Markdown格式内容
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | id | TEXT | 主键 |
-| title | TEXT | 原始标题 |
-| rewritten_title | TEXT | 重写标题（AI生成） |
+| title | TEXT | 标题（可由AI生成） |
+| original_title | TEXT | 原始标题 |
 | category | TEXT | 主类目 |
 | subcategory | TEXT | 子类目 |
 | tags | TEXT | JSON数组，商品标签 |

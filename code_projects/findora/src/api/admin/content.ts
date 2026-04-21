@@ -323,7 +323,7 @@ export async function getTopic(env: Env, request: Request, id: string): Promise<
 
   // Get associated products
   const productsResult = await env.DB.prepare(`
-    SELECT tp.*, p.original_title, p.rewritten_title, p.category, p.price_min, p.price_max, p.images
+    SELECT tp.*, p.original_title, p.title, p.category, p.price_min, p.price_max, p.images
     FROM topic_products tp
     INNER JOIN products p ON tp.product_id = p.id
     WHERE tp.topic_id = ?
@@ -337,7 +337,7 @@ export async function getTopic(env: Env, request: Request, id: string): Promise<
       product: {
         id: (row as Record<string, unknown>).product_id,
         original_title: (row as Record<string, unknown>).original_title,
-        rewritten_title: (row as Record<string, unknown>).rewritten_title,
+        title: (row as Record<string, unknown>).title,
         category: (row as Record<string, unknown>).category,
         price_min: (row as Record<string, unknown>).price_min,
         price_max: (row as Record<string, unknown>).price_max,
