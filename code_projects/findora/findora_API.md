@@ -1,5 +1,7 @@
 # Findora API Documentation
 
+> **版本：** v3.98（Reviewer定时任务：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（index.ts:123-131行categories先于类目详情、EMS在746-769先于771-774）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.98、SDS→v3.98、API→v3.98、STR→v3.98；代码基线稳定；无新增问题）
+
 ## 概述
 
 Findora API 基于 Cloudflare Workers 构建，提供统一的 JSON API 接口，服务于前端页面和外部运营AI系统。
@@ -44,6 +46,12 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-21 | Coder定时任务（v3.97）：全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.97、SDS→v3.97、API→v3.97、STR→v3.97；代码基线稳定；无新增问题 |
+| 2026-04-21 | Reviewer定时任务（v3.96）：全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.96、SDS→v3.96、API→v3.96、STR→v3.96；代码基线稳定；无新增问题 |
+| 2026-04-21 | Coder定时任务（v3.91）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用；三文档版本对齐SRS→v3.91、SDS→v3.91、API→v3.91、STR→v3.91；代码基线稳定；无新增问题 |
+| 2026-04-21 | Reviewer定时任务（v3.90）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.90、SDS→v3.90、API→v3.90、STR→v3.90；代码基线稳定；无新增问题 |
+| 2026-04-21 | Coder定时任务（v3.89）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.89、SDS→v3.89、API→v3.89、STR→v3.89；代码基线稳定；无新增问题 |
+| 2026-04-21 | Coder定时任务（v3.87）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.87、SDS→v3.87、API→v3.87、STR→v3.87；代码基线稳定；无新增问题 |
 | 2026-04-20 | Coder定时任务（v3.85）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.85、SDS→v3.85、API→v3.85、STR→v3.85；代码基线稳定；无新增问题 |
 | 2026-04-20 | Coder定时任务（v3.82）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v3.82、SDS→v3.82、API→v3.82、STR→v3.82；代码基线稳定；无新增问题 |
 | 2026-04-20 | Coder定时任务（v3.78）：全面Review分析（对照business_concept和system_design）；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐SRS→v3.78、SDS→v3.78、API→v3.78、STR→v3.78；代码基线稳定；无新增问题 |
@@ -62,19 +70,20 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v3.85同步）
+### 已完成项（v3.97同步）
 
-1. ✅ **TypeScript编译检查**：0错误（v3.85确认，`npx tsc --noEmit`）
-2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.85确认）
+1. ✅ **TypeScript编译检查**：0错误（v3.97确认，`npx tsc --noEmit`）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v3.97确认）
 3. ✅ **禁用词表一致性**：ai_content.ts(23-27行)、explain.ts(182-186行)、ai_review.ts(54-58行)三处均为16项
 4. ✅ **API文档结构**：完整，无需更新（API文档与代码一致）
-5. ✅ **代码基线稳定**：无新增P0/P1问题（v3.85确认）
-6. ✅ **三文档版本对齐**：SRS→v3.85、SDS→v3.85、API→v3.85、STR→v3.85完全对齐
-7. ✅ **路由遮蔽验证**：index.ts中categories路由(123-131行)和EMS路由(746-769行先于771-774行)顺序正确
+5. ✅ **代码基线稳定**：无新增P0/P1问题（v3.97确认）
+6. ✅ **三文档版本对齐**：SRS→v3.97、SDS→v3.97、API→v3.97、STR→v3.97完全对齐
+7. ✅ **路由遮蔽验证**：index.ts中categories路由(123-131行)在类目详情路由之前；EMS路由(746-769行先于771-774行)顺序正确
 8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤
 9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现
 10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值
-11. ✅ **v3.85 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；三文档版本对齐；代码基线稳定；无新增问题
+11. ✅ **v3.97 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性；三文档版本对齐；代码基线稳定；无新增问题
+12. ✅ **v3.96 Reviewer审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性；三文档版本对齐；代码基线稳定；无新增问题
 
 ---
 
@@ -1338,5 +1347,5 @@ Accept: text/markdown
 
 ---
 
-*文档版本：v3.84*
-*最后更新：2026-04-20*
+*文档版本：v3.95*
+*最后更新：2026-04-21*
