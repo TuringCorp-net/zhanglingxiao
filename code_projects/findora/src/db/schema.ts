@@ -1,5 +1,12 @@
 // D1 Schema Types - matching migrations/001_initial_schema.sql
 
+// API请求类型：用于创建/更新商品，支持R2直传模式
+export interface CreateProductRequest extends Partial<Product> {
+  // R2直传模式专用字段，不存储到products表
+  source_md?: string;       // 完整markdown文件内容
+  source_filename?: string; // 原始文件名（如 C20260421-001.md）
+}
+
 export interface Product {
   id: string;
   title: string;

@@ -1,5 +1,5 @@
 // Products API - F-040-01, F-040-02, F-040-14, F-040-15, F-040-16
-import { Env, Product } from '../db/schema';
+import { Env, Product, CreateProductRequest } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
 import {
@@ -30,7 +30,7 @@ function normalizeStringArray(input: unknown): string[] {
   return [];
 }
 
-function buildContentFromBody(body: Partial<Product>): ReturnType<typeof buildProductContent> {
+function buildContentFromBody(body: CreateProductRequest): ReturnType<typeof buildProductContent> {
   return buildProductContent({
     summary: typeof body.summary === 'string' ? body.summary : null,
     images: normalizeStringArray(body.images),
@@ -42,14 +42,14 @@ function buildContentFromBody(body: Partial<Product>): ReturnType<typeof buildPr
   });
 }
 
-function resolveCoverImage(body: Partial<Product>, contentImages: string[]): string | null {
+function resolveCoverImage(body: CreateProductRequest, contentImages: string[]): string | null {
   if (typeof body.cover_image === 'string' && body.cover_image.trim()) {
     return body.cover_image.trim();
   }
   return contentImages[0] || null;
 }
 
-function resolveTitle(body: Partial<Product>): string {
+function resolveTitle(body: CreateProductRequest): string {
   if (typeof body.title === 'string' && body.title.trim()) {
     return body.title.trim();
   }
@@ -234,7 +234,7 @@ export async function getProduct(env: Env, request: Request, id: string): Promis
 
 // POST /api/admin/products - F-040-14
 export async function createProduct(env: Env, request: Request): Promise<Response> {
-  const body = await request.json() as Partial<Product>;
+  const body = await request.json() as CreateProductRequest;
   const required = ['source_platform', 'source_url', 'original_title', 'category'];
   for (const field of required) {
     if (!body[field as keyof Product]) {
