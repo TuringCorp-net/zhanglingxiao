@@ -25,6 +25,7 @@
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { BANNED_WORDS } from './ai_content';
 
 // ============================================================
 // Explanation Templates
@@ -178,12 +179,8 @@ export function generateExplanation(ctx: ExplanationContext): {
 // AI Extension (Optional Enhancement)
 // ============================================================
 
-// ST-P4修复：统一禁用词表为16项，与ai_content.ts/ai_review.ts保持一致
-const BANNED_WORDS = [
-  'best', 'worst', 'safest', 'guaranteed', 'proven', 'clinically',
-  'miracle', 'revolutionary', 'lifesaving', 'official', 'authentic',
-  'dangerous', 'amazing', 'incredible', 'unbelievable', 'game-changing',
-];
+// ST-P4修复：统一禁用词表从ai_content.ts导入，与ai_content.ts/ai_review.ts保持完全一致
+// 注意：使用 `import type` 或重新导出以确保类型一致性
 
 /**
  * Validate AI explanation against banned words

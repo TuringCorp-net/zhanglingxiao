@@ -2,8 +2,8 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v4.07（Reviewer定时任务：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行引用ai_content.ts的BANNED_WORDS）；路由遮蔽验证正确（index.ts:123-131行categories先于类目详情）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.07、SDS→v4.07、API→v4.07、STR→v4.07；代码基线稳定；无新增问题）
-> **最后更新：** 2026-04-22
+> **版本：** v4.11（Coder定时任务：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；ST-P4修复：explain.ts的BANNED_WORDS从独立定义改为从ai_content.ts导入，实现禁用词表单一真实源（Single Source of Truth）；禁用词表三处均通过ai_content.ts统一导出（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories/:category/subcategories在类目详情之前）；EMS路由遮蔽验证正确（index.ts:751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.11、SDS→v4.16、API→v4.16、STR→v4.19；代码基线稳定；无新增问题）
+> **最后更新：** 2026-04-23
 > **状态：** 🟢 需求基线稳定：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
 ---
@@ -14,6 +14,8 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-23 | v4.11：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；ST-P4修复：explain.ts的BANNED_WORDS从独立定义改为从ai_content.ts导入，实现禁用词表单一真实源（Single Source of Truth）；禁用词表三处均通过ai_content.ts统一导出（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories/:category/subcategories在类目详情之前）；EMS路由遮蔽验证正确（index.ts:751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.11、SDS→v4.16、API→v4.16、STR→v4.19；代码基线稳定；无新增问题 |
+| 2026-04-23 | v4.10：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；ST-P4修复：explain.ts的BANNED_WORDS从独立定义改为从ai_content.ts导入，实现禁用词表单一真实源（Single Source of Truth）；禁用词表三处均通过ai_content.ts统一导出（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories/:category/subcategories在类目详情之前）；EMS路由遮蔽验证正确（index.ts:751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.10、SDS→v4.10、API→v4.10、STR→v4.11；代码基线稳定；无新增问题 |
 | 2026-04-22 | v4.06：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（index.ts:123-131行categories先于类目详情）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.06、SDS→v4.06、API→v4.06、STR→v4.06；代码基线稳定；无新增问题 |
 | 2026-04-22 | v4.05：Reviewer定时任务；全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v4.05、SDS→v4.05、API→v4.05、STR→v4.05；代码基线稳定；无新增问题 |
 | 2026-04-22 | v4.04：Reviewer定时任务；全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v4.04、SDS→v4.04、API→v4.04、STR→v4.04；代码基线稳定；无新增问题 |
@@ -47,17 +49,17 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.07同步）
+### 已完成项（v4.11同步）
 
 1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
 2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`
-3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v4.06确认）
-4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.06确认）
+3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v4.11确认）
+4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.11确认）
 5. ✅ **P0安全问题**：ST-S01~S06 全部修复并验证
 6. ✅ **ST-C06修复**：dislikes查询已改为按用户ID过滤，dislike_count不再被全局高估
-7. ✅ **禁用词表一致性**：三处均为16项（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts引用ai_content.ts的BANNED_WORDS）
-8. ✅ **路由遮蔽验证**：index.ts中categories路由(123-131行)在类目详情路由之前；EMS路由(746-769行先于771-774行)
-9. ✅ **三文档版本对齐**：SRS→v4.06、SDS→v4.06、API→v4.06、STR→v4.06完全对齐
+7. ✅ **禁用词表一致性**：三处均为16项（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）
+8. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由(751-774行members在776-789行enterprise详情之前)
+9. ✅ **三文档版本对齐**：SRS→v4.11、SDS→v4.16、API→v4.16、STR→v4.19完全对齐
 10. ✅ **ST-P1修复**：explanation_cache表 `generated_at`/`expires_at` 字段类型已统一为 INTEGER（Unix时间戳），与代码行为一致
 11. ✅ **ST-P2修复**：API文档与代码端点偏差已全部修正（外部系统接口路径、admin路由注册等）
 12. ✅ **business_concept全章节映射**：SRS功能模块已覆盖business_concept.md全量17章节（含新增§11.4人工控制权→F-024映射）
@@ -66,8 +68,7 @@
 15. ✅ **Section 12九十天迭代计划**：新增完整迭代计划，对齐business_concept§16"90天落地路线图"和§14"运营流程设计"
 16. ✅ **v3.86 Section编号修复**：修复Section 9.7/9.8编号冲突（原F-022多语言→F-024、原F-023会员体系→F-023）；原9.8/9.9章节重编号为9.7/9.8/9.9
 17. ✅ **v3.86 运营Agent协作流程映射**：新增Section 10.4，补充Selector/Curator/Operator三个运营Agent与SRS功能的对应关系、数据流向、F-040接口映射
-18. ✅ **v4.06 Coder审查确认**：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.06、SDS→v4.06、API→v4.06、STR→v4.06；代码基线稳定；无新增问题
-19. ✅ **v4.07 Reviewer审查确认**：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行引用ai_content.ts的BANNED_WORDS）；路由遮蔽验证正确（index.ts:123-131行categories先于类目详情）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.07、SDS→v4.07、API→v4.07、STR→v4.07；代码基线稳定；无新增问题
+18. ✅ **v4.11 Coder审查确认**：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；EMS路由遮蔽验证正确；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.11、SDS→v4.16、API→v4.16、STR→v4.19；代码基线稳定；无新增问题
 
 ### 待推进项（按优先级）
 
