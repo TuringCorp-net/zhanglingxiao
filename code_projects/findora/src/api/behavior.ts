@@ -153,34 +153,31 @@ export async function getProductBehaviorScores(
     }
 
     // 查询商品标签是否匹配用户的disliked_tags
+    // ST-C06修复：使用 product_tag_map 桥接表替代 json_each/LIKE
+    const dislikedTagPlaceholders = userDislikedTags.map(() => '?').join(',');
     dislikeRows = await env.DB.prepare(`
-      SELECT
+      SELECT DISTINCT
         p.id as product_id,
         1 as dislike_count
       FROM products p
+      JOIN product_tag_map ptm ON p.id = ptm.product_id AND ptm.tag_id IN (${dislikedTagPlaceholders})
       WHERE p.id IN (${placeholders})
-        AND (
-          ${userDislikedTags.map(tag =>
-            `p.tags LIKE '%' || ? || '%'`
-          ).join(' OR ')}
-        )
-    `).bind(...productIds, ...userDislikedTags).all<{ product_id: string; dislike_count: number }>();
+    `).bind(...userDislikedTags, ...productIds).all<{ product_id: string; dislike_count: number }>();
   } else {
     // 无用户ID时：统计所有用户disliked_tags中包含该商品标签的商品
+    // ST-C06修复：使用 product_tag_map 桥接表替代 json_each/LIKE
     dislikeRows = await env.DB.prepare(`
       SELECT
         p.id as product_id,
         COUNT(DISTINCT u.id) as dislike_count
       FROM products p
+      JOIN product_tag_map ptm ON p.id = ptm.product_id
       JOIN users u ON u.status = 'active'
-      JOIN products p2 ON p2.id = p.id
       WHERE p.id IN (${placeholders})
         AND u.disliked_tags IS NOT NULL
         AND u.disliked_tags != '[]'
         AND EXISTS (
-          SELECT 1 FROM users u2, json_each(u2.disliked_tags) je
-          WHERE u2.id = u.id
-            AND p.tags LIKE '%' || je.value || '%'
+          SELECT 1 FROM json_each(u.disliked_tags) je WHERE ptm.tag_id = je.value
         )
       GROUP BY p.id
     `).bind(...productIds).all<{ product_id: string; dislike_count: number }>();

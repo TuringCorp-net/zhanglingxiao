@@ -146,9 +146,9 @@ export async function deleteTag(env: Env, request: Request, id: string): Promise
     });
   }
 
-  // ST-S06修复：使用json_each安全匹配标签
+  // ST-S06修复：使用 product_tag_map 桥接表查询标签引用
   const referencing = await env.DB.prepare(
-    "SELECT COUNT(*) as count FROM products WHERE EXISTS (SELECT 1 FROM json_each(products.tags) AS jt WHERE jt.value = ?)"
+    "SELECT COUNT(*) as count FROM product_tag_map WHERE tag_id = ?"
   ).bind(existing.name).first<{ count: number }>();
 
   await env.DB.prepare('DELETE FROM tags WHERE id = ?').bind(id).run();
@@ -164,11 +164,12 @@ export async function deleteTag(env: Env, request: Request, id: string): Promise
 
 // GET /api/admin/tags/stats - F-011-03
 export async function getTagStats(env: Env): Promise<Response> {
-  // ST-S06修复：使用json_each安全匹配标签，避免LIKE注入
+  // ST-S06修复：使用 product_tag_map 桥接表查询标签，避免 json_each 注入
   const rows = await env.DB.prepare(`
-    SELECT t.name as tag_name, t.slug, COUNT(p.id) as product_count, t.layer
+    SELECT t.name as tag_name, t.slug, COUNT(ptm.product_id) as product_count, t.layer
     FROM tags t
-    LEFT JOIN products p ON EXISTS (SELECT 1 FROM json_each(p.tags) AS jt WHERE jt.value = t.slug) AND p.status = 'active'
+    LEFT JOIN product_tag_map ptm ON ptm.tag_id = t.slug
+    LEFT JOIN products p ON p.id = ptm.product_id AND p.status = 'active'
     GROUP BY t.id, t.name, t.slug, t.layer
     ORDER BY product_count DESC
   `).all<{ tag_name: string; slug: string; product_count: number; layer: string }>();

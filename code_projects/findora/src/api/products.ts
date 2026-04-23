@@ -30,6 +30,23 @@ function normalizeStringArray(input: unknown): string[] {
   return [];
 }
 
+// 同步商品标签到 product_tag_map 桥接表
+async function syncProductTags(env: Env, productId: string, tagIds: string[]): Promise<void> {
+  const now = new Date().toISOString();
+
+  // 删除旧标签关联
+  await env.DB.prepare('DELETE FROM product_tag_map WHERE product_id = ?').bind(productId).run();
+
+  // 插入新标签关联
+  for (const tagId of tagIds) {
+    const id = `${productId}_${tagId}`;
+    await env.DB.prepare(`
+      INSERT INTO product_tag_map (id, product_id, tag_id, weight, created_at)
+      VALUES (?, ?, ?, 1.0, ?)
+    `).bind(id, productId, tagId, now).run();
+  }
+}
+
 function buildContentFromBody(body: CreateProductRequest): ReturnType<typeof buildProductContent> {
   return buildProductContent({
     summary: typeof body.summary === 'string' ? body.summary : null,
@@ -108,10 +125,20 @@ export async function listProducts(env: Env, request: Request): Promise<Response
     bindings.push(parseFloat(priceMax));
   }
 
-  // ST-S03修复：使用json_each安全匹配标签，避免LIKE注入风险
+  // ST-S03修复：使用 product_tag_map 桥接表查询标签，避免 json_each 注入风险
+  // 注意：tag 参数是 slug，需要先转换为 tag_id
+  let tagId: string | null = null;
   if (tag) {
-    whereClause += ' AND EXISTS (SELECT 1 FROM json_each(p.tags) AS jt WHERE jt.value = ?)';
-    bindings.push(tag);
+    const tagRow = await env.DB.prepare('SELECT id FROM tags WHERE slug = ?').bind(tag).first<{ id: string }>();
+    if (tagRow) {
+      tagId = tagRow.id;
+    }
+  }
+
+  if (tagId) {
+    joinClause += ' JOIN product_tag_map ptm ON p.id = ptm.product_id';
+    whereClause += ' AND ptm.tag_id = ?';
+    bindings.push(tagId);
   }
 
   // ST-S03修复：countQuery需要与实际查询逻辑一致
@@ -146,9 +173,10 @@ export async function listProducts(env: Env, request: Request): Promise<Response
       tempBindings.push(parseFloat(priceMax));
     }
 
-    if (tag) {
-      countWhereClause += ' AND EXISTS (SELECT 1 FROM json_each(p.tags) AS jt WHERE jt.value = ?)';
-      tempBindings.push(tag);
+    if (tagId) {
+      // ST-S03修复：使用 product_tag_map 桥接表
+      countWhereClause += ' AND EXISTS (SELECT 1 FROM product_tag_map ptm WHERE ptm.product_id = p.id AND ptm.tag_id = ?)';
+      tempBindings.push(tagId);
     }
 
     // 使用子查询来匹配实际查询的LEFT JOIN和GROUP BY逻辑
@@ -162,9 +190,41 @@ export async function listProducts(env: Env, request: Request): Promise<Response
     `;
     countBindings = tempBindings;
   } else {
-    // sortBy !== 'popular' 时，countQuery直接使用whereClause
-    countQuery = `SELECT COUNT(*) as total FROM products p ${whereClause}`;
-    countBindings = [...bindings];
+    // sortBy !== 'popular' 时，countQuery需要与实际查询一致（包含tag桥接表JOIN）
+    let countJoinClause = '';
+    let countWhereClause = 'WHERE p.status = ?';
+    const countBindingsList: (string | number)[] = ['active'];
+
+    if (category) {
+      countWhereClause += ' AND p.category = ?';
+      countBindingsList.push(category);
+    }
+
+    const countSubcategory = url.searchParams.get('subcategory');
+    if (countSubcategory) {
+      countWhereClause += ' AND p.subcategory = ?';
+      countBindingsList.push(countSubcategory);
+    }
+
+    if (priceMin) {
+      countWhereClause += ' AND p.price_min >= ?';
+      countBindingsList.push(parseFloat(priceMin));
+    }
+
+    if (priceMax) {
+      countWhereClause += ' AND p.price_max <= ?';
+      countBindingsList.push(parseFloat(priceMax));
+    }
+
+    // ST-S03修复：使用 product_tag_map 桥接表进行countQuery
+    if (tagId) {
+      countJoinClause = 'JOIN product_tag_map ptm ON p.id = ptm.product_id';
+      countWhereClause += ' AND ptm.tag_id = ?';
+      countBindingsList.push(tagId);
+    }
+
+    countQuery = `SELECT COUNT(*) as total FROM products p ${countJoinClause} ${countWhereClause}`;
+    countBindings = countBindingsList;
   }
 
   const countResult = await env.DB.prepare(countQuery).bind(...countBindings).first<{ total: number }>();
@@ -425,6 +485,9 @@ export async function updateProductTags(env: Env, request: Request, productId: s
   const tagsJson = JSON.stringify(body.tags);
   await env.DB.prepare('UPDATE products SET tags = ?, updated_at = ? WHERE id = ?').bind(tagsJson, now, productId).run();
 
+  // 同步更新 product_tag_map 桥接表
+  await syncProductTags(env, productId, body.tags);
+
   return new Response(JSON.stringify(jsonSuccess({ id: productId, tags: body.tags })), {
     headers: { 'Content-Type': 'application/json' },
   });
@@ -461,6 +524,8 @@ export async function batchUpdateProducts(env: Env, request: Request): Promise<R
         ? [...new Set([...currentTags, body.value])]
         : currentTags.filter(t => t !== body.value);
       await env.DB.prepare('UPDATE products SET tags = ?, updated_at = ? WHERE id = ?').bind(JSON.stringify(newTags), now, row.id).run();
+      // 同步更新 product_tag_map 桥接表
+      await syncProductTags(env, row.id as string, newTags);
     }
   }
 
@@ -546,6 +611,10 @@ export async function importProducts(env: Env, request: Request): Promise<Respon
           JSON.stringify(content.cons), JSON.stringify(content.use_cases), JSON.stringify(content.target_audience),
           content.shipping_notes, p.merchant_name || null, p.affiliate_url || null, now, p.status || 'active', now, id
         ).run();
+        // 同步更新 product_tag_map
+        if (Array.isArray(p.tags) && p.tags.length > 0) {
+          await syncProductTags(env, id, p.tags);
+        }
       } else {
         await env.DB.prepare(`
           INSERT INTO products (id, title, source_platform, source_url, original_title, category, subcategory, tags, price_min, price_max, currency, cover_image, r2_object_key, images, summary, pros, cons, use_cases, target_audience, shipping_notes, merchant_name, affiliate_url, last_checked_at, status, created_at, updated_at)
@@ -558,6 +627,10 @@ export async function importProducts(env: Env, request: Request): Promise<Respon
           JSON.stringify(content.target_audience), content.shipping_notes, p.merchant_name || null, p.affiliate_url || null,
           now, p.status || 'active', now, now
         ).run();
+        // 同步写入 product_tag_map
+        if (Array.isArray(p.tags) && p.tags.length > 0) {
+          await syncProductTags(env, id, p.tags);
+        }
       }
 
       results.push({ index: i, id, status: 'success' });

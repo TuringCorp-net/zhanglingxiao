@@ -111,11 +111,11 @@
   </section>
 
   <main class="container">
-    <!-- Hot Lists -->
+        <!-- Hot Picks -->
     <section class="section">
-      <h2 class="section-title">🔥 Hot Lists</h2>
-      <div id="hot-lists" class="lists-grid">
-        <div class="loading">Loading curated lists...</div>
+      <h2 class="section-title">🔥 Hot Picks</h2>
+      <div id="hot-picks" class="products-grid">
+        <div class="loading">Loading popular products...</div>
       </div>
     </section>
 
@@ -193,18 +193,18 @@
       return 'https://picsum.photos/400/400?grayscale';
     }
 
-    function renderHotLists(lists) {
-      const container = document.getElementById('hot-lists');
-      if (!lists || lists.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-light)">No lists available yet. Check back soon!</p>';
+    function renderHotPicks(products) {
+      const container = document.getElementById('hot-picks');
+      if (!products || products.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-light)">No products found.</p>';
         return;
       }
-      container.innerHTML = lists.slice(0, 3).map(list => `
-        <a href="/list.html?id=${list.slug || list.id}" class="list-card">
-          <img src="${list.cover_image || 'https://picsum.photos/600/300?grayscale'}" alt="${list.title}" onerror="this.src='https://picsum.photos/600/300?grayscale'">
-          <div class="list-card-body">
-            <h3>${list.title}</h3>
-            <p>${list.description || list.why_these || 'Curated just for you'}</p>
+      container.innerHTML = products.map(product => `
+        <a href="/product.html?id=${product.id}" class="product-card">
+          <img src="${product.cover_image || getProductImage(product)}" alt="${product.title}" onerror="this.src='https://picsum.photos/400/400?grayscale'">
+          <div class="product-card-body">
+            <h3>${product.title}</h3>
+            <div class="price">${formatPrice(product)}</div>
           </div>
         </a>
       `).join('');
@@ -250,9 +250,9 @@
     }
 
     async function init() {
-      // Load hot lists
-      const listsData = await fetchAPI('/lists');
-      if (listsData?.data) renderHotLists(listsData.data);
+      // Load hot picks
+      const hotPicksData = await fetchAPI('/products?sort_by=popular&limit=6');
+      if (hotPicksData?.data) renderHotPicks(hotPicksData.data);
       
       // Load latest products
       const productsData = await fetchAPI('/products?limit=6');

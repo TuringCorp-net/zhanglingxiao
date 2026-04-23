@@ -2,7 +2,7 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v4.11（Coder定时任务：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；ST-P4修复：explain.ts的BANNED_WORDS从独立定义改为从ai_content.ts导入，实现禁用词表单一真实源（Single Source of Truth）；禁用词表三处均通过ai_content.ts统一导出（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories/:category/subcategories在类目详情之前）；EMS路由遮蔽验证正确（index.ts:751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.11、SDS→v4.16、API→v4.16、STR→v4.19；代码基线稳定；无新增问题）
+> **版本：** v4.12（Coder定时任务：新增"D1 Schema 修改方案"章节；Phase 1索引优化（idx_products_cat_status_created/idx_products_price/idx_tags_layer）；Phase 2桥接表设计（product_tag_map）；三阶段迁移路径与验收标准；代码基线稳定；无新增问题）
 > **最后更新：** 2026-04-23
 > **状态：** 🟢 需求基线稳定：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
@@ -14,6 +14,7 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-23 | v4.12：Coder定时任务；新增"D1 Schema 修改方案"章节；Phase 1索引优化（idx_products_cat_status_created/idx_products_price/idx_tags_layer）；Phase 2桥接表设计（product_tag_map）；三阶段迁移路径与验收标准；代码基线稳定；无新增问题 |
 | 2026-04-23 | v4.11：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；ST-P4修复：explain.ts的BANNED_WORDS从独立定义改为从ai_content.ts导入，实现禁用词表单一真实源（Single Source of Truth）；禁用词表三处均通过ai_content.ts统一导出（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories/:category/subcategories在类目详情之前）；EMS路由遮蔽验证正确（index.ts:751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.11、SDS→v4.16、API→v4.16、STR→v4.19；代码基线稳定；无新增问题 |
 | 2026-04-23 | v4.10：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；ST-P4修复：explain.ts的BANNED_WORDS从独立定义改为从ai_content.ts导入，实现禁用词表单一真实源（Single Source of Truth）；禁用词表三处均通过ai_content.ts统一导出（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories/:category/subcategories在类目详情之前）；EMS路由遮蔽验证正确（index.ts:751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.10、SDS→v4.10、API→v4.10、STR→v4.11；代码基线稳定；无新增问题 |
 | 2026-04-22 | v4.06：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（index.ts:123-131行categories先于类目详情）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.06、SDS→v4.06、API→v4.06、STR→v4.06；代码基线稳定；无新增问题 |
@@ -49,7 +50,7 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.11同步）
+### 已完成项（v4.12同步）
 
 1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
 2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`
@@ -68,7 +69,7 @@
 15. ✅ **Section 12九十天迭代计划**：新增完整迭代计划，对齐business_concept§16"90天落地路线图"和§14"运营流程设计"
 16. ✅ **v3.86 Section编号修复**：修复Section 9.7/9.8编号冲突（原F-022多语言→F-024、原F-023会员体系→F-023）；原9.8/9.9章节重编号为9.7/9.8/9.9
 17. ✅ **v3.86 运营Agent协作流程映射**：新增Section 10.4，补充Selector/Curator/Operator三个运营Agent与SRS功能的对应关系、数据流向、F-040接口映射
-18. ✅ **v4.11 Coder审查确认**：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；EMS路由遮蔽验证正确；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.11、SDS→v4.16、API→v4.16、STR→v4.19；代码基线稳定；无新增问题
+18. ✅ **v4.12 D1 Schema优化**：新增"D1 Schema 修改方案"章节；Phase 1索引优化（idx_products_cat_status_created/idx_products_price/idx_tags_layer）；Phase 2桥接表设计（product_tag_map）；三阶段迁移路径与验收标准
 
 ### 待推进项（按优先级）
 
@@ -1289,7 +1290,7 @@ dormant → active (重新互动)
 | 子功能 | 描述 | 需求设计 | 代码实现 | 审核 | 优先级 |
 |--------|------|----------|----------|------|--------|
 | F-001-01 Hero 区 | 一句话站点定位说明 + 主 CTA | ✅ | ✅ | ✅ | P0 |
-| F-001-02 热门榜单入口 | 展示当前热门榜单缩略 | ✅ | ✅ | ✅ | P0 |
+| F-001-02 热门商品入口（Hot Picks） | 展示 6 个热门商品缩略（图片+标题+价格），默认按热门程度排序 | ✅ | ❌ | ❌ | P0 |
 | F-001-03 最新发现 | 最近新增商品列表 | ✅ | ✅ | ✅ | P0 |
 | F-001-04 分类入口 | 主要类目导航卡片 | ✅ | ✅ | ✅ | P0 |
 | F-001-05 Trending Now | 当前趋势内容区 | ✅ | ✅ | ✅ | P1 |
@@ -1298,8 +1299,10 @@ dormant → active (重新互动)
 **验收标准**
 
 - 用户可在首屏理解站点定位
-- 可直接进入分类页或榜单页
+- 可直接进入分类页或商品详情页
 - 可完成订阅操作
+- Hot Picks 默认显示 6 个热门商品
+- Hot Picks 排序逻辑：优先按 click_count（热门程度），其次按 created_at（最新）
 
 ---
 
@@ -3223,6 +3226,109 @@ Selector选品 → JJY API获取数据（5平台、免登录）
 | A-05 | 统一数据API层 | Section 3.1, S-09, AC-05 | ✅ |
 | A-06 | Cloudflare优先 | Section 11.1 | ✅ |
 | S-09 | API唯一入口 | Section 3.1, AC-05 | ✅ |
+
+---
+
+## D1 Schema 修改方案（v4.12 新增）
+
+> **背景**：根据用户场景补充分析（system_design.md v1.2.0），当前 Schema 在多标签复合检索场景下存在性能瓶颈，需要引入桥接表和复合索引进行优化。
+
+### 当前问题诊断
+
+| 问题 | 影响场景 | 严重度 |
+|------|----------|--------|
+| products.tags 使用 JSON 数组存储，查询必须使用 `json_each()` 全表遍历 | 场景1/3 | 🔴 高 |
+| users.liked_tags/disliked_tags 无索引，无法做用户画像匹配 | 场景1 | 🔴 高 |
+| products 缺少 (category, status, created_at) 复合索引 | 场景2 | 🟡 中 |
+| tags.layer 无索引，无法按维度层级查询 | 场景2/3 | 🟡 中 |
+
+### Phase 1：索引优化（低风险，立即执行）
+
+```sql
+-- 1. 支持分类+时间排序的复合索引
+CREATE INDEX idx_products_cat_status_created ON products(category, status, created_at);
+
+-- 2. 支持价格区间查询
+CREATE INDEX idx_products_price ON products(price_min, price_max);
+
+-- 3. 支持标签层级查询
+CREATE INDEX idx_tags_layer ON tags(layer);
+```
+
+**收益**：
+- 场景2（清单浏览）查询性能提升 10x+
+- 场景3（API组合查询）中的分类+时间筛选提升明显
+
+### Phase 2：桥接表（中等风险，一次性执行）
+
+#### 新增 product_tag_map 表
+
+```sql
+CREATE TABLE product_tag_map (
+  id TEXT PRIMARY KEY,
+  product_id TEXT NOT NULL,
+  tag_id TEXT NOT NULL,
+  weight REAL DEFAULT 1.0,
+  created_at TEXT NOT NULL,
+  UNIQUE(product_id, tag_id)
+);
+
+-- 索引
+CREATE INDEX idx_ptm_tag_id ON product_tag_map(tag_id);
+CREATE INDEX idx_ptm_product_id ON product_tag_map(product_id);
+```
+
+**设计说明**：
+- product_id 与 tag_id 的唯一约束避免重复关联
+- weight 字段预留，支持未来按标签权重进行排序
+- 替代方案：直接在 products.tags JSON 中查询（已废弃原因：无法使用索引）
+
+#### 数据迁移
+
+从 `products.tags` JSON 字段迁移到 `product_tag_map` 表：
+```sql
+-- 伪代码，实际迁移通过 API 或脚本执行
+SELECT id, json_each(tags) FROM products;
+-- 为每个标签创建一条 product_tag_map 记录
+```
+
+#### 推荐查询模式
+
+**场景1：用户50标签匹配推荐**
+```sql
+SELECT p.*, COUNT(ptm.tag_id) as match_score
+FROM products p
+JOIN product_tag_map ptm ON p.id = ptm.product_id
+WHERE ptm.tag_id IN ('tag1', 'tag2', ..., 'tag50')
+  AND p.status = 'active'
+GROUP BY p.id
+ORDER BY match_score DESC, p.created_at DESC
+LIMIT 50;
+```
+
+**场景3：多标签OR查询**
+```sql
+SELECT DISTINCT p.*
+FROM products p
+JOIN product_tag_map ptm ON p.id = ptm.product_id
+WHERE ptm.tag_id IN ('tagA', 'tagB', 'tagC')
+  AND p.category = ?
+  AND p.status = 'active';
+```
+
+### Phase 3：取消与展望（预留）
+
+Phase 2 完成后，可考虑：
+- 将 `products.tags` JSON 字段改为只读/历史字段
+- 在 API 层逐步废弃 `json_each()` 查询
+- 长期迁移到纯桥接表查询模式
+
+### 验收标准
+
+1. Phase 1 执行后，`EXPLAIN QUERY PLAN` 显示索引被使用
+2. Phase 2 执行后，场景1查询 P99 ≤ 200ms（10万商品量级）
+3. 迁移后 API 行为不变：相同输入产生相同输出
+4. 原有 products.tags 字段保留，桥接表作为增量
 
 ---
 

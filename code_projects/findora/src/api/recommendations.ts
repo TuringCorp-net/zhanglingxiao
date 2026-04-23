@@ -146,10 +146,11 @@ export async function getRecommendations(env: Env, request: Request): Promise<Re
   }
 
   // Exclude products with disliked tags (F-014-07)
-  // ST-S04修复：使用json_each安全匹配标签，避免LIKE注入风险
-  for (const dt of dislikedTags) {
-    conditions.push(`NOT EXISTS (SELECT 1 FROM json_each(p.tags) AS jt WHERE jt.value = ?)`);
-    bindings.push(dt);
+  // ST-S04修复：使用 product_tag_map 桥接表替代 json_each，避免 LIKE 注入
+  if (dislikedTags.length > 0) {
+    const dislikedPlaceholders = dislikedTags.map(() => '?').join(',');
+    conditions.push(`p.id NOT IN (SELECT ptm.product_id FROM product_tag_map ptm WHERE ptm.tag_id IN (${dislikedPlaceholders}))`);
+    bindings.push(...dislikedTags);
   }
 
   const whereClause = conditions.join(' AND ');
@@ -163,61 +164,115 @@ export async function getRecommendations(env: Env, request: Request): Promise<Re
     bindings.push(...subscribedCategories);
   }
 
-  // Tag match count - number of likedTags found in product's tags (F-014-02 + F-014-06)
-  // Each matching tag adds 3 to score
-  // Using json_each for proper JSON array parsing instead of LIKE pattern matching
-  const tagMatchCase = likedTags.length > 0
-    ? `(SELECT COUNT(*) FROM json_each(p.tags) AS je WHERE je.value IN (${likedTags.map(() => '?').join(',')}))`
-    : '0';
+  // F-014-02/F-014-06: Tag matching using product_tag_map
+  // 如果 product_tag_map 为空且有 likedTags，JOIN 结果为空（不降级到 json_each）
+  let tagMatchExpr: string;
+  let tagJoinClause: string;
+  let tagGroupBy: string;
+  const userTagBindings: string[] = [];
+
   if (likedTags.length > 0) {
-    bindings.push(...likedTags);
+    // JOIN mode: Use product_tag_map table for tag matching
+    // Score = COUNT(ptm.tag_id) * 3
+    const userTagPlaceholders = likedTags.map(() => '?').join(',');
+    userTagBindings.push(...likedTags);
+    tagMatchExpr = `COUNT(ptm.tag_id) * 3`;
+    tagJoinClause = `JOIN product_tag_map ptm ON p.id = ptm.product_id AND ptm.tag_id IN (${userTagPlaceholders})`;
+    tagGroupBy = 'p.id';
+  } else {
+    tagMatchExpr = '0';
+    tagJoinClause = '';
+    tagGroupBy = '';
   }
 
   // Price match: 5 points if product price range matches user's preference (F-014-03)
   const { caseExpr: priceMatchCase, bindings: priceBindings } = buildPriceMatchCase(pricePreference);
-  bindings.push(...priceBindings);
 
-  // Scoring formula (per SRS Section 4.5):
-  // score = category_match_score + tag_match_score*3 + click_count*1 + favorite_count*2 + price_match*5 + recency_score
-  // The final score is used for ORDER BY DESC (higher = better)
-  // F-014-05: recency_score = MIN(7, days_since_created) * 0.1 (max 0.7 boost for products < 7 days old)
-  const query = `
-    SELECT
-      p.*,
-      COALESCE(cc.click_count, 0) as click_count,
-      COALESCE(fc.favorite_count, 0) as favorite_count,
-      (
-        ${categoryCase}
-        + ${tagMatchCase} * 3
-        + COALESCE(cc.click_count, 0) * 1
-        + COALESCE(fc.favorite_count, 0) * 2
-        + ${priceMatchCase}
-        + MIN(7, julianday('now') - julianday(p.created_at)) * 0.1
-      ) as score
-    FROM products p
-    LEFT JOIN (
-      SELECT product_id, COUNT(*) as click_count
-      FROM clicks
-      WHERE clicked_at >= datetime('now', '-30 days')
-      GROUP BY product_id
-    ) cc ON p.id = cc.product_id
-    LEFT JOIN (
+  // Build the main query based on tag match mode
+  let query: string;
+  if (likedTags.length > 0) {
+    // JOIN mode: requires GROUP BY, uses product_tag_map for tag matching
+    // Scoring: category_match + tag_match_score + click_count*1 + favorite_count*2 + price_match*5 + recency_score
+    query = `
+      SELECT p.*,
+        COALESCE(cc.click_count, 0) as click_count,
+        COALESCE(fc.favorite_count, 0) as favorite_count,
+        (
+          ${categoryCase}
+          + ${tagMatchExpr}
+          + COALESCE(cc.click_count, 0) * 1
+          + COALESCE(fc.favorite_count, 0) * 2
+          + ${priceMatchCase}
+          + MIN(7, julianday('now') - julianday(p.created_at)) * 0.1
+        ) as score
+      FROM products p
+      ${tagJoinClause}
+      LEFT JOIN (
+        SELECT product_id, COUNT(*) as click_count
+        FROM clicks
+        WHERE clicked_at >= datetime('now', '-30 days')
+        GROUP BY product_id
+      ) cc ON p.id = cc.product_id
+      LEFT JOIN (
+        SELECT
+          je.value as product_id,
+          COUNT(DISTINCT u.id) as favorite_count
+        FROM users u, json_each(u.saved_items) as je
+        WHERE u.status = 'active'
+          AND u.updated_at >= datetime('now', '-30 days')
+        GROUP BY je.value
+      ) fc ON p.id = fc.product_id
+      WHERE p.status = 'active'
+      GROUP BY ${tagGroupBy}
+      HAVING COUNT(ptm.tag_id) > 0
+      ORDER BY score DESC, p.created_at DESC
+      LIMIT ?
+    `;
+  } else {
+    // No liked tags: simple query without tag matching, just apply dislikedTags filter
+    query = `
       SELECT
-        je.value as product_id,
-        COUNT(DISTINCT u.id) as favorite_count
-      FROM users u, json_each(u.saved_items) as je
-      WHERE u.status = 'active'
-        AND u.updated_at >= datetime('now', '-30 days')
-      GROUP BY je.value
-    ) fc ON p.id = fc.product_id
-    WHERE ${whereClause}
-    ORDER BY score DESC, p.created_at DESC
-    LIMIT ?
-  `;
+        p.*,
+        COALESCE(cc.click_count, 0) as click_count,
+        COALESCE(fc.favorite_count, 0) as favorite_count,
+        (
+          ${categoryCase}
+          + ${tagMatchExpr}
+          + COALESCE(cc.click_count, 0) * 1
+          + COALESCE(fc.favorite_count, 0) * 2
+          + ${priceMatchCase}
+          + MIN(7, julianday('now') - julianday(p.created_at)) * 0.1
+        ) as score
+      FROM products p
+      LEFT JOIN (
+        SELECT product_id, COUNT(*) as click_count
+        FROM clicks
+        WHERE clicked_at >= datetime('now', '-30 days')
+        GROUP BY product_id
+      ) cc ON p.id = cc.product_id
+      LEFT JOIN (
+        SELECT
+          je.value as product_id,
+          COUNT(DISTINCT u.id) as favorite_count
+        FROM users u, json_each(u.saved_items) as je
+        WHERE u.status = 'active'
+          AND u.updated_at >= datetime('now', '-30 days')
+        GROUP BY je.value
+      ) fc ON p.id = fc.product_id
+      WHERE ${whereClause}
+      ORDER BY score DESC, p.created_at DESC
+      LIMIT ?
+    `;
+  }
 
-  bindings.push(limit);
+  // Build all bindings in correct order
+  const allBindings: (string | number)[] = [];
+  allBindings.push(...bindings); // whereClause bindings (status, clickHistory, dislikedTags)
+  allBindings.push(...userTagBindings); // tag bindings (empty if no likedTags)
+  allBindings.push(...priceBindings);
+  allBindings.push(limit);
 
-  const recommendations = await env.DB.prepare(query).bind(...bindings).all<Record<string, unknown>>();
+  const recommendations = await env.DB.prepare(query).bind(...allBindings).all<Record<string, unknown>>();
 
   const normalizedRecommendations = (recommendations.results || []).map(row => toClientProduct(row, parseProductContentFromRow(row)));
   return new Response(JSON.stringify(jsonSuccess(normalizedRecommendations)), {
