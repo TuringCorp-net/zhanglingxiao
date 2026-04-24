@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-24
+- **文件**: 20260424-2604.20791-clinical-llm-empathy.md
+- **标题**: AI能当医生吗？一项研究揭开了临床大模型的真实水平
+- **论文来源**: arXiv:2604.20791 | Can "AI" Be a Doctor? A Study of Empathy, Readability, and Alignment in Clinical LLMs
+- **作者**: Mariano Barone, Francesco Di Serio, Roberto Moio等（那不勒斯腓特烈二世大学、范维特利大学、东北大学）
+- **撰写日期**: 2026-04-24（北京时间）
+- **备注**: 大模型临床沟通多维评估（语义忠实度/可读性/情感共鸣）；AI比医生更负面、复杂度更高；人机协作改写效果最佳；AI定位应为"临床沟通助手"而非替代医生
+
 ### 2026-04-22
 - **文件**: 20260422-2604.09726-continued-fraction-error.md
 - **标题**: 当数学家"切来切去"：一个关于数字分解的惊人发现

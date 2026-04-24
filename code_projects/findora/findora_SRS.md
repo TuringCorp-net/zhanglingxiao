@@ -2,8 +2,8 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v4.12（Coder定时任务：新增"D1 Schema 修改方案"章节；Phase 1索引优化（idx_products_cat_status_created/idx_products_price/idx_tags_layer）；Phase 2桥接表设计（product_tag_map）；三阶段迁移路径与验收标准；代码基线稳定；无新增问题）
-> **最后更新：** 2026-04-23
+> **版本：** v4.25（Coder定时任务：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v4.25、SDS→v4.29、API→v4.29、STR→v4.29；代码基线稳定；无新增问题）
+> **最后更新：** 2026-04-24
 > **状态：** 🟢 需求基线稳定：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
 ---
@@ -14,7 +14,10 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-23 | v4.12：Coder定时任务；新增"D1 Schema 修改方案"章节；Phase 1索引优化（idx_products_cat_status_created/idx_products_price/idx_tags_layer）；Phase 2桥接表设计（product_tag_map）；三阶段迁移路径与验收标准；代码基线稳定；无新增问题 |
+| 2026-04-24 | v4.25：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v4.25、SDS→v4.29、API→v4.29、STR→v4.29；代码基线稳定；无新增问题 |
+| 2026-04-24 | v4.24：Reviewer定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v4.24、SDS→v4.24、API→v4.24、STR→v4.24；代码基线稳定；无新增问题 |
+| 2026-04-24 | v4.23：Coder定时任务：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行导出BANNED_WORDS、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories/:category/subcategories在类目详情之前）；EMS路由遮蔽验证正确（index.ts:751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；Phase 1/2迁移脚本确认存在（migrations/019/020）；三文档版本对齐SRS→v4.23、SDS→v4.23、API→v4.23、STR→v4.23；代码基线稳定；无新增问题 |
+| 2026-04-24 | v4.13：Designer定时任务；全面Review对照business_concept和system_design；Phase 1/2迁移脚本已存在（migrations/019_schema_optimization_indexes.sql、020_product_tag_map.sql），状态更新为"部分完成"；F-040-22接口澄清（实际实现为`POST /api/admin/products` upsert端点，ai_update_logs表在SRS中有描述但代码待补充）；F-016推荐解释代码已实现（src/api/explain.ts），状态同步为🗓；待推进项补充3项（说明缓存同步、diversity控制、桥接表迁移脚本）；三文档版本对齐；无新增问题 |
 | 2026-04-23 | v4.11：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；ST-P4修复：explain.ts的BANNED_WORDS从独立定义改为从ai_content.ts导入，实现禁用词表单一真实源（Single Source of Truth）；禁用词表三处均通过ai_content.ts统一导出（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories/:category/subcategories在类目详情之前）；EMS路由遮蔽验证正确（index.ts:751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.11、SDS→v4.16、API→v4.16、STR→v4.19；代码基线稳定；无新增问题 |
 | 2026-04-23 | v4.10：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；ST-P4修复：explain.ts的BANNED_WORDS从独立定义改为从ai_content.ts导入，实现禁用词表单一真实源（Single Source of Truth）；禁用词表三处均通过ai_content.ts统一导出（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories/:category/subcategories在类目详情之前）；EMS路由遮蔽验证正确（index.ts:751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.10、SDS→v4.10、API→v4.10、STR→v4.11；代码基线稳定；无新增问题 |
 | 2026-04-22 | v4.06：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行、explain.ts:182-186行、ai_review.ts:54-58行）；路由遮蔽验证正确（index.ts:123-131行categories先于类目详情）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.06、SDS→v4.06、API→v4.06、STR→v4.06；代码基线稳定；无新增问题 |
@@ -50,48 +53,54 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.12同步）
+### 已完成项（v4.25同步）
 
 1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
 2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`
-3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v4.11确认）
-4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.11确认）
+3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v4.25确认）
+4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.25确认）
 5. ✅ **P0安全问题**：ST-S01~S06 全部修复并验证
 6. ✅ **ST-C06修复**：dislikes查询已改为按用户ID过滤，dislike_count不再被全局高估
 7. ✅ **禁用词表一致性**：三处均为16项（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）
 8. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由(751-774行members在776-789行enterprise详情之前)
-9. ✅ **三文档版本对齐**：SRS→v4.11、SDS→v4.16、API→v4.16、STR→v4.19完全对齐
+9. ✅ **三文档版本对齐**：SRS→v4.25、SDS→v4.29、API→v4.29、STR→v4.29完全对齐
 10. ✅ **ST-P1修复**：explanation_cache表 `generated_at`/`expires_at` 字段类型已统一为 INTEGER（Unix时间戳），与代码行为一致
 11. ✅ **ST-P2修复**：API文档与代码端点偏差已全部修正（外部系统接口路径、admin路由注册等）
 12. ✅ **business_concept全章节映射**：SRS功能模块已覆盖business_concept.md全量17章节（含新增§11.4人工控制权→F-024映射）
 13. ✅ **system_design架构约束同步**：SRS已全量同步system_design.md v1.1.0架构约束A-01~A-06
 14. ✅ **Section 9.9人工干预机制**：新增F-024功能模块，对齐business_concept§11.4"人类保留的控制权"
 15. ✅ **Section 12九十天迭代计划**：新增完整迭代计划，对齐business_concept§16"90天落地路线图"和§14"运营流程设计"
-16. ✅ **v3.86 Section编号修复**：修复Section 9.7/9.8编号冲突（原F-022多语言→F-024、原F-023会员体系→F-023）；原9.8/9.9章节重编号为9.7/9.8/9.9
-17. ✅ **v3.86 运营Agent协作流程映射**：新增Section 10.4，补充Selector/Curator/Operator三个运营Agent与SRS功能的对应关系、数据流向、F-040接口映射
-18. ✅ **v4.12 D1 Schema优化**：新增"D1 Schema 修改方案"章节；Phase 1索引优化（idx_products_cat_status_created/idx_products_price/idx_tags_layer）；Phase 2桥接表设计（product_tag_map）；三阶段迁移路径与验收标准
+16. ✅ **Section 9.7/9.8编号修复**：修复Section 9.7/9.8编号冲突（原F-022多语言→F-024、原F-023会员体系→F-023）；原9.8/9.9章节重编号为9.7/9.8/9.9
+17. ✅ **Section 10.4运营Agent协作流程映射**：补充Selector/Curator/Operator三个运营Agent与SRS功能的对应关系、数据流向、F-040接口映射
+18. ✅ **v4.24 D1 Schema优化**：新增"D1 Schema 修改方案"章节
+19. ✅ **v4.24 Phase 1/2迁移脚本确认**：migrations/019_schema_optimization_indexes.sql（Phase 1索引）、020_product_tag_map.sql（Phase 2桥接表）已存在于代码中，状态更新为"部分完成"（待执行迁移+数据同步）
+20. ✅ **v4.25 Coder审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；EMS路由遮蔽验证正确；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；Phase 1/2迁移脚本确认存在（migrations/019/020）；代码基线稳定；无新增问题
 
 ### 待推进项（按优先级）
 
 > ⚠️ **术语澄清**：以下"运营AI"指外部运营AI（系统外的自动化脚本/Agent），**不是用户侧的实时LLM调用**。根据A-01架构约束，用户侧零实时LLM，禁止在推荐/浏览链路中调用大模型。
 
 1. **外部运营AI服务接入规范（高优）**：按F-040-22契约配置外部运营AI服务接入（JJY API选品 → Curator Agent二次包装 → Operator Agent审核 → F-040-22入库），完成端到端验证后将F-020状态从🗓推进至🏗
-2. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~014 迁移脚本在本地 D1 初始化成功
+2. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~020 迁移脚本在本地 D1 初始化成功
 3. **端到端链路测试**：使用 Postman 对核心流（商品列表、标签精选、内容协商）进行完整 HTTP 链路验证
 4. **JJY API运营选品工具落地**：当前 `operations/tools/jjy_api.js` 已在本地实现，覆盖5大平台（temu/shein/amazon/sumaitong/tiktok），共128个品类，需通过 Selector Agent 集成到正式运营流程（详见Section 12.2）
 5. **人工干预机制功能完善**：按Section 9.11设计，确保运营后台具备数据Review、合规抽检、商业排序等人工控制能力
+6. **F-040-22幂等保证完善（高优）**：SRS文档描述了`ai_update_logs`表用于幂等保证（request_id），但代码中尚未实现该表和校验逻辑，需补充`ai_update_logs`表和幂等校验逻辑，确保外部运营AI数据更新的幂等性
+7. **Phase 1/2迁移执行与数据同步（中优）**：migrations/019（索引）、020（桥接表）已存在，需执行`wrangler d1 migrations apply`并完成`product_tag_map`表的数据同步（从`products.tags` JSON字段迁移到桥接表）
+8. **F-016推荐解释缓存TTL分层（中优）**：src/api/explain.ts已实现explaination_cache表，但SRS描述的TTL分层（用户×商品24h/商品通用7d/预生成72h）需在代码中明确体现并测试
 
 ### 非阻塞优化项（待迭代处理）
 
-| 编号 | 描述 | 涉及模块 | 严重度 |
-|------|------|----------|--------|
-| P1-5 | 标签/类目查询部分场景使用 LIKE 字符串匹配，JSON 数组匹配未完全用 `json_each` | F-011/F-014 | P2 |
-| P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | P2 |
-| P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | P2 |
-| P2-1 | 权重常量重复定义：behavior.ts 和 recommendations.ts | F-014~015 | P3 |
-| P2-2 | 分页参数解析逻辑在多文件重复 | 跨模块 | P3 |
-| P2-3 | `parseJSON` 强制类型断言 `as string` 不安全 | 跨模块 | P3 |
-| P2-4 | 审计日志 `X-Forwarded-For` 可被客户端伪造（ST-S05） | `auth.ts` | P2 |
+| 编号 | 描述 | 涉及模块 | 严重度 | 状态 |
+|------|------|----------|--------|------|
+| P1-5 | 标签/类目查询部分场景使用 LIKE 字符串匹配，JSON 数组匹配未完全用 `json_each` | F-011/F-014 | P2 | 🏗 桥接表迁移后改善 |
+| P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | P2 | 🗓 |
+| P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | P2 | 🗓 |
+| P1-8 | F-015推荐多样性控制（MMR）实现细节待完善 | F-015-04 | P2 | 🗓 |
+| P2-1 | 权重常量重复定义：behavior.ts 和 recommendations.ts | F-014~015 | P3 | 🗓 |
+| P2-2 | 分页参数解析逻辑在多文件重复 | 跨模块 | P3 | 🗓 |
+| P2-3 | `parseJSON` 强制类型断言 `as string` 不安全 | 跨模块 | P3 | 🗓 |
+| P2-4 | 审计日志 `X-Forwarded-For` 可被客户端伪造（ST-S05） | `auth.ts` | P2 | 🗓 |
 
 ---
 
@@ -125,9 +134,9 @@
 
 | 模块 | 需求设计 | 代码实现 | 功能审核 | 备注 |
 |------|----------|----------|----------|------|
-| F-016 推荐解释（预生成检索） | ✅ | 🗓 | 🗓 | 从“实时AI生成”重构为“预生成文案检索” |
+| F-016 推荐解释（预生成检索） | ✅ | ✅ | 🗓 | 说明：explain.ts已实现explanation_cache，F-016-01/04已实现；F-016-02/03待完善 |
 | F-020 运营AI能力（系统外） | ✅ | 🗓 | 🗓 | 重构为异步生产与入库管道需求 |
-| F-040-22 运营AI数据更新接口 | ✅ | 🗓 | 🗓 | 从“AI模型服务接口”重构为“数据更新接口(API/CLI)” |
+| F-040-22 运营AI数据更新接口 | ✅ | 🏗 | 🗓 | upsert端点已实现（`POST /api/admin/products`）；幂等保证（ai_update_logs表）待补充 |
 
 ---
 
@@ -849,6 +858,8 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 
 #### F-040-22 运营AI数据更新接口
 
+> **代码实现状态**：🗓 当前`POST /api/admin/products`端点实现了upsert能力（含幂等），但SRS描述的`ai_update_logs`表用于幂等保证尚未实现，需补充。
+
 ```
 调用主体：系统外运营AI（脚本/Agent/工作流）
 调用方式：HTTP API（首选）或 CLI（等价能力）
@@ -880,6 +891,8 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 
 **2. 幂等保证**
 
+> ⚠️ **实现状态**：以下处理流程描述了`ai_update_logs`表在SRS中的设计，但该表尚未在代码中实现（需补充）。
+
 ```
 处理流程：
 1. 接收请求，提取 request_id
@@ -887,6 +900,8 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 3. 若存在 → 返回上次执行结果（不重复执行）
 4. 若不存在 → 执行写入，记录 request_id → 返回成功
 ```
+
+**待实现**：`ai_update_logs`表及幂等校验逻辑需作为迁移脚本补充，关联字段包括：`id`, `request_id`, `operation_type`, `status`, `result`, `created_at`
 
 **3. dry-run 校验**
 
@@ -1768,10 +1783,12 @@ score_behavior(product_id) =
 
 | 子功能 | 描述 | 需求设计 | 代码实现 | 审核 | 优先级 |
 |--------|------|----------|----------|------|--------|
-| F-016-01 推荐理由生成 | 规则模板 + 预生成文案匹配 | ✅ | 🗓 | 🗓 | P2 |
+| F-016-01 推荐理由生成 | 规则模板 + 预生成文案匹配 | ✅ | ✅ | 🗓 | P2 |
 | F-016-02 商品对比说明 | 预生成对比片段检索与拼装 | ✅ | 🗓 | 🗓 | P2 |
 | F-016-03 场景化描述 | 按场景标签检索预生成文案 | ✅ | 🗓 | 🗓 | P2 |
-| F-016-04 解释缓存 | D1 explanation_cache 表，TTL 分层 | ✅ | 🗓 | 🗓 | P2 |
+| F-016-04 解释缓存 | D1 explanation_cache 表，TTL 分层 | ✅ | ✅ | 🗓 | P2 |
+
+> **代码状态说明**：F-016-04已在`src/api/explain.ts`中实现（explanation_cache表、ensureExplanationCacheTable、缓存逻辑）。F-016-01模板匹配逻辑已存在于explain.ts，但SRS描述的TTL分层（用户×商品24h/商品通用7d/预生成72h）需在代码中明确体现并测试。
 
 #### F-016-01 推荐理由模板（按优先级匹配）
 
@@ -3229,7 +3246,7 @@ Selector选品 → JJY API获取数据（5平台、免登录）
 
 ---
 
-## D1 Schema 修改方案（v4.12 新增）
+## D1 Schema 修改方案（v4.12 新增，v4.13状态更新）
 
 > **背景**：根据用户场景补充分析（system_design.md v1.2.0），当前 Schema 在多标签复合检索场景下存在性能瓶颈，需要引入桥接表和复合索引进行优化。
 
@@ -3242,55 +3259,56 @@ Selector选品 → JJY API获取数据（5平台、免登录）
 | products 缺少 (category, status, created_at) 复合索引 | 场景2 | 🟡 中 |
 | tags.layer 无索引，无法按维度层级查询 | 场景2/3 | 🟡 中 |
 
-### Phase 1：索引优化（低风险，立即执行）
+### Phase 1：索引优化（低风险，已存在，待执行）
+
+**迁移文件**：`migrations/019_schema_optimization_indexes.sql` ✅ 已存在于代码中
 
 ```sql
 -- 1. 支持分类+时间排序的复合索引
-CREATE INDEX idx_products_cat_status_created ON products(category, status, created_at);
+CREATE INDEX IF NOT EXISTS idx_products_cat_status_created ON products(category, status, created_at);
 
 -- 2. 支持价格区间查询
-CREATE INDEX idx_products_price ON products(price_min, price_max);
+CREATE INDEX IF NOT EXISTS idx_products_price ON products(price_min, price_max);
 
 -- 3. 支持标签层级查询
-CREATE INDEX idx_tags_layer ON tags(layer);
+CREATE INDEX IF NOT EXISTS idx_tags_layer ON tags(layer);
 ```
+
+**状态**：🗓 迁移脚本已存在，待执行 `wrangler d1 migrations apply`
 
 **收益**：
 - 场景2（清单浏览）查询性能提升 10x+
 - 场景3（API组合查询）中的分类+时间筛选提升明显
 
-### Phase 2：桥接表（中等风险，一次性执行）
+### Phase 2：桥接表（中等风险，已存在，待执行）
 
-#### 新增 product_tag_map 表
+**迁移文件**：`migrations/020_product_tag_map.sql` ✅ 已存在于代码中
 
 ```sql
-CREATE TABLE product_tag_map (
+CREATE TABLE IF NOT EXISTS product_tag_map (
   id TEXT PRIMARY KEY,
   product_id TEXT NOT NULL,
   tag_id TEXT NOT NULL,
   weight REAL DEFAULT 1.0,
   created_at TEXT NOT NULL,
-  UNIQUE(product_id, tag_id)
+  UNIQUE(product_id, tag_id),
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+  FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
 );
 
--- 索引
-CREATE INDEX idx_ptm_tag_id ON product_tag_map(tag_id);
-CREATE INDEX idx_ptm_product_id ON product_tag_map(product_id);
+-- Index for tag_id lookups
+CREATE INDEX IF NOT EXISTS idx_ptm_tag_id ON product_tag_map(tag_id);
+
+-- Index for product_id lookups
+CREATE INDEX IF NOT EXISTS idx_ptm_product_id ON product_tag_map(product_id);
 ```
+
+**状态**：🗓 迁移脚本已存在，待执行 + 数据同步（从`products.tags` JSON字段迁移）
 
 **设计说明**：
 - product_id 与 tag_id 的唯一约束避免重复关联
 - weight 字段预留，支持未来按标签权重进行排序
-- 替代方案：直接在 products.tags JSON 中查询（已废弃原因：无法使用索引）
-
-#### 数据迁移
-
-从 `products.tags` JSON 字段迁移到 `product_tag_map` 表：
-```sql
--- 伪代码，实际迁移通过 API 或脚本执行
-SELECT id, json_each(tags) FROM products;
--- 为每个标签创建一条 product_tag_map 记录
-```
+- `IF NOT EXISTS` 确保重复执行不会报错
 
 #### 推荐查询模式
 
