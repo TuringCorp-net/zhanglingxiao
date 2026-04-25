@@ -1,4 +1,4 @@
--- Migration: 014_clicks_cascade.sql
+-- Migration: 021_clicks_cascade.sql
 -- 为 clicks 表的 product_id 外键添加 ON DELETE CASCADE
 -- 基于: migrations/001_initial_schema.sql
 

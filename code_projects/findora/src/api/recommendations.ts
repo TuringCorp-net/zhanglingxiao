@@ -20,14 +20,6 @@ const PRICE_RANGES = {
   premium: { min: 75, max: Infinity },
 };
 
-function getPriceRangeCategory(priceMin: number | null, priceMax: number | null): string | null {
-  if (priceMin === null && priceMax === null) return null;
-  const avg = (priceMin || 0 + (priceMax || 0)) / 2;
-  if (avg <= 25) return 'budget';
-  if (avg <= 75) return 'mid_range';
-  return 'premium';
-}
-
 function buildPriceMatchCase(userPricePreference: string | null): { caseExpr: string; bindings: string[] } {
   if (!userPricePreference) {
     return { caseExpr: '0', bindings: [] };

@@ -2,8 +2,8 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v4.25（Coder定时任务：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v4.25、SDS→v4.29、API→v4.29、STR→v4.29；代码基线稳定；无新增问题）
-> **最后更新：** 2026-04-24
+> **版本：** v4.37（Coder定时任务：全面Review对照business_concept和system_design；修复ST-P12（非阻塞优化项表P1-5~P1-8严重度列P2→P1，编号前缀与严重度一致）；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；代码基线稳定）
+> **最后更新：** 2026-04-25
 > **状态：** 🟢 需求基线稳定：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
 ---
@@ -14,6 +14,11 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-25 | v4.37：Coder定时任务；全面Review对照business_concept和system_design；修复ST-P12（非阻塞优化项表P1-5~P1-8严重度列P2→P1，编号前缀与严重度一致）；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；代码基线稳定；无新增问题 |
+| 2026-04-25 | v4.36：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；修复ST-P10（SDS/STR §F-013 HTTP方法修正遗漏）；四文档版本对齐SRS→v4.36、SDS→v4.36、API→v4.36、STR→v4.39；代码基线稳定；无新增问题 |
+| 2026-04-25 | v4.35：Coder定时任务；全面Review对照business_concept和system_design；修复P2-8（模块基线表F-016代码实现✅→🏗与§2.2统一）；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.35、SDS→v4.35、API→v4.35、STR→v4.37；代码基线稳定；无新增问题 |
+| 2026-04-25 | v4.34：Coder定时任务；全面Review对照business_concept和system_design；修复ST-P5（§2.2 F-016/F-020代码实现状态🗓→🏗，与模块基线表和实际代码一致）；修复ST-P6（SRS版本v4.26→v4.34与SDS/API/STR对齐）；更新模块基线表F-020代码实现🗓→🏗、F-016备注更新（全4端点已实现）；四文档版本对齐SRS→v4.34、SDS→v4.34、API→v4.34、STR→v4.34；TS编译0错误；代码基线稳定；无新增问题 |
+| 2026-04-25 | v4.26：Designer定时任务；全面Review对照business_concept和system_design；修正Section 2.2/10.4/12.3/15中F-022→F-024、F-024→F-025的编号不一致（SRS内部F编号体系统一：F-023=会员体系、F-024=多语言支持、F-025=人工干预机制）；三文档版本对齐SRS→v4.26、SDS→v4.30、API→v4.30、STR→v4.30；代码基线稳定；无新增问题 |
 | 2026-04-24 | v4.25：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v4.25、SDS→v4.29、API→v4.29、STR→v4.29；代码基线稳定；无新增问题 |
 | 2026-04-24 | v4.24：Reviewer定时任务；全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；安全修复验证通过；三文档版本对齐SRS→v4.24、SDS→v4.24、API→v4.24、STR→v4.24；代码基线稳定；无新增问题 |
 | 2026-04-24 | v4.23：Coder定时任务：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行导出BANNED_WORDS、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories/:category/subcategories在类目详情之前）；EMS路由遮蔽验证正确（index.ts:751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；Phase 1/2迁移脚本确认存在（migrations/019/020）；三文档版本对齐SRS→v4.23、SDS→v4.23、API→v4.23、STR→v4.23；代码基线稳定；无新增问题 |
@@ -53,34 +58,40 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.25同步）
+### 已完成项（v4.36同步）
 
 1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
 2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`
-3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v4.25确认）
-4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.25确认）
+3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v4.34确认）
+4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.34确认）
 5. ✅ **P0安全问题**：ST-S01~S06 全部修复并验证
 6. ✅ **ST-C06修复**：dislikes查询已改为按用户ID过滤，dislike_count不再被全局高估
-7. ✅ **禁用词表一致性**：三处均为16项（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:24行导入）
+7. ✅ **禁用词表一致性**：三处均为16项（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:25行导入），SSOT模式
 8. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由(751-774行members在776-789行enterprise详情之前)
-9. ✅ **三文档版本对齐**：SRS→v4.25、SDS→v4.29、API→v4.29、STR→v4.29完全对齐
+9. ✅ **四文档版本对齐**：SRS→v4.36、SDS→v4.36、API→v4.36、STR→v4.39完全对齐
 10. ✅ **ST-P1修复**：explanation_cache表 `generated_at`/`expires_at` 字段类型已统一为 INTEGER（Unix时间戳），与代码行为一致
 11. ✅ **ST-P2修复**：API文档与代码端点偏差已全部修正（外部系统接口路径、admin路由注册等）
-12. ✅ **business_concept全章节映射**：SRS功能模块已覆盖business_concept.md全量17章节（含新增§11.4人工控制权→F-024映射）
+12. ✅ **business_concept全章节映射**：SRS功能模块已覆盖business_concept.md全量17章节（含§11.4人工控制权→F-025映射）
 13. ✅ **system_design架构约束同步**：SRS已全量同步system_design.md v1.1.0架构约束A-01~A-06
-14. ✅ **Section 9.9人工干预机制**：新增F-024功能模块，对齐business_concept§11.4"人类保留的控制权"
+14. ✅ **Section 9.11人工干预机制**：F-025功能模块，对齐business_concept§11.4"人类保留的控制权"
 15. ✅ **Section 12九十天迭代计划**：新增完整迭代计划，对齐business_concept§16"90天落地路线图"和§14"运营流程设计"
 16. ✅ **Section 9.7/9.8编号修复**：修复Section 9.7/9.8编号冲突（原F-022多语言→F-024、原F-023会员体系→F-023）；原9.8/9.9章节重编号为9.7/9.8/9.9
 17. ✅ **Section 10.4运营Agent协作流程映射**：补充Selector/Curator/Operator三个运营Agent与SRS功能的对应关系、数据流向、F-040接口映射
 18. ✅ **v4.24 D1 Schema优化**：新增"D1 Schema 修改方案"章节
 19. ✅ **v4.24 Phase 1/2迁移脚本确认**：migrations/019_schema_optimization_indexes.sql（Phase 1索引）、020_product_tag_map.sql（Phase 2桥接表）已存在于代码中，状态更新为"部分完成"（待执行迁移+数据同步）
 20. ✅ **v4.25 Coder审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；EMS路由遮蔽验证正确；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；Phase 1/2迁移脚本确认存在（migrations/019/020）；代码基线稳定；无新增问题
+21. ✅ **v4.26 F编号体系统一**：修正Section 2.2/10.4/12.3/15中F-022→F-024（多语言）、F-024→F-025（人工干预）共4处编号不一致；SRS内部F编号体系统一：F-023=会员体系、F-024=多语言支持、F-025=人工干预机制
+22. ✅ **v4.34 ST-P5/ST-P6修复**：§2.2表F-016/F-020代码实现状态🗓→🏗（与模块基线表、实际代码一致）；SRS版本v4.26→v4.34与SDS/API/STR对齐；模块基线表F-020→🏗、F-016备注更新（4端点全部实现）
+23. ✅ **v4.35 P2-8修复**：模块基线表F-016代码实现✅→🏗（与§2.2统一为🏗，待AI API Key联调）
+24. ✅ **v4.36 ST-P10修复**：SDS/STR §F-013 HTTP方法修正遗漏（PUT→PATCH /api/subscribe/preferences、POST /api/unsubscribe→DELETE /api/subscribe）
+25. ✅ **v4.37 ST-P12修复**：非阻塞优化项表P1-5~P1-8严重度列P2→P1，编号前缀与严重度一致
+26. ✅ **v4.37 代码修复**：tags.ts deleteTag引用计数绑定了错误值（existing.name→existing.id）；getTagStats JOIN条件修正（t.slug→t.id）；recommendations.ts死代码移除（getPriceRangeCategory）；explain.ts冗余.sort()移除
 
 ### 待推进项（按优先级）
 
 > ⚠️ **术语澄清**：以下"运营AI"指外部运营AI（系统外的自动化脚本/Agent），**不是用户侧的实时LLM调用**。根据A-01架构约束，用户侧零实时LLM，禁止在推荐/浏览链路中调用大模型。
 
-1. **外部运营AI服务接入规范（高优）**：按F-040-22契约配置外部运营AI服务接入（JJY API选品 → Curator Agent二次包装 → Operator Agent审核 → F-040-22入库），完成端到端验证后将F-020状态从🗓推进至🏗
+1. **外部运营AI服务接入规范（高优）**：按F-040-22契约配置外部运营AI服务接入（JJY API选品 → Curator Agent二次包装 → Operator Agent审核 → F-040-22入库），配置AI_API_KEY后完成F-016/F-020端到端验证，将功能审核状态从🗓推进至✅
 2. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~020 迁移脚本在本地 D1 初始化成功
 3. **端到端链路测试**：使用 Postman 对核心流（商品列表、标签精选、内容协商）进行完整 HTTP 链路验证
 4. **JJY API运营选品工具落地**：当前 `operations/tools/jjy_api.js` 已在本地实现，覆盖5大平台（temu/shein/amazon/sumaitong/tiktok），共128个品类，需通过 Selector Agent 集成到正式运营流程（详见Section 12.2）
@@ -93,10 +104,10 @@
 
 | 编号 | 描述 | 涉及模块 | 严重度 | 状态 |
 |------|------|----------|--------|------|
-| P1-5 | 标签/类目查询部分场景使用 LIKE 字符串匹配，JSON 数组匹配未完全用 `json_each` | F-011/F-014 | P2 | 🏗 桥接表迁移后改善 |
-| P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | P2 | 🗓 |
-| P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | P2 | 🗓 |
-| P1-8 | F-015推荐多样性控制（MMR）实现细节待完善 | F-015-04 | P2 | 🗓 |
+| P1-5 | 标签/类目查询部分场景使用 LIKE 字符串匹配，JSON 数组匹配未完全用 `json_each` | F-011/F-014 | P1 | 🏗 桥接表迁移后改善 |
+| P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | P1 | 🗓 |
+| P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | P1 | 🗓 |
+| P1-8 | F-015推荐多样性控制（MMR）实现细节待完善 | F-015-04 | P1 | 🗓 |
 | P2-1 | 权重常量重复定义：behavior.ts 和 recommendations.ts | F-014~015 | P3 | 🗓 |
 | P2-2 | 分页参数解析逻辑在多文件重复 | 跨模块 | P3 | 🗓 |
 | P2-3 | `parseJSON` 强制类型断言 `as string` 不安全 | 跨模块 | P3 | 🗓 |
@@ -128,14 +139,14 @@
 > - **模块状态（Section 2.2）**：关注功能是否可上线（需求设计→代码实现→人工审核）
 > - **接口状态（Section 3.1）**：关注API端点是否已定义且可调用
 >
-> **示例**：F-016 的"需求设计"列为✅，表示该功能的**需求文档已完成**；但"代码实现"列为🗓，表示系统内的**实时AI生成代码尚未实现**（因架构已改为"预生成+检索"模式）。最终用户看到的推荐解释100%来自预生成文案检索，无需实时AI。
+> **示例**：F-016 的"需求设计"列为✅表示需求文档已完成，"代码实现"列为🏗表示代码已实现（explain.ts含4端点+模板引擎+缓存层）但功能审核尚未完成（待AI服务API Key联调）。最终用户看到的推荐解释100%来自预生成文案检索，无需实时AI。
 
 ### 模块基线状态（本次重点）
 
 | 模块 | 需求设计 | 代码实现 | 功能审核 | 备注 |
 |------|----------|----------|----------|------|
-| F-016 推荐解释（预生成检索） | ✅ | ✅ | 🗓 | 说明：explain.ts已实现explanation_cache，F-016-01/04已实现；F-016-02/03待完善 |
-| F-020 运营AI能力（系统外） | ✅ | 🗓 | 🗓 | 重构为异步生产与入库管道需求 |
+| F-016 推荐解释（预生成检索） | ✅ | 🏗 | 🗓 | explain.ts已完整实现F-016-01~04（4个端点+模板引擎+缓存层），待AI服务API Key联调 |
+| F-020 运营AI能力（系统外） | ✅ | 🏗 | 🗓 | ai_content.ts已实现6个AI能力端点（F-020-01~06），待AI服务API Key联调 |
 | F-040-22 运营AI数据更新接口 | ✅ | 🏗 | 🗓 | upsert端点已实现（`POST /api/admin/products`）；幂等保证（ai_update_logs表）待补充 |
 
 ---
@@ -144,6 +155,10 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
+| v4.37 | 2026-04-25 | SRS定时任务 | 全面Review对照business_concept和system_design；修复ST-P12（非阻塞优化项表严重度列P2→P1）；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；代码基线稳定；无新增问题 |
+| v4.35 | 2026-04-25 | SRS定时任务 | 全面Review对照business_concept和system_design；修复P2-8（模块基线表F-016代码实现✅→🏗与§2.2统一）；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.35、SDS→v4.35、API→v4.35、STR→v4.37；代码基线稳定；无新增问题 |
+| v4.34 | 2026-04-25 | SRS定时任务 | 全面Review对照business_concept和system_design；修复ST-P5（§2.2 F-016/F-020代码实现🗓→🏗）；修复ST-P6（版本v4.26→v4.34对齐）；更新模块基线表F-020→🏗；四文档版本对齐SRS→v4.34、SDS→v4.34、API→v4.34、STR→v4.34；代码基线稳定；无新增问题 |
+| v4.26 | 2026-04-25 | SRS定时任务 | 全面Review对照business_concept和system_design；修正Section 2.2/10.4/12.3/15中F-022→F-024、F-024→F-025共4处编号不一致；SRS内部F编号体系统一：F-023=会员体系、F-024=多语言支持、F-025=人工干预机制；三文档版本对齐SRS→v4.26、SDS→v4.30、API→v4.30、STR→v4.30；代码基线稳定；无新增问题 |
 | v3.99 | 2026-04-22 | SRS定时任务 | 全面Review对照business_concept和system_design；修复Section 9.7编号冲突（原数据更新链路验收模板→9.7、原多语言设计→9.10、原会员体系→9.8、原人工干预机制→9.11）；添加9.9预留编号；Actions表从v3.97同步更新为v3.98 Reviewer定时任务确认项；三文档版本对齐SRS→v3.99、SDS→v3.99、API→v3.99、STR→v3.99；business_concept 17章节映射完整；system_design v1.1.0架构约束A-01~A-06全量同步；无新增问题 |
 | v3.86 | 2026-04-21 | SRS定时任务 | 全面Review对照business_concept和system_design；修复Section 9.7/9.8编号冲突（原F-022多语言→F-024、原F-023会员体系→F-023）；补充运营Agent协作流程映射（Selector→Curator→Operator→F-040-22）；无新增问题 |
 | v3.64 | 2026-04-19 | SRS定时任务 | 禁用词表从12项更新为16项（与代码对齐：新增amazing/incredible/unbelievable/game-changing）；版本号与STR v3.63对齐；business_concept全17章节映射确认完整；system_design v1.1.0架构约束A-01~A-06全量同步；无新增问题 |
@@ -254,13 +269,13 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 | 用户订阅与偏好选择（F-013） | P1 | ✅ | ✅ | ✅ |
 | 基础推荐（F-014） | P1 | ✅ | ✅ | ✅ |
 | 点击统计与基础数据（F-017） | P0 | ✅ | ✅ | ✅ |
-| 运营AI异步生产（F-020） | P1 | ✅ | 🗓 | 🗓 |
-| 推荐解释检索（F-016） | P2 | ✅ | 🗓 | 🗓 |
+| 运营AI异步生产（F-020） | P1 | ✅ | 🏗 | 🗓 |
+| 推荐解释检索（F-016） | P2 | ✅ | 🏗 | 🗓 |
 | 进阶推荐（F-015） | P2 | ✅ | ✅ | ✅ |
 | 会员体系（F-023） | P2 | ✅ | ✅ | ✅ |
-| 多语言支持（F-022） | P2 | ✅ | ✅ | ✅ |
+| 多语言支持（F-024） | P2 | ✅ | ✅ | ✅ |
 | 内容管理（F-030） | P1 | ✅ | ✅ | ✅ |
-| 人工干预机制（F-024） | P1 | ✅ | ✅ | ✅ |
+| 人工干预机制（F-025） | P1 | ✅ | ✅ | ✅ |
 | API端点（F-040） | P0 | ✅ | 🏗 | 🗓 |
 | 数据模型（F-050） | P0 | ✅ | ✅ | ✅ |
 | 技术架构（Section 11） | P0 | ✅ | ✅ | ✅ |
@@ -2900,7 +2915,7 @@ Selector选品 → JJY API获取数据（5平台、免登录）
 |-----------|----------|-------------|----------|
 | **Selector Agent** | 海量初筛与发现（JJY API 5平台128品类） | F-020-01 选品辅助 | `/selected`文件夹 |
 | **Curator Agent** | 内容二次创作（推广文案+Item Card） | F-020-02 内容生产、F-020-03 社媒文案 | `/candidate`文件夹 |
-| **Operator Agent** | 最终质量把关与上架决策 | F-021 AI审核工作流、F-024 人工干预机制 | `/pass`或`/notpass`文件夹 |
+| **Operator Agent** | 最终质量把关与上架决策 | F-021 AI审核工作流、F-025 人工干预机制 | `/pass`或`/notpass`文件夹 |
 
 #### 协作流程图
 
@@ -3056,7 +3071,7 @@ Selector选品 → JJY API获取数据（5平台、免登录）
 | 榜单自动化 | 榜单页按规则自动生成 | P2 | 🗓 |
 | 邮件个性化 | 按用户偏好发送个性化推荐 | P1 | 🗓 |
 | 外部运营AI接入 | F-040-22契约完成，运营AI正式接入 | P1 | 🗓 |
-| 人工干预机制 | F-024人工控制能力完善 | P1 | ✅ |
+| 人工干预机制 | F-025人工控制能力完善 | P1 | ✅ |
 
 **验收标准**：
 - 站点不再只是静态内容库
@@ -3193,8 +3208,8 @@ Selector选品 → JJY API获取数据（5平台、免登录）
 | 编号 | 描述 | 当前状态 | 推进建议 |
 |------|------|----------|----------|
 | F-040-22 | 运营AI数据更新接口（API/CLI） | 🗓 | Token 鉴权已实现；契约已完善（request_id规范、错误格式、校验规则）；ST-T02/T03已修复，端点完全可用 |
-| F-020 | 运营AI异步生产能力接入规范 | 🗓 | 明确 payload 契约与失败重试策略 |
-| F-016 | 推荐解释检索化改造 | 🗓 | 移除实时生成分支，统一预生成文案检索 |
+| F-020 | 运营AI异步生产能力接入规范 | 🏗 | 代码已实现（ai_content.ts 6端点），待AI_API_KEY配置与E2E验证 |
+| F-016 | 推荐解释检索化改造 | 🏗 | 代码已实现（explain.ts 4端点+缓存），待AI_API_KEY配置与E2E验证 |
 | F-011 | 动态标签维度治理 | 🗓 | 增加维度生命周期管理与冲突检测 |
 | F-050 | D1/R2 主从字段对齐 | 🗓 | 补齐内容指针字段、建立一致性巡检任务 |
 
@@ -3221,7 +3236,7 @@ Selector选品 → JJY API获取数据（5平台、免登录）
 | 8 | 数据模型设计 | Section 4 数据字典 (F-050), Section 7.1 商品库 (F-010) | ✅ |
 | 9 | 推荐系统设计 | Section 7.5 F-014, Section 7.6 F-015, Section 7.7 F-016 | ✅ |
 | 10 | 技术方案 | Section 11 技术架构概要 | ✅ |
-| 11 | AI在项目中的作用 | Section 9 AI能力边界 (F-020/F-021/F-024) | ✅ |
+| 11 | AI在项目中的作用 | Section 9 AI能力边界 (F-020/F-021/F-025) | ✅ |
 | 11.4 | 人类保留的控制权 | Section 9.11 人工干预机制 (F-025) | ✅ |
 | 12 | 流量方案 | Section 2.3 用例流程, Section 13 KPI体系 | ✅ |
 | 13 | 合规与风险控制 | Section 14 合规要求 (C-01~C-07) | ✅ |

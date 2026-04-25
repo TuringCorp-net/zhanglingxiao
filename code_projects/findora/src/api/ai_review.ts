@@ -21,6 +21,7 @@
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+// ST-P4修复：禁用词表统一从ai_content.ts导入（Single Source of Truth）
 import { validateAgainstBannedWords, BANNED_WORDS } from './ai_content';
 
 // ============================================================
@@ -49,13 +50,6 @@ export type HighRiskCategory = 'medical' | 'beauty' | 'kids' | 'electronics';
 
 // High-risk categories per SRS Section 5.2
 const HIGH_RISK_CATEGORIES: HighRiskCategory[] = ['medical', 'beauty', 'kids', 'electronics'];
-
-// Banned expressions for tone review
-const BANNED_EXPRESSIONS = [
-  'best', 'worst', 'safest', 'guaranteed', 'proven', 'clinically',
-  'miracle', 'revolutionary', 'lifesaving', 'official', 'authentic',
-  'dangerous', 'amazing', 'incredible', 'unbelievable', 'game-changing',
-];
 
 export interface AIReviewRecord {
   id: string;
@@ -289,7 +283,7 @@ export function validateExaggeration(content: string): ReviewValidation {
 
   const lower = content.toLowerCase();
 
-  for (const expression of BANNED_EXPRESSIONS) {
+  for (const expression of BANNED_WORDS) {
     if (lower.includes(expression)) {
       if (['best', 'worst', 'safest', 'guaranteed', 'proven', 'dangerous'].includes(expression)) {
         issues.push(`Contains banned expression: "${expression}" (F-021-05)`);

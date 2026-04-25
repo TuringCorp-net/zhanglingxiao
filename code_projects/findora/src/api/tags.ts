@@ -149,7 +149,7 @@ export async function deleteTag(env: Env, request: Request, id: string): Promise
   // ST-S06修复：使用 product_tag_map 桥接表查询标签引用
   const referencing = await env.DB.prepare(
     "SELECT COUNT(*) as count FROM product_tag_map WHERE tag_id = ?"
-  ).bind(existing.name).first<{ count: number }>();
+  ).bind(existing.id).first<{ count: number }>();  // v4.37修复：绑定ID(UUID)替代name(标签名)
 
   await env.DB.prepare('DELETE FROM tags WHERE id = ?').bind(id).run();
 
@@ -168,7 +168,7 @@ export async function getTagStats(env: Env): Promise<Response> {
   const rows = await env.DB.prepare(`
     SELECT t.name as tag_name, t.slug, COUNT(ptm.product_id) as product_count, t.layer
     FROM tags t
-    LEFT JOIN product_tag_map ptm ON ptm.tag_id = t.slug
+    LEFT JOIN product_tag_map ptm ON ptm.tag_id = t.id  -- v4.37修复：JOIN tag.id(UUID)替代t.slug(名称)
     LEFT JOIN products p ON p.id = ptm.product_id AND p.status = 'active'
     GROUP BY t.id, t.name, t.slug, t.layer
     ORDER BY product_count DESC

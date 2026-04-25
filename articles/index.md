@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-25
+- **文件**: 20260425-2604.21916-math-duels.md
+- **标题**: 当AI既当"出题人"又当"答题者"：MathDuels如何用"对抗比武"重新定义大模型评估
+- **论文来源**: arXiv:2604.21916 | MathDuels: Evaluating LLMs as Problem Posers and Solvers
+- **作者**: Zhiqiu Xu、Shibo Jin、Shreya Arya、Mayur Naik（宾夕法尼亚大学）
+- **撰写日期**: 2026-04-25（北京时间）
+- **备注**: 让AI同时当出题者和答题者；19个顶级模型"对抗比武"；GPT-5.4-high解题第一，Gemini-3.1-Pro-high综合第一（因出题最难）；揭示解题与出题能力部分解耦；MathDuels天然抗基准饱和；开源排行榜持续更新
+
 ### 2026-04-24
 - **文件**: 20260424-2604.20791-clinical-llm-empathy.md
 - **标题**: AI能当医生吗？一项研究揭开了临床大模型的真实水平

@@ -160,8 +160,8 @@ export function generateExplanation(ctx: ExplanationContext): {
   type: string;
   vars: Record<string, unknown>;
 } {
-  // Find first matching template by priority
-  for (const template of TEMPLATES.sort((a, b) => a.priority - b.priority)) {
+  // Find first matching template by priority (TEMPLATES already sorted at definition)
+  for (const template of TEMPLATES) {
     if (template.condition(ctx)) {
       return template.generate(ctx);
     }

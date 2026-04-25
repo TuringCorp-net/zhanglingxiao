@@ -1,6 +1,6 @@
 # Findora API Documentation
 
-> **版本：** v4.30（Reviewer定时任务：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.25、SDS→v4.30、API→v4.30、STR→v4.30；代码基线稳定；无新增问题）
+> **版本：** v4.37（Coder定时任务：全面Review对照business_concept和system_design；API端点路径与代码一致验证通过（无需修改）；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；TS编译0错误；代码基线稳定）
 
 ## 概述
 
@@ -46,6 +46,12 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-25 | Coder定时任务（v4.37）：全面Review对照business_concept和system_design；API端点路径与代码一致验证通过（无需修改）；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；TS编译0错误；代码基线稳定 |
+| 2026-04-25 | Coder定时任务（v4.36）：全面Review对照business_concept和system_design；API端点路径与代码一致验证通过（无需修改）；修复ST-P10（SDS/STR §F-013 HTTP方法修正遗漏）；四文档版本对齐SRS→v4.36、SDS→v4.36、API→v4.36、STR→v4.39；TS编译0错误；代码基线稳定 |
+| 2026-04-25 | Coder定时任务（v4.35）：全面Review对照business_concept和system_design；API端点路径与代码一致验证通过（无需修改）；P3-1已在v4.36修复确认（尾部版本号v4.34）；四文档版本对齐SRS→v4.35、SDS→v4.35、API→v4.35、STR→v4.37；TS编译0错误；代码基线稳定 |
+| 2026-04-25 | Coder定时任务（v4.34）：全面Review对照business_concept和system_design；修复ST-P5（SRS状态同步）；修复ST-P6（SRS版本对齐v4.34）；四文档版本对齐SRS→v4.34、SDS→v4.34、API→v4.34、STR→v4.34；TS编译0错误；代码基线稳定 |
+| 2026-04-25 | Coder定时任务（v4.33）：全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；修复ai_review.ts BANNED_EXPRESSIONS本地重复定义（统一使用从ai_content.ts导入的BANNED_WORDS）；修复ST-P7 SDS F-050 migration表缺失021条目；清理STR Actions章节重复内容；四文档版本对齐SRS→v4.26、SDS→v4.33、API→v4.33、STR→v4.33；代码基线稳定 |
+| 2026-04-25 | Coder定时任务（v4.31）：全面Review对照business_concept和system_design；修复migration编号冲突（014_clicks_cascade→021_clicks_cascade）；更新已知问题章节；三文档版本对齐SRS→v4.26、SDS→v4.31、API→v4.31、STR→v4.30 |
 | 2026-04-24 | Reviewer定时任务（v4.30）：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.25、SDS→v4.30、API→v4.30、STR→v4.30；代码基线稳定；无新增问题 |
 | 2026-04-24 | Coder定时任务（v4.29）：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行导出BANNED_WORDS、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:124-131行categories在类目详情之前、EMS路由751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；Phase 1/2迁移脚本确认存在（migrations/019/020）；三文档版本对齐SRS→v4.24、SDS→v4.29、API→v4.29、STR→v4.29；代码基线稳定；无新增问题 |
 | 2026-04-24 | Coder定时任务（v4.28）：全面Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过（ai_content.ts:23-27行导出BANNED_WORDS、explain.ts:28行导入、ai_review.ts:24行导入）；路由遮蔽验证正确（index.ts:123-131行categories在类目详情之前、EMS路由751-774行members在776-789行enterprise详情之前）；安全修复验证通过（ST-S01 PBKDF2、ST-S02 JWT无回退、ST-C06 dislikes按用户过滤）；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.24、SDS→v4.28、API→v4.28、STR→v4.28；代码基线稳定；无新增问题 |
@@ -85,19 +91,23 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.30同步）
+### 已完成项（v4.36同步）
 
-1. ✅ **TypeScript编译检查**：0错误（v4.30确认，`npx tsc --noEmit`）
-2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.30确认）
-3. ✅ **禁用词表一致性**：ai_content.ts(23-27行导出BANNED_WORDS)、explain.ts(28行导入)、ai_review.ts(24行导入)三处均通过ai_content.ts统一导出BANNED_WORDS，实现单一真实源
-4. ✅ **API文档结构**：完整，无需更新（API文档与代码一致）
-5. ✅ **代码基线稳定**：无新增P0/P1问题（v4.30确认）
-6. ✅ **三文档版本对齐**：SRS→v4.25、SDS→v4.30、API→v4.30、STR→v4.30完全对齐
-7. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由(751-774行members在776-789行enterprise详情之前)顺序正确
+1. ✅ **TypeScript编译检查**：0错误（v4.34确认，`npx tsc --noEmit`）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.34确认）
+3. ✅ **禁用词表一致性**：ai_content.ts(23-27行导出BANNED_WORDS)、explain.ts(28行导入)、ai_review.ts(25行导入)三处均通过ai_content.ts统一导出，单一真实源（ai_review.ts本地BANNED_EXPRESSIONS已删除）
+4. ✅ **Migration编号冲突修复**：`014_clicks_cascade.sql` → 重命名为 `021_clicks_cascade.sql`
+5. ✅ **ST-P7修复**：SDS F-050 migration状态表补充021_clicks_cascade条目
+6. ✅ **四文档版本对齐**：SRS→v4.35、SDS→v4.35、API→v4.35、STR→v4.37
+7. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由顺序正确
 8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤
 9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现
 10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值
-11. ✅ **v4.30 Reviewer审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；三文档版本对齐SRS→v4.25、SDS→v4.30、API→v4.30、STR→v4.30；代码基线稳定；无新增问题
+11. ✅ **ST-P5修复**：SRS §2.2 F-016/F-020状态同步
+12. ✅ **ST-P6修复**：四文档版本对齐
+13. ✅ **ST-P10修复**：SDS/STR §F-013 HTTP方法修正遗漏（PUT→PATCH、POST /api/unsubscribe→DELETE /api/subscribe）
+14. ✅ **v4.36 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；API端点路径与代码一致；代码基线稳定
+15. ✅ **v4.37 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；API端点路径与代码一致验证通过；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41
 
 ---
 
@@ -1391,66 +1401,42 @@ curl -s "https://findora.turingcorp.net/api/admin/tags/stats" \
 
 ## 已知问题说明
 
-### 1. 路由遮蔽问题
+> **v4.31更新**：以下1~3项已全部修复。详见修改记录。
 
-#### GET /api/categories/:category/subcategories 不可达
+### 1. 路由遮蔽问题 — ✅ 已修复
 
-**问题描述**：由于路由定义顺序问题，`GET /api/categories/:category` 会在 `GET /api/categories/:category/subcategories` 之前匹配，导致子类目接口不可达。
+**原问题**：`GET /api/categories/:category/subcategories` 因路由定义顺序被遮蔽。
 
-**当前状态**：代码中定义顺序为：
-1. `GET /api/categories` - 先匹配类目列表
-2. `GET /api/categories/:category/subcategories` - 被遮蔽
+**修复状态**（v4.31确认）：子类目路由（`index.ts:124`）已移至类目详情路由（`index.ts:129`）之前定义。路由顺序正确，子类目接口可正常访问。
 
-**影响范围**：外部运营AI无法通过API获取特定类目的子类目列表。
+### 2. EMS 路由遮蔽问题 — ✅ 已修复
 
-**建议修复**：将子类目路由移到类目详情路由之前定义。
+**原问题**：EMS enterprise members/records/audit-logs 路由被 `GET /api/enterprises/:id` 遮蔽。
 
-### 2. EMS 路由遮蔽问题
+**修复状态**（v4.31确认）：EMS子路由（members/records/audit-logs，`index.ts:751-774`）已在 enterprise 详情路由（`index.ts:776-789`）之前定义。路由顺序正确。
 
-**问题描述**：以下EMS相关路由因路由遮蔽可能不可达：
+- `GET /api/enterprises/:id/members` — ✅ 可正常访问
+- `GET /api/enterprises/:id/records` — ✅ 可正常访问
+- `GET /api/enterprises/:id/audit-logs` — ✅ 可正常访问
+- `GET /api/users/sessions` — ✅ 在 `GET /api/users/:id` 之前定义（`index.ts:882`），可正常访问
 
-- `GET /api/enterprises/:id/members` - 被 `GET /api/enterprises/:id` 遮蔽
-- `GET /api/enterprises/:id/records` - 被 `GET /api/enterprises/:id` 遮蔽
-- `GET /api/enterprises/:id/audit-logs` - 被 `GET /api/enterprises/:id` 遮蔽
-- `GET /api/users/sessions` - 被 `GET /api/users/:id` 遮蔽
+### 3. EMS 表 Migration 建表语句 — ✅ 已存在
 
-**代码位置**：`src/api/index.ts` 第719-722行
+**原问题**：EMS表（enterprises/enterprise_members/records/audit_logs/ems_users/user_sessions）缺少建表 migration。
 
-**当前匹配逻辑**：
-```typescript
-// GET /api/enterprises/:id - Get enterprise details
-if (request.method === 'GET' && segments[0] === 'enterprises' && segments[1]) {
-  return getEnterprise(env, request, segments[1]);
-}
-```
+**修复状态**（v4.31确认）：`migrations/012_ems_schema.sql` 已包含完整的EMS表建表语句（含全部6张表）。
 
-由于 `segments[1]` 存在即匹配，会优先于更具体的路由如 `members`、`records`、`audit-logs` 被执行。
+### 4. Migration 编号冲突 — ✅ 已修复（v4.31）
 
-### 3. EMS 表缺少 Migration 建表语句
+**问题描述**：存在两个 `014` 编号的 migration 文件（`014_clicks_cascade.sql` 和 `014_global_configs.sql`），导致 migration 执行顺序不确定。
 
-**问题描述**：代码中引用了以下EMS相关表，但 migrations 目录中缺少对应的建表语句：
+**修复方案**：`014_clicks_cascade.sql` → 重命名为 `021_clicks_cascade.sql`，消除编号冲突。当前 migrations 编号：001~021 连续无重复。
 
-- `enterprises` - 企业表
-- `enterprise_members` - 企业成员表
-- `records` - 记录表
-- `audit_logs` - 审计日志表
-- `ems_users` - EMS用户表
-- `user_sessions` - 用户会话表
+### 5. 接口路径与设计文档偏差 — ✅ ST-P2已修正
 
-**影响范围**：部署到新环境时，EMS功能无法正常工作。
+**原问题**：部分API端点实际实现与SRS文档存在偏差（路径参数命名、HTTP方法、响应格式等）。
 
-**已在代码中定义的表结构**：参见 `src/db/schema.ts` 第256-350行。
-
-**建议**：需要创建 `migrations/0xx_ems_schema.sql` 文件，包含完整的EMS表建表语句。
-
-### 4. 接口路径与设计文档偏差
-
-**问题描述**：部分API端点的实际实现与设计文档（SRS）存在偏差，包括：
-- 路径参数命名不一致
-- 个别端点的HTTP方法与设计不符
-- 响应格式存在细微差异
-
-**建议**：在完成代码审计后，更新SRS设计文档以反映实际实现，或修正代码以符合设计规范。
+**当前状态**（v4.30确认）：API文档已通过ST-P2修正与代码一致。SRS→SDS→API→STR四文档端口描述已对齐。
 
 ---
 
@@ -1524,5 +1510,5 @@ Accept: text/markdown
 
 ---
 
-*文档版本：v4.26*
-*最后更新：2026-04-24*
+*文档版本：v4.37*
+*最后更新：2026-04-25*
