@@ -34,16 +34,41 @@ function normalizeStringArray(input: unknown): string[] {
 async function syncProductTags(env: Env, productId: string, tagIds: string[]): Promise<void> {
   const now = new Date().toISOString();
 
+  // 检查 product_tag_map 表是否存在
+  const tableCheck = await env.DB.prepare(
+    "SELECT name FROM sqlite_master WHERE type='table' AND name='product_tag_map'"
+  ).first();
+  if (!tableCheck) {
+    console.warn('product_tag_map 表不存在，跳过标签同步');
+    return;
+  }
+
   // 删除旧标签关联
   await env.DB.prepare('DELETE FROM product_tag_map WHERE product_id = ?').bind(productId).run();
 
   // 插入新标签关联
   for (const tagId of tagIds) {
-    const id = `${productId}_${tagId}`;
+    if (!tagId) continue;
+
+    // 将 slug 转换为 UUID（如果传入的是 slug 而不是 UUID）
+    let resolvedTagId = tagId;
+    const tagRow = await env.DB.prepare('SELECT id FROM tags WHERE slug = ?').bind(tagId).first<{ id: string }>();
+    if (tagRow) {
+      resolvedTagId = tagRow.id;
+    } else {
+      // 如果不是有效的 slug，检查是否是有效的 UUID
+      const uuidCheck = await env.DB.prepare('SELECT id FROM tags WHERE id = ?').bind(tagId).first();
+      if (!uuidCheck) {
+        console.warn(`标签不存在: ${tagId}，跳过`);
+        continue;
+      }
+    }
+
+    const id = `${productId}_${resolvedTagId}`;
     await env.DB.prepare(`
       INSERT INTO product_tag_map (id, product_id, tag_id, weight, created_at)
       VALUES (?, ?, ?, 1.0, ?)
-    `).bind(id, productId, tagId, now).run();
+    `).bind(id, productId, resolvedTagId, now).run();
   }
 }
 
