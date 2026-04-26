@@ -110,6 +110,7 @@
       .product-images { position: static; }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
   <header>
@@ -339,7 +340,7 @@
             ${product.summary ? `
               <div class="section">
                 <h2>📝 Summary</h2>
-                <p>${product.summary}</p>
+                <div>${marked.parse(product.summary || '')}</div>
               </div>
             ` : ''}
             
@@ -389,7 +390,7 @@
             ${product.shipping_notes ? `
               <div class="section">
                 <h2>🚚 Shipping</h2>
-                <p>${product.shipping_notes}</p>
+                <div>${marked.parse(product.shipping_notes || '')}</div>
               </div>
             ` : ''}
           </div>
