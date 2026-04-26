@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-26
+- **文件**: 20260426-2604.21928-llm-asr-evaluation.md
+- **标题**: AI听懂你说话了吗？大模型或许比人类更能判断语音识别质量
+- **论文来源**: arXiv:2604.21928 | Evaluation of Automatic Speech Recognition Using Generative Large Language Models
+- **作者**: Thibault Bañeras-Roux、Shashi Kumar、Driss Khalil、Sergio Burdisso、Petr Motlicek、Shiran Liu、Mickael Rouvier、Jane Wottawa、Richard Dufour（Idiap Research Institute等）
+- **撰写日期**: 2026-04-26（北京时间）
+- **备注**: LLM做ASR评估一致性92-94%，远超WER的63%；开源模型Qwen3.5-35B表现与GPT-4.1持平；LLM能容忍重复/填充词等无意义错误，更符合人类感知
+
 ### 2026-04-25
 - **文件**: 20260425-2604.21916-math-duels.md
 - **标题**: 当AI既当"出题人"又当"答题者"：MathDuels如何用"对抗比武"重新定义大模型评估

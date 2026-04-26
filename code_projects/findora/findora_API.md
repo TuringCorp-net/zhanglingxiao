@@ -1,6 +1,6 @@
 # Findora API Documentation
 
-> **版本：** v4.37（Coder定时任务：全面Review对照business_concept和system_design；API端点路径与代码一致验证通过（无需修改）；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；TS编译0错误；代码基线稳定）
+> **版本：** v4.50（Coder定时任务：全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；四文档版本对齐SRS→v4.38、SDS→v4.50、API→v4.50、STR→v4.50；代码基线稳定）
 
 ## 概述
 
@@ -46,6 +46,10 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-26 | Coder定时任务（v4.50）：全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；四文档版本对齐SRS→v4.38、SDS→v4.50、API→v4.50、STR→v4.50；代码基线稳定；无新增阻塞项 |
+| 2026-04-26 | Coder定时任务（v4.49）：全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；四文档版本对齐SRS→v4.38、SDS→v4.49、API→v4.49、STR→v4.49；代码基线稳定；无新增阻塞项 |
+| 2026-04-26 | Coder定时任务（v4.48）：全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；四文档版本对齐SRS→v4.38、SDS→v4.48、API→v4.48、STR→v4.48；代码基线稳定；无新增阻塞项 |
+| 2026-04-26 | Coder定时任务（v4.39）：全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；四文档版本对齐SRS→v4.38、SDS→v4.39、API→v4.39、STR→v4.44；代码基线稳定；无新增阻塞项 |
 | 2026-04-25 | Coder定时任务（v4.37）：全面Review对照business_concept和system_design；API端点路径与代码一致验证通过（无需修改）；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；TS编译0错误；代码基线稳定 |
 | 2026-04-25 | Coder定时任务（v4.36）：全面Review对照business_concept和system_design；API端点路径与代码一致验证通过（无需修改）；修复ST-P10（SDS/STR §F-013 HTTP方法修正遗漏）；四文档版本对齐SRS→v4.36、SDS→v4.36、API→v4.36、STR→v4.39；TS编译0错误；代码基线稳定 |
 | 2026-04-25 | Coder定时任务（v4.35）：全面Review对照business_concept和system_design；API端点路径与代码一致验证通过（无需修改）；P3-1已在v4.36修复确认（尾部版本号v4.34）；四文档版本对齐SRS→v4.35、SDS→v4.35、API→v4.35、STR→v4.37；TS编译0错误；代码基线稳定 |
@@ -91,23 +95,22 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.36同步）
+### 已完成项（v4.50同步）
 
-1. ✅ **TypeScript编译检查**：0错误（v4.34确认，`npx tsc --noEmit`）
-2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.34确认）
-3. ✅ **禁用词表一致性**：ai_content.ts(23-27行导出BANNED_WORDS)、explain.ts(28行导入)、ai_review.ts(25行导入)三处均通过ai_content.ts统一导出，单一真实源（ai_review.ts本地BANNED_EXPRESSIONS已删除）
+1. ✅ **TypeScript编译检查**：0错误（v4.50确认，`npx tsc --noEmit`）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.50确认）
+3. ✅ **禁用词表SSOT验证**：ai_content.ts(23-27行导出BANNED_WORDS)→explain.ts(28行导入)→ai_review.ts(25行导入)，单一真实源
 4. ✅ **Migration编号冲突修复**：`014_clicks_cascade.sql` → 重命名为 `021_clicks_cascade.sql`
 5. ✅ **ST-P7修复**：SDS F-050 migration状态表补充021_clicks_cascade条目
-6. ✅ **四文档版本对齐**：SRS→v4.35、SDS→v4.35、API→v4.35、STR→v4.37
-7. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由顺序正确
+6. ✅ **四文档版本对齐**：SRS→v4.38、SDS→v4.50、API→v4.50、STR→v4.50
+7. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由(751-774行members在776-789行enterprise详情之前)顺序正确
 8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤
 9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现
 10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值
 11. ✅ **ST-P5修复**：SRS §2.2 F-016/F-020状态同步
 12. ✅ **ST-P6修复**：四文档版本对齐
 13. ✅ **ST-P10修复**：SDS/STR §F-013 HTTP方法修正遗漏（PUT→PATCH、POST /api/unsubscribe→DELETE /api/subscribe）
-14. ✅ **v4.36 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；API端点路径与代码一致；代码基线稳定
-15. ✅ **v4.37 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；API端点路径与代码一致验证通过；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41
+14. ✅ **v4.50 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致；recommendations.ts纯数据库检索零LLM调用；四文档版本对齐；代码基线稳定；无新增阻塞项
 
 ---
 
@@ -1510,5 +1513,5 @@ Accept: text/markdown
 
 ---
 
-*文档版本：v4.37*
-*最后更新：2026-04-25*
+*文档版本：v4.50*
+*最后更新：2026-04-26*

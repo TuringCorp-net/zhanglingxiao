@@ -1,8 +1,8 @@
 # Findora SDS — 软件设计说明书
 
 > **项目名称：** Findora
-> **版本：** v4.37（Coder定时任务：全面Review对照business_concept和system_design；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；TS编译0错误；AC-01~AC-06全部通过；代码基线稳定）
-> **最后更新：** 2026-04-25
+> **版本：** v4.50（Coder定时任务：全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title字段已确认（第16行）；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；ai_content.ts/ai_review.ts使用同一禁用词表16项（SSOT模式）；四文档版本对齐SRS→v4.38、SDS→v4.50、API→v4.50、STR→v4.50；代码基线稳定；无新增阻塞项）
+> **最后更新：** 2026-04-26
 > **维护方式：** 以SRS F编号为主线的模块化设计文档
 
 ---
@@ -13,6 +13,11 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-26 | v4.50：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title字段已确认（第16行）；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；ai_content.ts/ai_review.ts使用同一禁用词表16项（SSOT模式）；四文档版本对齐SRS→v4.38、SDS→v4.50、API→v4.50、STR→v4.50；代码基线稳定；无新增阻塞项 |
+| 2026-04-26 | v4.49：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title字段已确认（第16行）；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；ai_content.ts/ai_review.ts使用同一禁用词表16项（SSOT模式）；四文档版本对齐SRS→v4.38、SDS→v4.49、API→v4.49、STR→v4.49；代码基线稳定；无新增阻塞项 |
+| 2026-04-26 | v4.48：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title字段已确认（第16行）；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；ai_content.ts/ai_review.ts使用同一禁用词表16项（SSOT模式）；四文档版本对齐SRS→v4.38、SDS→v4.48、API→v4.48、STR→v4.48；代码基线稳定；无新增阻塞项 |
+| 2026-04-26 | v4.40：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title字段已确认（第16行）；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；ai_content.ts/ai_review.ts使用同一禁用词表16项（SSOT模式）；四文档版本对齐SRS→v4.38、SDS→v4.40、API→v4.40、STR→v4.45；代码基线稳定；无新增阻塞项 |
+| 2026-04-26 | v4.39：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确（index.ts:124/751-774/882行）；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title字段已确认（第16行）；四文档版本对齐SRS→v4.38、SDS→v4.39、API→v4.39、STR→v4.44；代码基线稳定；无新增阻塞项 |
 | 2026-04-25 | v4.37：Coder定时任务；全面Review对照business_concept和system_design；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；TS编译0错误；AC-01~AC-06全部通过；代码基线稳定；无新增问题 |
 | 2026-04-25 | v4.36：Coder定时任务；全面Review对照business_concept和system_design；修复ST-P10（SDS §F-013 HTTP方法修正遗漏：PUT→PATCH /api/subscribe/preferences、POST /api/unsubscribe→DELETE /api/subscribe）；同步修复STR §F-013相同遗漏；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.36、SDS→v4.36、API→v4.36、STR→v4.39；代码基线稳定；无新增阻塞项 |
 | 2026-04-25 | v4.35：Coder定时任务；全面Review对照business_concept和system_design；修复F-020端点路径6→5与代码对齐（/api/admin/ai/selection→selection-assistance、generate→content-generation、social→social-copy、删除不存在的explain端点、insights→analytics-insights、complete→product-completion）；修复F-021端点路径4→10与代码对齐（ai-review→ai/review、补充create/list/pending-counts/validate/high-risk-review/tone-review/revision端点）；修复用户端点HTTP方法（PUT→PATCH /api/subscribe/preferences、POST /api/unsubscribe→DELETE /api/subscribe）；补充外部系统接口price-check/batch；TS编译0错误；四文档版本对齐SRS→v4.35、SDS→v4.35、API→v4.35、STR→v4.37；代码基线稳定 |
@@ -65,23 +70,25 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.36同步）
+### 已完成项（v4.50同步）
 
-1. ✅ **TypeScript编译检查**：0错误（v4.36确认，`npx tsc --noEmit`）
-2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.36确认）
-3. ✅ **禁用词表一致性**：ai_content.ts(23-27行导出BANNED_WORDS)、explain.ts(28行导入)、ai_review.ts(25行导入)三处均通过ai_content.ts统一导出单一真实源（ai_review.ts本地BANNED_EXPRESSIONS重复定义已删除）
+1. ✅ **TypeScript编译检查**：0错误（v4.50确认，`npx tsc --noEmit`）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.50确认）
+3. ✅ **禁用词表SSOT验证**：ai_content.ts(23-27行导出BANNED_WORDS)→explain.ts(28行导入)→ai_review.ts(25行导入)，单一真实源
 4. ✅ **Migration编号冲突修复**：`014_clicks_cascade.sql` → 重命名为 `021_clicks_cascade.sql`
 5. ✅ **ST-P7修复**：SDS F-050 migration状态表补充021_clicks_cascade条目
-6. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由(751-774行members在776-789行enterprise详情之前)
-7. ✅ **四文档版本对齐**：SRS→v4.36、SDS→v4.36、API→v4.36、STR→v4.39
-8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤
-9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现
-10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值
+6. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由(751-774行members在776-789行enterprise详情之前)；users/sessions路由(882行)在users/:id(888行)之前
+7. ✅ **四文档版本对齐**：SRS→v4.38、SDS→v4.50、API→v4.50、STR→v4.50
+8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤（behavior.ts:107-120行）
+9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现（salt$hash格式，100000iter，SHA-256）
+10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值（缺JWT_SECRET直接throw）
 11. ✅ **ST-P5修复**：SRS §2.2 F-016/F-020代码实现状态同步（🗓→🏗）
-12. ✅ **ST-P6修复**：SRS版本v4.26→v4.35与其他文档对齐
+12. ✅ **ST-P6修复**：SRS版本v4.26→v4.38与其他文档对齐
 13. ✅ **ST-P10修复**：SDS §F-013 HTTP方法修正遗漏（PUT→PATCH、POST /api/unsubscribe→DELETE /api/subscribe）；同步修复STR §F-013
-14. ✅ **四文档版本对齐（v4.37）**：SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41，全部对齐
-15. ✅ **v4.37 代码修复**：tags.ts deleteTag引用计数绑定值修正（existing.name→existing.id）；getTagStats JOIN条件修正（t.slug→t.id）；recommendations.ts死代码移除；explain.ts冗余.sort()移除
+14. ✅ **v4.37 代码修复**：tags.ts deleteTag引用计数绑定值修正（existing.name→existing.id）；getTagStats JOIN条件修正（t.slug→t.id）；recommendations.ts死代码移除；explain.ts冗余.sort()移除
+15. ✅ **v4.38 ST-P14修复**：SRS §9.6 F-020-01~06代码实现🗓→🏗（与§2.2/模块基线表统一）
+16. ✅ **v4.38 ST-P15修复**：schema.ts Product接口补充rewritten_title字段（第16行）
+17. ✅ **v4.50 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认；recommendations.ts纯数据库检索零LLM调用；代码基线稳定；无新增阻塞项
 
 ### 待推进项（按优先级）
 
@@ -633,7 +640,7 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 
 ---
 
-## 当前基线状态（v4.36）
+## 当前基线状态（v4.40）
 
 | 指标 | 数值 | 备注 |
 |------|------|------|

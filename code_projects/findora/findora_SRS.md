@@ -2,8 +2,8 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v4.37（Coder定时任务：全面Review对照business_concept和system_design；修复ST-P12（非阻塞优化项表P1-5~P1-8严重度列P2→P1，编号前缀与严重度一致）；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；代码基线稳定）
-> **最后更新：** 2026-04-25
+> **版本：** v4.38（Coder定时任务：全面Review对照business_concept和system_design；修复ST-P14（SRS §9.6 F-020子功能代码实现🗓→🏗与§2.2统一）；修复ST-P15（schema.ts Product接口补充rewritten_title字段）；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.38、SDS→v4.38、API→v4.38、STR→v4.43；代码基线稳定）
+> **最后更新：** 2026-04-26
 > **状态：** 🟢 需求基线稳定：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
 ---
@@ -14,6 +14,7 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-04-26 | v4.38：Coder定时任务；全面Review对照business_concept和system_design；修复ST-P14（SRS §9.6 F-020-01~06代码实现🗓→🏗与§2.2统一）；修复ST-P15（schema.ts Product接口补充rewritten_title字段）；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.38、SDS→v4.38、API→v4.38、STR→v4.43；代码基线稳定；无新增问题 |
 | 2026-04-25 | v4.37：Coder定时任务；全面Review对照business_concept和system_design；修复ST-P12（非阻塞优化项表P1-5~P1-8严重度列P2→P1，编号前缀与严重度一致）；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；代码基线稳定；无新增问题 |
 | 2026-04-25 | v4.36：Coder定时任务；全面Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；修复ST-P10（SDS/STR §F-013 HTTP方法修正遗漏）；四文档版本对齐SRS→v4.36、SDS→v4.36、API→v4.36、STR→v4.39；代码基线稳定；无新增问题 |
 | 2026-04-25 | v4.35：Coder定时任务；全面Review对照business_concept和system_design；修复P2-8（模块基线表F-016代码实现✅→🏗与§2.2统一）；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.35、SDS→v4.35、API→v4.35、STR→v4.37；代码基线稳定；无新增问题 |
@@ -58,17 +59,17 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.36同步）
+### 已完成项（v4.38同步）
 
 1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
-2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`
-3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v4.34确认）
-4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.34确认）
+2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`、`rewritten_title`
+3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v4.38确认）
+4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.38确认）
 5. ✅ **P0安全问题**：ST-S01~S06 全部修复并验证
 6. ✅ **ST-C06修复**：dislikes查询已改为按用户ID过滤，dislike_count不再被全局高估
 7. ✅ **禁用词表一致性**：三处均为16项（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:25行导入），SSOT模式
 8. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由(751-774行members在776-789行enterprise详情之前)
-9. ✅ **四文档版本对齐**：SRS→v4.36、SDS→v4.36、API→v4.36、STR→v4.39完全对齐
+9. ✅ **四文档版本对齐**：SRS→v4.38、SDS→v4.38、API→v4.38、STR→v4.43完全对齐
 10. ✅ **ST-P1修复**：explanation_cache表 `generated_at`/`expires_at` 字段类型已统一为 INTEGER（Unix时间戳），与代码行为一致
 11. ✅ **ST-P2修复**：API文档与代码端点偏差已全部修正（外部系统接口路径、admin路由注册等）
 12. ✅ **business_concept全章节映射**：SRS功能模块已覆盖business_concept.md全量17章节（含§11.4人工控制权→F-025映射）
@@ -86,6 +87,8 @@
 24. ✅ **v4.36 ST-P10修复**：SDS/STR §F-013 HTTP方法修正遗漏（PUT→PATCH /api/subscribe/preferences、POST /api/unsubscribe→DELETE /api/subscribe）
 25. ✅ **v4.37 ST-P12修复**：非阻塞优化项表P1-5~P1-8严重度列P2→P1，编号前缀与严重度一致
 26. ✅ **v4.37 代码修复**：tags.ts deleteTag引用计数绑定了错误值（existing.name→existing.id）；getTagStats JOIN条件修正（t.slug→t.id）；recommendations.ts死代码移除（getPriceRangeCategory）；explain.ts冗余.sort()移除
+27. ✅ **v4.38 ST-P14修复**：SRS §9.6 F-020-01~06代码实现🗓→🏗（与§2.2/模块基线表统一）
+28. ✅ **v4.38 ST-P15修复**：schema.ts Product接口补充rewritten_title字段
 
 ### 待推进项（按优先级）
 
@@ -2318,12 +2321,12 @@ draft → submitted → in_review → high_risk_pending → approved
 
 | 功能编号 | 子功能 | 需求设计 | 代码实现 | 审核 | 优先级 |
 |----------|--------|----------|----------|------|--------|
-| F-020-01 | 选品辅助 | ✅ | 🗓 | 🗓 | P1 |
-| F-020-02 | 内容生产 | ✅ | 🗓 | 🗓 | P1 |
-| F-020-03 | 社媒文案 | ✅ | 🗓 | 🗓 | P1 |
-| F-020-04 | 推荐解释预生产 | ✅ | 🗓 | 🗓 | P1 |
-| F-020-05 | 运营分析 | ✅ | 🗓 | 🗓 | P2 |
-| F-020-06 | 商品信息补全 | ✅ | 🗓 | 🗓 | P1 |
+| F-020-01 | 选品辅助 | ✅ | 🏗 | 🗓 | P1 |
+| F-020-02 | 内容生产 | ✅ | 🏗 | 🗓 | P1 |
+| F-020-03 | 社媒文案 | ✅ | 🏗 | 🗓 | P1 |
+| F-020-04 | 推荐解释预生产 | ✅ | 🏗 | 🗓 | P1 |
+| F-020-05 | 运营分析 | ✅ | 🏗 | 🗓 | P2 |
+| F-020-06 | 商品信息补全 | ✅ | 🏗 | 🗓 | P1 |
 | F-021-01 | 最终选品决策 | ✅ | ✅ | ✅ | P1 |
 | F-021-02 | 合规判断 | ✅ | ✅ | ✅ | P1 |
 | F-021-03 | 品牌调性把控 | ✅ | ✅ | ✅ | P1 |

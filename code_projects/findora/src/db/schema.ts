@@ -13,6 +13,7 @@ export interface Product {
   source_platform: string;
   source_url: string;
   original_title: string;
+  rewritten_title: string | null; // 重写后标题（用于前端展示）
   category: string;
   subcategory: string | null;
   tags: string; // JSON array
