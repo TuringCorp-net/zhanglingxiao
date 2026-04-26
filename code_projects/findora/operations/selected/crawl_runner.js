@@ -2,15 +2,15 @@
  * 选品采集脚本 - 按crawl_state规则执行
  * 采集目标：每个平台最久未采集的类目 × 4子渠道 × Top10
  */
-const JJYAPITool = require('./jjy_api.js');
+const JJYAPITool = require('../tools/jjy_api.js');
 
 // crawl_state.js 中的采集目标（每个平台最久未采集的类目）
 const targetCategories = {
-  temu: { catId: 2542, catName: '电子', siteId: null },
-  shein: { catId: 1864, catName: '美容与健康', siteId: null },
-  amazon: { catId: 165796011, catName: '婴儿产品', siteId: null },
-  sumaitong: { catId: 15, catName: '家居用品', siteId: 1 },
-  tiktok: { catId: 951432, catName: 'Collectibles', siteId: 1 }
+  temu: { catId: 4673, catName: '工业和科学', siteId: null },
+  shein: { catId: 3650, catName: '家电', siteId: null },
+  amazon: { catId: 3760911, catName: '美容与护理', siteId: null },
+  sumaitong: { catId: 18, catName: '运动及娱乐', siteId: 1 },
+  tiktok: { catId: 605248, catName: 'Fashion Accessories', siteId: 1 }
 };
 
 // 子渠道配置
@@ -27,58 +27,59 @@ async function runCrawl() {
   console.log('');
 
   const jjyApi = new JJYAPITool();
-  const采集结果 = [];
+  const allResults = [];
 
   // 遍历每个平台
-  for (const [platform, target] of Object.entries(采集目标)) {
+  for (const [platform, target] of Object.entries(targetCategories)) {
     console.log(`\n>>> 处理 ${platform} - ${target.catName} (catId=${target.catId})`);
     console.log('='.repeat(50));
 
-    let平台结果 = {
+    let platformResult = {
       platform,
       catName: target.catName,
       catId: target.catId,
       channels: []
     };
 
+    // 确定排序字段
+    const sortField = platform === 'amazon' ? 'monthSold' :
+                     (platform === 'sumaitong' || platform === 'tiktok') ? 'totalSold' : 'sold';
+
     // 遍历4个子渠道
-    for (const channel of 子渠道) {
+    for (const channel of channels) {
       console.log(`\n  [${channel.name}]`);
 
       try {
-        // 调用API获取该平台+类目+子渠道的Top10商品
-        // 注意：热销接口可能不支持catId筛选，直接搜索然后由API返回分类数据
-        // 由于数据源可能是页面抓取，我们使用关键词搜索方式获取相关商品
+        // 调用API获取该平台+类目的Top10商品
         const result = await jjyApi.search({
           platform,
           categoryId: target.catId,
           size: 10,
-          sort: target.platform === 'amazon' ? 'monthSold' :
-                (target.platform === 'sumaitong' || target.platform === 'tiktok') ? 'totalSold' : 'sold'
+          sort: sortField
         });
 
         if (result.success && result.products && result.products.length > 0) {
           console.log(`    获得 ${result.products.length} 个商品`);
 
           // 标记来源渠道
-          const商品列表 = result.products.map((p, idx) => ({
+          const productsWithChannel = result.products.map((p, idx) => ({
             ...p,
             channel: channel.name,
             channelIndex: idx + 1,
             fullIndex: `${platform}_${channel.name}_${idx + 1}`
           }));
 
-          平台结果.channels.push({
+          platformResult.channels.push({
             channelName: channel.name,
             success: true,
-            products: 商品列表
+            products: productsWithChannel
           });
 
           // 累加到总结果
-          采集结果.push(...商品列表);
+          allResults.push(...productsWithChannel);
         } else {
           console.log(`    未获取到数据 ${result.error || ''}`);
-          平台结果.channels.push({
+          platformResult.channels.push({
             channelName: channel.name,
             success: false,
             error: result.error || '无数据'
@@ -86,7 +87,7 @@ async function runCrawl() {
         }
       } catch (e) {
         console.log(`    错误: ${e.message}`);
-        平台结果.channels.push({
+        platformResult.channels.push({
           channelName: channel.name,
           success: false,
           error: e.message
@@ -97,24 +98,25 @@ async function runCrawl() {
       await new Promise(r => setTimeout(r, 500));
     }
 
-    console.log(`  [${platform}] 小计: ${平台结果.channels.reduce((sum, ch) => sum + (ch.success ? ch.products.length : 0), 0)} 个商品`);
+    const totalCount = platformResult.channels.reduce((sum, ch) => sum + (ch.success ? ch.products.length : 0), 0);
+    console.log(`  [${platform}] 小计: ${totalCount} 个商品`);
   }
 
   console.log('\n========== 采集完成 ==========');
-  console.log(`总计获取: ${采集结果.length} 个商品`);
+  console.log(`总计获取: ${allResults.length} 个商品`);
 
-  return 采集结果;
+  return allResults;
 }
 
 // 导出采集函数
-module.exports = { 执行采集, 采集目标, 子渠道 };
+module.exports = { runCrawl, targetCategories, channels };
 
 // 直接运行
 if (require.main === module) {
   (async () => {
-    const结果 = await 执行采集();
+    const results = await runCrawl();
     console.log('\n采集结果预览（前5个）:');
-    结果.slice(0, 5).forEach((p, i) => {
+    results.slice(0, 5).forEach((p, i) => {
       console.log(`${i+1}. [${p.platform}/${p.channel}] ${p.goodsNameEn?.substring(0, 40)}...`);
       console.log(`   销量: ${p.sold}, 价格: ${p.goodsPriceMin}-${p.goodsPriceMax}`);
     });
