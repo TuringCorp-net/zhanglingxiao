@@ -22,7 +22,7 @@
 
 const crawlState = {
   // 最后更新时间
-  lastUpdated: "2026-04-26T03:02:30.525Z",
+  lastUpdated: "2026-04-27T03:06:00.000Z",
 
   // 各平台类目状态
   platforms: {
@@ -38,22 +38,22 @@ const crawlState = {
         { catId: 4673, catName: "工业和科学", lastCrawled: "2026-04-26T08:45:00.000Z" },
         { catId: 9711, catName: "家居、厨房用品", lastCrawled: "2026-04-26T02:03:34.916Z" },
         { catId: 13512, catName: "家居装修", lastCrawled: "2026-04-26T03:02:30.525Z" },
-        { catId: 15945, catName: "健康和家居用品", lastCrawled: null },
-        { catId: 17719, catName: "乐器", lastCrawled: null },
+        { catId: 15945, catName: "健康和家居用品", lastCrawled: "2026-04-27T08:05:00.000Z" },
+        { catId: 17719, catName: "乐器", lastCrawled: "2026-04-27T01:02:11.000Z" },
         { catId: 2096, catName: "家电", lastCrawled: null },
         { catId: 18768, catName: "美容和个人护理", lastCrawled: null },
         { catId: 19858, catName: "汽车用品", lastCrawled: null },
         { catId: 23177, catName: "视频游戏", lastCrawled: null },
         { catId: 24252, catName: "手机和配件", lastCrawled: null },
         { catId: 24389, catName: "庭院、草坪和园艺", lastCrawled: null },
-        { catId: 25439, catName: "玩具与游戏", lastCrawled: null },
+        { catId: 25439, catName: "玩具与游戏", lastCrawled: "2026-04-27T02:05:00.000Z" },
         { catId: 26207, catName: "母婴用品", lastCrawled: "2026-04-26T00:08:35.886Z" },
         { catId: 27011, catName: "服装、鞋靴和珠宝饰品", lastCrawled: null },
         { catId: 31148, catName: "运动与户外用品", lastCrawled: null },
         { catId: 39278, catName: "收藏品和工艺品", lastCrawled: null },
         { catId: 39316, catName: "艺术品、工艺品和缝纫用品", lastCrawled: null },
         { catId: 42367, catName: "各色美食", lastCrawled: null },
-        { catId: 44933, catName: "图书", lastCrawled: "2026-04-20T11:26:17.698Z" }
+        { catId: 44933, catName: "图书", lastCrawled: "2026-04-27T03:06:00.000Z" }
       ]
     },
 
@@ -68,10 +68,10 @@ const crawlState = {
         { catId: 3650, catName: "家电", lastCrawled: "2026-04-26T08:45:00.000Z" },
         { catId: 2026, catName: "男人", lastCrawled: "2026-04-26T02:03:34.916Z" },
         { catId: 2031, catName: "孩子们", lastCrawled: "2026-04-26T03:02:30.525Z" },
-        { catId: 3634, catName: "珠宝和手表", lastCrawled: null },
+        { catId: 3634, catName: "珠宝和手表", lastCrawled: "2026-04-27T08:05:00.000Z" },
         { catId: 1864, catName: "美容与健康", lastCrawled: "2026-04-26T00:09:00.000Z" },
-        { catId: 2400, catName: "宠物用品", lastCrawled: null },
-        { catId: 4436, catName: "女装", lastCrawled: null },
+        { catId: 2400, catName: "宠物用品", lastCrawled: "2026-04-27T01:03:12.000Z" },
+        { catId: 4436, catName: "女装", lastCrawled: "2026-04-27T02:05:00.000Z" },
         { catId: 4327, catName: "工具和家居装修", lastCrawled: null },
         { catId: 2297, catName: "办公和学校用品", lastCrawled: null },
         { catId: 2038, catName: "内衣和睡衣", lastCrawled: null },
@@ -84,7 +84,7 @@ const crawlState = {
         { catId: 2274, catName: "手机及配件", lastCrawled: null },
         { catId: 2273, catName: "电子学", lastCrawled: null },
         { catId: 13087, catName: "书籍和杂志", lastCrawled: null },
-        { catId: 13086, catName: "食品和饮料", lastCrawled: "2026-04-26T00:08:35.886Z" }
+        { catId: 13086, catName: "食品和饮料", lastCrawled: "2026-04-27T03:06:00.000Z" }
       ]
     },
 
@@ -100,9 +100,9 @@ const crawlState = {
         { catId: 3760911, catName: "美容与护理", lastCrawled: "2026-04-26T08:45:00.000Z" },
         { catId: 283155, catName: "图书", lastCrawled: "2026-04-26T02:03:34.916Z" },
         { catId: 2335752011, catName: "手机", lastCrawled: "2026-04-26T03:02:30.525Z" },
-        { catId: 7141123011, catName: "服装、鞋履和珠宝", lastCrawled: null },
-        { catId: 172282, catName: "电子产品", lastCrawled: null },
-        { catId: 16310101, catName: "杂货店", lastCrawled: null },
+        { catId: 7141123011, catName: "服装、鞋履和珠宝", lastCrawled: "2026-04-27T08:05:00.000Z" },
+        { catId: 172282, catName: "电子产品", lastCrawled: "2026-04-27T01:03:52.000Z" },
+        { catId: 16310101, catName: "杂货店", lastCrawled: "2026-04-27T02:05:00.000Z" },
         { catId: 3760901, catName: "健康与家居", lastCrawled: null },
         { catId: 1055398, catName: "家居用品", lastCrawled: null },
         { catId: 706813011, catName: "狩猎&渔具", lastCrawled: null },
@@ -115,7 +115,7 @@ const crawlState = {
         { catId: 3375251, catName: "运动与户外", lastCrawled: null },
         { catId: 228013, catName: "工具", lastCrawled: null },
         { catId: 165793011, catName: "玩具", lastCrawled: null },
-        { catId: 468642, catName: "视频游戏", lastCrawled: "2026-04-26T00:08:35.886Z" }
+        { catId: 468642, catName: "视频游戏", lastCrawled: "2026-04-27T03:06:00.000Z" }
       ]
     },
 
@@ -131,10 +131,10 @@ const crawlState = {
         { catId: 18, catName: "运动及娱乐", lastCrawled: "2026-04-26T08:45:00.000Z" },
         { catId: 21, catName: "办公、文化及教育用品", lastCrawled: "2026-04-26T02:03:34.916Z" },
         { catId: 30, catName: "安全防护", lastCrawled: "2026-04-26T03:02:30.525Z" },
-        { catId: 34, catName: "汽车及零配件", lastCrawled: null },
-        { catId: 36, catName: "珠宝饰品及配件", lastCrawled: null },
-        { catId: 39, catName: "照明灯饰", lastCrawled: null },
-        { catId: 44, catName: "消费电子", lastCrawled: null },
+        { catId: 34, catName: "汽车及零配件", lastCrawled: "2026-04-27T08:05:00.000Z" },
+        { catId: 36, catName: "珠宝饰品及配件", lastCrawled: "2026-04-27T01:04:32.000Z" },
+        { catId: 39, catName: "照明灯饰", lastCrawled: "2026-04-27T02:05:00.000Z" },
+        { catId: 44, catName: "消费电子", lastCrawled: "2026-04-27T03:06:00.000Z" },
         { catId: 66, catName: "美容健康", lastCrawled: null },
         { catId: 320, catName: "婚礼及重要场合", lastCrawled: null },
         { catId: 322, catName: "鞋子", lastCrawled: null },
@@ -169,10 +169,10 @@ const crawlState = {
         { catId: 605248, catName: "Fashion Accessories", lastCrawled: "2026-04-26T08:45:00.000Z" },
         { catId: 600024, catName: "Kitchenware", lastCrawled: "2026-04-26T02:03:34.916Z" },
         { catId: 601450, catName: "Beauty & Personal Care", lastCrawled: "2026-04-26T03:02:30.525Z" },
-        { catId: 601739, catName: "Phones & Electronics", lastCrawled: null },
-        { catId: 700645, catName: "Health", lastCrawled: null },
-        { catId: 604968, catName: "Home Improvement", lastCrawled: null },
-        { catId: 601152, catName: "Womenswear & Underwear", lastCrawled: null },
+        { catId: 601739, catName: "Phones & Electronics", lastCrawled: "2026-04-27T08:05:00.000Z" },
+        { catId: 700645, catName: "Health", lastCrawled: "2026-04-27T01:05:12.000Z" },
+        { catId: 604968, catName: "Home Improvement", lastCrawled: "2026-04-27T02:05:00.000Z" },
+        { catId: 601152, catName: "Womenswear & Underwear", lastCrawled: "2026-04-27T03:06:00.000Z" }
         { catId: 605196, catName: "Automotive & Motorcycle", lastCrawled: null },
         { catId: 700437, catName: "Food & Beverages", lastCrawled: null },
         { catId: 602284, catName: "Baby & Maternity", lastCrawled: null },

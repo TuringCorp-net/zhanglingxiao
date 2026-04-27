@@ -1,0 +1,548 @@
+{
+  "timestamp": "2026-04-27T03:06:17.555Z",
+  "totalScreened": 50,
+  "selected": [
+    {
+      "goodsNameEn": "Open Source R36S Retro Handheld Video Game Console Linux System 3.5 Inch IPS Screen Portable Pocket Video Player R35S 64GB Games",
+      "goodsNameCn": "Open Source R36S Retro Handheld Video Game Console Linux System 3.5 Inch IPS Screen Portable Pocket ",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sdeb3d6f04fb6464bb4e286b37c953707y.png",
+      "thumbnailCn": "",
+      "sold": 164372,
+      "sales": null,
+      "goodsPriceMin": 33.19,
+      "goodsPriceMax": 92.7,
+      "reviewNum": 14345,
+      "rating": 4.9,
+      "mallOpenTime": "2024-03-01T00:05:27.000+08:00",
+      "onSaleTime": "2024-04-03T00:00:00.000+08:00",
+      "goodsId": "3256806596747489",
+      "detailUrl": "3256806596747489",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 11,
+          "catId": "44",
+          "catName": "消费电子",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 5524,
+          "catId": "100000310",
+          "catName": "游戏及配附件",
+          "catLevel": 1,
+          "parentCatId": "44",
+          "isLeaf": false
+        },
+        {
+          "id": 5613,
+          "catId": "180604",
+          "catName": "掌上游戏机",
+          "catLevel": 2,
+          "parentCatId": "100000310",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Open Source R36S Retro Handheld Video Game Console Linux System 3.5 Inch IPS Screen Portable Pocket Video Player R35S 64GB Games",
+      "source": "sumaitong-热销商品",
+      "catName": "消费电子",
+      "score": 74.7
+    },
+    {
+      "goodsNameEn": "Random DIY Face Sticker Book with Fashion Doll Design - Dress-Up Game Set, Includes Reusable Stickers for Creative Fun, Beautiful Face Art, and Interactive Activities - Perfect as Party Favors or Gift",
+      "goodsNameCn": "随机DIY脸部贴纸书 时尚娃娃换装游戏套装 含可重复使用贴纸 创意面部彩绘互动活动 完美派对赠品礼物",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/32bb1601-7303-4f01-84f5-381d02ea027a.jpg",
+      "thumbnailCn": "https://cbu01.alicdn.com/O1CN01Q6EmiS1zvv7N9rvnT_!!2215867636777-0-cib.jpg",
+      "sold": 45000,
+      "sales": 197100,
+      "goodsPriceMin": 4.38,
+      "goodsPriceMax": 4.2,
+      "reviewNum": 1814,
+      "rating": 4.8,
+      "mallOpenTime": "2025-04-15T04:41:32.967+00:00",
+      "onSaleTime": "2025-09-24T04:05:15.000+00:00",
+      "goodsId": "601102878219056",
+      "detailUrl": "601102878219056",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 20512,
+          "catId": 44933,
+          "catName": "图书",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23582,
+          "catId": 45748,
+          "catName": "儿童书籍",
+          "catLevel": 2,
+          "parentCatId": 44933,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 52205,
+          "catId": 46341,
+          "catName": "儿童活动、工艺品与游戏图书",
+          "catLevel": 3,
+          "parentCatId": 45748,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 52324,
+          "catId": 46353,
+          "catName": "儿童活动图书",
+          "catLevel": 4,
+          "parentCatId": 46341,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 52789,
+          "catId": 46373,
+          "catName": "儿童小说贴纸书",
+          "catLevel": 6,
+          "parentCatId": 46372,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "随机DIY脸部贴纸书 时尚娃娃换装游戏套装 含可重复使用贴纸 创意面部彩绘互动活动 完美派对赠品礼物",
+      "source": "temu-热销商品",
+      "catName": "图书",
+      "score": 71.4
+    },
+    {
+      "goodsNameEn": "ARKOS 100% Original R36S Retro Handheld Game Console 3.5'' IPS,15000+ Games, Linux Portable Pocket Player, Back to School Gifts",
+      "goodsNameCn": "ARKOS 100% Original R36S Retro Handheld Game Console 3.5'' IPS,15000+ Games, Linux Portable Pocket P",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sc35c7141c9ad4c8a8f7627cc8168d4e4n.jpg",
+      "thumbnailCn": "",
+      "sold": 141120,
+      "sales": null,
+      "goodsPriceMin": 40.91,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": 4.9,
+      "mallOpenTime": null,
+      "onSaleTime": "2024-05-16T00:00:00.000+08:00",
+      "goodsId": "3256806824425304",
+      "detailUrl": "3256806824425304",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 11,
+          "catId": "44",
+          "catName": "消费电子",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 5524,
+          "catId": "100000310",
+          "catName": "游戏及配附件",
+          "catLevel": 1,
+          "parentCatId": "44",
+          "isLeaf": false
+        },
+        {
+          "id": 5613,
+          "catId": "180604",
+          "catName": "掌上游戏机",
+          "catLevel": 2,
+          "parentCatId": "100000310",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "ARKOS 100% Original R36S Retro Handheld Game Console 3.5'' IPS,15000+ Games, Linux Portable Pocket Player, Back to School Gifts",
+      "source": "sumaitong-热销商品",
+      "catName": "消费电子",
+      "score": 68.7
+    },
+    {
+      "goodsNameEn": "Princess Sticker Book for Girls - Fun Activity & Creativity | Best Kids Travel Toy, Educational Activity Book, Birthday Holiday Gifts, Party Favors",
+      "goodsNameCn": "Princess Sticker Book for Girls - Fun Activity & Creativity | Best Kids Travel Toy, Educational Acti",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/2f6bc00d-c3d0-4f68-9c1d-09602dd32452.jpg",
+      "thumbnailCn": "https://cbu01.alicdn.com/O1CN01xgRfUK1x1vU4FQcYH_!!2215436986384-0-cib.jpg",
+      "sold": 44000,
+      "sales": 248600.00000000003,
+      "goodsPriceMin": 5.65,
+      "goodsPriceMax": 3.27,
+      "reviewNum": 610,
+      "rating": 4.7,
+      "mallOpenTime": "2023-07-26T07:43:56.271+00:00",
+      "onSaleTime": "2025-08-04T11:04:50.456+00:00",
+      "goodsId": "601102452394145",
+      "detailUrl": "601102452394145",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 20512,
+          "catId": 44933,
+          "catName": "图书",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23582,
+          "catId": 45748,
+          "catName": "儿童书籍",
+          "catLevel": 2,
+          "parentCatId": 44933,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 52205,
+          "catId": 46341,
+          "catName": "儿童活动、工艺品与游戏图书",
+          "catLevel": 3,
+          "parentCatId": 45748,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 52324,
+          "catId": 46353,
+          "catName": "儿童活动图书",
+          "catLevel": 4,
+          "parentCatId": 46341,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 52806,
+          "catId": 46374,
+          "catName": "儿童非虚构小说贴纸书",
+          "catLevel": 6,
+          "parentCatId": 46372,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "Princess Sticker Book for Girls - Fun Activity & Creativity | Best Kids Travel Toy, Educational Activity Book, Birthday Holiday Gifts, Party Favors",
+      "source": "temu-热销商品",
+      "catName": "图书",
+      "score": 65.1
+    },
+    {
+      "goodsNameEn": "NEW COMPRESSION BAND & ONE SEAM OPTION! THE ORIGINAL MAGIC FLEECE LINED LEGGINGS - XXS TO 3XL - 4 SHADES - CLOSED FOOT - Fleece Tights Available in Plus Size and Light to Brown Fur",
+      "goodsNameCn": "NEW COMPRESSION BAND & ONE SEAM OPTION! THE ORIGINAL MAGIC FLEECE LINED LEGGINGS - XXS TO 3XL - 4 SH",
+      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/2886397a7af549ed97fdb02c9b906198~tplv-fhlh96nyum-crop-webp:1800:2250.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+      "thumbnailCn": "",
+      "sold": 629815,
+      "sales": null,
+      "goodsPriceMin": 37.99,
+      "goodsPriceMax": 37.99,
+      "reviewNum": 37380,
+      "rating": 4.2,
+      "mallOpenTime": "2024-01-05T08:17:18.099+08:00",
+      "onSaleTime": "2024-01-11T01:59:21.111+08:00",
+      "goodsId": "1729406693411230691",
+      "detailUrl": "1729406693411230691",
+      "platform": "tiktok",
+      "catItems": [
+        {
+          "id": 9859,
+          "catId": "601152",
+          "catName": "Womenswear & Underwear",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 9860,
+          "catId": "842888",
+          "catName": "Women's Underwear",
+          "catLevel": 2,
+          "parentCatId": "601152",
+          "isLeaf": false
+        },
+        {
+          "id": 10809,
+          "catId": "844552",
+          "catName": "Tights",
+          "catLevel": 3,
+          "parentCatId": "842888",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "NEW COMPRESSION BAND & ONE SEAM OPTION! THE ORIGINAL MAGIC FLEECE LINED LEGGINGS - XXS TO 3XL - 4 SHADES - CLOSED FOOT - Fleece Tights Available in Plus Size and Light to Brown Fur",
+      "source": "tiktok-热销商品",
+      "catName": "Womenswear & Underwear",
+      "score": 60.6
+    },
+    {
+      "goodsNameEn": "Xbox Core Wireless Gaming Controller – Electric Volt Series X|S, One, Windows PC, Android, and iOS",
+      "goodsNameCn": "Xbox Core Wireless Gaming Controller – Electric Volt Series X|S, One, Windows PC, Android, and iOS",
+      "thumbnail": "https://m.media-amazon.com/images/I/41B1cb0xqSL._SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 75072,
+      "sales": null,
+      "goodsPriceMin": 49.49,
+      "goodsPriceMax": null,
+      "reviewNum": 27544,
+      "rating": 4.6,
+      "mallOpenTime": "2025-03-13T00:00:00.000+08:00",
+      "onSaleTime": "2025-03-13T00:00:00.000+08:00",
+      "goodsId": "B0FHXSL5M8",
+      "detailUrl": "B0FHXSL5M8",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 3353,
+          "catId": "468642",
+          "catName": "视频游戏",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 13130,
+          "catId": "6469269011",
+          "catName": "Xbox One",
+          "catLevel": 2,
+          "parentCatId": "468642",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 13882,
+          "catId": "6469270011",
+          "catName": "配件",
+          "catLevel": 3,
+          "parentCatId": "6469269011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 17040,
+          "catId": "6469279011",
+          "catName": "控制器",
+          "catLevel": 4,
+          "parentCatId": "6469270011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 17697,
+          "catId": "6469282011",
+          "catName": "手柄",
+          "catLevel": 5,
+          "parentCatId": "6469279011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Xbox Core Wireless Gaming Controller – Electric Volt Series X|S, One, Windows PC, Android, and iOS",
+      "source": "amazon-热销商品",
+      "catName": "视频游戏",
+      "score": 55.8
+    },
+    {
+      "goodsNameEn": "Women's Trendy Round Neck Long Sleeve Crop Tee, Casual Crew Neck T-shirt, Women's Slim-fitting Top for Music Festival, Dating & Daily Wear",
+      "goodsNameCn": "Women's Trendy Round Neck Long Sleeve Crop Tee, Casual Crew Neck T-shirt, Women's Slim-fitting Top f",
+      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/e37155f503ac490388b1a4ab66c42887~tplv-fhlh96nyum-crop-webp:1350:1800.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+      "thumbnailCn": "",
+      "sold": 593338,
+      "sales": null,
+      "goodsPriceMin": 9.53,
+      "goodsPriceMax": 55.12,
+      "reviewNum": 33745,
+      "rating": 4.6,
+      "mallOpenTime": null,
+      "onSaleTime": "2024-01-15T02:57:22.675+08:00",
+      "goodsId": "1729400340518441214",
+      "detailUrl": "1729400340518441214",
+      "platform": "tiktok",
+      "catItems": [
+        {
+          "id": 9859,
+          "catId": "601152",
+          "catName": "Womenswear & Underwear",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 9938,
+          "catId": "842248",
+          "catName": "Women's Tops",
+          "catLevel": 2,
+          "parentCatId": "601152",
+          "isLeaf": false
+        },
+        {
+          "id": 9939,
+          "catId": "601302",
+          "catName": "Women's T-shirts",
+          "catLevel": 3,
+          "parentCatId": "842248",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Women's Trendy Round Neck Long Sleeve Crop Tee, Casual Crew Neck T-shirt, Women's Slim-fitting Top for Music Festival, Dating & Daily Wear",
+      "source": "tiktok-热销商品",
+      "catName": "Womenswear & Underwear",
+      "score": 55.8
+    },
+    {
+      "goodsNameEn": "RYR 无线游戏耳机适用于 Xbox 系列 X|S、Xbox One、PS5、PS4、Mac、蓝牙 5.3、3D 环绕声、可旋转耳罩、带降噪麦克风的游戏耳机 - 黑绿色",
+      "goodsNameCn": "RYR 无线游戏耳机适用于 Xbox 系列 X|S、Xbox One、PS5、PS4、Mac、蓝牙 5.3、3D 环绕声、可旋转耳罩、带降噪麦克风的游戏耳机 - 黑绿色",
+      "thumbnail": "https://m.media-amazon.com/images/I/61OMy3rPH5L._AC_UY218_.jpg",
+      "thumbnailCn": "",
+      "sold": 19745,
+      "sales": null,
+      "goodsPriceMin": 42.49,
+      "goodsPriceMax": null,
+      "reviewNum": 1464,
+      "rating": 3.7,
+      "mallOpenTime": "2025-02-14T00:00:00.000+08:00",
+      "onSaleTime": "2025-02-14T00:00:00.000+08:00",
+      "goodsId": "B0DWWJG8WG",
+      "detailUrl": "B0DWWJG8WG",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13796,
+          "catId": "20972798011",
+          "catName": "Xbox Series X & S",
+          "catLevel": 2,
+          "parentCatId": "468642",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14552,
+          "catId": "20972799011",
+          "catName": "配件",
+          "catLevel": 3,
+          "parentCatId": "20972798011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 3353,
+          "catId": "468642",
+          "catName": "视频游戏",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "RYR 无线游戏耳机适用于 Xbox 系列 X|S、Xbox One、PS5、PS4、Mac、蓝牙 5.3、3D 环绕声、可旋转耳罩、带降噪麦克风的游戏耳机 - 黑绿色",
+      "source": "amazon-热销商品",
+      "catName": "视频游戏",
+      "score": 53.1
+    },
+    {
+      "goodsNameEn": "AMOS Peelerz Lychee Gummy Candy 3oz Bag Peelable Fruit-Shaped Candy Fun Peeling Gummy Snack Made With Real Juice",
+      "goodsNameCn": "食品和饮料, Salgadinhos e Doces, Sweets & Candy",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/17/d8/1765941896362fdb251ea2bdf8d7ae64633ed5a626_square_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 638,
+      "sales": 2871,
+      "goodsPriceMin": 4.5,
+      "goodsPriceMax": null,
+      "reviewNum": 114,
+      "rating": 4.77,
+      "mallOpenTime": "2025-10-10T08:00:00.000+08:00",
+      "onSaleTime": "2025-11-04T08:00:00.000+08:00",
+      "goodsId": "334291691",
+      "detailUrl": "334291691",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 8311,
+          "catId": 13086,
+          "catName": "Food & Beverages",
+          "catNameCn": "食品和饮料",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 9192,
+          "catId": 13091,
+          "catName": "Salgadinhos e Doces",
+          "catNameCn": null,
+          "catLevel": 1,
+          "parentCatId": 13086,
+          "isLeaf": false
+        },
+        {
+          "id": 9396,
+          "catId": 13186,
+          "catName": "Sweets & Candy",
+          "catNameCn": null,
+          "catLevel": 2,
+          "parentCatId": 13091,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "AMOS Peelerz Lychee Gummy Candy 3oz Bag Peelable Fruit-Shaped Candy Fun Peeling Gummy Snack Made With Real Juice",
+      "source": "shein-热销商品",
+      "catName": "食品和饮料",
+      "score": 42.7540068652672
+    },
+    {
+      "goodsNameEn": "AMOS Peelerz Peach Gummy Candy 3oz Bag Peelable Fruit-Shaped Candy Fun Peeling Gummy Snack Made With Real Juice",
+      "goodsNameCn": "食品和饮料, Salgadinhos e Doces, Sweets & Candy",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/17/f7/1765941853e46ad94dfc0fab6bbc4ef11356386d9a_square_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 638,
+      "sales": 2871,
+      "goodsPriceMin": 4.5,
+      "goodsPriceMax": null,
+      "reviewNum": 114,
+      "rating": 4.77,
+      "mallOpenTime": "2025-10-10T08:00:00.000+08:00",
+      "onSaleTime": "2025-11-04T08:00:00.000+08:00",
+      "goodsId": "334298536",
+      "detailUrl": "334298536",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 8311,
+          "catId": 13086,
+          "catName": "Food & Beverages",
+          "catNameCn": "食品和饮料",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 9192,
+          "catId": 13091,
+          "catName": "Salgadinhos e Doces",
+          "catNameCn": null,
+          "catLevel": 1,
+          "parentCatId": 13086,
+          "isLeaf": false
+        },
+        {
+          "id": 9396,
+          "catId": 13186,
+          "catName": "Sweets & Candy",
+          "catNameCn": null,
+          "catLevel": 2,
+          "parentCatId": 13091,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "AMOS Peelerz Peach Gummy Candy 3oz Bag Peelable Fruit-Shaped Candy Fun Peeling Gummy Snack Made With Real Juice",
+      "source": "shein-热销商品",
+      "catName": "食品和饮料",
+      "score": 42.7540068652672
+    }
+  ]
+}
