@@ -1,0 +1,27 @@
+{
+  "temu": {
+    "catName": "健康和家居用品",
+    "catId": 15945,
+    "products": []
+  },
+  "shein": {
+    "catName": "珠宝和手表",
+    "catId": 3634,
+    "products": []
+  },
+  "amazon": {
+    "catName": "服装、鞋履和珠宝",
+    "catId": 7141123011,
+    "products": []
+  },
+  "sumaitong": {
+    "catName": "汽车及零配件",
+    "catId": 34,
+    "products": []
+  },
+  "tiktok": {
+    "catName": "手机和电子产品",
+    "catId": 601739,
+    "products": []
+  }
+}
