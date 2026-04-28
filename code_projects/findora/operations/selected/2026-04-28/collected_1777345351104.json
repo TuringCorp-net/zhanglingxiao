@@ -1,0 +1,1840 @@
+{
+  "date": "2026-04-28T03:02:31.104Z",
+  "categories": [
+    {
+      "platform": "temu",
+      "catId": 24252,
+      "catName": "手机和配件"
+    },
+    {
+      "platform": "shein",
+      "catId": 4328,
+      "catName": "玩具和游戏"
+    },
+    {
+      "platform": "amazon",
+      "catId": 11091801,
+      "catName": "乐器"
+    },
+    {
+      "platform": "sumaitong",
+      "catId": 1420,
+      "catName": "工具"
+    },
+    {
+      "platform": "tiktok",
+      "catId": 602118,
+      "catName": "Pet Supplies"
+    }
+  ],
+  "totalCollected": 120,
+  "totalUnique": 31,
+  "products": [
+    {
+      "goodsNameEn": "2-Pack Frosted Privacy Ceramic Screen Protector, Suitable for Samsung Galaxy S26/S25/S24/S23/S22/S21 Plus/Edge/Ultra Series, Offers HD Clarity, Bubble-Free Installation, and Shatterproof Protection, A",
+      "goodsNameCn": "2片装磨砂防窥陶瓷屏幕保护膜，适用于三星Galaxy S26/S25/S24/S23/S22/S21 Plus/Edge/Ultra系列，提供高清画质、无气泡安装及防碎保护,防窥视",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/08488687-f8df-4d2b-a2e6-aee3f2db52ae.jpg",
+      "thumbnailCn": "https://cbu01.alicdn.com/O1CN01upHUNq1Xq8ysSaCUh_!!2208090652974-0-cib.jpg",
+      "sold": 1735,
+      "sales": 8727.050000000001,
+      "goodsPriceMin": 5.03,
+      "goodsPriceMax": 6.02,
+      "reviewNum": 5,
+      "rating": 5,
+      "mallOpenTime": "2025-03-29T15:19:06.873+00:00",
+      "onSaleTime": "2026-04-02T04:39:37.319+00:00",
+      "goodsId": "606497983589039",
+      "detailUrl": "606497983589039",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 11291,
+          "catId": 24252,
+          "catName": "手机和配件",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 11911,
+          "catId": 24253,
+          "catName": "手机配件",
+          "catLevel": 2,
+          "parentCatId": 24252,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 21575,
+          "catId": 24293,
+          "catName": "手机保养、维护和维修",
+          "catLevel": 3,
+          "parentCatId": 24253,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 22796,
+          "catId": 24299,
+          "catName": "手机屏幕保护膜",
+          "catLevel": 4,
+          "parentCatId": 24293,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "2片装磨砂防窥陶瓷屏幕保护膜，适用于三星Galaxy S26/S25/S24/S23/S22/S21 Plus/Edge/Ultra系列，提供高清画质、无气泡安装及防碎保护,防窥视",
+      "_source": {
+        "platform": "temu",
+        "catId": 24252,
+        "catName": "手机和配件",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "3pcs, Black, Flash Camera Lens Protective Film, Compatible iPhone 17 Pro Max/17 Pro/17E/17 Air/16 Pro/16e/15 Pro Max/14 Plus/13 Pro Max/12 Mini/11 Pro Max, Shiny Metal, Shiny, 9H Hardness Scratch Resi",
+      "goodsNameCn": "3片，黑色，闪光相机镜头保护膜，兼容iPhone 17 Pro Max/17 Pro/17E/17 Air/16 Pro/16e/15 Pro Max/14 Plus/13 Pro Max/12 Mi",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/ce89026e-3f8c-49d7-817b-611540ecbb40.jpg",
+      "thumbnailCn": "https://cbu01.alicdn.com/O1CN01quHQNN2Inel9V8YOs_!!2207240129331-0-cib.jpg",
+      "sold": 1590,
+      "sales": 1987.5,
+      "goodsPriceMin": 1.25,
+      "goodsPriceMax": 1.43,
+      "reviewNum": 4,
+      "rating": 4.3,
+      "mallOpenTime": "2025-04-10T03:03:19.942+00:00",
+      "onSaleTime": null,
+      "goodsId": "606253975761576",
+      "detailUrl": "606253975761576",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 11291,
+          "catId": 24252,
+          "catName": "手机和配件",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 11911,
+          "catId": 24253,
+          "catName": "手机配件",
+          "catLevel": 2,
+          "parentCatId": 24252,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 21575,
+          "catId": 24293,
+          "catName": "手机保养、维护和维修",
+          "catLevel": 3,
+          "parentCatId": 24253,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 24241,
+          "catId": 24303,
+          "catName": "手机镜头保护垫",
+          "catLevel": 4,
+          "parentCatId": 24293,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "3片，黑色，闪光相机镜头保护膜，兼容iPhone 17 Pro Max/17 Pro/17E/17 Air/16 Pro/16e/15 Pro Max/14 Plus/13 Pro Max/12 Mini/11 Pro Max，闪亮金属,闪光,9H硬度防刮膜，时尚配饰，闪光友好设计,兼容手机壳，闪亮的礼物",
+      "_source": {
+        "platform": "temu",
+        "catId": 24252,
+        "catName": "手机和配件",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "1PC Lily Pattern Full Covered Lychee Grain Mobile Phone Case for iPhone 17, 16, 15, 14, 13, 12, 11 Pro Max, Air, X, XS, XR, 8, 7 Plus",
+      "goodsNameCn": "1PC墨韵百合图案全包荔枝纹手机保护壳适用于iPhone 17 16 15 14 13 12 11 Pro Max Air X XS XR 8 7 Plus Phone Case",
+      "thumbnail": "https://img.kwcdn.com/product/open/6f8b990a33594930af0f9da6e10a009e-goods.jpeg",
+      "thumbnailCn": "https://cbu01.alicdn.com/O1CN01RBca0N1e9HBBOrwZn_!!2214074523828-0-cib.jpg",
+      "sold": 1399,
+      "sales": 2881.94,
+      "goodsPriceMin": 2.06,
+      "goodsPriceMax": 3.49,
+      "reviewNum": 1,
+      "rating": 5,
+      "mallOpenTime": "2024-04-20T02:23:38.828+00:00",
+      "onSaleTime": "2026-04-02T11:08:44.372+00:00",
+      "goodsId": "606158815347477",
+      "detailUrl": "606158815347477",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 11291,
+          "catId": 24252,
+          "catName": "手机和配件",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 12564,
+          "catId": 24374,
+          "catName": "手机壳及外壳",
+          "catLevel": 2,
+          "parentCatId": 24252,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 13780,
+          "catId": 24376,
+          "catName": "手机壳、套",
+          "catLevel": 3,
+          "parentCatId": 24374,
+          "isLeaf": true,
+          "optId": 2660
+        }
+      ],
+      "goodsName": "1PC墨韵百合图案全包荔枝纹手机保护壳适用于iPhone 17 16 15 14 13 12 11 Pro Max Air X XS XR 8 7 Plus Phone Case",
+      "_source": {
+        "platform": "temu",
+        "catId": 24252,
+        "catName": "手机和配件",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Phone Case: Disney Winnie the Pooh Cherry Blossom Phone Case Suitable for iPhone 17/17 Pro/17 Pro Max/17 Air/16/15/14/13/12/11/X Series iPhone 17 Pro Max Case iPhone 17 Pro Case iPhone 17 Case Stockin",
+      "goodsNameCn": "手机壳：迪士尼维尼熊樱花手机壳，适用于iPhone 17/17 Pro/17 Pro Max/17 Air/16/15/14/13/12/11/X系列 iPhone 17 Pro Max手机壳 iPh",
+      "thumbnail": "https://img.kwcdn.com/product/open/3e5ec10dd1814cbc8e43e5fbfbc2e8db-goods.jpeg",
+      "thumbnailCn": "https://cbu01.alicdn.com/O1CN01Kvz3V21wI7uAJBiZ0_!!2218899256284-0-cib.jpg",
+      "sold": 1331,
+      "sales": 5244.14,
+      "goodsPriceMin": 3.94,
+      "goodsPriceMax": 7.3,
+      "reviewNum": 5,
+      "rating": 4.2,
+      "mallOpenTime": "2026-01-29T09:13:02.000+00:00",
+      "onSaleTime": "2026-03-30T00:13:47.000+00:00",
+      "goodsId": "606524558666403",
+      "detailUrl": "606524558666403",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 11291,
+          "catId": 24252,
+          "catName": "手机和配件",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 12564,
+          "catId": 24374,
+          "catName": "手机壳及外壳",
+          "catLevel": 2,
+          "parentCatId": 24252,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 16330,
+          "catId": 24381,
+          "catName": "手机壳和外壳",
+          "catLevel": 3,
+          "parentCatId": 24374,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "手机壳：迪士尼维尼熊樱花手机壳，适用于iPhone 17/17 Pro/17 Pro Max/17 Air/16/15/14/13/12/11/X系列 iPhone 17 Pro Max手机壳 iPhone 17 Pro手机壳 iPhone 17手机壳 女友圣诞袜小礼物",
+      "_source": {
+        "platform": "temu",
+        "catId": 24252,
+        "catName": "手机和配件",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Mini Screwdriver Set, Flat and Phillips Small Screwdriver Set, Suitable for Electronics, Jewelry, Computers, Eyeglasses, Watches, Mobile Phones - DIY Projects - Computer Repair, Precision Tools, Durab",
+      "goodsNameCn": "迷你螺丝刀套装，含一字和十字小螺丝刀，适用于电子设备、珠宝、电脑、眼镜、手表、手机维修——DIY项目——电脑维修，精密工具，耐用螺丝刀，坚固材质，多功能工具套装",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/b359c6d0-0d31-4120-a463-0d37f0c1535d.jpg",
+      "thumbnailCn": "",
+      "sold": 1286,
+      "sales": 1813.26,
+      "goodsPriceMin": 1.41,
+      "goodsPriceMax": 1.41,
+      "reviewNum": 1,
+      "rating": 5,
+      "mallOpenTime": "2026-04-02T11:42:04.000+00:00",
+      "onSaleTime": "2026-04-02T11:42:04.000+00:00",
+      "goodsId": "605729989734574",
+      "detailUrl": "605729989734574",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 11291,
+          "catId": 24252,
+          "catName": "手机和配件",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 11911,
+          "catId": 24253,
+          "catName": "手机配件",
+          "catLevel": 2,
+          "parentCatId": 24252,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 21575,
+          "catId": 24293,
+          "catName": "手机保养、维护和维修",
+          "catLevel": 3,
+          "parentCatId": 24253,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23753,
+          "catId": 24302,
+          "catName": "手机维修套件",
+          "catLevel": 4,
+          "parentCatId": 24293,
+          "isLeaf": true,
+          "optId": 2670
+        }
+      ],
+      "goodsName": "迷你螺丝刀套装，含一字和十字小螺丝刀，适用于电子设备、珠宝、电脑、眼镜、手表、手机维修——DIY项目——电脑维修，精密工具，耐用螺丝刀，坚固材质，多功能工具套装",
+      "_source": {
+        "platform": "temu",
+        "catId": 24252,
+        "catName": "手机和配件",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Phone Case: Black Bow Tie Striped Large Window Style, Compatible with iPhone 17 Pro Max, Full Coverage Anti-Shock Protective Case, Compatible with iPhone 16/15/14/13/12/11 Series - Soft Edge and Soft ",
+      "goodsNameCn": "手机壳：黑色蝴蝶结条纹大视窗款，适用于iPhone 17 Pro Max手机壳，全面覆盖防摔保护壳，兼容iPhone 16/15/14/13/12/11系列——柔边软背设计，适合作为圣诞与感恩节馈赠亲",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/5bb112b0-92b2-4b1b-a72c-7b29152aebcc.jpg",
+      "thumbnailCn": "",
+      "sold": 1054,
+      "sales": 5343.780000000001,
+      "goodsPriceMin": 5.07,
+      "goodsPriceMax": 5.48,
+      "reviewNum": 12,
+      "rating": 4.9,
+      "mallOpenTime": "2024-07-12T14:34:40.492+00:00",
+      "onSaleTime": null,
+      "goodsId": "601105811456257",
+      "detailUrl": "601105811456257",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 11291,
+          "catId": 24252,
+          "catName": "手机和配件",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 12564,
+          "catId": 24374,
+          "catName": "手机壳及外壳",
+          "catLevel": 2,
+          "parentCatId": 24252,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 13780,
+          "catId": 24376,
+          "catName": "手机壳、套",
+          "catLevel": 3,
+          "parentCatId": 24374,
+          "isLeaf": true,
+          "optId": 2660
+        }
+      ],
+      "goodsName": "手机壳：黑色蝴蝶结条纹大视窗款，适用于iPhone 17 Pro Max手机壳，全面覆盖防摔保护壳，兼容iPhone 16/15/14/13/12/11系列——柔边软背设计，适合作为圣诞与感恩节馈赠亲友的礼物",
+      "_source": {
+        "platform": "temu",
+        "catId": 24252,
+        "catName": "手机和配件",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Creative Deer Head 360° Rotating Stainless Steel Phone Lanyard Connector, Ultra-Thin Metal Clip, Won't Damage Your Phone, Secure Wrist Strap Pendant, Suitable for Phone Cases, Universal Phone Accessor",
+      "goodsNameCn": "创意鹿头360°旋转不锈钢手机挂绳连接器，超薄金属夹片，不会损坏您的手机，安全的手腕带挂件，适用于手机壳，通用手机配件手机垫片，手机挂片，手机挂绳链接片贴片",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/add624c2-4cbe-4c31-b562-3c83b7a0345b.jpg",
+      "thumbnailCn": "https://cbu01.alicdn.com/O1CN01tUkXW41szOtBWLfya_!!2215411925837-0-cib.jpg",
+      "sold": 1001,
+      "sales": 2592.5899999999997,
+      "goodsPriceMin": 2.59,
+      "goodsPriceMax": 3.04,
+      "reviewNum": 4,
+      "rating": 5,
+      "mallOpenTime": "2024-08-01T01:28:09.227+00:00",
+      "onSaleTime": "2026-04-06T04:05:16.406+00:00",
+      "goodsId": "606314105289849",
+      "detailUrl": "606314105289849",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 11291,
+          "catId": 24252,
+          "catName": "手机和配件",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 11911,
+          "catId": 24253,
+          "catName": "手机配件",
+          "catLevel": 2,
+          "parentCatId": 24252,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23381,
+          "catId": 24308,
+          "catName": "手机挂绳与腕带",
+          "catLevel": 3,
+          "parentCatId": 24253,
+          "isLeaf": true,
+          "optId": 2663
+        }
+      ],
+      "goodsName": "创意鹿头360°旋转不锈钢手机挂绳连接器，超薄金属夹片，不会损坏您的手机，安全的手腕带挂件，适用于手机壳，通用手机配件手机垫片，手机挂片，手机挂绳链接片贴片",
+      "_source": {
+        "platform": "temu",
+        "catId": 24252,
+        "catName": "手机和配件",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "萌趣小蜜蜂 采蜜图 手机壳适用于三星Galaxy A02 A03S A04 A05S A06 A13 A14 A15 A16 5G A21S A22 A23 A24 A25 A26 A32 A34 A35 A36 A50 A52 A53 A54 A55 A56 A73 S21 Ultra S22 Plus S23+ S24 FE S48卡通透明防摔全包TPU手机套简约时尚防震软壳保护套个性创意",
+      "goodsNameCn": "萌趣小蜜蜂 采蜜图 手机壳适用于三星Galaxy A02 A03S A04 A05S A06 A13 A14 A15 A16 5G A21S A22 A23 A24 A25 A26 A32 A34 A",
+      "thumbnail": "https://img.kwcdn.com/product/open/f6bd1ac1852047e1ae17f7db380eead6-goods.jpeg",
+      "thumbnailCn": "",
+      "sold": 997,
+      "sales": 5154.49,
+      "goodsPriceMin": 5.17,
+      "goodsPriceMax": 5.17,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2025-09-08T20:48:53.000+00:00",
+      "onSaleTime": null,
+      "goodsId": "601103043839138",
+      "detailUrl": "601103043839138",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 11291,
+          "catId": 24252,
+          "catName": "手机和配件",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 12564,
+          "catId": 24374,
+          "catName": "手机壳及外壳",
+          "catLevel": 2,
+          "parentCatId": 24252,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 13780,
+          "catId": 24376,
+          "catName": "手机壳、套",
+          "catLevel": 3,
+          "parentCatId": 24374,
+          "isLeaf": true,
+          "optId": 2660
+        }
+      ],
+      "goodsName": "萌趣小蜜蜂 采蜜图 手机壳适用于三星Galaxy A02 A03S A04 A05S A06 A13 A14 A15 A16 5G A21S A22 A23 A24 A25 A26 A32 A34 A35 A36 A50 A52 A53 A54 A55 A56 A73 S21 Ultra S22 Plus S23+ S24 FE S48卡通透明防摔全包TPU手机套简约时尚防震软壳保护套个性创意",
+      "_source": {
+        "platform": "temu",
+        "catId": 24252,
+        "catName": "手机和配件",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "1pc生气小企鹅图案透明太空手机防摔保护壳，适用于iPhone11 12 13 14 15 16 17 XS XR X 7 8 12 13 Plus Pro Max SE系列，采用太空壳设计，适合作为装饰品/生日礼物/节日礼物，可送给女友、男友、朋友或自己, 节日礼物,送给他的礼物,趣味图案,透明保护壳,UV印刷设计,独特设计外壳,时尚手机壳,动物爱好者,礼品购物者",
+      "goodsNameCn": "1pc生气小企鹅图案透明太空手机防摔保护壳，适用于iPhone11 12 13 14 15 16 17 XS XR X 7 8 12 13 Plus Pro Max SE系列，采用太空壳设计，适合作为",
+      "thumbnail": "https://img.kwcdn.com/product/open/20a41198e0914b7ba41bac77ecf4c9e0-goods.jpeg",
+      "thumbnailCn": "",
+      "sold": 976,
+      "sales": 2849.92,
+      "goodsPriceMin": 2.92,
+      "goodsPriceMax": 3.24,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2024-10-29T23:38:16.000+00:00",
+      "onSaleTime": null,
+      "goodsId": "601104050241705",
+      "detailUrl": "601104050241705",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 11291,
+          "catId": 24252,
+          "catName": "手机和配件",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 12564,
+          "catId": 24374,
+          "catName": "手机壳及外壳",
+          "catLevel": 2,
+          "parentCatId": 24252,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 13780,
+          "catId": 24376,
+          "catName": "手机壳、套",
+          "catLevel": 3,
+          "parentCatId": 24374,
+          "isLeaf": true,
+          "optId": 2660
+        }
+      ],
+      "goodsName": "1pc生气小企鹅图案透明太空手机防摔保护壳，适用于iPhone11 12 13 14 15 16 17 XS XR X 7 8 12 13 Plus Pro Max SE系列，采用太空壳设计，适合作为装饰品/生日礼物/节日礼物，可送给女友、男友、朋友或自己, 节日礼物,送给他的礼物,趣味图案,透明保护壳,UV印刷设计,独特设计外壳,时尚手机壳,动物爱好者,礼品购物者",
+      "_source": {
+        "platform": "temu",
+        "catId": 24252,
+        "catName": "手机和配件",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Black Pupil Eyes MAMA Pattern Phone Case, Compatible with iPhone 16 15 14 13 12 11 X Pro Max Plus, Soft TPU Protective Case",
+      "goodsNameCn": "黑色瞳眼MAMA图案手机壳，适用于iPhone 16 15 14 13 12 11 X Pro Max Plus，软质TPU保护套，适用于iPhone 111213 Pro Max12 Pro Max",
+      "thumbnail": "https://img.kwcdn.com/product/open/be3838e6e4094342908c7f345287f270-goods.jpeg",
+      "thumbnailCn": "https://cbu01.alicdn.com/O1CN01y0cne41gnF29DXiu0_!!2219492974186-0-cib.jpg",
+      "sold": 963,
+      "sales": 1771.92,
+      "goodsPriceMin": 1.84,
+      "goodsPriceMax": 3.57,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2024-10-22T08:30:18.760+00:00",
+      "onSaleTime": null,
+      "goodsId": "605813070509146",
+      "detailUrl": "605813070509146",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 11291,
+          "catId": 24252,
+          "catName": "手机和配件",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 12564,
+          "catId": 24374,
+          "catName": "手机壳及外壳",
+          "catLevel": 2,
+          "parentCatId": 24252,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 14798,
+          "catId": 24378,
+          "catName": "手机保护套",
+          "catLevel": 3,
+          "parentCatId": 24374,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "黑色瞳眼MAMA图案手机壳，适用于iPhone 16 15 14 13 12 11 X Pro Max Plus，软质TPU保护套，适用于iPhone 111213 Pro Max12 Pro Max14 Pro14 Pro Max1515 ProiPhone 1616 Pro Max16 Plus",
+      "_source": {
+        "platform": "temu",
+        "catId": 24252,
+        "catName": "手机和配件",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "3D Cartoon Figure Stress Relief Toy – Soft Simulation Magic Cube Squishy, Sensory Fidget Squeeze Toy For Anxiety Release & Desk Decoration",
+      "goodsNameCn": "玩具和游戏, 儿童益智玩具, 儿童学前玩具, 儿童指尖玩具",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/03/31/eb/17749374694ef55e117352dcca65d2f320560f32a3_square_thumbnail_220x293.jpg",
+      "thumbnailCn": "",
+      "sold": 3800,
+      "sales": 8664,
+      "goodsPriceMin": 2.28,
+      "goodsPriceMax": 2.28,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2026-03-26T08:00:00.000+08:00",
+      "onSaleTime": "2026-03-31T08:00:00.000+08:00",
+      "goodsId": "434645120",
+      "detailUrl": "434645120",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 150,
+          "catId": 4328,
+          "catName": "Toys & Games",
+          "catNameCn": "玩具和游戏",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 182,
+          "catId": 6996,
+          "catName": "Kids Educational Toys",
+          "catNameCn": "儿童益智玩具",
+          "catLevel": 1,
+          "parentCatId": 4328,
+          "isLeaf": false
+        },
+        {
+          "id": 3047,
+          "catId": 7021,
+          "catName": "Kids Preschool Toys",
+          "catNameCn": "儿童学前玩具",
+          "catLevel": 2,
+          "parentCatId": 6996,
+          "isLeaf": false
+        },
+        {
+          "id": 5952,
+          "catId": 13820,
+          "catName": "Kids Fidget Toys",
+          "catNameCn": "儿童指尖玩具",
+          "catLevel": 3,
+          "parentCatId": 7021,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "3D Cartoon Figure Stress Relief Toy – Soft Simulation Magic Cube Squishy, Sensory Fidget Squeeze Toy For Anxiety Release & Desk Decoration",
+      "_source": {
+        "platform": "shein",
+        "catId": 4328,
+        "catName": "玩具和游戏",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "1pc Colorful Glitter Axolotl Squeeze Toy Set: Soft, Transparent Silicone Axolotl With Glitter Inside, Slow Rebound Design, Suitable For Children And Adults To Relieve Stress, Great For Anxiety Relief,",
+      "goodsNameCn": "玩具和游戏, 儿童益智玩具, 儿童学前玩具, 儿童指尖玩具",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/03/27/78/1774605640c296e2508ba7ec188c212818da2bd631_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 3700,
+      "sales": 12950,
+      "goodsPriceMin": 5.85,
+      "goodsPriceMax": null,
+      "reviewNum": 24,
+      "rating": 4.45,
+      "mallOpenTime": "2024-01-04T01:39:20.000+08:00",
+      "onSaleTime": "2026-04-08T08:00:00.000+08:00",
+      "goodsId": "443999224",
+      "detailUrl": "443999224",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 150,
+          "catId": 4328,
+          "catName": "Toys & Games",
+          "catNameCn": "玩具和游戏",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 182,
+          "catId": 6996,
+          "catName": "Kids Educational Toys",
+          "catNameCn": "儿童益智玩具",
+          "catLevel": 1,
+          "parentCatId": 4328,
+          "isLeaf": false
+        },
+        {
+          "id": 3047,
+          "catId": 7021,
+          "catName": "Kids Preschool Toys",
+          "catNameCn": "儿童学前玩具",
+          "catLevel": 2,
+          "parentCatId": 6996,
+          "isLeaf": false
+        },
+        {
+          "id": 5952,
+          "catId": 13820,
+          "catName": "Kids Fidget Toys",
+          "catNameCn": "儿童指尖玩具",
+          "catLevel": 3,
+          "parentCatId": 7021,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "1pc Colorful Glitter Axolotl Squeeze Toy Set: Soft, Transparent Silicone Axolotl With Glitter Inside, Slow Rebound Design, Suitable For Children And Adults To Relieve Stress, Great For Anxiety Relief, Desktop Decor And Party Favors, Perfect Gift For Wedding Season And Mother's Day.",
+      "_source": {
+        "platform": "shein",
+        "catId": 4328,
+        "catName": "玩具和游戏",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Glitter Duck Squeeze Stress Relief Toy: Soft And Transparent Squeeze Stress Relief Toy With Adorable Glitter Duck Design, A Perfect Sensory Toy To Relieve Anxiety, Ideal Mother's Day Gift For Stress T",
+      "goodsNameCn": "玩具和游戏, 儿童益智玩具, 儿童学前玩具, 儿童指尖玩具",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/04/11/b2/1775900785b86a95230235edc9c50a29b84b10874b_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 3500,
+      "sales": 5250,
+      "goodsPriceMin": 2.51,
+      "goodsPriceMax": null,
+      "reviewNum": 24,
+      "rating": 4.45,
+      "mallOpenTime": "2024-01-04T01:39:20.000+08:00",
+      "onSaleTime": "2026-04-11T08:00:00.000+08:00",
+      "goodsId": "444836091",
+      "detailUrl": "444836091",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 150,
+          "catId": 4328,
+          "catName": "Toys & Games",
+          "catNameCn": "玩具和游戏",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 182,
+          "catId": 6996,
+          "catName": "Kids Educational Toys",
+          "catNameCn": "儿童益智玩具",
+          "catLevel": 1,
+          "parentCatId": 4328,
+          "isLeaf": false
+        },
+        {
+          "id": 3047,
+          "catId": 7021,
+          "catName": "Kids Preschool Toys",
+          "catNameCn": "儿童学前玩具",
+          "catLevel": 2,
+          "parentCatId": 6996,
+          "isLeaf": false
+        },
+        {
+          "id": 5952,
+          "catId": 13820,
+          "catName": "Kids Fidget Toys",
+          "catNameCn": "儿童指尖玩具",
+          "catLevel": 3,
+          "parentCatId": 7021,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Glitter Duck Squeeze Stress Relief Toy: Soft And Transparent Squeeze Stress Relief Toy With Adorable Glitter Duck Design, A Perfect Sensory Toy To Relieve Anxiety, Ideal Mother's Day Gift For Stress Toy Collectors And Adults.",
+      "_source": {
+        "platform": "shein",
+        "catId": 4328,
+        "catName": "玩具和游戏",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Colorful Face Steamed Bun Squishy Toy TPR Slow Rise Cute Kawaii Baozi Pull Stretch Sensory Fidget Stress Relief Anti-Anxiety Decompression Gift For Kids Adults Office Desk Travel Party Favor",
+      "goodsNameCn": "玩具和游戏, 儿童益智玩具, 儿童学前玩具, 儿童指尖玩具",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/04/10/fa/17758014845bbc4aab33d3056e0f94c5f831560bac_square_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 3200,
+      "sales": 14624,
+      "goodsPriceMin": 4.57,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2026-03-10T08:00:00.000+08:00",
+      "onSaleTime": "2026-04-10T08:00:00.000+08:00",
+      "goodsId": "440059132",
+      "detailUrl": "440059132",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 150,
+          "catId": 4328,
+          "catName": "Toys & Games",
+          "catNameCn": "玩具和游戏",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 182,
+          "catId": 6996,
+          "catName": "Kids Educational Toys",
+          "catNameCn": "儿童益智玩具",
+          "catLevel": 1,
+          "parentCatId": 4328,
+          "isLeaf": false
+        },
+        {
+          "id": 3047,
+          "catId": 7021,
+          "catName": "Kids Preschool Toys",
+          "catNameCn": "儿童学前玩具",
+          "catLevel": 2,
+          "parentCatId": 6996,
+          "isLeaf": false
+        },
+        {
+          "id": 5952,
+          "catId": 13820,
+          "catName": "Kids Fidget Toys",
+          "catNameCn": "儿童指尖玩具",
+          "catLevel": 3,
+          "parentCatId": 7021,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Colorful Face Steamed Bun Squishy Toy TPR Slow Rise Cute Kawaii Baozi Pull Stretch Sensory Fidget Stress Relief Anti-Anxiety Decompression Gift For Kids Adults Office Desk Travel Party Favor",
+      "_source": {
+        "platform": "shein",
+        "catId": 4328,
+        "catName": "玩具和游戏",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "NewJumbo Strawberry Squishy Slow Rising Toy - Realistic Scented Squeeze Toy, Giant Squishy Sensory Fidget Game & S,  PU Fruit Squishy With Slow-Rising Gel-Filled Design (Strawberry Scent, 4.53x3..74in",
+      "goodsNameCn": "青少年指尖玩具, 玩具和游戏, 爱好、收藏、派对, 青少年新奇和恶作剧玩具",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/03/31/a3/17749428533889b17e857da9d8aa6048acdecc5c11_square_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 2200,
+      "sales": 5800,
+      "goodsPriceMin": 2,
+      "goodsPriceMax": 4,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2026-03-25T08:00:00.000+08:00",
+      "onSaleTime": "2026-03-31T08:00:00.000+08:00",
+      "goodsId": "434990511",
+      "detailUrl": "434990511",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 894,
+          "catId": 2852,
+          "catName": "Fidget Toys for Teenager",
+          "catNameCn": "青少年指尖玩具",
+          "catLevel": 3,
+          "parentCatId": 7165,
+          "isLeaf": true
+        },
+        {
+          "id": 150,
+          "catId": 4328,
+          "catName": "Toys & Games",
+          "catNameCn": "玩具和游戏",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 212,
+          "catId": 7163,
+          "catName": "Hobbies, Collections, Parties",
+          "catNameCn": "爱好、收藏、派对",
+          "catLevel": 1,
+          "parentCatId": 4328,
+          "isLeaf": false
+        },
+        {
+          "id": 893,
+          "catId": 7165,
+          "catName": "Teenager Novelty & Gag Toys",
+          "catNameCn": "青少年新奇和恶作剧玩具",
+          "catLevel": 2,
+          "parentCatId": 7163,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "NewJumbo Strawberry Squishy Slow Rising Toy - Realistic Scented Squeeze Toy, Giant Squishy Sensory Fidget Game & S,  PU Fruit Squishy With Slow-Rising Gel-Filled Design (Strawberry Scent, 4.53x3..74inch)Cute Glutinous Rice Ball Squeezable Sensory Play Toy",
+      "_source": {
+        "platform": "shein",
+        "catId": 4328,
+        "catName": "玩具和游戏",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Butter Squishy Toy, Yellow Cream Stick Soft Toy With Cream Scent - Good For Play And Stress Relief Toys Sensory Fidget Toys Goody Bag Party Favors Pinata Filler Carnival Stocking Stuffers Birthday Gif",
+      "goodsNameCn": "玩具和游戏, 爱好、收藏、派对, 青少年新奇和恶作剧玩具, 青少年挤压玩具",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/04/03/d5/17752034267101d3f8df16f74779c4910d81722de1_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 2900,
+      "sales": 3335,
+      "goodsPriceMin": 1.27,
+      "goodsPriceMax": 2.19,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2025-07-23T08:00:00.000+08:00",
+      "onSaleTime": "2026-04-03T08:00:00.000+08:00",
+      "goodsId": "436492952",
+      "detailUrl": "436492952",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 150,
+          "catId": 4328,
+          "catName": "Toys & Games",
+          "catNameCn": "玩具和游戏",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 212,
+          "catId": 7163,
+          "catName": "Hobbies, Collections, Parties",
+          "catNameCn": "爱好、收藏、派对",
+          "catLevel": 1,
+          "parentCatId": 4328,
+          "isLeaf": false
+        },
+        {
+          "id": 893,
+          "catId": 7165,
+          "catName": "Teenager Novelty & Gag Toys",
+          "catNameCn": "青少年新奇和恶作剧玩具",
+          "catLevel": 2,
+          "parentCatId": 7163,
+          "isLeaf": false
+        },
+        {
+          "id": 3591,
+          "catId": 7216,
+          "catName": "Squeeze Toys for Teenager",
+          "catNameCn": "青少年挤压玩具",
+          "catLevel": 3,
+          "parentCatId": 7165,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Butter Squishy Toy, Yellow Cream Stick Soft Toy With Cream Scent - Good For Play And Stress Relief Toys Sensory Fidget Toys Goody Bag Party Favors Pinata Filler Carnival Stocking Stuffers Birthday Gifts Mother's Day Graduation",
+      "_source": {
+        "platform": "shein",
+        "catId": 4328,
+        "catName": "玩具和游戏",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Super Soft And Slow-Rebound Butter Stick New Product, Squeezeable Cartoon Finger-Sucking Toy",
+      "goodsNameCn": "玩具和游戏, 其他游戏和配件, 游戏&娱乐, 游戏用品",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/03/30/ae/1774862152e1554519b07c5a19d0880f6683f04471_square_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 2900,
+      "sales": 8990,
+      "goodsPriceMin": 3.1,
+      "goodsPriceMax": 5.05,
+      "reviewNum": 7,
+      "rating": 2.85,
+      "mallOpenTime": "2026-03-18T08:00:00.000+08:00",
+      "onSaleTime": "2026-03-30T08:00:00.000+08:00",
+      "goodsId": "433528454",
+      "detailUrl": "433528454",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 150,
+          "catId": 4328,
+          "catName": "Toys & Games",
+          "catNameCn": "玩具和游戏",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 967,
+          "catId": 4659,
+          "catName": "Other Games & Accessories",
+          "catNameCn": "其他游戏和配件",
+          "catLevel": 3,
+          "parentCatId": 7173,
+          "isLeaf": true
+        },
+        {
+          "id": 897,
+          "catId": 7169,
+          "catName": "Games & Entertainment",
+          "catNameCn": "游戏&娱乐",
+          "catLevel": 1,
+          "parentCatId": 4328,
+          "isLeaf": false
+        },
+        {
+          "id": 924,
+          "catId": 7173,
+          "catName": "Game Supplies",
+          "catNameCn": "游戏用品",
+          "catLevel": 2,
+          "parentCatId": 7169,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "Super Soft And Slow-Rebound Butter Stick New Product, Squeezeable Cartoon Finger-Sucking Toy",
+      "_source": {
+        "platform": "shein",
+        "catId": 4328,
+        "catName": "玩具和游戏",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Fluid Mochi Handmade Stress Ball – Popping Beads Sensory Toy, Squeeze Fidget For Anxiety Relief",
+      "goodsNameCn": "玩具和游戏, 儿童益智玩具, 儿童学前玩具, 儿童指尖玩具",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/04/18/bf/17764975119dcbe7a0ec9c59fceb34a9a04cb371ef_square_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 2700,
+      "sales": 7452,
+      "goodsPriceMin": 2.76,
+      "goodsPriceMax": 5.24,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2026-03-26T08:00:00.000+08:00",
+      "onSaleTime": "2026-04-01T08:00:00.000+08:00",
+      "goodsId": "434913836",
+      "detailUrl": "434913836",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 150,
+          "catId": 4328,
+          "catName": "Toys & Games",
+          "catNameCn": "玩具和游戏",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 182,
+          "catId": 6996,
+          "catName": "Kids Educational Toys",
+          "catNameCn": "儿童益智玩具",
+          "catLevel": 1,
+          "parentCatId": 4328,
+          "isLeaf": false
+        },
+        {
+          "id": 3047,
+          "catId": 7021,
+          "catName": "Kids Preschool Toys",
+          "catNameCn": "儿童学前玩具",
+          "catLevel": 2,
+          "parentCatId": 6996,
+          "isLeaf": false
+        },
+        {
+          "id": 5952,
+          "catId": 13820,
+          "catName": "Kids Fidget Toys",
+          "catNameCn": "儿童指尖玩具",
+          "catLevel": 3,
+          "parentCatId": 7021,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Fluid Mochi Handmade Stress Ball – Popping Beads Sensory Toy, Squeeze Fidget For Anxiety Relief",
+      "_source": {
+        "platform": "shein",
+        "catId": 4328,
+        "catName": "玩具和游戏",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Gradient Squishy Toys, & Popsicle Squeeze Stress Relief Fidget Toys",
+      "goodsNameCn": "玩具和游戏, 爱好、收藏、派对, 青少年新奇和恶作剧玩具, 青少年粘液和腻子玩具",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/03/31/6a/1774946818b40799c41ec8e89bbcab07a671c221bf_square_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 2600,
+      "sales": 6370,
+      "goodsPriceMin": 2.45,
+      "goodsPriceMax": 38.36,
+      "reviewNum": 5,
+      "rating": 3.6,
+      "mallOpenTime": "2026-03-13T08:00:00.000+08:00",
+      "onSaleTime": "2026-04-06T08:00:00.000+08:00",
+      "goodsId": "437262583",
+      "detailUrl": "437262583",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 150,
+          "catId": 4328,
+          "catName": "Toys & Games",
+          "catNameCn": "玩具和游戏",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 212,
+          "catId": 7163,
+          "catName": "Hobbies, Collections, Parties",
+          "catNameCn": "爱好、收藏、派对",
+          "catLevel": 1,
+          "parentCatId": 4328,
+          "isLeaf": false
+        },
+        {
+          "id": 893,
+          "catId": 7165,
+          "catName": "Teenager Novelty & Gag Toys",
+          "catNameCn": "青少年新奇和恶作剧玩具",
+          "catLevel": 2,
+          "parentCatId": 7163,
+          "isLeaf": false
+        },
+        {
+          "id": 3245,
+          "catId": 7211,
+          "catName": "Slime & Putty Toys for Teenager",
+          "catNameCn": "青少年粘液和腻子玩具",
+          "catLevel": 3,
+          "parentCatId": 7165,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Gradient Squishy Toys, & Popsicle Squeeze Stress Relief Fidget Toys",
+      "_source": {
+        "platform": "shein",
+        "catId": 4328,
+        "catName": "玩具和游戏",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Gradient Squishy Toys, & Popsicle Squeeze Stress Relief Fidget Toys",
+      "goodsNameCn": "玩具和游戏, 爱好、收藏、派对, 青少年新奇和恶作剧玩具, 青少年粘液和腻子玩具",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/03/31/2f/17749468239a90c25782aac2586a540bc7e197a2c3_square_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 2400,
+      "sales": 5304,
+      "goodsPriceMin": 2.21,
+      "goodsPriceMax": 4.2,
+      "reviewNum": 5,
+      "rating": 3.6,
+      "mallOpenTime": "2026-03-13T08:00:00.000+08:00",
+      "onSaleTime": "2026-04-06T08:00:00.000+08:00",
+      "goodsId": "437323871",
+      "detailUrl": "437323871",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 150,
+          "catId": 4328,
+          "catName": "Toys & Games",
+          "catNameCn": "玩具和游戏",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 212,
+          "catId": 7163,
+          "catName": "Hobbies, Collections, Parties",
+          "catNameCn": "爱好、收藏、派对",
+          "catLevel": 1,
+          "parentCatId": 4328,
+          "isLeaf": false
+        },
+        {
+          "id": 893,
+          "catId": 7165,
+          "catName": "Teenager Novelty & Gag Toys",
+          "catNameCn": "青少年新奇和恶作剧玩具",
+          "catLevel": 2,
+          "parentCatId": 7163,
+          "isLeaf": false
+        },
+        {
+          "id": 3245,
+          "catId": 7211,
+          "catName": "Slime & Putty Toys for Teenager",
+          "catNameCn": "青少年粘液和腻子玩具",
+          "catLevel": 3,
+          "parentCatId": 7165,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Gradient Squishy Toys, & Popsicle Squeeze Stress Relief Fidget Toys",
+      "_source": {
+        "platform": "shein",
+        "catId": 4328,
+        "catName": "玩具和游戏",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Pink Cordless Staple Gun - 2-in-1 Electric Nailer with USB Charger, 1000 Staples & Nails for Woodworking, Crafts, DIY",
+      "goodsNameCn": "Pink Cordless Staple Gun - 2-in-1 Electric Nailer with USB Charger, 1000 Staples & Nails for Woodwor",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S09e395cdc4334506bcb4771ec2c14629M.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 43.85,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-03-31T00:00:00.000+08:00",
+      "goodsId": "3256811796994413",
+      "detailUrl": "3256811796994413",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6945,
+          "catId": "1417",
+          "catName": "动力工具",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7004,
+          "catId": "14200512",
+          "catName": "钉枪",
+          "catLevel": 2,
+          "parentCatId": "1417",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Pink Cordless Staple Gun - 2-in-1 Electric Nailer with USB Charger, 1000 Staples & Nails for Woodworking, Crafts, DIY",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Acetec 1/2 Pneumatic Wrench High Torque Small Air Impact Wrench Ai2000 Dual Hammer Auto Repair Air Trigger",
+      "goodsNameCn": "Acetec 1/2 Pneumatic Wrench High Torque Small Air Impact Wrench Ai2000 Dual Hammer Auto Repair Air T",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Se9a2caf2058448a7946d97bd583ea0d5n.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 117.39,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-02T12:00:00.000+08:00",
+      "goodsId": "1005012008594885",
+      "detailUrl": "1005012008594885",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6945,
+          "catId": "1417",
+          "catName": "动力工具",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7001,
+          "catId": "201336703",
+          "catName": "气动工具套件",
+          "catLevel": 2,
+          "parentCatId": "1417",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Acetec 1/2 Pneumatic Wrench High Torque Small Air Impact Wrench Ai2000 Dual Hammer Auto Repair Air Trigger",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Kvaser Lifu CAN Analyzer Compatible with Swedish Kvaser Leaf Light v2",
+      "goodsNameCn": "Kvaser Lifu CAN Analyzer Compatible with Swedish Kvaser Leaf Light v2",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sb4f36a79b98a4cdca6dc8d73c82eb8794.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 52.88,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-03-30T00:00:00.000+08:00",
+      "goodsId": "3256811795162168",
+      "detailUrl": "3256811795162168",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6950,
+          "catId": "1537",
+          "catName": "仪器仪表",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7075,
+          "catId": "153713",
+          "catName": "配件与附件",
+          "catLevel": 2,
+          "parentCatId": "1537",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Kvaser Lifu CAN Analyzer Compatible with Swedish Kvaser Leaf Light v2",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "4-in-1 Carbon Monoxide Detector with Digital Display Plug-in Temperature and Humidity Monitor CO Detector for Home Kitchen RV",
+      "goodsNameCn": "4-in-1 Carbon Monoxide Detector with Digital Display Plug-in Temperature and Humidity Monitor CO Det",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sbbd590e065f24030adf61ceec40a0286N.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 19.95,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-09T00:00:00.000+08:00",
+      "goodsId": "1005012051171595",
+      "detailUrl": "1005012051171595",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6950,
+          "catId": "1537",
+          "catName": "仪器仪表",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7068,
+          "catId": "153701",
+          "catName": "分析仪器",
+          "catLevel": 2,
+          "parentCatId": "1537",
+          "isLeaf": false
+        },
+        {
+          "id": 7135,
+          "catId": "15370104",
+          "catName": "气体检测仪",
+          "catLevel": 3,
+          "parentCatId": "153701",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "4-in-1 Carbon Monoxide Detector with Digital Display Plug-in Temperature and Humidity Monitor CO Detector for Home Kitchen RV",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Smart Carbon Monoxide Detector with LCD HD Color Screen 4-in-1 Gas Alarm for Home  Supply",
+      "goodsNameCn": "Smart Carbon Monoxide Detector with LCD HD Color Screen 4-in-1 Gas Alarm for Home  Supply",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S5c7a524e9dc949c0990d68112ff047d2U.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 15.41,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-01T00:00:00.000+08:00",
+      "goodsId": "1005011991867737",
+      "detailUrl": "1005011991867737",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6950,
+          "catId": "1537",
+          "catName": "仪器仪表",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7068,
+          "catId": "153701",
+          "catName": "分析仪器",
+          "catLevel": 2,
+          "parentCatId": "1537",
+          "isLeaf": false
+        },
+        {
+          "id": 7135,
+          "catId": "15370104",
+          "catName": "气体检测仪",
+          "catLevel": 3,
+          "parentCatId": "153701",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Smart Carbon Monoxide Detector with LCD HD Color Screen 4-in-1 Gas Alarm for Home  Supply",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "4-in-1 Portable Carbon Monoxide Alarm with Digital Display Plug-in Carbon Monoxide Detector CO Detector for Home Kitchen RV",
+      "goodsNameCn": "4-in-1 Portable Carbon Monoxide Alarm with Digital Display Plug-in Carbon Monoxide Detector CO Detec",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sf4c79d8df971421bbef50ec277bd2efeC.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 21.2,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-03-30T00:00:00.000+08:00",
+      "goodsId": "1005011977801489",
+      "detailUrl": "1005011977801489",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6950,
+          "catId": "1537",
+          "catName": "仪器仪表",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7068,
+          "catId": "153701",
+          "catName": "分析仪器",
+          "catLevel": 2,
+          "parentCatId": "1537",
+          "isLeaf": false
+        },
+        {
+          "id": 7135,
+          "catId": "15370104",
+          "catName": "气体检测仪",
+          "catLevel": 3,
+          "parentCatId": "153701",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "4-in-1 Portable Carbon Monoxide Alarm with Digital Display Plug-in Carbon Monoxide Detector CO Detector for Home Kitchen RV",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "4-in-1 Carbon Monoxide Detector with Digital Display Plug-in Temperature and Humidity Monitor CO Detector for Home Kitchen RV",
+      "goodsNameCn": "4-in-1 Carbon Monoxide Detector with Digital Display Plug-in Temperature and Humidity Monitor CO Det",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sb94137ac808c4f7c9fbff00389240c1da.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 29.51,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-08T00:00:00.000+08:00",
+      "goodsId": "1005012047060446",
+      "detailUrl": "1005012047060446",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6950,
+          "catId": "1537",
+          "catName": "仪器仪表",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7068,
+          "catId": "153701",
+          "catName": "分析仪器",
+          "catLevel": 2,
+          "parentCatId": "1537",
+          "isLeaf": false
+        },
+        {
+          "id": 7135,
+          "catId": "15370104",
+          "catName": "气体检测仪",
+          "catLevel": 3,
+          "parentCatId": "153701",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "4-in-1 Carbon Monoxide Detector with Digital Display Plug-in Temperature and Humidity Monitor CO Detector for Home Kitchen RV",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "4-in-1 CO & Gas Leak Detector GC600 LCD Color Display Electrochemical Sensor Sound Light Alarm EU US Plug for Home Kitchen Hotel",
+      "goodsNameCn": "4-in-1 CO & Gas Leak Detector GC600 LCD Color Display Electrochemical Sensor Sound Light Alarm EU US",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S2f78667504fc4bf597fca157c860a4255.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 14.18,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-03-30T00:00:00.000+08:00",
+      "goodsId": "1005011981165302",
+      "detailUrl": "1005011981165302",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6950,
+          "catId": "1537",
+          "catName": "仪器仪表",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7075,
+          "catId": "153713",
+          "catName": "配件与附件",
+          "catLevel": 2,
+          "parentCatId": "1537",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "4-in-1 CO & Gas Leak Detector GC600 LCD Color Display Electrochemical Sensor Sound Light Alarm EU US Plug for Home Kitchen Hotel",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "4i-1Plug-in Carbon Monoxide Detector High Sensitivity Temperature and Humidity Sensor Household Gas Alarm AC 100-240V",
+      "goodsNameCn": "4i-1Plug-in Carbon Monoxide Detector High Sensitivity Temperature and Humidity Sensor Household Gas ",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Scfaca002ce264b41b765a5b5e0f0469co.png",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 21.15,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-03-31T00:00:00.000+08:00",
+      "goodsId": "1005011984841502",
+      "detailUrl": "1005011984841502",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6950,
+          "catId": "1537",
+          "catName": "仪器仪表",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7068,
+          "catId": "153701",
+          "catName": "分析仪器",
+          "catLevel": 2,
+          "parentCatId": "1537",
+          "isLeaf": false
+        },
+        {
+          "id": 7135,
+          "catId": "15370104",
+          "catName": "气体检测仪",
+          "catLevel": 3,
+          "parentCatId": "153701",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "4i-1Plug-in Carbon Monoxide Detector High Sensitivity Temperature and Humidity Sensor Household Gas Alarm AC 100-240V",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "GC300 CO Carbon Monoxide Alarm Detector Home Outdoor Remote Gas Sensor For Coal Burning Harmful Gas Detection",
+      "goodsNameCn": "GC300 CO Carbon Monoxide Alarm Detector Home Outdoor Remote Gas Sensor For Coal Burning Harmful Gas ",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S2e524501bdf54389a90d920659150fc9d.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 24.25,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "1005012031304429",
+      "detailUrl": "1005012031304429",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6950,
+          "catId": "1537",
+          "catName": "仪器仪表",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7068,
+          "catId": "153701",
+          "catName": "分析仪器",
+          "catLevel": 2,
+          "parentCatId": "1537",
+          "isLeaf": false
+        },
+        {
+          "id": 7135,
+          "catId": "15370104",
+          "catName": "气体检测仪",
+          "catLevel": 3,
+          "parentCatId": "153701",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "GC300 CO Carbon Monoxide Alarm Detector Home Outdoor Remote Gas Sensor For Coal Burning Harmful Gas Detection",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Powder Bowl 3L Coffee Powder Residue Bucket Electric Coffee Handle Cleaner Brush Commercial Knocking Residue Bucket",
+      "goodsNameCn": "Powder Bowl 3L Coffee Powder Residue Bucket Electric Coffee Handle Cleaner Brush Commercial Knocking",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S666b7429db3b4a7589f1c72ea7ddde49w.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 183.98,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-06T12:00:00.000+08:00",
+      "goodsId": "1005012022339695",
+      "detailUrl": "1005012022339695",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 16,
+          "catId": "1420",
+          "catName": "工具",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 6956,
+          "catId": "200003955",
+          "catName": "组合工具",
+          "catLevel": 1,
+          "parentCatId": "1420",
+          "isLeaf": false
+        },
+        {
+          "id": 7211,
+          "catId": "100007505",
+          "catName": "手动工具组合",
+          "catLevel": 2,
+          "parentCatId": "200003955",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Powder Bowl 3L Coffee Powder Residue Bucket Electric Coffee Handle Cleaner Brush Commercial Knocking Residue Bucket",
+      "_source": {
+        "platform": "sumaitong",
+        "catId": 1420,
+        "catName": "工具",
+        "channel": "hot-sale-new",
+        "channelTitle": "热销新品"
+      }
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "date": "2026-04-28T03:03:00.995Z",
+  "categories": [
+    {
+      "platform": "amazon",
+      "catId": 165793011,
+      "catName": "玩具"
+    },
+    {
+      "platform": "tiktok",
+      "catId": 601755,
+      "catName": "Computers & Office Equipment"
+    }
+  ],
+  "totalUnique": 4,
+  "products": [
+    {
+      "goodsNameEn": "Glitter Dumpling Squishy - Random Dumpling Squishy Mystery Box, 10 Colors Dumplings Squishy Toy, More Surprises (Random-2PC)",
+      "goodsNameCn": "Glitter Dumpling Squishy - Random Dumpling Squishy Mystery Box, 10 Colors Dumplings Squishy Toy, Mor",
+      "thumbnail": "https://m.media-amazon.com/images/I/811AXXG8ydL._AC_SX300_SY300_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 1639,
+      "sales": null,
+      "goodsPriceMin": 17.98,
+      "goodsPriceMax": null,
+      "reviewNum": 202,
+      "rating": 1.9,
+      "mallOpenTime": "2025-06-16T00:00:00.000+08:00",
+      "onSaleTime": "2026-03-31T00:00:00.000+08:00",
+      "goodsId": "B0GSQMTG4D",
+      "detailUrl": "B0GSQMTG4D",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 3020,
+          "catId": "165793011",
+          "catName": "玩具",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14960,
+          "catId": "166027011",
+          "catName": "新颖性",
+          "catLevel": 2,
+          "parentCatId": "165793011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 26181,
+          "catId": "23538328011",
+          "catName": "挤压玩具",
+          "catLevel": 3,
+          "parentCatId": "166027011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Glitter Dumpling Squishy - Random Dumpling Squishy Mystery Box, 10 Colors Dumplings Squishy Toy, More Surprises (Random-2PC)",
+      "_source": {
+        "platform": "amazon",
+        "catId": 165793011,
+        "catName": "玩具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Binbo Kids Rumi Golden Costume, Kpop Girls Halloween Cosplay Outfit 3PSC Set Include Jacket T-Shirt Shorts",
+      "goodsNameCn": "Binbo Kids Rumi Golden Costume, Kpop Girls Halloween Cosplay Outfit 3PSC Set Include Jacket T-Shirt ",
+      "thumbnail": "https://m.media-amazon.com/images/I/71DW8fLMjfL._AC_SX342_SY445_QL70_FMwebp_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 45.99,
+      "goodsPriceMax": null,
+      "reviewNum": 116,
+      "rating": 3.8,
+      "mallOpenTime": "2020-11-09T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-03T00:00:00.000+08:00",
+      "goodsId": "B0FT3QH2S4",
+      "detailUrl": "B0FT3QH2S4",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 9019,
+          "catId": "14702634011",
+          "catName": "服装",
+          "catLevel": 3,
+          "parentCatId": "166316011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 3020,
+          "catId": "165793011",
+          "catName": "玩具",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 7571,
+          "catId": "166316011",
+          "catName": "扮靓",
+          "catLevel": 2,
+          "parentCatId": "165793011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Binbo Kids Rumi Golden Costume, Kpop Girls Halloween Cosplay Outfit 3PSC Set Include Jacket T-Shirt Shorts",
+      "_source": {
+        "platform": "amazon",
+        "catId": 165793011,
+        "catName": "玩具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Binbo Kids Rumi Golden Costume, Kpop Girls Halloween Cosplay Outfit 3PSC Set Include Jacket T-Shirt Shorts",
+      "goodsNameCn": "Binbo Kids Rumi Golden Costume, Kpop Girls Halloween Cosplay Outfit 3PSC Set Include Jacket T-Shirt ",
+      "thumbnail": "https://m.media-amazon.com/images/I/71DW8fLMjfL._AC_SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 58,
+      "sales": null,
+      "goodsPriceMin": 45.99,
+      "goodsPriceMax": null,
+      "reviewNum": 116,
+      "rating": 3.8,
+      "mallOpenTime": "2020-11-09T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-03T00:00:00.000+08:00",
+      "goodsId": "B0FT3QKPSX",
+      "detailUrl": "B0FT3QKPSX",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 9019,
+          "catId": "14702634011",
+          "catName": "服装",
+          "catLevel": 3,
+          "parentCatId": "166316011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 3020,
+          "catId": "165793011",
+          "catName": "玩具",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 7571,
+          "catId": "166316011",
+          "catName": "扮靓",
+          "catLevel": 2,
+          "parentCatId": "165793011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Binbo Kids Rumi Golden Costume, Kpop Girls Halloween Cosplay Outfit 3PSC Set Include Jacket T-Shirt Shorts",
+      "_source": {
+        "platform": "amazon",
+        "catId": 165793011,
+        "catName": "玩具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    },
+    {
+      "goodsNameEn": "Binbo Kids Rumi Golden Costume, Kpop Girls Halloween Cosplay Outfit 3PSC Set Include Jacket T-Shirt Shorts",
+      "goodsNameCn": "Binbo Kids Rumi Golden Costume, Kpop Girls Halloween Cosplay Outfit 3PSC Set Include Jacket T-Shirt ",
+      "thumbnail": "https://m.media-amazon.com/images/I/71DW8fLMjfL._AC_SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 29,
+      "sales": null,
+      "goodsPriceMin": 45.99,
+      "goodsPriceMax": null,
+      "reviewNum": 116,
+      "rating": 3.8,
+      "mallOpenTime": "2020-11-09T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-03T00:00:00.000+08:00",
+      "goodsId": "B0FT3MGXQP",
+      "detailUrl": "B0FT3MGXQP",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 9019,
+          "catId": "14702634011",
+          "catName": "服装",
+          "catLevel": 3,
+          "parentCatId": "166316011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 3020,
+          "catId": "165793011",
+          "catName": "玩具",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 7571,
+          "catId": "166316011",
+          "catName": "扮靓",
+          "catLevel": 2,
+          "parentCatId": "165793011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Binbo Kids Rumi Golden Costume, Kpop Girls Halloween Cosplay Outfit 3PSC Set Include Jacket T-Shirt Shorts",
+      "_source": {
+        "platform": "amazon",
+        "catId": 165793011,
+        "catName": "玩具",
+        "channel": "hot-sale",
+        "channelTitle": "热销商品"
+      }
+    }
+  ]
+}

@@ -1,0 +1,584 @@
+[
+  {
+    "goodsNameEn": "[Portable Lint Remover] Portable USB Rechargeable Lint Remover | Fabric Shaver & Clothes Trimmer, Wool Ball Cutter with Long-Lasting Battery - Perfect Christmas Gift for Home & Travel Use, Garment Hai",
+    "goodsNameCn": "USB可充电除毛球-便携式织物剃毛器和衣物修剪机，衣服袜子毛球修剪器，脱毛衣物，家用和旅行用长效电池，完美的圣诞礼物，衣物除毛器",
+    "thumbnail": "https://img.kwcdn.com/product/fancy/420f191d-2025-4e4c-945c-72c96c7d44a7.jpg",
+    "thumbnailCn": "https://cbu01.alicdn.com/O1CN01iTLOnQ2IKLPPqVuUS_!!2219854779267-0-cib.jpg",
+    "sold": 100000,
+    "sales": 664000,
+    "goodsPriceMin": 6.64,
+    "goodsPriceMax": 6.59,
+    "reviewNum": 929,
+    "rating": 4.7,
+    "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+    "onSaleTime": "2025-08-25T06:13:06.000+00:00",
+    "goodsId": "601102938387491",
+    "detailUrl": "601102938387491",
+    "platform": "temu",
+    "catItems": [
+      {
+        "id": 9260,
+        "catId": 2096,
+        "catName": "家电",
+        "catLevel": 1,
+        "parentCatId": 0,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 11312,
+        "catId": 39198,
+        "catName": "个护电子",
+        "catLevel": 2,
+        "parentCatId": 2096,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 3420,
+        "catId": 39215,
+        "catName": "毛球修剪器",
+        "catLevel": 3,
+        "parentCatId": 39198,
+        "isLeaf": true,
+        "optId": 2050
+      }
+    ],
+    "goodsName": "USB可充电除毛球-便携式织物剃毛器和衣物修剪机，衣服袜子毛球修剪器，脱毛衣物，家用和旅行用长效电池，完美的圣诞礼物，衣物除毛器",
+    "_source": {
+      "platform": "temu",
+      "catId": 2096,
+      "catName": "家电",
+      "channel": "热销商品"
+    },
+    "_score": 46.468015713993644,
+    "_selectorId": "20260428001"
+  },
+  {
+    "goodsNameEn": "1 rechargeable ultra strong cordless handheld vacuum cleaner, lightweight and portable design, barrier free wireless cleaning, strong suction, high cleaning efficiency, convenient for families and car",
+    "goodsNameCn": "1台充电款超强力无绳手持式吸尘器轻便、便携设计，无障碍无线清洁，吸力强，清洁效率高，方便家庭、汽车",
+    "thumbnail": "https://img.kwcdn.com/product/fancy/32cb4fae-3301-44cb-9537-8bcecb3e134d.jpg",
+    "thumbnailCn": "https://cbu01.alicdn.com/O1CN01j8SMjd1VkWvElF7wG_!!2220523012691-0-cib.jpg",
+    "sold": 100000,
+    "sales": 1618000,
+    "goodsPriceMin": 16.18,
+    "goodsPriceMax": 19.17,
+    "reviewNum": 4136,
+    "rating": 4.5,
+    "mallOpenTime": "2023-09-11T02:48:07.382+00:00",
+    "onSaleTime": "2024-09-08T11:28:29.648+00:00",
+    "goodsId": "601099642543433",
+    "detailUrl": "601099642543433",
+    "platform": "temu",
+    "catItems": [
+      {
+        "id": 9260,
+        "catId": 2096,
+        "catName": "家电",
+        "catLevel": 1,
+        "parentCatId": 0,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 3380,
+        "catId": 2487,
+        "catName": "吸尘器和地板护理器具",
+        "catLevel": 2,
+        "parentCatId": 2096,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 3384,
+        "catId": 2491,
+        "catName": "吸尘器",
+        "catLevel": 3,
+        "parentCatId": 2487,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 3387,
+        "catId": 2494,
+        "catName": "杆式吸尘器",
+        "catLevel": 4,
+        "parentCatId": 2491,
+        "isLeaf": true,
+        "optId": null
+      }
+    ],
+    "goodsName": "1台充电款超强力无绳手持式吸尘器轻便、便携设计，无障碍无线清洁，吸力强，清洁效率高，方便家庭、汽车",
+    "_source": {
+      "platform": "temu",
+      "catId": 2096,
+      "catName": "家电",
+      "channel": "热销商品"
+    },
+    "_score": 43.11658053008588,
+    "_selectorId": "20260428002"
+  },
+  {
+    "goodsNameEn": "Portable Electric Balloon Pump/Electric Balloon Inflator Decoration, Suitable For Halloween Parties, Gifts, Wedding Celebrations, Holiday Party Decoration, Balloon Pump",
+    "goodsNameCn": "工具和家居装修, 电动工具, 电动气泵",
+    "thumbnail": "//img.ltwebstatic.com/images3_spmp/2025/03/17/50/1742199962748fedbec7190d441621fece7e027feb_square_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 40016,
+    "sales": 89600,
+    "goodsPriceMin": 7,
+    "goodsPriceMax": 130.13,
+    "reviewNum": 3,
+    "rating": 4.88,
+    "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+    "onSaleTime": "2025-03-17T00:00:00.000+08:00",
+    "goodsId": "61222301",
+    "detailUrl": "61222301",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 62,
+        "catId": 4327,
+        "catName": "Tools & Home Improvement",
+        "catNameCn": "工具和家居装修",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      },
+      {
+        "id": 73,
+        "catId": 4469,
+        "catName": "Power Tools",
+        "catNameCn": "电动工具",
+        "catLevel": 1,
+        "parentCatId": 4327,
+        "isLeaf": false
+      },
+      {
+        "id": 3508,
+        "catId": 10404,
+        "catName": "Electric Air Pumps",
+        "catNameCn": "电动气泵",
+        "catLevel": 2,
+        "parentCatId": 4469,
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "Portable Electric Balloon Pump/Electric Balloon Inflator Decoration, Suitable For Halloween Parties, Gifts, Wedding Celebrations, Holiday Party Decoration, Balloon Pump",
+    "_source": {
+      "platform": "shein",
+      "catId": 4327,
+      "catName": "工具和家居装修",
+      "channel": "热销商品"
+    },
+    "_score": 50.90335051157964,
+    "_selectorId": "20260428003"
+  },
+  {
+    "goodsNameEn": "100FT LED Strip Light, Music Sync Tape Lighting, RGB Color Changing  Lighting With Remote, Smart APP Control, LED Lights For Bedroom,TV, Room DIY (APP+Remote)",
+    "goodsNameCn": "照明和灯, LED条形灯, 新奇照明, 工具和家居装修",
+    "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/17/5b/1763361257c1766a12ad95bcb1689f0b577d30ba7f_square_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 7387,
+    "sales": 63262,
+    "goodsPriceMin": 6.73,
+    "goodsPriceMax": null,
+    "reviewNum": 853,
+    "rating": 4.69,
+    "mallOpenTime": "2023-06-22T00:00:00.000+08:00",
+    "onSaleTime": "2025-11-17T08:00:00.000+08:00",
+    "goodsId": "293248809",
+    "detailUrl": "293248809",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 363,
+        "catId": 2299,
+        "catName": "Lighting & Lamp",
+        "catNameCn": "照明和灯",
+        "catLevel": 1,
+        "parentCatId": 4327,
+        "isLeaf": false
+      },
+      {
+        "id": 365,
+        "catId": 2310,
+        "catName": "LED Strip Lights",
+        "catNameCn": "LED条形灯",
+        "catLevel": 3,
+        "parentCatId": 3373,
+        "isLeaf": true
+      },
+      {
+        "id": 364,
+        "catId": 3373,
+        "catName": "Novelty Lighting",
+        "catNameCn": "新奇照明",
+        "catLevel": 2,
+        "parentCatId": 2299,
+        "isLeaf": false
+      },
+      {
+        "id": 62,
+        "catId": 4327,
+        "catName": "Tools & Home Improvement",
+        "catNameCn": "工具和家居装修",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      }
+    ],
+    "goodsName": "100FT LED Strip Light, Music Sync Tape Lighting, RGB Color Changing  Lighting With Remote, Smart APP Control, LED Lights For Bedroom,TV, Room DIY (APP+Remote)",
+    "_source": {
+      "platform": "shein",
+      "catId": 4327,
+      "catName": "工具和家居装修",
+      "channel": "热销商品"
+    },
+    "_score": 40.733651179699,
+    "_selectorId": "20260428004"
+  },
+  {
+    "goodsNameEn": "Physician's CHOICE Probiotics 60 Billion CFU - 10 Strains + Organic Prebiotics - Immune, Digestive & Gut Health - Supports Occasional Constipation, Diarrhea, Gas & Bloating - for Women & Men - 30ct",
+    "goodsNameCn": "Physician's CHOICE Probiotics 60 Billion CFU - 10 Strains + Organic Prebiotics - Immune, Digestive &",
+    "thumbnail": "https://m.media-amazon.com/images/I/810wCtCHD-L._AC_UY218_.jpg",
+    "thumbnailCn": "",
+    "sold": 9886342,
+    "sales": null,
+    "goodsPriceMin": 21.57,
+    "goodsPriceMax": null,
+    "reviewNum": 1413,
+    "rating": 4.6,
+    "mallOpenTime": "2018-02-08T16:00:00.000+08:00",
+    "onSaleTime": "2018-02-08T16:00:00.000+08:00",
+    "goodsId": "B079H53D2B",
+    "detailUrl": "B079H53D2B",
+    "platform": "amazon",
+    "catItems": [
+      {
+        "id": 7376,
+        "catId": "23675621011",
+        "catName": "身、泳和附剂",
+        "catLevel": 2,
+        "parentCatId": "3760901",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 236,
+        "catId": "3760901",
+        "catName": "健康与家居",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 13030,
+        "catId": "3774071",
+        "catName": "查看",
+        "catLevel": 4,
+        "parentCatId": "6942464011",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 10576,
+        "catId": "6942464011",
+        "catName": "补充补充剂",
+        "catLevel": 3,
+        "parentCatId": "23675621011",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 13680,
+        "catId": "6942484011",
+        "catName": "嗜酸乳",
+        "catLevel": 5,
+        "parentCatId": "3774071",
+        "isLeaf": true,
+        "siteId": 1
+      }
+    ],
+    "goodsName": "Physician's CHOICE Probiotics 60 Billion CFU - 10 Strains + Organic Prebiotics - Immune, Digestive & Gut Health - Supports Occasional Constipation, Diarrhea, Gas & Bloating - for Women & Men - 30ct",
+    "_source": {
+      "platform": "amazon",
+      "catId": 3760901,
+      "catName": "健康与家居",
+      "channel": "热销商品"
+    },
+    "_score": 22.64269560686572,
+    "_selectorId": "20260428005"
+  },
+  {
+    "goodsNameEn": "ComfortPlus Toilet Paper, 12 Triple Rolls, 231 Sheets per Roll, Septic-Safe, 1-Ply Toilet TissueForestry practicesDiscover more products with sustainability features.",
+    "goodsNameCn": "ComfortPlus Toilet Paper, 12 Triple Rolls, 231 Sheets per Roll, Septic-Safe, 1-Ply Toilet TissueFore",
+    "thumbnail": "https://m.media-amazon.com/images/I/81DRDg-i4BL._AC_UL320_.jpg",
+    "thumbnailCn": "",
+    "sold": 1357676,
+    "sales": null,
+    "goodsPriceMin": 5.68,
+    "goodsPriceMax": null,
+    "reviewNum": 136,
+    "rating": 4.5,
+    "mallOpenTime": "2018-03-19T00:00:00.000+08:00",
+    "onSaleTime": "2025-02-13T08:00:00.000+08:00",
+    "goodsId": "B07BGLT25K",
+    "detailUrl": "B07BGLT25K",
+    "platform": "amazon",
+    "catItems": [
+      {
+        "id": 2059,
+        "catId": "15342811",
+        "catName": "家居用品",
+        "catLevel": 2,
+        "parentCatId": "3760901",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 5995,
+        "catId": "15342841",
+        "catName": "纸张和塑料",
+        "catLevel": 3,
+        "parentCatId": "15342811",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 236,
+        "catId": "3760901",
+        "catName": "健康与家居",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false,
+        "siteId": 1
+      }
+    ],
+    "goodsName": "ComfortPlus Toilet Paper, 12 Triple Rolls, 231 Sheets per Roll, Septic-Safe, 1-Ply Toilet TissueForestry practicesDiscover more products with sustainability features.",
+    "_source": {
+      "platform": "amazon",
+      "catId": 3760901,
+      "catName": "健康与家居",
+      "channel": "热销商品"
+    },
+    "_score": 20.33273311976628,
+    "_selectorId": "20260428006"
+  },
+  {
+    "goodsNameEn": "1PC Portable Electric High-Pressure Water Flosser Manual Pulse Jet Dental Teeth And Gums Cleaner Deep Cleaning Oral Irrigator",
+    "goodsNameCn": "1PC Portable Electric High-Pressure Water Flosser Manual Pulse Jet Dental Teeth And Gums Cleaner Dee",
+    "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Safe9c75710f246349e099f2c3817ea254.jpg",
+    "thumbnailCn": "",
+    "sold": 145588,
+    "sales": null,
+    "goodsPriceMin": 0.93,
+    "goodsPriceMax": 6.67,
+    "reviewNum": 19273,
+    "rating": 4.9,
+    "mallOpenTime": "2024-03-01T00:05:27.000+08:00",
+    "onSaleTime": "2024-08-01T00:00:00.000+08:00",
+    "goodsId": "3256806984046150",
+    "detailUrl": "3256806984046150",
+    "platform": "sumaitong",
+    "catItems": [
+      {
+        "id": 12,
+        "catId": "66",
+        "catName": "美容健康",
+        "catLevel": 0,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 5843,
+        "catId": "3305",
+        "catName": "口腔清洁",
+        "catLevel": 1,
+        "parentCatId": "66",
+        "isLeaf": false
+      },
+      {
+        "id": 6283,
+        "catId": "100000620",
+        "catName": "牙间刷",
+        "catLevel": 2,
+        "parentCatId": "3305",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "1PC Portable Electric High-Pressure Water Flosser Manual Pulse Jet Dental Teeth And Gums Cleaner Deep Cleaning Oral Irrigator",
+    "_source": {
+      "platform": "sumaitong",
+      "catId": 66,
+      "catName": "美容健康",
+      "channel": "热销商品"
+    },
+    "_score": 26.029637691404687,
+    "_selectorId": "20260428007"
+  },
+  {
+    "goodsNameEn": "500pcs Double Head Wood Cotton Swab Nose Ears Cleaning Women Makeup Tools Lipstik Cotton Buds Tip Sticks Bastoncillos Oidos",
+    "goodsNameCn": "500pcs Double Head Wood Cotton Swab Nose Ears Cleaning Women Makeup Tools Lipstik Cotton Buds Tip St",
+    "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sf19627521d30464287f63c7a87f87395e.jpg",
+    "thumbnailCn": "",
+    "sold": 145605,
+    "sales": null,
+    "goodsPriceMin": 1.33,
+    "goodsPriceMax": 0.99,
+    "reviewNum": 28811,
+    "rating": 4.9,
+    "mallOpenTime": "2024-03-01T00:05:27.000+08:00",
+    "onSaleTime": "2024-04-28T00:00:00.000+08:00",
+    "goodsId": "3256806718312550",
+    "detailUrl": "3256806718312550",
+    "platform": "sumaitong",
+    "catItems": [
+      {
+        "id": 12,
+        "catId": "66",
+        "catName": "美容健康",
+        "catLevel": 0,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 5840,
+        "catId": "1513",
+        "catName": "卫生用纸",
+        "catLevel": 1,
+        "parentCatId": "66",
+        "isLeaf": false
+      },
+      {
+        "id": 5925,
+        "catId": "200001296",
+        "catName": "棉签（婴儿的请发布到婴儿棉签下）",
+        "catLevel": 2,
+        "parentCatId": "1513",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "500pcs Double Head Wood Cotton Swab Nose Ears Cleaning Women Makeup Tools Lipstik Cotton Buds Tip Sticks Bastoncillos Oidos",
+    "_source": {
+      "platform": "sumaitong",
+      "catId": 66,
+      "catName": "美容健康",
+      "channel": "热销商品"
+    },
+    "_score": 23.204322765473837,
+    "_selectorId": "20260428008"
+  },
+  {
+    "goodsNameEn": "【Hieha】Spring Outing Portable Car Jump Starter, 4000A Car Battery Jump Starter with 150PSI Tire Inflator, 12V Car Battery Jump Starter, 15000mAh Power Bank, with LED Light，Mother's Day gift",
+    "goodsNameCn": "【Hieha】Spring Outing Portable Car Jump Starter, 4000A Car Battery Jump Starter with 150PSI Tire Infl",
+    "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/b64d3a63f5f448dea9627c2ac0d617f1~tplv-fhlh96nyum-crop-webp:3600:3600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+    "thumbnailCn": "",
+    "sold": 318225,
+    "sales": null,
+    "goodsPriceMin": 38.99,
+    "goodsPriceMax": 55.99,
+    "reviewNum": 29082,
+    "rating": 4.6,
+    "mallOpenTime": null,
+    "onSaleTime": "2024-09-29T11:04:05.833+08:00",
+    "goodsId": "1729492189712846969",
+    "detailUrl": "1729492189712846969",
+    "platform": "tiktok",
+    "catItems": [
+      {
+        "id": 9863,
+        "catId": "605196",
+        "catName": "Automotive & Motorcycle",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 9903,
+        "catId": "940296",
+        "catName": "Car Repair Tools",
+        "catLevel": 2,
+        "parentCatId": "605196",
+        "isLeaf": false
+      },
+      {
+        "id": 10561,
+        "catId": "941448",
+        "catName": "Car Battery Repair Tools",
+        "catLevel": 3,
+        "parentCatId": "940296",
+        "isLeaf": false
+      },
+      {
+        "id": 11920,
+        "catId": "1451152",
+        "catName": "Battery Charging Units",
+        "catLevel": 4,
+        "parentCatId": "941448",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "【Hieha】Spring Outing Portable Car Jump Starter, 4000A Car Battery Jump Starter with 150PSI Tire Inflator, 12V Car Battery Jump Starter, 15000mAh Power Bank, with LED Light，Mother's Day gift",
+    "_source": {
+      "platform": "tiktok",
+      "catId": 605196,
+      "catName": "Automotive & Motorcycle",
+      "channel": "热销商品"
+    },
+    "_score": 48.71772571284387,
+    "_selectorId": "20260428009"
+  },
+  {
+    "goodsNameEn": "【PASLDA】2026 Mother's Day  Gift -Upgraded Wireless CarPlay Screen for Andriod & Iphone : The Ultimate Portable Car Play Adapter for Seamless In-Car Entertainment Summervibes",
+    "goodsNameCn": "【PASLDA】2026 Mother's Day  Gift -Upgraded Wireless CarPlay Screen for Andriod & Iphone : The Ultimat",
+    "thumbnail": "https://p16-oec-general-useast8.ttcdn-us.com/tos-useast8-i-rt0ujvrtvp-tx2/ecbf0103597e4a6085b74a99d11aa476~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+    "thumbnailCn": "",
+    "sold": 442738,
+    "sales": null,
+    "goodsPriceMin": 46.99,
+    "goodsPriceMax": null,
+    "reviewNum": 47393,
+    "rating": 4.2,
+    "mallOpenTime": null,
+    "onSaleTime": "2024-10-16T09:16:38.215+08:00",
+    "goodsId": "1729569241736188017",
+    "detailUrl": "1729569241736188017",
+    "platform": "tiktok",
+    "catItems": [
+      {
+        "id": 9863,
+        "catId": "605196",
+        "catName": "Automotive & Motorcycle",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 10018,
+        "catId": "929928",
+        "catName": "Car Electronics",
+        "catLevel": 2,
+        "parentCatId": "605196",
+        "isLeaf": false
+      },
+      {
+        "id": 11241,
+        "catId": "930952",
+        "catName": "Car Video Players",
+        "catLevel": 3,
+        "parentCatId": "929928",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "【PASLDA】2026 Mother's Day  Gift -Upgraded Wireless CarPlay Screen for Andriod & Iphone : The Ultimate Portable Car Play Adapter for Seamless In-Car Entertainment Summervibes",
+    "_source": {
+      "platform": "tiktok",
+      "catId": 605196,
+      "catName": "Automotive & Motorcycle",
+      "channel": "热销商品"
+    },
+    "_score": 43.64493439893488,
+    "_selectorId": "20260428010"
+  }
+]

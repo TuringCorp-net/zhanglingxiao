@@ -22,7 +22,7 @@
 
 const crawlState = {
   // 最后更新时间
-  lastUpdated: "2026-04-27T03:06:00.000Z",
+  lastUpdated: "2026-04-28T11:05:00.000Z",
 
   // 各平台类目状态
   platforms: {
@@ -44,7 +44,7 @@ const crawlState = {
         { catId: 18768, catName: "美容和个人护理", lastCrawled: null },
         { catId: 19858, catName: "汽车用品", lastCrawled: null },
         { catId: 23177, catName: "视频游戏", lastCrawled: null },
-        { catId: 24252, catName: "手机和配件", lastCrawled: null },
+        { catId: 24252, catName: "手机和配件", lastCrawled: "2026-04-28T11:05:00.000Z" },
         { catId: 24389, catName: "庭院、草坪和园艺", lastCrawled: null },
         { catId: 25439, catName: "玩具与游戏", lastCrawled: "2026-04-27T02:05:00.000Z" },
         { catId: 26207, catName: "母婴用品", lastCrawled: "2026-04-26T00:08:35.886Z" },
@@ -76,7 +76,7 @@ const crawlState = {
         { catId: 2297, catName: "办公和学校用品", lastCrawled: null },
         { catId: 2038, catName: "内衣和睡衣", lastCrawled: null },
         { catId: 3224, catName: "宝贝儿", lastCrawled: null },
-        { catId: 4328, catName: "玩具和游戏", lastCrawled: null },
+        { catId: 4328, catName: "玩具和游戏", lastCrawled: "2026-04-28T11:05:00.000Z" },
         { catId: 3636, catName: "鞋", lastCrawled: null },
         { catId: 4083, catName: "家用纺织品", lastCrawled: null },
         { catId: 3657, catName: "汽车类", lastCrawled: null },
@@ -107,14 +107,14 @@ const crawlState = {
         { catId: 1055398, catName: "家居用品", lastCrawled: null },
         { catId: 706813011, catName: "狩猎&渔具", lastCrawled: null },
         { catId: 16310091, catName: "工业类", lastCrawled: null },
-        { catId: 11091801, catName: "乐器", lastCrawled: null },
+        { catId: 11091801, catName: "乐器", lastCrawled: "2026-04-28T11:05:00.000Z" },
         { catId: 1064954, catName: "办公产品", lastCrawled: null },
         { catId: 2972638011, catName: "庭院、草坪和园艺", lastCrawled: null },
         { catId: 2619533011, catName: "宠物用品", lastCrawled: null },
         { catId: 328182011, catName: "电动和手动工具", lastCrawled: null },
         { catId: 3375251, catName: "运动与户外", lastCrawled: null },
         { catId: 228013, catName: "工具", lastCrawled: null },
-        { catId: 165793011, catName: "玩具", lastCrawled: null },
+        { catId: 165793011, catName: "玩具", lastCrawled: "2026-04-28T11:05:00.000Z" },
         { catId: 468642, catName: "视频游戏", lastCrawled: "2026-04-27T03:06:00.000Z" }
       ]
     },
@@ -139,7 +139,7 @@ const crawlState = {
         { catId: 320, catName: "婚礼及重要场合", lastCrawled: null },
         { catId: 322, catName: "鞋子", lastCrawled: null },
         { catId: 509, catName: "电话和通讯", lastCrawled: null },
-        { catId: 1420, catName: "工具", lastCrawled: null },
+        { catId: 1420, catName: "工具", lastCrawled: "2026-04-28T11:05:00.000Z" },
         { catId: 1501, catName: "孕婴童", lastCrawled: null },
         { catId: 1503, catName: "家具和室内装饰品", lastCrawled: null },
         { catId: 1511, catName: "手表", lastCrawled: null },
@@ -173,10 +173,10 @@ const crawlState = {
         { catId: 700645, catName: "Health", lastCrawled: "2026-04-27T01:05:12.000Z" },
         { catId: 604968, catName: "Home Improvement", lastCrawled: "2026-04-27T02:05:00.000Z" },
         { catId: 601152, catName: "Womenswear & Underwear", lastCrawled: "2026-04-27T03:06:00.000Z" },
-        { catId: 605196, catName: "Automotive & Motorcycle", lastCrawled: null },
-        { catId: 700437, catName: "Food & Beverages", lastCrawled: null },
-        { catId: 602284, catName: "Baby & Maternity", lastCrawled: null },
-        { catId: 600001, catName: "Home Supplies", lastCrawled: null },
+        { catId: 605196, catName: "Automotive & Motorcycle", lastCrawled: "2026-04-28T00:00:00.000Z" },
+        { catId: 700437, catName: "Food & Beverages", lastCrawled: "2026-04-28T01:04:22.750Z" },
+        { catId: 602284, catName: "Baby & Maternity", lastCrawled: "2026-04-28T01:06:07.573Z" },
+        { catId: 600001, catName: "Home Supplies", lastCrawled: "2026-04-28T09:30:00.000Z" },
         { catId: 602118, catName: "Pet Supplies", lastCrawled: null },
         { catId: 824328, catName: "Menswear & Underwear", lastCrawled: null },
         { catId: 856720, catName: "Pre-Owned", lastCrawled: null },
