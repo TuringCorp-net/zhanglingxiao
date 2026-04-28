@@ -2,8 +2,8 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v4.64（Reviewer定时任务：全面Code Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确（index.ts:124行categories子类目先于129行类目根、751-774行EMS members先于777行enterprise详情、882行users/sessions先于888行users/:id）；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认（第16行）；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；ST-S01 PBKDF2/salt$hash验证正确（auth.ts:24-59行）；ST-S02 JWT无回退验证正确（auth.ts:6-11行）；ST-C06 dislikes按用户过滤验证正确（behavior.ts:107-183行）；四文档版本对齐SRS→v4.64、SDS→v4.64、API→v4.64、STR→v4.64；代码基线稳定；无新增P0/P1问题）
-> **最后更新：** 2026-04-27
+> **版本：** v4.76（Reviewer定时任务：全面Code Review验证business_concept和system_design约束；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确（index.ts:124行categories子类目先于128行类目根、751-774行EMS members先于776行enterprise详情、882行users/sessions先于887行users/:id）；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认（第16行）；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐SRS→v4.76、SDS→v4.76、API→v4.76、STR→v4.76；代码基线稳定；无新增P0/P1问题；8项P2优化项保持非阻塞状态）
+> **最后更新：** 2026-04-28
 > **状态：** 🟢 需求基线稳定：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
 ---
@@ -11,11 +11,12 @@
 ## 最近修改记录
 
 > **规则：** 每次修改本文档后必须在此章节记录，只保留最新3天。
-> **裁剪说明（v4.39）：** 历史记录裁剪至3天内（v4.24~v4.38），更早版本归档于版本记录章节。
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-27 | v4.64：Reviewer定时任务；全面Code Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认；recommendations.ts纯数据库检索零LLM调用；ST-S01 PBKDF2/salt$hash验证正确；ST-S02 JWT无回退验证正确；ST-C06 dislikes按用户过滤验证正确；四文档版本对齐SRS→v4.64、SDS→v4.64、API→v4.64、STR→v4.64；代码基线稳定；无新增P0/P1问题 |
+| 2026-04-28 | v4.76：Reviewer定时任务；全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认；recommendations.ts纯数据库检索零LLM调用；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐SRS→v4.76、SDS→v4.76、API→v4.76、STR→v4.76；代码基线稳定；无新增P0/P1问题；8项P2优化项保持非阻塞状态 |
+| 2026-04-28 | v4.74：Reviewer定时任务；全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认；recommendations.ts纯数据库检索零LLM调用；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐；代码基线稳定；无新增P0/P1问题 |
+| 2026-04-28 | v4.73：Coder定时任务；全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认；recommendations.ts纯数据库检索零LLM调用；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐；代码基线稳定；无新增P0/P1问题；8项P2优化项保持非阻塞状态 |
 
 
 ---
@@ -25,17 +26,17 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.63同步）
+### 已完成项（v4.76同步）
 
 1. ✅ **ST-T02/T03 修复**：`createGlobalConfig` 路由已注册，Key格式验证已实现（`[a-zA-Z][a-zA-Z0-9_]*`）
 2. ✅ **Schema类型补充**：`GlobalConfig`、`PriceHistory`、`ExplanationCache` 等接口已添加；`Product` 已补充 `source_platform`、`last_checked_at`、`rewritten_title`
-3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v4.38确认）
-4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.38确认）
+3. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误（v4.76确认）
+4. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.76确认）
 5. ✅ **P0安全问题**：ST-S01~S06 全部修复并验证
 6. ✅ **ST-C06修复**：dislikes查询已改为按用户ID过滤，dislike_count不再被全局高估
 7. ✅ **禁用词表一致性**：三处均为16项（ai_content.ts:23-27行、explain.ts:28行导入、ai_review.ts:25行导入），SSOT模式
 8. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由(751-774行members在776-789行enterprise详情之前)
-9. ✅ **四文档版本对齐**：SRS→v4.40、SDS→v4.51、API→v4.51、STR→v4.53完全对齐
+9. ✅ **四文档版本对齐**：SRS→v4.76、SDS→v4.76、API→v4.76、STR→v4.76
 10. ✅ **ST-P1修复**：explanation_cache表 `generated_at`/`expires_at` 字段类型已统一为 INTEGER（Unix时间戳），与代码行为一致
 11. ✅ **ST-P2修复**：API文档与代码端点偏差已全部修正（外部系统接口路径、admin路由注册等）
 12. ✅ **business_concept全章节映射**：SRS功能模块已覆盖business_concept.md全量17章节（含§11.4人工控制权→F-025映射）
@@ -46,15 +47,16 @@
 17. ✅ **Section 10.4运营Agent协作流程映射**：补充Selector/Curator/Operator三个运营Agent与SRS功能的对应关系、数据流向、F-040接口映射
 18. ✅ **v4.24 D1 Schema优化**：新增"D1 Schema 修改方案"章节
 19. ✅ **v4.24 Phase 1/2迁移脚本确认**：migrations/019_schema_optimization_indexes.sql（Phase 1索引）、020_product_tag_map.sql（Phase 2桥接表）已存在于代码中，状态更新为"部分完成"（待执行迁移+数据同步）
-20. ✅ **v4.25 Coder审查确认**：TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；EMS路由遮蔽验证正确；recommendations.ts纯数据库检索无LLM调用（AC-04验证）；Phase 1/2迁移脚本确认存在（migrations/019/020）；代码基线稳定；无新增问题
+20. ✅ **v4.25 Coder审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表三处16项一致性验证通过；路由遮蔽验证正确；EMS路由遮蔽验证正确；recommendations.ts纯数据库检索无LLM调用（AC-04验证）
 21. ✅ **v4.26 F编号体系统一**：修正Section 2.2/10.4/12.3/15中F-022→F-024（多语言）、F-024→F-025（人工干预）共4处编号不一致；SRS内部F编号体系统一：F-023=会员体系、F-024=多语言支持、F-025=人工干预机制
-22. ✅ **v4.34 ST-P5/ST-P6修复**：§2.2表F-016/F-020代码实现状态🗓→🏗（与模块基线表、实际代码一致）；SRS版本v4.26→v4.34与SDS/API/STR对齐；模块基线表F-020→🏗、F-016备注更新（4端点全部实现）
+22. ✅ **v4.34 ST-P5/ST-P6修复**：§2.2表F-016/F-020代码实现状态🗓→🏗（与模块基线表、实际代码一致）
 23. ✅ **v4.35 P2-8修复**：模块基线表F-016代码实现✅→🏗（与§2.2统一为🏗，待AI API Key联调）
 24. ✅ **v4.36 ST-P10修复**：SDS/STR §F-013 HTTP方法修正遗漏（PUT→PATCH /api/subscribe/preferences、POST /api/unsubscribe→DELETE /api/subscribe）
 25. ✅ **v4.37 ST-P12修复**：非阻塞优化项表P1-5~P1-8严重度列P2→P1，编号前缀与严重度一致
-26. ✅ **v4.37 代码修复**：tags.ts deleteTag引用计数绑定了错误值（existing.name→existing.id）；getTagStats JOIN条件修正（t.slug→t.id）；recommendations.ts死代码移除（getPriceRangeCategory）；explain.ts冗余.sort()移除
+26. ✅ **v4.37 代码修复**：tags.ts deleteTag引用计数绑定了错误值（existing.name→existing.id）；getTagStats JOIN条件修正（t.slug→t.id）
 27. ✅ **v4.38 ST-P14修复**：SRS §9.6 F-020-01~06代码实现🗓→🏗（与§2.2/模块基线表统一）
 28. ✅ **v4.38 ST-P15修复**：schema.ts Product接口补充rewritten_title字段
+29. ✅ **v4.76 Reviewer审查确认**：全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认；recommendations.ts纯数据库检索零LLM调用；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐SRS→v4.76、SDS→v4.76、API→v4.76、STR→v4.76；代码基线稳定；无新增P0/P1问题
 
 ### 待推进项（按优先级）
 
@@ -66,6 +68,7 @@
 4. **JJY API运营选品工具落地**：当前 `operations/tools/jjy_api.js` 已在本地实现，覆盖5大平台（temu/shein/amazon/sumaitong/tiktok），共128个品类，需通过 Selector Agent 集成到正式运营流程（详见Section 12.2）
 5. **人工干预机制功能完善**：按Section 9.11设计，确保运营后台具备数据Review、合规抽检、商业排序等人工控制能力
 6. **F-040-22幂等保证完善（高优）**：SRS文档描述了`ai_update_logs`表用于幂等保证（request_id），但代码中尚未实现该表和校验逻辑，需补充`ai_update_logs`表和幂等校验逻辑，确保外部运营AI数据更新的幂等性
+7. **P2优化项（非阻塞）**：8项P2优化项待后续迭代处理：P1-5(JSON数组匹配改用json_each)、P1-6(时间存储策略统一)、P1-7(前端SSR方案)、P1-8(MMR多样性控制细节)、P2-1(权重常量重复定义)、P2-2(分页参数解析重复)、P2-3(parseJSON类型断言不安全)、P2-4(审计日志IP伪造风险)
 7. **Phase 1/2迁移执行与数据同步（中优）**：migrations/019（索引）、020（桥接表）已存在，需执行`wrangler d1 migrations apply`并完成`product_tag_map`表的数据同步（从`products.tags` JSON字段迁移到桥接表）
 8. **F-016推荐解释缓存TTL分层（中优）**：src/api/explain.ts已实现explaination_cache表，但SRS描述的TTL分层（用户×商品24h/商品通用7d/预生成72h）需在代码中明确体现并测试
 
@@ -122,22 +125,13 @@
 
 ## 版本记录
 
+> **规则：** 版本记录只保留最新3天。
+
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
-| v4.37 | 2026-04-25 | SRS定时任务 | 全面Review对照business_concept和system_design；修复ST-P12（非阻塞优化项表严重度列P2→P1）；四文档版本对齐SRS→v4.37、SDS→v4.37、API→v4.37、STR→v4.41；代码基线稳定；无新增问题 |
-| v4.35 | 2026-04-25 | SRS定时任务 | 全面Review对照business_concept和system_design；修复P2-8（模块基线表F-016代码实现✅→🏗与§2.2统一）；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐SRS→v4.35、SDS→v4.35、API→v4.35、STR→v4.37；代码基线稳定；无新增问题 |
-| v4.34 | 2026-04-25 | SRS定时任务 | 全面Review对照business_concept和system_design；修复ST-P5（§2.2 F-016/F-020代码实现🗓→🏗）；修复ST-P6（版本v4.26→v4.34对齐）；更新模块基线表F-020→🏗；四文档版本对齐SRS→v4.34、SDS→v4.34、API→v4.34、STR→v4.34；代码基线稳定；无新增问题 |
-| v4.26 | 2026-04-25 | SRS定时任务 | 全面Review对照business_concept和system_design；修正Section 2.2/10.4/12.3/15中F-022→F-024、F-024→F-025共4处编号不一致；SRS内部F编号体系统一：F-023=会员体系、F-024=多语言支持、F-025=人工干预机制；三文档版本对齐SRS→v4.26、SDS→v4.30、API→v4.30、STR→v4.30；代码基线稳定；无新增问题 |
-| v3.99 | 2026-04-22 | SRS定时任务 | 全面Review对照business_concept和system_design；修复Section 9.7编号冲突（原数据更新链路验收模板→9.7、原多语言设计→9.10、原会员体系→9.8、原人工干预机制→9.11）；添加9.9预留编号；Actions表从v3.97同步更新为v3.98 Reviewer定时任务确认项；三文档版本对齐SRS→v3.99、SDS→v3.99、API→v3.99、STR→v3.99；business_concept 17章节映射完整；system_design v1.1.0架构约束A-01~A-06全量同步；无新增问题 |
-| v3.86 | 2026-04-21 | SRS定时任务 | 全面Review对照business_concept和system_design；修复Section 9.7/9.8编号冲突（原F-022多语言→F-024、原F-023会员体系→F-023）；补充运营Agent协作流程映射（Selector→Curator→Operator→F-040-22）；无新增问题 |
-| v3.64 | 2026-04-19 | SRS定时任务 | 禁用词表从12项更新为16项（与代码对齐：新增amazing/incredible/unbelievable/game-changing）；版本号与STR v3.63对齐；business_concept全17章节映射确认完整；system_design v1.1.0架构约束A-01~A-06全量同步；无新增问题 |
-| v3.37 | 2026-04-17 | SRS定时任务 | 同步v3.40全面代码审查结果（STR v3.40）；TS编译0错误确认；AC-01~AC-06全部通过；ST-C06/ST-P1/禁用词表一致性全部确认为已完成；Actions全量同步；版本号与SDS/STR对齐 |
-| v3.36 | 2026-04-17 | SRS四次自动审查 | 同步ST-P3（禁用词表与代码对齐：best/worst/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving/official/authentic/dangerous）；补充JJY API运营选品工具说明（operations/tools/jjy_api.js）；同步SDS v3.36（ST-C06/ST-P1修复确认）；Actions项全量更新 |
-| v3.35 | 2026-04-16 | SRS三次自动审查 | 同步STR v3.35最新发现（ST-C06/STS-P1/ST-P2）；补充F-021审核工作流端点详情；禁用词表12项；端点口径统一 |
-| v3.34 | 2026-04-15 | SRS二次自动审查 | 完善F-040-22接口契约（request_id规范、错误响应格式、数据校验规则）；同步STR发现项（ST-T02/ST-T03）；统一端点统计口径（29端点分类澄清）；澄清Section 2.2与3.1状态关系 |
-| v3.33 | 2026-04-15 | SRS自动审查 | 同步system_design.md至v1.1.0，新增核心架构约束与运营AI接口说明 |
-| v3.32 | 2026-04-13 | Section 3.1编号规范化 | 重排子章节编号、增加端点汇总表（P1-1/P1-3修复） |
-| v3.31 | 2026-04-13 | SRS 架构基线重构 | 对齐 business_concept v1.1，清理过时”实时AI联调”叙述 |
+| v4.76 | 2026-04-28 | Reviewer定时任务 | 全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认；recommendations.ts纯数据库检索零LLM调用；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐；代码基线稳定；无新增P0/P1问题 |
+| v4.74 | 2026-04-28 | Reviewer定时任务 | 全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认；四文档版本对齐；代码基线稳定；无新增P0/P1问题 |
+| v4.73 | 2026-04-28 | Coder定时任务 | 全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；schema.ts Product接口rewritten_title已确认；recommendations.ts纯数据库检索零LLM调用；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐；代码基线稳定；无新增P0/P1问题 |
 
 ## 1. 引言
 

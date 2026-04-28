@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-28
+- **文件**: 20260428-2604.22074-rlvr-reasoning-myth.md
+- **标题**: RL训练的AI真的会"思考"吗？新研究：你可能被"推理链"骗了
+- **论文来源**: arXiv:2604.22074 | Outcome Rewards Do Not Guarantee Verifiable or Causally Important Reasoning
+- **作者**: Qinan Yu, Alexa Tartaglini, Peter Hase, Carlos Guestrin, Christopher Potts（斯坦福大学）
+- **撰写日期**: 2026-04-28（北京时间）
+- **备注**: RLVR训练虽然提升AI准确率，但不保证推理链因果重要性和可验证性；19/40任务CIR下降，17/40任务SR下降；SFT前训练+辅助奖励可修复；联合奖励在保持精度的同时显著改善推理质量
+
 ### 2026-04-26
 - **文件**: 20260426-2604.21928-llm-asr-evaluation.md
 - **标题**: AI听懂你说话了吗？大模型或许比人类更能判断语音识别质量

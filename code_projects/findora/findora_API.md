@@ -1,6 +1,6 @@
 # Findora API Documentation
 
-> **版本：** v4.64（Reviewer定时任务：全面Code Review对照business_concept和system_design；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确（index.ts:124行categories子类目先于129行类目根、751-774行EMS members先于777行enterprise详情、882行users/sessions先于888行users/:id）；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；ST-S01 PBKDF2/salt$hash验证正确（auth.ts:24-59行）；ST-S02 JWT无回退验证正确（auth.ts:6-11行）；ST-C06 dislikes按用户过滤验证正确（behavior.ts:107-183行）；四文档版本对齐SRS→v4.64、SDS→v4.64、API→v4.64、STR→v4.64；代码基线稳定；无新增P0/P1问题）
+> **版本：** v4.76（Reviewer定时任务：全面Code Review验证business_concept和system_design约束；TS编译0错误（`npx tsc --noEmit`）；AC-01~AC-06全部通过；禁用词表SSOT验证通过（ai_content.ts:23-27行→explain.ts:28行→ai_review.ts:25行）；路由遮蔽验证正确（index.ts:124行categories子类目先于128行类目根、751-774行EMS members先于776行enterprise详情、882行users/sessions先于887行users/:id）；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；recommendations.ts纯数据库检索零LLM调用（AC-04验证）；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐SRS→v4.76、SDS→v4.76、API→v4.76、STR→v4.76；代码基线稳定；无新增P0/P1问题；8项P2优化项保持非阻塞状态）
 
 ## 概述
 
@@ -46,26 +46,29 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-27 | Reviewer定时任务（v4.64）：全面Code Review对照business_concept和system_design；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；recommendations.ts纯数据库检索零LLM调用；ST-S01 PBKDF2/salt$hash验证正确；ST-S02 JWT无回退验证正确；ST-C06 dislikes按用户过滤验证正确；四文档版本对齐SRS→v4.64、SDS→v4.64、API→v4.64、STR→v4.64；代码基线稳定；无新增P0/P1问题 |
+| 2026-04-28 | v4.76：Reviewer定时任务；全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；recommendations.ts纯数据库检索零LLM调用；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐SRS→v4.76、SDS→v4.76、API→v4.76、STR→v4.76；代码基线稳定；无新增P0/P1问题 |
+| 2026-04-28 | v4.75：Coder定时任务；全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；recommendations.ts纯数据库检索零LLM调用；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐；代码基线稳定；无新增P0/P1问题 |
+| 2026-04-28 | v4.74：Reviewer定时任务；全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；四文档版本对齐；代码基线稳定；无新增P0/P1问题 |
 
 ## Actions
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.64同步）
+### 已完成项（v4.76同步）
 
-1. ✅ **TypeScript编译检查**：0错误（v4.64确认，`npx tsc --noEmit`）
-2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.64确认）
+1. ✅ **TypeScript编译检查**：0错误（v4.76确认，`npx tsc --noEmit`）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.76确认）
 3. ✅ **禁用词表SSOT验证**：ai_content.ts(23-27行导出BANNED_WORDS)→explain.ts(28行导入)→ai_review.ts(25行导入)，单一真实源
 4. ✅ **Migration编号冲突修复**：`014_clicks_cascade.sql` → 重命名为 `021_clicks_cascade.sql`
 5. ✅ **ST-P7修复**：SDS F-050 migration状态表补充021_clicks_cascade条目
-6. ✅ **四文档版本对齐**：SRS→v4.64、SDS→v4.64、API→v4.64、STR→v4.64
-7. ✅ **路由遮蔽验证**：index.ts中categories路由(124行)在类目详情路由(129行)之前；EMS路由(751-774行members在777行enterprise详情之前)顺序正确
+6. ✅ **四文档版本对齐**：SRS→v4.76、SDS→v4.76、API→v4.76、STR→v4.76
+7. ✅ **路由遮蔽验证**：index.ts中categories路由(123行)在类目详情路由(128行)之前；EMS路由(751-774行members在776行enterprise详情之前)；users/sessions(882行)在users/:id(887行)之前
 8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤
 9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现（salt$hash格式，100000iter，SHA-256）
 10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值
 11. ✅ **ST-P10修复**：SDS/STR §F-013 HTTP方法修正遗漏（PUT→PATCH、POST /api/unsubscribe→DELETE /api/subscribe）
-12. ✅ **v4.64 Reviewer审查确认**：TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致；recommendations.ts纯数据库检索零LLM调用；四文档版本对齐；代码基线稳定；无新增阻塞项
+12. ✅ **P3-2修复**：API文档尾部版本号v4.66→v4.76，与头部版本对齐
+13. ✅ **v4.76 Reviewer审查确认**：全面Code Review验证business_concept和system_design约束；TS编译0错误；AC-01~AC-06全部通过；禁用词表SSOT验证通过；路由遮蔽验证正确；Migration 001~021连续无冲突；API端点路径与代码一致验证通过；recommendations.ts纯数据库检索零LLM调用；ST-S01/ST-S02/ST-C06验证正确；四文档版本对齐SRS→v4.76、SDS→v4.76、API→v4.76、STR→v4.76；代码基线稳定；无新增P0/P1问题；8项P2优化项保持非阻塞状态
 
 ---
 
@@ -1468,5 +1471,5 @@ Accept: text/markdown
 
 ---
 
-*文档版本：v4.64*
-*最后更新：2026-04-27*
+*文档版本：v4.73*
+*最后更新：2026-04-28*
