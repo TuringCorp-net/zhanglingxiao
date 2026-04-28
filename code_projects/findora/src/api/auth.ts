@@ -130,7 +130,8 @@ async function createAuditLog(
   changes: object | null = null
 ): Promise<void> {
   const id = crypto.randomUUID();
-  const ip = request.headers.get('CF-Connecting-IP') || request.headers.get('X-Forwarded-For') || null;
+  // ST-S05修复：仅使用Cloudflare提供的真实IP，避免X-Forwarded-For伪造
+  const ip = request.headers.get('CF-Connecting-IP') || null;
   const userAgent = request.headers.get('User-Agent') || null;
 
   await env.DB.prepare(`
