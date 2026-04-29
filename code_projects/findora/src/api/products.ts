@@ -318,6 +318,7 @@ export async function getProduct(env: Env, request: Request, id: string): Promis
 }
 
 // POST /api/admin/products - F-040-14
+// 幂等性支持：如果请求包含 request_id，先检查 ai_update_logs 避免重复写入
 export async function createProduct(env: Env, request: Request): Promise<Response> {
   const body = await request.json() as CreateProductRequest;
   const required = ['source_platform', 'source_url', 'original_title', 'category'];
@@ -328,6 +329,42 @@ export async function createProduct(env: Env, request: Request): Promise<Respons
         headers: { 'Content-Type': 'application/json' },
       });
     }
+  }
+
+  // F-040-22 幂等性保证：检查 request_id 是否已处理
+  const requestId = body.request_id as string | undefined;
+  if (requestId) {
+    const existingLog = await env.DB.prepare(
+      'SELECT id, result FROM ai_update_logs WHERE request_id = ?'
+    ).bind(requestId).first<{ id: string; result: string }>();
+    if (existingLog) {
+      // 已处理过的请求，返回之前的结果（幂等保证）
+      try {
+        const cached = JSON.parse(existingLog.result);
+        return new Response(JSON.stringify(jsonSuccess({
+          id: cached.id,
+          r2_object_key: cached.r2_object_key,
+          _idempotent: true,
+          _cached: true,
+        })), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', 'X-Idempotent': 'true' },
+        });
+      } catch {
+        return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, 'Invalid cached result')), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+    }
+    // 记录新请求
+    await env.DB.prepare(`
+      INSERT INTO ai_update_logs (id, request_id, operation_type, target_type, status, created_by, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      crypto.randomUUID(), requestId, 'create_product', 'product', 'processing', 'admin',
+      new Date().toISOString()
+    ).run();
   }
 
   const id = crypto.randomUUID();
@@ -360,6 +397,18 @@ export async function createProduct(env: Env, request: Request): Promise<Respons
       now, body.status || 'active', now, now
     ).run();
 
+    // F-040-22 幂等性更新：更新 ai_update_logs 状态为 completed
+    if (requestId) {
+      await env.DB.prepare(`
+        UPDATE ai_update_logs SET status = ?, result = ?, updated_at = ? WHERE request_id = ?
+      `).bind(
+        'completed',
+        JSON.stringify({ id, r2_object_key: r2Key }),
+        new Date().toISOString(),
+        requestId
+      ).run();
+    }
+
     return new Response(JSON.stringify(jsonSuccess({ id, r2_object_key: r2Key })), {
       status: 201,
       headers: { 'Content-Type': 'application/json' },
@@ -383,6 +432,18 @@ export async function createProduct(env: Env, request: Request): Promise<Respons
     now, body.status || 'active', now, now
   ).run();
 
+  // F-040-22 幂等性更新：更新 ai_update_logs 状态为 completed
+  if (requestId) {
+    await env.DB.prepare(`
+      UPDATE ai_update_logs SET status = ?, result = ?, updated_at = ? WHERE request_id = ?
+    `).bind(
+      'completed',
+      JSON.stringify({ id, r2_object_key: r2Key }),
+      new Date().toISOString(),
+      requestId
+    ).run();
+  }
+
   return new Response(JSON.stringify(jsonSuccess({ id, r2_object_key: r2Key })), {
     status: 201,
     headers: { 'Content-Type': 'application/json' },
@@ -390,6 +451,7 @@ export async function createProduct(env: Env, request: Request): Promise<Respons
 }
 
 // PUT /api/admin/products/:id - F-040-15
+// 幂等性支持：如果请求包含 request_id，先检查 ai_update_logs 避免重复写入
 export async function updateProduct(env: Env, request: Request, id: string): Promise<Response> {
   const existing = await env.DB.prepare('SELECT * FROM products WHERE id = ?').bind(id).first<Record<string, unknown>>();
   if (!existing) {
@@ -399,7 +461,44 @@ export async function updateProduct(env: Env, request: Request, id: string): Pro
     });
   }
 
-  const body = await request.json() as Partial<Product>;
+  const body = await request.json() as Partial<Product> & { request_id?: string };
+
+  // F-040-22 幂等性保证：检查 request_id 是否已处理
+  const requestId = body.request_id;
+  if (requestId) {
+    const existingLog = await env.DB.prepare(
+      'SELECT id, result FROM ai_update_logs WHERE request_id = ?'
+    ).bind(requestId).first<{ id: string; result: string }>();
+    if (existingLog) {
+      // 已处理过的请求，返回之前的结果（幂等保证）
+      try {
+        const cached = JSON.parse(existingLog.result);
+        return new Response(JSON.stringify(jsonSuccess({
+          id: cached.id,
+          r2_object_key: cached.r2_object_key,
+          _idempotent: true,
+          _cached: true,
+        })), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', 'X-Idempotent': 'true' },
+        });
+      } catch {
+        return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, 'Invalid cached result')), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+    }
+    // 记录新请求
+    await env.DB.prepare(`
+      INSERT INTO ai_update_logs (id, request_id, operation_type, target_type, target_id, status, created_by, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      crypto.randomUUID(), requestId, 'update_product', 'product', id, 'processing', 'admin',
+      new Date().toISOString()
+    ).run();
+  }
+
   const now = new Date().toISOString();
   const existingContent = await readProductContent(env, resolveProductR2Key(existing));
   const mergedContent = buildProductContent({
@@ -455,6 +554,18 @@ export async function updateProduct(env: Env, request: Request, id: string): Pro
 
   bindings.push(id);
   await env.DB.prepare(`UPDATE products SET ${fields.join(', ')} WHERE id = ?`).bind(...bindings).run();
+
+  // F-040-22 幂等性更新：更新 ai_update_logs 状态为 completed
+  if (requestId) {
+    await env.DB.prepare(`
+      UPDATE ai_update_logs SET status = ?, result = ?, updated_at = ? WHERE request_id = ?
+    `).bind(
+      'completed',
+      JSON.stringify({ id, r2_object_key: r2Key }),
+      new Date().toISOString(),
+      requestId
+    ).run();
+  }
 
   return new Response(JSON.stringify(jsonSuccess({ id, r2_object_key: r2Key })), {
     headers: { 'Content-Type': 'application/json' },

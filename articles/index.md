@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-04-29
+- **文件**: 20260429-2604.24698-persona-collapse.md
+- **标题**: 当AI"扮演角色"时，为什么全都成了一副模样？——新研究揭示大模型"人格坍塌"现象
+- **论文来源**: arXiv:2604.24698 | The Chameleon's Limit: Investigating Persona Collapse and Homogenization in Large Language Models
+- **作者**: Yunze Xiao (CMU), Vivienne J. Zhang (UChicago), Chenghao Yang (UChicago), Ningshan Ma (MIT), Weihao Xuan (UTokyo), Jen-tse Huang (JHU)
+- **撰写日期**: 2026-04-29（北京时间）
+- **备注**: 揭示LLM模拟人群的"人格坍塌"现象——给AI设定多维度人设后行为趋同；提出覆盖度/均匀度/复杂度三维诊断框架；"忠实度陷阱"——越精确执行人设越刻板；同一模型在不同任务上表现完全相反
+
 ### 2026-04-28
 - **文件**: 20260428-2604.22074-rlvr-reasoning-myth.md
 - **标题**: RL训练的AI真的会"思考"吗？新研究：你可能被"推理链"骗了

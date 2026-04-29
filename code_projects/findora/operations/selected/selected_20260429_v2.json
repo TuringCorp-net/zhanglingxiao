@@ -1,0 +1,183 @@
+{
+  "reportId": "20260429030",
+  "date": "2026-04-29",
+  "timestamp": "2026-04-29T03:06:59.215Z",
+  "summary": {
+    "totalScanned": 196,
+    "finalSelected": 10
+  },
+  "products": [
+    {
+      "id": "20260429030-001",
+      "goodsId": "601099820381097",
+      "goodsNameEn": "1pc Unique Sci-Fi Cyberpunk Mechanical Arm Statue, Futuristic Distinctive Design, Game Controller Stand, Headphone Stand, Desktop Ornament, Perfect Gift for Gaming Enthusiasts And Men, Suitable for Va",
+      "goodsNameCn": "一只独具科幻赛博朋克机械手臂雕像 ，超前科幻的独特设计，游戏手柄支架，头戴式耳机支架， 桌面摆件，送给热爱游戏玩家与男士的完美礼物，适用于情人节父亲节圣诞节结婚纪念日感恩节等场景",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/6554d46f-09ac-437e-ae07-c116a3677c75.jpg",
+      "price": {
+        "min": 8.37,
+        "max": 7.11
+      },
+      "sold": 62000,
+      "reviewNum": 1046,
+      "rating": 4.7,
+      "score": 37,
+      "sourceUrl": "https://www.temaishuju.com/goods/hot-sale"
+    },
+    {
+      "id": "20260429030-002",
+      "goodsId": "601099872111740",
+      "goodsNameEn": "1 pieza Soporte para mando de juego de mano mecánica 3D creativo ciberpunk, agarre para mando, organizador de escritorio multifuncional adecuado para mandos y teléfonos, una excelente opción de regalo",
+      "goodsNameCn": "1pc/赛博朋克创意3D机械手游戏控制器支架，支架手柄，适用于控制器和手机的多功能桌面收纳工具，游戏爱好者开学礼物的美好选择，新年礼物",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/97b6fb58-5958-4f7f-897a-ecf1a19ee2eb.jpg",
+      "price": {
+        "min": 8.39,
+        "max": 14.81
+      },
+      "sold": 50000,
+      "reviewNum": 835,
+      "rating": 4.7,
+      "score": 31,
+      "sourceUrl": "https://www.temaishuju.com/goods/hot-sale"
+    },
+    {
+      "id": "20260429030-003",
+      "goodsId": "601099655745520",
+      "goodsNameEn": "Multifunctional 3D Printed Cyberpunk Handle - 1pc Sci-fi Mechanical Style Desktop Storage for Game Controllers, Mobile Phones, Etc. | Perfect for Home And Office Decoration",
+      "goodsNameCn": "1件赛博朋克3D列印手柄 - 多功能桌面收纳盒，适用于游戏手柄、手机等 | 科幻机械风格装饰 | 家居和办公室完美选择",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/b7112227-7322-4759-b315-f3af781b59d6.jpg",
+      "price": {
+        "min": 7.59,
+        "max": 10.94
+      },
+      "sold": 70000,
+      "reviewNum": 1218,
+      "rating": 4.8,
+      "score": 28,
+      "sourceUrl": "https://www.temaishuju.com/goods/hot-sale"
+    },
+    {
+      "id": "20260429030-004",
+      "goodsId": "397232825",
+      "goodsNameEn": "30/60pcs Under The Sea Balloons , Blue And Green Balloons With Dusty Blue Pastel Teal Sand White Clear Balloon For Under The Sea Beach Ocean Pool Themed Baby Shower Birthday Party Decorations",
+      "goodsNameCn": "宝贝儿, 婴儿用品, 婴儿派对用品",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/02/04/f3/177018999829734cfd79ed1ce3e29b474335e65ae3_thumbnail_405x552.jpg",
+      "price": {
+        "min": 2.07,
+        "max": null
+      },
+      "sold": 24000,
+      "reviewNum": 243,
+      "rating": 4.85,
+      "score": 17,
+      "sourceUrl": "https://www.temaishuju.com/goods/hot-sale"
+    },
+    {
+      "id": "20260429030-005",
+      "goodsId": "38790251",
+      "goodsNameEn": "SHEIN Baby Girl Funny Letter Print Short Sleeve T-Shirt Top, Summer",
+      "goodsNameCn": "女婴上衣, 宝贝儿, 女婴服装",
+      "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/07/16/38/1721121432475a83b1a5114346a2472a68051fd892_thumbnail_405x552.jpg",
+      "price": {
+        "min": 6.14,
+        "max": null
+      },
+      "sold": 9558,
+      "reviewNum": 1000,
+      "rating": 4.93,
+      "score": 16,
+      "sourceUrl": "https://www.temaishuju.com/goods/hot-sale"
+    },
+    {
+      "id": "20260429030-006",
+      "goodsId": "B0CZLPZCXT",
+      "goodsNameEn": "PLUSINNO H5 Horizontal Fishing Rod/Pole Holders for Garage, Wall or Ceiling Mounted Fishing Rod Rack, Aviation Aluminum Fishing Holder Holds up to 5/10/20 Rod or Combos or Nets Storage Racks",
+      "goodsNameCn": "PLUSINNO H5 Horizontal Fishing Rod/Pole Holders for Garage, Wall or Ceiling Mounted Fishing Rod Rack",
+      "thumbnail": "https://m.media-amazon.com/images/I/71lHG8GEKXL.__AC_SX300_SY300_QL70_ML2_.jpg",
+      "price": {
+        "min": 13.99,
+        "max": null
+      },
+      "sold": 55640,
+      "reviewNum": 1257,
+      "rating": 4.6,
+      "score": 16,
+      "sourceUrl": "https://www.temaishuju.com/goods/hot-sale"
+    },
+    {
+      "id": "20260429030-007",
+      "platform": "temu",
+      "category": "视频游戏",
+      "channel": "热销商品",
+      "goodsId": "601099596270377",
+      "goodsNameEn": "Controller Charging Stand for PS5, Dual Charging Dock Station Charging P-5 Charger Dock for Playstation 5",
+      "goodsNameCn": "PS5手柄充电底座，双充充电座P-5充电站，适用于PlayStation 5",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/6debc848-2bed-4449-8d58-c89fbf06365b.jpg",
+      "price": {
+        "min": 9.1,
+        "max": 9.63
+      },
+      "sold": 100000,
+      "reviewNum": 3126,
+      "rating": 4.9,
+      "score": 22,
+      "sourceUrl": "https://www.temaishuju.com/goods/hot-sale"
+    },
+    {
+      "id": "20260429030-008",
+      "platform": "temu",
+      "category": "视频游戏",
+      "channel": "热销商品",
+      "goodsId": "601099520692008",
+      "goodsNameEn": "1pc 3D VR Headset Smart Virtual Reality Glasses VR Helmet for iPhone Android Smartphones Phone Lenses",
+      "goodsNameCn": "1pc 3D VR Headset Smart Virtual Reality Glasses VR Helmet for iPhone Android Smartphones Phone Lense",
+      "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/cac57e3f67014c0c4b55234e39c77e26.jpg",
+      "price": {
+        "min": 13.65,
+        "max": 13.98
+      },
+      "sold": 100000,
+      "reviewNum": 8631,
+      "rating": 4.4,
+      "score": 20,
+      "sourceUrl": "https://www.temaishuju.com/goods/hot-sale"
+    },
+    {
+      "id": "20260429030-009",
+      "platform": "shein",
+      "category": "宝贝儿",
+      "channel": "热销商品",
+      "goodsId": "34711128",
+      "goodsNameEn": "Simple And Cute Baby Girl Sandals With Bowknot Decoration, Hook & Loop Closure, Round Toe Soft Sole Princess Shoes, For All Seasons",
+      "goodsNameCn": "婴儿鞋, 婴儿凉鞋, 宝贝儿",
+      "thumbnail": "//img.ltwebstatic.com/images3_spmp/2024/05/07/4e/1715051896075e09d73d62ab2d9c8f539c088fbe2f_thumbnail_405x552.jpg",
+      "price": {
+        "min": 7.97,
+        "max": null
+      },
+      "sold": 14903,
+      "reviewNum": 1000,
+      "rating": 4.93,
+      "score": 12,
+      "sourceUrl": "https://www.sheinshuju.com/goods/hot-sale"
+    },
+    {
+      "id": "20260429030-010",
+      "platform": "shein",
+      "category": "宝贝儿",
+      "channel": "热销商品",
+      "goodsId": "12414503",
+      "goodsNameEn": "SHEIN Vintaside Kids Baby Girl Flap Pocket Denim Jacket & Floral Print Ruffle Hem Cami Dress",
+      "goodsNameCn": "女婴连衣裙, 宝贝儿, 女婴服装",
+      "thumbnail": "//img.ltwebstatic.com/images3_pi/2022/12/08/16705027675aafda6d2a146f040ad10020f8285b20_thumbnail_405x552.jpg",
+      "price": {
+        "min": 15.31,
+        "max": 21.61
+      },
+      "sold": 21388,
+      "reviewNum": 7,
+      "rating": 4.99,
+      "score": 10,
+      "sourceUrl": "https://www.sheinshuju.com/goods/hot-sale"
+    }
+  ]
+}

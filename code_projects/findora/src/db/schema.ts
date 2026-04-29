@@ -5,6 +5,8 @@ export interface CreateProductRequest extends Partial<Product> {
   // R2直传模式专用字段，不存储到products表
   source_md?: string;       // 完整markdown文件内容
   source_filename?: string; // 原始文件名（如 C20260421-001.md）
+  // F-040-22 幂等性支持字段
+  request_id?: string;      // 请求唯一ID，用于幂等保证
 }
 
 export interface Product {
@@ -510,6 +512,22 @@ export interface GlobalConfig {
   is_public: number;
   updated_at: string;
   updated_by: string | null;
+}
+
+// AI Update Log (F-040-22 Idempotency)
+export interface AIUpdateLog {
+  id: string;
+  request_id: string;
+  operation_type: string;
+  target_type: string;
+  target_id: string | null;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  result: string | null;
+  error_message: string | null;
+  metadata: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Env {

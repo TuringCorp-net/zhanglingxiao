@@ -1,7 +1,7 @@
 # Findora SDS — 软件设计说明书
 
 > **项目名称：** Findora
-> **版本：** v4.84（Coder定时任务：全面Code Review完成；TS编译0错误；四文档版本对齐；无新增P0/P1问题；代码基线稳定）
+> **版本：** v4.87（Coder定时任务：全面Review完成；TS编译0错误；代码基线稳定；无P0/P1问题；四文档版本对齐）
 > **最后更新：** 2026-04-29
 > **维护方式：** 以SRS F编号为主线的模块化设计文档
 
@@ -13,33 +13,35 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-29 | v4.84：Coder定时任务；全面Code Review完成；TS编译0错误；四文档版本对齐；无新增P0/P1问题；代码基线稳定；P2优化项保持非阻塞状态 |
+| 2026-04-29 | v4.87：Coder定时任务；全面Review完成；TS编译0错误；代码基线稳定；无P0/P1问题；四文档版本对齐 |
+| 2026-04-29 | v4.86：Reviewer定时任务；全面Code Review完成；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐；无新增P0/P1问题；代码基线稳定 |
 
 ## Actions
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.84同步）
+### 已完成项（v4.87同步）
 
-1. ✅ **TypeScript编译检查**：0错误（v4.84确认，`npx tsc --noEmit`）
-2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.84确认）
+1. ✅ **TypeScript编译检查**：0错误（v4.87确认，`npx tsc --noEmit`）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.87确认）
 3. ✅ **Business Concept约束**：A-01~A-06 全部满足
 4. ✅ **禁用词表SSOT验证**：ai_content.ts(23-27行导出BANNED_WORDS)→explain.ts(28行导入)→ai_review.ts(25行导入)，单一真实源
-5. ✅ **Migration编号冲突修复**：001~021连续无冲突
+5. ✅ **Migration编号冲突修复**：001~022连续无冲突
 6. ✅ **路由遮蔽验证**：index.ts中categories路由在类目详情路由之前；EMS路由正确顺序
-7. ✅ **四文档版本对齐**：SRS→v4.84、SDS→v4.84、API→v4.84、STR→v4.84
+7. ✅ **四文档版本对齐**：SRS→v4.87、SDS→v4.87、API→v4.87、STR→v4.87
 8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤
 9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现
 10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值
 11. ✅ **ST-S05修复验证**：auth.ts 审计日志IP仅使用CF-Connecting-IP
 12. ✅ **ST-P1修复验证**：explanation_cache时间戳类型统一为INTEGER
-13. ✅ **代码基线稳定**：无新增P0/P1问题（v4.84确认）
-14. ✅ **P2优化项状态确认**：8项非阻塞优化项（P1-5~P1-8, P2-1~P2-4）保持非阻塞状态
+13. ✅ **代码基线稳定**：无新增P0/P1问题（v4.87确认）
+14. ✅ **F-040-22幂等保证实现**：ai_update_logs表+迁移022+幂等逻辑（P1-1已解决）
+15. ✅ **P2优化项状态确认**：8项非阻塞优化项（P1-5~P1-8, P2-1~P2-4）保持非阻塞状态
 
 ### 待推进项（按优先级）
 
 1. **AI 服务联调（优先）**：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
-2. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~021 迁移脚本在本地 D1 初始化成功
+2. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~022 迁移脚本在本地 D1 初始化成功
 3. **端到端链路测试**：使用 Postman 对核心流（商品列表、标签精选、内容协商）进行完整 HTTP 链路验证
 4. **P2优化项（非阻塞）**：8项P2优化项待后续迭代处理：P1-5(JSON数组匹配)、P1-6(时间存储策略)、P1-7(前端SSR)、P1-8(MMR控制)、P2-1~P2-4(代码重复/类型断言/审计日志)
 
@@ -563,11 +565,31 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 | `price_history` | 价格历史 | 004_price_history |
 | `ai_review_records` | AI审核记录 | 005_ai_review_records |
 | `global_configs` | 全局配置 | 014_global_configs |
+| `ai_update_logs` | AI更新日志（幂等保证） | 022_ai_update_logs |
 | `ems_users` | EMS用户 | 012_ems_schema |
 | `enterprises` | 企业 | 012_ems_schema |
 | `enterprise_members` | 企业成员 | 012_ems_schema |
 | `records` | 业务记录 | 012_ems_schema |
 | `audit_logs` | 审计日志 | 012_ems_schema |
+
+### ai_update_logs表设计（F-040-22幂等保证）
+
+用于确保外部运营AI数据更新的幂等性，避免相同request_id重复写入。
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| id | TEXT | 主键 |
+| request_id | TEXT | 唯一请求ID（UNIQUE索引） |
+| operation_type | TEXT | 操作类型：create_product/update_product等 |
+| target_type | TEXT | 目标类型：product/list等 |
+| target_id | TEXT | 目标ID（可选） |
+| status | TEXT | 状态：pending/processing/completed/failed |
+| result | TEXT | 操作结果JSON（幂等返回） |
+| error_message | TEXT | 错误信息 |
+| metadata | TEXT | 元数据JSON |
+| created_by | TEXT | 创建人 |
+| created_at | TEXT | 创建时间 |
+| updated_at | TEXT | 更新时间 |
 
 ### TypeScript类型
 `src/db/schema.ts` — 所有表对应TypeScript类型定义
@@ -603,3 +625,13 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 | ST-S05修复 | ✅ 审计日志IP仅使用CF-Connecting-IP | |
 
 **无 CRITICAL/HIGH 阻塞项。**
+
+### F-040-22幂等保证实现说明（v4.85）
+
+| 组件 | 状态 | 说明 |
+|------|------|------|
+| 迁移022 | ✅ | ai_update_logs表，含request_id唯一索引 |
+| CreateProduct | ✅ | request_id检查→返回缓存或记录新请求→完成后更新状态 |
+| UpdateProduct | ✅ | 同上，target_id记录产品ID |
+| TypeScript类型 | ✅ | AIUpdateLog接口已定义 |
+| Schema更新 | ✅ | CreateProductRequest已包含request_id字段 |
