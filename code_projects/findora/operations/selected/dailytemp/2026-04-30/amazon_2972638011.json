@@ -1,0 +1,2482 @@
+{
+  "platform": "amazon",
+  "catId": 2972638011,
+  "catName": "庭院、草坪和园艺",
+  "collectedAt": "2026-04-30T03:01:37.528Z",
+  "channels": [
+    {
+      "channel": "热销商品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "WF Athletic Supply Tatami Pattern 3/4-Inch Thickness Interlocking Exercise Foam Mats, Extra Thick Eva Foam Flooring Tiles, Gym Fitness Equipment Mat & Home Protective Flooring Cushion, Black & Blue",
+          "goodsNameCn": "WF Athletic Supply Tatami Pattern 3/4-Inch Thickness Interlocking Exercise Foam Mats, Extra Thick Ev",
+          "thumbnail": "https://m.media-amazon.com/images/I/81nFoA3r6ML._AC_SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 7474914,
+          "sales": null,
+          "goodsPriceMin": 45.5,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": null,
+          "mallOpenTime": "2024-04-12T00:00:00.000+08:00",
+          "onSaleTime": "2024-04-12T00:00:00.000+08:00",
+          "goodsId": "B0D1KGSYGC",
+          "detailUrl": "B0D1KGSYGC",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 2589,
+              "catId": "3375251",
+              "catName": "运动与户外",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4170,
+              "catId": "3407731",
+              "catName": "锻炼身体",
+              "catLevel": 2,
+              "parentCatId": "3375251",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4591,
+              "catId": "3407891",
+              "catName": "辅料",
+              "catLevel": 3,
+              "parentCatId": "3407731",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 7018,
+              "catId": "3407941",
+              "catName": "运动垫",
+              "catLevel": 4,
+              "parentCatId": "3407891",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "WF Athletic Supply Tatami Pattern 3/4-Inch Thickness Interlocking Exercise Foam Mats, Extra Thick Eva Foam Flooring Tiles, Gym Fitness Equipment Mat & Home Protective Flooring Cushion, Black & Blue",
+          "_source": "热销商品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "露肩分层蕾丝舞会礼服 2026 长款舞会礼服女式正式闪亮亮片紧身胸衣婚纱带开叉",
+          "goodsNameCn": "露肩分层蕾丝舞会礼服 2026 长款舞会礼服女式正式闪亮亮片紧身胸衣婚纱带开叉",
+          "thumbnail": "https://m.media-amazon.com/images/I/61-zjOHTXLL._AC_SY550_.jpg",
+          "thumbnailCn": "",
+          "sold": 7990280,
+          "sales": null,
+          "goodsPriceMin": 99.89,
+          "goodsPriceMax": null,
+          "reviewNum": 173,
+          "rating": 4,
+          "mallOpenTime": "2022-12-09T00:00:00.000+08:00",
+          "onSaleTime": "2023-11-24T08:00:00.000+08:00",
+          "goodsId": "B0CNX4JTMP",
+          "detailUrl": "B0CNX4JTMP",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 13287,
+              "catId": "1040660",
+              "catName": "服装",
+              "catLevel": 3,
+              "parentCatId": "7147440011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 16565,
+              "catId": "1045024",
+              "catName": "连衣裙",
+              "catLevel": 4,
+              "parentCatId": "1040660",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 18562,
+              "catId": "11006703011",
+              "catName": "鸡尾酒装",
+              "catLevel": 5,
+              "parentCatId": "1045024",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 84,
+              "catId": "7141123011",
+              "catName": "服装、鞋履和珠宝",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 12062,
+              "catId": "7147440011",
+              "catName": "女士",
+              "catLevel": 2,
+              "parentCatId": "7141123011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "露肩分层蕾丝舞会礼服 2026 长款舞会礼服女式正式闪亮亮片紧身胸衣婚纱带开叉",
+          "_source": "热销商品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "goodsNameCn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "thumbnail": "https://m.media-amazon.com/images/I/512--JLMUsL._AC_SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 13010454,
+          "sales": null,
+          "goodsPriceMin": 18.79,
+          "goodsPriceMax": null,
+          "reviewNum": 1,
+          "rating": 5,
+          "mallOpenTime": "2021-10-22T00:00:00.000+08:00",
+          "onSaleTime": "2026-03-11T00:00:00.000+08:00",
+          "goodsId": "B0GS5BN8BM",
+          "detailUrl": "B0GS5BN8BM",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 14179,
+              "catId": "553188",
+              "catName": "文件",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "_source": "热销商品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Gildan Men's Crew T-Shirts, Multipack, Style G1100",
+          "goodsNameCn": "Gildan Men's Crew T-Shirts, Multipack, Style G1100",
+          "thumbnail": "https://m.media-amazon.com/images/I/61Jkk5m9EWL._AC_SX342_SY445_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 3321078,
+          "sales": null,
+          "goodsPriceMin": 45.45,
+          "goodsPriceMax": 70.4,
+          "reviewNum": 314362,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-03-23T12:00:00.000+08:00",
+          "goodsId": "B0BZDLXKTS",
+          "detailUrl": "B0BZDLXKTS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 4946,
+              "catId": "1040658",
+              "catName": "服装",
+              "catLevel": 3,
+              "parentCatId": "7147441011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 11775,
+              "catId": "1045624",
+              "catName": "T 恤",
+              "catLevel": 5,
+              "parentCatId": "2476517011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 8241,
+              "catId": "2476517011",
+              "catName": "衬衫",
+              "catLevel": 4,
+              "parentCatId": "1040658",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 84,
+              "catId": "7141123011",
+              "catName": "服装、鞋履和珠宝",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4076,
+              "catId": "7147441011",
+              "catName": "男士",
+              "catLevel": 2,
+              "parentCatId": "7141123011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Gildan Men's Crew T-Shirts, Multipack, Style G1100",
+          "_source": "热销商品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "STANLEY Quencher H2.0 Tumbler with Handle and Straw 14 oz | Flowstate 3-Position Lid | Cup Holder Compatible for Travel | Insulated Stainless Steel Cup | BPA-Free | Azure",
+          "goodsNameCn": "STANLEY Quencher H2.0 Tumbler with Handle and Straw 14 oz | Flowstate 3-Position Lid | Cup Holder Co",
+          "thumbnail": "https://m.media-amazon.com/images/I/61mpaVVZafL.__AC_SX300_SY300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 816203,
+          "sales": null,
+          "goodsPriceMin": 20,
+          "goodsPriceMax": null,
+          "reviewNum": 70044,
+          "rating": 4.7,
+          "mallOpenTime": "2025-02-04T08:00:00.000+08:00",
+          "onSaleTime": "2025-02-04T00:00:00.000+08:00",
+          "goodsId": "B0F165F7V9",
+          "detailUrl": "B0F165F7V9",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 324,
+              "catId": "1055398",
+              "catName": "家居用品",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 12000,
+              "catId": "21613418011",
+              "catName": "热水器",
+              "catLevel": 4,
+              "parentCatId": "510136",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 12645,
+              "catId": "21613420011",
+              "catName": "保温饮料容器",
+              "catLevel": 5,
+              "parentCatId": "21613418011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 15152,
+              "catId": "21613423011",
+              "catName": "不倒翁",
+              "catLevel": 6,
+              "parentCatId": "21613420011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 3914,
+              "catId": "284507",
+              "catName": "厨房",
+              "catLevel": 2,
+              "parentCatId": "1055398",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8840,
+              "catId": "510136",
+              "catName": "储存",
+              "catLevel": 3,
+              "parentCatId": "284507",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "STANLEY Quencher H2.0 Tumbler with Handle and Straw 14 oz | Flowstate 3-Position Lid | Cup Holder Compatible for Travel | Insulated Stainless Steel Cup | BPA-Free | Azure",
+          "_source": "热销商品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Nature's Sunshine Lower Bowel Stimulator - Helps Relieve Constipation - Cleanse & Detox Your Colon with Natural Herbal Ingredients - 25 Servings - 100 Vegcaps",
+          "goodsNameCn": "Nature's Sunshine Lower Bowel Stimulator - Helps Relieve Constipation - Cleanse & Detox Your Colon w",
+          "thumbnail": "https://m.media-amazon.com/images/I/51NYh0EgqgL._AC_UY218_.jpg",
+          "thumbnailCn": "",
+          "sold": 24513391,
+          "sales": null,
+          "goodsPriceMin": 25.95,
+          "goodsPriceMax": null,
+          "reviewNum": 45,
+          "rating": 4.5,
+          "mallOpenTime": "2007-10-05T00:00:00.000+08:00",
+          "onSaleTime": "2007-10-05T08:00:00.000+08:00",
+          "goodsId": "B000WQJK94",
+          "detailUrl": "B000WQJK94",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 236,
+              "catId": "3760901",
+              "catName": "健康与家居",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 1316,
+              "catId": "3760941",
+              "catName": "卫生保健",
+              "catLevel": 2,
+              "parentCatId": "3760901",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2558,
+              "catId": "3779501",
+              "catName": "女士卫生护理",
+              "catLevel": 3,
+              "parentCatId": "3760941",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 5588,
+              "catId": "3779591",
+              "catName": "卫生巾",
+              "catLevel": 4,
+              "parentCatId": "3779501",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Nature's Sunshine Lower Bowel Stimulator - Helps Relieve Constipation - Cleanse & Detox Your Colon with Natural Herbal Ingredients - 25 Servings - 100 Vegcaps",
+          "_source": "热销商品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "CURAD Alcohol Prep Pads (Pack of 4 Boxes), 400 Pieces of Medium Isopropyl Alcohol Wipes Individually Wrapped, First Aid Alcohol Swabs for Cuts & Scrapes, Medical Alcohol Pads for General Cleansing($0.",
+          "goodsNameCn": "CURAD Alcohol Prep Pads (Pack of 4 Boxes), 400 Pieces of Medium Isopropyl Alcohol Wipes Individually",
+          "thumbnail": "https://m.media-amazon.com/images/I/716L5aJWJyL._AC_UY218_.jpg",
+          "thumbnailCn": "",
+          "sold": 11274964,
+          "sales": null,
+          "goodsPriceMin": 5.59,
+          "goodsPriceMax": null,
+          "reviewNum": 576,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2014-05-31T08:00:00.000+08:00",
+          "goodsId": "B00KOSP454",
+          "detailUrl": "B00KOSP454",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 236,
+              "catId": "3760901",
+              "catName": "健康与家居",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 1316,
+              "catId": "3760941",
+              "catName": "卫生保健",
+              "catLevel": 2,
+              "parentCatId": "3760901",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2853,
+              "catId": "3762591",
+              "catName": "急救",
+              "catLevel": 3,
+              "parentCatId": "3760941",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3954,
+              "catId": "3762711",
+              "catName": "绷带和包扎用品",
+              "catLevel": 4,
+              "parentCatId": "3762591",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 6411,
+              "catId": "3762771",
+              "catName": "纱布和包扎垫",
+              "catLevel": 5,
+              "parentCatId": "3762711",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 7452,
+              "catId": "702367011",
+              "catName": "纱布",
+              "catLevel": 6,
+              "parentCatId": "3762771",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "CURAD Alcohol Prep Pads (Pack of 4 Boxes), 400 Pieces of Medium Isopropyl Alcohol Wipes Individually Wrapped, First Aid Alcohol Swabs for Cuts & Scrapes, Medical Alcohol Pads for General Cleansing($0.01$0.01/count)",
+          "_source": "热销商品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "La Roche-Posay Toleriane 双重修复面部保湿霜,含神经酰胺和烟酰胺的日常保湿霜,适合所有肤质,瞬间舒适持久保湿,不含香料",
+          "goodsNameCn": "La Roche-Posay Toleriane 双重修复面部保湿霜,含神经酰胺和烟酰胺的日常保湿霜,适合所有肤质,瞬间舒适持久保湿,不含香料",
+          "thumbnail": "https://m.media-amazon.com/images/I/51x78epntaL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 297145,
+          "sales": null,
+          "goodsPriceMin": 24.99,
+          "goodsPriceMax": null,
+          "reviewNum": 48,
+          "rating": 4.6,
+          "mallOpenTime": "2025-03-21T08:00:00.000+08:00",
+          "onSaleTime": "2026-01-20T00:00:00.000+08:00",
+          "goodsId": "B01N9SPQHQ",
+          "detailUrl": "B01N9SPQHQ",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 2451,
+              "catId": "11060451",
+              "catName": "身体护理",
+              "catLevel": 2,
+              "parentCatId": "3760911",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3382,
+              "catId": "11060711",
+              "catName": "面部护肤",
+              "catLevel": 3,
+              "parentCatId": "11060451",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4149,
+              "catId": "11061301",
+              "catName": "面霜乳液",
+              "catLevel": 4,
+              "parentCatId": "11060711",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 5036,
+              "catId": "16479981011",
+              "catName": "面部保湿霜",
+              "catLevel": 5,
+              "parentCatId": "11061301",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 24,
+              "catId": "3760911",
+              "catName": "美容与护理",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "La Roche-Posay Toleriane 双重修复面部保湿霜,含神经酰胺和烟酰胺的日常保湿霜,适合所有肤质,瞬间舒适持久保湿,不含香料",
+          "_source": "热销商品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Nizoral A-D 抗皮屑洗发水，含氯共聚物1%，干痒头皮洗发水用于控皮屑，7 液盎司（约207毫升）",
+          "goodsNameCn": "Nizoral A-D 抗皮屑洗发水，含氯共聚物1%，干痒头皮洗发水用于控皮屑，7 液盎司（约207毫升）",
+          "thumbnail": "https://m.media-amazon.com/images/I/71UKDMdW3KL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 22.07,
+          "goodsPriceMax": null,
+          "reviewNum": 109,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B00AINMFAC",
+          "detailUrl": "B00AINMFAC",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 603,
+              "catId": "11057241",
+              "catName": "美发护发",
+              "catLevel": 2,
+              "parentCatId": "3760911",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 6947,
+              "catId": "11057651",
+              "catName": "洗发",
+              "catLevel": 4,
+              "parentCatId": "17911764011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 3681,
+              "catId": "17911764011",
+              "catName": "洗发水和护发素",
+              "catLevel": 3,
+              "parentCatId": "11057241",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 24,
+              "catId": "3760911",
+              "catName": "美容与护理",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Nizoral A-D 抗皮屑洗发水，含氯共聚物1%，干痒头皮洗发水用于控皮屑，7 液盎司（约207毫升）",
+          "_source": "热销商品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "有机蓝莓,12 盎司",
+          "goodsNameCn": "有机蓝莓,12 盎司",
+          "thumbnail": "https://m.media-amazon.com/images/I/71PK6BOLxCL._SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 3.99,
+          "goodsPriceMax": null,
+          "reviewNum": 26006,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B077N7TR5G",
+          "detailUrl": "B077N7TR5G",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 174,
+              "catId": "16310101",
+              "catName": "杂货店",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 16197,
+              "catId": "16318981",
+              "catName": "新鲜水果",
+              "catLevel": 3,
+              "parentCatId": "6506977011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 14921,
+              "catId": "6506977011",
+              "catName": "产量",
+              "catLevel": 2,
+              "parentCatId": "16310101",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 18140,
+              "catId": "6507006011",
+              "catName": "浆果",
+              "catLevel": 4,
+              "parentCatId": "16318981",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "有机蓝莓,12 盎司",
+          "_source": "热销商品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        }
+      ]
+    },
+    {
+      "channel": "热销新品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "TERRO 蚂蚁杀手诱饵站 T300B - 消除蚂蚁的液体诱饵 - 诱饵系统 - 12 个装站,有效控制室内蚂蚁",
+          "goodsNameCn": "TERRO 蚂蚁杀手诱饵站 T300B - 消除蚂蚁的液体诱饵 - 诱饵系统 - 12 个装站,有效控制室内蚂蚁",
+          "thumbnail": "https://m.media-amazon.com/images/I/81GTDsmO9IL._AC_SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 12.12,
+          "goodsPriceMax": null,
+          "reviewNum": 151269,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B00E4GACB8",
+          "detailUrl": "B00E4GACB8",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 5566,
+              "catId": "3737941",
+              "catName": "饵剂和诱饵",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "TERRO 蚂蚁杀手诱饵站 T300B - 消除蚂蚁的液体诱饵 - 诱饵系统 - 12 个装站,有效控制室内蚂蚁",
+          "_source": "热销新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (4 Official Refill Cartridges)",
+          "goodsNameCn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Aut",
+          "thumbnail": "https://m.media-amazon.com/images/I/81uXJAVhd1L._AC_UY218_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 14.97,
+          "goodsPriceMax": null,
+          "reviewNum": 383,
+          "rating": 4.8,
+          "mallOpenTime": "2026-03-21T00:00:00.000+08:00",
+          "onSaleTime": null,
+          "goodsId": "B0C3FTCYZL",
+          "detailUrl": "B0C3FTCYZL",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 5083,
+              "catId": "911952",
+              "catName": "配件",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (4 Official Refill Cartridges)",
+          "_source": "热销新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Chapin 20004 Pump Sprayer, 1-Gallon SureSpray Translucent Tank with an Easy Fill Funnel-Top Opening, Adjustable Cone Nozzle & 34\" Long Reach Hose, Used for Fertilizer, Pesticides, Weeds & Pests",
+          "goodsNameCn": "Chapin 20004 Pump Sprayer, 1-Gallon SureSpray Translucent Tank with an Easy Fill Funnel-Top Opening,",
+          "thumbnail": "https://m.media-amazon.com/images/I/71oqfMsZf6L._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 15.49,
+          "goodsPriceMax": null,
+          "reviewNum": 997,
+          "rating": 4.4,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B000E28UQU",
+          "detailUrl": "B000E28UQU",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2007,
+              "catId": "3610851",
+              "catName": "园艺和微笑护理",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 11023,
+              "catId": "492090011",
+              "catName": "喷雾器",
+              "catLevel": 4,
+              "parentCatId": "9001143011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 9274,
+              "catId": "9001143011",
+              "catName": "喷雾器",
+              "catLevel": 3,
+              "parentCatId": "3610851",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Chapin 20004 Pump Sprayer, 1-Gallon SureSpray Translucent Tank with an Easy Fill Funnel-Top Opening, Adjustable Cone Nozzle & 34\" Long Reach Hose, Used for Fertilizer, Pesticides, Weeds & Pests",
+          "_source": "热销新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Wagner's 53002 Farmer's Delight樱桃味野生鸟类食品，10磅袋装",
+          "goodsNameCn": "Wagner's 53002 Farmer's Delight樱桃味野生鸟类食品，10磅袋装",
+          "thumbnail": "https://m.media-amazon.com/images/I/81gIvBzsnaL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 10109263,
+          "sales": null,
+          "goodsPriceMin": 12.48,
+          "goodsPriceMax": null,
+          "reviewNum": 194,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2014-06-11T00:00:00.000+08:00",
+          "goodsId": "B00LHE5OSQ",
+          "detailUrl": "B00LHE5OSQ",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 8160,
+              "catId": "13401981",
+              "catName": "鸟食",
+              "catLevel": 5,
+              "parentCatId": "4532514011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8705,
+              "catId": "13401991",
+              "catName": "野鸟食",
+              "catLevel": 6,
+              "parentCatId": "13401981",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4665,
+              "catId": "4532514011",
+              "catName": "鸟",
+              "catLevel": 4,
+              "parentCatId": "553632",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3814,
+              "catId": "553632",
+              "catName": "后院观鸟和野生动物",
+              "catLevel": 3,
+              "parentCatId": "553788",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2770,
+              "catId": "553788",
+              "catName": "彩绘装饰",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Wagner's 53002 Farmer's Delight樱桃味野生鸟类食品，10磅袋装",
+          "_source": "热销新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Thermacell E-Series Rechargeable Mosquito Repeller with 20’ Mosquito Protection Zone; Bug Spray Alternative; Scent Free",
+          "goodsNameCn": "Thermacell E-Series Rechargeable Mosquito Repeller with 20’ Mosquito Protection Zone; Bug Spray Alte",
+          "thumbnail": "https://m.media-amazon.com/images/I/71KqVhpbSjL.__AC_SX300_SY300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 670480,
+          "sales": null,
+          "goodsPriceMin": 35,
+          "goodsPriceMax": null,
+          "reviewNum": 22611,
+          "rating": 4,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-03-25T00:00:00.000+08:00",
+          "goodsId": "B0F3Y54Z8R",
+          "detailUrl": "B0F3Y54Z8R",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8417,
+              "catId": "3737951",
+              "catName": "驱虫剂",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Thermacell E-Series Rechargeable Mosquito Repeller with 20’ Mosquito Protection Zone; Bug Spray Alternative; Scent Free",
+          "_source": "热销新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Ortho Home Defense Insect Killer for Indoor and Perimeter2 with Comfort Wand - Ready-To-Use Bug Spray, Kills Ants, Cockroaches & Spiders, 1.33 gal.",
+          "goodsNameCn": "Ortho Home Defense Insect Killer for Indoor and Perimeter2 with Comfort Wand - Ready-To-Use Bug Spra",
+          "thumbnail": "https://m.media-amazon.com/images/I/717MxeY-OpL._AC_SY300_SX300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 22.21,
+          "goodsPriceMax": null,
+          "reviewNum": 17055,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B01N0TGJHB",
+          "detailUrl": "B01N0TGJHB",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 9561,
+              "catId": "23539052011",
+              "catName": "喷雾剂",
+              "catLevel": 4,
+              "parentCatId": "3737951",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8417,
+              "catId": "3737951",
+              "catName": "驱虫剂",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Ortho Home Defense Insect Killer for Indoor and Perimeter2 with Comfort Wand - Ready-To-Use Bug Spray, Kills Ants, Cockroaches & Spiders, 1.33 gal.",
+          "_source": "热销新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Zevo Flying Insect Trap & 3 Refill Cartridges - Plug in Fly Trap & Indoor Bug Catcher for Gnats, House & Fruit Flies - Blue & UV Light Technology, Mess-Free Alternative to Bug Zapper",
+          "goodsNameCn": "Zevo Flying Insect Trap & 3 Refill Cartridges - Plug in Fly Trap & Indoor Bug Catcher for Gnats, Hou",
+          "thumbnail": "https://m.media-amazon.com/images/I/81oM9Fx8QaL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 25.96,
+          "goodsPriceMax": null,
+          "reviewNum": 504,
+          "rating": 4.2,
+          "mallOpenTime": "2026-03-20T00:00:00.000+08:00",
+          "onSaleTime": null,
+          "goodsId": "B0CKY689WQ",
+          "detailUrl": "B0CKY689WQ",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8986,
+              "catId": "3737901",
+              "catName": "陷阱",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Zevo Flying Insect Trap & 3 Refill Cartridges - Plug in Fly Trap & Indoor Bug Catcher for Gnats, House & Fruit Flies - Blue & UV Light Technology, Mess-Free Alternative to Bug Zapper",
+          "_source": "热销新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "PayLessHere 户外家具套装三件，露台家具套装，灰色对话套装，配有两把麻条椅，玻璃咖啡桌，适合咖啡吧，泳池边露台，户外，红色靠垫",
+          "goodsNameCn": "PayLessHere 户外家具套装三件，露台家具套装，灰色对话套装，配有两把麻条椅，玻璃咖啡桌，适合咖啡吧，泳池边露台，户外，红色靠垫",
+          "thumbnail": "https://m.media-amazon.com/images/I/61fDCYsh5IL._AC_SY300_SX300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 1123616,
+          "sales": null,
+          "goodsPriceMin": 49.99,
+          "goodsPriceMax": null,
+          "reviewNum": 353,
+          "rating": 4.3,
+          "mallOpenTime": "2023-10-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-10-16T00:00:00.000+08:00",
+          "goodsId": "B0CMGGG6Z8",
+          "detailUrl": "B0CMGGG6Z8",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 10290,
+              "catId": "16135380011",
+              "catName": "沙发组",
+              "catLevel": 4,
+              "parentCatId": "3742441",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8528,
+              "catId": "3742441",
+              "catName": "庭院套装",
+              "catLevel": 3,
+              "parentCatId": "553824",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4202,
+              "catId": "553824",
+              "catName": "庭院家具及配件",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "PayLessHere 户外家具套装三件，露台家具套装，灰色对话套装，配有两把麻条椅，玻璃咖啡桌，适合咖啡吧，泳池边露台，户外，红色靠垫",
+          "_source": "热销新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Kaytee Hummingbird ElectroNectar Wild Bird Food, Ready to Use, 64 Ounces",
+          "goodsNameCn": "Kaytee Hummingbird ElectroNectar Wild Bird Food, Ready to Use, 64 Ounces",
+          "thumbnail": "https://m.media-amazon.com/images/I/71sh8qAWtdL._AC_SY300_SX300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 9.9,
+          "goodsPriceMax": null,
+          "reviewNum": 28419,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B007FJ0FJU",
+          "detailUrl": "B007FJ0FJU",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 8160,
+              "catId": "13401981",
+              "catName": "鸟食",
+              "catLevel": 5,
+              "parentCatId": "4532514011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9290,
+              "catId": "13402001",
+              "catName": "蜂鸟食",
+              "catLevel": 6,
+              "parentCatId": "13401981",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4665,
+              "catId": "4532514011",
+              "catName": "鸟",
+              "catLevel": 4,
+              "parentCatId": "553632",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3814,
+              "catId": "553632",
+              "catName": "后院观鸟和野生动物",
+              "catLevel": 3,
+              "parentCatId": "553788",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2770,
+              "catId": "553788",
+              "catName": "彩绘装饰",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Kaytee Hummingbird ElectroNectar Wild Bird Food, Ready to Use, 64 Ounces",
+          "_source": "热销新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (6 Official Refill Cartridges)",
+          "goodsNameCn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Aut",
+          "thumbnail": "https://m.media-amazon.com/images/I/81+nq0FrOeL._AC_SY300_SX300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 21.2,
+          "goodsPriceMax": null,
+          "reviewNum": 38397,
+          "rating": 4.8,
+          "mallOpenTime": "2026-03-30T00:00:00.000+08:00",
+          "onSaleTime": null,
+          "goodsId": "B0CTQDTF1V",
+          "detailUrl": "B0CTQDTF1V",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 5083,
+              "catId": "911952",
+              "catName": "配件",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (6 Official Refill Cartridges)",
+          "_source": "热销新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        }
+      ]
+    },
+    {
+      "channel": "新店热销",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "WF Athletic Supply Tatami Pattern 3/4-Inch Thickness Interlocking Exercise Foam Mats, Extra Thick Eva Foam Flooring Tiles, Gym Fitness Equipment Mat & Home Protective Flooring Cushion, Black & Blue",
+          "goodsNameCn": "WF Athletic Supply Tatami Pattern 3/4-Inch Thickness Interlocking Exercise Foam Mats, Extra Thick Ev",
+          "thumbnail": "https://m.media-amazon.com/images/I/81nFoA3r6ML._AC_SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 7474914,
+          "sales": null,
+          "goodsPriceMin": 45.5,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": null,
+          "mallOpenTime": "2024-04-12T00:00:00.000+08:00",
+          "onSaleTime": "2024-04-12T00:00:00.000+08:00",
+          "goodsId": "B0D1KGSYGC",
+          "detailUrl": "B0D1KGSYGC",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 2589,
+              "catId": "3375251",
+              "catName": "运动与户外",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4170,
+              "catId": "3407731",
+              "catName": "锻炼身体",
+              "catLevel": 2,
+              "parentCatId": "3375251",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4591,
+              "catId": "3407891",
+              "catName": "辅料",
+              "catLevel": 3,
+              "parentCatId": "3407731",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 7018,
+              "catId": "3407941",
+              "catName": "运动垫",
+              "catLevel": 4,
+              "parentCatId": "3407891",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "WF Athletic Supply Tatami Pattern 3/4-Inch Thickness Interlocking Exercise Foam Mats, Extra Thick Eva Foam Flooring Tiles, Gym Fitness Equipment Mat & Home Protective Flooring Cushion, Black & Blue",
+          "_source": "新店热销",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "露肩分层蕾丝舞会礼服 2026 长款舞会礼服女式正式闪亮亮片紧身胸衣婚纱带开叉",
+          "goodsNameCn": "露肩分层蕾丝舞会礼服 2026 长款舞会礼服女式正式闪亮亮片紧身胸衣婚纱带开叉",
+          "thumbnail": "https://m.media-amazon.com/images/I/61-zjOHTXLL._AC_SY550_.jpg",
+          "thumbnailCn": "",
+          "sold": 7990280,
+          "sales": null,
+          "goodsPriceMin": 99.89,
+          "goodsPriceMax": null,
+          "reviewNum": 173,
+          "rating": 4,
+          "mallOpenTime": "2022-12-09T00:00:00.000+08:00",
+          "onSaleTime": "2023-11-24T08:00:00.000+08:00",
+          "goodsId": "B0CNX4JTMP",
+          "detailUrl": "B0CNX4JTMP",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 13287,
+              "catId": "1040660",
+              "catName": "服装",
+              "catLevel": 3,
+              "parentCatId": "7147440011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 16565,
+              "catId": "1045024",
+              "catName": "连衣裙",
+              "catLevel": 4,
+              "parentCatId": "1040660",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 18562,
+              "catId": "11006703011",
+              "catName": "鸡尾酒装",
+              "catLevel": 5,
+              "parentCatId": "1045024",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 84,
+              "catId": "7141123011",
+              "catName": "服装、鞋履和珠宝",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 12062,
+              "catId": "7147440011",
+              "catName": "女士",
+              "catLevel": 2,
+              "parentCatId": "7141123011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "露肩分层蕾丝舞会礼服 2026 长款舞会礼服女式正式闪亮亮片紧身胸衣婚纱带开叉",
+          "_source": "新店热销",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "goodsNameCn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "thumbnail": "https://m.media-amazon.com/images/I/512--JLMUsL._AC_SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 13010454,
+          "sales": null,
+          "goodsPriceMin": 18.79,
+          "goodsPriceMax": null,
+          "reviewNum": 1,
+          "rating": 5,
+          "mallOpenTime": "2021-10-22T00:00:00.000+08:00",
+          "onSaleTime": "2026-03-11T00:00:00.000+08:00",
+          "goodsId": "B0GS5BN8BM",
+          "detailUrl": "B0GS5BN8BM",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 14179,
+              "catId": "553188",
+              "catName": "文件",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "_source": "新店热销",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Gildan Men's Crew T-Shirts, Multipack, Style G1100",
+          "goodsNameCn": "Gildan Men's Crew T-Shirts, Multipack, Style G1100",
+          "thumbnail": "https://m.media-amazon.com/images/I/61Jkk5m9EWL._AC_SX342_SY445_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 3321078,
+          "sales": null,
+          "goodsPriceMin": 45.45,
+          "goodsPriceMax": 70.4,
+          "reviewNum": 314362,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-03-23T12:00:00.000+08:00",
+          "goodsId": "B0BZDLXKTS",
+          "detailUrl": "B0BZDLXKTS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 4946,
+              "catId": "1040658",
+              "catName": "服装",
+              "catLevel": 3,
+              "parentCatId": "7147441011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 11775,
+              "catId": "1045624",
+              "catName": "T 恤",
+              "catLevel": 5,
+              "parentCatId": "2476517011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 8241,
+              "catId": "2476517011",
+              "catName": "衬衫",
+              "catLevel": 4,
+              "parentCatId": "1040658",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 84,
+              "catId": "7141123011",
+              "catName": "服装、鞋履和珠宝",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4076,
+              "catId": "7147441011",
+              "catName": "男士",
+              "catLevel": 2,
+              "parentCatId": "7141123011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Gildan Men's Crew T-Shirts, Multipack, Style G1100",
+          "_source": "新店热销",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "STANLEY Quencher H2.0 Tumbler with Handle and Straw 14 oz | Flowstate 3-Position Lid | Cup Holder Compatible for Travel | Insulated Stainless Steel Cup | BPA-Free | Azure",
+          "goodsNameCn": "STANLEY Quencher H2.0 Tumbler with Handle and Straw 14 oz | Flowstate 3-Position Lid | Cup Holder Co",
+          "thumbnail": "https://m.media-amazon.com/images/I/61mpaVVZafL.__AC_SX300_SY300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 816203,
+          "sales": null,
+          "goodsPriceMin": 20,
+          "goodsPriceMax": null,
+          "reviewNum": 70044,
+          "rating": 4.7,
+          "mallOpenTime": "2025-02-04T08:00:00.000+08:00",
+          "onSaleTime": "2025-02-04T00:00:00.000+08:00",
+          "goodsId": "B0F165F7V9",
+          "detailUrl": "B0F165F7V9",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 324,
+              "catId": "1055398",
+              "catName": "家居用品",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 12000,
+              "catId": "21613418011",
+              "catName": "热水器",
+              "catLevel": 4,
+              "parentCatId": "510136",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 12645,
+              "catId": "21613420011",
+              "catName": "保温饮料容器",
+              "catLevel": 5,
+              "parentCatId": "21613418011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 15152,
+              "catId": "21613423011",
+              "catName": "不倒翁",
+              "catLevel": 6,
+              "parentCatId": "21613420011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 3914,
+              "catId": "284507",
+              "catName": "厨房",
+              "catLevel": 2,
+              "parentCatId": "1055398",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8840,
+              "catId": "510136",
+              "catName": "储存",
+              "catLevel": 3,
+              "parentCatId": "284507",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "STANLEY Quencher H2.0 Tumbler with Handle and Straw 14 oz | Flowstate 3-Position Lid | Cup Holder Compatible for Travel | Insulated Stainless Steel Cup | BPA-Free | Azure",
+          "_source": "新店热销",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Nature's Sunshine Lower Bowel Stimulator - Helps Relieve Constipation - Cleanse & Detox Your Colon with Natural Herbal Ingredients - 25 Servings - 100 Vegcaps",
+          "goodsNameCn": "Nature's Sunshine Lower Bowel Stimulator - Helps Relieve Constipation - Cleanse & Detox Your Colon w",
+          "thumbnail": "https://m.media-amazon.com/images/I/51NYh0EgqgL._AC_UY218_.jpg",
+          "thumbnailCn": "",
+          "sold": 24513391,
+          "sales": null,
+          "goodsPriceMin": 25.95,
+          "goodsPriceMax": null,
+          "reviewNum": 45,
+          "rating": 4.5,
+          "mallOpenTime": "2007-10-05T00:00:00.000+08:00",
+          "onSaleTime": "2007-10-05T08:00:00.000+08:00",
+          "goodsId": "B000WQJK94",
+          "detailUrl": "B000WQJK94",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 236,
+              "catId": "3760901",
+              "catName": "健康与家居",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 1316,
+              "catId": "3760941",
+              "catName": "卫生保健",
+              "catLevel": 2,
+              "parentCatId": "3760901",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2558,
+              "catId": "3779501",
+              "catName": "女士卫生护理",
+              "catLevel": 3,
+              "parentCatId": "3760941",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 5588,
+              "catId": "3779591",
+              "catName": "卫生巾",
+              "catLevel": 4,
+              "parentCatId": "3779501",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Nature's Sunshine Lower Bowel Stimulator - Helps Relieve Constipation - Cleanse & Detox Your Colon with Natural Herbal Ingredients - 25 Servings - 100 Vegcaps",
+          "_source": "新店热销",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "CURAD Alcohol Prep Pads (Pack of 4 Boxes), 400 Pieces of Medium Isopropyl Alcohol Wipes Individually Wrapped, First Aid Alcohol Swabs for Cuts & Scrapes, Medical Alcohol Pads for General Cleansing($0.",
+          "goodsNameCn": "CURAD Alcohol Prep Pads (Pack of 4 Boxes), 400 Pieces of Medium Isopropyl Alcohol Wipes Individually",
+          "thumbnail": "https://m.media-amazon.com/images/I/716L5aJWJyL._AC_UY218_.jpg",
+          "thumbnailCn": "",
+          "sold": 11274964,
+          "sales": null,
+          "goodsPriceMin": 5.59,
+          "goodsPriceMax": null,
+          "reviewNum": 576,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2014-05-31T08:00:00.000+08:00",
+          "goodsId": "B00KOSP454",
+          "detailUrl": "B00KOSP454",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 236,
+              "catId": "3760901",
+              "catName": "健康与家居",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 1316,
+              "catId": "3760941",
+              "catName": "卫生保健",
+              "catLevel": 2,
+              "parentCatId": "3760901",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2853,
+              "catId": "3762591",
+              "catName": "急救",
+              "catLevel": 3,
+              "parentCatId": "3760941",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3954,
+              "catId": "3762711",
+              "catName": "绷带和包扎用品",
+              "catLevel": 4,
+              "parentCatId": "3762591",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 6411,
+              "catId": "3762771",
+              "catName": "纱布和包扎垫",
+              "catLevel": 5,
+              "parentCatId": "3762711",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 7452,
+              "catId": "702367011",
+              "catName": "纱布",
+              "catLevel": 6,
+              "parentCatId": "3762771",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "CURAD Alcohol Prep Pads (Pack of 4 Boxes), 400 Pieces of Medium Isopropyl Alcohol Wipes Individually Wrapped, First Aid Alcohol Swabs for Cuts & Scrapes, Medical Alcohol Pads for General Cleansing($0.01$0.01/count)",
+          "_source": "新店热销",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "La Roche-Posay Toleriane 双重修复面部保湿霜,含神经酰胺和烟酰胺的日常保湿霜,适合所有肤质,瞬间舒适持久保湿,不含香料",
+          "goodsNameCn": "La Roche-Posay Toleriane 双重修复面部保湿霜,含神经酰胺和烟酰胺的日常保湿霜,适合所有肤质,瞬间舒适持久保湿,不含香料",
+          "thumbnail": "https://m.media-amazon.com/images/I/51x78epntaL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 297145,
+          "sales": null,
+          "goodsPriceMin": 24.99,
+          "goodsPriceMax": null,
+          "reviewNum": 48,
+          "rating": 4.6,
+          "mallOpenTime": "2025-03-21T08:00:00.000+08:00",
+          "onSaleTime": "2026-01-20T00:00:00.000+08:00",
+          "goodsId": "B01N9SPQHQ",
+          "detailUrl": "B01N9SPQHQ",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 2451,
+              "catId": "11060451",
+              "catName": "身体护理",
+              "catLevel": 2,
+              "parentCatId": "3760911",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3382,
+              "catId": "11060711",
+              "catName": "面部护肤",
+              "catLevel": 3,
+              "parentCatId": "11060451",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4149,
+              "catId": "11061301",
+              "catName": "面霜乳液",
+              "catLevel": 4,
+              "parentCatId": "11060711",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 5036,
+              "catId": "16479981011",
+              "catName": "面部保湿霜",
+              "catLevel": 5,
+              "parentCatId": "11061301",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 24,
+              "catId": "3760911",
+              "catName": "美容与护理",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "La Roche-Posay Toleriane 双重修复面部保湿霜,含神经酰胺和烟酰胺的日常保湿霜,适合所有肤质,瞬间舒适持久保湿,不含香料",
+          "_source": "新店热销",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Nizoral A-D 抗皮屑洗发水，含氯共聚物1%，干痒头皮洗发水用于控皮屑，7 液盎司（约207毫升）",
+          "goodsNameCn": "Nizoral A-D 抗皮屑洗发水，含氯共聚物1%，干痒头皮洗发水用于控皮屑，7 液盎司（约207毫升）",
+          "thumbnail": "https://m.media-amazon.com/images/I/71UKDMdW3KL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 22.07,
+          "goodsPriceMax": null,
+          "reviewNum": 109,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B00AINMFAC",
+          "detailUrl": "B00AINMFAC",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 603,
+              "catId": "11057241",
+              "catName": "美发护发",
+              "catLevel": 2,
+              "parentCatId": "3760911",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 6947,
+              "catId": "11057651",
+              "catName": "洗发",
+              "catLevel": 4,
+              "parentCatId": "17911764011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 3681,
+              "catId": "17911764011",
+              "catName": "洗发水和护发素",
+              "catLevel": 3,
+              "parentCatId": "11057241",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 24,
+              "catId": "3760911",
+              "catName": "美容与护理",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Nizoral A-D 抗皮屑洗发水，含氯共聚物1%，干痒头皮洗发水用于控皮屑，7 液盎司（约207毫升）",
+          "_source": "新店热销",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "有机蓝莓,12 盎司",
+          "goodsNameCn": "有机蓝莓,12 盎司",
+          "thumbnail": "https://m.media-amazon.com/images/I/71PK6BOLxCL._SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 3.99,
+          "goodsPriceMax": null,
+          "reviewNum": 26006,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B077N7TR5G",
+          "detailUrl": "B077N7TR5G",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 174,
+              "catId": "16310101",
+              "catName": "杂货店",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 16197,
+              "catId": "16318981",
+              "catName": "新鲜水果",
+              "catLevel": 3,
+              "parentCatId": "6506977011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 14921,
+              "catId": "6506977011",
+              "catName": "产量",
+              "catLevel": 2,
+              "parentCatId": "16310101",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 18140,
+              "catId": "6507006011",
+              "catName": "浆果",
+              "catLevel": 4,
+              "parentCatId": "16318981",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "有机蓝莓,12 盎司",
+          "_source": "新店热销",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        }
+      ]
+    },
+    {
+      "channel": "大卖新品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "TERRO 蚂蚁杀手诱饵站 T300B - 消除蚂蚁的液体诱饵 - 诱饵系统 - 12 个装站,有效控制室内蚂蚁",
+          "goodsNameCn": "TERRO 蚂蚁杀手诱饵站 T300B - 消除蚂蚁的液体诱饵 - 诱饵系统 - 12 个装站,有效控制室内蚂蚁",
+          "thumbnail": "https://m.media-amazon.com/images/I/81GTDsmO9IL._AC_SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 12.12,
+          "goodsPriceMax": null,
+          "reviewNum": 151269,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B00E4GACB8",
+          "detailUrl": "B00E4GACB8",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 5566,
+              "catId": "3737941",
+              "catName": "饵剂和诱饵",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "TERRO 蚂蚁杀手诱饵站 T300B - 消除蚂蚁的液体诱饵 - 诱饵系统 - 12 个装站,有效控制室内蚂蚁",
+          "_source": "大卖新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (4 Official Refill Cartridges)",
+          "goodsNameCn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Aut",
+          "thumbnail": "https://m.media-amazon.com/images/I/81uXJAVhd1L._AC_UY218_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 14.97,
+          "goodsPriceMax": null,
+          "reviewNum": 383,
+          "rating": 4.8,
+          "mallOpenTime": "2026-03-21T00:00:00.000+08:00",
+          "onSaleTime": null,
+          "goodsId": "B0C3FTCYZL",
+          "detailUrl": "B0C3FTCYZL",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 5083,
+              "catId": "911952",
+              "catName": "配件",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (4 Official Refill Cartridges)",
+          "_source": "大卖新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Chapin 20004 Pump Sprayer, 1-Gallon SureSpray Translucent Tank with an Easy Fill Funnel-Top Opening, Adjustable Cone Nozzle & 34\" Long Reach Hose, Used for Fertilizer, Pesticides, Weeds & Pests",
+          "goodsNameCn": "Chapin 20004 Pump Sprayer, 1-Gallon SureSpray Translucent Tank with an Easy Fill Funnel-Top Opening,",
+          "thumbnail": "https://m.media-amazon.com/images/I/71oqfMsZf6L._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 15.49,
+          "goodsPriceMax": null,
+          "reviewNum": 997,
+          "rating": 4.4,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B000E28UQU",
+          "detailUrl": "B000E28UQU",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2007,
+              "catId": "3610851",
+              "catName": "园艺和微笑护理",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 11023,
+              "catId": "492090011",
+              "catName": "喷雾器",
+              "catLevel": 4,
+              "parentCatId": "9001143011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 9274,
+              "catId": "9001143011",
+              "catName": "喷雾器",
+              "catLevel": 3,
+              "parentCatId": "3610851",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Chapin 20004 Pump Sprayer, 1-Gallon SureSpray Translucent Tank with an Easy Fill Funnel-Top Opening, Adjustable Cone Nozzle & 34\" Long Reach Hose, Used for Fertilizer, Pesticides, Weeds & Pests",
+          "_source": "大卖新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Wagner's 53002 Farmer's Delight樱桃味野生鸟类食品，10磅袋装",
+          "goodsNameCn": "Wagner's 53002 Farmer's Delight樱桃味野生鸟类食品，10磅袋装",
+          "thumbnail": "https://m.media-amazon.com/images/I/81gIvBzsnaL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 10109263,
+          "sales": null,
+          "goodsPriceMin": 12.48,
+          "goodsPriceMax": null,
+          "reviewNum": 194,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2014-06-11T00:00:00.000+08:00",
+          "goodsId": "B00LHE5OSQ",
+          "detailUrl": "B00LHE5OSQ",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 8160,
+              "catId": "13401981",
+              "catName": "鸟食",
+              "catLevel": 5,
+              "parentCatId": "4532514011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8705,
+              "catId": "13401991",
+              "catName": "野鸟食",
+              "catLevel": 6,
+              "parentCatId": "13401981",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4665,
+              "catId": "4532514011",
+              "catName": "鸟",
+              "catLevel": 4,
+              "parentCatId": "553632",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3814,
+              "catId": "553632",
+              "catName": "后院观鸟和野生动物",
+              "catLevel": 3,
+              "parentCatId": "553788",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2770,
+              "catId": "553788",
+              "catName": "彩绘装饰",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Wagner's 53002 Farmer's Delight樱桃味野生鸟类食品，10磅袋装",
+          "_source": "大卖新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Thermacell E-Series Rechargeable Mosquito Repeller with 20’ Mosquito Protection Zone; Bug Spray Alternative; Scent Free",
+          "goodsNameCn": "Thermacell E-Series Rechargeable Mosquito Repeller with 20’ Mosquito Protection Zone; Bug Spray Alte",
+          "thumbnail": "https://m.media-amazon.com/images/I/71KqVhpbSjL.__AC_SX300_SY300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 670480,
+          "sales": null,
+          "goodsPriceMin": 35,
+          "goodsPriceMax": null,
+          "reviewNum": 22611,
+          "rating": 4,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-03-25T00:00:00.000+08:00",
+          "goodsId": "B0F3Y54Z8R",
+          "detailUrl": "B0F3Y54Z8R",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8417,
+              "catId": "3737951",
+              "catName": "驱虫剂",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Thermacell E-Series Rechargeable Mosquito Repeller with 20’ Mosquito Protection Zone; Bug Spray Alternative; Scent Free",
+          "_source": "大卖新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Ortho Home Defense Insect Killer for Indoor and Perimeter2 with Comfort Wand - Ready-To-Use Bug Spray, Kills Ants, Cockroaches & Spiders, 1.33 gal.",
+          "goodsNameCn": "Ortho Home Defense Insect Killer for Indoor and Perimeter2 with Comfort Wand - Ready-To-Use Bug Spra",
+          "thumbnail": "https://m.media-amazon.com/images/I/717MxeY-OpL._AC_SY300_SX300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 22.21,
+          "goodsPriceMax": null,
+          "reviewNum": 17055,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B01N0TGJHB",
+          "detailUrl": "B01N0TGJHB",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 9561,
+              "catId": "23539052011",
+              "catName": "喷雾剂",
+              "catLevel": 4,
+              "parentCatId": "3737951",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8417,
+              "catId": "3737951",
+              "catName": "驱虫剂",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Ortho Home Defense Insect Killer for Indoor and Perimeter2 with Comfort Wand - Ready-To-Use Bug Spray, Kills Ants, Cockroaches & Spiders, 1.33 gal.",
+          "_source": "大卖新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Zevo Flying Insect Trap & 3 Refill Cartridges - Plug in Fly Trap & Indoor Bug Catcher for Gnats, House & Fruit Flies - Blue & UV Light Technology, Mess-Free Alternative to Bug Zapper",
+          "goodsNameCn": "Zevo Flying Insect Trap & 3 Refill Cartridges - Plug in Fly Trap & Indoor Bug Catcher for Gnats, Hou",
+          "thumbnail": "https://m.media-amazon.com/images/I/81oM9Fx8QaL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 25.96,
+          "goodsPriceMax": null,
+          "reviewNum": 504,
+          "rating": 4.2,
+          "mallOpenTime": "2026-03-20T00:00:00.000+08:00",
+          "onSaleTime": null,
+          "goodsId": "B0CKY689WQ",
+          "detailUrl": "B0CKY689WQ",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8986,
+              "catId": "3737901",
+              "catName": "陷阱",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Zevo Flying Insect Trap & 3 Refill Cartridges - Plug in Fly Trap & Indoor Bug Catcher for Gnats, House & Fruit Flies - Blue & UV Light Technology, Mess-Free Alternative to Bug Zapper",
+          "_source": "大卖新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "PayLessHere 户外家具套装三件，露台家具套装，灰色对话套装，配有两把麻条椅，玻璃咖啡桌，适合咖啡吧，泳池边露台，户外，红色靠垫",
+          "goodsNameCn": "PayLessHere 户外家具套装三件，露台家具套装，灰色对话套装，配有两把麻条椅，玻璃咖啡桌，适合咖啡吧，泳池边露台，户外，红色靠垫",
+          "thumbnail": "https://m.media-amazon.com/images/I/61fDCYsh5IL._AC_SY300_SX300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 1123616,
+          "sales": null,
+          "goodsPriceMin": 49.99,
+          "goodsPriceMax": null,
+          "reviewNum": 353,
+          "rating": 4.3,
+          "mallOpenTime": "2023-10-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-10-16T00:00:00.000+08:00",
+          "goodsId": "B0CMGGG6Z8",
+          "detailUrl": "B0CMGGG6Z8",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 10290,
+              "catId": "16135380011",
+              "catName": "沙发组",
+              "catLevel": 4,
+              "parentCatId": "3742441",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 8528,
+              "catId": "3742441",
+              "catName": "庭院套装",
+              "catLevel": 3,
+              "parentCatId": "553824",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4202,
+              "catId": "553824",
+              "catName": "庭院家具及配件",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "PayLessHere 户外家具套装三件，露台家具套装，灰色对话套装，配有两把麻条椅，玻璃咖啡桌，适合咖啡吧，泳池边露台，户外，红色靠垫",
+          "_source": "大卖新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Kaytee Hummingbird ElectroNectar Wild Bird Food, Ready to Use, 64 Ounces",
+          "goodsNameCn": "Kaytee Hummingbird ElectroNectar Wild Bird Food, Ready to Use, 64 Ounces",
+          "thumbnail": "https://m.media-amazon.com/images/I/71sh8qAWtdL._AC_SY300_SX300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 9.9,
+          "goodsPriceMax": null,
+          "reviewNum": 28419,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B007FJ0FJU",
+          "detailUrl": "B007FJ0FJU",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 8160,
+              "catId": "13401981",
+              "catName": "鸟食",
+              "catLevel": 5,
+              "parentCatId": "4532514011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9290,
+              "catId": "13402001",
+              "catName": "蜂鸟食",
+              "catLevel": 6,
+              "parentCatId": "13401981",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4665,
+              "catId": "4532514011",
+              "catName": "鸟",
+              "catLevel": 4,
+              "parentCatId": "553632",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3814,
+              "catId": "553632",
+              "catName": "后院观鸟和野生动物",
+              "catLevel": 3,
+              "parentCatId": "553788",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2770,
+              "catId": "553788",
+              "catName": "彩绘装饰",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Kaytee Hummingbird ElectroNectar Wild Bird Food, Ready to Use, 64 Ounces",
+          "_source": "大卖新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        },
+        {
+          "goodsNameEn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (6 Official Refill Cartridges)",
+          "goodsNameCn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Aut",
+          "thumbnail": "https://m.media-amazon.com/images/I/81+nq0FrOeL._AC_SY300_SX300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 21.2,
+          "goodsPriceMax": null,
+          "reviewNum": 38397,
+          "rating": 4.8,
+          "mallOpenTime": "2026-03-30T00:00:00.000+08:00",
+          "onSaleTime": null,
+          "goodsId": "B0CTQDTF1V",
+          "detailUrl": "B0CTQDTF1V",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1412,
+              "catId": "2972638011",
+              "catName": "庭院、草坪和园艺",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4632,
+              "catId": "553844",
+              "catName": "防虫用品",
+              "catLevel": 2,
+              "parentCatId": "2972638011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 5083,
+              "catId": "911952",
+              "catName": "配件",
+              "catLevel": 3,
+              "parentCatId": "553844",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (6 Official Refill Cartridges)",
+          "_source": "大卖新品",
+          "_platform": "amazon",
+          "_catId": 2972638011
+        }
+      ]
+    }
+  ]
+}

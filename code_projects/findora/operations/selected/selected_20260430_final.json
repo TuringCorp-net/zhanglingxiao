@@ -1,0 +1,540 @@
+[
+  {
+    "goodsNameEn": "8 Shaped Elastic Resistance Band With Foam Handle, Tension Band For Abdomen Waist Arm Leg Stretching, Fitness Training, Gym Fitness, Yoga, Pilates, Suitable For Beginner",
+    "goodsNameCn": "8 Shaped Elastic Resistance Band With Foam Handle, Tension Band For Abdomen Waist Arm Leg Stretching",
+    "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/f809d8730248a2e4433254ad8112574e.jpg",
+    "thumbnailCn": "https://cbu01.alicdn.com/O1CN01LdBzt81LjwEDRnIIJ_!!2218953201336-0-cib.jpg",
+    "sold": 100000,
+    "sales": 175000,
+    "goodsPriceMin": 1.75,
+    "goodsPriceMax": 8.23,
+    "reviewNum": 4241,
+    "rating": 4.6,
+    "mallOpenTime": "2022-09-03T06:24:33.493+00:00",
+    "onSaleTime": "2023-02-02T19:44:11.324+00:00",
+    "goodsId": "601099512835944",
+    "detailUrl": "601099512835944",
+    "platform": "temu",
+    "catItems": [
+      {
+        "id": 15277,
+        "catId": 31148,
+        "catName": "运动与户外用品",
+        "catLevel": 1,
+        "parentCatId": 0,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 19620,
+        "catId": 31757,
+        "catName": "健身、训练用品",
+        "catLevel": 2,
+        "parentCatId": 31148,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 26825,
+        "catId": 31996,
+        "catName": "力量训练器械",
+        "catLevel": 3,
+        "parentCatId": 31757,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 36683,
+        "catId": 32045,
+        "catName": "拉力带",
+        "catLevel": 4,
+        "parentCatId": 31996,
+        "isLeaf": true,
+        "optId": null
+      }
+    ],
+    "goodsName": "8 Shaped Elastic Resistance Band With Foam Handle, Tension Band For Abdomen Waist Arm Leg Stretching, Fitness Training, Gym Fitness, Yoga, Pilates, Suitable For Beginner",
+    "_source": "热销新品",
+    "_platform": "temu",
+    "_catId": 31148,
+    "_score": 39
+  },
+  {
+    "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+    "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+    "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/09/1763619512bacf93bafda75ea54b6f0a518ef07bcb_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 1500,
+    "sales": 33345,
+    "goodsPriceMin": 1.71,
+    "goodsPriceMax": null,
+    "reviewNum": 2,
+    "rating": 4.85,
+    "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+    "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+    "goodsId": "299983499",
+    "detailUrl": "299983499",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 192,
+        "catId": 3657,
+        "catName": "Automotive",
+        "catNameCn": "汽车类",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      },
+      {
+        "id": 193,
+        "catId": 3883,
+        "catName": "Automotive Interior Accessories",
+        "catNameCn": "汽车内饰配件",
+        "catLevel": 1,
+        "parentCatId": 3657,
+        "isLeaf": false
+      },
+      {
+        "id": 5880,
+        "catId": 13894,
+        "catName": "Car Hanging Decorations",
+        "catNameCn": "汽车悬挂装饰品",
+        "catLevel": 2,
+        "parentCatId": 3883,
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+    "_source": "热销新品",
+    "_platform": "shein",
+    "_catId": 3657,
+    "_score": 53
+  },
+  {
+    "goodsNameEn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (4 Official Refill Cartridges)",
+    "goodsNameCn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Aut",
+    "thumbnail": "https://m.media-amazon.com/images/I/81uXJAVhd1L._AC_UY218_.jpg",
+    "thumbnailCn": "",
+    "sold": 0,
+    "sales": null,
+    "goodsPriceMin": 14.97,
+    "goodsPriceMax": null,
+    "reviewNum": 383,
+    "rating": 4.8,
+    "mallOpenTime": "2026-03-21T00:00:00.000+08:00",
+    "onSaleTime": null,
+    "goodsId": "B0C3FTCYZL",
+    "detailUrl": "B0C3FTCYZL",
+    "platform": "amazon",
+    "catItems": [
+      {
+        "id": 1412,
+        "catId": "2972638011",
+        "catName": "庭院、草坪和园艺",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 4632,
+        "catId": "553844",
+        "catName": "防虫用品",
+        "catLevel": 2,
+        "parentCatId": "2972638011",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 5083,
+        "catId": "911952",
+        "catName": "配件",
+        "catLevel": 3,
+        "parentCatId": "553844",
+        "isLeaf": true,
+        "siteId": 1
+      }
+    ],
+    "goodsName": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (4 Official Refill Cartridges)",
+    "_source": "热销新品",
+    "_platform": "amazon",
+    "_catId": 2972638011,
+    "_score": 47
+  },
+  {
+    "goodsNameEn": "Solar Outdoor Waterproof LED Wall Light Powerful Solar Energy Lamp with Light Sensor for Garden Yard Fence House Decoration",
+    "goodsNameCn": "Solar Outdoor Waterproof LED Wall Light Powerful Solar Energy Lamp with Light Sensor for Garden Yard",
+    "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S9cf84afddb3642ac94c699df4aff1fabj.png",
+    "thumbnailCn": "",
+    "sold": 269987,
+    "sales": null,
+    "goodsPriceMin": 3.93,
+    "goodsPriceMax": null,
+    "reviewNum": 0,
+    "rating": 4.9,
+    "mallOpenTime": null,
+    "onSaleTime": "2024-05-16T00:00:00.000+08:00",
+    "goodsId": "1005006995785463",
+    "detailUrl": "1005006995785463",
+    "platform": "sumaitong",
+    "catItems": [
+      {
+        "id": 10,
+        "catId": "39",
+        "catName": "照明灯饰",
+        "catLevel": 0,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 5427,
+        "catId": "150401",
+        "catName": "���外照明",
+        "catLevel": 1,
+        "parentCatId": "39",
+        "isLeaf": false
+      },
+      {
+        "id": 5486,
+        "catId": "39050207",
+        "catName": "太阳能灯",
+        "catLevel": 2,
+        "parentCatId": "150401",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "Solar Outdoor Waterproof LED Wall Light Powerful Solar Energy Lamp with Light Sensor for Garden Yard Fence House Decoration",
+    "_source": "热销商品",
+    "_platform": "sumaitong",
+    "_catId": 1511,
+    "_score": 61
+  },
+  {
+    "goodsNameEn": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ideal for Bed,Couch, Travel,Camping, All Seasons,Home Bedroom Decor",
+    "goodsNameCn": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ide",
+    "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/bb10ac60902b4fc08bf6632e79debfdd~tplv-fhlh96nyum-crop-webp:2500:2500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+    "thumbnailCn": "",
+    "sold": 398851,
+    "sales": null,
+    "goodsPriceMin": 13.59,
+    "goodsPriceMax": 29.99,
+    "reviewNum": 45295,
+    "rating": 4.6,
+    "mallOpenTime": null,
+    "onSaleTime": "2024-11-12T10:56:50.981+08:00",
+    "goodsId": "1729436032662278390",
+    "detailUrl": "1729436032662278390",
+    "platform": "tiktok",
+    "catItems": [
+      {
+        "id": 9974,
+        "catId": "600154",
+        "catName": "Textiles & Soft Furnishings",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 9979,
+        "catId": "808328",
+        "catName": "Bedding and Linens",
+        "catLevel": 2,
+        "parentCatId": "600154",
+        "isLeaf": false
+      },
+      {
+        "id": 10746,
+        "catId": "600157",
+        "catName": "Blankets & Throws",
+        "catLevel": 3,
+        "parentCatId": "808328",
+        "isLeaf": false
+      },
+      {
+        "id": 10747,
+        "catId": "1010576",
+        "catName": "Blankets",
+        "catLevel": 4,
+        "parentCatId": "600157",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ideal for Bed,Couch, Travel,Camping, All Seasons,Home Bedroom Decor",
+    "_source": "热销新品",
+    "_platform": "tiktok",
+    "_catId": 600154,
+    "_score": 39
+  },
+  {
+    "goodsNameEn": "Motion Sensor Light Wireless LED Night Light Type C Rechargeable Light Cabinet Wardrobe Lamp Staircase Backlight For Kitchen LED",
+    "goodsNameCn": "Motion Sensor Light Wireless LED Night Light Type C Rechargeable Light Cabinet Wardrobe Lamp Stairca",
+    "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sc56ba89b3b77443ea4452d5be7c4c4d9H.jpg",
+    "thumbnailCn": "",
+    "sold": 308467,
+    "sales": null,
+    "goodsPriceMin": 0.99,
+    "goodsPriceMax": null,
+    "reviewNum": 0,
+    "rating": 4.5,
+    "mallOpenTime": null,
+    "onSaleTime": "2023-05-19T00:00:00.000+08:00",
+    "goodsId": "1005005588986583",
+    "detailUrl": "1005005588986583",
+    "platform": "sumaitong",
+    "catItems": [
+      {
+        "id": 10,
+        "catId": "39",
+        "catName": "照明灯饰",
+        "catLevel": 0,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 5432,
+        "catId": "39050508",
+        "catName": "小夜灯",
+        "catLevel": 1,
+        "parentCatId": "39",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "Motion Sensor Light Wireless LED Night Light Type C Rechargeable Light Cabinet Wardrobe Lamp Staircase Backlight For Kitchen LED",
+    "_source": "热销商品",
+    "_platform": "sumaitong",
+    "_catId": 1511,
+    "_score": 49
+  },
+  {
+    "goodsNameEn": "Zevo Flying Insect Trap & 3 Refill Cartridges - Plug in Fly Trap & Indoor Bug Catcher for Gnats, House & Fruit Flies - Blue & UV Light Technology, Mess-Free Alternative to Bug Zapper",
+    "goodsNameCn": "Zevo Flying Insect Trap & 3 Refill Cartridges - Plug in Fly Trap & Indoor Bug Catcher for Gnats, Hou",
+    "thumbnail": "https://m.media-amazon.com/images/I/81oM9Fx8QaL._AC_UL320_.jpg",
+    "thumbnailCn": "",
+    "sold": 0,
+    "sales": null,
+    "goodsPriceMin": 25.96,
+    "goodsPriceMax": null,
+    "reviewNum": 504,
+    "rating": 4.2,
+    "mallOpenTime": "2026-03-20T00:00:00.000+08:00",
+    "onSaleTime": null,
+    "goodsId": "B0CKY689WQ",
+    "detailUrl": "B0CKY689WQ",
+    "platform": "amazon",
+    "catItems": [
+      {
+        "id": 1412,
+        "catId": "2972638011",
+        "catName": "庭院、草坪和园艺",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 8986,
+        "catId": "3737901",
+        "catName": "陷阱",
+        "catLevel": 3,
+        "parentCatId": "553844",
+        "isLeaf": true,
+        "siteId": 1
+      },
+      {
+        "id": 4632,
+        "catId": "553844",
+        "catName": "防虫用品",
+        "catLevel": 2,
+        "parentCatId": "2972638011",
+        "isLeaf": false,
+        "siteId": 1
+      }
+    ],
+    "goodsName": "Zevo Flying Insect Trap & 3 Refill Cartridges - Plug in Fly Trap & Indoor Bug Catcher for Gnats, House & Fruit Flies - Blue & UV Light Technology, Mess-Free Alternative to Bug Zapper",
+    "_source": "热销新品",
+    "_platform": "amazon",
+    "_catId": 2972638011,
+    "_score": 47
+  },
+  {
+    "goodsNameEn": "Spring/Autumn Style Men's Tactical Cargo Pants, Slightly Stretch Fabric, Soft and Breathable, Multi-Pocket, Suitable for Casual Outings, No Belt",
+    "goodsNameCn": "春秋款 男士战术工装裤 微弹面料 高品质柔软透气 多口袋 休闲外出适用 不含腰带",
+    "thumbnail": "https://img.kwcdn.com/product/fancy/d82ea997-c4a2-4b9a-ba26-41dc67eb0079.jpg",
+    "thumbnailCn": "https://cbu01.alicdn.com/O1CN01kMCHhC2CZYnePexMu_!!2218657638488-0-cib.jpg",
+    "sold": 100000,
+    "sales": 2198000,
+    "goodsPriceMin": 21.98,
+    "goodsPriceMax": 28.6,
+    "reviewNum": 1987,
+    "rating": 4.7,
+    "mallOpenTime": "2024-09-25T11:09:22.284+00:00",
+    "onSaleTime": "2025-07-29T10:54:21.000+00:00",
+    "goodsId": "601101938887572",
+    "detailUrl": "601101938887572",
+    "platform": "temu",
+    "catItems": [
+      {
+        "id": 15277,
+        "catId": 31148,
+        "catName": "运动与户外用品",
+        "catLevel": 1,
+        "parentCatId": 0,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 22659,
+        "catId": 32875,
+        "catName": "户外休闲",
+        "catLevel": 2,
+        "parentCatId": 31148,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 28297,
+        "catId": 33936,
+        "catName": "徒步和户外休闲服装",
+        "catLevel": 3,
+        "parentCatId": 32875,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 28814,
+        "catId": 33937,
+        "catName": "男士户外服饰",
+        "catLevel": 4,
+        "parentCatId": 33936,
+        "isLeaf": false,
+        "optId": 2303
+      },
+      {
+        "id": 30941,
+        "catId": 33939,
+        "catName": "男士户外长裤",
+        "catLevel": 5,
+        "parentCatId": 33937,
+        "isLeaf": true,
+        "optId": null
+      }
+    ],
+    "goodsName": "春秋款 男士战术工装裤 微弹面料 高品质柔软透气 多口袋 休闲外出适用 不含腰带",
+    "_source": "热销新品",
+    "_platform": "temu",
+    "_catId": 31148,
+    "_score": 39
+  },
+  {
+    "goodsNameEn": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocket, Perfect Christmas & Valentine's Day Gift #GLOBAL PICKS",
+    "goodsNameCn": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocke",
+    "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/c359f0e1e6d74dab835011eb2730edda~tplv-fhlh96nyum-crop-webp:1200:1200.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast8&from=2378011839",
+    "thumbnailCn": "",
+    "sold": 184417,
+    "sales": null,
+    "goodsPriceMin": 16.49,
+    "goodsPriceMax": 24.69,
+    "reviewNum": 19734,
+    "rating": 4.8,
+    "mallOpenTime": null,
+    "onSaleTime": "2023-12-26T02:29:33.322+08:00",
+    "goodsId": "1729405570499645529",
+    "detailUrl": "1729405570499645529",
+    "platform": "tiktok",
+    "catItems": [
+      {
+        "id": 9974,
+        "catId": "600154",
+        "catName": "Textiles & Soft Furnishings",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 9979,
+        "catId": "808328",
+        "catName": "Bedding and Linens",
+        "catLevel": 2,
+        "parentCatId": "600154",
+        "isLeaf": false
+      },
+      {
+        "id": 10746,
+        "catId": "600157",
+        "catName": "Blankets & Throws",
+        "catLevel": 3,
+        "parentCatId": "808328",
+        "isLeaf": false
+      },
+      {
+        "id": 10747,
+        "catId": "1010576",
+        "catName": "Blankets",
+        "catLevel": 4,
+        "parentCatId": "600157",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocket, Perfect Christmas & Valentine's Day Gift #GLOBAL PICKS",
+    "_source": "热销新品",
+    "_platform": "tiktok",
+    "_catId": 600154,
+    "_score": 35
+  },
+  {
+    "goodsNameEn": "Plush Floor Mat, Decorative Area Rug, Modern Floor Carpet for Living Room, Bedroom & Home Decor, Soft-Thick Rugs, Fluffy Rugs for Room Decor, Modern Shaggy Rug #GLOBAL PICKS",
+    "goodsNameCn": "Plush Floor Mat, Decorative Area Rug, Modern Floor Carpet for Living Room, Bedroom & Home Decor, Sof",
+    "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/143c6622ef314fcda8bc78767412e52e~tplv-fhlh96nyum-crop-webp:1080:1080.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast8&from=2378011839",
+    "thumbnailCn": "",
+    "sold": 155498,
+    "sales": null,
+    "goodsPriceMin": 26.06,
+    "goodsPriceMax": 37.89,
+    "reviewNum": 20474,
+    "rating": 4.2,
+    "mallOpenTime": null,
+    "onSaleTime": "2024-04-27T04:09:40.220+08:00",
+    "goodsId": "1729456039002215120",
+    "detailUrl": "1729456039002215120",
+    "platform": "tiktok",
+    "catItems": [
+      {
+        "id": 9974,
+        "catId": "600154",
+        "catName": "Textiles & Soft Furnishings",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 9975,
+        "catId": "809992",
+        "catName": "Household Textiles",
+        "catLevel": 2,
+        "parentCatId": "600154",
+        "isLeaf": false
+      },
+      {
+        "id": 10303,
+        "catId": "600221",
+        "catName": "Carpets & Rugs",
+        "catLevel": 3,
+        "parentCatId": "809992",
+        "isLeaf": false
+      },
+      {
+        "id": 10304,
+        "catId": "1004432",
+        "catName": "Area Rugs",
+        "catLevel": 4,
+        "parentCatId": "600221",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "Plush Floor Mat, Decorative Area Rug, Modern Floor Carpet for Living Room, Bedroom & Home Decor, Soft-Thick Rugs, Fluffy Rugs for Room Decor, Modern Shaggy Rug #GLOBAL PICKS",
+    "_source": "热销新品",
+    "_platform": "tiktok",
+    "_catId": 600154,
+    "_score": 35
+  }
+]

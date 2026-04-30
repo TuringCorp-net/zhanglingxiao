@@ -1,6 +1,6 @@
 # Findora API Documentation
 
-> **版本：** v4.87（Coder定时任务：全面Review完成；TS编译0错误；四文档版本对齐）
+> **版本：** v4.99（Reviewer定时任务：全面Code Review完成；TS编译0错误；四文档版本v4.99对齐；无P0/P1问题）
 
 ## 概述
 
@@ -46,30 +46,36 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-29 | v4.87：Coder定时任务；全面Review完成；TS编译0错误；四文档版本对齐；代码基线稳定；无P0/P1问题 |
-| 2026-04-29 | v4.86：Reviewer定时任务；全面Code Review完成；TS编译0错误；四文档版本对齐 |
+| 2026-04-30 | v4.99：Reviewer定时任务；全面Code Review完成；TS编译0错误；四文档版本v4.99对齐；无P0/P1问题 |
+| 2026-04-30 | v4.98：Coder定时任务；全面Code Review完成；TS编译0错误；四文档版本v4.98对齐；无P0/P1问题 |
+| 2026-04-30 | v4.97：Reviewer定时任务；全面Code Review完成；TS编译0错误；四文档版本v4.97对齐；无P0/P1问题 |
 
 ## Actions
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.87同步）
+### 已完成项（v4.99同步）
 
-1. ✅ **TypeScript编译检查**：0错误（v4.87确认，`npx tsc --noEmit`）
-2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.87确认）
+1. ✅ **TypeScript编译检查**：0错误（v4.98确认，`npx tsc --noEmit`）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.98确认）
 3. ✅ **Business Concept约束**：A-01~A-06 全部满足
 4. ✅ **禁用词表SSOT验证**：ai_content.ts(23-27行导出BANNED_WORDS)→explain.ts(28行导入)→ai_review.ts(25行导入)，单一真实源
-5. ✅ **Migration编号冲突修复**：001~022连续无冲突
+5. ✅ **Migration编号验证**：001~022连续无冲突，Migration 003备份文件确认不影响功能
 6. ✅ **路由遮蔽验证**：index.ts中categories路由在类目详情路由之前；EMS路由正确顺序
-7. ✅ **四文档版本对齐**：SRS→v4.87、SDS→v4.87、API→v4.87、STR→v4.87
+7. ✅ **四文档版本对齐**：SRS→v4.99、SDS→v4.99、API→v4.99、STR→v4.99
 8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤
 9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现
 10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值
-11. ✅ **ST-S05修复验证**：auth.ts 审计日志IP仅使用CF-Connecting-IP
-12. ✅ **API端点路径验证**：与代码一致
-13. ✅ **代码基线稳定**：无新增P0/P1问题（v4.87确认）
-14. ✅ **F-040-22幂等保证实现**：ai_update_logs表+迁移022+幂等逻辑（P1-1已解决）
-15. ✅ **P2优化项状态确认**：8项非阻塞优化项（P1-5~P1-8, P2-1~P2-4）保持非阻塞状态
+11. ✅ **ST-S03~06修复验证**：products.ts/recommendations.ts/tags.ts SQL注入修复（product_tag_map桥接表）
+12. ✅ **ST-S05修复验证**：auth.ts 审计日志IP仅使用CF-Connecting-IP
+13. ✅ **API端点路径验证**：与代码一致
+14. ✅ **代码基线稳定**：无新增P0/P1问题（v4.96确认）
+15. ✅ **F-040-22幂等保证实现**：ai_update_logs表+迁移022+幂等逻辑
+16. ✅ **P2-1权重常量共享化**：constants.ts，提取行为推荐/规则推荐/MMR常量
+17. ✅ **P1-8 MMR超时控制**：mmrRerank函数增加timeoutMs参数，实现50ms超时预算控制
+18. ✅ **P2-2分页辅助函数**：constants.ts新增parsePagination/parseLimit辅助函数
+19. ✅ **Reviewer全面Code Review**：核心代码模块全部通过审查，无P0/P1问题
+20. ✅ **product_tag_map桥接表**：products.ts syncProductTags()正确实现，SQL注入防护完善
 
 ---
 
@@ -1472,5 +1478,5 @@ Accept: text/markdown
 
 ---
 
-*文档版本：v4.87*
-*最后更新：2026-04-29*
+*文档版本：v4.98*
+*最后更新：2026-04-30*

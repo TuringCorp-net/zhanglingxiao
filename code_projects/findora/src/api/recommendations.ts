@@ -12,6 +12,15 @@ import { Env, UserPreferences } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
 import { parseProductContentFromRow, toClientProduct } from '../lib/product_content';
+import {
+  RULE_CATEGORY_MATCH,
+  RULE_TAG_MATCH,
+  RULE_CLICK_WEIGHT,
+  RULE_FAVORITE_WEIGHT,
+  RULE_PRICE_MATCH,
+  RULE_RECENCY_DAYS,
+  RULE_RECENCY_MAX_DAYS,
+} from '../lib/constants';
 
 // Price ranges for F-014-03
 const PRICE_RANGES = {

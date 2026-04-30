@@ -1,0 +1,524 @@
+[
+  {
+    "goodsNameEn": "Spring/Autumn Style Men's Tactical Cargo Pants, Slightly Stretch Fabric, Soft and Breathable, Multi-Pocket, Suitable for Casual Outings, No Belt",
+    "goodsNameCn": "春秋款 男士战术工装裤 微弹面料 高品质柔软透气 多口袋 休闲外出适用 不含腰带",
+    "thumbnail": "https://img.kwcdn.com/product/fancy/d82ea997-c4a2-4b9a-ba26-41dc67eb0079.jpg",
+    "thumbnailCn": "https://cbu01.alicdn.com/O1CN01kMCHhC2CZYnePexMu_!!2218657638488-0-cib.jpg",
+    "sold": 100000,
+    "sales": 2198000,
+    "goodsPriceMin": 21.98,
+    "goodsPriceMax": 28.6,
+    "reviewNum": 1987,
+    "rating": 4.7,
+    "mallOpenTime": "2024-09-25T11:09:22.284+00:00",
+    "onSaleTime": "2025-07-29T10:54:21.000+00:00",
+    "goodsId": "601101938887572",
+    "detailUrl": "601101938887572",
+    "platform": "temu",
+    "catItems": [
+      {
+        "id": 15277,
+        "catId": 31148,
+        "catName": "运动与户外用品",
+        "catLevel": 1,
+        "parentCatId": 0,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 22659,
+        "catId": 32875,
+        "catName": "户外休闲",
+        "catLevel": 2,
+        "parentCatId": 31148,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 28297,
+        "catId": 33936,
+        "catName": "徒步和户外休闲服装",
+        "catLevel": 3,
+        "parentCatId": 32875,
+        "isLeaf": false,
+        "optId": null
+      },
+      {
+        "id": 28814,
+        "catId": 33937,
+        "catName": "男士户外服饰",
+        "catLevel": 4,
+        "parentCatId": 33936,
+        "isLeaf": false,
+        "optId": 2303
+      },
+      {
+        "id": 30941,
+        "catId": 33939,
+        "catName": "男士户外长裤",
+        "catLevel": 5,
+        "parentCatId": 33937,
+        "isLeaf": true,
+        "optId": null
+      }
+    ],
+    "goodsName": "春秋款 男士战术工装裤 微弹面料 高品质柔软透气 多口袋 休闲外出适用 不含腰带",
+    "_source": "热销新品",
+    "_platform": "temu",
+    "_catId": 31148,
+    "_score": 39
+  },
+  {
+    "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+    "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+    "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/09/1763619512bacf93bafda75ea54b6f0a518ef07bcb_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 1500,
+    "sales": 33345,
+    "goodsPriceMin": 1.71,
+    "goodsPriceMax": null,
+    "reviewNum": 2,
+    "rating": 4.85,
+    "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+    "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+    "goodsId": "299983499",
+    "detailUrl": "299983499",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 192,
+        "catId": 3657,
+        "catName": "Automotive",
+        "catNameCn": "汽车类",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      },
+      {
+        "id": 193,
+        "catId": 3883,
+        "catName": "Automotive Interior Accessories",
+        "catNameCn": "汽车内饰配件",
+        "catLevel": 1,
+        "parentCatId": 3657,
+        "isLeaf": false
+      },
+      {
+        "id": 5880,
+        "catId": 13894,
+        "catName": "Car Hanging Decorations",
+        "catNameCn": "汽车悬挂装饰品",
+        "catLevel": 2,
+        "parentCatId": 3883,
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+    "_source": "热销新品",
+    "_platform": "shein",
+    "_catId": 3657,
+    "_score": 45
+  },
+  {
+    "goodsNameEn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (4 Official Refill Cartridges)",
+    "goodsNameCn": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Aut",
+    "thumbnail": "https://m.media-amazon.com/images/I/81uXJAVhd1L._AC_UY218_.jpg",
+    "thumbnailCn": "",
+    "sold": 0,
+    "sales": null,
+    "goodsPriceMin": 14.97,
+    "goodsPriceMax": null,
+    "reviewNum": 383,
+    "rating": 4.8,
+    "mallOpenTime": "2026-03-21T00:00:00.000+08:00",
+    "onSaleTime": null,
+    "goodsId": "B0C3FTCYZL",
+    "detailUrl": "B0C3FTCYZL",
+    "platform": "amazon",
+    "catItems": [
+      {
+        "id": 1412,
+        "catId": "2972638011",
+        "catName": "庭院、草坪和园艺",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 4632,
+        "catId": "553844",
+        "catName": "防虫用品",
+        "catLevel": 2,
+        "parentCatId": "2972638011",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 5083,
+        "catId": "911952",
+        "catName": "配件",
+        "catLevel": 3,
+        "parentCatId": "553844",
+        "isLeaf": true,
+        "siteId": 1
+      }
+    ],
+    "goodsName": "Zevo Flying Insect Trap Official Refill Cartridges - Fits Both Zevo Trap & MAX Indoor Fly Trap - Authentic Trap+Lock Technology to Catch Gnats, House & Fruit Flies (4 Official Refill Cartridges)",
+    "_source": "热销新品",
+    "_platform": "amazon",
+    "_catId": 2972638011,
+    "_score": 37
+  },
+  {
+    "goodsNameEn": "Fashion Mickey Children Watches For Girls Electronic Bracelet Sports Touch LED Spiderman Doll Kids Watch Women Waterproof Clock",
+    "goodsNameCn": "Fashion Mickey Children Watches For Girls Electronic Bracelet Sports Touch LED Spiderman Doll Kids W",
+    "thumbnail": "//ae04.alicdn.com/kf/Sf688873a09cb4307a131e2f0ad9c2bf6c.jpg",
+    "thumbnailCn": "",
+    "sold": 100000,
+    "sales": null,
+    "goodsPriceMin": 0.33,
+    "goodsPriceMax": null,
+    "reviewNum": 0,
+    "rating": 4.9,
+    "mallOpenTime": null,
+    "onSaleTime": null,
+    "goodsId": "3256807120399317",
+    "detailUrl": "3256807120399317",
+    "platform": "sumaitong",
+    "catItems": [
+      {
+        "id": 19,
+        "catId": "1511",
+        "catName": "手表",
+        "catLevel": 0,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 8057,
+        "catId": "200362144",
+        "catName": "儿童腕表",
+        "catLevel": 1,
+        "parentCatId": "1511",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "Fashion Mickey Children Watches For Girls Electronic Bracelet Sports Touch LED Spiderman Doll Kids Watch Women Waterproof Clock",
+    "_source": "热销新品",
+    "_platform": "sumaitong",
+    "_catId": 1511,
+    "_score": 36
+  },
+  {
+    "goodsNameEn": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ideal for Bed,Couch, Travel,Camping, All Seasons,Home Bedroom Decor",
+    "goodsNameCn": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ide",
+    "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/bb10ac60902b4fc08bf6632e79debfdd~tplv-fhlh96nyum-crop-webp:2500:2500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+    "thumbnailCn": "",
+    "sold": 398851,
+    "sales": null,
+    "goodsPriceMin": 13.59,
+    "goodsPriceMax": 29.99,
+    "reviewNum": 45295,
+    "rating": 4.6,
+    "mallOpenTime": null,
+    "onSaleTime": "2024-11-12T10:56:50.981+08:00",
+    "goodsId": "1729436032662278390",
+    "detailUrl": "1729436032662278390",
+    "platform": "tiktok",
+    "catItems": [
+      {
+        "id": 9974,
+        "catId": "600154",
+        "catName": "Textiles & Soft Furnishings",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false
+      },
+      {
+        "id": 9979,
+        "catId": "808328",
+        "catName": "Bedding and Linens",
+        "catLevel": 2,
+        "parentCatId": "600154",
+        "isLeaf": false
+      },
+      {
+        "id": 10746,
+        "catId": "600157",
+        "catName": "Blankets & Throws",
+        "catLevel": 3,
+        "parentCatId": "808328",
+        "isLeaf": false
+      },
+      {
+        "id": 10747,
+        "catId": "1010576",
+        "catName": "Blankets",
+        "catLevel": 4,
+        "parentCatId": "600157",
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ideal for Bed,Couch, Travel,Camping, All Seasons,Home Bedroom Decor",
+    "_source": "热销新品",
+    "_platform": "tiktok",
+    "_catId": 600154,
+    "_score": 42
+  },
+  {
+    "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+    "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+    "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/09/5f/176526903757a47510a8d5e96f5d75a11a8a613c1a_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 433,
+    "sales": 32231,
+    "goodsPriceMin": 1.67,
+    "goodsPriceMax": 3.06,
+    "reviewNum": 2,
+    "rating": 4.85,
+    "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+    "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+    "goodsId": "329970350",
+    "detailUrl": "329970350",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 192,
+        "catId": 3657,
+        "catName": "Automotive",
+        "catNameCn": "汽车类",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      },
+      {
+        "id": 193,
+        "catId": 3883,
+        "catName": "Automotive Interior Accessories",
+        "catNameCn": "汽车内饰配件",
+        "catLevel": 1,
+        "parentCatId": 3657,
+        "isLeaf": false
+      },
+      {
+        "id": 5880,
+        "catId": 13894,
+        "catName": "Car Hanging Decorations",
+        "catNameCn": "汽车悬挂装饰品",
+        "catLevel": 2,
+        "parentCatId": 3883,
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+    "_source": "热销新品",
+    "_platform": "shein",
+    "_catId": 3657,
+    "_score": 45
+  },
+  {
+    "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+    "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+    "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/09/9d/176526913401bc907c3c3bfc1a6edff7f92438133e_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 480,
+    "sales": 31563,
+    "goodsPriceMin": 1.67,
+    "goodsPriceMax": 2.89,
+    "reviewNum": 2,
+    "rating": 4.84,
+    "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+    "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+    "goodsId": "327393429",
+    "detailUrl": "327393429",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 192,
+        "catId": 3657,
+        "catName": "Automotive",
+        "catNameCn": "汽车类",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      },
+      {
+        "id": 193,
+        "catId": 3883,
+        "catName": "Automotive Interior Accessories",
+        "catNameCn": "汽车内饰配件",
+        "catLevel": 1,
+        "parentCatId": 3657,
+        "isLeaf": false
+      },
+      {
+        "id": 5880,
+        "catId": 13894,
+        "catName": "Car Hanging Decorations",
+        "catNameCn": "汽车悬挂装饰品",
+        "catLevel": 2,
+        "parentCatId": 3883,
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+    "_source": "热销新品",
+    "_platform": "shein",
+    "_catId": 3657,
+    "_score": 45
+  },
+  {
+    "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+    "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+    "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/f6/176362176190262228493f894b981f54d48a358c69_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 1213,
+    "sales": 32130,
+    "goodsPriceMin": 1.7,
+    "goodsPriceMax": null,
+    "reviewNum": 2,
+    "rating": 4.84,
+    "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+    "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+    "goodsId": "303865206",
+    "detailUrl": "303865206",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 192,
+        "catId": 3657,
+        "catName": "Automotive",
+        "catNameCn": "汽车类",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      },
+      {
+        "id": 193,
+        "catId": 3883,
+        "catName": "Automotive Interior Accessories",
+        "catNameCn": "汽车内饰配件",
+        "catLevel": 1,
+        "parentCatId": 3657,
+        "isLeaf": false
+      },
+      {
+        "id": 5880,
+        "catId": 13894,
+        "catName": "Car Hanging Decorations",
+        "catNameCn": "汽车悬挂装饰品",
+        "catLevel": 2,
+        "parentCatId": 3883,
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+    "_source": "热销新品",
+    "_platform": "shein",
+    "_catId": 3657,
+    "_score": 45
+  },
+  {
+    "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+    "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+    "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/16/90/1760584564e4f2f4ea5c8c4435c1493e490c9be499_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 15784,
+    "sales": 34020,
+    "goodsPriceMin": 1.8,
+    "goodsPriceMax": 3.11,
+    "reviewNum": 2,
+    "rating": 4.84,
+    "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+    "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+    "goodsId": "220784792",
+    "detailUrl": "220784792",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 192,
+        "catId": 3657,
+        "catName": "Automotive",
+        "catNameCn": "汽车类",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      },
+      {
+        "id": 193,
+        "catId": 3883,
+        "catName": "Automotive Interior Accessories",
+        "catNameCn": "汽车内饰配件",
+        "catLevel": 1,
+        "parentCatId": 3657,
+        "isLeaf": false
+      },
+      {
+        "id": 5880,
+        "catId": 13894,
+        "catName": "Car Hanging Decorations",
+        "catNameCn": "汽车悬挂装饰品",
+        "catLevel": 2,
+        "parentCatId": 3883,
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+    "_source": "热销新品",
+    "_platform": "shein",
+    "_catId": 3657,
+    "_score": 45
+  },
+  {
+    "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+    "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+    "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/bb/1763619556026428c756baf5d6b2d63783118b7bab_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 900,
+    "sales": 34020,
+    "goodsPriceMin": 1.8,
+    "goodsPriceMax": null,
+    "reviewNum": 2,
+    "rating": 4.84,
+    "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+    "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+    "goodsId": "303808391",
+    "detailUrl": "303808391",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 192,
+        "catId": 3657,
+        "catName": "Automotive",
+        "catNameCn": "汽车类",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      },
+      {
+        "id": 193,
+        "catId": 3883,
+        "catName": "Automotive Interior Accessories",
+        "catNameCn": "汽车内饰配件",
+        "catLevel": 1,
+        "parentCatId": 3657,
+        "isLeaf": false
+      },
+      {
+        "id": 5880,
+        "catId": 13894,
+        "catName": "Car Hanging Decorations",
+        "catNameCn": "汽车悬挂装饰品",
+        "catLevel": 2,
+        "parentCatId": 3883,
+        "isLeaf": true
+      }
+    ],
+    "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+    "_source": "热销新品",
+    "_platform": "shein",
+    "_catId": 3657,
+    "_score": 45
+  }
+]

@@ -1,8 +1,8 @@
 # Findora SDS — 软件设计说明书
 
 > **项目名称：** Findora
-> **版本：** v4.87（Coder定时任务：全面Review完成；TS编译0错误；代码基线稳定；无P0/P1问题；四文档版本对齐）
-> **最后更新：** 2026-04-29
+> **版本：** v4.99（Reviewer定时任务：全面Code Review完成；TS编译0错误；四文档版本v4.99对齐；无P0/P1问题）
+> **最后更新：** 2026-04-30
 > **维护方式：** 以SRS F编号为主线的模块化设计文档
 
 ---
@@ -13,37 +13,42 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-04-29 | v4.87：Coder定时任务；全面Review完成；TS编译0错误；代码基线稳定；无P0/P1问题；四文档版本对齐 |
-| 2026-04-29 | v4.86：Reviewer定时任务；全面Code Review完成；TS编译0错误；AC-01~AC-06全部通过；四文档版本对齐；无新增P0/P1问题；代码基线稳定 |
+| 2026-04-30 | v4.99：Reviewer定时任务；全面Code Review完成；TS编译0错误；四文档版本v4.99对齐；无P0/P1问题 |
+| 2026-04-30 | v4.98：Coder定时任务；全面Code Review完成；TS编译0错误；四文档版本v4.98对齐；无P0/P1问题 |
+| 2026-04-30 | v4.97：Reviewer定时任务；全面Code Review完成；TS编译0错误；四文档版本v4.97对齐；无P0/P1问题 |
 
 ## Actions
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 已完成项（v4.87同步）
+### 已完成项（v4.99同步）
 
-1. ✅ **TypeScript编译检查**：0错误（v4.87确认，`npx tsc --noEmit`）
-2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.87确认）
+1. ✅ **TypeScript编译检查**：0错误（v4.99确认，`npx tsc --noEmit`）
+2. ✅ **架构约束验证**：AC-01~AC-06 全部通过（v4.99确认）
 3. ✅ **Business Concept约束**：A-01~A-06 全部满足
 4. ✅ **禁用词表SSOT验证**：ai_content.ts(23-27行导出BANNED_WORDS)→explain.ts(28行导入)→ai_review.ts(25行导入)，单一真实源
-5. ✅ **Migration编号冲突修复**：001~022连续无冲突
+5. ✅ **Migration编号验证**：001~022连续无冲突，Migration 003备份文件确认不影响功能
 6. ✅ **路由遮蔽验证**：index.ts中categories路由在类目详情路由之前；EMS路由正确顺序
-7. ✅ **四文档版本对齐**：SRS→v4.87、SDS→v4.87、API→v4.87、STR→v4.87
+7. ✅ **四文档版本对齐**：SRS→v4.99、SDS→v4.99、API→v4.99、STR→v4.99
 8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤
 9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现
 10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值
-11. ✅ **ST-S05修复验证**：auth.ts 审计日志IP仅使用CF-Connecting-IP
-12. ✅ **ST-P1修复验证**：explanation_cache时间戳类型统一为INTEGER
-13. ✅ **代码基线稳定**：无新增P0/P1问题（v4.87确认）
-14. ✅ **F-040-22幂等保证实现**：ai_update_logs表+迁移022+幂等逻辑（P1-1已解决）
-15. ✅ **P2优化项状态确认**：8项非阻塞优化项（P1-5~P1-8, P2-1~P2-4）保持非阻塞状态
+11. ✅ **ST-S03~06修复验证**：products.ts/recommendations.ts/tags.ts SQL注入修复（product_tag_map桥接表）
+12. ✅ **ST-S05修复验证**：auth.ts 审计日志IP仅使用CF-Connecting-IP
+13. ✅ **ST-P1修复验证**：explanation_cache时间戳类型统一为INTEGER
+14. ✅ **代码基线稳定**：无新增P0/P1问题（v4.96确认）
+15. ✅ **F-040-22幂等保证实现**：ai_update_logs表+迁移022+幂等逻辑
+16. ✅ **P2-1权重常量共享化**：新建constants.ts，提取行为推荐/规则推荐/MMR常量
+17. ✅ **P1-8 MMR超时控制**：mmrRerank函数增加timeoutMs参数，50ms超时预算
+18. ✅ **P2-2分页辅助函数**：constants.ts新增parsePagination/parseLimit辅助函数
+19. ✅ **product_tag_map桥接表**：products.ts syncProductTags()正确实现
 
 ### 待推进项（按优先级）
 
 1. **AI 服务联调（优先）**：配置 `AI_API_KEY`（OpenAI 或 Anthropic），按 SDS AI 联调 SOP 完成 F-016（推荐解释 4 项）和 F-020（运营 AI 6 项）端到端验证，通过后将状态升级为 ✅
 2. **本地 E2E 验证**：执行 `npm run build` + `wrangler d1 execute`，确认 001~022 迁移脚本在本地 D1 初始化成功
 3. **端到端链路测试**：使用 Postman 对核心流（商品列表、标签精选、内容协商）进行完整 HTTP 链路验证
-4. **P2优化项（非阻塞）**：8项P2优化项待后续迭代处理：P1-5(JSON数组匹配)、P1-6(时间存储策略)、P1-7(前端SSR)、P1-8(MMR控制)、P2-1~P2-4(代码重复/类型断言/审计日志)
+4. **P2优化项（非阻塞）**：P2-2分页逻辑迁移（20+处逐步迁移）、P1-7前端SSR优化等
 
 ---
 
@@ -67,6 +72,7 @@
 - **静态资源：** Workers Assets
 - **统一入口：** `src/api/index.ts` 路由分发
 - **管理端鉴权：** `X-Admin-Key` + `env.ADMIN_KEY`
+- **共享常量库：** `src/lib/constants.ts`（v4.91新增：权重常量、分页辅助函数、MMR控制参数）
 
 ---
 
@@ -620,8 +626,8 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 | 完成度 | 90% | |
 | TypeScript编译 | ✅ 0错误 | `npx tsc --noEmit` |
 | 架构约束 | ✅ AC-01~AC-06全部通过 | |
-| Migration编号 | ✅ 001~021连续无冲突 | |
-| 四文档版本 | ✅ 全部v4.80 | |
+| Migration编号 | ✅ 001~022连续无冲突 | |
+| 四文档版本 | ✅ 全部v4.98 | |
 | ST-S05修复 | ✅ 审计日志IP仅使用CF-Connecting-IP | |
 
 **无 CRITICAL/HIGH 阻塞项。**

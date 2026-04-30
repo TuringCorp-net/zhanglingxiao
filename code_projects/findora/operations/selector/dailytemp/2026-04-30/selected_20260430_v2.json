@@ -1,0 +1,186 @@
+{
+  "date": "2026-04-30",
+  "totalProducts": 200,
+  "uniqueProducts": 50,
+  "selectedProducts": [
+    {
+      "platform": "TIKTOK",
+      "category": "Textiles & Soft Furnishings",
+      "name": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocket, Perfect Christmas & Valentine's Day Gift #GLOBAL PICKS",
+      "nameCn": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocke",
+      "price": "$16.49-24.69",
+      "sold": 184417,
+      "rating": 4.8,
+      "reviews": 19734,
+      "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/c359f0e1e6d74dab835011eb2730edda~tplv-fhlh96nyum-crop-webp:1200:1200.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast8&from=2378011839",
+      "goodsId": "1729405570499645529",
+      "features": [
+        "送礼佳品"
+      ],
+      "score": 72.5,
+      "reason": "销量184417件，市场验证充分；评分4.8分，口碑优秀；19734条真实评价；价格亲民，易于转化；特点: 送礼佳品"
+    },
+    {
+      "platform": "AMAZON",
+      "category": "庭院、草坪和园艺",
+      "name": "Wagner's 53002 Farmer's Delight樱桃味野生鸟类食品，10磅袋装",
+      "nameCn": "Wagner's 53002 Farmer's Delight樱桃味野生鸟类食品，10磅袋装",
+      "price": "$12.48",
+      "sold": 10109263,
+      "rating": 4.5,
+      "reviews": 194,
+      "thumbnail": "https://m.media-amazon.com/images/I/81gIvBzsnaL._AC_UL320_.jpg",
+      "goodsId": "B00LHE5OSQ",
+      "features": [
+        "LED灯效"
+      ],
+      "score": 71,
+      "reason": "销量10109263件，市场验证充分；评分4.5分，口碑优秀；价格亲民，易于转化；特点: LED灯效"
+    },
+    {
+      "platform": "TIKTOK",
+      "category": "Textiles & Soft Furnishings",
+      "name": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ideal for Bed,Couch, Travel,Camping, All Seasons,Home Bedroom Decor",
+      "nameCn": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ide",
+      "price": "$13.59-29.99",
+      "sold": 398851,
+      "rating": 4.6,
+      "reviews": 45295,
+      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/bb10ac60902b4fc08bf6632e79debfdd~tplv-fhlh96nyum-crop-webp:2500:2500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+      "goodsId": "1729436032662278390",
+      "features": [
+        "母亲节热点"
+      ],
+      "score": 70.4,
+      "reason": "销量398851件，市场验证充分；评分4.6分，口碑优秀；45295条真实评价；价格亲民，易于转化；特点: 母亲节热点"
+    },
+    {
+      "platform": "TEMU",
+      "category": "运动与户外用品",
+      "name": "6pcs super soft microfiber bath towel set, 2 bath towels 27 x 55 inches, 2 hand towels 13 x 30 inches, 2 washcloths 13.7 x 13.7 inches, quick drying, highly absorbent and lightweight bath towel set, m",
+      "nameCn": "6件超柔软超细纤维浴巾套装，2条27 x 55英寸浴巾，2条13 x 30英寸手巾，2块13.7 x 13.7英寸洗脸巾，快干吸水性好且轻便的多功能浴巾套装",
+      "price": "$20.25-35.76",
+      "sold": 100000,
+      "rating": 4.7,
+      "reviews": 186,
+      "thumbnail": "https://img.kwcdn.com/product/fancy/b00f36ee-9676-4b87-8a08-1746bd3e8b90.jpg",
+      "goodsId": "601099573015643",
+      "features": [
+        "套装组合",
+        "多功能",
+        "LED灯效"
+      ],
+      "score": 67.8,
+      "reason": "销量100000件，市场验证充分；评分4.7分，口碑优秀；特点: 套装组合, 多功能, LED灯效"
+    },
+    {
+      "platform": "TEMU",
+      "category": "运动与户外用品",
+      "name": "500米-546码 300米-328码 超强钓鱼线，4股多股PE抗磨损编织线，12磅 25磅 40磅 80磅 100磅 顺滑长抛专用",
+      "nameCn": "500米-546码 300米-328码 超强钓鱼线，4股多股PE抗磨损编织线，12磅 25磅 40磅 80磅 100磅 顺滑长抛专用",
+      "price": "$8.82-14.57",
+      "sold": 350000,
+      "rating": 4.8,
+      "reviews": 8218,
+      "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/b2e9ac7d56d5ad2bbeb3b48e2ddd5eb4.jpg",
+      "goodsId": "601099523208136",
+      "features": [
+        "基础款"
+      ],
+      "score": 66.9,
+      "reason": "销量350000件，市场验证充分；评分4.8分，口碑优秀；8218条真实评价；价格亲民，易于转化；特点: 基础款"
+    },
+    {
+      "platform": "SHEIN",
+      "category": "运动与户外",
+      "name": "Musera Sport Solid Ruched Bust Open Back Halter Sports Bra, Active Comfy Workout Gym Running Run Club,Padel, Tennis, Pickleball Gym Fitness",
+      "nameCn": "女装运动服, 女士活动上衣, 女士运动文胸, 运动与户外",
+      "price": "$7.31",
+      "sold": 57960,
+      "rating": 4.87,
+      "reviews": 1000,
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/03/06/3e/1772766731588c78a783f6771d42dcd3eef428244d_thumbnail_405x552.jpg",
+      "goodsId": "414445019",
+      "features": [
+        "基础款"
+      ],
+      "score": 66.3,
+      "reason": "销量57960件，市场验证充分；评分4.87分，口碑优秀；1000条真实评价；价格亲民，易于转化；特点: 基础款"
+    },
+    {
+      "platform": "SHEIN",
+      "category": "运动与户外",
+      "name": "Musera Sport Solid Ruched Bust Open Back Halter Sports Bra, Active Comfy Workout Gym Running Run Club,Padel, Tennis, Pickleball Gym Fitness",
+      "nameCn": "女装运动服, 女士活动上衣, 女士运动文胸, 运动与户外",
+      "price": "$10.53",
+      "sold": 56300,
+      "rating": 4.87,
+      "reviews": 1000,
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/02/10/17/1770703959da7718308ece0740f02d8bae7b09495a_thumbnail_405x552.jpg",
+      "goodsId": "404077572",
+      "features": [
+        "基础款"
+      ],
+      "score": 66.2,
+      "reason": "销量56300件，市场验证充分；评分4.87分，口碑优秀；1000条真实评价；价格亲民，易于转化；特点: 基础款"
+    },
+    {
+      "platform": "AMAZON",
+      "category": "庭院、草坪和园艺",
+      "name": "PayLessHere 户外家具套装三件，露台家具套装，灰色对话套装，配有两把麻条椅，玻璃咖啡桌，适合咖啡吧，泳池边露台，户外，红色靠垫",
+      "nameCn": "PayLessHere 户外家具套装三件，露台家具套装，灰色对话套装，配有两把麻条椅，玻璃咖啡桌，适合咖啡吧，泳池边露台，户外，红色靠垫",
+      "price": "$49.99",
+      "sold": 1123616,
+      "rating": 4.3,
+      "reviews": 353,
+      "thumbnail": "https://m.media-amazon.com/images/I/61fDCYsh5IL._AC_SY300_SX300_QL70_ML2_.jpg",
+      "goodsId": "B0CMGGG6Z8",
+      "features": [
+        "套装组合"
+      ],
+      "score": 66.2,
+      "reason": "销量1123616件，市场验证充分；价格亲民，易于转化；特点: 套装组合"
+    },
+    {
+      "platform": "SUMAITONG",
+      "category": "女装",
+      "name": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+      "nameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+      "price": "$3.52-23",
+      "sold": 48808,
+      "rating": 4.8,
+      "reviews": 4905,
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S4977ab02d21141b580a24aa3a1026cf8c.png",
+      "goodsId": "3256807095249832",
+      "features": [
+        "基础款"
+      ],
+      "score": 65.6,
+      "reason": "销量48808件，市场验证充分；评分4.8分，口碑优秀；4905条真实评价；价格亲民，易于转化；特点: 基础款"
+    },
+    {
+      "platform": "SUMAITONG",
+      "category": "女装",
+      "name": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Tank Top Korean Style",
+      "nameCn": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Ta",
+      "price": "$3.48",
+      "sold": 50000,
+      "rating": 4.9,
+      "reviews": 6178,
+      "thumbnail": "//ae04.alicdn.com/kf/Sfd98e7483d134c4ebb3277a5f05b3173B.png",
+      "goodsId": "3256806808766870",
+      "features": [
+        "基础款"
+      ],
+      "score": 61.1,
+      "reason": "销量50000件，市场验证充分；评分4.9分，口碑优秀；6178条真实评价；价格亲民，易于转化；特点: 基础款"
+    }
+  ],
+  "platformDistribution": {
+    "TIKTOK": 9,
+    "AMAZON": 3,
+    "TEMU": 9,
+    "SHEIN": 3,
+    "SUMAITONG": 2
+  }
+}

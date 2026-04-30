@@ -1,0 +1,2626 @@
+{
+  "platform": "temu",
+  "catId": 31148,
+  "catName": "运动与户外用品",
+  "collectedAt": "2026-04-30T03:01:29.664Z",
+  "channels": [
+    {
+      "channel": "热销商品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "12/24pcs Kitchen Cleaning Sponge, Dish Towel, Scouring Pad, Dishware Anti-Scratch Scrubbing Sponge",
+          "goodsNameCn": "12/24pcs Kitchen Cleaning Sponge, Dish Towel, Scouring Pad, Dishware Anti-Scratch Scrubbing Sponge",
+          "thumbnail": "https://img.kwcdn.com/product/1e78ea2412/19a84758-493f-4487-983b-71523c0b1d6e_800x800.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN013nfFni1a4SUm916uA_!!961083276-0-cib.jpg",
+          "sold": 1000000,
+          "sales": 3150000,
+          "goodsPriceMin": 3.15,
+          "goodsPriceMax": 7.62,
+          "reviewNum": 21162,
+          "rating": 4.7,
+          "mallOpenTime": "2022-10-03T02:28:06.626+00:00",
+          "onSaleTime": "2023-06-07T07:18:42.137+00:00",
+          "goodsId": "601099514868374",
+          "detailUrl": "601099514868374",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 8871,
+              "catId": 9711,
+              "catName": "家居、厨房用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 14470,
+              "catId": 12870,
+              "catName": "家庭清洁用品",
+              "catLevel": 2,
+              "parentCatId": 9711,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22355,
+              "catId": 12959,
+              "catName": "海绵",
+              "catLevel": 3,
+              "parentCatId": 12870,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "12/24pcs Kitchen Cleaning Sponge, Dish Towel, Scouring Pad, Dishware Anti-Scratch Scrubbing Sponge",
+          "_source": "热销商品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "3-Piece Anti-Peeking Screen Protector for iPhone 17, 16, 15, 14, 13, 12, 11 Pro Max, 17 Air, 14, 15, 16 Plus, 13, 12 Mini - Tempered Glass, 9H Hardness, Full Screen Coverage, Anti-Peeking",
+          "goodsNameCn": "3片装 防窥屏保护膜 iPhone 17 16 15 14 13 12 11 Pro Max 17 Air 14 15 16 Plus 13 12 Mini 适用 钢化玻璃 9H硬度 全屏覆盖 防窥保",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/10a5760d-9e71-4385-a3dc-2d47caf7023f.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN011PEDNI1l8XrdNrKBV_!!2209258214774-0-cib.jpg",
+          "sold": 900000,
+          "sales": 2160000,
+          "goodsPriceMin": 2.4,
+          "goodsPriceMax": 4.09,
+          "reviewNum": 6561,
+          "rating": 4.7,
+          "mallOpenTime": "2025-04-25T06:23:54.321+00:00",
+          "onSaleTime": "2025-04-25T06:23:54.321+00:00",
+          "goodsId": "601099621486411",
+          "detailUrl": "601099621486411",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 11291,
+              "catId": 24252,
+              "catName": "手机和配件",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 11911,
+              "catId": 24253,
+              "catName": "手机配件",
+              "catLevel": 2,
+              "parentCatId": 24252,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 21575,
+              "catId": 24293,
+              "catName": "手机保养、维护和维修",
+              "catLevel": 3,
+              "parentCatId": 24253,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22796,
+              "catId": 24299,
+              "catName": "手机屏幕保护膜",
+              "catLevel": 4,
+              "parentCatId": 24293,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "3片装 防窥屏保护膜 iPhone 17 16 15 14 13 12 11 Pro Max 17 Air 14 15 16 Plus 13 12 Mini 适用 钢化玻璃 9H硬度 全屏覆盖 防窥保护膜",
+          "_source": "热销商品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "10 Pieces Half - Moon Nail Files, Nail Polishing Tools",
+          "goodsNameCn": "10pcs 半月形指甲锉 指甲抛光工具",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/2decf8d890aef6e4a76b2915a48d4d8a.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01z1ZEZA1qnpdVyQjId_!!2216357685541-0-cib.jpg",
+          "sold": 900000,
+          "sales": 2069999.9999999998,
+          "goodsPriceMin": 2.3,
+          "goodsPriceMax": 1.88,
+          "reviewNum": 11527,
+          "rating": 4.9,
+          "mallOpenTime": "2023-04-28T02:33:16.157+00:00",
+          "onSaleTime": "2023-10-28T15:34:22.369+00:00",
+          "goodsId": "601099515292831",
+          "detailUrl": "601099515292831",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 10097,
+              "catId": 18768,
+              "catName": "美容和个人护理",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 16368,
+              "catId": 19739,
+              "catName": "足部、手部和指甲护理产品",
+              "catLevel": 2,
+              "parentCatId": 18768,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22047,
+              "catId": 19820,
+              "catName": "美甲工具",
+              "catLevel": 3,
+              "parentCatId": 19739,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24868,
+              "catId": 19825,
+              "catName": "修甲工具",
+              "catLevel": 4,
+              "parentCatId": 19820,
+              "isLeaf": false,
+              "optId": 7306
+            },
+            {
+              "id": 28642,
+              "catId": 19829,
+              "catName": "指甲锉和缓冲液",
+              "catLevel": 5,
+              "parentCatId": 19825,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "10pcs 半月形指甲锉 指甲抛光工具",
+          "_source": "热销商品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "50 Black Elastic Hair Ties - Simple Hair Ropes, Seamless Elastic Bands",
+          "goodsNameCn": "50根-黑色皮筋圈头绳简约发绳无接缝弹力皮筋",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/d2d01a70436b8f02ff2d5b8258fd53ca.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01dsYlAz21pAVXLhVpZ_!!2213333547033-0-cib.jpg",
+          "sold": 700000,
+          "sales": 1106000,
+          "goodsPriceMin": 1.58,
+          "goodsPriceMax": 1.58,
+          "reviewNum": 41587,
+          "rating": 4.8,
+          "mallOpenTime": "2023-03-04T02:30:20.231+00:00",
+          "onSaleTime": "2023-10-16T11:19:19.620+00:00",
+          "goodsId": "601099523857663",
+          "detailUrl": "601099523857663",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 13367,
+              "catId": 26207,
+              "catName": "母婴用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 27816,
+              "catId": 26297,
+              "catName": "婴幼儿洗护用品",
+              "catLevel": 2,
+              "parentCatId": 26207,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 32020,
+              "catId": 26305,
+              "catName": "宝宝头发护理",
+              "catLevel": 3,
+              "parentCatId": 26297,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 32612,
+              "catId": 26306,
+              "catName": "女婴发饰",
+              "catLevel": 4,
+              "parentCatId": 26305,
+              "isLeaf": false,
+              "optId": 3025
+            },
+            {
+              "id": 35507,
+              "catId": 26920,
+              "catName": "女婴发绳",
+              "catLevel": 5,
+              "parentCatId": 26306,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "50根-黑色皮筋圈头绳简约发绳无接缝弹力皮筋",
+          "_source": "热销商品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "6-Piece Nail Care Set, Household Nail Clipper Set, Portable Ear Pick and Spoon Nail Clipper Set",
+          "goodsNameCn": "6pcs 指甲护理套装家用指甲刀套装便携式耳签勺指甲刀套装",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/1675e9ad02c62e8f0d8b2b6e2492f775.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01bFEXHR1mHzdEgDHZc_!!2212800824930-0-cib.jpg",
+          "sold": 550000,
+          "sales": 1424500,
+          "goodsPriceMin": 2.59,
+          "goodsPriceMax": 2.59,
+          "reviewNum": 13958,
+          "rating": 4.7,
+          "mallOpenTime": "2024-03-11T02:53:04.182+00:00",
+          "onSaleTime": "2024-03-11T02:53:04.182+00:00",
+          "goodsId": "601099518237979",
+          "detailUrl": "601099518237979",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 9011,
+              "catId": 15945,
+              "catName": "健康和家居用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 10123,
+              "catId": 16298,
+              "catName": "医疗器械",
+              "catLevel": 2,
+              "parentCatId": 15945,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 13009,
+              "catId": 16401,
+              "catName": "助行和日用辅助用品",
+              "catLevel": 3,
+              "parentCatId": 16298,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 13830,
+              "catId": 16402,
+              "catName": "卫浴用品",
+              "catLevel": 4,
+              "parentCatId": 16401,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23885,
+              "catId": 16427,
+              "catName": "日常脚部和指甲护理产品",
+              "catLevel": 5,
+              "parentCatId": 16402,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "6pcs 指甲护理套装家用指甲刀套装便携式耳签勺指甲刀套装",
+          "_source": "热销商品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "200mAh/400mAh Rechargeable LED Motion Sensor Night Light - Street & Area Lighting - Wireless USB Powered, Auto-On Motion Detector, Under Cabinet Lighting, Warm/White Color Options, Perfect for Kitchen",
+          "goodsNameCn": "200mAh/400mAh Rechargeable LED Motion Sensor Night Light - Street & Area Lighting - Wireless USB Pow",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/e33b1f6b-3128-4af0-b4a3-ede49bcbbe42.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01MvaXHp1eUnl7ZjxTj_!!2215495023875-0-cib.jpg",
+          "sold": 550000,
+          "sales": 1094500,
+          "goodsPriceMin": 1.99,
+          "goodsPriceMax": 4.35,
+          "reviewNum": 17525,
+          "rating": 4.7,
+          "mallOpenTime": "2022-12-05T03:50:29.984+00:00",
+          "onSaleTime": "2024-09-30T20:35:23.741+00:00",
+          "goodsId": "601099678310459",
+          "detailUrl": "601099678310459",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 601,
+              "catId": 653,
+              "catName": "办公用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 697,
+              "catId": 748,
+              "catName": "办公家具灯具",
+              "catLevel": 2,
+              "parentCatId": 653,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 698,
+              "catId": 749,
+              "catName": "办公灯具",
+              "catLevel": 3,
+              "parentCatId": 748,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 702,
+              "catId": 753,
+              "catName": "柜下灯",
+              "catLevel": 4,
+              "parentCatId": 749,
+              "isLeaf": true,
+              "optId": 1457
+            }
+          ],
+          "goodsName": "200mAh/400mAh Rechargeable LED Motion Sensor Night Light - Street & Area Lighting - Wireless USB Powered, Auto-On Motion Detector, Under Cabinet Lighting, Warm/White Color Options, Perfect for Kitchen, Wardrobe, Dormitory, Hallway, Stairs",
+          "_source": "热销商品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "不锈钢双S型挂钩 | 免打孔，门面安装，现代风格，SUS304材质，适用于厨房和浴室橱柜",
+          "goodsNameCn": "不锈钢双S型挂钩 | 免打孔，门面安装，现代风格，SUS304材质，适用于厨房和浴室橱柜",
+          "thumbnail": "https://img.kwcdn.com/product/open/2023-04-10/1681141323127-55c2bf698f4945a587b058db99344853-goods.jpeg",
+          "thumbnailCn": "",
+          "sold": 550000,
+          "sales": 929500,
+          "goodsPriceMin": 1.69,
+          "goodsPriceMax": 9.49,
+          "reviewNum": 5587,
+          "rating": 4.6,
+          "mallOpenTime": "2023-04-08T03:14:08.839+00:00",
+          "onSaleTime": "2023-05-10T01:20:17.225+00:00",
+          "goodsId": "601099516127805",
+          "detailUrl": "601099516127805",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 8925,
+              "catId": 13512,
+              "catName": "家居装修",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 10393,
+              "catId": 13859,
+              "catName": "五金",
+              "catLevel": 2,
+              "parentCatId": 13512,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 29339,
+              "catId": 14000,
+              "catName": "挂钩",
+              "catLevel": 3,
+              "parentCatId": 13859,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 32459,
+              "catId": 14004,
+              "catName": "门吊挂钩",
+              "catLevel": 4,
+              "parentCatId": 14000,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "不锈钢双S型挂钩 | 免打孔，门面安装，现代风格，SUS304材质，适用于厨房和浴室橱柜",
+          "_source": "热销商品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "Shower Bath Sponge Loofah - Deep Clean And Vitalize Your Skin - 3pcs/Set",
+          "goodsNameCn": "沐浴海绵丝瓜-深层清洁并赋予皮肤活力-3件/套",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/b0a33776-c1b0-423d-bdda-2c0c2c93731b.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01F2H1Mc2DRbZjH2o7m_!!2218174258606-0-cib.jpg",
+          "sold": 500000,
+          "sales": 2970000,
+          "goodsPriceMin": 5.94,
+          "goodsPriceMax": 2.78,
+          "reviewNum": 10290,
+          "rating": 4.6,
+          "mallOpenTime": "2022-10-16T07:45:49.224+00:00",
+          "onSaleTime": "2024-03-13T06:31:33.000+00:00",
+          "goodsId": "601099540141453",
+          "detailUrl": "601099540141453",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 9011,
+              "catId": 15945,
+              "catName": "健康和家居用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 10828,
+              "catId": 16685,
+              "catName": "个人护理",
+              "catLevel": 2,
+              "parentCatId": 15945,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 13550,
+              "catId": 16820,
+              "catName": "浴室及淋浴配件",
+              "catLevel": 3,
+              "parentCatId": 16685,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 15551,
+              "catId": 16829,
+              "catName": "沐浴工具",
+              "catLevel": 4,
+              "parentCatId": 16820,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 21084,
+              "catId": 16835,
+              "catName": "搓澡巾",
+              "catLevel": 5,
+              "parentCatId": 16829,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "沐浴海绵丝瓜-深层清洁并赋予皮肤活力-3件/套",
+          "_source": "热销商品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "goodsNameCn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/4e918929-5852-48fe-b13d-95fbfa4b1424.jpg",
+          "thumbnailCn": "",
+          "sold": 450000,
+          "sales": 855000,
+          "goodsPriceMin": 1.9,
+          "goodsPriceMax": 1.9,
+          "reviewNum": 6461,
+          "rating": 4.8,
+          "mallOpenTime": "2023-09-12T19:47:03.000+00:00",
+          "onSaleTime": "2024-05-21T11:45:47.498+00:00",
+          "goodsId": "601099568567899",
+          "detailUrl": "601099568567899",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53186,
+              "catId": 39586,
+              "catName": "缝纫紧固件",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53229,
+              "catId": 39598,
+              "catName": "钩扣、挂钩扣",
+              "catLevel": 5,
+              "parentCatId": 39586,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "_source": "热销商品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "旅行包大容量女健身包豪华超大号手提包 - 时尚实用隔层设计，多功能带干湿分离及便捷侧袋，适合旅行探险与健身活动轻便待产包收纳袋短途出差行李包独立鞋仓轻巧的阿盖尔图案行李袋，便携式过夜袋",
+          "goodsNameCn": "旅行包大容量女健身包豪华超大号手提包 - 时尚实用隔层设计，多功能带干湿分离及便捷侧袋，适合旅行探险与健身活动轻便待产包收纳袋短途出差行李包独立鞋仓轻巧的阿盖尔图案行李袋，便携式过夜袋",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/8d13e2ad-ac15-4690-b188-a060b42e221e.jpg",
+          "thumbnailCn": "",
+          "sold": 400000,
+          "sales": 12212000,
+          "goodsPriceMin": 30.53,
+          "goodsPriceMax": 36.53,
+          "reviewNum": 13060,
+          "rating": 4.8,
+          "mallOpenTime": "2023-04-23T06:07:42.433+00:00",
+          "onSaleTime": "2024-03-27T12:37:03.296+00:00",
+          "goodsId": "601099553329725",
+          "detailUrl": "601099553329725",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 14369,
+              "catId": 27011,
+              "catName": "服装、鞋靴和珠宝饰品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 26217,
+              "catId": 30972,
+              "catName": "皮具箱包",
+              "catLevel": 2,
+              "parentCatId": 27011,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28375,
+              "catId": 30973,
+              "catName": "健身包",
+              "catLevel": 3,
+              "parentCatId": 30972,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 29457,
+              "catId": 30974,
+              "catName": "手提健身包",
+              "catLevel": 4,
+              "parentCatId": 30973,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "旅行包大容量女健身包豪华超大号手提包 - 时尚实用隔层设计，多功能带干湿分离及便捷侧袋，适合旅行探险与健身活动轻便待产包收纳袋短途出差行李包独立鞋仓轻巧的阿盖尔图案行李袋，便携式过夜袋",
+          "_source": "热销商品",
+          "_platform": "temu",
+          "_catId": 31148
+        }
+      ]
+    },
+    {
+      "channel": "热销新品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "500米-546码 300米-328码 超强钓鱼线，4股多股PE抗磨损编织线，12磅 25磅 40磅 80磅 100磅 顺滑长抛专用",
+          "goodsNameCn": "500米-546码 300米-328码 超强钓鱼线，4股多股PE抗磨损编织线，12磅 25磅 40磅 80磅 100磅 顺滑长抛专用",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/b2e9ac7d56d5ad2bbeb3b48e2ddd5eb4.jpg",
+          "thumbnailCn": "",
+          "sold": 350000,
+          "sales": 3087000,
+          "goodsPriceMin": 8.82,
+          "goodsPriceMax": 14.57,
+          "reviewNum": 8218,
+          "rating": 4.8,
+          "mallOpenTime": "2023-04-29T13:22:55.821+00:00",
+          "onSaleTime": "2023-09-10T14:34:22.450+00:00",
+          "goodsId": "601099523208136",
+          "detailUrl": "601099523208136",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 21990,
+              "catId": 32373,
+              "catName": "打猎和钓鱼",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23874,
+              "catId": 32415,
+              "catName": "钓鱼用品",
+              "catLevel": 3,
+              "parentCatId": 32373,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 27198,
+              "catId": 32425,
+              "catName": "鱼线",
+              "catLevel": 4,
+              "parentCatId": 32415,
+              "isLeaf": false,
+              "optId": 2249
+            },
+            {
+              "id": 29580,
+              "catId": 32430,
+              "catName": "路亚线",
+              "catLevel": 5,
+              "parentCatId": 32425,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "500米-546码 300米-328码 超强钓鱼线，4股多股PE抗磨损编织线，12磅 25磅 40磅 80磅 100磅 顺滑长抛专用",
+          "_source": "热销新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "Knife Sharpener, 3-stage Kitchen Whetstone, Ceramic Knife Sharpening Tool, Sharpener in Box Set",
+          "goodsNameCn": "磨刀器，三段式厨房磨刀石，陶瓷刀具磨刀工具，盒装套装",
+          "thumbnail": "https://img.kwcdn.com/product/open/8770a624673c4e0db5162a384b235a19-goods.jpeg",
+          "thumbnailCn": "",
+          "sold": 200000,
+          "sales": 646000,
+          "goodsPriceMin": 3.23,
+          "goodsPriceMax": 3.27,
+          "reviewNum": 760,
+          "rating": 4.7,
+          "mallOpenTime": "2024-01-21T11:27:57.101+00:00",
+          "onSaleTime": "2025-01-12T23:58:57.144+00:00",
+          "goodsId": "601099888898647",
+          "detailUrl": "601099888898647",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 21990,
+              "catId": 32373,
+              "catName": "打猎和钓鱼",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24314,
+              "catId": 32503,
+              "catName": "打猎用品",
+              "catLevel": 3,
+              "parentCatId": 32373,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 33687,
+              "catId": 32645,
+              "catName": "狩猎猎物处理",
+              "catLevel": 4,
+              "parentCatId": 32503,
+              "isLeaf": false,
+              "optId": 2263
+            },
+            {
+              "id": 47247,
+              "catId": 32662,
+              "catName": "狩猎磨刀器",
+              "catLevel": 7,
+              "parentCatId": 32656,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "磨刀器，三段式厨房磨刀石，陶瓷刀具磨刀工具，盒装套装",
+          "_source": "热销新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "2件装U型无肩带运动文胸",
+          "goodsNameCn": "2件装U型无肩带运动文胸",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/c8d36189-2b34-48b6-ba5f-e7b020c767a3.jpg",
+          "thumbnailCn": "",
+          "sold": 200000,
+          "sales": 2162000,
+          "goodsPriceMin": 10.81,
+          "goodsPriceMax": 11.28,
+          "reviewNum": 2601,
+          "rating": 4.5,
+          "mallOpenTime": "2024-04-12T05:02:01.142+00:00",
+          "onSaleTime": "2024-04-27T11:09:42.085+00:00",
+          "goodsId": "601099562314095",
+          "detailUrl": "601099562314095",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23463,
+              "catId": 34516,
+              "catName": "运动户外服饰",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28550,
+              "catId": 34517,
+              "catName": "女士运动户外服饰",
+              "catLevel": 3,
+              "parentCatId": 34516,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 29109,
+              "catId": 34518,
+              "catName": "内衣",
+              "catLevel": 4,
+              "parentCatId": 34517,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 29697,
+              "catId": 34519,
+              "catName": "运动胸罩",
+              "catLevel": 5,
+              "parentCatId": 34518,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "2件装U型无肩带运动文胸",
+          "_source": "热销新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "1X Summer Quick-Dry Men'S Ponytail Baseball Cap, Sun Protection Hat, Women'S Sports Cap, Camping Hat",
+          "goodsNameCn": "1x 夏季速干款男士马尾棒球帽防晒帽女士运动帽露营帽",
+          "thumbnail": "https://img.kwcdn.com/product/1e133b37bd6/787da926-a871-4a47-bbc5-246c39c2928d_1000x1000.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN013LzoEK1F5jdWAWj1G_!!4004860436-0-cib.jpg",
+          "sold": 150000,
+          "sales": 553500,
+          "goodsPriceMin": 3.69,
+          "goodsPriceMax": 6.97,
+          "reviewNum": 4524,
+          "rating": 4.6,
+          "mallOpenTime": "2022-11-08T04:55:55.287+00:00",
+          "onSaleTime": "2023-06-09T23:00:55.078+00:00",
+          "goodsId": "601099517670689",
+          "detailUrl": "601099517670689",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22659,
+              "catId": 32875,
+              "catName": "户外休闲",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28297,
+              "catId": 33936,
+              "catName": "徒步和户外休闲服装",
+              "catLevel": 3,
+              "parentCatId": 32875,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28814,
+              "catId": 33937,
+              "catName": "男士户外服饰",
+              "catLevel": 4,
+              "parentCatId": 33936,
+              "isLeaf": false,
+              "optId": 2303
+            },
+            {
+              "id": 37744,
+              "catId": 33972,
+              "catName": "男士户外帽子",
+              "catLevel": 6,
+              "parentCatId": 33967,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1x 夏季速干款男士马尾棒球帽防晒帽女士运动帽露营帽",
+          "_source": "热销新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "保持干燥并受到保护：适合皮划艇、划船、露营和钓鱼的多种颜色高品质干袋",
+          "goodsNameCn": "保持干燥并受到保护：适合皮划艇、划船、露营和钓鱼的多种颜色高品质干袋",
+          "thumbnail": "https://img.kwcdn.com/product/fancyalgo/toaster-api/toaster-processor-image-cm2in/abd3b49e-2ebd-11ef-b768-0a580a6610a4.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01bJj3Fg2LdWkmETBIn_!!2217847369715-0-cib.jpg",
+          "sold": 150000,
+          "sales": 1344000.0000000002,
+          "goodsPriceMin": 8.96,
+          "goodsPriceMax": 11.66,
+          "reviewNum": 4129,
+          "rating": 4.8,
+          "mallOpenTime": "2022-09-16T05:40:46.829+00:00",
+          "onSaleTime": "2023-03-19T06:34:26.057+00:00",
+          "goodsId": "601099512517271",
+          "detailUrl": "601099512517271",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22659,
+              "catId": 32875,
+              "catName": "户外休闲",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 30578,
+              "catId": 34176,
+              "catName": "水上运动",
+              "catLevel": 3,
+              "parentCatId": 32875,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 43956,
+              "catId": 34496,
+              "catName": "水上运动配件",
+              "catLevel": 4,
+              "parentCatId": 34176,
+              "isLeaf": false,
+              "optId": 2213
+            },
+            {
+              "id": 47110,
+              "catId": 34507,
+              "catName": "防水包",
+              "catLevel": 5,
+              "parentCatId": 34496,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "保持干燥并受到保护：适合皮划艇、划船、露营和钓鱼的多种颜色高品质干袋",
+          "_source": "热销新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "8 Shaped Elastic Resistance Band With Foam Handle, Tension Band For Abdomen Waist Arm Leg Stretching, Fitness Training, Gym Fitness, Yoga, Pilates, Suitable For Beginner",
+          "goodsNameCn": "8 Shaped Elastic Resistance Band With Foam Handle, Tension Band For Abdomen Waist Arm Leg Stretching",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/f809d8730248a2e4433254ad8112574e.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01LdBzt81LjwEDRnIIJ_!!2218953201336-0-cib.jpg",
+          "sold": 100000,
+          "sales": 175000,
+          "goodsPriceMin": 1.75,
+          "goodsPriceMax": 8.23,
+          "reviewNum": 4241,
+          "rating": 4.6,
+          "mallOpenTime": "2022-09-03T06:24:33.493+00:00",
+          "onSaleTime": "2023-02-02T19:44:11.324+00:00",
+          "goodsId": "601099512835944",
+          "detailUrl": "601099512835944",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19620,
+              "catId": 31757,
+              "catName": "健身、训练用品",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 26825,
+              "catId": 31996,
+              "catName": "力量训练器械",
+              "catLevel": 3,
+              "parentCatId": 31757,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 36683,
+              "catId": 32045,
+              "catName": "拉力带",
+              "catLevel": 4,
+              "parentCatId": 31996,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "8 Shaped Elastic Resistance Band With Foam Handle, Tension Band For Abdomen Waist Arm Leg Stretching, Fitness Training, Gym Fitness, Yoga, Pilates, Suitable For Beginner",
+          "_source": "热销新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "5 Pairs Of Comfy Ankle Socks, Solid Color Low Cut Sweat Absorption Sports Socks, Women's Stockings & Hosiery",
+          "goodsNameCn": "5双舒适的脚踝袜，纯色低胸吸汗运动袜，女式丝袜和袜子",
+          "thumbnail": "https://img.kwcdn.com/product/open/2023-07-19/1689755724999-8f34957be35d489d90d6e63a8dc0344d-goods.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01qBkPVN29VwuNLtjYv_!!2217629448074-0-cib.jpg",
+          "sold": 100000,
+          "sales": 272000,
+          "goodsPriceMin": 2.72,
+          "goodsPriceMax": 5.64,
+          "reviewNum": 41,
+          "rating": 4.5,
+          "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+          "onSaleTime": "2023-09-13T02:51:48.000+00:00",
+          "goodsId": "601099521291415",
+          "detailUrl": "601099521291415",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22659,
+              "catId": 32875,
+              "catName": "户外休闲",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24389,
+              "catId": 33069,
+              "catName": "攀岩用品",
+              "catLevel": 3,
+              "parentCatId": 32875,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 33406,
+              "catId": 33109,
+              "catName": "服装",
+              "catLevel": 4,
+              "parentCatId": 33069,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 37748,
+              "catId": 33156,
+              "catName": "女士户外袜子",
+              "catLevel": 6,
+              "parentCatId": 33148,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "5双舒适的脚踝袜，纯色低胸吸汗运动袜，女式丝袜和袜子",
+          "_source": "热销新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "6pcs super soft microfiber bath towel set, 2 bath towels 27 x 55 inches, 2 hand towels 13 x 30 inches, 2 washcloths 13.7 x 13.7 inches, quick drying, highly absorbent and lightweight bath towel set, m",
+          "goodsNameCn": "6件超柔软超细纤维浴巾套装，2条27 x 55英寸浴巾，2条13 x 30英寸手巾，2块13.7 x 13.7英寸洗脸巾，快干吸水性好且轻便的多功能浴巾套装",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/b00f36ee-9676-4b87-8a08-1746bd3e8b90.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01uHWPqe1juW8Q9gVhF_!!2219301474608-0-cib.jpg",
+          "sold": 100000,
+          "sales": 2025000,
+          "goodsPriceMin": 20.25,
+          "goodsPriceMax": 35.76,
+          "reviewNum": 186,
+          "rating": 4.7,
+          "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+          "onSaleTime": "2024-05-26T07:31:25.000+00:00",
+          "goodsId": "601099573015643",
+          "detailUrl": "601099573015643",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22659,
+              "catId": 32875,
+              "catName": "户外休闲",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23684,
+              "catId": 32876,
+              "catName": "露营、徒步用品",
+              "catLevel": 3,
+              "parentCatId": 32875,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 30781,
+              "catId": 32949,
+              "catName": "户外个人护理",
+              "catLevel": 4,
+              "parentCatId": 32876,
+              "isLeaf": false,
+              "optId": 1629
+            },
+            {
+              "id": 33977,
+              "catId": 32954,
+              "catName": "露营毛巾",
+              "catLevel": 5,
+              "parentCatId": 32949,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "6件超柔软超细纤维浴巾套装，2条27 x 55英寸浴巾，2条13 x 30英寸手巾，2块13.7 x 13.7英寸洗脸巾，快干吸水性好且轻便的多功能浴巾套装",
+          "_source": "热销新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "Spring/Autumn Style Men's Tactical Cargo Pants, Slightly Stretch Fabric, Soft and Breathable, Multi-Pocket, Suitable for Casual Outings, No Belt",
+          "goodsNameCn": "春秋款 男士战术工装裤 微弹面料 高品质柔软透气 多口袋 休闲外出适用 不含腰带",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/d82ea997-c4a2-4b9a-ba26-41dc67eb0079.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01kMCHhC2CZYnePexMu_!!2218657638488-0-cib.jpg",
+          "sold": 100000,
+          "sales": 2198000,
+          "goodsPriceMin": 21.98,
+          "goodsPriceMax": 28.6,
+          "reviewNum": 1987,
+          "rating": 4.7,
+          "mallOpenTime": "2024-09-25T11:09:22.284+00:00",
+          "onSaleTime": "2025-07-29T10:54:21.000+00:00",
+          "goodsId": "601101938887572",
+          "detailUrl": "601101938887572",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22659,
+              "catId": 32875,
+              "catName": "户外休闲",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28297,
+              "catId": 33936,
+              "catName": "徒步和户外休闲服装",
+              "catLevel": 3,
+              "parentCatId": 32875,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28814,
+              "catId": 33937,
+              "catName": "男士户外服饰",
+              "catLevel": 4,
+              "parentCatId": 33936,
+              "isLeaf": false,
+              "optId": 2303
+            },
+            {
+              "id": 30941,
+              "catId": 33939,
+              "catName": "男士户外长裤",
+              "catLevel": 5,
+              "parentCatId": 33937,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "春秋款 男士战术工装裤 微弹面料 高品质柔软透气 多口袋 休闲外出适用 不含腰带",
+          "_source": "热销新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "11.02-220.46LB Counting Hand Grip Strengthener, Arm Strength Fitness Equipment, Wrist Strength Trainer, Five-Finger Grip Strengthener",
+          "goodsNameCn": "11.02-220.46LB Counting Hand Grip Strengthener, Arm Strength Fitness Equipment, Wrist Strength Train",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/5568daf8-55b5-471f-a63b-0d0df38033e5.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01zQDirr1flZsnTO00g_!!2217741714047-0-cib.jpg",
+          "sold": 100000,
+          "sales": 390000,
+          "goodsPriceMin": 3.9,
+          "goodsPriceMax": 5.67,
+          "reviewNum": 2015,
+          "rating": 4.8,
+          "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+          "onSaleTime": "2024-03-27T02:53:38.683+00:00",
+          "goodsId": "601099546572408",
+          "detailUrl": "601099546572408",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19620,
+              "catId": 31757,
+              "catName": "健身、训练用品",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 26825,
+              "catId": 31996,
+              "catName": "力量训练器械",
+              "catLevel": 3,
+              "parentCatId": 31757,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 34040,
+              "catId": 32037,
+              "catName": "力量训练设备",
+              "catLevel": 4,
+              "parentCatId": 31996,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 35828,
+              "catId": 32038,
+              "catName": "力量训练握力训练器",
+              "catLevel": 5,
+              "parentCatId": 32037,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "11.02-220.46LB Counting Hand Grip Strengthener, Arm Strength Fitness Equipment, Wrist Strength Trainer, Five-Finger Grip Strengthener",
+          "_source": "热销新品",
+          "_platform": "temu",
+          "_catId": 31148
+        }
+      ]
+    },
+    {
+      "channel": "新店热销",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "12/24pcs Kitchen Cleaning Sponge, Dish Towel, Scouring Pad, Dishware Anti-Scratch Scrubbing Sponge",
+          "goodsNameCn": "12/24pcs Kitchen Cleaning Sponge, Dish Towel, Scouring Pad, Dishware Anti-Scratch Scrubbing Sponge",
+          "thumbnail": "https://img.kwcdn.com/product/1e78ea2412/19a84758-493f-4487-983b-71523c0b1d6e_800x800.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN013nfFni1a4SUm916uA_!!961083276-0-cib.jpg",
+          "sold": 1000000,
+          "sales": 3150000,
+          "goodsPriceMin": 3.15,
+          "goodsPriceMax": 7.62,
+          "reviewNum": 21162,
+          "rating": 4.7,
+          "mallOpenTime": "2022-10-03T02:28:06.626+00:00",
+          "onSaleTime": "2023-06-07T07:18:42.137+00:00",
+          "goodsId": "601099514868374",
+          "detailUrl": "601099514868374",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 8871,
+              "catId": 9711,
+              "catName": "家居、厨房用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 14470,
+              "catId": 12870,
+              "catName": "家庭清洁用品",
+              "catLevel": 2,
+              "parentCatId": 9711,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22355,
+              "catId": 12959,
+              "catName": "海绵",
+              "catLevel": 3,
+              "parentCatId": 12870,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "12/24pcs Kitchen Cleaning Sponge, Dish Towel, Scouring Pad, Dishware Anti-Scratch Scrubbing Sponge",
+          "_source": "新店热销",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "3-Piece Anti-Peeking Screen Protector for iPhone 17, 16, 15, 14, 13, 12, 11 Pro Max, 17 Air, 14, 15, 16 Plus, 13, 12 Mini - Tempered Glass, 9H Hardness, Full Screen Coverage, Anti-Peeking",
+          "goodsNameCn": "3片装 防窥屏保护膜 iPhone 17 16 15 14 13 12 11 Pro Max 17 Air 14 15 16 Plus 13 12 Mini 适用 钢化玻璃 9H硬度 全屏覆盖 防窥保",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/10a5760d-9e71-4385-a3dc-2d47caf7023f.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN011PEDNI1l8XrdNrKBV_!!2209258214774-0-cib.jpg",
+          "sold": 900000,
+          "sales": 2160000,
+          "goodsPriceMin": 2.4,
+          "goodsPriceMax": 4.09,
+          "reviewNum": 6561,
+          "rating": 4.7,
+          "mallOpenTime": "2025-04-25T06:23:54.321+00:00",
+          "onSaleTime": "2025-04-25T06:23:54.321+00:00",
+          "goodsId": "601099621486411",
+          "detailUrl": "601099621486411",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 11291,
+              "catId": 24252,
+              "catName": "手机和配件",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 11911,
+              "catId": 24253,
+              "catName": "手机配件",
+              "catLevel": 2,
+              "parentCatId": 24252,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 21575,
+              "catId": 24293,
+              "catName": "手机保养、维护和维修",
+              "catLevel": 3,
+              "parentCatId": 24253,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22796,
+              "catId": 24299,
+              "catName": "手机屏幕保护膜",
+              "catLevel": 4,
+              "parentCatId": 24293,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "3片装 防窥屏保护膜 iPhone 17 16 15 14 13 12 11 Pro Max 17 Air 14 15 16 Plus 13 12 Mini 适用 钢化玻璃 9H硬度 全屏覆盖 防窥保护膜",
+          "_source": "新店热销",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "10 Pieces Half - Moon Nail Files, Nail Polishing Tools",
+          "goodsNameCn": "10pcs 半月形指甲锉 指甲抛光工具",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/2decf8d890aef6e4a76b2915a48d4d8a.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01z1ZEZA1qnpdVyQjId_!!2216357685541-0-cib.jpg",
+          "sold": 900000,
+          "sales": 2069999.9999999998,
+          "goodsPriceMin": 2.3,
+          "goodsPriceMax": 1.88,
+          "reviewNum": 11527,
+          "rating": 4.9,
+          "mallOpenTime": "2023-04-28T02:33:16.157+00:00",
+          "onSaleTime": "2023-10-28T15:34:22.369+00:00",
+          "goodsId": "601099515292831",
+          "detailUrl": "601099515292831",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 10097,
+              "catId": 18768,
+              "catName": "美容和个人护理",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 16368,
+              "catId": 19739,
+              "catName": "足部、手部和指甲护理产品",
+              "catLevel": 2,
+              "parentCatId": 18768,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22047,
+              "catId": 19820,
+              "catName": "美甲工具",
+              "catLevel": 3,
+              "parentCatId": 19739,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24868,
+              "catId": 19825,
+              "catName": "修甲工具",
+              "catLevel": 4,
+              "parentCatId": 19820,
+              "isLeaf": false,
+              "optId": 7306
+            },
+            {
+              "id": 28642,
+              "catId": 19829,
+              "catName": "指甲锉和缓冲液",
+              "catLevel": 5,
+              "parentCatId": 19825,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "10pcs 半月形指甲锉 指甲抛光工具",
+          "_source": "新店热销",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "50 Black Elastic Hair Ties - Simple Hair Ropes, Seamless Elastic Bands",
+          "goodsNameCn": "50根-黑色皮筋圈头绳简约发绳无接缝弹力皮筋",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/d2d01a70436b8f02ff2d5b8258fd53ca.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01dsYlAz21pAVXLhVpZ_!!2213333547033-0-cib.jpg",
+          "sold": 700000,
+          "sales": 1106000,
+          "goodsPriceMin": 1.58,
+          "goodsPriceMax": 1.58,
+          "reviewNum": 41587,
+          "rating": 4.8,
+          "mallOpenTime": "2023-03-04T02:30:20.231+00:00",
+          "onSaleTime": "2023-10-16T11:19:19.620+00:00",
+          "goodsId": "601099523857663",
+          "detailUrl": "601099523857663",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 13367,
+              "catId": 26207,
+              "catName": "母婴用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 27816,
+              "catId": 26297,
+              "catName": "婴幼儿洗护用品",
+              "catLevel": 2,
+              "parentCatId": 26207,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 32020,
+              "catId": 26305,
+              "catName": "宝宝头发护理",
+              "catLevel": 3,
+              "parentCatId": 26297,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 32612,
+              "catId": 26306,
+              "catName": "女婴发饰",
+              "catLevel": 4,
+              "parentCatId": 26305,
+              "isLeaf": false,
+              "optId": 3025
+            },
+            {
+              "id": 35507,
+              "catId": 26920,
+              "catName": "女婴发绳",
+              "catLevel": 5,
+              "parentCatId": 26306,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "50根-黑色皮筋圈头绳简约发绳无接缝弹力皮筋",
+          "_source": "新店热销",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "6-Piece Nail Care Set, Household Nail Clipper Set, Portable Ear Pick and Spoon Nail Clipper Set",
+          "goodsNameCn": "6pcs 指甲护理套装家用指甲刀套装便携式耳签勺指甲刀套装",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/1675e9ad02c62e8f0d8b2b6e2492f775.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01bFEXHR1mHzdEgDHZc_!!2212800824930-0-cib.jpg",
+          "sold": 550000,
+          "sales": 1424500,
+          "goodsPriceMin": 2.59,
+          "goodsPriceMax": 2.59,
+          "reviewNum": 13958,
+          "rating": 4.7,
+          "mallOpenTime": "2024-03-11T02:53:04.182+00:00",
+          "onSaleTime": "2024-03-11T02:53:04.182+00:00",
+          "goodsId": "601099518237979",
+          "detailUrl": "601099518237979",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 9011,
+              "catId": 15945,
+              "catName": "健康和家居用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 10123,
+              "catId": 16298,
+              "catName": "医疗器械",
+              "catLevel": 2,
+              "parentCatId": 15945,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 13009,
+              "catId": 16401,
+              "catName": "助行和日用辅助用品",
+              "catLevel": 3,
+              "parentCatId": 16298,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 13830,
+              "catId": 16402,
+              "catName": "卫浴用品",
+              "catLevel": 4,
+              "parentCatId": 16401,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23885,
+              "catId": 16427,
+              "catName": "日常脚部和指甲护理产品",
+              "catLevel": 5,
+              "parentCatId": 16402,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "6pcs 指甲护理套装家用指甲刀套装便携式耳签勺指甲刀套装",
+          "_source": "新店热销",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "200mAh/400mAh Rechargeable LED Motion Sensor Night Light - Street & Area Lighting - Wireless USB Powered, Auto-On Motion Detector, Under Cabinet Lighting, Warm/White Color Options, Perfect for Kitchen",
+          "goodsNameCn": "200mAh/400mAh Rechargeable LED Motion Sensor Night Light - Street & Area Lighting - Wireless USB Pow",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/e33b1f6b-3128-4af0-b4a3-ede49bcbbe42.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01MvaXHp1eUnl7ZjxTj_!!2215495023875-0-cib.jpg",
+          "sold": 550000,
+          "sales": 1094500,
+          "goodsPriceMin": 1.99,
+          "goodsPriceMax": 4.35,
+          "reviewNum": 17525,
+          "rating": 4.7,
+          "mallOpenTime": "2022-12-05T03:50:29.984+00:00",
+          "onSaleTime": "2024-09-30T20:35:23.741+00:00",
+          "goodsId": "601099678310459",
+          "detailUrl": "601099678310459",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 601,
+              "catId": 653,
+              "catName": "办公用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 697,
+              "catId": 748,
+              "catName": "办公家具灯具",
+              "catLevel": 2,
+              "parentCatId": 653,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 698,
+              "catId": 749,
+              "catName": "办公灯具",
+              "catLevel": 3,
+              "parentCatId": 748,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 702,
+              "catId": 753,
+              "catName": "柜下灯",
+              "catLevel": 4,
+              "parentCatId": 749,
+              "isLeaf": true,
+              "optId": 1457
+            }
+          ],
+          "goodsName": "200mAh/400mAh Rechargeable LED Motion Sensor Night Light - Street & Area Lighting - Wireless USB Powered, Auto-On Motion Detector, Under Cabinet Lighting, Warm/White Color Options, Perfect for Kitchen, Wardrobe, Dormitory, Hallway, Stairs",
+          "_source": "新店热销",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "不锈钢双S型挂钩 | 免打孔，门面安装，现代风格，SUS304材质，适用于厨房和浴室橱柜",
+          "goodsNameCn": "不锈钢双S型挂钩 | 免打孔，门面安装，现代风格，SUS304材质，适用于厨房和浴室橱柜",
+          "thumbnail": "https://img.kwcdn.com/product/open/2023-04-10/1681141323127-55c2bf698f4945a587b058db99344853-goods.jpeg",
+          "thumbnailCn": "",
+          "sold": 550000,
+          "sales": 929500,
+          "goodsPriceMin": 1.69,
+          "goodsPriceMax": 9.49,
+          "reviewNum": 5587,
+          "rating": 4.6,
+          "mallOpenTime": "2023-04-08T03:14:08.839+00:00",
+          "onSaleTime": "2023-05-10T01:20:17.225+00:00",
+          "goodsId": "601099516127805",
+          "detailUrl": "601099516127805",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 8925,
+              "catId": 13512,
+              "catName": "家居装修",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 10393,
+              "catId": 13859,
+              "catName": "五金",
+              "catLevel": 2,
+              "parentCatId": 13512,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 29339,
+              "catId": 14000,
+              "catName": "挂钩",
+              "catLevel": 3,
+              "parentCatId": 13859,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 32459,
+              "catId": 14004,
+              "catName": "门吊挂钩",
+              "catLevel": 4,
+              "parentCatId": 14000,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "不锈钢双S型挂钩 | 免打孔，门面安装，现代风格，SUS304材质，适用于厨房和浴室橱柜",
+          "_source": "新店热销",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "Shower Bath Sponge Loofah - Deep Clean And Vitalize Your Skin - 3pcs/Set",
+          "goodsNameCn": "沐浴海绵丝瓜-深层清洁并赋予皮肤活力-3件/套",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/b0a33776-c1b0-423d-bdda-2c0c2c93731b.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01F2H1Mc2DRbZjH2o7m_!!2218174258606-0-cib.jpg",
+          "sold": 500000,
+          "sales": 2970000,
+          "goodsPriceMin": 5.94,
+          "goodsPriceMax": 2.78,
+          "reviewNum": 10290,
+          "rating": 4.6,
+          "mallOpenTime": "2022-10-16T07:45:49.224+00:00",
+          "onSaleTime": "2024-03-13T06:31:33.000+00:00",
+          "goodsId": "601099540141453",
+          "detailUrl": "601099540141453",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 9011,
+              "catId": 15945,
+              "catName": "健康和家居用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 10828,
+              "catId": 16685,
+              "catName": "个人护理",
+              "catLevel": 2,
+              "parentCatId": 15945,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 13550,
+              "catId": 16820,
+              "catName": "浴室及淋浴配件",
+              "catLevel": 3,
+              "parentCatId": 16685,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 15551,
+              "catId": 16829,
+              "catName": "沐浴工具",
+              "catLevel": 4,
+              "parentCatId": 16820,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 21084,
+              "catId": 16835,
+              "catName": "搓澡巾",
+              "catLevel": 5,
+              "parentCatId": 16829,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "沐浴海绵丝瓜-深层清洁并赋予皮肤活力-3件/套",
+          "_source": "新店热销",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "goodsNameCn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/4e918929-5852-48fe-b13d-95fbfa4b1424.jpg",
+          "thumbnailCn": "",
+          "sold": 450000,
+          "sales": 855000,
+          "goodsPriceMin": 1.9,
+          "goodsPriceMax": 1.9,
+          "reviewNum": 6461,
+          "rating": 4.8,
+          "mallOpenTime": "2023-09-12T19:47:03.000+00:00",
+          "onSaleTime": "2024-05-21T11:45:47.498+00:00",
+          "goodsId": "601099568567899",
+          "detailUrl": "601099568567899",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53186,
+              "catId": 39586,
+              "catName": "缝纫紧固件",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53229,
+              "catId": 39598,
+              "catName": "钩扣、挂钩扣",
+              "catLevel": 5,
+              "parentCatId": 39586,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "_source": "新店热销",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "旅行包大容量女健身包豪华超大号手提包 - 时尚实用隔层设计，多功能带干湿分离及便捷侧袋，适合旅行探险与健身活动轻便待产包收纳袋短途出差行李包独立鞋仓轻巧的阿盖尔图案行李袋，便携式过夜袋",
+          "goodsNameCn": "旅行包大容量女健身包豪华超大号手提包 - 时尚实用隔层设计，多功能带干湿分离及便捷侧袋，适合旅行探险与健身活动轻便待产包收纳袋短途出差行李包独立鞋仓轻巧的阿盖尔图案行李袋，便携式过夜袋",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/8d13e2ad-ac15-4690-b188-a060b42e221e.jpg",
+          "thumbnailCn": "",
+          "sold": 400000,
+          "sales": 12212000,
+          "goodsPriceMin": 30.53,
+          "goodsPriceMax": 36.53,
+          "reviewNum": 13060,
+          "rating": 4.8,
+          "mallOpenTime": "2023-04-23T06:07:42.433+00:00",
+          "onSaleTime": "2024-03-27T12:37:03.296+00:00",
+          "goodsId": "601099553329725",
+          "detailUrl": "601099553329725",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 14369,
+              "catId": 27011,
+              "catName": "服装、鞋靴和珠宝饰品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 26217,
+              "catId": 30972,
+              "catName": "皮具箱包",
+              "catLevel": 2,
+              "parentCatId": 27011,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28375,
+              "catId": 30973,
+              "catName": "健身包",
+              "catLevel": 3,
+              "parentCatId": 30972,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 29457,
+              "catId": 30974,
+              "catName": "手提健身包",
+              "catLevel": 4,
+              "parentCatId": 30973,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "旅行包大容量女健身包豪华超大号手提包 - 时尚实用隔层设计，多功能带干湿分离及便捷侧袋，适合旅行探险与健身活动轻便待产包收纳袋短途出差行李包独立鞋仓轻巧的阿盖尔图案行李袋，便携式过夜袋",
+          "_source": "新店热销",
+          "_platform": "temu",
+          "_catId": 31148
+        }
+      ]
+    },
+    {
+      "channel": "大卖新品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "500米-546码 300米-328码 超强钓鱼线，4股多股PE抗磨损编织线，12磅 25磅 40磅 80磅 100磅 顺滑长抛专用",
+          "goodsNameCn": "500米-546码 300米-328码 超强钓鱼线，4股多股PE抗磨损编织线，12磅 25磅 40磅 80磅 100磅 顺滑长抛专用",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/b2e9ac7d56d5ad2bbeb3b48e2ddd5eb4.jpg",
+          "thumbnailCn": "",
+          "sold": 350000,
+          "sales": 3087000,
+          "goodsPriceMin": 8.82,
+          "goodsPriceMax": 14.57,
+          "reviewNum": 8218,
+          "rating": 4.8,
+          "mallOpenTime": "2023-04-29T13:22:55.821+00:00",
+          "onSaleTime": "2023-09-10T14:34:22.450+00:00",
+          "goodsId": "601099523208136",
+          "detailUrl": "601099523208136",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 21990,
+              "catId": 32373,
+              "catName": "打猎和钓鱼",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23874,
+              "catId": 32415,
+              "catName": "钓鱼用品",
+              "catLevel": 3,
+              "parentCatId": 32373,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 27198,
+              "catId": 32425,
+              "catName": "鱼线",
+              "catLevel": 4,
+              "parentCatId": 32415,
+              "isLeaf": false,
+              "optId": 2249
+            },
+            {
+              "id": 29580,
+              "catId": 32430,
+              "catName": "路亚线",
+              "catLevel": 5,
+              "parentCatId": 32425,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "500米-546码 300米-328码 超强钓鱼线，4股多股PE抗磨损编织线，12磅 25磅 40磅 80磅 100磅 顺滑长抛专用",
+          "_source": "大卖新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "Knife Sharpener, 3-stage Kitchen Whetstone, Ceramic Knife Sharpening Tool, Sharpener in Box Set",
+          "goodsNameCn": "磨刀器，三段式厨房磨刀石，陶瓷刀具磨刀工具，盒装套装",
+          "thumbnail": "https://img.kwcdn.com/product/open/8770a624673c4e0db5162a384b235a19-goods.jpeg",
+          "thumbnailCn": "",
+          "sold": 200000,
+          "sales": 646000,
+          "goodsPriceMin": 3.23,
+          "goodsPriceMax": 3.27,
+          "reviewNum": 760,
+          "rating": 4.7,
+          "mallOpenTime": "2024-01-21T11:27:57.101+00:00",
+          "onSaleTime": "2025-01-12T23:58:57.144+00:00",
+          "goodsId": "601099888898647",
+          "detailUrl": "601099888898647",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 21990,
+              "catId": 32373,
+              "catName": "打猎和钓鱼",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24314,
+              "catId": 32503,
+              "catName": "打猎用品",
+              "catLevel": 3,
+              "parentCatId": 32373,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 33687,
+              "catId": 32645,
+              "catName": "狩猎猎物处理",
+              "catLevel": 4,
+              "parentCatId": 32503,
+              "isLeaf": false,
+              "optId": 2263
+            },
+            {
+              "id": 47247,
+              "catId": 32662,
+              "catName": "狩猎磨刀器",
+              "catLevel": 7,
+              "parentCatId": 32656,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "磨刀器，三段式厨房磨刀石，陶瓷刀具磨刀工具，盒装套装",
+          "_source": "大卖新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "2件装U型无肩带运动文胸",
+          "goodsNameCn": "2件装U型无肩带运动文胸",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/c8d36189-2b34-48b6-ba5f-e7b020c767a3.jpg",
+          "thumbnailCn": "",
+          "sold": 200000,
+          "sales": 2162000,
+          "goodsPriceMin": 10.81,
+          "goodsPriceMax": 11.28,
+          "reviewNum": 2601,
+          "rating": 4.5,
+          "mallOpenTime": "2024-04-12T05:02:01.142+00:00",
+          "onSaleTime": "2024-04-27T11:09:42.085+00:00",
+          "goodsId": "601099562314095",
+          "detailUrl": "601099562314095",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23463,
+              "catId": 34516,
+              "catName": "运动户外服饰",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28550,
+              "catId": 34517,
+              "catName": "女士运动户外服饰",
+              "catLevel": 3,
+              "parentCatId": 34516,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 29109,
+              "catId": 34518,
+              "catName": "内衣",
+              "catLevel": 4,
+              "parentCatId": 34517,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 29697,
+              "catId": 34519,
+              "catName": "运动胸罩",
+              "catLevel": 5,
+              "parentCatId": 34518,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "2件装U型无肩带运动文胸",
+          "_source": "大卖新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "1X Summer Quick-Dry Men'S Ponytail Baseball Cap, Sun Protection Hat, Women'S Sports Cap, Camping Hat",
+          "goodsNameCn": "1x 夏季速干款男士马尾棒球帽防晒帽女士运动帽露营帽",
+          "thumbnail": "https://img.kwcdn.com/product/1e133b37bd6/787da926-a871-4a47-bbc5-246c39c2928d_1000x1000.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN013LzoEK1F5jdWAWj1G_!!4004860436-0-cib.jpg",
+          "sold": 150000,
+          "sales": 553500,
+          "goodsPriceMin": 3.69,
+          "goodsPriceMax": 6.97,
+          "reviewNum": 4524,
+          "rating": 4.6,
+          "mallOpenTime": "2022-11-08T04:55:55.287+00:00",
+          "onSaleTime": "2023-06-09T23:00:55.078+00:00",
+          "goodsId": "601099517670689",
+          "detailUrl": "601099517670689",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22659,
+              "catId": 32875,
+              "catName": "户外休闲",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28297,
+              "catId": 33936,
+              "catName": "徒步和户外休闲服装",
+              "catLevel": 3,
+              "parentCatId": 32875,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28814,
+              "catId": 33937,
+              "catName": "男士户外服饰",
+              "catLevel": 4,
+              "parentCatId": 33936,
+              "isLeaf": false,
+              "optId": 2303
+            },
+            {
+              "id": 37744,
+              "catId": 33972,
+              "catName": "男士户外帽子",
+              "catLevel": 6,
+              "parentCatId": 33967,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1x 夏季速干款男士马尾棒球帽防晒帽女士运动帽露营帽",
+          "_source": "大卖新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "保持干燥并受到保护：适合皮划艇、划船、露营和钓鱼的多种颜色高品质干袋",
+          "goodsNameCn": "保持干燥并受到保护：适合皮划艇、划船、露营和钓鱼的多种颜色高品质干袋",
+          "thumbnail": "https://img.kwcdn.com/product/fancyalgo/toaster-api/toaster-processor-image-cm2in/abd3b49e-2ebd-11ef-b768-0a580a6610a4.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01bJj3Fg2LdWkmETBIn_!!2217847369715-0-cib.jpg",
+          "sold": 150000,
+          "sales": 1344000.0000000002,
+          "goodsPriceMin": 8.96,
+          "goodsPriceMax": 11.66,
+          "reviewNum": 4129,
+          "rating": 4.8,
+          "mallOpenTime": "2022-09-16T05:40:46.829+00:00",
+          "onSaleTime": "2023-03-19T06:34:26.057+00:00",
+          "goodsId": "601099512517271",
+          "detailUrl": "601099512517271",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22659,
+              "catId": 32875,
+              "catName": "户外休闲",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 30578,
+              "catId": 34176,
+              "catName": "水上运动",
+              "catLevel": 3,
+              "parentCatId": 32875,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 43956,
+              "catId": 34496,
+              "catName": "水上运动配件",
+              "catLevel": 4,
+              "parentCatId": 34176,
+              "isLeaf": false,
+              "optId": 2213
+            },
+            {
+              "id": 47110,
+              "catId": 34507,
+              "catName": "防水包",
+              "catLevel": 5,
+              "parentCatId": 34496,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "保持干燥并受到保护：适合皮划艇、划船、露营和钓鱼的多种颜色高品质干袋",
+          "_source": "大卖新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "8 Shaped Elastic Resistance Band With Foam Handle, Tension Band For Abdomen Waist Arm Leg Stretching, Fitness Training, Gym Fitness, Yoga, Pilates, Suitable For Beginner",
+          "goodsNameCn": "8 Shaped Elastic Resistance Band With Foam Handle, Tension Band For Abdomen Waist Arm Leg Stretching",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/f809d8730248a2e4433254ad8112574e.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01LdBzt81LjwEDRnIIJ_!!2218953201336-0-cib.jpg",
+          "sold": 100000,
+          "sales": 175000,
+          "goodsPriceMin": 1.75,
+          "goodsPriceMax": 8.23,
+          "reviewNum": 4241,
+          "rating": 4.6,
+          "mallOpenTime": "2022-09-03T06:24:33.493+00:00",
+          "onSaleTime": "2023-02-02T19:44:11.324+00:00",
+          "goodsId": "601099512835944",
+          "detailUrl": "601099512835944",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19620,
+              "catId": 31757,
+              "catName": "健身、训练用品",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 26825,
+              "catId": 31996,
+              "catName": "力量训练器械",
+              "catLevel": 3,
+              "parentCatId": 31757,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 36683,
+              "catId": 32045,
+              "catName": "拉力带",
+              "catLevel": 4,
+              "parentCatId": 31996,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "8 Shaped Elastic Resistance Band With Foam Handle, Tension Band For Abdomen Waist Arm Leg Stretching, Fitness Training, Gym Fitness, Yoga, Pilates, Suitable For Beginner",
+          "_source": "大卖新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "5 Pairs Of Comfy Ankle Socks, Solid Color Low Cut Sweat Absorption Sports Socks, Women's Stockings & Hosiery",
+          "goodsNameCn": "5双舒适的脚踝袜，纯色低胸吸汗运动袜，女式丝袜和袜子",
+          "thumbnail": "https://img.kwcdn.com/product/open/2023-07-19/1689755724999-8f34957be35d489d90d6e63a8dc0344d-goods.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01qBkPVN29VwuNLtjYv_!!2217629448074-0-cib.jpg",
+          "sold": 100000,
+          "sales": 272000,
+          "goodsPriceMin": 2.72,
+          "goodsPriceMax": 5.64,
+          "reviewNum": 41,
+          "rating": 4.5,
+          "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+          "onSaleTime": "2023-09-13T02:51:48.000+00:00",
+          "goodsId": "601099521291415",
+          "detailUrl": "601099521291415",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22659,
+              "catId": 32875,
+              "catName": "户外休闲",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24389,
+              "catId": 33069,
+              "catName": "攀岩用品",
+              "catLevel": 3,
+              "parentCatId": 32875,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 33406,
+              "catId": 33109,
+              "catName": "服装",
+              "catLevel": 4,
+              "parentCatId": 33069,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 37748,
+              "catId": 33156,
+              "catName": "女士户外袜子",
+              "catLevel": 6,
+              "parentCatId": 33148,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "5双舒适的脚踝袜，纯色低胸吸汗运动袜，女式丝袜和袜子",
+          "_source": "大卖新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "6pcs super soft microfiber bath towel set, 2 bath towels 27 x 55 inches, 2 hand towels 13 x 30 inches, 2 washcloths 13.7 x 13.7 inches, quick drying, highly absorbent and lightweight bath towel set, m",
+          "goodsNameCn": "6件超柔软超细纤维浴巾套装，2条27 x 55英寸浴巾，2条13 x 30英寸手巾，2块13.7 x 13.7英寸洗脸巾，快干吸水性好且轻便的多功能浴巾套装",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/b00f36ee-9676-4b87-8a08-1746bd3e8b90.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01uHWPqe1juW8Q9gVhF_!!2219301474608-0-cib.jpg",
+          "sold": 100000,
+          "sales": 2025000,
+          "goodsPriceMin": 20.25,
+          "goodsPriceMax": 35.76,
+          "reviewNum": 186,
+          "rating": 4.7,
+          "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+          "onSaleTime": "2024-05-26T07:31:25.000+00:00",
+          "goodsId": "601099573015643",
+          "detailUrl": "601099573015643",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22659,
+              "catId": 32875,
+              "catName": "户外休闲",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23684,
+              "catId": 32876,
+              "catName": "露营、徒步用品",
+              "catLevel": 3,
+              "parentCatId": 32875,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 30781,
+              "catId": 32949,
+              "catName": "户外个人护理",
+              "catLevel": 4,
+              "parentCatId": 32876,
+              "isLeaf": false,
+              "optId": 1629
+            },
+            {
+              "id": 33977,
+              "catId": 32954,
+              "catName": "露营毛巾",
+              "catLevel": 5,
+              "parentCatId": 32949,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "6件超柔软超细纤维浴巾套装，2条27 x 55英寸浴巾，2条13 x 30英寸手巾，2块13.7 x 13.7英寸洗脸巾，快干吸水性好且轻便的多功能浴巾套装",
+          "_source": "大卖新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "Spring/Autumn Style Men's Tactical Cargo Pants, Slightly Stretch Fabric, Soft and Breathable, Multi-Pocket, Suitable for Casual Outings, No Belt",
+          "goodsNameCn": "春秋款 男士战术工装裤 微弹面料 高品质柔软透气 多口袋 休闲外出适用 不含腰带",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/d82ea997-c4a2-4b9a-ba26-41dc67eb0079.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01kMCHhC2CZYnePexMu_!!2218657638488-0-cib.jpg",
+          "sold": 100000,
+          "sales": 2198000,
+          "goodsPriceMin": 21.98,
+          "goodsPriceMax": 28.6,
+          "reviewNum": 1987,
+          "rating": 4.7,
+          "mallOpenTime": "2024-09-25T11:09:22.284+00:00",
+          "onSaleTime": "2025-07-29T10:54:21.000+00:00",
+          "goodsId": "601101938887572",
+          "detailUrl": "601101938887572",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22659,
+              "catId": 32875,
+              "catName": "户外休闲",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28297,
+              "catId": 33936,
+              "catName": "徒步和户外休闲服装",
+              "catLevel": 3,
+              "parentCatId": 32875,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28814,
+              "catId": 33937,
+              "catName": "男士户外服饰",
+              "catLevel": 4,
+              "parentCatId": 33936,
+              "isLeaf": false,
+              "optId": 2303
+            },
+            {
+              "id": 30941,
+              "catId": 33939,
+              "catName": "男士户外长裤",
+              "catLevel": 5,
+              "parentCatId": 33937,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "春秋款 男士战术工装裤 微弹面料 高品质柔软透气 多口袋 休闲外出适用 不含腰带",
+          "_source": "大卖新品",
+          "_platform": "temu",
+          "_catId": 31148
+        },
+        {
+          "goodsNameEn": "11.02-220.46LB Counting Hand Grip Strengthener, Arm Strength Fitness Equipment, Wrist Strength Trainer, Five-Finger Grip Strengthener",
+          "goodsNameCn": "11.02-220.46LB Counting Hand Grip Strengthener, Arm Strength Fitness Equipment, Wrist Strength Train",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/5568daf8-55b5-471f-a63b-0d0df38033e5.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01zQDirr1flZsnTO00g_!!2217741714047-0-cib.jpg",
+          "sold": 100000,
+          "sales": 390000,
+          "goodsPriceMin": 3.9,
+          "goodsPriceMax": 5.67,
+          "reviewNum": 2015,
+          "rating": 4.8,
+          "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+          "onSaleTime": "2024-03-27T02:53:38.683+00:00",
+          "goodsId": "601099546572408",
+          "detailUrl": "601099546572408",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 15277,
+              "catId": 31148,
+              "catName": "运动与户外用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19620,
+              "catId": 31757,
+              "catName": "健身、训练用品",
+              "catLevel": 2,
+              "parentCatId": 31148,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 26825,
+              "catId": 31996,
+              "catName": "力量训练器械",
+              "catLevel": 3,
+              "parentCatId": 31757,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 34040,
+              "catId": 32037,
+              "catName": "力量训练设备",
+              "catLevel": 4,
+              "parentCatId": 31996,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 35828,
+              "catId": 32038,
+              "catName": "力量训练握力训练器",
+              "catLevel": 5,
+              "parentCatId": 32037,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "11.02-220.46LB Counting Hand Grip Strengthener, Arm Strength Fitness Equipment, Wrist Strength Trainer, Five-Finger Grip Strengthener",
+          "_source": "大卖新品",
+          "_platform": "temu",
+          "_catId": 31148
+        }
+      ]
+    }
+  ]
+}

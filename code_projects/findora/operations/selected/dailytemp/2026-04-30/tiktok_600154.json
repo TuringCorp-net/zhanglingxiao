@@ -1,0 +1,1788 @@
+{
+  "platform": "tiktok",
+  "catId": 600154,
+  "catName": "Textiles & Soft Furnishings",
+  "collectedAt": "2026-04-30T03:01:52.549Z",
+  "channels": [
+    {
+      "channel": "热销商品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "[KKM] FEREENA GLUTA SOAP 10g",
+          "goodsNameCn": "[KKM] FEREENA GLUTA SOAP 10g",
+          "thumbnail": "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/48117b5919fd413c81ab4ac814f3eefc~tplv-aphluv4xwc-crop-webp:1000:1000.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my2&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 3244228,
+          "sales": null,
+          "goodsPriceMin": 0.87,
+          "goodsPriceMax": null,
+          "reviewNum": 126357,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1732820937232844740",
+          "detailUrl": "1732820937232844740",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "[KKM] FEREENA GLUTA SOAP 10g",
+          "_source": "热销商品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "15 Day Cleanse - Gut and Colon Support | Caffeine Free | Advanced Formula with Senna, Cascara Sagrada, & Psyllium Husk | Non-GMO | 30 capsules",
+          "goodsNameCn": "15 Day Cleanse - Gut and Colon Support | Caffeine Free | Advanced Formula with Senna, Cascara Sagrad",
+          "thumbnail": "https://p16-oec-general-useast8.ttcdn-us.com/tos-useast8-i-rt0ujvrtvp-tx2/d831ccc5fdb84d2c848993de7c3bdd33~tplv-fhlh96nyum-crop-webp:1000:1000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2767844,
+          "sales": null,
+          "goodsPriceMin": 14.79,
+          "goodsPriceMax": 42.86,
+          "reviewNum": 204278,
+          "rating": 4.5,
+          "mallOpenTime": "2023-11-29T12:37:37.769+08:00",
+          "onSaleTime": "2023-11-23T05:59:05.912+08:00",
+          "goodsId": "1729401873273951198",
+          "detailUrl": "1729401873273951198",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9836,
+              "catId": "700645",
+              "catName": "Health",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9839,
+              "catId": "700646",
+              "catName": "Nutrition & Wellness",
+              "catLevel": 2,
+              "parentCatId": "700645",
+              "isLeaf": false
+            },
+            {
+              "id": 9840,
+              "catId": "700650",
+              "catName": "Vitamins, Minerals & Wellness Supplements",
+              "catLevel": 3,
+              "parentCatId": "700646",
+              "isLeaf": false
+            },
+            {
+              "id": 9841,
+              "catId": "1301392",
+              "catName": "Digestive Nutritional Supplements",
+              "catLevel": 4,
+              "parentCatId": "700650",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "15 Day Cleanse - Gut and Colon Support | Caffeine Free | Advanced Formula with Senna, Cascara Sagrada, & Psyllium Husk | Non-GMO | 30 capsules",
+          "_source": "热销商品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Dolca Air Freshener Pewangi Kereta Car Perfume Murah Pewangi Bilik Toilet Minyak Wangi Tahan Lama Perfum",
+          "goodsNameCn": "Dolca Air Freshener Pewangi Kereta Car Perfume Murah Pewangi Bilik Toilet Minyak Wangi Tahan Lama Pe",
+          "thumbnail": "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/199562f8839c40489ea3b15bdb6040b5~tplv-aphluv4xwc-crop-webp:1290:1290.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2351892,
+          "sales": null,
+          "goodsPriceMin": 3.3,
+          "goodsPriceMax": null,
+          "reviewNum": 352173,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-12-18T10:52:33.079+08:00",
+          "goodsId": "1729449047682157402",
+          "detailUrl": "1729449047682157402",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9863,
+              "catId": "605196",
+              "catName": "Automotive & Motorcycle",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9965,
+              "catId": "930184",
+              "catName": "Car Interior Accessories",
+              "catLevel": 2,
+              "parentCatId": "605196",
+              "isLeaf": false
+            },
+            {
+              "id": 10564,
+              "catId": "605201",
+              "catName": "Decoration",
+              "catLevel": 3,
+              "parentCatId": "930184",
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Dolca Air Freshener Pewangi Kereta Car Perfume Murah Pewangi Bilik Toilet Minyak Wangi Tahan Lama Perfum",
+          "_source": "热销商品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "P.Louise Bad B*tch Energy Lip Duo",
+          "goodsNameCn": "P.Louise Bad B*tch Energy Lip Duo",
+          "thumbnail": "https://p19-oec-eu-common-no.tiktokcdn-eu.com/tos-no1a-i-t5fjg24jzw-no/ecb177b445bc4a819cfb081044a07a8b~tplv-t5fjg24jzw-crop-webp:3001:3001.webp?dr=11209&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=no1a&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2244000,
+          "sales": null,
+          "goodsPriceMin": 22,
+          "goodsPriceMax": null,
+          "reviewNum": 209639,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1729598600272055008",
+          "detailUrl": "1729598600272055008",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "P.Louise Bad B*tch Energy Lip Duo",
+          "_source": "热销商品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Kg/1000g 1PCS Sleeping Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "goodsNameCn": "Kg/1000g 1PCS Sleeping Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "thumbnail": "https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/6ee8e38a163444df81e56c5b95ed2c7b~tplv-o3syd03w52-crop-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my2&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2174295,
+          "sales": null,
+          "goodsPriceMin": 7.17,
+          "goodsPriceMax": null,
+          "reviewNum": 211722,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1729424817337895571",
+          "detailUrl": "1729424817337895571",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "Kg/1000g 1PCS Sleeping Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "_source": "热销商品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "(W-006) ถุงเท้าข้อสั้น - ข้อกลาง ถุงเท้าญี่ปุ่นสีพื้น เนื้อผ้านุ่มสบาย ระบายอากาศ ไม่อับชื้น Man ผู้ชาย คู่",
+          "goodsNameCn": "(W-006) ถุงเท้าข้อสั้น - ข้อกลาง ถุงเท้าญี่ปุ่นสีพื้น เนื้อผ้านุ่มสบาย ระบายอากาศ ไม่อับชื้น Man ผู้",
+          "thumbnail": "https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/c6d42976b775438da07a2451c38587f1~tplv-o3syd03w52-crop-webp:1500:1500.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2103857,
+          "sales": null,
+          "goodsPriceMin": 5.99,
+          "goodsPriceMax": null,
+          "reviewNum": 39832,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1729569350985026043",
+          "detailUrl": "1729569350985026043",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "(W-006) ถุงเท้าข้อสั้น - ข้อกลาง ถุงเท้าญี่ปุ่นสีพื้น เนื้อผ้านุ่มสบาย ระบายอากาศ ไม่อับชื้น Man ผู้ชาย คู่",
+          "_source": "热销商品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "ถุงเท้า unisex ขาวดำเทา ความยาวสั้น/กลาง/ยาว ขอบยางยืด ระบายอากาศ ใ���่���บาย เหมาะสำหรับทุกโอกาส",
+          "goodsNameCn": "ถุงเท้า unisex ขาวดำเทา ความยาวสั้น/กลาง/ยาว ขอบยางยืด ระบายอากาศ ใ���่���บาย เหมาะสำหรับทุกโอกาส",
+          "thumbnail": "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/74e98a21814a447f88e1797a218251cc~tplv-aphluv4xwc-crop-webp:1024:1024.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2092422,
+          "sales": null,
+          "goodsPriceMin": 0.01,
+          "goodsPriceMax": null,
+          "reviewNum": 45332,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1731747656329365010",
+          "detailUrl": "1731747656329365010",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "ถุงเท้า unisex ขาวดำเทา ความยาวสั้น/กลาง/ยาว ขอบยางยืด ระบายอากาศ ใ���่���บาย เหมาะสำหรับทุกโอกาส",
+          "_source": "热销商品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "LIP LINER STAY-N - Peel-Off Lip Liner Stain - All Day & Night Lipliner with Hyaluronic Acid & Vitamin E - Long Lasting Formula - 0.12 fl oz / 3.5 ml",
+          "goodsNameCn": "LIP LINER STAY-N - Peel-Off Lip Liner Stain - All Day & Night Lipliner with Hyaluronic Acid & Vitami",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/4320e9a084884bdab7c0dbcfc9133d76~tplv-fhlh96nyum-crop-webp:600:600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2075343,
+          "sales": null,
+          "goodsPriceMin": 12,
+          "goodsPriceMax": 42,
+          "reviewNum": 109767,
+          "rating": 4.2,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-01-07T02:56:59.968+08:00",
+          "goodsId": "1729385088934777631",
+          "detailUrl": "1729385088934777631",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9820,
+              "catId": "601450",
+              "catName": "Beauty & Personal Care",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9854,
+              "catId": "848648",
+              "catName": "Makeup",
+              "catLevel": 2,
+              "parentCatId": "601450",
+              "isLeaf": false
+            },
+            {
+              "id": 10210,
+              "catId": "601587",
+              "catName": "Eyeliner & Lipliner",
+              "catLevel": 3,
+              "parentCatId": "848648",
+              "isLeaf": false
+            },
+            {
+              "id": 10211,
+              "catId": "1399952",
+              "catName": "Lipliner",
+              "catLevel": 4,
+              "parentCatId": "601587",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "LIP LINER STAY-N - Peel-Off Lip Liner Stain - All Day & Night Lipliner with Hyaluronic Acid & Vitamin E - Long Lasting Formula - 0.12 fl oz / 3.5 ml",
+          "_source": "热销商品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "GuruNanda CocoMint Oil Pulling Mouthwash with 7 Essential Oils & 3 Vitamins, Promotes Fresh Breath & Happy Gums, Alcohol-Free, 8 fl oz",
+          "goodsNameCn": "GuruNanda CocoMint Oil Pulling Mouthwash with 7 Essential Oils & 3 Vitamins, Promotes Fresh Breath &",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/f485194a0a294b8db7edc1d816c397e0~tplv-fhlh96nyum-crop-webp:2000:2000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 1926634,
+          "sales": null,
+          "goodsPriceMin": 14.23,
+          "goodsPriceMax": 14.99,
+          "reviewNum": 92649,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-11-08T07:47:15.371+08:00",
+          "goodsId": "1729388319103029511",
+          "detailUrl": "1729388319103029511",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9820,
+              "catId": "601450",
+              "catName": "Beauty & Personal Care",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10477,
+              "catId": "849672",
+              "catName": "Nasal & Oral Care",
+              "catLevel": 2,
+              "parentCatId": "601450",
+              "isLeaf": false
+            },
+            {
+              "id": 11047,
+              "catId": "601694",
+              "catName": "Mouthwash",
+              "catLevel": 3,
+              "parentCatId": "849672",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "GuruNanda CocoMint Oil Pulling Mouthwash with 7 Essential Oils & 3 Vitamins, Promotes Fresh Breath & Happy Gums, Alcohol-Free, 8 fl oz",
+          "_source": "热销商品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Kg/1000g 1PCS Sleeping hilton Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "goodsNameCn": "Kg/1000g 1PCS Sleeping hilton Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "thumbnail": "https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/6ee8e38a163444df81e56c5b95ed2c7b~tplv-o3syd03w52-crop-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my2&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 1890788,
+          "sales": null,
+          "goodsPriceMin": 0.01,
+          "goodsPriceMax": null,
+          "reviewNum": 182138,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1729424817337895571",
+          "detailUrl": "1729424817337895571",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "Kg/1000g 1PCS Sleeping hilton Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "_source": "热销商品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        }
+      ]
+    },
+    {
+      "channel": "热销新品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ideal for Bed,Couch, Travel,Camping, All Seasons,Home Bedroom Decor",
+          "goodsNameCn": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ide",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/bb10ac60902b4fc08bf6632e79debfdd~tplv-fhlh96nyum-crop-webp:2500:2500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 398851,
+          "sales": null,
+          "goodsPriceMin": 13.59,
+          "goodsPriceMax": 29.99,
+          "reviewNum": 45295,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-11-12T10:56:50.981+08:00",
+          "goodsId": "1729436032662278390",
+          "detailUrl": "1729436032662278390",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10746,
+              "catId": "600157",
+              "catName": "Blankets & Throws",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 10747,
+              "catId": "1010576",
+              "catName": "Blankets",
+              "catLevel": 4,
+              "parentCatId": "600157",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ideal for Bed,Couch, Travel,Camping, All Seasons,Home Bedroom Decor",
+          "_source": "热销新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Shilucheng Bamboo Sheets Set 4/6 Pc,Cooling Breathable & Hotel Luxury Super Silky Soft, 16'' Deep Pocket, Wrinkle, Fade Resistant Springtok",
+          "goodsNameCn": "Shilucheng Bamboo Sheets Set 4/6 Pc,Cooling Breathable & Hotel Luxury Super Silky Soft, 16'' Deep Po",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/621dae0813d044e9b2f688fb3fe20a76~tplv-fhlh96nyum-crop-webp:1500:1500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 309653,
+          "sales": null,
+          "goodsPriceMin": 23.16,
+          "goodsPriceMax": 49.39,
+          "reviewNum": 32566,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-19T08:42:12.972+08:00",
+          "goodsId": "1729438233542234865",
+          "detailUrl": "1729438233542234865",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 11124,
+              "catId": "600165",
+              "catName": "Sheets & Pillowcases",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 11125,
+              "catId": "1006864",
+              "catName": "Sheet & Pillowcase Sets",
+              "catLevel": 4,
+              "parentCatId": "600165",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Shilucheng Bamboo Sheets Set 4/6 Pc,Cooling Breathable & Hotel Luxury Super Silky Soft, 16'' Deep Pocket, Wrinkle, Fade Resistant Springtok",
+          "_source": "热销新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Solid Color Satin Fitted Sheet and Pillowcase Set, Silky Bed Sheets, Soft Breathable Sheet, Soft & Comfortable Bedding Set for Bedroom & Hotel #GLOBAL PICKS",
+          "goodsNameCn": "Solid Color Satin Fitted Sheet and Pillowcase Set, Silky Bed Sheets, Soft Breathable Sheet, Soft & C",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/761669a184464afcbae01b4763a5efc3~tplv-fhlh96nyum-crop-webp:1200:1200.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 293919,
+          "sales": null,
+          "goodsPriceMin": 9.9,
+          "goodsPriceMax": null,
+          "reviewNum": 21822,
+          "rating": 4.5,
+          "mallOpenTime": "2024-03-17T06:23:16.975+08:00",
+          "onSaleTime": "2024-03-17T06:23:16.975+08:00",
+          "goodsId": "1729396676166849042",
+          "detailUrl": "1729396676166849042",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 9980,
+              "catId": "808584",
+              "catName": "Bedding Sets Collections",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Solid Color Satin Fitted Sheet and Pillowcase Set, Silky Bed Sheets, Soft Breathable Sheet, Soft & Comfortable Bedding Set for Bedroom & Hotel #GLOBAL PICKS",
+          "_source": "热销新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocket, Perfect Christmas & Valentine's Day Gift #GLOBAL PICKS",
+          "goodsNameCn": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocke",
+          "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/c359f0e1e6d74dab835011eb2730edda~tplv-fhlh96nyum-crop-webp:1200:1200.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 184417,
+          "sales": null,
+          "goodsPriceMin": 16.49,
+          "goodsPriceMax": 24.69,
+          "reviewNum": 19734,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-12-26T02:29:33.322+08:00",
+          "goodsId": "1729405570499645529",
+          "detailUrl": "1729405570499645529",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10746,
+              "catId": "600157",
+              "catName": "Blankets & Throws",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 10747,
+              "catId": "1010576",
+              "catName": "Blankets",
+              "catLevel": 4,
+              "parentCatId": "600157",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocket, Perfect Christmas & Valentine's Day Gift #GLOBAL PICKS",
+          "_source": "热销新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Sweet Furniture Memory Foam Bed Topper with Cooling Gel Swirl Infusion - Perfect Gift for a Cozy Sleep",
+          "goodsNameCn": "Sweet Furniture Memory Foam Bed Topper with Cooling Gel Swirl Infusion - Perfect Gift for a Cozy Sle",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/9fc5ea5e20ce4d9eb64cdd420d4bf6aa~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 162204,
+          "sales": null,
+          "goodsPriceMin": 24.99,
+          "goodsPriceMax": 58.99,
+          "reviewNum": 19699,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-10-14T01:24:07.830+08:00",
+          "goodsId": "1729386003262378120",
+          "detailUrl": "1729386003262378120",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10212,
+              "catId": "809480",
+              "catName": "Mattress & Mattress Pads/ Toppers/Protectors",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 10213,
+              "catId": "1008912",
+              "catName": "Mattress Pads/ Toppers/Protector",
+              "catLevel": 4,
+              "parentCatId": "809480",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Sweet Furniture Memory Foam Bed Topper with Cooling Gel Swirl Infusion - Perfect Gift for a Cozy Sleep",
+          "_source": "热销新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Plush Floor Mat, Decorative Area Rug, Modern Floor Carpet for Living Room, Bedroom & Home Decor, Soft-Thick Rugs, Fluffy Rugs for Room Decor, Modern Shaggy Rug #GLOBAL PICKS",
+          "goodsNameCn": "Plush Floor Mat, Decorative Area Rug, Modern Floor Carpet for Living Room, Bedroom & Home Decor, Sof",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/143c6622ef314fcda8bc78767412e52e~tplv-fhlh96nyum-crop-webp:1080:1080.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 155498,
+          "sales": null,
+          "goodsPriceMin": 26.06,
+          "goodsPriceMax": 37.89,
+          "reviewNum": 20474,
+          "rating": 4.2,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-04-27T04:09:40.220+08:00",
+          "goodsId": "1729456039002215120",
+          "detailUrl": "1729456039002215120",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9975,
+              "catId": "809992",
+              "catName": "Household Textiles",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10303,
+              "catId": "600221",
+              "catName": "Carpets & Rugs",
+              "catLevel": 3,
+              "parentCatId": "809992",
+              "isLeaf": false
+            },
+            {
+              "id": 10304,
+              "catId": "1004432",
+              "catName": "Area Rugs",
+              "catLevel": 4,
+              "parentCatId": "600221",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Plush Floor Mat, Decorative Area Rug, Modern Floor Carpet for Living Room, Bedroom & Home Decor, Soft-Thick Rugs, Fluffy Rugs for Room Decor, Modern Shaggy Rug #GLOBAL PICKS",
+          "_source": "热销新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Solid Color Sofa Cover: Non-slip Sofa Slipcover, Soft Sofa Towel & Comfortable Throw Pillowcase, Sofa Protector for Home Living Room #GLOBAL PICKS",
+          "goodsNameCn": "Solid Color Sofa Cover: Non-slip Sofa Slipcover, Soft Sofa Towel & Comfortable Throw Pillowcase, Sof",
+          "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/d73fd20f11d44503a8c9396069200d0d~tplv-fhlh96nyum-crop-webp:1000:1000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 138645,
+          "sales": null,
+          "goodsPriceMin": 9.9,
+          "goodsPriceMax": 31.96,
+          "reviewNum": 8106,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-06-26T05:45:56.804+08:00",
+          "goodsId": "1730269913476403780",
+          "detailUrl": "1730269913476403780",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9975,
+              "catId": "809992",
+              "catName": "Household Textiles",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 13297,
+              "catId": "810376",
+              "catName": "Sofa Covers",
+              "catLevel": 3,
+              "parentCatId": "809992",
+              "isLeaf": false
+            },
+            {
+              "id": 13360,
+              "catId": "997520",
+              "catName": "Sofa towel",
+              "catLevel": 4,
+              "parentCatId": "810376",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Solid Color Sofa Cover: Non-slip Sofa Slipcover, Soft Sofa Towel & Comfortable Throw Pillowcase, Sofa Protector for Home Living Room #GLOBAL PICKS",
+          "_source": "热销新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Utopia Bedding Gusseted Pillows Set King Queen & Standard Size White Pack of 2 Durable Breathable Soft Memory Foam for Cozy Sleep Hotel Quality",
+          "goodsNameCn": "Utopia Bedding Gusseted Pillows Set King Queen & Standard Size White Pack of 2 Durable Breathable So",
+          "thumbnail": "https://p16-oec-general-useast8.ttcdn-us.com/tos-useast8-i-rt0ujvrtvp-tx2/1019aca6aaff4c83b00fcdfa3ffb484d~tplv-fhlh96nyum-crop-webp:2000:2000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 137486,
+          "sales": null,
+          "goodsPriceMin": 23.99,
+          "goodsPriceMax": 64.99,
+          "reviewNum": 12440,
+          "rating": 4.4,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-21T21:04:17.295+08:00",
+          "goodsId": "1729953066403139590",
+          "detailUrl": "1729953066403139590",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10871,
+              "catId": "700653",
+              "catName": "Pillows & Bed Wedges",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 11968,
+              "catId": "1007632",
+              "catName": "Standard Pillows",
+              "catLevel": 4,
+              "parentCatId": "700653",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Utopia Bedding Gusseted Pillows Set King Queen & Standard Size White Pack of 2 Durable Breathable Soft Memory Foam for Cozy Sleep Hotel Quality",
+          "_source": "热销新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Lux Decor 4 Piece Microfiber Bed Sheet Set, Ultra Soft Cooling Sheets, 16 Inches Deep Pocket Fitted Sheet, Hotel Luxury Bedding, Oeko-TEX Certified, Fade Resistant, Embroidered Pillowcases",
+          "goodsNameCn": "Lux Decor 4 Piece Microfiber Bed Sheet Set, Ultra Soft Cooling Sheets, 16 Inches Deep Pocket Fitted ",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/5c13be93bcd341b4b41f1b4cb4e5037a~tplv-fhlh96nyum-crop-webp:2500:2500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 132209,
+          "sales": null,
+          "goodsPriceMin": 11.7,
+          "goodsPriceMax": 24.99,
+          "reviewNum": 15771,
+          "rating": 4.3,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-03-11T11:33:35.982+08:00",
+          "goodsId": "1729590912873370233",
+          "detailUrl": "1729590912873370233",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 11124,
+              "catId": "600165",
+              "catName": "Sheets & Pillowcases",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 11125,
+              "catId": "1006864",
+              "catName": "Sheet & Pillowcase Sets",
+              "catLevel": 4,
+              "parentCatId": "600165",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Lux Decor 4 Piece Microfiber Bed Sheet Set, Ultra Soft Cooling Sheets, 16 Inches Deep Pocket Fitted Sheet, Hotel Luxury Bedding, Oeko-TEX Certified, Fade Resistant, Embroidered Pillowcases",
+          "_source": "热销新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Mellow Sleep | CloudAlign Pillow + FREE Cooling Pillowcase - Ergonomic Cervical Pillow +Dual-Height Memory Foam with Cooling Pillowcase for Side Back & Stomach Sleepers Best Pillow 2025 Awarded",
+          "goodsNameCn": "Mellow Sleep | CloudAlign Pillow + FREE Cooling Pillowcase - Ergonomic Cervical Pillow +Dual-Height ",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/afd623830a164078ae4e4e510e717c64~tplv-fhlh96nyum-crop-webp:1080:1080.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 116934,
+          "sales": null,
+          "goodsPriceMin": 47.53,
+          "goodsPriceMax": 69,
+          "reviewNum": 26317,
+          "rating": 3.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-08-04T11:13:45.613+08:00",
+          "goodsId": "1731182908423966801",
+          "detailUrl": "1731182908423966801",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10871,
+              "catId": "700653",
+              "catName": "Pillows & Bed Wedges",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 10872,
+              "catId": "1008144",
+              "catName": "Neck Pillows",
+              "catLevel": 4,
+              "parentCatId": "700653",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Mellow Sleep | CloudAlign Pillow + FREE Cooling Pillowcase - Ergonomic Cervical Pillow +Dual-Height Memory Foam with Cooling Pillowcase for Side Back & Stomach Sleepers Best Pillow 2025 Awarded",
+          "_source": "热销新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        }
+      ]
+    },
+    {
+      "channel": "新店热销",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "[KKM] FEREENA GLUTA SOAP 10g",
+          "goodsNameCn": "[KKM] FEREENA GLUTA SOAP 10g",
+          "thumbnail": "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/48117b5919fd413c81ab4ac814f3eefc~tplv-aphluv4xwc-crop-webp:1000:1000.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my2&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 3244228,
+          "sales": null,
+          "goodsPriceMin": 0.87,
+          "goodsPriceMax": null,
+          "reviewNum": 126357,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1732820937232844740",
+          "detailUrl": "1732820937232844740",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "[KKM] FEREENA GLUTA SOAP 10g",
+          "_source": "新店热销",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "15 Day Cleanse - Gut and Colon Support | Caffeine Free | Advanced Formula with Senna, Cascara Sagrada, & Psyllium Husk | Non-GMO | 30 capsules",
+          "goodsNameCn": "15 Day Cleanse - Gut and Colon Support | Caffeine Free | Advanced Formula with Senna, Cascara Sagrad",
+          "thumbnail": "https://p16-oec-general-useast8.ttcdn-us.com/tos-useast8-i-rt0ujvrtvp-tx2/d831ccc5fdb84d2c848993de7c3bdd33~tplv-fhlh96nyum-crop-webp:1000:1000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2767844,
+          "sales": null,
+          "goodsPriceMin": 14.79,
+          "goodsPriceMax": 42.86,
+          "reviewNum": 204278,
+          "rating": 4.5,
+          "mallOpenTime": "2023-11-29T12:37:37.769+08:00",
+          "onSaleTime": "2023-11-23T05:59:05.912+08:00",
+          "goodsId": "1729401873273951198",
+          "detailUrl": "1729401873273951198",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9836,
+              "catId": "700645",
+              "catName": "Health",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9839,
+              "catId": "700646",
+              "catName": "Nutrition & Wellness",
+              "catLevel": 2,
+              "parentCatId": "700645",
+              "isLeaf": false
+            },
+            {
+              "id": 9840,
+              "catId": "700650",
+              "catName": "Vitamins, Minerals & Wellness Supplements",
+              "catLevel": 3,
+              "parentCatId": "700646",
+              "isLeaf": false
+            },
+            {
+              "id": 9841,
+              "catId": "1301392",
+              "catName": "Digestive Nutritional Supplements",
+              "catLevel": 4,
+              "parentCatId": "700650",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "15 Day Cleanse - Gut and Colon Support | Caffeine Free | Advanced Formula with Senna, Cascara Sagrada, & Psyllium Husk | Non-GMO | 30 capsules",
+          "_source": "新店热销",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Dolca Air Freshener Pewangi Kereta Car Perfume Murah Pewangi Bilik Toilet Minyak Wangi Tahan Lama Perfum",
+          "goodsNameCn": "Dolca Air Freshener Pewangi Kereta Car Perfume Murah Pewangi Bilik Toilet Minyak Wangi Tahan Lama Pe",
+          "thumbnail": "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/199562f8839c40489ea3b15bdb6040b5~tplv-aphluv4xwc-crop-webp:1290:1290.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2351892,
+          "sales": null,
+          "goodsPriceMin": 3.3,
+          "goodsPriceMax": null,
+          "reviewNum": 352173,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-12-18T10:52:33.079+08:00",
+          "goodsId": "1729449047682157402",
+          "detailUrl": "1729449047682157402",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9863,
+              "catId": "605196",
+              "catName": "Automotive & Motorcycle",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9965,
+              "catId": "930184",
+              "catName": "Car Interior Accessories",
+              "catLevel": 2,
+              "parentCatId": "605196",
+              "isLeaf": false
+            },
+            {
+              "id": 10564,
+              "catId": "605201",
+              "catName": "Decoration",
+              "catLevel": 3,
+              "parentCatId": "930184",
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Dolca Air Freshener Pewangi Kereta Car Perfume Murah Pewangi Bilik Toilet Minyak Wangi Tahan Lama Perfum",
+          "_source": "新店热销",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "P.Louise Bad B*tch Energy Lip Duo",
+          "goodsNameCn": "P.Louise Bad B*tch Energy Lip Duo",
+          "thumbnail": "https://p19-oec-eu-common-no.tiktokcdn-eu.com/tos-no1a-i-t5fjg24jzw-no/ecb177b445bc4a819cfb081044a07a8b~tplv-t5fjg24jzw-crop-webp:3001:3001.webp?dr=11209&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=no1a&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2244000,
+          "sales": null,
+          "goodsPriceMin": 22,
+          "goodsPriceMax": null,
+          "reviewNum": 209639,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1729598600272055008",
+          "detailUrl": "1729598600272055008",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "P.Louise Bad B*tch Energy Lip Duo",
+          "_source": "新店热销",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Kg/1000g 1PCS Sleeping Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "goodsNameCn": "Kg/1000g 1PCS Sleeping Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "thumbnail": "https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/6ee8e38a163444df81e56c5b95ed2c7b~tplv-o3syd03w52-crop-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my2&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2174295,
+          "sales": null,
+          "goodsPriceMin": 7.17,
+          "goodsPriceMax": null,
+          "reviewNum": 211722,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1729424817337895571",
+          "detailUrl": "1729424817337895571",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "Kg/1000g 1PCS Sleeping Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "_source": "新店热销",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "(W-006) ถุงเท้าข้อสั้น - ข้อกลาง ถุงเท้าญี่ปุ่นสีพื้น เนื้อผ้านุ่มสบาย ระบายอากาศ ไม่อับชื้น Man ผู้ชาย คู่",
+          "goodsNameCn": "(W-006) ถุงเท้าข้อสั้น - ข้อกลาง ถุงเท้าญี่ปุ่นสีพื้น เนื้อผ้านุ่มสบาย ระบายอากาศ ไม่อับชื้น Man ผู้",
+          "thumbnail": "https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/c6d42976b775438da07a2451c38587f1~tplv-o3syd03w52-crop-webp:1500:1500.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2103857,
+          "sales": null,
+          "goodsPriceMin": 5.99,
+          "goodsPriceMax": null,
+          "reviewNum": 39832,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1729569350985026043",
+          "detailUrl": "1729569350985026043",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "(W-006) ถุงเท้าข้อสั้น - ข้อกลาง ถุงเท้าญี่ปุ่นสีพื้น เนื้อผ้านุ่มสบาย ระบายอากาศ ไม่อับชื้น Man ผู้ชาย คู่",
+          "_source": "新店热销",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "ถุงเท้า unisex ขาวดำเทา ความยาวสั้น/กลาง/ยาว ขอบยางยืด ระบายอากาศ ใส่สบาย เหมาะสำหรับทุกโอกาส",
+          "goodsNameCn": "ถุงเท้า unisex ขาวดำเทา ความยาวสั้น/กลาง/ยาว ขอบยางยืด ระบายอากาศ ใส่สบาย เหมาะสำหรับทุกโอกาส",
+          "thumbnail": "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/74e98a21814a447f88e1797a218251cc~tplv-aphluv4xwc-crop-webp:1024:1024.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2092422,
+          "sales": null,
+          "goodsPriceMin": 0.01,
+          "goodsPriceMax": null,
+          "reviewNum": 45332,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1731747656329365010",
+          "detailUrl": "1731747656329365010",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "ถุงเท้า unisex ขาวดำเทา ความยาวสั้น/กลาง/ยาว ขอบยางยืด ระบายอากาศ ใส่สบาย เหมาะสำหรับทุกโอกาส",
+          "_source": "新店热销",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "LIP LINER STAY-N - Peel-Off Lip Liner Stain - All Day & Night Lipliner with Hyaluronic Acid & Vitamin E - Long Lasting Formula - 0.12 fl oz / 3.5 ml",
+          "goodsNameCn": "LIP LINER STAY-N - Peel-Off Lip Liner Stain - All Day & Night Lipliner with Hyaluronic Acid & Vitami",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/4320e9a084884bdab7c0dbcfc9133d76~tplv-fhlh96nyum-crop-webp:600:600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 2075343,
+          "sales": null,
+          "goodsPriceMin": 12,
+          "goodsPriceMax": 42,
+          "reviewNum": 109767,
+          "rating": 4.2,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-01-07T02:56:59.968+08:00",
+          "goodsId": "1729385088934777631",
+          "detailUrl": "1729385088934777631",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9820,
+              "catId": "601450",
+              "catName": "Beauty & Personal Care",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9854,
+              "catId": "848648",
+              "catName": "Makeup",
+              "catLevel": 2,
+              "parentCatId": "601450",
+              "isLeaf": false
+            },
+            {
+              "id": 10210,
+              "catId": "601587",
+              "catName": "Eyeliner & Lipliner",
+              "catLevel": 3,
+              "parentCatId": "848648",
+              "isLeaf": false
+            },
+            {
+              "id": 10211,
+              "catId": "1399952",
+              "catName": "Lipliner",
+              "catLevel": 4,
+              "parentCatId": "601587",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "LIP LINER STAY-N - Peel-Off Lip Liner Stain - All Day & Night Lipliner with Hyaluronic Acid & Vitamin E - Long Lasting Formula - 0.12 fl oz / 3.5 ml",
+          "_source": "新店热销",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "GuruNanda CocoMint Oil Pulling Mouthwash with 7 Essential Oils & 3 Vitamins, Promotes Fresh Breath & Happy Gums, Alcohol-Free, 8 fl oz",
+          "goodsNameCn": "GuruNanda CocoMint Oil Pulling Mouthwash with 7 Essential Oils & 3 Vitamins, Promotes Fresh Breath &",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/f485194a0a294b8db7edc1d816c397e0~tplv-fhlh96nyum-crop-webp:2000:2000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 1926634,
+          "sales": null,
+          "goodsPriceMin": 14.23,
+          "goodsPriceMax": 14.99,
+          "reviewNum": 92649,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-11-08T07:47:15.371+08:00",
+          "goodsId": "1729388319103029511",
+          "detailUrl": "1729388319103029511",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9820,
+              "catId": "601450",
+              "catName": "Beauty & Personal Care",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10477,
+              "catId": "849672",
+              "catName": "Nasal & Oral Care",
+              "catLevel": 2,
+              "parentCatId": "601450",
+              "isLeaf": false
+            },
+            {
+              "id": 11047,
+              "catId": "601694",
+              "catName": "Mouthwash",
+              "catLevel": 3,
+              "parentCatId": "849672",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "GuruNanda CocoMint Oil Pulling Mouthwash with 7 Essential Oils & 3 Vitamins, Promotes Fresh Breath & Happy Gums, Alcohol-Free, 8 fl oz",
+          "_source": "新店热销",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Kg/1000g 1PCS Sleeping hilton Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "goodsNameCn": "Kg/1000g 1PCS Sleeping hilton Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "thumbnail": "https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/6ee8e38a163444df81e56c5b95ed2c7b~tplv-o3syd03w52-crop-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=my2&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 1890788,
+          "sales": null,
+          "goodsPriceMin": 0.01,
+          "goodsPriceMax": null,
+          "reviewNum": 182138,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "1729424817337895571",
+          "detailUrl": "1729424817337895571",
+          "platform": "tiktok",
+          "catItems": [],
+          "goodsName": "Kg/1000g 1PCS Sleeping hilton Pillow Viral Bantal Tidur Bantal Hotel Cotton Bedding Soft",
+          "_source": "新店热销",
+          "_platform": "tiktok",
+          "_catId": 600154
+        }
+      ]
+    },
+    {
+      "channel": "大卖新品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ideal for Bed,Couch, Travel,Camping, All Seasons,Home Bedroom Decor",
+          "goodsNameCn": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ide",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/bb10ac60902b4fc08bf6632e79debfdd~tplv-fhlh96nyum-crop-webp:2500:2500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 398851,
+          "sales": null,
+          "goodsPriceMin": 13.59,
+          "goodsPriceMax": 29.99,
+          "reviewNum": 45295,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-11-12T10:56:50.981+08:00",
+          "goodsId": "1729436032662278390",
+          "detailUrl": "1729436032662278390",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10746,
+              "catId": "600157",
+              "catName": "Blankets & Throws",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 10747,
+              "catId": "1010576",
+              "catName": "Blankets",
+              "catLevel": 4,
+              "parentCatId": "600157",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "【Mother's day Deal】Bedsure GentleSoft Cozy Blanket-Patio Furniture Decor,Classic Stripe Pattern, Ideal for Bed,Couch, Travel,Camping, All Seasons,Home Bedroom Decor",
+          "_source": "大卖新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Shilucheng Bamboo Sheets Set 4/6 Pc,Cooling Breathable & Hotel Luxury Super Silky Soft, 16'' Deep Pocket, Wrinkle, Fade Resistant Springtok",
+          "goodsNameCn": "Shilucheng Bamboo Sheets Set 4/6 Pc,Cooling Breathable & Hotel Luxury Super Silky Soft, 16'' Deep Po",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/621dae0813d044e9b2f688fb3fe20a76~tplv-fhlh96nyum-crop-webp:1500:1500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 309653,
+          "sales": null,
+          "goodsPriceMin": 23.16,
+          "goodsPriceMax": 49.39,
+          "reviewNum": 32566,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-19T08:42:12.972+08:00",
+          "goodsId": "1729438233542234865",
+          "detailUrl": "1729438233542234865",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 11124,
+              "catId": "600165",
+              "catName": "Sheets & Pillowcases",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 11125,
+              "catId": "1006864",
+              "catName": "Sheet & Pillowcase Sets",
+              "catLevel": 4,
+              "parentCatId": "600165",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Shilucheng Bamboo Sheets Set 4/6 Pc,Cooling Breathable & Hotel Luxury Super Silky Soft, 16'' Deep Pocket, Wrinkle, Fade Resistant Springtok",
+          "_source": "大卖新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Solid Color Satin Fitted Sheet and Pillowcase Set, Silky Bed Sheets, Soft Breathable Sheet, Soft & Comfortable Bedding Set for Bedroom & Hotel #GLOBAL PICKS",
+          "goodsNameCn": "Solid Color Satin Fitted Sheet and Pillowcase Set, Silky Bed Sheets, Soft Breathable Sheet, Soft & C",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/761669a184464afcbae01b4763a5efc3~tplv-fhlh96nyum-crop-webp:1200:1200.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 293919,
+          "sales": null,
+          "goodsPriceMin": 9.9,
+          "goodsPriceMax": null,
+          "reviewNum": 21822,
+          "rating": 4.5,
+          "mallOpenTime": "2024-03-17T06:23:16.975+08:00",
+          "onSaleTime": "2024-03-17T06:23:16.975+08:00",
+          "goodsId": "1729396676166849042",
+          "detailUrl": "1729396676166849042",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 9980,
+              "catId": "808584",
+              "catName": "Bedding Sets Collections",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Solid Color Satin Fitted Sheet and Pillowcase Set, Silky Bed Sheets, Soft Breathable Sheet, Soft & Comfortable Bedding Set for Bedroom & Hotel #GLOBAL PICKS",
+          "_source": "大卖新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocket, Perfect Christmas & Valentine's Day Gift #GLOBAL PICKS",
+          "goodsNameCn": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocke",
+          "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/c359f0e1e6d74dab835011eb2730edda~tplv-fhlh96nyum-crop-webp:1200:1200.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 184417,
+          "sales": null,
+          "goodsPriceMin": 16.49,
+          "goodsPriceMax": 24.69,
+          "reviewNum": 19734,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-12-26T02:29:33.322+08:00",
+          "goodsId": "1729405570499645529",
+          "detailUrl": "1729405570499645529",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10746,
+              "catId": "600157",
+              "catName": "Blankets & Throws",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 10747,
+              "catId": "1010576",
+              "catName": "Blankets",
+              "catLevel": 4,
+              "parentCatId": "600157",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Oversized Wearable Blanket Hoodie for Women & Adults, Super Soft, Warm & Cozy with Giant Front Pocket, Perfect Christmas & Valentine's Day Gift #GLOBAL PICKS",
+          "_source": "大卖新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Sweet Furniture Memory Foam Bed Topper with Cooling Gel Swirl Infusion - Perfect Gift for a Cozy Sleep",
+          "goodsNameCn": "Sweet Furniture Memory Foam Bed Topper with Cooling Gel Swirl Infusion - Perfect Gift for a Cozy Sle",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/9fc5ea5e20ce4d9eb64cdd420d4bf6aa~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 162204,
+          "sales": null,
+          "goodsPriceMin": 24.99,
+          "goodsPriceMax": 58.99,
+          "reviewNum": 19699,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-10-14T01:24:07.830+08:00",
+          "goodsId": "1729386003262378120",
+          "detailUrl": "1729386003262378120",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10212,
+              "catId": "809480",
+              "catName": "Mattress & Mattress Pads/ Toppers/Protectors",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 10213,
+              "catId": "1008912",
+              "catName": "Mattress Pads/ Toppers/Protector",
+              "catLevel": 4,
+              "parentCatId": "809480",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Sweet Furniture Memory Foam Bed Topper with Cooling Gel Swirl Infusion - Perfect Gift for a Cozy Sleep",
+          "_source": "大卖新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Plush Floor Mat, Decorative Area Rug, Modern Floor Carpet for Living Room, Bedroom & Home Decor, Soft-Thick Rugs, Fluffy Rugs for Room Decor, Modern Shaggy Rug #GLOBAL PICKS",
+          "goodsNameCn": "Plush Floor Mat, Decorative Area Rug, Modern Floor Carpet for Living Room, Bedroom & Home Decor, Sof",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/143c6622ef314fcda8bc78767412e52e~tplv-fhlh96nyum-crop-webp:1080:1080.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 155498,
+          "sales": null,
+          "goodsPriceMin": 26.06,
+          "goodsPriceMax": 37.89,
+          "reviewNum": 20474,
+          "rating": 4.2,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-04-27T04:09:40.220+08:00",
+          "goodsId": "1729456039002215120",
+          "detailUrl": "1729456039002215120",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9975,
+              "catId": "809992",
+              "catName": "Household Textiles",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10303,
+              "catId": "600221",
+              "catName": "Carpets & Rugs",
+              "catLevel": 3,
+              "parentCatId": "809992",
+              "isLeaf": false
+            },
+            {
+              "id": 10304,
+              "catId": "1004432",
+              "catName": "Area Rugs",
+              "catLevel": 4,
+              "parentCatId": "600221",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Plush Floor Mat, Decorative Area Rug, Modern Floor Carpet for Living Room, Bedroom & Home Decor, Soft-Thick Rugs, Fluffy Rugs for Room Decor, Modern Shaggy Rug #GLOBAL PICKS",
+          "_source": "大卖新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Solid Color Sofa Cover: Non-slip Sofa Slipcover, Soft Sofa Towel & Comfortable Throw Pillowcase, Sofa Protector for Home Living Room #GLOBAL PICKS",
+          "goodsNameCn": "Solid Color Sofa Cover: Non-slip Sofa Slipcover, Soft Sofa Towel & Comfortable Throw Pillowcase, Sof",
+          "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/d73fd20f11d44503a8c9396069200d0d~tplv-fhlh96nyum-crop-webp:1000:1000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 138645,
+          "sales": null,
+          "goodsPriceMin": 9.9,
+          "goodsPriceMax": 31.96,
+          "reviewNum": 8106,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-06-26T05:45:56.804+08:00",
+          "goodsId": "1730269913476403780",
+          "detailUrl": "1730269913476403780",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9975,
+              "catId": "809992",
+              "catName": "Household Textiles",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 13297,
+              "catId": "810376",
+              "catName": "Sofa Covers",
+              "catLevel": 3,
+              "parentCatId": "809992",
+              "isLeaf": false
+            },
+            {
+              "id": 13360,
+              "catId": "997520",
+              "catName": "Sofa towel",
+              "catLevel": 4,
+              "parentCatId": "810376",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Solid Color Sofa Cover: Non-slip Sofa Slipcover, Soft Sofa Towel & Comfortable Throw Pillowcase, Sofa Protector for Home Living Room #GLOBAL PICKS",
+          "_source": "大卖新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Utopia Bedding Gusseted Pillows Set King Queen & Standard Size White Pack of 2 Durable Breathable Soft Memory Foam for Cozy Sleep Hotel Quality",
+          "goodsNameCn": "Utopia Bedding Gusseted Pillows Set King Queen & Standard Size White Pack of 2 Durable Breathable So",
+          "thumbnail": "https://p16-oec-general-useast8.ttcdn-us.com/tos-useast8-i-rt0ujvrtvp-tx2/1019aca6aaff4c83b00fcdfa3ffb484d~tplv-fhlh96nyum-crop-webp:2000:2000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 137486,
+          "sales": null,
+          "goodsPriceMin": 23.99,
+          "goodsPriceMax": 64.99,
+          "reviewNum": 12440,
+          "rating": 4.4,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-21T21:04:17.295+08:00",
+          "goodsId": "1729953066403139590",
+          "detailUrl": "1729953066403139590",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10871,
+              "catId": "700653",
+              "catName": "Pillows & Bed Wedges",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 11968,
+              "catId": "1007632",
+              "catName": "Standard Pillows",
+              "catLevel": 4,
+              "parentCatId": "700653",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Utopia Bedding Gusseted Pillows Set King Queen & Standard Size White Pack of 2 Durable Breathable Soft Memory Foam for Cozy Sleep Hotel Quality",
+          "_source": "大卖新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Lux Decor 4 Piece Microfiber Bed Sheet Set, Ultra Soft Cooling Sheets, 16 Inches Deep Pocket Fitted Sheet, Hotel Luxury Bedding, Oeko-TEX Certified, Fade Resistant, Embroidered Pillowcases",
+          "goodsNameCn": "Lux Decor 4 Piece Microfiber Bed Sheet Set, Ultra Soft Cooling Sheets, 16 Inches Deep Pocket Fitted ",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/5c13be93bcd341b4b41f1b4cb4e5037a~tplv-fhlh96nyum-crop-webp:2500:2500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 132209,
+          "sales": null,
+          "goodsPriceMin": 11.7,
+          "goodsPriceMax": 24.99,
+          "reviewNum": 15771,
+          "rating": 4.3,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-03-11T11:33:35.982+08:00",
+          "goodsId": "1729590912873370233",
+          "detailUrl": "1729590912873370233",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 11124,
+              "catId": "600165",
+              "catName": "Sheets & Pillowcases",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 11125,
+              "catId": "1006864",
+              "catName": "Sheet & Pillowcase Sets",
+              "catLevel": 4,
+              "parentCatId": "600165",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Lux Decor 4 Piece Microfiber Bed Sheet Set, Ultra Soft Cooling Sheets, 16 Inches Deep Pocket Fitted Sheet, Hotel Luxury Bedding, Oeko-TEX Certified, Fade Resistant, Embroidered Pillowcases",
+          "_source": "大卖新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        },
+        {
+          "goodsNameEn": "Mellow Sleep | CloudAlign Pillow + FREE Cooling Pillowcase - Ergonomic Cervical Pillow +Dual-Height Memory Foam with Cooling Pillowcase for Side Back & Stomach Sleepers Best Pillow 2025 Awarded",
+          "goodsNameCn": "Mellow Sleep | CloudAlign Pillow + FREE Cooling Pillowcase - Ergonomic Cervical Pillow +Dual-Height ",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/afd623830a164078ae4e4e510e717c64~tplv-fhlh96nyum-crop-webp:1080:1080.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 116934,
+          "sales": null,
+          "goodsPriceMin": 47.53,
+          "goodsPriceMax": 69,
+          "reviewNum": 26317,
+          "rating": 3.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-08-04T11:13:45.613+08:00",
+          "goodsId": "1731182908423966801",
+          "detailUrl": "1731182908423966801",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 9974,
+              "catId": "600154",
+              "catName": "Textiles & Soft Furnishings",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 9979,
+              "catId": "808328",
+              "catName": "Bedding and Linens",
+              "catLevel": 2,
+              "parentCatId": "600154",
+              "isLeaf": false
+            },
+            {
+              "id": 10871,
+              "catId": "700653",
+              "catName": "Pillows & Bed Wedges",
+              "catLevel": 3,
+              "parentCatId": "808328",
+              "isLeaf": false
+            },
+            {
+              "id": 10872,
+              "catId": "1008144",
+              "catName": "Neck Pillows",
+              "catLevel": 4,
+              "parentCatId": "700653",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Mellow Sleep | CloudAlign Pillow + FREE Cooling Pillowcase - Ergonomic Cervical Pillow +Dual-Height Memory Foam with Cooling Pillowcase for Side Back & Stomach Sleepers Best Pillow 2025 Awarded",
+          "_source": "大卖新品",
+          "_platform": "tiktok",
+          "_catId": 600154
+        }
+      ]
+    }
+  ]
+}

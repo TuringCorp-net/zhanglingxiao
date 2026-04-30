@@ -1,0 +1,219 @@
+{
+  "date": "2026-04-30",
+  "totalCollected": 50,
+  "totalSelected": 10,
+  "categories": [
+    {
+      "platform": "temu",
+      "catName": "庭院、草坪和园艺",
+      "channels": [
+        "热销商品",
+        "热销新品",
+        "新店热销",
+        "大卖新品"
+      ]
+    },
+    {
+      "platform": "shein",
+      "catName": "鞋",
+      "channels": [
+        "热销商品",
+        "热销新品",
+        "新店热销",
+        "大卖新品"
+      ]
+    },
+    {
+      "platform": "amazon",
+      "catName": "工业类",
+      "channels": [
+        "热销商品",
+        "热销新品",
+        "新店热销",
+        "大卖新品"
+      ]
+    },
+    {
+      "platform": "sumaitong",
+      "catName": "孕婴童",
+      "channels": [
+        "热销商品",
+        "热销新品",
+        "新店热销",
+        "大卖新品"
+      ]
+    },
+    {
+      "platform": "tiktok",
+      "catName": "Computers & Office Equipment",
+      "channels": [
+        "热销商品",
+        "热销新品",
+        "新店热销",
+        "大卖新品"
+      ]
+    }
+  ],
+  "selectedProducts": [
+    {
+      "rank": 1,
+      "goodsId": "1729447492824764479",
+      "goodsName": "Conatu Acrylic LED Drawing Board for Kids, Acrylic Dry Erase Light-Up Drawing Board with Stand, Markers & Wipes, Erasable Reusable Board for Kids Learning, Ideal Gift for Birthday",
+      "goodsNameCn": "Conatu Acrylic LED Drawing Board for Kids, Acrylic Dry Erase Light-Up Drawing Board with Stand, Mark",
+      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/9425c281e3b44bc8a120c9a1e9a7d13a~tplv-fhlh96nyum-crop-webp:1200:1200.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+      "goodsPriceMin": 15.98,
+      "goodsPriceMax": 23.98,
+      "sold": 191752,
+      "rating": 4.2,
+      "reviewNum": 10469,
+      "sourcePlatform": "tiktok",
+      "sourceCatName": "Computers & Office Equipment",
+      "sourceChannel": "热销商品",
+      "selectionScore": 93
+    },
+    {
+      "rank": 2,
+      "goodsId": "1729407818110636160",
+      "goodsName": "【P1] (Qty 10 for solid and print) Standard Beadable Pens - Black Ink, Durable Plastic, Easy DIY, Fun Creative Gift for Home Office School Business",
+      "goodsNameCn": "【P1] (Qty 10 for solid and print) Standard Beadable Pens - Black Ink, Durable Plastic, Easy DIY, Fun",
+      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/7911fa74486f40c7bf0d8bf8a53d1aab~tplv-fhlh96nyum-crop-webp:1435:1280.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+      "goodsPriceMin": 2.56,
+      "goodsPriceMax": 36,
+      "sold": 409080,
+      "rating": 4.9,
+      "reviewNum": 37738,
+      "sourcePlatform": "tiktok",
+      "sourceCatName": "Computers & Office Equipment",
+      "sourceChannel": "热销商品",
+      "selectionScore": 92
+    },
+    {
+      "rank": 3,
+      "goodsId": "3256806718295848",
+      "goodsName": "1080P HD Mini Camera WiFi Wireless HD Night Vision Camera Home X5 Remote Camera Kids Pet Safety Monitoring",
+      "goodsNameCn": "1080P HD Mini Camera WiFi Wireless HD Night Vision Camera Home X5 Remote Camera Kids Pet Safety Moni",
+      "thumbnail": "//ae04.alicdn.com/kf/S6c6ec7e930494a00aaa25b14a3056a20F.jpeg",
+      "goodsPriceMin": 4.39,
+      "goodsPriceMax": null,
+      "sold": 100000,
+      "rating": 4.9,
+      "reviewNum": 9764,
+      "sourcePlatform": "sumaitong",
+      "sourceCatName": "孕婴童",
+      "sourceChannel": "热销商品",
+      "selectionScore": 91
+    },
+    {
+      "rank": 4,
+      "goodsId": "1729543795869455109",
+      "goodsName": "Led drawing board for kids 1/8 Counts USB Powered Illuminated Dry Erase Board with Stand & Markers & Rags, Room Accessories, LED Display Board, School Supplies,Christmas gifts",
+      "goodsNameCn": "Led drawing board for kids 1/8 Counts USB Powered Illuminated Dry Erase Board with Stand & Markers &",
+      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/3022011a8a6a411b994f98ba60d82e43~tplv-fhlh96nyum-crop-webp:1239:1239.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+      "goodsPriceMin": 13.38,
+      "goodsPriceMax": 28.89,
+      "sold": 158688,
+      "rating": 4.4,
+      "reviewNum": 6331,
+      "sourcePlatform": "tiktok",
+      "sourceCatName": "Computers & Office Equipment",
+      "sourceChannel": "热销商品",
+      "selectionScore": 91
+    },
+    {
+      "rank": 5,
+      "goodsId": "1731904667491078460",
+      "goodsName": "WiFi Extender 2026 6-Antenna Strong Signal, 1200Mbps Dual Band (2.4GHz) Booster, Wide Signal Coverage,Wireless Remote Amplifier, Ideal for Home Studios, Remote Workspaces, computer",
+      "goodsNameCn": "WiFi Extender 2026 6-Antenna Strong Signal, 1200Mbps Dual Band (2.4GHz) Booster, Wide Signal Coverag",
+      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/9c054d26a5e741cc99d80e2a3e667a25~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+      "goodsPriceMin": 13.98,
+      "goodsPriceMax": 14.99,
+      "sold": 93546,
+      "rating": 4,
+      "reviewNum": 8402,
+      "sourcePlatform": "tiktok",
+      "sourceCatName": "Computers & Office Equipment",
+      "sourceChannel": "热销商品",
+      "selectionScore": 89
+    },
+    {
+      "rank": 6,
+      "goodsId": "1729398645909787397",
+      "goodsName": "100 Envelope Saving Challenge Binder, Budget Binder and Savings Challenge Planner, Money Organizer Notebook",
+      "goodsNameCn": "100 Envelope Saving Challenge Binder, Budget Binder and Savings Challenge Planner, Money Organizer N",
+      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/bbdc998b993e44f8b54b4ea120bda399~tplv-fhlh96nyum-crop-webp:1000:1000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+      "goodsPriceMin": 14.39,
+      "goodsPriceMax": 10.37,
+      "sold": 222803,
+      "rating": 4.7,
+      "reviewNum": 13528,
+      "sourcePlatform": "tiktok",
+      "sourceCatName": "Computers & Office Equipment",
+      "sourceChannel": "热销商品",
+      "selectionScore": 87
+    },
+    {
+      "rank": 7,
+      "goodsId": "601099524466997",
+      "goodsName": "Solar Garden Lights, Solar Lights Outdoor Garden Path, Firefly Lights, Solar Lights Outdoor Garden, Lawn, Garden Decoration, Christmas Decoration",
+      "goodsNameCn": "Solar Garden Lights, Solar Lights Outdoor Garden Path, Firefly Lights, Solar Lights Outdoor Garden, ",
+      "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/cfc62522df43136d2358408aa58a3f46.jpg",
+      "goodsPriceMin": 8.06,
+      "goodsPriceMax": 8.06,
+      "sold": 150000,
+      "rating": 4.8,
+      "reviewNum": 3083,
+      "sourcePlatform": "temu",
+      "sourceCatName": "庭院、草坪和园艺",
+      "sourceChannel": "热销商品",
+      "selectionScore": 86
+    },
+    {
+      "rank": 8,
+      "goodsId": "3256809686148245",
+      "goodsName": "1080P HD Mini WiFi Camera Indoor Safety Security Surveillance Baby Monitor Night Vision Camcorder IP Cam Audio Video Recorder",
+      "goodsNameCn": "1080P HD Mini WiFi Camera Indoor Safety Security Surveillance Baby Monitor Night Vision Camcorder IP",
+      "thumbnail": "https://ae01.alicdn.com/kf/S63059daab23646f784446a04afc03428P.jpg",
+      "goodsPriceMin": 7.65,
+      "goodsPriceMax": 7.65,
+      "sold": 50000,
+      "rating": 4.9,
+      "reviewNum": 6703,
+      "sourcePlatform": "sumaitong",
+      "sourceCatName": "孕婴童",
+      "sourceChannel": "热销商品",
+      "selectionScore": 86
+    },
+    {
+      "rank": 9,
+      "goodsId": "1729499363524644899",
+      "goodsName": "24/48/72 Color Dual-Tip Acrylic Marker Pen, Waterproof & Quick-Dry for Wood, Canvas, Stone, Glass & Rock Painting, DIY Crafts Ideal Christmas Gift #GLOBAL PICKS",
+      "goodsNameCn": "24/48/72 Color Dual-Tip Acrylic Marker Pen, Waterproof & Quick-Dry for Wood, Canvas, Stone, Glass & ",
+      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/21cda3162f3042c6910170cdb6bd7525~tplv-fhlh96nyum-crop-webp:1000:1000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+      "goodsPriceMin": 4.43,
+      "goodsPriceMax": 14.89,
+      "sold": 107567,
+      "rating": 4.7,
+      "reviewNum": 13608,
+      "sourcePlatform": "tiktok",
+      "sourceCatName": "Computers & Office Equipment",
+      "sourceChannel": "热销商品",
+      "selectionScore": 86
+    },
+    {
+      "rank": 10,
+      "goodsId": "601099520279509",
+      "goodsName": "Christmas Lights Outdoor Icicle Lights Meteor Light Christmas LED Decoration Falling Drop String Light 8 Tubes 288 LEDs IP44",
+      "goodsNameCn": "Christmas Lights Outdoor Icicle Lights Meteor Light Christmas LED Decoration Falling Drop String Lig",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/9ead4d1b-468f-4658-8f5c-1463f861308a.jpg",
+      "goodsPriceMin": 13.48,
+      "goodsPriceMax": 15.51,
+      "sold": 100000,
+      "rating": 4.7,
+      "reviewNum": 1720,
+      "sourcePlatform": "temu",
+      "sourceCatName": "庭院、草坪和园艺",
+      "sourceChannel": "热销商品",
+      "selectionScore": 85
+    }
+  ]
+}

@@ -1,0 +1,2212 @@
+{
+  "platform": "shein",
+  "catId": 3657,
+  "catName": "汽车类",
+  "collectedAt": "2026-04-30T03:01:33.479Z",
+  "channels": [
+    {
+      "channel": "热销商品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Summer Beach Hollow Out Off-Shoulder Long Sleeve Loose Cover-Up",
+          "goodsNameCn": "女士毛衣, 女装, 女士针织品, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/08/05/30/1722823702d42f248bda46a6c826ce4e55825c3f9e_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 4560,
+          "sales": 3230320,
+          "goodsPriceMin": 10.84,
+          "goodsPriceMax": null,
+          "reviewNum": 9,
+          "rating": 4.94,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-04-19T08:00:00.000+08:00",
+          "goodsId": "34153501",
+          "detailUrl": "34153501",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 164,
+              "catId": 1734,
+              "catName": "Women Sweaters",
+              "catNameCn": "女士毛衣",
+              "catLevel": 3,
+              "parentCatId": 2216,
+              "isLeaf": true
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 163,
+              "catId": 2216,
+              "catName": "Women Knitwear",
+              "catNameCn": "女士针织品",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Summer Beach Hollow Out Off-Shoulder Long Sleeve Loose Cover-Up",
+          "_source": "热销商品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Collared Pocket Fitted White Long Sleeve Blouse Fall Cloth For Women",
+          "goodsNameCn": "女式衬衫, 女士上衣、衬衫和T恤, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/03/25/64/1774402174bd4745516ad232ec2e222b6ea67ab00a_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 2957,
+          "sales": 1710800,
+          "goodsPriceMin": 7.28,
+          "goodsPriceMax": 17.97,
+          "reviewNum": 12,
+          "rating": 4.87,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-09-15T00:00:00.000+08:00",
+          "goodsId": "58988988",
+          "detailUrl": "58988988",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 162,
+              "catId": 1733,
+              "catName": "Women Blouses",
+              "catNameCn": "女式衬衫",
+              "catLevel": 3,
+              "parentCatId": 1766,
+              "isLeaf": true
+            },
+            {
+              "id": 161,
+              "catId": 1766,
+              "catName": "Women Tops, Blouses & Tee",
+              "catNameCn": "女士上衣、衬衫和T恤",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Collared Pocket Fitted White Long Sleeve Blouse Fall Cloth For Women",
+          "_source": "热销商品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "Breezaya Solid Cami Pointelle Knit Top",
+          "goodsNameCn": "女装, 女士针织品, 女士针织上衣, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2023/05/25/16850104286cec91300e1c95b106f580aa0b743fde_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 20499,
+          "sales": 1267500,
+          "goodsPriceMin": 6.5,
+          "goodsPriceMax": null,
+          "reviewNum": 4,
+          "rating": 4.71,
+          "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+          "onSaleTime": "2023-05-22T08:00:00.000+08:00",
+          "goodsId": "16760502",
+          "detailUrl": "16760502",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 163,
+              "catId": 2216,
+              "catName": "Women Knitwear",
+              "catNameCn": "女士针织品",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 814,
+              "catId": 2217,
+              "catName": "Women Knit Tops",
+              "catNameCn": "女士针织上衣",
+              "catLevel": 3,
+              "parentCatId": 2216,
+              "isLeaf": true
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Breezaya Solid Cami Pointelle Knit Top",
+          "_source": "热销商品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "INAWLY Women Solid Color Round Neck Short Sleeve Casual T-Shirt",
+          "goodsNameCn": "女士T恤, 女士上衣、衬衫和T恤, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2025/01/03/3f/17358714204827d7290c3a8658429ddecd3b54a67c_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 193000,
+          "sales": 1935790,
+          "goodsPriceMin": 10.03,
+          "goodsPriceMax": null,
+          "reviewNum": 41,
+          "rating": 4.92,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-03-19T08:00:00.000+08:00",
+          "goodsId": "52421579",
+          "detailUrl": "52421579",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 345,
+              "catId": 1738,
+              "catName": "Women T-Shirts",
+              "catNameCn": "女士T恤",
+              "catLevel": 3,
+              "parentCatId": 1766,
+              "isLeaf": true
+            },
+            {
+              "id": 161,
+              "catId": 1766,
+              "catName": "Women Tops, Blouses & Tee",
+              "catNameCn": "女士上衣、衬衫和T恤",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "INAWLY Women Solid Color Round Neck Short Sleeve Casual T-Shirt",
+          "_source": "热销商品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "INAWLY Women's Solid Color Round Neck Short Sleeve Simple T-Shirt, Casual For Daily Wear",
+          "goodsNameCn": "女士T恤, 女士上衣、衬衫和T恤, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2025/01/03/98/17358713838327327c540fc4b18c84cf19f3bc9e81_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1604,
+          "sales": 2016850,
+          "goodsPriceMin": 10.45,
+          "goodsPriceMax": null,
+          "reviewNum": 41,
+          "rating": 4.92,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-03-19T08:00:00.000+08:00",
+          "goodsId": "52397267",
+          "detailUrl": "52397267",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 345,
+              "catId": 1738,
+              "catName": "Women T-Shirts",
+              "catNameCn": "女士T恤",
+              "catLevel": 3,
+              "parentCatId": 1766,
+              "isLeaf": true
+            },
+            {
+              "id": 161,
+              "catId": 1766,
+              "catName": "Women Tops, Blouses & Tee",
+              "catNameCn": "女士上衣、衬衫和T恤",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "INAWLY Women's Solid Color Round Neck Short Sleeve Simple T-Shirt, Casual For Daily Wear",
+          "_source": "热销商品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "goodsNameCn": "女裤, 女性下装, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/10/14/2b/172887676521cb6699a9208ab30d21c05152771d67_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1997,
+          "sales": 1119300,
+          "goodsPriceMin": 6.15,
+          "goodsPriceMax": null,
+          "reviewNum": 13,
+          "rating": 4.91,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-07-16T08:00:00.000+08:00",
+          "goodsId": "44771918",
+          "detailUrl": "44771918",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 346,
+              "catId": 1740,
+              "catName": "Women Pants",
+              "catNameCn": "女裤",
+              "catLevel": 3,
+              "parentCatId": 1767,
+              "isLeaf": true
+            },
+            {
+              "id": 342,
+              "catId": 1767,
+              "catName": "Women Bottoms",
+              "catNameCn": "女性下装",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "_source": "热销商品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Simple Striped Heart Print Long Pants Summer Spring Valentine's Day New Years Women",
+          "goodsNameCn": "女裤, 女性下装, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/11/25/c2/1732512959a10ab40339a8e7d943c4e96d275f2984_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 3307,
+          "sales": 1259440,
+          "goodsPriceMin": 6.92,
+          "goodsPriceMax": 34.2,
+          "reviewNum": 13,
+          "rating": 4.91,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-07-16T08:00:00.000+08:00",
+          "goodsId": "48573950",
+          "detailUrl": "48573950",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 346,
+              "catId": 1740,
+              "catName": "Women Pants",
+              "catNameCn": "女裤",
+              "catLevel": 3,
+              "parentCatId": 1767,
+              "isLeaf": true
+            },
+            {
+              "id": 342,
+              "catId": 1767,
+              "catName": "Women Bottoms",
+              "catNameCn": "女性下装",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Simple Striped Heart Print Long Pants Summer Spring Valentine's Day New Years Women",
+          "_source": "热销商品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Simple Textured Long Pants Summer Spring Valentine Day New Years",
+          "goodsNameCn": "女裤, 女性下装, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/09/05/22/1725537317cd227213bd19f3a7c07e136656e1cb9b_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 2645,
+          "sales": 1073800,
+          "goodsPriceMin": 5.9,
+          "goodsPriceMax": 11.39,
+          "reviewNum": 13,
+          "rating": 4.91,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-07-10T09:54:30.000+08:00",
+          "goodsId": "42144394",
+          "detailUrl": "42144394",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 346,
+              "catId": 1740,
+              "catName": "Women Pants",
+              "catNameCn": "女裤",
+              "catLevel": 3,
+              "parentCatId": 1767,
+              "isLeaf": true
+            },
+            {
+              "id": 342,
+              "catId": 1767,
+              "catName": "Women Bottoms",
+              "catNameCn": "女性下装",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Simple Textured Long Pants Summer Spring Valentine Day New Years",
+          "_source": "热销商品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "goodsNameCn": "女裤, 女性下装, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/09/14/4d/1726291065afa5488626362c31099b4bf329f9dc1c_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1990,
+          "sales": 1142960,
+          "goodsPriceMin": 6.28,
+          "goodsPriceMax": null,
+          "reviewNum": 13,
+          "rating": 4.91,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-07-10T09:54:30.000+08:00",
+          "goodsId": "42774582",
+          "detailUrl": "42774582",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 346,
+              "catId": 1740,
+              "catName": "Women Pants",
+              "catNameCn": "女裤",
+              "catLevel": 3,
+              "parentCatId": 1767,
+              "isLeaf": true
+            },
+            {
+              "id": 342,
+              "catId": 1767,
+              "catName": "Women Bottoms",
+              "catNameCn": "女性下装",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "_source": "热销商品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "goodsNameCn": "女裤, 女性下装, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/09/20/73/1726799243c19413a23c041b136b7d5d14c7033d0d_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1997,
+          "sales": 1086540,
+          "goodsPriceMin": 5.97,
+          "goodsPriceMax": null,
+          "reviewNum": 13,
+          "rating": 4.91,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-07-10T09:54:30.000+08:00",
+          "goodsId": "43153728",
+          "detailUrl": "43153728",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 346,
+              "catId": 1740,
+              "catName": "Women Pants",
+              "catNameCn": "女裤",
+              "catLevel": 3,
+              "parentCatId": 1767,
+              "isLeaf": true
+            },
+            {
+              "id": 342,
+              "catId": 1767,
+              "catName": "Women Bottoms",
+              "catNameCn": "女性下装",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "_source": "热销商品",
+          "_platform": "shein",
+          "_catId": 3657
+        }
+      ]
+    },
+    {
+      "channel": "热销新品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/09/1763619512bacf93bafda75ea54b6f0a518ef07bcb_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1500,
+          "sales": 33345,
+          "goodsPriceMin": 1.71,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.85,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "299983499",
+          "detailUrl": "299983499",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "热销新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/09/5f/176526903757a47510a8d5e96f5d75a11a8a613c1a_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 433,
+          "sales": 32231,
+          "goodsPriceMin": 1.67,
+          "goodsPriceMax": 3.06,
+          "reviewNum": 2,
+          "rating": 4.85,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "329970350",
+          "detailUrl": "329970350",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "_source": "热销新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/09/9d/176526913401bc907c3c3bfc1a6edff7f92438133e_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 480,
+          "sales": 31563,
+          "goodsPriceMin": 1.67,
+          "goodsPriceMax": 2.89,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "327393429",
+          "detailUrl": "327393429",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "热销新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/f6/176362176190262228493f894b981f54d48a358c69_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1213,
+          "sales": 32130,
+          "goodsPriceMin": 1.7,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "303865206",
+          "detailUrl": "303865206",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "热销新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/16/90/1760584564e4f2f4ea5c8c4435c1493e490c9be499_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 15784,
+          "sales": 34020,
+          "goodsPriceMin": 1.8,
+          "goodsPriceMax": 3.11,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "220784792",
+          "detailUrl": "220784792",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "热销新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/bb/1763619556026428c756baf5d6b2d63783118b7bab_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 900,
+          "sales": 34020,
+          "goodsPriceMin": 1.8,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "303808391",
+          "detailUrl": "303808391",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "热销新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/01/02/3d/1767327096bb00af508d2624bfff1b7f363a6a22d3_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 138,
+          "sales": 30618,
+          "goodsPriceMin": 1.62,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "352878485",
+          "detailUrl": "352878485",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "_source": "热销新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/09/07/1765268861e2a5ca6ec401971f363f8a6e51b06af3_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 229,
+          "sales": 28917,
+          "goodsPriceMin": 1.53,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "328001762",
+          "detailUrl": "328001762",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "_source": "热销新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/40/176361991705cb6cf2d2f6c928f924f91455b93880_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1836,
+          "sales": 30240,
+          "goodsPriceMin": 1.6,
+          "goodsPriceMax": 2.83,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "304916381",
+          "detailUrl": "304916381",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "热销新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/09/6e/1765268449aed927e3d959470513ac771a25a640b3_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1153,
+          "sales": 30618,
+          "goodsPriceMin": 1.62,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "327866692",
+          "detailUrl": "327866692",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "_source": "热销新品",
+          "_platform": "shein",
+          "_catId": 3657
+        }
+      ]
+    },
+    {
+      "channel": "新店热销",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Summer Beach Hollow Out Off-Shoulder Long Sleeve Loose Cover-Up",
+          "goodsNameCn": "女士毛衣, 女装, 女士针织品, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/08/05/30/1722823702d42f248bda46a6c826ce4e55825c3f9e_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 4560,
+          "sales": 3230320,
+          "goodsPriceMin": 10.84,
+          "goodsPriceMax": null,
+          "reviewNum": 9,
+          "rating": 4.94,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-04-19T08:00:00.000+08:00",
+          "goodsId": "34153501",
+          "detailUrl": "34153501",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 164,
+              "catId": 1734,
+              "catName": "Women Sweaters",
+              "catNameCn": "女士毛衣",
+              "catLevel": 3,
+              "parentCatId": 2216,
+              "isLeaf": true
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 163,
+              "catId": 2216,
+              "catName": "Women Knitwear",
+              "catNameCn": "女士针织品",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Summer Beach Hollow Out Off-Shoulder Long Sleeve Loose Cover-Up",
+          "_source": "新店热销",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Collared Pocket Fitted White Long Sleeve Blouse Fall Cloth For Women",
+          "goodsNameCn": "女式衬衫, 女士上衣、衬衫和T恤, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/03/25/64/1774402174bd4745516ad232ec2e222b6ea67ab00a_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 2957,
+          "sales": 1710800,
+          "goodsPriceMin": 7.28,
+          "goodsPriceMax": 17.97,
+          "reviewNum": 12,
+          "rating": 4.87,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-09-15T00:00:00.000+08:00",
+          "goodsId": "58988988",
+          "detailUrl": "58988988",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 162,
+              "catId": 1733,
+              "catName": "Women Blouses",
+              "catNameCn": "女式衬衫",
+              "catLevel": 3,
+              "parentCatId": 1766,
+              "isLeaf": true
+            },
+            {
+              "id": 161,
+              "catId": 1766,
+              "catName": "Women Tops, Blouses & Tee",
+              "catNameCn": "女士上衣、衬衫和T恤",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Collared Pocket Fitted White Long Sleeve Blouse Fall Cloth For Women",
+          "_source": "新店热销",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "Breezaya Solid Cami Pointelle Knit Top",
+          "goodsNameCn": "女装, 女士针织品, 女士针织上衣, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2023/05/25/16850104286cec91300e1c95b106f580aa0b743fde_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 20499,
+          "sales": 1267500,
+          "goodsPriceMin": 6.5,
+          "goodsPriceMax": null,
+          "reviewNum": 4,
+          "rating": 4.71,
+          "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+          "onSaleTime": "2023-05-22T08:00:00.000+08:00",
+          "goodsId": "16760502",
+          "detailUrl": "16760502",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 163,
+              "catId": 2216,
+              "catName": "Women Knitwear",
+              "catNameCn": "女士针织品",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 814,
+              "catId": 2217,
+              "catName": "Women Knit Tops",
+              "catNameCn": "女士针织上衣",
+              "catLevel": 3,
+              "parentCatId": 2216,
+              "isLeaf": true
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Breezaya Solid Cami Pointelle Knit Top",
+          "_source": "新店热销",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "INAWLY Women Solid Color Round Neck Short Sleeve Casual T-Shirt",
+          "goodsNameCn": "女士T恤, 女士上衣、衬衫和T恤, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2025/01/03/3f/17358714204827d7290c3a8658429ddecd3b54a67c_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 193000,
+          "sales": 1935790,
+          "goodsPriceMin": 10.03,
+          "goodsPriceMax": null,
+          "reviewNum": 41,
+          "rating": 4.92,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-03-19T08:00:00.000+08:00",
+          "goodsId": "52421579",
+          "detailUrl": "52421579",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 345,
+              "catId": 1738,
+              "catName": "Women T-Shirts",
+              "catNameCn": "女士T恤",
+              "catLevel": 3,
+              "parentCatId": 1766,
+              "isLeaf": true
+            },
+            {
+              "id": 161,
+              "catId": 1766,
+              "catName": "Women Tops, Blouses & Tee",
+              "catNameCn": "女士上衣、衬衫和T恤",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "INAWLY Women Solid Color Round Neck Short Sleeve Casual T-Shirt",
+          "_source": "新店热销",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "INAWLY Women's Solid Color Round Neck Short Sleeve Simple T-Shirt, Casual For Daily Wear",
+          "goodsNameCn": "女士T恤, 女士上衣、衬衫和T恤, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2025/01/03/98/17358713838327327c540fc4b18c84cf19f3bc9e81_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1604,
+          "sales": 2016850,
+          "goodsPriceMin": 10.45,
+          "goodsPriceMax": null,
+          "reviewNum": 41,
+          "rating": 4.92,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-03-19T08:00:00.000+08:00",
+          "goodsId": "52397267",
+          "detailUrl": "52397267",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 345,
+              "catId": 1738,
+              "catName": "Women T-Shirts",
+              "catNameCn": "女士T恤",
+              "catLevel": 3,
+              "parentCatId": 1766,
+              "isLeaf": true
+            },
+            {
+              "id": 161,
+              "catId": 1766,
+              "catName": "Women Tops, Blouses & Tee",
+              "catNameCn": "女士上衣、衬衫和T恤",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "INAWLY Women's Solid Color Round Neck Short Sleeve Simple T-Shirt, Casual For Daily Wear",
+          "_source": "新店热销",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "goodsNameCn": "女裤, 女性下装, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/10/14/2b/172887676521cb6699a9208ab30d21c05152771d67_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1997,
+          "sales": 1119300,
+          "goodsPriceMin": 6.15,
+          "goodsPriceMax": null,
+          "reviewNum": 13,
+          "rating": 4.91,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-07-16T08:00:00.000+08:00",
+          "goodsId": "44771918",
+          "detailUrl": "44771918",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 346,
+              "catId": 1740,
+              "catName": "Women Pants",
+              "catNameCn": "女裤",
+              "catLevel": 3,
+              "parentCatId": 1767,
+              "isLeaf": true
+            },
+            {
+              "id": 342,
+              "catId": 1767,
+              "catName": "Women Bottoms",
+              "catNameCn": "女性下装",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "_source": "新店热销",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Simple Striped Heart Print Long Pants Summer Spring Valentine's Day New Years Women",
+          "goodsNameCn": "女裤, 女性下装, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/11/25/c2/1732512959a10ab40339a8e7d943c4e96d275f2984_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 3307,
+          "sales": 1259440,
+          "goodsPriceMin": 6.92,
+          "goodsPriceMax": 34.2,
+          "reviewNum": 13,
+          "rating": 4.91,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-07-16T08:00:00.000+08:00",
+          "goodsId": "48573950",
+          "detailUrl": "48573950",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 346,
+              "catId": 1740,
+              "catName": "Women Pants",
+              "catNameCn": "女裤",
+              "catLevel": 3,
+              "parentCatId": 1767,
+              "isLeaf": true
+            },
+            {
+              "id": 342,
+              "catId": 1767,
+              "catName": "Women Bottoms",
+              "catNameCn": "女性下装",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Simple Striped Heart Print Long Pants Summer Spring Valentine's Day New Years Women",
+          "_source": "新店热销",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Simple Textured Long Pants Summer Spring Valentine Day New Years",
+          "goodsNameCn": "女裤, 女性下装, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/09/05/22/1725537317cd227213bd19f3a7c07e136656e1cb9b_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 2645,
+          "sales": 1073800,
+          "goodsPriceMin": 5.9,
+          "goodsPriceMax": 11.39,
+          "reviewNum": 13,
+          "rating": 4.91,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-07-10T09:54:30.000+08:00",
+          "goodsId": "42144394",
+          "detailUrl": "42144394",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 346,
+              "catId": 1740,
+              "catName": "Women Pants",
+              "catNameCn": "女裤",
+              "catLevel": 3,
+              "parentCatId": 1767,
+              "isLeaf": true
+            },
+            {
+              "id": 342,
+              "catId": 1767,
+              "catName": "Women Bottoms",
+              "catNameCn": "女性下装",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Simple Textured Long Pants Summer Spring Valentine Day New Years",
+          "_source": "新店热销",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "goodsNameCn": "女裤, 女性下装, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/09/14/4d/1726291065afa5488626362c31099b4bf329f9dc1c_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1990,
+          "sales": 1142960,
+          "goodsPriceMin": 6.28,
+          "goodsPriceMax": null,
+          "reviewNum": 13,
+          "rating": 4.91,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-07-10T09:54:30.000+08:00",
+          "goodsId": "42774582",
+          "detailUrl": "42774582",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 346,
+              "catId": 1740,
+              "catName": "Women Pants",
+              "catNameCn": "女裤",
+              "catLevel": 3,
+              "parentCatId": 1767,
+              "isLeaf": true
+            },
+            {
+              "id": 342,
+              "catId": 1767,
+              "catName": "Women Bottoms",
+              "catNameCn": "女性下装",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "_source": "新店热销",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "goodsNameCn": "女裤, 女性下装, 女装, 女装",
+          "thumbnail": "//img.ltwebstatic.com/images3_pi/2024/09/20/73/1726799243c19413a23c041b136b7d5d14c7033d0d_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1997,
+          "sales": 1086540,
+          "goodsPriceMin": 5.97,
+          "goodsPriceMax": null,
+          "reviewNum": 13,
+          "rating": 4.91,
+          "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+          "onSaleTime": "2024-07-10T09:54:30.000+08:00",
+          "goodsId": "43153728",
+          "detailUrl": "43153728",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 346,
+              "catId": 1740,
+              "catName": "Women Pants",
+              "catNameCn": "女裤",
+              "catLevel": 3,
+              "parentCatId": 1767,
+              "isLeaf": true
+            },
+            {
+              "id": 342,
+              "catId": 1767,
+              "catName": "Women Bottoms",
+              "catNameCn": "女性下装",
+              "catLevel": 2,
+              "parentCatId": 2030,
+              "isLeaf": false
+            },
+            {
+              "id": 60,
+              "catId": 2030,
+              "catName": "Women Clothing",
+              "catNameCn": "女装",
+              "catLevel": 1,
+              "parentCatId": 4436,
+              "isLeaf": false
+            },
+            {
+              "id": 59,
+              "catId": 4436,
+              "catName": "Women Apparel",
+              "catNameCn": "女装",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "SHEIN Essnce Women's Casual Simple Plisse Long Pants Summer Spring Valentine Day New Years",
+          "_source": "新店热销",
+          "_platform": "shein",
+          "_catId": 3657
+        }
+      ]
+    },
+    {
+      "channel": "大卖新品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/09/1763619512bacf93bafda75ea54b6f0a518ef07bcb_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1500,
+          "sales": 33345,
+          "goodsPriceMin": 1.71,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.85,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "299983499",
+          "detailUrl": "299983499",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "大卖新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/09/5f/176526903757a47510a8d5e96f5d75a11a8a613c1a_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 433,
+          "sales": 32231,
+          "goodsPriceMin": 1.67,
+          "goodsPriceMax": 3.06,
+          "reviewNum": 2,
+          "rating": 4.85,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "329970350",
+          "detailUrl": "329970350",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "_source": "大卖新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/09/9d/176526913401bc907c3c3bfc1a6edff7f92438133e_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 480,
+          "sales": 31563,
+          "goodsPriceMin": 1.67,
+          "goodsPriceMax": 2.89,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "327393429",
+          "detailUrl": "327393429",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "大卖新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/f6/176362176190262228493f894b981f54d48a358c69_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1213,
+          "sales": 32130,
+          "goodsPriceMin": 1.7,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "303865206",
+          "detailUrl": "303865206",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "大卖新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/16/90/1760584564e4f2f4ea5c8c4435c1493e490c9be499_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 15784,
+          "sales": 34020,
+          "goodsPriceMin": 1.8,
+          "goodsPriceMax": 3.11,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "220784792",
+          "detailUrl": "220784792",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "大卖新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/bb/1763619556026428c756baf5d6b2d63783118b7bab_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 900,
+          "sales": 34020,
+          "goodsPriceMin": 1.8,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "303808391",
+          "detailUrl": "303808391",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Charm Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "大卖新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/01/02/3d/1767327096bb00af508d2624bfff1b7f363a6a22d3_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 138,
+          "sales": 30618,
+          "goodsPriceMin": 1.62,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "352878485",
+          "detailUrl": "352878485",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "_source": "大卖新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/09/07/1765268861e2a5ca6ec401971f363f8a6e51b06af3_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 229,
+          "sales": 28917,
+          "goodsPriceMin": 1.53,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "328001762",
+          "detailUrl": "328001762",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "_source": "大卖新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/20/40/176361991705cb6cf2d2f6c928f924f91455b93880_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1836,
+          "sales": 30240,
+          "goodsPriceMin": 1.6,
+          "goodsPriceMax": 2.83,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "304916381",
+          "detailUrl": "304916381",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Beads Car Pendant Accessory, Unique Fashion Car Hanging Decoration",
+          "_source": "大卖新品",
+          "_platform": "shein",
+          "_catId": 3657
+        },
+        {
+          "goodsNameEn": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "goodsNameCn": "汽车类, 汽车内饰配件, 汽车悬挂装饰品",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/12/09/6e/1765268449aed927e3d959470513ac771a25a640b3_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 1153,
+          "sales": 30618,
+          "goodsPriceMin": 1.62,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2022-03-08T08:00:00.000+08:00",
+          "onSaleTime": "2025-10-16T08:00:00.000+08:00",
+          "goodsId": "327866692",
+          "detailUrl": "327866692",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 192,
+              "catId": 3657,
+              "catName": "Automotive",
+              "catNameCn": "汽车类",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 193,
+              "catId": 3883,
+              "catName": "Automotive Interior Accessories",
+              "catNameCn": "汽车内饰配件",
+              "catLevel": 1,
+              "parentCatId": 3657,
+              "isLeaf": false
+            },
+            {
+              "id": 5880,
+              "catId": 13894,
+              "catName": "Car Hanging Decorations",
+              "catNameCn": "汽车悬挂装饰品",
+              "catLevel": 2,
+              "parentCatId": 3883,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "1pc Steering Wheel Decor, 15cm Adjustable Length, Minimalist, Cute, Creative Rosary Charm Car Accessory, Unique Fashion Car Pendant Decoration",
+          "_source": "大卖新品",
+          "_platform": "shein",
+          "_catId": 3657
+        }
+      ]
+    }
+  ]
+}

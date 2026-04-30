@@ -21,26 +21,22 @@
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import {
+  BEHAVIOR_WEIGHT_CLICK,
+  BEHAVIOR_WEIGHT_FAVORITE,
+  BEHAVIOR_WEIGHT_SAVE,
+  BEHAVIOR_WEIGHT_DISLIKE,
+  BEHAVIOR_DECAY_LAMBDA,
+  COLD_START_THRESHOLD,
+  COLLAB_USER_MIN,
+  COLLAB_TAG_MIN_USERS,
+  RULE_WEIGHT,
+  BEHAVIOR_WEIGHT,
+} from '../lib/constants';
 
 // ============================================================
 // F-015-01: Behavior Weight Calculation
 // ============================================================
-
-// Weight constants from SRS F-015-01
-const WEIGHT_CLICK = 1;
-const WEIGHT_FAVORITE = 5;
-const WEIGHT_SAVE = 3;
-const WEIGHT_DISLIKE = 8;
-
-// Time decay constant (30 days → 20% decay)
-const DECAY_LAMBDA = 0.1;
-
-// Cold start threshold
-const COLD_START_THRESHOLD = 5;
-
-// Collaborative filtering threshold
-const COLLAB_USER_MIN = 100;
-const COLLAB_TAG_MIN_USERS = 10;
 
 /**
  * Calculate behavior score for a single product
@@ -53,13 +49,13 @@ export function calculateBehaviorScore(
   dislikeCount: number,
   daysSinceLastAction: number
 ): { raw: number; decay: number } {
-  const raw = clickCount * WEIGHT_CLICK
-    + favoriteCount * WEIGHT_FAVORITE
-    + saveCount * WEIGHT_SAVE
-    - dislikeCount * WEIGHT_DISLIKE;
+  const raw = clickCount * BEHAVIOR_WEIGHT_CLICK
+    + favoriteCount * BEHAVIOR_WEIGHT_FAVORITE
+    + saveCount * BEHAVIOR_WEIGHT_SAVE
+    - dislikeCount * BEHAVIOR_WEIGHT_DISLIKE;
 
   // Time decay: e^(-0.1 × days_ago)
-  const decay = raw * Math.exp(-DECAY_LAMBDA * daysSinceLastAction);
+  const decay = raw * Math.exp(-BEHAVIOR_DECAY_LAMBDA * daysSinceLastAction);
 
   return { raw, decay };
 }
@@ -371,9 +367,6 @@ function cosineSimilarity(vecA: Map<string, number>, vecB: Map<string, number>):
 // F-015-03: Combined Scoring (Rule + Behavior)
 // ============================================================
 
-const RULE_WEIGHT = 0.6;
-const BEHAVIOR_WEIGHT = 0.4;
-
 /**
  * Get behavior-enhanced recommendations by combining rule score + behavior score
  */
@@ -432,6 +425,8 @@ export async function getBehaviorEnhancedRecommendations(
 // F-015-04: MMR Diversity Control
 // ============================================================
 
+import { MMR_SUB_CATEGORY_RATIO, MMR_MIN_TAGS, MMR_TIMEOUT_MS } from '../lib/constants';
+
 /**
  * MMR (Maximal Marginal Relevance) reranking
  * - Same subcategory ≤ 30% of results
@@ -444,14 +439,16 @@ export function mmrRerank<T extends { id: string; subcategory?: string | null; t
   items: T[],
   userTags: string[],
   lambda: number = 0.5,
-  maxSubcategoryRatio: number = 0.3,
-  minDistinctTags: number = 3
+  maxSubcategoryRatio: number = MMR_SUB_CATEGORY_RATIO,
+  minDistinctTags: number = MMR_MIN_TAGS,
+  timeoutMs: number = MMR_TIMEOUT_MS
 ): T[] {
   if (items.length === 0) return [];
   if (items.length === 1) return items;
 
   const result: T[] = [];
   const remaining = [...items];
+  const startTime = Date.now();
 
   // Calculate tag coverage importance score for each item
   const tagScores = items.map(item => {
@@ -470,6 +467,13 @@ export function mmrRerank<T extends { id: string; subcategory?: string | null; t
   let tagCoverage = new Set<string>();
 
   for (const { index } of tagScores) {
+    // Check timeout budget - P1-8 优化：实现MMR超时控制
+    if (Date.now() - startTime > timeoutMs) {
+      // Timeout: add remaining items in original order and break
+      result.push(...remaining);
+      break;
+    }
+
     if (result.length >= items.length) break;
 
     const item = remaining[index];
@@ -479,7 +483,7 @@ export function mmrRerank<T extends { id: string; subcategory?: string | null; t
     const subcat = item.subcategory || 'unknown';
     const currentSubcatCount = subcategoryCounts.get(subcat) || 0;
 
-    if (currentSubcatCount >= maxSubcategoryRatio && subcategoryCounts.size > 1) {
+    if (currentSubcatCount >= maxPerSubcategory && subcategoryCounts.size > 1) {
       // Skip if this subcategory is already at max (unless it's the only subcategory)
       continue;
     }
@@ -738,12 +742,12 @@ export async function getBehavioralRecommendations(env: Env, request: Request): 
       rule_weight: RULE_WEIGHT,
       behavior_weight: BEHAVIOR_WEIGHT,
       weight_constants: {
-        click: WEIGHT_CLICK,
-        favorite: WEIGHT_FAVORITE,
-        save: WEIGHT_SAVE,
-        dislike: WEIGHT_DISLIKE,
+        click: BEHAVIOR_WEIGHT_CLICK,
+        favorite: BEHAVIOR_WEIGHT_FAVORITE,
+        save: BEHAVIOR_WEIGHT_SAVE,
+        dislike: BEHAVIOR_WEIGHT_DISLIKE,
       },
-      decay_lambda: DECAY_LAMBDA,
+      decay_lambda: BEHAVIOR_DECAY_LAMBDA,
     },
   })), {
     headers: { 'Content-Type': 'application/json' },

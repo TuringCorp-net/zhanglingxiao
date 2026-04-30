@@ -1,0 +1,1734 @@
+{
+  "platform": "sumaitong",
+  "catId": 1511,
+  "catName": "手表",
+  "collectedAt": "2026-04-30T03:01:40.846Z",
+  "channels": [
+    {
+      "channel": "热销商品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "AliExpress Saver--Monthly Perks & Service",
+          "goodsNameCn": "AliExpress Saver--Monthly Perks & Service",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sbb1ea754567a4eb7b59bd902cfa525d51.png",
+          "thumbnailCn": "",
+          "sold": 1067057,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-12T00:00:00.000+08:00",
+          "goodsId": "3256808296417523",
+          "detailUrl": "3256808296417523",
+          "platform": "sumaitong",
+          "catItems": [],
+          "goodsName": "AliExpress Saver--Monthly Perks & Service",
+          "_source": "热销商品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Welding Locator Soldering Tools",
+          "goodsNameCn": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Weldin",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sa917d684da6045c0b862e25f827b41abX.jpg",
+          "thumbnailCn": "",
+          "sold": 398908,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 16393,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-05-06T00:00:00.000+08:00",
+          "goodsId": "1005008972114534",
+          "detailUrl": "1005008972114534",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 16,
+              "catId": "1420",
+              "catName": "工具",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 6949,
+              "catId": "1440",
+              "catName": "焊接设备",
+              "catLevel": 1,
+              "parentCatId": "1420",
+              "isLeaf": false
+            },
+            {
+              "id": 7020,
+              "catId": "201512701",
+              "catName": "焊接定位器",
+              "catLevel": 2,
+              "parentCatId": "1427",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Welding Locator Soldering Tools",
+          "_source": "热销商品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "NAGARAKU 16Rows Classic Individual Eyelash Extension Lashes Matte Black Professional Soft Natural",
+          "goodsNameCn": "NAGARAKU 16Rows Classic Individual Eyelash Extension Lashes Matte Black Professional Soft Natural",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S6f2e09b7d61a4293920d666edf29981a5.jpg",
+          "thumbnailCn": "",
+          "sold": 330066,
+          "sales": null,
+          "goodsPriceMin": 3.34,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2015-09-23T00:00:00.000+08:00",
+          "goodsId": "32477921977",
+          "detailUrl": "32477921977",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 12,
+              "catId": "66",
+              "catName": "美容健康",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 5849,
+              "catId": "660103",
+              "catName": "彩妆",
+              "catLevel": 1,
+              "parentCatId": "66",
+              "isLeaf": false
+            },
+            {
+              "id": 6507,
+              "catId": "201541402",
+              "catName": "假睫毛和工具",
+              "catLevel": 2,
+              "parentCatId": "660103",
+              "isLeaf": false
+            },
+            {
+              "id": 6521,
+              "catId": "200001197",
+              "catName": "假睫毛",
+              "catLevel": 3,
+              "parentCatId": "201541402",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "NAGARAKU 16Rows Classic Individual Eyelash Extension Lashes Matte Black Professional Soft Natural",
+          "_source": "热销商品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Welding Locator Soldering Tools",
+          "goodsNameCn": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Weldin",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sa917d684da6045c0b862e25f827b41abX.jpg",
+          "thumbnailCn": "",
+          "sold": 325809,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 29016,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-06-06T00:00:00.000+08:00",
+          "goodsId": "1005009211379088",
+          "detailUrl": "1005009211379088",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 16,
+              "catId": "1420",
+              "catName": "工具",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 6949,
+              "catId": "1440",
+              "catName": "焊接设备",
+              "catLevel": 1,
+              "parentCatId": "1420",
+              "isLeaf": false
+            },
+            {
+              "id": 7020,
+              "catId": "201512701",
+              "catName": "焊接定位器",
+              "catLevel": 2,
+              "parentCatId": "1427",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Welding Locator Soldering Tools",
+          "_source": "热销商品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Motion Sensor Light Wireless LED Night Light Type C Rechargeable Light Cabinet Wardrobe Lamp Staircase Backlight For Kitchen LED",
+          "goodsNameCn": "Motion Sensor Light Wireless LED Night Light Type C Rechargeable Light Cabinet Wardrobe Lamp Stairca",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sc56ba89b3b77443ea4452d5be7c4c4d9H.jpg",
+          "thumbnailCn": "",
+          "sold": 308467,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-05-19T00:00:00.000+08:00",
+          "goodsId": "1005005588986583",
+          "detailUrl": "1005005588986583",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 10,
+              "catId": "39",
+              "catName": "照明灯饰",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 5432,
+              "catId": "39050508",
+              "catName": "小夜灯",
+              "catLevel": 1,
+              "parentCatId": "39",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Motion Sensor Light Wireless LED Night Light Type C Rechargeable Light Cabinet Wardrobe Lamp Staircase Backlight For Kitchen LED",
+          "_source": "热销商品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "goodsNameCn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Tab",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S8c4a1b768a314fccb9be627a327fecd7t.jpg",
+          "thumbnailCn": "",
+          "sold": 296207,
+          "sales": null,
+          "goodsPriceMin": 2.11,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-18T00:00:00.000+08:00",
+          "goodsId": "1005007010254856",
+          "detailUrl": "1005007010254856",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 6928,
+              "catId": "5093004",
+              "catName": "手机支架",
+              "catLevel": 2,
+              "parentCatId": "100001205",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "_source": "热销商品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "goodsNameCn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Tab",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S8c4a1b768a314fccb9be627a327fecd7t.jpg",
+          "thumbnailCn": "",
+          "sold": 295408,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-07-02T00:00:00.000+08:00",
+          "goodsId": "1005005785774950",
+          "detailUrl": "1005005785774950",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 6928,
+              "catId": "5093004",
+              "catName": "手机支架",
+              "catLevel": 2,
+              "parentCatId": "100001205",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "_source": "热销商品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "goodsNameCn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Tab",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S8c4a1b768a314fccb9be627a327fecd7t.jpg",
+          "thumbnailCn": "",
+          "sold": 290883,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": 0.99,
+          "reviewNum": 37902,
+          "rating": 4.5,
+          "mallOpenTime": "2023-05-30T20:30:21.000+08:00",
+          "onSaleTime": "2023-07-02T00:00:00.000+08:00",
+          "goodsId": "3256805599460198",
+          "detailUrl": "3256805599460198",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 6928,
+              "catId": "5093004",
+              "catName": "手机支架",
+              "catLevel": 2,
+              "parentCatId": "100001205",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "_source": "热销商品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Oil Spray for Cooking - Olive Oil Dispenser Bottle Sprayer Mist-Reusable Food Grade Oil Vinegar,Spray Bottle Kitchen Accessories",
+          "goodsNameCn": "Oil Spray for Cooking - Olive Oil Dispenser Bottle Sprayer Mist-Reusable Food Grade Oil Vinegar,Spra",
+          "thumbnail": "https://ae-pic-a1.aliexpress-media.com/kf/Sdfda3822f064426692204d01a24fdb26m.png_640x640.png",
+          "thumbnailCn": "",
+          "sold": 274533,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 31183,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-07-10T09:36:15.743+08:00",
+          "goodsId": "3256808067186188",
+          "detailUrl": "3256808067186188",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 4,
+              "catId": "15",
+              "catName": "家居用品",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 1152,
+              "catId": "200000920",
+              "catName": "厨房吧台用品",
+              "catLevel": 1,
+              "parentCatId": "15",
+              "isLeaf": false
+            },
+            {
+              "id": 1764,
+              "catId": "100003238",
+              "catName": "厨房工具",
+              "catLevel": 2,
+              "parentCatId": "200000920",
+              "isLeaf": false
+            },
+            {
+              "id": 1967,
+              "catId": "100003251",
+              "catName": "调味工具/调味罐/油壶",
+              "catLevel": 3,
+              "parentCatId": "100003238",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Oil Spray for Cooking - Olive Oil Dispenser Bottle Sprayer Mist-Reusable Food Grade Oil Vinegar,Spray Bottle Kitchen Accessories",
+          "_source": "热销商品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Solar Outdoor Waterproof LED Wall Light Powerful Solar Energy Lamp with Light Sensor for Garden Yard Fence House Decoration",
+          "goodsNameCn": "Solar Outdoor Waterproof LED Wall Light Powerful Solar Energy Lamp with Light Sensor for Garden Yard",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S9cf84afddb3642ac94c699df4aff1fabj.png",
+          "thumbnailCn": "",
+          "sold": 269987,
+          "sales": null,
+          "goodsPriceMin": 3.93,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-16T00:00:00.000+08:00",
+          "goodsId": "1005006995785463",
+          "detailUrl": "1005006995785463",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 10,
+              "catId": "39",
+              "catName": "照明灯饰",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 5427,
+              "catId": "150401",
+              "catName": "���外照明",
+              "catLevel": 1,
+              "parentCatId": "39",
+              "isLeaf": false
+            },
+            {
+              "id": 5486,
+              "catId": "39050207",
+              "catName": "太阳能灯",
+              "catLevel": 2,
+              "parentCatId": "150401",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Solar Outdoor Waterproof LED Wall Light Powerful Solar Energy Lamp with Light Sensor for Garden Yard Fence House Decoration",
+          "_source": "热销商品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        }
+      ]
+    },
+    {
+      "channel": "热销新品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "goodsNameCn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sd44dd4fe3a694a49941949d034160ba7O.jpg",
+          "thumbnailCn": "",
+          "sold": 147621,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-03-17T00:00:00.000+08:00",
+          "goodsId": "1005006706836534",
+          "detailUrl": "1005006706836534",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "_source": "热销新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "goodsNameCn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S2810954781a64c54a094928a5b673cbcc.jpg",
+          "thumbnailCn": "",
+          "sold": 139647,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-03-17T00:00:00.000+08:00",
+          "goodsId": "3256806520521782",
+          "detailUrl": "3256806520521782",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "_source": "热销新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Steel Strap Watches Women Watch Men Business Clock Multifunction LED Digtal Sports Wrist Watch Electronic Clock Electron wi",
+          "goodsNameCn": "Steel Strap Watches Women Watch Men Business Clock Multifunction LED Digtal Sports Wrist Watch Elect",
+          "thumbnail": "//ae04.alicdn.com/kf/S619e1130a3154150878f9142b9d7f721W.jpg",
+          "thumbnailCn": "",
+          "sold": 100000,
+          "sales": null,
+          "goodsPriceMin": 2.18,
+          "goodsPriceMax": null,
+          "reviewNum": 11067,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "3256806674471733",
+          "detailUrl": "3256806674471733",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8057,
+              "catId": "200362144",
+              "catName": "儿童腕表",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Steel Strap Watches Women Watch Men Business Clock Multifunction LED Digtal Sports Wrist Watch Electronic Clock Electron wi",
+          "_source": "热销新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "F91W Non-Waterproof Steel Band Watch For Women, Men, Business Clock, Multi-Functional LED Digital Sports Watch, Electronic Clock",
+          "goodsNameCn": "F91W Non-Waterproof Steel Band Watch For Women, Men, Business Clock, Multi-Functional LED Digital Sp",
+          "thumbnail": "//ae04.alicdn.com/kf/Sdb887ebeb7434a3688665e375b177968p.png",
+          "thumbnailCn": "",
+          "sold": 100000,
+          "sales": null,
+          "goodsPriceMin": 1.13,
+          "goodsPriceMax": null,
+          "reviewNum": 12386,
+          "rating": 4.3,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-07-24T00:00:00.000+08:00",
+          "goodsId": "3256805686257830",
+          "detailUrl": "3256805686257830",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8057,
+              "catId": "200362144",
+              "catName": "儿童腕表",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "F91W Non-Waterproof Steel Band Watch For Women, Men, Business Clock, Multi-Functional LED Digital Sports Watch, Electronic Clock",
+          "_source": "热销新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Alpine Loop For Apple Watch Band ultra 2 49mm Series 10 9 8 7 6 SE 5 4 46mm 42mm 40-44mm 45mm 41mm G-hook sport strap iwatch 10",
+          "goodsNameCn": "Alpine Loop For Apple Watch Band ultra 2 49mm Series 10 9 8 7 6 SE 5 4 46mm 42mm 40-44mm 45mm 41mm G",
+          "thumbnail": "https://ae01.alicdn.com/kf/Sa3ccc359f80d407c8c78d5581a4988e21.jpg",
+          "thumbnailCn": "",
+          "sold": 100000,
+          "sales": null,
+          "goodsPriceMin": 2.58,
+          "goodsPriceMax": 145999.85,
+          "reviewNum": 13957,
+          "rating": 4.9,
+          "mallOpenTime": "2024-03-01T00:05:27.000+08:00",
+          "onSaleTime": null,
+          "goodsId": "3256807158794131",
+          "detailUrl": "3256807158794131",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Alpine Loop For Apple Watch Band ultra 2 49mm Series 10 9 8 7 6 SE 5 4 46mm 42mm 40-44mm 45mm 41mm G-hook sport strap iwatch 10",
+          "_source": "热销新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Fashion Mickey Children Watches For Girls Electronic Bracelet Sports Touch LED Spiderman Doll Kids Watch Women Waterproof Clock",
+          "goodsNameCn": "Fashion Mickey Children Watches For Girls Electronic Bracelet Sports Touch LED Spiderman Doll Kids W",
+          "thumbnail": "//ae04.alicdn.com/kf/Sf688873a09cb4307a131e2f0ad9c2bf6c.jpg",
+          "thumbnailCn": "",
+          "sold": 100000,
+          "sales": null,
+          "goodsPriceMin": 0.33,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "3256807120399317",
+          "detailUrl": "3256807120399317",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8057,
+              "catId": "200362144",
+              "catName": "儿童腕表",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Fashion Mickey Children Watches For Girls Electronic Bracelet Sports Touch LED Spiderman Doll Kids Watch Women Waterproof Clock",
+          "_source": "热销新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "goodsNameCn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sa50a091e271f41cd98f2c4dd19fb43f9e.jpg",
+          "thumbnailCn": "",
+          "sold": 87027,
+          "sales": null,
+          "goodsPriceMin": 1.76,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-16T00:00:00.000+08:00",
+          "goodsId": "3256806810168189",
+          "detailUrl": "3256806810168189",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "_source": "热销新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch series 11 10 9 8 7 6 5 SE Ultra3",
+          "goodsNameCn": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch seri",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S6b9b2fd0f542415b86e1a55e58a44967S.jpg",
+          "thumbnailCn": "",
+          "sold": 84518,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-12-26T00:00:00.000+08:00",
+          "goodsId": "1005008301451347",
+          "detailUrl": "1005008301451347",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch series 11 10 9 8 7 6 5 SE Ultra3",
+          "_source": "热销新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch series 11 10 9 8 7 6 5 SE Ultra3",
+          "goodsNameCn": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch seri",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S17dbf776427547f084e9d542621f4d06A.jpg",
+          "thumbnailCn": "",
+          "sold": 83613,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 8709,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-12-26T00:00:00.000+08:00",
+          "goodsId": "3256808115136595",
+          "detailUrl": "3256808115136595",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch series 11 10 9 8 7 6 5 SE Ultra3",
+          "_source": "热销新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Cover for Apple Watch Case 45mm 41mm 44mm 40mm 42mm 38mm 46 49 mm Accessories PC Protector bumper iWatch Series 8 7 SE 6 5 4 3 9",
+          "goodsNameCn": "Cover for Apple Watch Case 45mm 41mm 44mm 40mm 42mm 38mm 46 49 mm Accessories PC Protector bumper iW",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sd5289a88d89a4caeb303a4b2ace03047S.jpg",
+          "thumbnailCn": "",
+          "sold": 68226,
+          "sales": null,
+          "goodsPriceMin": 1.33,
+          "goodsPriceMax": 145999.85,
+          "reviewNum": 6037,
+          "rating": 4.9,
+          "mallOpenTime": "2024-03-01T00:05:27.000+08:00",
+          "onSaleTime": "2024-07-05T00:00:00.000+08:00",
+          "goodsId": "3256807120267247",
+          "detailUrl": "3256807120267247",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8081,
+              "catId": "200195142",
+              "catName": "表壳",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Cover for Apple Watch Case 45mm 41mm 44mm 40mm 42mm 38mm 46 49 mm Accessories PC Protector bumper iWatch Series 8 7 SE 6 5 4 3 9",
+          "_source": "热销新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        }
+      ]
+    },
+    {
+      "channel": "新店热销",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "AliExpress Saver--Monthly Perks & Service",
+          "goodsNameCn": "AliExpress Saver--Monthly Perks & Service",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sbb1ea754567a4eb7b59bd902cfa525d51.png",
+          "thumbnailCn": "",
+          "sold": 1067057,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-12T00:00:00.000+08:00",
+          "goodsId": "3256808296417523",
+          "detailUrl": "3256808296417523",
+          "platform": "sumaitong",
+          "catItems": [],
+          "goodsName": "AliExpress Saver--Monthly Perks & Service",
+          "_source": "新店热销",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Welding Locator Soldering Tools",
+          "goodsNameCn": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Weldin",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sa917d684da6045c0b862e25f827b41abX.jpg",
+          "thumbnailCn": "",
+          "sold": 398908,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 16393,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-05-06T00:00:00.000+08:00",
+          "goodsId": "1005008972114534",
+          "detailUrl": "1005008972114534",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 16,
+              "catId": "1420",
+              "catName": "工具",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 6949,
+              "catId": "1440",
+              "catName": "焊接设备",
+              "catLevel": 1,
+              "parentCatId": "1420",
+              "isLeaf": false
+            },
+            {
+              "id": 7020,
+              "catId": "201512701",
+              "catName": "焊接定位器",
+              "catLevel": 2,
+              "parentCatId": "1427",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Welding Locator Soldering Tools",
+          "_source": "新店热销",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "NAGARAKU 16Rows Classic Individual Eyelash Extension Lashes Matte Black Professional Soft Natural",
+          "goodsNameCn": "NAGARAKU 16Rows Classic Individual Eyelash Extension Lashes Matte Black Professional Soft Natural",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S6f2e09b7d61a4293920d666edf29981a5.jpg",
+          "thumbnailCn": "",
+          "sold": 330066,
+          "sales": null,
+          "goodsPriceMin": 3.34,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2015-09-23T00:00:00.000+08:00",
+          "goodsId": "32477921977",
+          "detailUrl": "32477921977",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 12,
+              "catId": "66",
+              "catName": "美容健康",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 5849,
+              "catId": "660103",
+              "catName": "彩妆",
+              "catLevel": 1,
+              "parentCatId": "66",
+              "isLeaf": false
+            },
+            {
+              "id": 6507,
+              "catId": "201541402",
+              "catName": "假睫毛和工具",
+              "catLevel": 2,
+              "parentCatId": "660103",
+              "isLeaf": false
+            },
+            {
+              "id": 6521,
+              "catId": "200001197",
+              "catName": "假睫毛",
+              "catLevel": 3,
+              "parentCatId": "201541402",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "NAGARAKU 16Rows Classic Individual Eyelash Extension Lashes Matte Black Professional Soft Natural",
+          "_source": "新店热销",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Welding Locator Soldering Tools",
+          "goodsNameCn": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Weldin",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sa917d684da6045c0b862e25f827b41abX.jpg",
+          "thumbnailCn": "",
+          "sold": 325809,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 29016,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-06-06T00:00:00.000+08:00",
+          "goodsId": "1005009211379088",
+          "detailUrl": "1005009211379088",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 16,
+              "catId": "1420",
+              "catName": "工具",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 6949,
+              "catId": "1440",
+              "catName": "焊接设备",
+              "catLevel": 1,
+              "parentCatId": "1420",
+              "isLeaf": false
+            },
+            {
+              "id": 7020,
+              "catId": "201512701",
+              "catName": "焊接定位器",
+              "catLevel": 2,
+              "parentCatId": "1427",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Welding Wire Fixture Adjustable Suction Bracket Welding Table Clamp For Motherboard Soldering Welding Locator Soldering Tools",
+          "_source": "新店热销",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Motion Sensor Light Wireless LED Night Light Type C Rechargeable Light Cabinet Wardrobe Lamp Staircase Backlight For Kitchen LED",
+          "goodsNameCn": "Motion Sensor Light Wireless LED Night Light Type C Rechargeable Light Cabinet Wardrobe Lamp Stairca",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sc56ba89b3b77443ea4452d5be7c4c4d9H.jpg",
+          "thumbnailCn": "",
+          "sold": 308467,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-05-19T00:00:00.000+08:00",
+          "goodsId": "1005005588986583",
+          "detailUrl": "1005005588986583",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 10,
+              "catId": "39",
+              "catName": "照明灯饰",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 5432,
+              "catId": "39050508",
+              "catName": "小夜灯",
+              "catLevel": 1,
+              "parentCatId": "39",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Motion Sensor Light Wireless LED Night Light Type C Rechargeable Light Cabinet Wardrobe Lamp Staircase Backlight For Kitchen LED",
+          "_source": "新店热销",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "goodsNameCn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Tab",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S8c4a1b768a314fccb9be627a327fecd7t.jpg",
+          "thumbnailCn": "",
+          "sold": 296207,
+          "sales": null,
+          "goodsPriceMin": 2.11,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-18T00:00:00.000+08:00",
+          "goodsId": "1005007010254856",
+          "detailUrl": "1005007010254856",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 6928,
+              "catId": "5093004",
+              "catName": "手机支架",
+              "catLevel": 2,
+              "parentCatId": "100001205",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "_source": "新店热销",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "goodsNameCn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Tab",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S8c4a1b768a314fccb9be627a327fecd7t.jpg",
+          "thumbnailCn": "",
+          "sold": 295408,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-07-02T00:00:00.000+08:00",
+          "goodsId": "1005005785774950",
+          "detailUrl": "1005005785774950",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 6928,
+              "catId": "5093004",
+              "catName": "手机支架",
+              "catLevel": 2,
+              "parentCatId": "100001205",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "_source": "新店热销",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "goodsNameCn": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Tab",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S8c4a1b768a314fccb9be627a327fecd7t.jpg",
+          "thumbnailCn": "",
+          "sold": 290883,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": 0.99,
+          "reviewNum": 37902,
+          "rating": 4.5,
+          "mallOpenTime": "2023-05-30T20:30:21.000+08:00",
+          "onSaleTime": "2023-07-02T00:00:00.000+08:00",
+          "goodsId": "3256805599460198",
+          "detailUrl": "3256805599460198",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 6928,
+              "catId": "5093004",
+              "catName": "手机支架",
+              "catLevel": 2,
+              "parentCatId": "100001205",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Desk Mobile Phone Holder Stand For IPhone IPad Xiaomi Adjustable Desktop Tablet Holder Universal Table Cell Phone Stand",
+          "_source": "新店热销",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Oil Spray for Cooking - Olive Oil Dispenser Bottle Sprayer Mist-Reusable Food Grade Oil Vinegar,Spray Bottle Kitchen Accessories",
+          "goodsNameCn": "Oil Spray for Cooking - Olive Oil Dispenser Bottle Sprayer Mist-Reusable Food Grade Oil Vinegar,Spra",
+          "thumbnail": "https://ae-pic-a1.aliexpress-media.com/kf/Sdfda3822f064426692204d01a24fdb26m.png_640x640.png",
+          "thumbnailCn": "",
+          "sold": 274533,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 31183,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-07-10T09:36:15.743+08:00",
+          "goodsId": "3256808067186188",
+          "detailUrl": "3256808067186188",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 4,
+              "catId": "15",
+              "catName": "家居用品",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 1152,
+              "catId": "200000920",
+              "catName": "厨房吧台用品",
+              "catLevel": 1,
+              "parentCatId": "15",
+              "isLeaf": false
+            },
+            {
+              "id": 1764,
+              "catId": "100003238",
+              "catName": "厨房工具",
+              "catLevel": 2,
+              "parentCatId": "200000920",
+              "isLeaf": false
+            },
+            {
+              "id": 1967,
+              "catId": "100003251",
+              "catName": "调味工具/调味罐/油壶",
+              "catLevel": 3,
+              "parentCatId": "100003238",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Oil Spray for Cooking - Olive Oil Dispenser Bottle Sprayer Mist-Reusable Food Grade Oil Vinegar,Spray Bottle Kitchen Accessories",
+          "_source": "新店热销",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Solar Outdoor Waterproof LED Wall Light Powerful Solar Energy Lamp with Light Sensor for Garden Yard Fence House Decoration",
+          "goodsNameCn": "Solar Outdoor Waterproof LED Wall Light Powerful Solar Energy Lamp with Light Sensor for Garden Yard",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S9cf84afddb3642ac94c699df4aff1fabj.png",
+          "thumbnailCn": "",
+          "sold": 269987,
+          "sales": null,
+          "goodsPriceMin": 3.93,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-16T00:00:00.000+08:00",
+          "goodsId": "1005006995785463",
+          "detailUrl": "1005006995785463",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 10,
+              "catId": "39",
+              "catName": "照明灯饰",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 5427,
+              "catId": "150401",
+              "catName": "室外照明",
+              "catLevel": 1,
+              "parentCatId": "39",
+              "isLeaf": false
+            },
+            {
+              "id": 5486,
+              "catId": "39050207",
+              "catName": "太阳能灯",
+              "catLevel": 2,
+              "parentCatId": "150401",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Solar Outdoor Waterproof LED Wall Light Powerful Solar Energy Lamp with Light Sensor for Garden Yard Fence House Decoration",
+          "_source": "新店热销",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        }
+      ]
+    },
+    {
+      "channel": "大卖新品",
+      "count": 10,
+      "products": [
+        {
+          "goodsNameEn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "goodsNameCn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sd44dd4fe3a694a49941949d034160ba7O.jpg",
+          "thumbnailCn": "",
+          "sold": 147621,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-03-17T00:00:00.000+08:00",
+          "goodsId": "1005006706836534",
+          "detailUrl": "1005006706836534",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "_source": "大卖新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "goodsNameCn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S2810954781a64c54a094928a5b673cbcc.jpg",
+          "thumbnailCn": "",
+          "sold": 139647,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-03-17T00:00:00.000+08:00",
+          "goodsId": "3256806520521782",
+          "detailUrl": "3256806520521782",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "_source": "大卖新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "F91W Non-Waterproof Steel Band Watch For Women, Men, Business Clock, Multi-Functional LED Digital Sports Watch, Electronic Clock",
+          "goodsNameCn": "F91W Non-Waterproof Steel Band Watch For Women, Men, Business Clock, Multi-Functional LED Digital Sp",
+          "thumbnail": "//ae04.alicdn.com/kf/Sdb887ebeb7434a3688665e375b177968p.png",
+          "thumbnailCn": "",
+          "sold": 100000,
+          "sales": null,
+          "goodsPriceMin": 1.13,
+          "goodsPriceMax": null,
+          "reviewNum": 12386,
+          "rating": 4.3,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-07-24T00:00:00.000+08:00",
+          "goodsId": "3256805686257830",
+          "detailUrl": "3256805686257830",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8057,
+              "catId": "200362144",
+              "catName": "儿童腕表",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "F91W Non-Waterproof Steel Band Watch For Women, Men, Business Clock, Multi-Functional LED Digital Sports Watch, Electronic Clock",
+          "_source": "大卖新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Steel Strap Watches Women Watch Men Business Clock Multifunction LED Digtal Sports Wrist Watch Electronic Clock Electron wi",
+          "goodsNameCn": "Steel Strap Watches Women Watch Men Business Clock Multifunction LED Digtal Sports Wrist Watch Elect",
+          "thumbnail": "//ae04.alicdn.com/kf/S619e1130a3154150878f9142b9d7f721W.jpg",
+          "thumbnailCn": "",
+          "sold": 100000,
+          "sales": null,
+          "goodsPriceMin": 2.18,
+          "goodsPriceMax": null,
+          "reviewNum": 11067,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "3256806674471733",
+          "detailUrl": "3256806674471733",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8057,
+              "catId": "200362144",
+              "catName": "儿童腕表",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Steel Strap Watches Women Watch Men Business Clock Multifunction LED Digtal Sports Wrist Watch Electronic Clock Electron wi",
+          "_source": "大卖新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Alpine Loop For Apple Watch Band ultra 2 49mm Series 10 9 8 7 6 SE 5 4 46mm 42mm 40-44mm 45mm 41mm G-hook sport strap iwatch 10",
+          "goodsNameCn": "Alpine Loop For Apple Watch Band ultra 2 49mm Series 10 9 8 7 6 SE 5 4 46mm 42mm 40-44mm 45mm 41mm G",
+          "thumbnail": "https://ae01.alicdn.com/kf/Sa3ccc359f80d407c8c78d5581a4988e21.jpg",
+          "thumbnailCn": "",
+          "sold": 100000,
+          "sales": null,
+          "goodsPriceMin": 2.58,
+          "goodsPriceMax": 145999.85,
+          "reviewNum": 13957,
+          "rating": 4.9,
+          "mallOpenTime": "2024-03-01T00:05:27.000+08:00",
+          "onSaleTime": null,
+          "goodsId": "3256807158794131",
+          "detailUrl": "3256807158794131",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Alpine Loop For Apple Watch Band ultra 2 49mm Series 10 9 8 7 6 SE 5 4 46mm 42mm 40-44mm 45mm 41mm G-hook sport strap iwatch 10",
+          "_source": "大卖新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Fashion Mickey Children Watches For Girls Electronic Bracelet Sports Touch LED Spiderman Doll Kids Watch Women Waterproof Clock",
+          "goodsNameCn": "Fashion Mickey Children Watches For Girls Electronic Bracelet Sports Touch LED Spiderman Doll Kids W",
+          "thumbnail": "//ae04.alicdn.com/kf/Sf688873a09cb4307a131e2f0ad9c2bf6c.jpg",
+          "thumbnailCn": "",
+          "sold": 100000,
+          "sales": null,
+          "goodsPriceMin": 0.33,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "3256807120399317",
+          "detailUrl": "3256807120399317",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8057,
+              "catId": "200362144",
+              "catName": "儿童腕表",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Fashion Mickey Children Watches For Girls Electronic Bracelet Sports Touch LED Spiderman Doll Kids Watch Women Waterproof Clock",
+          "_source": "大卖新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "goodsNameCn": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sa50a091e271f41cd98f2c4dd19fb43f9e.jpg",
+          "thumbnailCn": "",
+          "sold": 87027,
+          "sales": null,
+          "goodsPriceMin": 1.76,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-16T00:00:00.000+08:00",
+          "goodsId": "3256806810168189",
+          "detailUrl": "3256806810168189",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Silicone Band For Apple Watch strap 44mm 45mm 40mm 41mm 42-38mm 45 mm sport bracelet iwatch series 8 7 6 5 4 3 SE 9 Ultra 2 49mm",
+          "_source": "大卖新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch series 11 10 9 8 7 6 5 SE Ultra3",
+          "goodsNameCn": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch seri",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S6b9b2fd0f542415b86e1a55e58a44967S.jpg",
+          "thumbnailCn": "",
+          "sold": 84518,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-12-26T00:00:00.000+08:00",
+          "goodsId": "1005008301451347",
+          "detailUrl": "1005008301451347",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch series 11 10 9 8 7 6 5 SE Ultra3",
+          "_source": "大卖新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch series 11 10 9 8 7 6 5 SE Ultra3",
+          "goodsNameCn": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch seri",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S17dbf776427547f084e9d542621f4d06A.jpg",
+          "thumbnailCn": "",
+          "sold": 83613,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 8709,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-12-26T00:00:00.000+08:00",
+          "goodsId": "3256808115136595",
+          "detailUrl": "3256808115136595",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8074,
+              "catId": "200000127",
+              "catName": "表带",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Silicone Band For Apple Watch strap 46mm 44mm 45mm 40mm 41mm 42-38mm 49mm sport bracelet iwatch series 11 10 9 8 7 6 5 SE Ultra3",
+          "_source": "大卖新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        },
+        {
+          "goodsNameEn": "Cover for Apple Watch Case 45mm 41mm 44mm 40mm 42mm 38mm 46 49 mm Accessories PC Protector bumper iWatch Series 8 7 SE 6 5 4 3 9",
+          "goodsNameCn": "Cover for Apple Watch Case 45mm 41mm 44mm 40mm 42mm 38mm 46 49 mm Accessories PC Protector bumper iW",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sd5289a88d89a4caeb303a4b2ace03047S.jpg",
+          "thumbnailCn": "",
+          "sold": 68226,
+          "sales": null,
+          "goodsPriceMin": 1.33,
+          "goodsPriceMax": 145999.85,
+          "reviewNum": 6037,
+          "rating": 4.9,
+          "mallOpenTime": "2024-03-01T00:05:27.000+08:00",
+          "onSaleTime": "2024-07-05T00:00:00.000+08:00",
+          "goodsId": "3256807120267247",
+          "detailUrl": "3256807120267247",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 19,
+              "catId": "1511",
+              "catName": "手表",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8059,
+              "catId": "200000121",
+              "catName": "表附件",
+              "catLevel": 1,
+              "parentCatId": "1511",
+              "isLeaf": false
+            },
+            {
+              "id": 8081,
+              "catId": "200195142",
+              "catName": "表壳",
+              "catLevel": 2,
+              "parentCatId": "200000121",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Cover for Apple Watch Case 45mm 41mm 44mm 40mm 42mm 38mm 46 49 mm Accessories PC Protector bumper iWatch Series 8 7 SE 6 5 4 3 9",
+          "_source": "大卖新品",
+          "_platform": "sumaitong",
+          "_catId": 1511
+        }
+      ]
+    }
+  ]
+}
