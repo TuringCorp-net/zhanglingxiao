@@ -1,6 +1,6 @@
 # Findora API Documentation
 
-> **版本：** v5.11（Reviewer定时任务：代码全面Review完成；无P0/P1问题；四文档版本对齐至v5.11）
+> **版本：** v5.12（Designer定时任务：SRS全面Review完成；Business Concept约束验证通过；System Design约束验证通过；四文档版本对齐至v5.12）
 
 ## 概述
 

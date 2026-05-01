@@ -1,8 +1,8 @@
 # Findora STR — 软件测试报告
 
 > **项目名称：** Findora
-> **版本：** v5.11（Reviewer定时任务：全面Code Review完成；无P0/P1问题；四文档版本对齐至v5.11）
-> **最后更新：** 2026-05-01
+> **版本：** v5.12（Designer定时任务：SRS全面Review完成；Business Concept约束验证通过；System Design约束验证通过；四文档版本对齐至v5.12）
+> **最后更新：** 2026-05-02
 > **维护方式：** 以SRS F编号为主线的模块化测试状态文档
 
 ---
@@ -13,6 +13,7 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
+| 2026-05-02 | v5.12：Designer定时任务；SRS全面Review完成；Business Concept约束验证通过；System Design约束同步；四文档版本对齐至v5.12 |
 | 2026-05-01 | v5.11：Reviewer定时任务；全面Code Review完成；无P0/P1问题；四文档版本对齐至v5.11 |
 
 ## 文档目标
@@ -45,7 +46,7 @@
 | 代码结构验证 | ✅ schema.ts Product接口完整；product_tag_map桥接表正确实现 |
 | 架构约束验证 | ✅ AC-01~AC-06 + A-01~A-06全部通过 |
 
-### 本次Reviewer审查发现（v5.11）
+### 本次Designer审查发现（v5.12）
 
 **Reviewer定时任务：全面Code Review完成，无P0/P1问题。**
 
