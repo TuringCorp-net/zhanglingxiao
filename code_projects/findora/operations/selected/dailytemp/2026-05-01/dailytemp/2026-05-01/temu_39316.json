@@ -1,0 +1,2375 @@
+{
+  "platform": "temu",
+  "catId": 39316,
+  "catName": "艺术品、工艺品和缝纫用品",
+  "channels": [
+    {
+      "channel": "热销商品",
+      "products": [
+        {
+          "goodsNameEn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "goodsNameCn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/4e918929-5852-48fe-b13d-95fbfa4b1424.jpg",
+          "thumbnailCn": "",
+          "sold": 450000,
+          "sales": 855000,
+          "goodsPriceMin": 1.9,
+          "goodsPriceMax": 1.9,
+          "reviewNum": 6461,
+          "rating": 4.8,
+          "mallOpenTime": "2023-09-12T19:47:03.000+00:00",
+          "onSaleTime": "2024-05-21T11:45:47.498+00:00",
+          "goodsId": "601099568567899",
+          "detailUrl": "601099568567899",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53186,
+              "catId": 39586,
+              "catName": "缝纫紧固件",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53229,
+              "catId": 39598,
+              "catName": "钩扣、挂钩扣",
+              "catLevel": 5,
+              "parentCatId": 39586,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活"
+        },
+        {
+          "goodsNameEn": "[High-Strength Tape] High-Strength Double-Sided Tape- Strong Adhesion, Reusable, Multi-Functional Bonding Solution- Essential Decorations and Handicrafts, Suitable Various Surfaces",
+          "goodsNameCn": "高强度双面纳米胶带 - 超强粘合力，可重复使用，多功能粘贴解决方案 - 圣诞装饰与手工艺品必备，适用于各类表面",
+          "thumbnail": "https://img.kwcdn.com/product/open/225877ed2c91416f882457c1af3ace7c-goods.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01cZcCL61L08bBuQKpW_!!2219077451236-0-cib.jpg",
+          "sold": 200000,
+          "sales": 650000,
+          "goodsPriceMin": 3.25,
+          "goodsPriceMax": 3.55,
+          "reviewNum": 2092,
+          "rating": 4.6,
+          "mallOpenTime": "2024-08-19T03:30:46.133+00:00",
+          "onSaleTime": "2025-07-26T06:32:06.000+00:00",
+          "goodsId": "601102161808663",
+          "detailUrl": "601102161808663",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 33815,
+              "catId": 39461,
+              "catName": "剪贴簿粘合剂",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 36261,
+              "catId": 39465,
+              "catName": "胶带",
+              "catLevel": 4,
+              "parentCatId": 39461,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "高强度双面纳米胶带 - 超强粘合力，可重复使用，多功能粘贴解决方案 - 圣诞装饰与手工艺品必备，适用于各类表面"
+        },
+        {
+          "goodsNameEn": "1box O-ring Connector Metal Open Jump Ring for DIY Handmade Bracelet Earrings Necklace Connector Rings",
+          "goodsNameCn": "1盒O型环连接器 金属开口跳环 适用于DIY手工制作手链耳环项链连接环",
+          "thumbnail": "https://img.kwcdn.com/product/1e23313ef0/ab1d7c59-1ed7-4738-af97-df95d62cd846_1345x1342.jpeg.a.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01aU9tws1ieCPGwegiJ_!!2218971634437-0-cib.jpg",
+          "sold": 150000,
+          "sales": 415500,
+          "goodsPriceMin": 2.77,
+          "goodsPriceMax": 5.29,
+          "reviewNum": 3397,
+          "rating": 4.9,
+          "mallOpenTime": "2022-11-22T05:52:46.173+00:00",
+          "onSaleTime": "2023-11-24T18:45:11.723+00:00",
+          "goodsId": "601099518686962",
+          "detailUrl": "601099518686962",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19494,
+              "catId": 39317,
+              "catName": "DIY珠饰、首饰用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22303,
+              "catId": 39321,
+              "catName": "首饰制作零件",
+              "catLevel": 3,
+              "parentCatId": 39317,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 27672,
+              "catId": 39327,
+              "catName": "珠宝制作连接环",
+              "catLevel": 4,
+              "parentCatId": 39321,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1盒O型环连接器 金属开口跳环 适用于DIY手工制作手链耳环项链连接环"
+        },
+        {
+          "goodsNameEn": "Self-Adhesive 9.84 X 23.62In Self Adhesive PU Leather Repair Patches Fix Sticker for Sofa Seat Table Chair Bag Shoes Bed",
+          "goodsNameCn": "自粘PU皮革修补贴 9.84 X 23.62英寸，沙发座椅桌椅包包鞋子床子修复贴",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/f2ff15e38f255b00c2dc7be7d69680bd.jpg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 387000,
+          "goodsPriceMin": 2.58,
+          "goodsPriceMax": 12.15,
+          "reviewNum": 7599,
+          "rating": 4.6,
+          "mallOpenTime": "2024-03-25T03:06:16.983+00:00",
+          "onSaleTime": "2024-03-25T03:06:16.983+00:00",
+          "goodsId": "601099538344553",
+          "detailUrl": "601099538344553",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 25836,
+              "catId": 39651,
+              "catName": "工艺工具和用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 30232,
+              "catId": 39688,
+              "catName": "皮革手工艺",
+              "catLevel": 3,
+              "parentCatId": 39651,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 31680,
+              "catId": 39691,
+              "catName": "皮革手工艺部件",
+              "catLevel": 4,
+              "parentCatId": 39688,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "自粘PU皮革修补贴 9.84 X 23.62英寸，沙发座椅桌椅包包鞋子床子修复贴"
+        },
+        {
+          "goodsNameEn": "6pcs Silicone Ear Post Backs for Heavy Earrings: Invisible Support Pads for Non-Dropping Earlobes - Safe Ear Jewelry Lifters for Studs And Pendants",
+          "goodsNameCn": "6件硅胶耳环后盖，适用于重型耳环，隐形提升支撑垫，适用于无下垂耳垂，安全耳环提升器，适用于耳钉和吊坠",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/market/a726928c60eb0ef7b780548ca0ff6ac5_WECh83hbeI65A.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01ToKNrl21gvVAOOjga_!!2219764247015-0-cib.jpg",
+          "sold": 150000,
+          "sales": 222000,
+          "goodsPriceMin": 1.48,
+          "goodsPriceMax": 1.35,
+          "reviewNum": 1395,
+          "rating": 4.8,
+          "mallOpenTime": "2024-02-19T17:59:13.000+00:00",
+          "onSaleTime": "2024-10-12T12:03:25.378+00:00",
+          "goodsId": "601099628815279",
+          "detailUrl": "601099628815279",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19494,
+              "catId": 39317,
+              "catName": "DIY珠饰、首饰用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22303,
+              "catId": 39321,
+              "catName": "首饰制作零件",
+              "catLevel": 3,
+              "parentCatId": 39317,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 26124,
+              "catId": 39324,
+              "catName": "耳环架",
+              "catLevel": 4,
+              "parentCatId": 39321,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "6件硅胶耳环后盖，适用于重型耳环，隐形提升支撑垫，适用于无下垂耳垂，安全耳环提升器，适用于耳钉和吊坠"
+        },
+        {
+          "goodsNameEn": "1 Pack of 6 Sheets of Vintage Botanical Floral PVC Decorative Journaling Base Stickers",
+          "goodsNameCn": "1包6张复古植物花卉PVC装饰手帐素材打底贴纸",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/63b7668a972302b82f2159adfcb46bf0.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN0181ks0H1svHF3ikHMK_!!2206738465828-0-cib.jpg",
+          "sold": 150000,
+          "sales": 237000,
+          "goodsPriceMin": 1.58,
+          "goodsPriceMax": 2.66,
+          "reviewNum": 3437,
+          "rating": 4.9,
+          "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+          "onSaleTime": "2023-12-24T21:24:27.436+00:00",
+          "goodsId": "601099535273065",
+          "detailUrl": "601099535273065",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 36132,
+              "catId": 39471,
+              "catName": "剪贴簿贴花和装饰",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 37771,
+              "catId": 39474,
+              "catName": "贴纸",
+              "catLevel": 4,
+              "parentCatId": 39471,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1包6张复古植物花卉PVC装饰手帐素材打底贴纸"
+        },
+        {
+          "goodsNameEn": "20/40/60/80/100/120pcs  Spool Clip, Thread Locking Spool Protector for All Popular Spool Sizes, Keeps Threads Organized and Tidy",
+          "goodsNameCn": "20/40/60/80/100/120个线轴夹线轴保护器,线轴顶适合所有流行的线轴尺寸-线程锁定功能有助于保持线程有组织和整洁",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/37ccb372-59dc-4213-9059-58d6a3a47753.jpg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 495000,
+          "goodsPriceMin": 3.3,
+          "goodsPriceMax": 12.3,
+          "reviewNum": 6102,
+          "rating": 4.9,
+          "mallOpenTime": "2022-11-26T21:40:56.731+00:00",
+          "onSaleTime": "2023-02-10T17:08:25.146+00:00",
+          "goodsId": "601099513306154",
+          "detailUrl": "601099513306154",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53160,
+              "catId": 39573,
+              "catName": "线轴、梭芯",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "20/40/60/80/100/120个线轴夹线轴保护器,线轴顶适合所有流行的线轴尺寸-线程锁定功能有助于保持线程有组织和整洁"
+        },
+        {
+          "goodsNameEn": "10pcs Colorful 3# Nylon Coil Zippers - 4/6/7/8/10/12/14/16/20/22/24 Inch Random Mix for Skirts, Pants, Clothes, Backpacks & Sewing Crafts Accessories, Skirt Zipper Closure, Stylish Zipper Pulls, Durab",
+          "goodsNameCn": "10个彩色3#尼龙卷轴拉链-4/6/7/8/10/12/14/16/20/22/24英寸随机混合，适用于裙子、裤子、衣服、背包和缝纫工艺配件，裙子拉链闭合，时尚拉链拉环，耐用拉链卷轴",
+          "thumbnail": "https://img.kwcdn.com/product/open/2023-05-03/1683110349022-41564464943845dabf2976d3ef4fe812-goods.jpeg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 270000,
+          "goodsPriceMin": 1.8,
+          "goodsPriceMax": 3.65,
+          "reviewNum": 3051,
+          "rating": 4.9,
+          "mallOpenTime": "2023-04-01T01:09:15.385+00:00",
+          "onSaleTime": "2023-09-07T17:28:26.829+00:00",
+          "goodsId": "601099524408111",
+          "detailUrl": "601099524408111",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53186,
+              "catId": 39586,
+              "catName": "缝纫紧固件",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53214,
+              "catId": 39591,
+              "catName": "拉链",
+              "catLevel": 5,
+              "parentCatId": 39586,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "10个彩色3#尼龙卷轴拉链-4/6/7/8/10/12/14/16/20/22/24英寸随机混合，适用于裙子、裤子、衣服、背包和缝纫工艺配件，裙子拉链闭合，时尚拉链拉环，耐用拉链卷轴"
+        },
+        {
+          "goodsNameEn": "1 Roll Pants Hem Shortening Tool No Sewing No Ironing Fixed Stickers Self-Adhesive Pants Leg Stickers Clip Hem Buckle Too Long Adjustment",
+          "goodsNameCn": "1卷裤脚收窄器 免缝免烫固定贴 自粘裤腿贴片 裤脚夹扣 过长裤脚调节贴",
+          "thumbnail": "https://img.kwcdn.com/product/open/af48e4d8f2234b4da2bc785c0abb8008-goods.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN015sU9V32EV6Hon9g8v_!!2219533098749-0-cib.jpg",
+          "sold": 150000,
+          "sales": 274500,
+          "goodsPriceMin": 1.83,
+          "goodsPriceMax": 1.83,
+          "reviewNum": 4531,
+          "rating": 4.7,
+          "mallOpenTime": "2024-02-19T17:59:13.000+00:00",
+          "onSaleTime": "2025-09-01T02:33:01.000+00:00",
+          "goodsId": "601103151982388",
+          "detailUrl": "601103151982388",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53240,
+              "catId": 39623,
+              "catName": "缝纫胶带和粘合剂",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53248,
+              "catId": 39628,
+              "catName": "缝纫摺边带",
+              "catLevel": 6,
+              "parentCatId": 39627,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1卷裤脚收窄器 免缝免烫固定贴 自粘裤腿贴片 裤脚夹扣 过长裤脚调节贴"
+        },
+        {
+          "goodsNameEn": "45/60/120/240/360/480pcs Premium Transparent Name Stickers: Custom-Designed & High Quality. Revamp Your School Supplies, Enhance Office Decor & Celebrate Scrapbooking Moments.stickers",
+          "goodsNameCn": "45/60/120/240/360/480张优质透明姓名贴纸：定制设计，品质卓越。焕新学习用品，点缀办公空间，珍藏剪贴时光",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/7c5f6ee266906e0d278134d0f22db2ff.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN010muRNU1T4jWiIiUja_!!2218373002329-0-cib.jpg",
+          "sold": 100000,
+          "sales": 212000,
+          "goodsPriceMin": 2.12,
+          "goodsPriceMax": 7.89,
+          "reviewNum": 637,
+          "rating": 4.9,
+          "mallOpenTime": "2024-04-01T03:25:49.728+00:00",
+          "onSaleTime": "2024-04-01T03:25:49.728+00:00",
+          "goodsId": "601099523262866",
+          "detailUrl": "601099523262866",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28030,
+              "catId": 39437,
+              "catName": "剪贴簿贴纸和贴纸机",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28549,
+              "catId": 39438,
+              "catName": "剪贴簿贴纸",
+              "catLevel": 4,
+              "parentCatId": 39437,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "45/60/120/240/360/480张优质透明姓名贴纸：定制设计，品质卓越。焕新学习用品，点缀办公空间，珍藏剪贴时光"
+        }
+      ]
+    },
+    {
+      "channel": "热销新品",
+      "products": [
+        {
+          "goodsNameEn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "goodsNameCn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/4e918929-5852-48fe-b13d-95fbfa4b1424.jpg",
+          "thumbnailCn": "",
+          "sold": 450000,
+          "sales": 855000,
+          "goodsPriceMin": 1.9,
+          "goodsPriceMax": 1.9,
+          "reviewNum": 6461,
+          "rating": 4.8,
+          "mallOpenTime": "2023-09-12T19:47:03.000+00:00",
+          "onSaleTime": "2024-05-21T11:45:47.498+00:00",
+          "goodsId": "601099568567899",
+          "detailUrl": "601099568567899",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53186,
+              "catId": 39586,
+              "catName": "缝纫紧固件",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53229,
+              "catId": 39598,
+              "catName": "钩扣、挂钩扣",
+              "catLevel": 5,
+              "parentCatId": 39586,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活"
+        },
+        {
+          "goodsNameEn": "[High-Strength Tape] High-Strength Double-Sided Tape- Strong Adhesion, Reusable, Multi-Functional Bonding Solution- Essential Decorations and Handicrafts, Suitable Various Surfaces",
+          "goodsNameCn": "高强度双面纳米胶带 - 超强粘合力，可重复使用，多功能粘贴解决方案 - 圣诞装饰与手工艺品必备，适用于各类表面",
+          "thumbnail": "https://img.kwcdn.com/product/open/225877ed2c91416f882457c1af3ace7c-goods.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01cZcCL61L08bBuQKpW_!!2219077451236-0-cib.jpg",
+          "sold": 200000,
+          "sales": 650000,
+          "goodsPriceMin": 3.25,
+          "goodsPriceMax": 3.55,
+          "reviewNum": 2092,
+          "rating": 4.6,
+          "mallOpenTime": "2024-08-19T03:30:46.133+00:00",
+          "onSaleTime": "2025-07-26T06:32:06.000+00:00",
+          "goodsId": "601102161808663",
+          "detailUrl": "601102161808663",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 33815,
+              "catId": 39461,
+              "catName": "剪贴簿粘合剂",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 36261,
+              "catId": 39465,
+              "catName": "胶带",
+              "catLevel": 4,
+              "parentCatId": 39461,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "高强度双面纳米胶带 - 超强粘合力，可重复使用，多功能粘贴解决方案 - 圣诞装饰与手工艺品必备，适用于各类表面"
+        },
+        {
+          "goodsNameEn": "1box O-ring Connector Metal Open Jump Ring for DIY Handmade Bracelet Earrings Necklace Connector Rings",
+          "goodsNameCn": "1盒O型环连接器 金属开口跳环 适用于DIY手工制作手链耳环项链连接环",
+          "thumbnail": "https://img.kwcdn.com/product/1e23313ef0/ab1d7c59-1ed7-4738-af97-df95d62cd846_1345x1342.jpeg.a.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01aU9tws1ieCPGwegiJ_!!2218971634437-0-cib.jpg",
+          "sold": 150000,
+          "sales": 415500,
+          "goodsPriceMin": 2.77,
+          "goodsPriceMax": 5.29,
+          "reviewNum": 3397,
+          "rating": 4.9,
+          "mallOpenTime": "2022-11-22T05:52:46.173+00:00",
+          "onSaleTime": "2023-11-24T18:45:11.723+00:00",
+          "goodsId": "601099518686962",
+          "detailUrl": "601099518686962",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19494,
+              "catId": 39317,
+              "catName": "DIY珠饰、首饰用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22303,
+              "catId": 39321,
+              "catName": "首饰制作零件",
+              "catLevel": 3,
+              "parentCatId": 39317,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 27672,
+              "catId": 39327,
+              "catName": "珠宝制作连接环",
+              "catLevel": 4,
+              "parentCatId": 39321,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1盒O型环连接器 金属开口跳环 适用于DIY手工制作手链耳环项链连接环"
+        },
+        {
+          "goodsNameEn": "Self-Adhesive 9.84 X 23.62In Self Adhesive PU Leather Repair Patches Fix Sticker for Sofa Seat Table Chair Bag Shoes Bed",
+          "goodsNameCn": "自粘PU皮革修补贴 9.84 X 23.62英寸，沙发座椅桌椅包包鞋子床子修复贴",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/f2ff15e38f255b00c2dc7be7d69680bd.jpg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 387000,
+          "goodsPriceMin": 2.58,
+          "goodsPriceMax": 12.15,
+          "reviewNum": 7599,
+          "rating": 4.6,
+          "mallOpenTime": "2024-03-25T03:06:16.983+00:00",
+          "onSaleTime": "2024-03-25T03:06:16.983+00:00",
+          "goodsId": "601099538344553",
+          "detailUrl": "601099538344553",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 25836,
+              "catId": 39651,
+              "catName": "工艺工具和用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 30232,
+              "catId": 39688,
+              "catName": "皮革手工艺",
+              "catLevel": 3,
+              "parentCatId": 39651,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 31680,
+              "catId": 39691,
+              "catName": "皮革手工艺部件",
+              "catLevel": 4,
+              "parentCatId": 39688,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "自粘PU皮革修补贴 9.84 X 23.62英寸，沙发座椅桌椅包包鞋子床子修复贴"
+        },
+        {
+          "goodsNameEn": "6pcs Silicone Ear Post Backs for Heavy Earrings: Invisible Support Pads for Non-Dropping Earlobes - Safe Ear Jewelry Lifters for Studs And Pendants",
+          "goodsNameCn": "6件硅胶耳环后盖，适用于重型耳环，隐形提升支撑垫，适用于无下垂耳垂，安全耳环提升器，适用于耳钉和吊坠",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/market/a726928c60eb0ef7b780548ca0ff6ac5_WECh83hbeI65A.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01ToKNrl21gvVAOOjga_!!2219764247015-0-cib.jpg",
+          "sold": 150000,
+          "sales": 222000,
+          "goodsPriceMin": 1.48,
+          "goodsPriceMax": 1.35,
+          "reviewNum": 1395,
+          "rating": 4.8,
+          "mallOpenTime": "2024-02-19T17:59:13.000+00:00",
+          "onSaleTime": "2024-10-12T12:03:25.378+00:00",
+          "goodsId": "601099628815279",
+          "detailUrl": "601099628815279",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19494,
+              "catId": 39317,
+              "catName": "DIY珠饰、首饰用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22303,
+              "catId": 39321,
+              "catName": "首饰制作零件",
+              "catLevel": 3,
+              "parentCatId": 39317,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 26124,
+              "catId": 39324,
+              "catName": "耳环架",
+              "catLevel": 4,
+              "parentCatId": 39321,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "6件硅胶耳环后盖，适用于重型耳环，隐形提升支撑垫，适用于无下垂耳垂，安全耳环提升器，适用于耳钉和吊坠"
+        },
+        {
+          "goodsNameEn": "1 Pack of 6 Sheets of Vintage Botanical Floral PVC Decorative Journaling Base Stickers",
+          "goodsNameCn": "1包6张复古植物花卉PVC装饰手帐素材打底贴纸",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/63b7668a972302b82f2159adfcb46bf0.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN0181ks0H1svHF3ikHMK_!!2206738465828-0-cib.jpg",
+          "sold": 150000,
+          "sales": 237000,
+          "goodsPriceMin": 1.58,
+          "goodsPriceMax": 2.66,
+          "reviewNum": 3437,
+          "rating": 4.9,
+          "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+          "onSaleTime": "2023-12-24T21:24:27.436+00:00",
+          "goodsId": "601099535273065",
+          "detailUrl": "601099535273065",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 36132,
+              "catId": 39471,
+              "catName": "剪贴簿贴花和装饰",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 37771,
+              "catId": 39474,
+              "catName": "贴纸",
+              "catLevel": 4,
+              "parentCatId": 39471,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1包6张复古植物花卉PVC装饰手帐素材打底贴纸"
+        },
+        {
+          "goodsNameEn": "20/40/60/80/100/120pcs  Spool Clip, Thread Locking Spool Protector for All Popular Spool Sizes, Keeps Threads Organized and Tidy",
+          "goodsNameCn": "20/40/60/80/100/120个线轴夹线轴保护器,线轴顶适合所有流行的线轴尺寸-线程锁定功能有助于保持线程有组织和整洁",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/37ccb372-59dc-4213-9059-58d6a3a47753.jpg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 495000,
+          "goodsPriceMin": 3.3,
+          "goodsPriceMax": 12.3,
+          "reviewNum": 6102,
+          "rating": 4.9,
+          "mallOpenTime": "2022-11-26T21:40:56.731+00:00",
+          "onSaleTime": "2023-02-10T17:08:25.146+00:00",
+          "goodsId": "601099513306154",
+          "detailUrl": "601099513306154",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53160,
+              "catId": 39573,
+              "catName": "线轴、梭芯",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "20/40/60/80/100/120个线轴夹线轴保护器,线轴顶适合所有流行的线轴尺寸-线程锁定功能有助于保持线程有组织和整洁"
+        },
+        {
+          "goodsNameEn": "10pcs Colorful 3# Nylon Coil Zippers - 4/6/7/8/10/12/14/16/20/22/24 Inch Random Mix for Skirts, Pants, Clothes, Backpacks & Sewing Crafts Accessories, Skirt Zipper Closure, Stylish Zipper Pulls, Durab",
+          "goodsNameCn": "10个彩色3#尼龙卷轴拉链-4/6/7/8/10/12/14/16/20/22/24英寸随机混合，适用于裙子、裤子、衣服、背包和缝纫工艺配件，裙子拉链闭合，时尚拉链拉环，耐用拉链卷轴",
+          "thumbnail": "https://img.kwcdn.com/product/open/2023-05-03/1683110349022-41564464943845dabf2976d3ef4fe812-goods.jpeg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 270000,
+          "goodsPriceMin": 1.8,
+          "goodsPriceMax": 3.65,
+          "reviewNum": 3051,
+          "rating": 4.9,
+          "mallOpenTime": "2023-04-01T01:09:15.385+00:00",
+          "onSaleTime": "2023-09-07T17:28:26.829+00:00",
+          "goodsId": "601099524408111",
+          "detailUrl": "601099524408111",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53186,
+              "catId": 39586,
+              "catName": "缝纫紧固件",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53214,
+              "catId": 39591,
+              "catName": "拉链",
+              "catLevel": 5,
+              "parentCatId": 39586,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "10个彩色3#尼龙卷轴拉链-4/6/7/8/10/12/14/16/20/22/24英寸随机混合，适用于裙子、裤子、衣服、背包和缝纫工艺配件，裙子拉链闭合，时尚拉链拉环，耐用拉链卷轴"
+        },
+        {
+          "goodsNameEn": "1 Roll Pants Hem Shortening Tool No Sewing No Ironing Fixed Stickers Self-Adhesive Pants Leg Stickers Clip Hem Buckle Too Long Adjustment",
+          "goodsNameCn": "1卷裤脚收窄器 免缝免烫固定贴 自粘裤腿贴片 裤脚夹扣 过长裤脚调节贴",
+          "thumbnail": "https://img.kwcdn.com/product/open/af48e4d8f2234b4da2bc785c0abb8008-goods.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN015sU9V32EV6Hon9g8v_!!2219533098749-0-cib.jpg",
+          "sold": 150000,
+          "sales": 274500,
+          "goodsPriceMin": 1.83,
+          "goodsPriceMax": 1.83,
+          "reviewNum": 4531,
+          "rating": 4.7,
+          "mallOpenTime": "2024-02-19T17:59:13.000+00:00",
+          "onSaleTime": "2025-09-01T02:33:01.000+00:00",
+          "goodsId": "601103151982388",
+          "detailUrl": "601103151982388",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53240,
+              "catId": 39623,
+              "catName": "缝纫胶带和粘合剂",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53248,
+              "catId": 39628,
+              "catName": "缝纫摺边带",
+              "catLevel": 6,
+              "parentCatId": 39627,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1卷裤脚收窄器 免缝免烫固定贴 自粘裤腿贴片 裤脚夹扣 过长裤脚调节贴"
+        },
+        {
+          "goodsNameEn": "45/60/120/240/360/480pcs Premium Transparent Name Stickers: Custom-Designed & High Quality. Revamp Your School Supplies, Enhance Office Decor & Celebrate Scrapbooking Moments.stickers",
+          "goodsNameCn": "45/60/120/240/360/480张优质透明姓名贴纸：定制设计，品质卓越。焕新学习用品，点缀办公空间，珍藏剪贴时光",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/7c5f6ee266906e0d278134d0f22db2ff.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN010muRNU1T4jWiIiUja_!!2218373002329-0-cib.jpg",
+          "sold": 100000,
+          "sales": 212000,
+          "goodsPriceMin": 2.12,
+          "goodsPriceMax": 7.89,
+          "reviewNum": 637,
+          "rating": 4.9,
+          "mallOpenTime": "2024-04-01T03:25:49.728+00:00",
+          "onSaleTime": "2024-04-01T03:25:49.728+00:00",
+          "goodsId": "601099523262866",
+          "detailUrl": "601099523262866",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28030,
+              "catId": 39437,
+              "catName": "剪贴簿贴纸和贴纸机",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28549,
+              "catId": 39438,
+              "catName": "剪贴簿贴纸",
+              "catLevel": 4,
+              "parentCatId": 39437,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "45/60/120/240/360/480张优质透明姓名贴纸：定制设计，品质卓越。焕新学习用品，点缀办公空间，珍藏剪贴时光"
+        }
+      ]
+    },
+    {
+      "channel": "新店热销",
+      "products": [
+        {
+          "goodsNameEn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "goodsNameCn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/4e918929-5852-48fe-b13d-95fbfa4b1424.jpg",
+          "thumbnailCn": "",
+          "sold": 450000,
+          "sales": 855000,
+          "goodsPriceMin": 1.9,
+          "goodsPriceMax": 1.9,
+          "reviewNum": 6461,
+          "rating": 4.8,
+          "mallOpenTime": "2023-09-12T19:47:03.000+00:00",
+          "onSaleTime": "2024-05-21T11:45:47.498+00:00",
+          "goodsId": "601099568567899",
+          "detailUrl": "601099568567899",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53186,
+              "catId": 39586,
+              "catName": "缝纫紧固件",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53229,
+              "catId": 39598,
+              "catName": "钩扣、挂钩扣",
+              "catLevel": 5,
+              "parentCatId": 39586,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活"
+        },
+        {
+          "goodsNameEn": "[High-Strength Tape] High-Strength Double-Sided Tape- Strong Adhesion, Reusable, Multi-Functional Bonding Solution- Essential Decorations and Handicrafts, Suitable Various Surfaces",
+          "goodsNameCn": "高强度双面纳米胶带 - 超强粘合力，可重复使用，多功能粘贴解决方案 - 圣诞装饰与手工艺品必备，适用于各类表面",
+          "thumbnail": "https://img.kwcdn.com/product/open/225877ed2c91416f882457c1af3ace7c-goods.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01cZcCL61L08bBuQKpW_!!2219077451236-0-cib.jpg",
+          "sold": 200000,
+          "sales": 650000,
+          "goodsPriceMin": 3.25,
+          "goodsPriceMax": 3.55,
+          "reviewNum": 2092,
+          "rating": 4.6,
+          "mallOpenTime": "2024-08-19T03:30:46.133+00:00",
+          "onSaleTime": "2025-07-26T06:32:06.000+00:00",
+          "goodsId": "601102161808663",
+          "detailUrl": "601102161808663",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 33815,
+              "catId": 39461,
+              "catName": "剪贴簿粘合剂",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 36261,
+              "catId": 39465,
+              "catName": "胶带",
+              "catLevel": 4,
+              "parentCatId": 39461,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "高强度双面纳米胶带 - 超强粘合力，可重复使用，多功能粘贴解决方案 - 圣诞装饰与手工艺品必备，适用于各类表面"
+        },
+        {
+          "goodsNameEn": "1box O-ring Connector Metal Open Jump Ring for DIY Handmade Bracelet Earrings Necklace Connector Rings",
+          "goodsNameCn": "1盒O型环连接器 金属开口跳环 适用于DIY手工制作手链耳环项链连接环",
+          "thumbnail": "https://img.kwcdn.com/product/1e23313ef0/ab1d7c59-1ed7-4738-af97-df95d62cd846_1345x1342.jpeg.a.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01aU9tws1ieCPGwegiJ_!!2218971634437-0-cib.jpg",
+          "sold": 150000,
+          "sales": 415500,
+          "goodsPriceMin": 2.77,
+          "goodsPriceMax": 5.29,
+          "reviewNum": 3397,
+          "rating": 4.9,
+          "mallOpenTime": "2022-11-22T05:52:46.173+00:00",
+          "onSaleTime": "2023-11-24T18:45:11.723+00:00",
+          "goodsId": "601099518686962",
+          "detailUrl": "601099518686962",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19494,
+              "catId": 39317,
+              "catName": "DIY珠饰、首饰用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22303,
+              "catId": 39321,
+              "catName": "首饰制作零件",
+              "catLevel": 3,
+              "parentCatId": 39317,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 27672,
+              "catId": 39327,
+              "catName": "珠宝制作连接环",
+              "catLevel": 4,
+              "parentCatId": 39321,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1盒O型环连接器 金属开口跳环 适用于DIY手工制作手链耳环项链连接环"
+        },
+        {
+          "goodsNameEn": "Self-Adhesive 9.84 X 23.62In Self Adhesive PU Leather Repair Patches Fix Sticker for Sofa Seat Table Chair Bag Shoes Bed",
+          "goodsNameCn": "自粘PU皮革修补贴 9.84 X 23.62英寸，沙发座椅桌椅包包鞋子床子修复贴",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/f2ff15e38f255b00c2dc7be7d69680bd.jpg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 387000,
+          "goodsPriceMin": 2.58,
+          "goodsPriceMax": 12.15,
+          "reviewNum": 7599,
+          "rating": 4.6,
+          "mallOpenTime": "2024-03-25T03:06:16.983+00:00",
+          "onSaleTime": "2024-03-25T03:06:16.983+00:00",
+          "goodsId": "601099538344553",
+          "detailUrl": "601099538344553",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 25836,
+              "catId": 39651,
+              "catName": "工艺工具和用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 30232,
+              "catId": 39688,
+              "catName": "皮革手工艺",
+              "catLevel": 3,
+              "parentCatId": 39651,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 31680,
+              "catId": 39691,
+              "catName": "皮革手工艺部件",
+              "catLevel": 4,
+              "parentCatId": 39688,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "自粘PU皮革修补贴 9.84 X 23.62英寸，沙发座椅桌椅包包鞋子床子修复贴"
+        },
+        {
+          "goodsNameEn": "6pcs Silicone Ear Post Backs for Heavy Earrings: Invisible Support Pads for Non-Dropping Earlobes - Safe Ear Jewelry Lifters for Studs And Pendants",
+          "goodsNameCn": "6件硅胶耳环后盖，适用于重型耳环，隐形提升支撑垫，适用于无下垂耳垂，安全耳环提升器，适用于耳钉和吊坠",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/market/a726928c60eb0ef7b780548ca0ff6ac5_WECh83hbeI65A.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01ToKNrl21gvVAOOjga_!!2219764247015-0-cib.jpg",
+          "sold": 150000,
+          "sales": 222000,
+          "goodsPriceMin": 1.48,
+          "goodsPriceMax": 1.35,
+          "reviewNum": 1395,
+          "rating": 4.8,
+          "mallOpenTime": "2024-02-19T17:59:13.000+00:00",
+          "onSaleTime": "2024-10-12T12:03:25.378+00:00",
+          "goodsId": "601099628815279",
+          "detailUrl": "601099628815279",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19494,
+              "catId": 39317,
+              "catName": "DIY珠饰、首饰用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22303,
+              "catId": 39321,
+              "catName": "首饰制作零件",
+              "catLevel": 3,
+              "parentCatId": 39317,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 26124,
+              "catId": 39324,
+              "catName": "耳环架",
+              "catLevel": 4,
+              "parentCatId": 39321,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "6件硅胶耳环后盖，适用于重型耳环，隐形提升支撑垫，适用于无下垂耳垂，安全耳环提升器，适用于耳钉和吊坠"
+        },
+        {
+          "goodsNameEn": "1 Pack of 6 Sheets of Vintage Botanical Floral PVC Decorative Journaling Base Stickers",
+          "goodsNameCn": "1包6张复古植物花卉PVC装饰手帐素材打底贴纸",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/63b7668a972302b82f2159adfcb46bf0.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN0181ks0H1svHF3ikHMK_!!2206738465828-0-cib.jpg",
+          "sold": 150000,
+          "sales": 237000,
+          "goodsPriceMin": 1.58,
+          "goodsPriceMax": 2.66,
+          "reviewNum": 3437,
+          "rating": 4.9,
+          "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+          "onSaleTime": "2023-12-24T21:24:27.436+00:00",
+          "goodsId": "601099535273065",
+          "detailUrl": "601099535273065",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 36132,
+              "catId": 39471,
+              "catName": "剪贴簿贴花和装饰",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 37771,
+              "catId": 39474,
+              "catName": "贴纸",
+              "catLevel": 4,
+              "parentCatId": 39471,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1包6张复古植物花卉PVC装饰手帐素材打底贴纸"
+        },
+        {
+          "goodsNameEn": "20/40/60/80/100/120pcs  Spool Clip, Thread Locking Spool Protector for All Popular Spool Sizes, Keeps Threads Organized and Tidy",
+          "goodsNameCn": "20/40/60/80/100/120个线轴夹线轴保护器,线轴顶适合所有流行的线轴尺寸-线程锁定功能有助于保持线程有组织和整洁",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/37ccb372-59dc-4213-9059-58d6a3a47753.jpg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 495000,
+          "goodsPriceMin": 3.3,
+          "goodsPriceMax": 12.3,
+          "reviewNum": 6102,
+          "rating": 4.9,
+          "mallOpenTime": "2022-11-26T21:40:56.731+00:00",
+          "onSaleTime": "2023-02-10T17:08:25.146+00:00",
+          "goodsId": "601099513306154",
+          "detailUrl": "601099513306154",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53160,
+              "catId": 39573,
+              "catName": "线轴、梭芯",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "20/40/60/80/100/120个线轴夹线轴保护器,线轴顶适合所有流行的线轴尺寸-线程锁定功能有助于保持线程有组织和整洁"
+        },
+        {
+          "goodsNameEn": "10pcs Colorful 3# Nylon Coil Zippers - 4/6/7/8/10/12/14/16/20/22/24 Inch Random Mix for Skirts, Pants, Clothes, Backpacks & Sewing Crafts Accessories, Skirt Zipper Closure, Stylish Zipper Pulls, Durab",
+          "goodsNameCn": "10个彩色3#尼龙卷轴拉链-4/6/7/8/10/12/14/16/20/22/24英寸随机混合，适用于裙子、裤子、衣服、背包和缝纫工艺配件，裙子拉链闭合，时尚拉链拉环，耐用拉链卷轴",
+          "thumbnail": "https://img.kwcdn.com/product/open/2023-05-03/1683110349022-41564464943845dabf2976d3ef4fe812-goods.jpeg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 270000,
+          "goodsPriceMin": 1.8,
+          "goodsPriceMax": 3.65,
+          "reviewNum": 3051,
+          "rating": 4.9,
+          "mallOpenTime": "2023-04-01T01:09:15.385+00:00",
+          "onSaleTime": "2023-09-07T17:28:26.829+00:00",
+          "goodsId": "601099524408111",
+          "detailUrl": "601099524408111",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53186,
+              "catId": 39586,
+              "catName": "缝纫紧固件",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53214,
+              "catId": 39591,
+              "catName": "拉链",
+              "catLevel": 5,
+              "parentCatId": 39586,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "10个彩色3#尼龙卷轴拉链-4/6/7/8/10/12/14/16/20/22/24英寸随机混合，适用于裙子、裤子、衣服、背包和缝纫工艺配件，裙子拉链闭合，时尚拉链拉环，耐用拉链卷轴"
+        },
+        {
+          "goodsNameEn": "1 Roll Pants Hem Shortening Tool No Sewing No Ironing Fixed Stickers Self-Adhesive Pants Leg Stickers Clip Hem Buckle Too Long Adjustment",
+          "goodsNameCn": "1卷裤脚收窄器 免缝免烫固定贴 自粘裤腿贴片 裤脚夹扣 过长裤脚调节贴",
+          "thumbnail": "https://img.kwcdn.com/product/open/af48e4d8f2234b4da2bc785c0abb8008-goods.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN015sU9V32EV6Hon9g8v_!!2219533098749-0-cib.jpg",
+          "sold": 150000,
+          "sales": 274500,
+          "goodsPriceMin": 1.83,
+          "goodsPriceMax": 1.83,
+          "reviewNum": 4531,
+          "rating": 4.7,
+          "mallOpenTime": "2024-02-19T17:59:13.000+00:00",
+          "onSaleTime": "2025-09-01T02:33:01.000+00:00",
+          "goodsId": "601103151982388",
+          "detailUrl": "601103151982388",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53240,
+              "catId": 39623,
+              "catName": "缝纫胶带和粘合剂",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53248,
+              "catId": 39628,
+              "catName": "缝纫摺边带",
+              "catLevel": 6,
+              "parentCatId": 39627,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1卷裤脚收窄器 免缝免烫固定贴 自粘裤腿贴片 裤脚夹扣 过长裤脚调节贴"
+        },
+        {
+          "goodsNameEn": "45/60/120/240/360/480pcs Premium Transparent Name Stickers: Custom-Designed & High Quality. Revamp Your School Supplies, Enhance Office Decor & Celebrate Scrapbooking Moments.stickers",
+          "goodsNameCn": "45/60/120/240/360/480张优质透明姓名贴纸：定制设计，品质卓越。焕新学习用品，点缀办公空间，珍藏剪贴时光",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/7c5f6ee266906e0d278134d0f22db2ff.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN010muRNU1T4jWiIiUja_!!2218373002329-0-cib.jpg",
+          "sold": 100000,
+          "sales": 212000,
+          "goodsPriceMin": 2.12,
+          "goodsPriceMax": 7.89,
+          "reviewNum": 637,
+          "rating": 4.9,
+          "mallOpenTime": "2024-04-01T03:25:49.728+00:00",
+          "onSaleTime": "2024-04-01T03:25:49.728+00:00",
+          "goodsId": "601099523262866",
+          "detailUrl": "601099523262866",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28030,
+              "catId": 39437,
+              "catName": "剪贴簿贴纸和贴纸机",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28549,
+              "catId": 39438,
+              "catName": "剪贴簿贴纸",
+              "catLevel": 4,
+              "parentCatId": 39437,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "45/60/120/240/360/480张优质透明姓名贴纸：定制设计，品质卓越。焕新学习用品，点缀办公空间，珍藏剪贴时光"
+        }
+      ]
+    },
+    {
+      "channel": "大卖新品",
+      "products": [
+        {
+          "goodsNameEn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "goodsNameCn": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/4e918929-5852-48fe-b13d-95fbfa4b1424.jpg",
+          "thumbnailCn": "",
+          "sold": 450000,
+          "sales": 855000,
+          "goodsPriceMin": 1.9,
+          "goodsPriceMax": 1.9,
+          "reviewNum": 6461,
+          "rating": 4.8,
+          "mallOpenTime": "2023-09-12T19:47:03.000+00:00",
+          "onSaleTime": "2024-05-21T11:45:47.498+00:00",
+          "goodsId": "601099568567899",
+          "detailUrl": "601099568567899",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53186,
+              "catId": 39586,
+              "catName": "缝纫紧固件",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53229,
+              "catId": 39598,
+              "catName": "钩扣、挂钩扣",
+              "catLevel": 5,
+              "parentCatId": 39586,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "五件套多功能金属夹与T恤套装——简易组装配件及柱式收紧配件，适用于缝纫与针线活"
+        },
+        {
+          "goodsNameEn": "[High-Strength Tape] High-Strength Double-Sided Tape- Strong Adhesion, Reusable, Multi-Functional Bonding Solution- Essential Decorations and Handicrafts, Suitable Various Surfaces",
+          "goodsNameCn": "高强度双面纳米胶带 - 超强粘合力，可重复使用，多功能粘贴解决方案 - 圣诞装饰与手工艺品必备，适用于各类表面",
+          "thumbnail": "https://img.kwcdn.com/product/open/225877ed2c91416f882457c1af3ace7c-goods.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01cZcCL61L08bBuQKpW_!!2219077451236-0-cib.jpg",
+          "sold": 200000,
+          "sales": 650000,
+          "goodsPriceMin": 3.25,
+          "goodsPriceMax": 3.55,
+          "reviewNum": 2092,
+          "rating": 4.6,
+          "mallOpenTime": "2024-08-19T03:30:46.133+00:00",
+          "onSaleTime": "2025-07-26T06:32:06.000+00:00",
+          "goodsId": "601102161808663",
+          "detailUrl": "601102161808663",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 33815,
+              "catId": 39461,
+              "catName": "剪贴簿粘合剂",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 36261,
+              "catId": 39465,
+              "catName": "胶带",
+              "catLevel": 4,
+              "parentCatId": 39461,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "高强度双面纳米胶带 - 超强粘合力，可重复使用，多功能粘贴解决方案 - 圣诞装饰与手工艺品必备，适用于各类表面"
+        },
+        {
+          "goodsNameEn": "1box O-ring Connector Metal Open Jump Ring for DIY Handmade Bracelet Earrings Necklace Connector Rings",
+          "goodsNameCn": "1盒O型环连接器 金属开口跳环 适用于DIY手工制作手链耳环项链连接环",
+          "thumbnail": "https://img.kwcdn.com/product/1e23313ef0/ab1d7c59-1ed7-4738-af97-df95d62cd846_1345x1342.jpeg.a.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01aU9tws1ieCPGwegiJ_!!2218971634437-0-cib.jpg",
+          "sold": 150000,
+          "sales": 415500,
+          "goodsPriceMin": 2.77,
+          "goodsPriceMax": 5.29,
+          "reviewNum": 3397,
+          "rating": 4.9,
+          "mallOpenTime": "2022-11-22T05:52:46.173+00:00",
+          "onSaleTime": "2023-11-24T18:45:11.723+00:00",
+          "goodsId": "601099518686962",
+          "detailUrl": "601099518686962",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19494,
+              "catId": 39317,
+              "catName": "DIY珠饰、首饰用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22303,
+              "catId": 39321,
+              "catName": "首饰制作零件",
+              "catLevel": 3,
+              "parentCatId": 39317,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 27672,
+              "catId": 39327,
+              "catName": "珠宝制作连接环",
+              "catLevel": 4,
+              "parentCatId": 39321,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1盒O型环连接器 金属开口跳环 适用于DIY手工制作手链耳环项链连接环"
+        },
+        {
+          "goodsNameEn": "Self-Adhesive 9.84 X 23.62In Self Adhesive PU Leather Repair Patches Fix Sticker for Sofa Seat Table Chair Bag Shoes Bed",
+          "goodsNameCn": "自粘PU皮革修补贴 9.84 X 23.62英寸，沙发座椅桌椅包包鞋子床子修复贴",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/f2ff15e38f255b00c2dc7be7d69680bd.jpg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 387000,
+          "goodsPriceMin": 2.58,
+          "goodsPriceMax": 12.15,
+          "reviewNum": 7599,
+          "rating": 4.6,
+          "mallOpenTime": "2024-03-25T03:06:16.983+00:00",
+          "onSaleTime": "2024-03-25T03:06:16.983+00:00",
+          "goodsId": "601099538344553",
+          "detailUrl": "601099538344553",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 25836,
+              "catId": 39651,
+              "catName": "工艺工具和用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 30232,
+              "catId": 39688,
+              "catName": "皮革手工艺",
+              "catLevel": 3,
+              "parentCatId": 39651,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 31680,
+              "catId": 39691,
+              "catName": "皮革手工艺部件",
+              "catLevel": 4,
+              "parentCatId": 39688,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "自粘PU皮革修补贴 9.84 X 23.62英寸，沙发座椅桌椅包包鞋子床子修复贴"
+        },
+        {
+          "goodsNameEn": "6pcs Silicone Ear Post Backs for Heavy Earrings: Invisible Support Pads for Non-Dropping Earlobes - Safe Ear Jewelry Lifters for Studs And Pendants",
+          "goodsNameCn": "6件硅胶耳环后盖，适用于重型耳环，隐形提升支撑垫，适用于无下垂耳垂，安全耳环提升器，适用于耳钉和吊坠",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/market/a726928c60eb0ef7b780548ca0ff6ac5_WECh83hbeI65A.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN01ToKNrl21gvVAOOjga_!!2219764247015-0-cib.jpg",
+          "sold": 150000,
+          "sales": 222000,
+          "goodsPriceMin": 1.48,
+          "goodsPriceMax": 1.35,
+          "reviewNum": 1395,
+          "rating": 4.8,
+          "mallOpenTime": "2024-02-19T17:59:13.000+00:00",
+          "onSaleTime": "2024-10-12T12:03:25.378+00:00",
+          "goodsId": "601099628815279",
+          "detailUrl": "601099628815279",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 19494,
+              "catId": 39317,
+              "catName": "DIY珠饰、首饰用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 22303,
+              "catId": 39321,
+              "catName": "首饰制作零件",
+              "catLevel": 3,
+              "parentCatId": 39317,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 26124,
+              "catId": 39324,
+              "catName": "耳环架",
+              "catLevel": 4,
+              "parentCatId": 39321,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "6件硅胶耳环后盖，适用于重型耳环，隐形提升支撑垫，适用于无下垂耳垂，安全耳环提升器，适用于耳钉和吊坠"
+        },
+        {
+          "goodsNameEn": "1 Pack of 6 Sheets of Vintage Botanical Floral PVC Decorative Journaling Base Stickers",
+          "goodsNameCn": "1包6张复古植物花卉PVC装饰手帐素材打底贴纸",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/63b7668a972302b82f2159adfcb46bf0.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN0181ks0H1svHF3ikHMK_!!2206738465828-0-cib.jpg",
+          "sold": 150000,
+          "sales": 237000,
+          "goodsPriceMin": 1.58,
+          "goodsPriceMax": 2.66,
+          "reviewNum": 3437,
+          "rating": 4.9,
+          "mallOpenTime": "2023-02-14T21:19:32.221+00:00",
+          "onSaleTime": "2023-12-24T21:24:27.436+00:00",
+          "goodsId": "601099535273065",
+          "detailUrl": "601099535273065",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 36132,
+              "catId": 39471,
+              "catName": "剪贴簿贴花和装饰",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 37771,
+              "catId": 39474,
+              "catName": "贴纸",
+              "catLevel": 4,
+              "parentCatId": 39471,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1包6张复古植物花卉PVC装饰手帐素材打底贴纸"
+        },
+        {
+          "goodsNameEn": "20/40/60/80/100/120pcs  Spool Clip, Thread Locking Spool Protector for All Popular Spool Sizes, Keeps Threads Organized and Tidy",
+          "goodsNameCn": "20/40/60/80/100/120个线轴夹线轴保护器,线轴顶适合所有流行的线轴尺寸-线程锁定功能有助于保持线程有组织和整洁",
+          "thumbnail": "https://img.kwcdn.com/product/fancy/37ccb372-59dc-4213-9059-58d6a3a47753.jpg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 495000,
+          "goodsPriceMin": 3.3,
+          "goodsPriceMax": 12.3,
+          "reviewNum": 6102,
+          "rating": 4.9,
+          "mallOpenTime": "2022-11-26T21:40:56.731+00:00",
+          "onSaleTime": "2023-02-10T17:08:25.146+00:00",
+          "goodsId": "601099513306154",
+          "detailUrl": "601099513306154",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53160,
+              "catId": 39573,
+              "catName": "线轴、梭芯",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "20/40/60/80/100/120个线轴夹线轴保护器,线轴顶适合所有流行的线轴尺寸-线程锁定功能有助于保持线程有组织和整洁"
+        },
+        {
+          "goodsNameEn": "10pcs Colorful 3# Nylon Coil Zippers - 4/6/7/8/10/12/14/16/20/22/24 Inch Random Mix for Skirts, Pants, Clothes, Backpacks & Sewing Crafts Accessories, Skirt Zipper Closure, Stylish Zipper Pulls, Durab",
+          "goodsNameCn": "10个彩色3#尼龙卷轴拉链-4/6/7/8/10/12/14/16/20/22/24英寸随机混合，适用于裙子、裤子、衣服、背包和缝纫工艺配件，裙子拉链闭合，时尚拉链拉环，耐用拉链卷轴",
+          "thumbnail": "https://img.kwcdn.com/product/open/2023-05-03/1683110349022-41564464943845dabf2976d3ef4fe812-goods.jpeg",
+          "thumbnailCn": "",
+          "sold": 150000,
+          "sales": 270000,
+          "goodsPriceMin": 1.8,
+          "goodsPriceMax": 3.65,
+          "reviewNum": 3051,
+          "rating": 4.9,
+          "mallOpenTime": "2023-04-01T01:09:15.385+00:00",
+          "onSaleTime": "2023-09-07T17:28:26.829+00:00",
+          "goodsId": "601099524408111",
+          "detailUrl": "601099524408111",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53186,
+              "catId": 39586,
+              "catName": "缝纫紧固件",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53214,
+              "catId": 39591,
+              "catName": "拉链",
+              "catLevel": 5,
+              "parentCatId": 39586,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "10个彩色3#尼龙卷轴拉链-4/6/7/8/10/12/14/16/20/22/24英寸随机混合，适用于裙子、裤子、衣服、背包和缝纫工艺配件，裙子拉链闭合，时尚拉链拉环，耐用拉链卷轴"
+        },
+        {
+          "goodsNameEn": "1 Roll Pants Hem Shortening Tool No Sewing No Ironing Fixed Stickers Self-Adhesive Pants Leg Stickers Clip Hem Buckle Too Long Adjustment",
+          "goodsNameCn": "1卷裤脚收窄器 免缝免烫固定贴 自粘裤腿贴片 裤脚夹扣 过长裤脚调节贴",
+          "thumbnail": "https://img.kwcdn.com/product/open/af48e4d8f2234b4da2bc785c0abb8008-goods.jpeg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN015sU9V32EV6Hon9g8v_!!2219533098749-0-cib.jpg",
+          "sold": 150000,
+          "sales": 274500,
+          "goodsPriceMin": 1.83,
+          "goodsPriceMax": 1.83,
+          "reviewNum": 4531,
+          "rating": 4.7,
+          "mallOpenTime": "2024-02-19T17:59:13.000+00:00",
+          "onSaleTime": "2025-09-01T02:33:01.000+00:00",
+          "goodsId": "601103151982388",
+          "detailUrl": "601103151982388",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 24946,
+              "catId": 39491,
+              "catName": "缝纫、针织用品",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53144,
+              "catId": 39549,
+              "catName": "缝纫用品",
+              "catLevel": 3,
+              "parentCatId": 39491,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53240,
+              "catId": 39623,
+              "catName": "缝纫胶带和粘合剂",
+              "catLevel": 4,
+              "parentCatId": 39549,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 53248,
+              "catId": 39628,
+              "catName": "缝纫摺边带",
+              "catLevel": 6,
+              "parentCatId": 39627,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "1卷裤脚收窄器 免缝免烫固定贴 自粘裤腿贴片 裤脚夹扣 过长裤脚调节贴"
+        },
+        {
+          "goodsNameEn": "45/60/120/240/360/480pcs Premium Transparent Name Stickers: Custom-Designed & High Quality. Revamp Your School Supplies, Enhance Office Decor & Celebrate Scrapbooking Moments.stickers",
+          "goodsNameCn": "45/60/120/240/360/480张优质透明姓名贴纸：定制设计，品质卓越。焕新学习用品，点缀办公空间，珍藏剪贴时光",
+          "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/7c5f6ee266906e0d278134d0f22db2ff.jpg",
+          "thumbnailCn": "https://cbu01.alicdn.com/O1CN010muRNU1T4jWiIiUja_!!2218373002329-0-cib.jpg",
+          "sold": 100000,
+          "sales": 212000,
+          "goodsPriceMin": 2.12,
+          "goodsPriceMax": 7.89,
+          "reviewNum": 637,
+          "rating": 4.9,
+          "mallOpenTime": "2024-04-01T03:25:49.728+00:00",
+          "onSaleTime": "2024-04-01T03:25:49.728+00:00",
+          "goodsId": "601099523262866",
+          "detailUrl": "601099523262866",
+          "platform": "temu",
+          "catItems": [
+            {
+              "id": 17980,
+              "catId": 39316,
+              "catName": "艺术品、工艺品和缝纫用品",
+              "catLevel": 1,
+              "parentCatId": 0,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 23172,
+              "catId": 39418,
+              "catName": "剪贴、压印",
+              "catLevel": 2,
+              "parentCatId": 39316,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28030,
+              "catId": 39437,
+              "catName": "剪贴簿贴纸和贴纸机",
+              "catLevel": 3,
+              "parentCatId": 39418,
+              "isLeaf": false,
+              "optId": null
+            },
+            {
+              "id": 28549,
+              "catId": 39438,
+              "catName": "剪贴簿贴纸",
+              "catLevel": 4,
+              "parentCatId": 39437,
+              "isLeaf": true,
+              "optId": null
+            }
+          ],
+          "goodsName": "45/60/120/240/360/480张优质透明姓名贴纸：定制设计，品质卓越。焕新学习用品，点缀办公空间，珍藏剪贴时光"
+        }
+      ]
+    }
+  ]
+}

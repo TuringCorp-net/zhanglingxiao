@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-05-01
+- **文件**: 20260501-2604.26951-turning-tide.md
+- **标题**: 把大AI模型"压缩"成小模型：北大团队首次实现跨架构知识蒸馏
+- **论文来源**: arXiv:2604.26951 | Turning the TIDE: Cross-Architecture Distillation for Diffusion Large Language Models
+- **作者**: Gongbo Zhang, Wen Wang, Ye Tian, Li Yuan（北京大学 & 浙江大学）
+- **撰写日期**: 2026-05-01（北京时间）
+- **备注**: 首次实现扩散LLM跨架构知识蒸馏（160亿→6亿参数）；三模块系统（TIDAL+CompDemo+Reverse CALM）；HumanEval从32.3升至48.78，22倍内存减少，5倍推理加速
+
 ### 2026-04-30
 - **文件**: 20260430-2604.25866-emotion-llm.md
 - **标题**: 大语言模型真的懂"恶心"吗？——新研究揭开AI"读懂"情绪的神经密码

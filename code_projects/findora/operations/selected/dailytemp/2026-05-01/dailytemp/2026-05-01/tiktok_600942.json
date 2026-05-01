@@ -1,0 +1,2075 @@
+{
+  "platform": "tiktok",
+  "catId": 600942,
+  "catName": "Household Appliances",
+  "channels": [
+    {
+      "channel": "热销商品",
+      "products": [
+        {
+          "goodsNameEn": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to 45 minutes of runtime and 33Kpa of powerful suction. This rechargeable cordless vacuum is ideal for",
+          "goodsNameCn": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/5dbd58590e494f17bd554d9512fa8827~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 358559,
+          "sales": null,
+          "goodsPriceMin": 84.73,
+          "goodsPriceMax": 89.29,
+          "reviewNum": 31949,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-11-18T08:45:44.177+08:00",
+          "goodsId": "1729406319708377732",
+          "detailUrl": "1729406319708377732",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11463,
+              "catId": "601102",
+              "catName": "Vacuums & Floor Care",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12544,
+              "catId": "1227664",
+              "catName": "Vacuums",
+              "catLevel": 4,
+              "parentCatId": "601102",
+              "isLeaf": false
+            },
+            {
+              "id": 13630,
+              "catId": "1820560",
+              "catName": "Stick Vacuums & Electric Brooms",
+              "catLevel": 5,
+              "parentCatId": "1227664",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to 45 minutes of runtime and 33Kpa of powerful suction. This rechargeable cordless vacuum is ideal for carpets, tiles, pet hair, and hardwood floors."
+        },
+        {
+          "goodsNameEn": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Replacement Parts , Multi-Purpose Steamer for Home Use, Kitchen and Car tiktokshopspringglowup",
+          "goodsNameCn": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Repla",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/b3df927a807a4fea87ee5f4f13cb15e9~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 348983,
+          "sales": null,
+          "goodsPriceMin": 40.99,
+          "goodsPriceMax": null,
+          "reviewNum": 20323,
+          "rating": 4.4,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-05T22:24:34.889+08:00",
+          "goodsId": "1729444617052590314",
+          "detailUrl": "1729444617052590314",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11463,
+              "catId": "601102",
+              "catName": "Vacuums & Floor Care",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12485,
+              "catId": "1227920",
+              "catName": "Steam Cleaners & Floor Polishers",
+              "catLevel": 4,
+              "parentCatId": "601102",
+              "isLeaf": false
+            },
+            {
+              "id": 12486,
+              "catId": "1823376",
+              "catName": "Steam Cleaners",
+              "catLevel": 5,
+              "parentCatId": "1227920",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Replacement Parts , Multi-Purpose Steamer for Home Use, Kitchen and Car tiktokshopspringglowup"
+        },
+        {
+          "goodsNameEn": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display, 5s Fast Heating, 90° Swivel Handle, New Year Gift",
+          "goodsNameCn": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/71b09896b8d34e419bf8fc9ba809ef43~tplv-fhlh96nyum-crop-webp:1500:1500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 345541,
+          "sales": null,
+          "goodsPriceMin": 29.98,
+          "goodsPriceMax": 64,
+          "reviewNum": 23611,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-21T02:33:39.371+08:00",
+          "goodsId": "1729992615540134195",
+          "detailUrl": "1729992615540134195",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11178,
+              "catId": "601107",
+              "catName": "Clothes Steamers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 11179,
+              "catId": "1230992",
+              "catName": "Travel Steam Generators",
+              "catLevel": 4,
+              "parentCatId": "601107",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display, 5s Fast Heating, 90° Swivel Handle, New Year Gift"
+        },
+        {
+          "goodsNameEn": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic Electric bag sealers, keep food fresh. Portable Sealer Picnics.",
+          "goodsNameCn": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic El",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/52a8cb885ed94b02bab31b3de64d81d5~tplv-fhlh96nyum-crop-webp:700:700.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 317419,
+          "sales": null,
+          "goodsPriceMin": 8.99,
+          "goodsPriceMax": 26.39,
+          "reviewNum": 18402,
+          "rating": 3.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-15T11:10:12.341+08:00",
+          "goodsId": "1729487990868381697",
+          "detailUrl": "1729487990868381697",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10641,
+              "catId": "848008",
+              "catName": "Vacuum Sealers",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic Electric bag sealers, keep food fresh. Portable Sealer Picnics."
+        },
+        {
+          "goodsNameEn": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Brush Heads and 3 Adjustable Extension Handle, 2 Adjustable Speeds for Bathroom, Kitchen, Tub, Tile, Fl",
+          "goodsNameCn": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Bru",
+          "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/4bce321efbf14781927500fb9a5f60f2~tplv-fhlh96nyum-crop-webp:1500:1485.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 278292,
+          "sales": null,
+          "goodsPriceMin": 19.99,
+          "goodsPriceMax": null,
+          "reviewNum": 20243,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-16T11:56:30.523+08:00",
+          "goodsId": "1729420703501620053",
+          "detailUrl": "1729420703501620053",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11525,
+              "catId": "801040",
+              "catName": "Electric Spin Scrubbers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Brush Heads and 3 Adjustable Extension Handle, 2 Adjustable Speeds for Bathroom, Kitchen, Tub, Tile, Floor, Toilet, Household Cleaning Supplies #Summervibes"
+        },
+        {
+          "goodsNameEn": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Diffuser Air Freshener Car Aromatherapy Diffuser,  3*10ML Natural Perfume",
+          "goodsNameCn": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Dif",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/0a1243bf9b2445d7af549649a3c9578e~tplv-fhlh96nyum-crop-webp:3000:3000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 271932,
+          "sales": null,
+          "goodsPriceMin": 10.99,
+          "goodsPriceMax": 10.99,
+          "reviewNum": 25611,
+          "rating": 4,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-11T02:16:34.076+08:00",
+          "goodsId": "1729446174326231703",
+          "detailUrl": "1729446174326231703",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10278,
+              "catId": "601092",
+              "catName": "Humidifiers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 10279,
+              "catId": "1229328",
+              "catName": "Humidifier",
+              "catLevel": 4,
+              "parentCatId": "601092",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Diffuser Air Freshener Car Aromatherapy Diffuser,  3*10ML Natural Perfume"
+        },
+        {
+          "goodsNameEn": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning Portable Ice Maker with Basket and Scoop, for Home/Kitchen/Camping/RV. (2024 New Silver) Utensils",
+          "goodsNameCn": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning ",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/0104490d89be498e8ceb79b572aa5310~tplv-fhlh96nyum-crop-webp:679:681.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 171671,
+          "sales": null,
+          "goodsPriceMin": 64.21,
+          "goodsPriceMax": 69.99,
+          "reviewNum": 20739,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-04-30T03:08:17.279+08:00",
+          "goodsId": "1729389464195863039",
+          "detailUrl": "1729389464195863039",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11167,
+              "catId": "983304",
+              "catName": "Specialty Kitchen Appliances",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": false
+            },
+            {
+              "id": 12847,
+              "catId": "1214864",
+              "catName": "Ice Cube Makers",
+              "catLevel": 4,
+              "parentCatId": "983304",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning Portable Ice Maker with Basket and Scoop, for Home/Kitchen/Camping/RV. (2024 New Silver) Utensils"
+        },
+        {
+          "goodsNameEn": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel Filter Basket Drain Hair Stopper, Anti-Odor Stopper",
+          "goodsNameCn": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel F",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/44a9dd9a2fd64044b44ae9bdf7d65a33~tplv-fhlh96nyum-crop-webp:1500:1500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 132380,
+          "sales": null,
+          "goodsPriceMin": 7.99,
+          "goodsPriceMax": 14.99,
+          "reviewNum": 10867,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-20T08:20:35.255+08:00",
+          "goodsId": "1730198800972419533",
+          "detailUrl": "1730198800972419533",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10057,
+              "catId": "601106",
+              "catName": "Household Appliance Parts & Accessories",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel Filter Basket Drain Hair Stopper, Anti-Odor Stopper"
+        },
+        {
+          "goodsNameEn": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet-Friendly  | Limited Stock!  Shop Now!",
+          "goodsNameCn": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/5405d404fbb14031be84ad83596ef358~tplv-fhlh96nyum-crop-webp:1000:1000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 126744,
+          "sales": null,
+          "goodsPriceMin": 12.99,
+          "goodsPriceMax": 119.9,
+          "reviewNum": 10098,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-03-12T03:37:29.572+08:00",
+          "goodsId": "1729428957774057804",
+          "detailUrl": "1729428957774057804",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 12016,
+              "catId": "601090",
+              "catName": "Air Purifiers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12965,
+              "catId": "1232016",
+              "catName": "HEPA Air Purifiers",
+              "catLevel": 4,
+              "parentCatId": "601090",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet-Friendly  | Limited Stock!  Shop Now!"
+        },
+        {
+          "goodsNameEn": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustable Temperature Control Universal Fry Griddle for Home Cooking",
+          "goodsNameCn": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustab",
+          "thumbnail": "https://p19-oec-general-useast8.ttcdn-us.com/tos-useast8-i-rt0ujvrtvp-tx2/479eaacc851444738abcc4a0f50ac809~tplv-fhlh96nyum-crop-webp:1024:1024.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 123118,
+          "sales": null,
+          "goodsPriceMin": 26,
+          "goodsPriceMax": 61.62,
+          "reviewNum": 15578,
+          "rating": 4.3,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-09-26T09:23:14.757+08:00",
+          "goodsId": "1731286075300548905",
+          "detailUrl": "1731286075300548905",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11841,
+              "catId": "977928",
+              "catName": "Electric Grills",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": false
+            },
+            {
+              "id": 11843,
+              "catId": "1225616",
+              "catName": "Grills",
+              "catLevel": 4,
+              "parentCatId": "977928",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustable Temperature Control Universal Fry Griddle for Home Cooking"
+        }
+      ]
+    },
+    {
+      "channel": "热销新品",
+      "products": [
+        {
+          "goodsNameEn": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to 45 minutes of runtime and 33Kpa of powerful suction. This rechargeable cordless vacuum is ideal for",
+          "goodsNameCn": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/5dbd58590e494f17bd554d9512fa8827~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 358559,
+          "sales": null,
+          "goodsPriceMin": 84.73,
+          "goodsPriceMax": 89.29,
+          "reviewNum": 31949,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-11-18T08:45:44.177+08:00",
+          "goodsId": "1729406319708377732",
+          "detailUrl": "1729406319708377732",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11463,
+              "catId": "601102",
+              "catName": "Vacuums & Floor Care",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12544,
+              "catId": "1227664",
+              "catName": "Vacuums",
+              "catLevel": 4,
+              "parentCatId": "601102",
+              "isLeaf": false
+            },
+            {
+              "id": 13630,
+              "catId": "1820560",
+              "catName": "Stick Vacuums & Electric Brooms",
+              "catLevel": 5,
+              "parentCatId": "1227664",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to 45 minutes of runtime and 33Kpa of powerful suction. This rechargeable cordless vacuum is ideal for carpets, tiles, pet hair, and hardwood floors."
+        },
+        {
+          "goodsNameEn": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Replacement Parts , Multi-Purpose Steamer for Home Use, Kitchen and Car tiktokshopspringglowup",
+          "goodsNameCn": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Repla",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/b3df927a807a4fea87ee5f4f13cb15e9~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 348983,
+          "sales": null,
+          "goodsPriceMin": 40.99,
+          "goodsPriceMax": null,
+          "reviewNum": 20323,
+          "rating": 4.4,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-05T22:24:34.889+08:00",
+          "goodsId": "1729444617052590314",
+          "detailUrl": "1729444617052590314",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11463,
+              "catId": "601102",
+              "catName": "Vacuums & Floor Care",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12485,
+              "catId": "1227920",
+              "catName": "Steam Cleaners & Floor Polishers",
+              "catLevel": 4,
+              "parentCatId": "601102",
+              "isLeaf": false
+            },
+            {
+              "id": 12486,
+              "catId": "1823376",
+              "catName": "Steam Cleaners",
+              "catLevel": 5,
+              "parentCatId": "1227920",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Replacement Parts , Multi-Purpose Steamer for Home Use, Kitchen and Car tiktokshopspringglowup"
+        },
+        {
+          "goodsNameEn": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display, 5s Fast Heating, 90° Swivel Handle, New Year Gift",
+          "goodsNameCn": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/71b09896b8d34e419bf8fc9ba809ef43~tplv-fhlh96nyum-crop-webp:1500:1500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 345541,
+          "sales": null,
+          "goodsPriceMin": 29.98,
+          "goodsPriceMax": 64,
+          "reviewNum": 23611,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-21T02:33:39.371+08:00",
+          "goodsId": "1729992615540134195",
+          "detailUrl": "1729992615540134195",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11178,
+              "catId": "601107",
+              "catName": "Clothes Steamers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 11179,
+              "catId": "1230992",
+              "catName": "Travel Steam Generators",
+              "catLevel": 4,
+              "parentCatId": "601107",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display, 5s Fast Heating, 90° Swivel Handle, New Year Gift"
+        },
+        {
+          "goodsNameEn": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic Electric bag sealers, keep food fresh. Portable Sealer Picnics.",
+          "goodsNameCn": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic El",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/52a8cb885ed94b02bab31b3de64d81d5~tplv-fhlh96nyum-crop-webp:700:700.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 317419,
+          "sales": null,
+          "goodsPriceMin": 8.99,
+          "goodsPriceMax": 26.39,
+          "reviewNum": 18402,
+          "rating": 3.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-15T11:10:12.341+08:00",
+          "goodsId": "1729487990868381697",
+          "detailUrl": "1729487990868381697",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10641,
+              "catId": "848008",
+              "catName": "Vacuum Sealers",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic Electric bag sealers, keep food fresh. Portable Sealer Picnics."
+        },
+        {
+          "goodsNameEn": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Brush Heads and 3 Adjustable Extension Handle, 2 Adjustable Speeds for Bathroom, Kitchen, Tub, Tile, Fl",
+          "goodsNameCn": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Bru",
+          "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/4bce321efbf14781927500fb9a5f60f2~tplv-fhlh96nyum-crop-webp:1500:1485.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 278292,
+          "sales": null,
+          "goodsPriceMin": 19.99,
+          "goodsPriceMax": null,
+          "reviewNum": 20243,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-16T11:56:30.523+08:00",
+          "goodsId": "1729420703501620053",
+          "detailUrl": "1729420703501620053",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11525,
+              "catId": "801040",
+              "catName": "Electric Spin Scrubbers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Brush Heads and 3 Adjustable Extension Handle, 2 Adjustable Speeds for Bathroom, Kitchen, Tub, Tile, Floor, Toilet, Household Cleaning Supplies #Summervibes"
+        },
+        {
+          "goodsNameEn": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Diffuser Air Freshener Car Aromatherapy Diffuser,  3*10ML Natural Perfume",
+          "goodsNameCn": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Dif",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/0a1243bf9b2445d7af549649a3c9578e~tplv-fhlh96nyum-crop-webp:3000:3000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 271932,
+          "sales": null,
+          "goodsPriceMin": 10.99,
+          "goodsPriceMax": 10.99,
+          "reviewNum": 25611,
+          "rating": 4,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-11T02:16:34.076+08:00",
+          "goodsId": "1729446174326231703",
+          "detailUrl": "1729446174326231703",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10278,
+              "catId": "601092",
+              "catName": "Humidifiers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 10279,
+              "catId": "1229328",
+              "catName": "Humidifier",
+              "catLevel": 4,
+              "parentCatId": "601092",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Diffuser Air Freshener Car Aromatherapy Diffuser,  3*10ML Natural Perfume"
+        },
+        {
+          "goodsNameEn": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning Portable Ice Maker with Basket and Scoop, for Home/Kitchen/Camping/RV. (2024 New Silver) Utensils",
+          "goodsNameCn": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning ",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/0104490d89be498e8ceb79b572aa5310~tplv-fhlh96nyum-crop-webp:679:681.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 171671,
+          "sales": null,
+          "goodsPriceMin": 64.21,
+          "goodsPriceMax": 69.99,
+          "reviewNum": 20739,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-04-30T03:08:17.279+08:00",
+          "goodsId": "1729389464195863039",
+          "detailUrl": "1729389464195863039",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11167,
+              "catId": "983304",
+              "catName": "Specialty Kitchen Appliances",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": false
+            },
+            {
+              "id": 12847,
+              "catId": "1214864",
+              "catName": "Ice Cube Makers",
+              "catLevel": 4,
+              "parentCatId": "983304",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning Portable Ice Maker with Basket and Scoop, for Home/Kitchen/Camping/RV. (2024 New Silver) Utensils"
+        },
+        {
+          "goodsNameEn": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel Filter Basket Drain Hair Stopper, Anti-Odor Stopper",
+          "goodsNameCn": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel F",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/44a9dd9a2fd64044b44ae9bdf7d65a33~tplv-fhlh96nyum-crop-webp:1500:1500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 132380,
+          "sales": null,
+          "goodsPriceMin": 7.99,
+          "goodsPriceMax": 14.99,
+          "reviewNum": 10867,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-20T08:20:35.255+08:00",
+          "goodsId": "1730198800972419533",
+          "detailUrl": "1730198800972419533",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10057,
+              "catId": "601106",
+              "catName": "Household Appliance Parts & Accessories",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel Filter Basket Drain Hair Stopper, Anti-Odor Stopper"
+        },
+        {
+          "goodsNameEn": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet-Friendly  | Limited Stock!  Shop Now!",
+          "goodsNameCn": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/5405d404fbb14031be84ad83596ef358~tplv-fhlh96nyum-crop-webp:1000:1000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 126744,
+          "sales": null,
+          "goodsPriceMin": 12.99,
+          "goodsPriceMax": 119.9,
+          "reviewNum": 10098,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-03-12T03:37:29.572+08:00",
+          "goodsId": "1729428957774057804",
+          "detailUrl": "1729428957774057804",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 12016,
+              "catId": "601090",
+              "catName": "Air Purifiers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12965,
+              "catId": "1232016",
+              "catName": "HEPA Air Purifiers",
+              "catLevel": 4,
+              "parentCatId": "601090",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet-Friendly  | Limited Stock!  Shop Now!"
+        },
+        {
+          "goodsNameEn": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustable Temperature Control Universal Fry Griddle for Home Cooking",
+          "goodsNameCn": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustab",
+          "thumbnail": "https://p19-oec-general-useast8.ttcdn-us.com/tos-useast8-i-rt0ujvrtvp-tx2/479eaacc851444738abcc4a0f50ac809~tplv-fhlh96nyum-crop-webp:1024:1024.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 123118,
+          "sales": null,
+          "goodsPriceMin": 26,
+          "goodsPriceMax": 61.62,
+          "reviewNum": 15578,
+          "rating": 4.3,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-09-26T09:23:14.757+08:00",
+          "goodsId": "1731286075300548905",
+          "detailUrl": "1731286075300548905",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11841,
+              "catId": "977928",
+              "catName": "Electric Grills",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": false
+            },
+            {
+              "id": 11843,
+              "catId": "1225616",
+              "catName": "Grills",
+              "catLevel": 4,
+              "parentCatId": "977928",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustable Temperature Control Universal Fry Griddle for Home Cooking"
+        }
+      ]
+    },
+    {
+      "channel": "新店热销",
+      "products": [
+        {
+          "goodsNameEn": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to 45 minutes of runtime and 33Kpa of powerful suction. This rechargeable cordless vacuum is ideal for",
+          "goodsNameCn": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/5dbd58590e494f17bd554d9512fa8827~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 358559,
+          "sales": null,
+          "goodsPriceMin": 84.73,
+          "goodsPriceMax": 89.29,
+          "reviewNum": 31949,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-11-18T08:45:44.177+08:00",
+          "goodsId": "1729406319708377732",
+          "detailUrl": "1729406319708377732",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11463,
+              "catId": "601102",
+              "catName": "Vacuums & Floor Care",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12544,
+              "catId": "1227664",
+              "catName": "Vacuums",
+              "catLevel": 4,
+              "parentCatId": "601102",
+              "isLeaf": false
+            },
+            {
+              "id": 13630,
+              "catId": "1820560",
+              "catName": "Stick Vacuums & Electric Brooms",
+              "catLevel": 5,
+              "parentCatId": "1227664",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to 45 minutes of runtime and 33Kpa of powerful suction. This rechargeable cordless vacuum is ideal for carpets, tiles, pet hair, and hardwood floors."
+        },
+        {
+          "goodsNameEn": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Replacement Parts , Multi-Purpose Steamer for Home Use, Kitchen and Car tiktokshopspringglowup",
+          "goodsNameCn": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Repla",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/b3df927a807a4fea87ee5f4f13cb15e9~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 348983,
+          "sales": null,
+          "goodsPriceMin": 40.99,
+          "goodsPriceMax": null,
+          "reviewNum": 20323,
+          "rating": 4.4,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-05T22:24:34.889+08:00",
+          "goodsId": "1729444617052590314",
+          "detailUrl": "1729444617052590314",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11463,
+              "catId": "601102",
+              "catName": "Vacuums & Floor Care",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12485,
+              "catId": "1227920",
+              "catName": "Steam Cleaners & Floor Polishers",
+              "catLevel": 4,
+              "parentCatId": "601102",
+              "isLeaf": false
+            },
+            {
+              "id": 12486,
+              "catId": "1823376",
+              "catName": "Steam Cleaners",
+              "catLevel": 5,
+              "parentCatId": "1227920",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Replacement Parts , Multi-Purpose Steamer for Home Use, Kitchen and Car tiktokshopspringglowup"
+        },
+        {
+          "goodsNameEn": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display, 5s Fast Heating, 90° Swivel Handle, New Year Gift",
+          "goodsNameCn": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/71b09896b8d34e419bf8fc9ba809ef43~tplv-fhlh96nyum-crop-webp:1500:1500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 345541,
+          "sales": null,
+          "goodsPriceMin": 29.98,
+          "goodsPriceMax": 64,
+          "reviewNum": 23611,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-21T02:33:39.371+08:00",
+          "goodsId": "1729992615540134195",
+          "detailUrl": "1729992615540134195",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11178,
+              "catId": "601107",
+              "catName": "Clothes Steamers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 11179,
+              "catId": "1230992",
+              "catName": "Travel Steam Generators",
+              "catLevel": 4,
+              "parentCatId": "601107",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display, 5s Fast Heating, 90° Swivel Handle, New Year Gift"
+        },
+        {
+          "goodsNameEn": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic Electric bag sealers, keep food fresh. Portable Sealer Picnics.",
+          "goodsNameCn": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic El",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/52a8cb885ed94b02bab31b3de64d81d5~tplv-fhlh96nyum-crop-webp:700:700.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 317419,
+          "sales": null,
+          "goodsPriceMin": 8.99,
+          "goodsPriceMax": 26.39,
+          "reviewNum": 18402,
+          "rating": 3.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-15T11:10:12.341+08:00",
+          "goodsId": "1729487990868381697",
+          "detailUrl": "1729487990868381697",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10641,
+              "catId": "848008",
+              "catName": "Vacuum Sealers",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic Electric bag sealers, keep food fresh. Portable Sealer Picnics."
+        },
+        {
+          "goodsNameEn": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Brush Heads and 3 Adjustable Extension Handle, 2 Adjustable Speeds for Bathroom, Kitchen, Tub, Tile, Fl",
+          "goodsNameCn": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Bru",
+          "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/4bce321efbf14781927500fb9a5f60f2~tplv-fhlh96nyum-crop-webp:1500:1485.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 278292,
+          "sales": null,
+          "goodsPriceMin": 19.99,
+          "goodsPriceMax": null,
+          "reviewNum": 20243,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-16T11:56:30.523+08:00",
+          "goodsId": "1729420703501620053",
+          "detailUrl": "1729420703501620053",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11525,
+              "catId": "801040",
+              "catName": "Electric Spin Scrubbers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Brush Heads and 3 Adjustable Extension Handle, 2 Adjustable Speeds for Bathroom, Kitchen, Tub, Tile, Floor, Toilet, Household Cleaning Supplies #Summervibes"
+        },
+        {
+          "goodsNameEn": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Diffuser Air Freshener Car Aromatherapy Diffuser,  3*10ML Natural Perfume",
+          "goodsNameCn": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Dif",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/0a1243bf9b2445d7af549649a3c9578e~tplv-fhlh96nyum-crop-webp:3000:3000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 271932,
+          "sales": null,
+          "goodsPriceMin": 10.99,
+          "goodsPriceMax": 10.99,
+          "reviewNum": 25611,
+          "rating": 4,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-11T02:16:34.076+08:00",
+          "goodsId": "1729446174326231703",
+          "detailUrl": "1729446174326231703",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10278,
+              "catId": "601092",
+              "catName": "Humidifiers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 10279,
+              "catId": "1229328",
+              "catName": "Humidifier",
+              "catLevel": 4,
+              "parentCatId": "601092",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Diffuser Air Freshener Car Aromatherapy Diffuser,  3*10ML Natural Perfume"
+        },
+        {
+          "goodsNameEn": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning Portable Ice Maker with Basket and Scoop, for Home/Kitchen/Camping/RV. (2024 New Silver) Utensils",
+          "goodsNameCn": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning ",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/0104490d89be498e8ceb79b572aa5310~tplv-fhlh96nyum-crop-webp:679:681.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 171671,
+          "sales": null,
+          "goodsPriceMin": 64.21,
+          "goodsPriceMax": 69.99,
+          "reviewNum": 20739,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-04-30T03:08:17.279+08:00",
+          "goodsId": "1729389464195863039",
+          "detailUrl": "1729389464195863039",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11167,
+              "catId": "983304",
+              "catName": "Specialty Kitchen Appliances",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": false
+            },
+            {
+              "id": 12847,
+              "catId": "1214864",
+              "catName": "Ice Cube Makers",
+              "catLevel": 4,
+              "parentCatId": "983304",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning Portable Ice Maker with Basket and Scoop, for Home/Kitchen/Camping/RV. (2024 New Silver) Utensils"
+        },
+        {
+          "goodsNameEn": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel Filter Basket Drain Hair Stopper, Anti-Odor Stopper",
+          "goodsNameCn": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel F",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/44a9dd9a2fd64044b44ae9bdf7d65a33~tplv-fhlh96nyum-crop-webp:1500:1500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 132380,
+          "sales": null,
+          "goodsPriceMin": 7.99,
+          "goodsPriceMax": 14.99,
+          "reviewNum": 10867,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-20T08:20:35.255+08:00",
+          "goodsId": "1730198800972419533",
+          "detailUrl": "1730198800972419533",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10057,
+              "catId": "601106",
+              "catName": "Household Appliance Parts & Accessories",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel Filter Basket Drain Hair Stopper, Anti-Odor Stopper"
+        },
+        {
+          "goodsNameEn": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet-Friendly  | Limited Stock!  Shop Now!",
+          "goodsNameCn": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/5405d404fbb14031be84ad83596ef358~tplv-fhlh96nyum-crop-webp:1000:1000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 126744,
+          "sales": null,
+          "goodsPriceMin": 12.99,
+          "goodsPriceMax": 119.9,
+          "reviewNum": 10098,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-03-12T03:37:29.572+08:00",
+          "goodsId": "1729428957774057804",
+          "detailUrl": "1729428957774057804",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 12016,
+              "catId": "601090",
+              "catName": "Air Purifiers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12965,
+              "catId": "1232016",
+              "catName": "HEPA Air Purifiers",
+              "catLevel": 4,
+              "parentCatId": "601090",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet-Friendly  | Limited Stock!  Shop Now!"
+        },
+        {
+          "goodsNameEn": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustable Temperature Control Universal Fry Griddle for Home Cooking",
+          "goodsNameCn": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustab",
+          "thumbnail": "https://p19-oec-general-useast8.ttcdn-us.com/tos-useast8-i-rt0ujvrtvp-tx2/479eaacc851444738abcc4a0f50ac809~tplv-fhlh96nyum-crop-webp:1024:1024.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 123118,
+          "sales": null,
+          "goodsPriceMin": 26,
+          "goodsPriceMax": 61.62,
+          "reviewNum": 15578,
+          "rating": 4.3,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-09-26T09:23:14.757+08:00",
+          "goodsId": "1731286075300548905",
+          "detailUrl": "1731286075300548905",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11841,
+              "catId": "977928",
+              "catName": "Electric Grills",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": false
+            },
+            {
+              "id": 11843,
+              "catId": "1225616",
+              "catName": "Grills",
+              "catLevel": 4,
+              "parentCatId": "977928",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustable Temperature Control Universal Fry Griddle for Home Cooking"
+        }
+      ]
+    },
+    {
+      "channel": "大卖新品",
+      "products": [
+        {
+          "goodsNameEn": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to 45 minutes of runtime and 33Kpa of powerful suction. This rechargeable cordless vacuum is ideal for",
+          "goodsNameCn": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/5dbd58590e494f17bd554d9512fa8827~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 358559,
+          "sales": null,
+          "goodsPriceMin": 84.73,
+          "goodsPriceMax": 89.29,
+          "reviewNum": 31949,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2023-11-18T08:45:44.177+08:00",
+          "goodsId": "1729406319708377732",
+          "detailUrl": "1729406319708377732",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11463,
+              "catId": "601102",
+              "catName": "Vacuums & Floor Care",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12544,
+              "catId": "1227664",
+              "catName": "Vacuums",
+              "catLevel": 4,
+              "parentCatId": "601102",
+              "isLeaf": false
+            },
+            {
+              "id": 13630,
+              "catId": "1820560",
+              "catName": "Stick Vacuums & Electric Brooms",
+              "catLevel": 5,
+              "parentCatId": "1227664",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "【 2026 newly upgraded】Trucozie T350 cordless vacuum features an 8-in-1 lightweight design with up to 45 minutes of runtime and 33Kpa of powerful suction. This rechargeable cordless vacuum is ideal for carpets, tiles, pet hair, and hardwood floors."
+        },
+        {
+          "goodsNameEn": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Replacement Parts , Multi-Purpose Steamer for Home Use, Kitchen and Car tiktokshopspringglowup",
+          "goodsNameCn": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Repla",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/b3df927a807a4fea87ee5f4f13cb15e9~tplv-fhlh96nyum-crop-webp:1600:1600.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 348983,
+          "sales": null,
+          "goodsPriceMin": 40.99,
+          "goodsPriceMax": null,
+          "reviewNum": 20323,
+          "rating": 4.4,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-05T22:24:34.889+08:00",
+          "goodsId": "1729444617052590314",
+          "detailUrl": "1729444617052590314",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11463,
+              "catId": "601102",
+              "catName": "Vacuums & Floor Care",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12485,
+              "catId": "1227920",
+              "catName": "Steam Cleaners & Floor Polishers",
+              "catLevel": 4,
+              "parentCatId": "601102",
+              "isLeaf": false
+            },
+            {
+              "id": 12486,
+              "catId": "1823376",
+              "catName": "Steam Cleaners",
+              "catLevel": 5,
+              "parentCatId": "1227920",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "[Mother's Day Gift]Phueut Pressurized Handheld Multi-Surface Natural Steam Cleaner with 12 pcs Replacement Parts , Multi-Purpose Steamer for Home Use, Kitchen and Car tiktokshopspringglowup"
+        },
+        {
+          "goodsNameEn": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display, 5s Fast Heating, 90° Swivel Handle, New Year Gift",
+          "goodsNameCn": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/71b09896b8d34e419bf8fc9ba809ef43~tplv-fhlh96nyum-crop-webp:1500:1500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 345541,
+          "sales": null,
+          "goodsPriceMin": 29.98,
+          "goodsPriceMax": 64,
+          "reviewNum": 23611,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-21T02:33:39.371+08:00",
+          "goodsId": "1729992615540134195",
+          "detailUrl": "1729992615540134195",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11178,
+              "catId": "601107",
+              "catName": "Clothes Steamers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 11179,
+              "catId": "1230992",
+              "catName": "Travel Steam Generators",
+              "catLevel": 4,
+              "parentCatId": "601107",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Dr.Flash Garment Steamer for Clothes, Portable Travel Clothing Steamer Iron, 7 Mode with LED Display, 5s Fast Heating, 90° Swivel Handle, New Year Gift"
+        },
+        {
+          "goodsNameEn": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic Electric bag sealers, keep food fresh. Portable Sealer Picnics.",
+          "goodsNameCn": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic El",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/52a8cb885ed94b02bab31b3de64d81d5~tplv-fhlh96nyum-crop-webp:700:700.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 317419,
+          "sales": null,
+          "goodsPriceMin": 8.99,
+          "goodsPriceMax": 26.39,
+          "reviewNum": 18402,
+          "rating": 3.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-15T11:10:12.341+08:00",
+          "goodsId": "1729487990868381697",
+          "detailUrl": "1729487990868381697",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10641,
+              "catId": "848008",
+              "catName": "Vacuum Sealers",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "【FaddishDeal】Mini snack bag sealing machine,2 in 1 heat USB rechargeable snack bag selaer,plastic Electric bag sealers, keep food fresh. Portable Sealer Picnics."
+        },
+        {
+          "goodsNameEn": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Brush Heads and 3 Adjustable Extension Handle, 2 Adjustable Speeds for Bathroom, Kitchen, Tub, Tile, Fl",
+          "goodsNameCn": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Bru",
+          "thumbnail": "https://p19-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/4bce321efbf14781927500fb9a5f60f2~tplv-fhlh96nyum-crop-webp:1500:1485.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 278292,
+          "sales": null,
+          "goodsPriceMin": 19.99,
+          "goodsPriceMax": null,
+          "reviewNum": 20243,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-16T11:56:30.523+08:00",
+          "goodsId": "1729420703501620053",
+          "detailUrl": "1729420703501620053",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11525,
+              "catId": "801040",
+              "catName": "Electric Spin Scrubbers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Dovety PowerSpin Electric Scrubber, Cordless Shower Scrubber, Cleaning Brush, with 8 Replaceable Brush Heads and 3 Adjustable Extension Handle, 2 Adjustable Speeds for Bathroom, Kitchen, Tub, Tile, Floor, Toilet, Household Cleaning Supplies #Summervibes"
+        },
+        {
+          "goodsNameEn": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Diffuser Air Freshener Car Aromatherapy Diffuser,  3*10ML Natural Perfume",
+          "goodsNameCn": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Dif",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/0a1243bf9b2445d7af549649a3c9578e~tplv-fhlh96nyum-crop-webp:3000:3000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 271932,
+          "sales": null,
+          "goodsPriceMin": 10.99,
+          "goodsPriceMax": 10.99,
+          "reviewNum": 25611,
+          "rating": 4,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-11T02:16:34.076+08:00",
+          "goodsId": "1729446174326231703",
+          "detailUrl": "1729446174326231703",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10278,
+              "catId": "601092",
+              "catName": "Humidifiers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 10279,
+              "catId": "1229328",
+              "catName": "Humidifier",
+              "catLevel": 4,
+              "parentCatId": "601092",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Smart Car Air Freshener with Three Adjustable Concentration Scent Levels, Portable Waterless Car Diffuser Air Freshener Car Aromatherapy Diffuser,  3*10ML Natural Perfume"
+        },
+        {
+          "goodsNameEn": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning Portable Ice Maker with Basket and Scoop, for Home/Kitchen/Camping/RV. (2024 New Silver) Utensils",
+          "goodsNameCn": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning ",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/0104490d89be498e8ceb79b572aa5310~tplv-fhlh96nyum-crop-webp:679:681.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 171671,
+          "sales": null,
+          "goodsPriceMin": 64.21,
+          "goodsPriceMax": 69.99,
+          "reviewNum": 20739,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-04-30T03:08:17.279+08:00",
+          "goodsId": "1729389464195863039",
+          "detailUrl": "1729389464195863039",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11167,
+              "catId": "983304",
+              "catName": "Specialty Kitchen Appliances",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": false
+            },
+            {
+              "id": 12847,
+              "catId": "1214864",
+              "catName": "Ice Cube Makers",
+              "catLevel": 4,
+              "parentCatId": "983304",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "EUHOMY Ice Maker Countertop with Handle, 26lbs in 24Hrs, 9 Ice Cubes Ready in 6 Mins, Auto-Cleaning Portable Ice Maker with Basket and Scoop, for Home/Kitchen/Camping/RV. (2024 New Silver) Utensils"
+        },
+        {
+          "goodsNameEn": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel Filter Basket Drain Hair Stopper, Anti-Odor Stopper",
+          "goodsNameCn": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel F",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/44a9dd9a2fd64044b44ae9bdf7d65a33~tplv-fhlh96nyum-crop-webp:1500:1500.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 132380,
+          "sales": null,
+          "goodsPriceMin": 7.99,
+          "goodsPriceMax": 14.99,
+          "reviewNum": 10867,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-02-20T08:20:35.255+08:00",
+          "goodsId": "1730198800972419533",
+          "detailUrl": "1730198800972419533",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 10057,
+              "catId": "601106",
+              "catName": "Household Appliance Parts & Accessories",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "JOMST Bath Universal 2-in-1 Bathroom Sink Stopper, Pop-up with Anti-Clog Removable Stainless Steel Filter Basket Drain Hair Stopper, Anti-Odor Stopper"
+        },
+        {
+          "goodsNameEn": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet-Friendly  | Limited Stock!  Shop Now!",
+          "goodsNameCn": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet",
+          "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/5405d404fbb14031be84ad83596ef358~tplv-fhlh96nyum-crop-webp:1000:1000.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=d741f1be&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 126744,
+          "sales": null,
+          "goodsPriceMin": 12.99,
+          "goodsPriceMax": 119.9,
+          "reviewNum": 10098,
+          "rating": 4.6,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-03-12T03:37:29.572+08:00",
+          "goodsId": "1729428957774057804",
+          "detailUrl": "1729428957774057804",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10056,
+              "catId": "844808",
+              "catName": "Home Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 12016,
+              "catId": "601090",
+              "catName": "Air Purifiers",
+              "catLevel": 3,
+              "parentCatId": "844808",
+              "isLeaf": false
+            },
+            {
+              "id": 12965,
+              "catId": "1232016",
+              "catName": "HEPA Air Purifiers",
+              "catLevel": 4,
+              "parentCatId": "601090",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Tolife TZ-K1 Air Purifier Kills most Viruses Allergens/Dust/Germs GONE! Silent Baby-Safe Design  Pet-Friendly  | Limited Stock!  Shop Now!"
+        },
+        {
+          "goodsNameEn": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustable Temperature Control Universal Fry Griddle for Home Cooking",
+          "goodsNameCn": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustab",
+          "thumbnail": "https://p19-oec-general-useast8.ttcdn-us.com/tos-useast8-i-rt0ujvrtvp-tx2/479eaacc851444738abcc4a0f50ac809~tplv-fhlh96nyum-crop-webp:1024:1024.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=a6e80448&idc=useast5&from=2378011839",
+          "thumbnailCn": "",
+          "sold": 123118,
+          "sales": null,
+          "goodsPriceMin": 26,
+          "goodsPriceMax": 61.62,
+          "reviewNum": 15578,
+          "rating": 4.3,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-09-26T09:23:14.757+08:00",
+          "goodsId": "1731286075300548905",
+          "detailUrl": "1731286075300548905",
+          "platform": "tiktok",
+          "catItems": [
+            {
+              "id": 10055,
+              "catId": "600942",
+              "catName": "Household Appliances",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 10161,
+              "catId": "844168",
+              "catName": "Kitchen Appliances",
+              "catLevel": 2,
+              "parentCatId": "600942",
+              "isLeaf": false
+            },
+            {
+              "id": 11841,
+              "catId": "977928",
+              "catName": "Electric Grills",
+              "catLevel": 3,
+              "parentCatId": "844168",
+              "isLeaf": false
+            },
+            {
+              "id": 11843,
+              "catId": "1225616",
+              "catName": "Grills",
+              "catLevel": 4,
+              "parentCatId": "977928",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "AORAN KITCHEN 1500W Portable Electric Korean BBQ Grill Indoor Smokeless Non-stick Grill Pan Adjustable Temperature Control Universal Fry Griddle for Home Cooking"
+        }
+      ]
+    }
+  ]
+}

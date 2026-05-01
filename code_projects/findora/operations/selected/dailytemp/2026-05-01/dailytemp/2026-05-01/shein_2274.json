@@ -1,0 +1,1979 @@
+{
+  "platform": "shein",
+  "catId": 2274,
+  "catName": "手机及配件",
+  "channels": [
+    {
+      "channel": "热销商品",
+      "products": [
+        {
+          "goodsNameEn": "Cheetah,Leopard Print Premium IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Apple 16 Pro Max, 16, 16 Pro; Premium Glitter Gradient Protective Phone Case Compatible Wi",
+          "goodsNameCn": "时尚手机壳, 手机及配件, 案例, 手机壳",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/01/19/42/176880131589a928fae71b22c826fa7704c0a0b297_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 390,
+          "sales": 299720,
+          "goodsPriceMin": 4.06,
+          "goodsPriceMax": 4.94,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+          "onSaleTime": "2025-03-16T08:00:00.000+08:00",
+          "goodsId": "377515304",
+          "detailUrl": "377515304",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 660,
+              "catId": 1925,
+              "catName": "Fashion Phone Cases",
+              "catNameCn": "时尚手机壳",
+              "catLevel": 3,
+              "parentCatId": 8953,
+              "isLeaf": true
+            },
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 612,
+              "catId": 3340,
+              "catName": "Cases",
+              "catNameCn": "案例",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 621,
+              "catId": 8953,
+              "catName": "Phone Cases",
+              "catNameCn": "手机壳",
+              "catLevel": 2,
+              "parentCatId": 3340,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Cheetah,Leopard Print Premium IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Apple 16 Pro Max, 16, 16 Pro; Premium Glitter Gradient Protective Phone Case Compatible With IPhone 15 Pro Max; New Shockproof Phone Case Compatible With IPhone 14, 13, 12/11, 14 Pro Max/11/14/13, Slim Soft Silicone Case Compatible With IPhone 15"
+        },
+        {
+          "goodsNameEn": "Sequins,Rhinestone High-End IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Iphone 16 Pro Max, 16, 16 Pro; High-End Glitter Gradient Protective Case Compatible With Iph",
+          "goodsNameCn": "时尚手机壳, 手机及配件, 案例, 手机壳",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/02/03/46/1770085237c6d24198578528d40084ab5cd5e65956_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 281,
+          "sales": 314960,
+          "goodsPriceMin": 4.28,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.83,
+          "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+          "onSaleTime": "2025-03-16T08:00:00.000+08:00",
+          "goodsId": "396258260",
+          "detailUrl": "396258260",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 660,
+              "catId": 1925,
+              "catName": "Fashion Phone Cases",
+              "catNameCn": "时尚手机壳",
+              "catLevel": 3,
+              "parentCatId": 8953,
+              "isLeaf": true
+            },
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 612,
+              "catId": 3340,
+              "catName": "Cases",
+              "catNameCn": "案例",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 621,
+              "catId": 8953,
+              "catName": "Phone Cases",
+              "catNameCn": "手机壳",
+              "catLevel": 2,
+              "parentCatId": 3340,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Sequins,Rhinestone High-End IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Iphone 16 Pro Max, 16, 16 Pro; High-End Glitter Gradient Protective Case Compatible With Iphone 15 Pro Max; New Slim Matte Shockproof Phone Case Compatible With Iphone 14, 13, 12, 11, 14 Pro Max, 15 Plus, Soft Silicone"
+        },
+        {
+          "goodsNameEn": "A 3 Packs Of Apple Privacy Screen Protectors Compatible With IPhone 17, 16 PRO MAX, 16, 16 PRO, 16 PLUS, 15 PRO MAX, 15, 15 PRO, 15 PLUS, 14 PRO MAX, 14 PRO, 14 PLUS, 13 PRO MAX, 13, 13PRO, 12, 11 XR,",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/07/29/70/1753776538a8e0cd90e2c49fe976b5fda8f5d94477_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 41300,
+          "sales": 137529,
+          "goodsPriceMin": 3.33,
+          "goodsPriceMax": null,
+          "reviewNum": 11,
+          "rating": 4.81,
+          "mallOpenTime": "2024-01-14T00:00:00.000+08:00",
+          "onSaleTime": "2025-03-29T08:00:00.000+08:00",
+          "goodsId": "145939056",
+          "detailUrl": "145939056",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "A 3 Packs Of Apple Privacy Screen Protectors Compatible With IPhone 17, 16 PRO MAX, 16, 16 PRO, 16 PLUS, 15 PRO MAX, 15, 15 PRO, 15 PLUS, 14 PRO MAX, 14 PRO, 14 PLUS, 13 PRO MAX, 13, 13PRO, 12, 11 XR, XS MAX, And XS. Tempered Glass, Anti-Privacy, Bubble-Free, Scratch-Resistant, Easy To Install, And Compatible With Phone Cases."
+        },
+        {
+          "goodsNameEn": "3 Pieces Tempered Glass Compatible With IPhone 17 17 Pro 17 Pro Max 17 Air16 16 Plus 16 Pro 16 Pro Max 15 14 13 12 11 Pro Max X XS XR Mini 7 8 14 Plus Compatible With IPhone Screen Protector Compatibl",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/03/29/44/17432531263bcaa14df8824bc2e054ac729976cf9b_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 38504,
+          "sales": 99120,
+          "goodsPriceMin": 2.4,
+          "goodsPriceMax": 42.18,
+          "reviewNum": 11,
+          "rating": 4.81,
+          "mallOpenTime": "2024-01-14T00:00:00.000+08:00",
+          "onSaleTime": "2025-03-29T00:00:00.000+08:00",
+          "goodsId": "65876691",
+          "detailUrl": "65876691",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "3 Pieces Tempered Glass Compatible With IPhone 17 17 Pro 17 Pro Max 17 Air16 16 Plus 16 Pro 16 Pro Max 15 14 13 12 11 Pro Max X XS XR Mini 7 8 14 Plus Compatible With IPhone Screen Protector Compatible With IPhone 14 15 Pro Max Glass"
+        },
+        {
+          "goodsNameEn": "5PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/images3_spmp/2023/08/28/e1/1693196369ce7fe4a503d4c2358ddf789742984efe_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 107178,
+          "sales": 73500,
+          "goodsPriceMin": 1.96,
+          "goodsPriceMax": 4.86,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T00:00:00.000+08:00",
+          "goodsId": "22202229",
+          "detailUrl": "22202229",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "5PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "3PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/ea/1761880268d9c756beaa55d26fb75ed8c6d2defc0a_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 50756,
+          "sales": 93375,
+          "goodsPriceMin": 2.49,
+          "goodsPriceMax": null,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "256930764",
+          "detailUrl": "256930764",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "3PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "4PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/17/17618802591be80754bcf62fe17e7c2895c0ba36a5_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 3953,
+          "sales": 120528,
+          "goodsPriceMin": 3.24,
+          "goodsPriceMax": 4.14,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "257234303",
+          "detailUrl": "257234303",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "4PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "6PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/3d/1761881245a0fed33d8e6ff005cb2658bdd9d0224e_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 8215,
+          "sales": 124620,
+          "goodsPriceMin": 3.35,
+          "goodsPriceMax": null,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "262271658",
+          "detailUrl": "262271658",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "6PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Pho",
+          "goodsNameCn": "手机及配件, 手机照片和配件, 手机外接闪光灯和自拍灯",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/26/2a/176416756158dc3f5b77de2930ccb7f8076797ccfb_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 30030,
+          "sales": 121765,
+          "goodsPriceMin": 3.43,
+          "goodsPriceMax": 6.54,
+          "reviewNum": 4,
+          "rating": 4.79,
+          "mallOpenTime": "2025-06-07T00:00:00.000+08:00",
+          "onSaleTime": "2025-06-07T00:00:00.000+08:00",
+          "goodsId": "93609474",
+          "detailUrl": "93609474",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1596,
+              "catId": 3327,
+              "catName": "Cell Phone Photo & Accessories",
+              "catNameCn": "手机照片和配件",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 1597,
+              "catId": 3328,
+              "catName": "Phone External Flashes & Selfie Lights",
+              "catNameCn": "手机外接闪光灯和自拍灯",
+              "catLevel": 2,
+              "parentCatId": 3327,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Phone, Camera"
+        },
+        {
+          "goodsNameEn": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Pho",
+          "goodsNameCn": "手机及配件, 手机照片和配件, 手机外接闪光灯和自拍灯",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/03/23/18/1742713110ee10fa0f9e218cf9da73c53756501237_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 6911,
+          "sales": 135255,
+          "goodsPriceMin": 3.81,
+          "goodsPriceMax": 66.14,
+          "reviewNum": 4,
+          "rating": 4.79,
+          "mallOpenTime": "2025-06-07T00:00:00.000+08:00",
+          "onSaleTime": "2025-06-07T00:00:00.000+08:00",
+          "goodsId": "93609481",
+          "detailUrl": "93609481",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1596,
+              "catId": 3327,
+              "catName": "Cell Phone Photo & Accessories",
+              "catNameCn": "手机照片和配件",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 1597,
+              "catId": 3328,
+              "catName": "Phone External Flashes & Selfie Lights",
+              "catNameCn": "手机外接闪光灯和自拍灯",
+              "catLevel": 2,
+              "parentCatId": 3327,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Phone, Camera"
+        }
+      ]
+    },
+    {
+      "channel": "热销新品",
+      "products": [
+        {
+          "goodsNameEn": "Cheetah,Leopard Print Premium IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Apple 16 Pro Max, 16, 16 Pro; Premium Glitter Gradient Protective Phone Case Compatible Wi",
+          "goodsNameCn": "时尚手机壳, 手机及配件, 案例, 手机壳",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/01/19/42/176880131589a928fae71b22c826fa7704c0a0b297_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 390,
+          "sales": 299720,
+          "goodsPriceMin": 4.06,
+          "goodsPriceMax": 4.94,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+          "onSaleTime": "2025-03-16T08:00:00.000+08:00",
+          "goodsId": "377515304",
+          "detailUrl": "377515304",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 660,
+              "catId": 1925,
+              "catName": "Fashion Phone Cases",
+              "catNameCn": "时尚手机壳",
+              "catLevel": 3,
+              "parentCatId": 8953,
+              "isLeaf": true
+            },
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 612,
+              "catId": 3340,
+              "catName": "Cases",
+              "catNameCn": "案例",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 621,
+              "catId": 8953,
+              "catName": "Phone Cases",
+              "catNameCn": "手机壳",
+              "catLevel": 2,
+              "parentCatId": 3340,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Cheetah,Leopard Print Premium IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Apple 16 Pro Max, 16, 16 Pro; Premium Glitter Gradient Protective Phone Case Compatible With IPhone 15 Pro Max; New Shockproof Phone Case Compatible With IPhone 14, 13, 12/11, 14 Pro Max/11/14/13, Slim Soft Silicone Case Compatible With IPhone 15"
+        },
+        {
+          "goodsNameEn": "Sequins,Rhinestone High-End IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Iphone 16 Pro Max, 16, 16 Pro; High-End Glitter Gradient Protective Case Compatible With Iph",
+          "goodsNameCn": "时尚手机壳, 手机及配件, 案例, 手机壳",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/02/03/46/1770085237c6d24198578528d40084ab5cd5e65956_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 281,
+          "sales": 314960,
+          "goodsPriceMin": 4.28,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.83,
+          "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+          "onSaleTime": "2025-03-16T08:00:00.000+08:00",
+          "goodsId": "396258260",
+          "detailUrl": "396258260",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 660,
+              "catId": 1925,
+              "catName": "Fashion Phone Cases",
+              "catNameCn": "时尚手机壳",
+              "catLevel": 3,
+              "parentCatId": 8953,
+              "isLeaf": true
+            },
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 612,
+              "catId": 3340,
+              "catName": "Cases",
+              "catNameCn": "案例",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 621,
+              "catId": 8953,
+              "catName": "Phone Cases",
+              "catNameCn": "手机壳",
+              "catLevel": 2,
+              "parentCatId": 3340,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Sequins,Rhinestone High-End IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Iphone 16 Pro Max, 16, 16 Pro; High-End Glitter Gradient Protective Case Compatible With Iphone 15 Pro Max; New Slim Matte Shockproof Phone Case Compatible With Iphone 14, 13, 12, 11, 14 Pro Max, 15 Plus, Soft Silicone"
+        },
+        {
+          "goodsNameEn": "A 3 Packs Of Apple Privacy Screen Protectors Compatible With IPhone 17, 16 PRO MAX, 16, 16 PRO, 16 PLUS, 15 PRO MAX, 15, 15 PRO, 15 PLUS, 14 PRO MAX, 14 PRO, 14 PLUS, 13 PRO MAX, 13, 13PRO, 12, 11 XR,",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/07/29/70/1753776538a8e0cd90e2c49fe976b5fda8f5d94477_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 41300,
+          "sales": 137529,
+          "goodsPriceMin": 3.33,
+          "goodsPriceMax": null,
+          "reviewNum": 11,
+          "rating": 4.81,
+          "mallOpenTime": "2024-01-14T00:00:00.000+08:00",
+          "onSaleTime": "2025-03-29T08:00:00.000+08:00",
+          "goodsId": "145939056",
+          "detailUrl": "145939056",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "A 3 Packs Of Apple Privacy Screen Protectors Compatible With IPhone 17, 16 PRO MAX, 16, 16 PRO, 16 PLUS, 15 PRO MAX, 15, 15 PRO, 15 PLUS, 14 PRO MAX, 14 PRO, 14 PLUS, 13 PRO MAX, 13, 13PRO, 12, 11 XR, XS MAX, And XS. Tempered Glass, Anti-Privacy, Bubble-Free, Scratch-Resistant, Easy To Install, And Compatible With Phone Cases."
+        },
+        {
+          "goodsNameEn": "3 Pieces Tempered Glass Compatible With IPhone 17 17 Pro 17 Pro Max 17 Air16 16 Plus 16 Pro 16 Pro Max 15 14 13 12 11 Pro Max X XS XR Mini 7 8 14 Plus Compatible With IPhone Screen Protector Compatibl",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/03/29/44/17432531263bcaa14df8824bc2e054ac729976cf9b_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 38504,
+          "sales": 99120,
+          "goodsPriceMin": 2.4,
+          "goodsPriceMax": 42.18,
+          "reviewNum": 11,
+          "rating": 4.81,
+          "mallOpenTime": "2024-01-14T00:00:00.000+08:00",
+          "onSaleTime": "2025-03-29T00:00:00.000+08:00",
+          "goodsId": "65876691",
+          "detailUrl": "65876691",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "3 Pieces Tempered Glass Compatible With IPhone 17 17 Pro 17 Pro Max 17 Air16 16 Plus 16 Pro 16 Pro Max 15 14 13 12 11 Pro Max X XS XR Mini 7 8 14 Plus Compatible With IPhone Screen Protector Compatible With IPhone 14 15 Pro Max Glass"
+        },
+        {
+          "goodsNameEn": "5PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/images3_spmp/2023/08/28/e1/1693196369ce7fe4a503d4c2358ddf789742984efe_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 107178,
+          "sales": 73500,
+          "goodsPriceMin": 1.96,
+          "goodsPriceMax": 4.86,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T00:00:00.000+08:00",
+          "goodsId": "22202229",
+          "detailUrl": "22202229",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "5PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "3PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/ea/1761880268d9c756beaa55d26fb75ed8c6d2defc0a_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 50756,
+          "sales": 93375,
+          "goodsPriceMin": 2.49,
+          "goodsPriceMax": null,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "256930764",
+          "detailUrl": "256930764",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "3PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "4PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/17/17618802591be80754bcf62fe17e7c2895c0ba36a5_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 3953,
+          "sales": 120528,
+          "goodsPriceMin": 3.24,
+          "goodsPriceMax": 4.14,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "257234303",
+          "detailUrl": "257234303",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "4PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "6PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/3d/1761881245a0fed33d8e6ff005cb2658bdd9d0224e_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 8215,
+          "sales": 124620,
+          "goodsPriceMin": 3.35,
+          "goodsPriceMax": null,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "262271658",
+          "detailUrl": "262271658",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "6PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Pho",
+          "goodsNameCn": "手机及配件, 手机照片和配件, 手机外接闪光灯和自拍灯",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/26/2a/176416756158dc3f5b77de2930ccb7f8076797ccfb_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 30030,
+          "sales": 121765,
+          "goodsPriceMin": 3.43,
+          "goodsPriceMax": 6.54,
+          "reviewNum": 4,
+          "rating": 4.79,
+          "mallOpenTime": "2025-06-07T00:00:00.000+08:00",
+          "onSaleTime": "2025-06-07T00:00:00.000+08:00",
+          "goodsId": "93609474",
+          "detailUrl": "93609474",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1596,
+              "catId": 3327,
+              "catName": "Cell Phone Photo & Accessories",
+              "catNameCn": "手机照片和配件",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 1597,
+              "catId": 3328,
+              "catName": "Phone External Flashes & Selfie Lights",
+              "catNameCn": "手机外接闪光灯和自拍灯",
+              "catLevel": 2,
+              "parentCatId": 3327,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Phone, Camera"
+        },
+        {
+          "goodsNameEn": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Pho",
+          "goodsNameCn": "手机及配件, 手机照片和配件, 手机外接闪光灯和自拍灯",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/03/23/18/1742713110ee10fa0f9e218cf9da73c53756501237_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 6911,
+          "sales": 135255,
+          "goodsPriceMin": 3.81,
+          "goodsPriceMax": 66.14,
+          "reviewNum": 4,
+          "rating": 4.79,
+          "mallOpenTime": "2025-06-07T00:00:00.000+08:00",
+          "onSaleTime": "2025-06-07T00:00:00.000+08:00",
+          "goodsId": "93609481",
+          "detailUrl": "93609481",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1596,
+              "catId": 3327,
+              "catName": "Cell Phone Photo & Accessories",
+              "catNameCn": "手机照片和配件",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 1597,
+              "catId": 3328,
+              "catName": "Phone External Flashes & Selfie Lights",
+              "catNameCn": "手机外接闪光灯和自拍灯",
+              "catLevel": 2,
+              "parentCatId": 3327,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Phone, Camera"
+        }
+      ]
+    },
+    {
+      "channel": "新店热销",
+      "products": [
+        {
+          "goodsNameEn": "Cheetah,Leopard Print Premium IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Apple 16 Pro Max, 16, 16 Pro; Premium Glitter Gradient Protective Phone Case Compatible Wi",
+          "goodsNameCn": "时尚手机壳, 手机及配件, 案例, 手机壳",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/01/19/42/176880131589a928fae71b22c826fa7704c0a0b297_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 390,
+          "sales": 299720,
+          "goodsPriceMin": 4.06,
+          "goodsPriceMax": 4.94,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+          "onSaleTime": "2025-03-16T08:00:00.000+08:00",
+          "goodsId": "377515304",
+          "detailUrl": "377515304",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 660,
+              "catId": 1925,
+              "catName": "Fashion Phone Cases",
+              "catNameCn": "时尚手机壳",
+              "catLevel": 3,
+              "parentCatId": 8953,
+              "isLeaf": true
+            },
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 612,
+              "catId": 3340,
+              "catName": "Cases",
+              "catNameCn": "案例",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 621,
+              "catId": 8953,
+              "catName": "Phone Cases",
+              "catNameCn": "手机壳",
+              "catLevel": 2,
+              "parentCatId": 3340,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Cheetah,Leopard Print Premium IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Apple 16 Pro Max, 16, 16 Pro; Premium Glitter Gradient Protective Phone Case Compatible With IPhone 15 Pro Max; New Shockproof Phone Case Compatible With IPhone 14, 13, 12/11, 14 Pro Max/11/14/13, Slim Soft Silicone Case Compatible With IPhone 15"
+        },
+        {
+          "goodsNameEn": "Sequins,Rhinestone High-End IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Iphone 16 Pro Max, 16, 16 Pro; High-End Glitter Gradient Protective Case Compatible With Iph",
+          "goodsNameCn": "时尚手机壳, 手机及配件, 案例, 手机壳",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/02/03/46/1770085237c6d24198578528d40084ab5cd5e65956_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 281,
+          "sales": 314960,
+          "goodsPriceMin": 4.28,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.83,
+          "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+          "onSaleTime": "2025-03-16T08:00:00.000+08:00",
+          "goodsId": "396258260",
+          "detailUrl": "396258260",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 660,
+              "catId": 1925,
+              "catName": "Fashion Phone Cases",
+              "catNameCn": "时尚手机壳",
+              "catLevel": 3,
+              "parentCatId": 8953,
+              "isLeaf": true
+            },
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 612,
+              "catId": 3340,
+              "catName": "Cases",
+              "catNameCn": "案例",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 621,
+              "catId": 8953,
+              "catName": "Phone Cases",
+              "catNameCn": "手机壳",
+              "catLevel": 2,
+              "parentCatId": 3340,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Sequins,Rhinestone High-End IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Iphone 16 Pro Max, 16, 16 Pro; High-End Glitter Gradient Protective Case Compatible With Iphone 15 Pro Max; New Slim Matte Shockproof Phone Case Compatible With Iphone 14, 13, 12, 11, 14 Pro Max, 15 Plus, Soft Silicone"
+        },
+        {
+          "goodsNameEn": "A 3 Packs Of Apple Privacy Screen Protectors Compatible With IPhone 17, 16 PRO MAX, 16, 16 PRO, 16 PLUS, 15 PRO MAX, 15, 15 PRO, 15 PLUS, 14 PRO MAX, 14 PRO, 14 PLUS, 13 PRO MAX, 13, 13PRO, 12, 11 XR,",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/07/29/70/1753776538a8e0cd90e2c49fe976b5fda8f5d94477_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 41300,
+          "sales": 137529,
+          "goodsPriceMin": 3.33,
+          "goodsPriceMax": null,
+          "reviewNum": 11,
+          "rating": 4.81,
+          "mallOpenTime": "2024-01-14T00:00:00.000+08:00",
+          "onSaleTime": "2025-03-29T08:00:00.000+08:00",
+          "goodsId": "145939056",
+          "detailUrl": "145939056",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "A 3 Packs Of Apple Privacy Screen Protectors Compatible With IPhone 17, 16 PRO MAX, 16, 16 PRO, 16 PLUS, 15 PRO MAX, 15, 15 PRO, 15 PLUS, 14 PRO MAX, 14 PRO, 14 PLUS, 13 PRO MAX, 13, 13PRO, 12, 11 XR, XS MAX, And XS. Tempered Glass, Anti-Privacy, Bubble-Free, Scratch-Resistant, Easy To Install, And Compatible With Phone Cases."
+        },
+        {
+          "goodsNameEn": "3 Pieces Tempered Glass Compatible With IPhone 17 17 Pro 17 Pro Max 17 Air16 16 Plus 16 Pro 16 Pro Max 15 14 13 12 11 Pro Max X XS XR Mini 7 8 14 Plus Compatible With IPhone Screen Protector Compatibl",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/03/29/44/17432531263bcaa14df8824bc2e054ac729976cf9b_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 38504,
+          "sales": 99120,
+          "goodsPriceMin": 2.4,
+          "goodsPriceMax": 42.18,
+          "reviewNum": 11,
+          "rating": 4.81,
+          "mallOpenTime": "2024-01-14T00:00:00.000+08:00",
+          "onSaleTime": "2025-03-29T00:00:00.000+08:00",
+          "goodsId": "65876691",
+          "detailUrl": "65876691",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "3 Pieces Tempered Glass Compatible With IPhone 17 17 Pro 17 Pro Max 17 Air16 16 Plus 16 Pro 16 Pro Max 15 14 13 12 11 Pro Max X XS XR Mini 7 8 14 Plus Compatible With IPhone Screen Protector Compatible With IPhone 14 15 Pro Max Glass"
+        },
+        {
+          "goodsNameEn": "5PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/images3_spmp/2023/08/28/e1/1693196369ce7fe4a503d4c2358ddf789742984efe_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 107178,
+          "sales": 73500,
+          "goodsPriceMin": 1.96,
+          "goodsPriceMax": 4.86,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T00:00:00.000+08:00",
+          "goodsId": "22202229",
+          "detailUrl": "22202229",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "5PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "3PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/ea/1761880268d9c756beaa55d26fb75ed8c6d2defc0a_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 50756,
+          "sales": 93375,
+          "goodsPriceMin": 2.49,
+          "goodsPriceMax": null,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "256930764",
+          "detailUrl": "256930764",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "3PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "4PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/17/17618802591be80754bcf62fe17e7c2895c0ba36a5_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 3953,
+          "sales": 120528,
+          "goodsPriceMin": 3.24,
+          "goodsPriceMax": 4.14,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "257234303",
+          "detailUrl": "257234303",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "4PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "6PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/3d/1761881245a0fed33d8e6ff005cb2658bdd9d0224e_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 8215,
+          "sales": 124620,
+          "goodsPriceMin": 3.35,
+          "goodsPriceMax": null,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "262271658",
+          "detailUrl": "262271658",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "6PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Pho",
+          "goodsNameCn": "手机及配件, 手机照片和配件, 手机外接闪光灯和自拍灯",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/26/2a/176416756158dc3f5b77de2930ccb7f8076797ccfb_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 30030,
+          "sales": 121765,
+          "goodsPriceMin": 3.43,
+          "goodsPriceMax": 6.54,
+          "reviewNum": 4,
+          "rating": 4.79,
+          "mallOpenTime": "2025-06-07T00:00:00.000+08:00",
+          "onSaleTime": "2025-06-07T00:00:00.000+08:00",
+          "goodsId": "93609474",
+          "detailUrl": "93609474",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1596,
+              "catId": 3327,
+              "catName": "Cell Phone Photo & Accessories",
+              "catNameCn": "手机照片和配件",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 1597,
+              "catId": 3328,
+              "catName": "Phone External Flashes & Selfie Lights",
+              "catNameCn": "手机外接闪光灯和自拍灯",
+              "catLevel": 2,
+              "parentCatId": 3327,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Phone, Camera"
+        },
+        {
+          "goodsNameEn": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Pho",
+          "goodsNameCn": "手机及配件, 手机照片和配件, 手机外接闪光灯和自拍灯",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/03/23/18/1742713110ee10fa0f9e218cf9da73c53756501237_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 6911,
+          "sales": 135255,
+          "goodsPriceMin": 3.81,
+          "goodsPriceMax": 66.14,
+          "reviewNum": 4,
+          "rating": 4.79,
+          "mallOpenTime": "2025-06-07T00:00:00.000+08:00",
+          "onSaleTime": "2025-06-07T00:00:00.000+08:00",
+          "goodsId": "93609481",
+          "detailUrl": "93609481",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1596,
+              "catId": 3327,
+              "catName": "Cell Phone Photo & Accessories",
+              "catNameCn": "手机照片和配件",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 1597,
+              "catId": 3328,
+              "catName": "Phone External Flashes & Selfie Lights",
+              "catNameCn": "手机外接闪光灯和自拍灯",
+              "catLevel": 2,
+              "parentCatId": 3327,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Phone, Camera"
+        }
+      ]
+    },
+    {
+      "channel": "大卖新品",
+      "products": [
+        {
+          "goodsNameEn": "Cheetah,Leopard Print Premium IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Apple 16 Pro Max, 16, 16 Pro; Premium Glitter Gradient Protective Phone Case Compatible Wi",
+          "goodsNameCn": "时尚手机壳, 手机及配件, 案例, 手机壳",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/01/19/42/176880131589a928fae71b22c826fa7704c0a0b297_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 390,
+          "sales": 299720,
+          "goodsPriceMin": 4.06,
+          "goodsPriceMax": 4.94,
+          "reviewNum": 2,
+          "rating": 4.84,
+          "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+          "onSaleTime": "2025-03-16T08:00:00.000+08:00",
+          "goodsId": "377515304",
+          "detailUrl": "377515304",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 660,
+              "catId": 1925,
+              "catName": "Fashion Phone Cases",
+              "catNameCn": "时尚手机壳",
+              "catLevel": 3,
+              "parentCatId": 8953,
+              "isLeaf": true
+            },
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 612,
+              "catId": 3340,
+              "catName": "Cases",
+              "catNameCn": "案例",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 621,
+              "catId": 8953,
+              "catName": "Phone Cases",
+              "catNameCn": "手机壳",
+              "catLevel": 2,
+              "parentCatId": 3340,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Cheetah,Leopard Print Premium IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Apple 16 Pro Max, 16, 16 Pro; Premium Glitter Gradient Protective Phone Case Compatible With IPhone 15 Pro Max; New Shockproof Phone Case Compatible With IPhone 14, 13, 12/11, 14 Pro Max/11/14/13, Slim Soft Silicone Case Compatible With IPhone 15"
+        },
+        {
+          "goodsNameEn": "Sequins,Rhinestone High-End IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Iphone 16 Pro Max, 16, 16 Pro; High-End Glitter Gradient Protective Case Compatible With Iph",
+          "goodsNameCn": "时尚手机壳, 手机及配件, 案例, 手机壳",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/02/03/46/1770085237c6d24198578528d40084ab5cd5e65956_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 281,
+          "sales": 314960,
+          "goodsPriceMin": 4.28,
+          "goodsPriceMax": null,
+          "reviewNum": 2,
+          "rating": 4.83,
+          "mallOpenTime": "2017-05-05T21:10:05.000+08:00",
+          "onSaleTime": "2025-03-16T08:00:00.000+08:00",
+          "goodsId": "396258260",
+          "detailUrl": "396258260",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 660,
+              "catId": 1925,
+              "catName": "Fashion Phone Cases",
+              "catNameCn": "时尚手机壳",
+              "catLevel": 3,
+              "parentCatId": 8953,
+              "isLeaf": true
+            },
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 612,
+              "catId": 3340,
+              "catName": "Cases",
+              "catNameCn": "案例",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 621,
+              "catId": 8953,
+              "catName": "Phone Cases",
+              "catNameCn": "手机壳",
+              "catLevel": 2,
+              "parentCatId": 3340,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "Sequins,Rhinestone High-End IMD Glitter Gradient Glossy Leopard Print Protective Phone Case Compatible With Iphone 16 Pro Max, 16, 16 Pro; High-End Glitter Gradient Protective Case Compatible With Iphone 15 Pro Max; New Slim Matte Shockproof Phone Case Compatible With Iphone 14, 13, 12, 11, 14 Pro Max, 15 Plus, Soft Silicone"
+        },
+        {
+          "goodsNameEn": "A 3 Packs Of Apple Privacy Screen Protectors Compatible With IPhone 17, 16 PRO MAX, 16, 16 PRO, 16 PLUS, 15 PRO MAX, 15, 15 PRO, 15 PLUS, 14 PRO MAX, 14 PRO, 14 PLUS, 13 PRO MAX, 13, 13PRO, 12, 11 XR,",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/07/29/70/1753776538a8e0cd90e2c49fe976b5fda8f5d94477_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 41300,
+          "sales": 137529,
+          "goodsPriceMin": 3.33,
+          "goodsPriceMax": null,
+          "reviewNum": 11,
+          "rating": 4.81,
+          "mallOpenTime": "2024-01-14T00:00:00.000+08:00",
+          "onSaleTime": "2025-03-29T08:00:00.000+08:00",
+          "goodsId": "145939056",
+          "detailUrl": "145939056",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "A 3 Packs Of Apple Privacy Screen Protectors Compatible With IPhone 17, 16 PRO MAX, 16, 16 PRO, 16 PLUS, 15 PRO MAX, 15, 15 PRO, 15 PLUS, 14 PRO MAX, 14 PRO, 14 PLUS, 13 PRO MAX, 13, 13PRO, 12, 11 XR, XS MAX, And XS. Tempered Glass, Anti-Privacy, Bubble-Free, Scratch-Resistant, Easy To Install, And Compatible With Phone Cases."
+        },
+        {
+          "goodsNameEn": "3 Pieces Tempered Glass Compatible With IPhone 17 17 Pro 17 Pro Max 17 Air16 16 Plus 16 Pro 16 Pro Max 15 14 13 12 11 Pro Max X XS XR Mini 7 8 14 Plus Compatible With IPhone Screen Protector Compatibl",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/03/29/44/17432531263bcaa14df8824bc2e054ac729976cf9b_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 38504,
+          "sales": 99120,
+          "goodsPriceMin": 2.4,
+          "goodsPriceMax": 42.18,
+          "reviewNum": 11,
+          "rating": 4.81,
+          "mallOpenTime": "2024-01-14T00:00:00.000+08:00",
+          "onSaleTime": "2025-03-29T00:00:00.000+08:00",
+          "goodsId": "65876691",
+          "detailUrl": "65876691",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "3 Pieces Tempered Glass Compatible With IPhone 17 17 Pro 17 Pro Max 17 Air16 16 Plus 16 Pro 16 Pro Max 15 14 13 12 11 Pro Max X XS XR Mini 7 8 14 Plus Compatible With IPhone Screen Protector Compatible With IPhone 14 15 Pro Max Glass"
+        },
+        {
+          "goodsNameEn": "5PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/images3_spmp/2023/08/28/e1/1693196369ce7fe4a503d4c2358ddf789742984efe_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 107178,
+          "sales": 73500,
+          "goodsPriceMin": 1.96,
+          "goodsPriceMax": 4.86,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T00:00:00.000+08:00",
+          "goodsId": "22202229",
+          "detailUrl": "22202229",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "5PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "3PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/ea/1761880268d9c756beaa55d26fb75ed8c6d2defc0a_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 50756,
+          "sales": 93375,
+          "goodsPriceMin": 2.49,
+          "goodsPriceMax": null,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "256930764",
+          "detailUrl": "256930764",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "3PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "4PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/17/17618802591be80754bcf62fe17e7c2895c0ba36a5_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 3953,
+          "sales": 120528,
+          "goodsPriceMin": 3.24,
+          "goodsPriceMax": 4.14,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "257234303",
+          "detailUrl": "257234303",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "4PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "6PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone P",
+          "goodsNameCn": "手机及配件, 手机屏幕保护膜, 屏幕保护膜",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/10/31/3d/1761881245a0fed33d8e6ff005cb2658bdd9d0224e_square_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 8215,
+          "sales": 124620,
+          "goodsPriceMin": 3.35,
+          "goodsPriceMax": null,
+          "reviewNum": 23,
+          "rating": 4.84,
+          "mallOpenTime": "2023-05-16T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-18T08:00:00.000+08:00",
+          "goodsId": "262271658",
+          "detailUrl": "262271658",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1480,
+              "catId": 2289,
+              "catName": "Phone Screen Protectors",
+              "catNameCn": "手机屏幕保护膜",
+              "catLevel": 2,
+              "parentCatId": 3648,
+              "isLeaf": true
+            },
+            {
+              "id": 619,
+              "catId": 3648,
+              "catName": "Screen Protectors",
+              "catNameCn": "屏幕保护膜",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            }
+          ],
+          "goodsName": "6PCS Anti-Spy Privacy Smartphone Screen Protector Scratch Resistant Tempered Glass Full Coverage Glass Flim Compatible With IPhone17 16 15 14 13 12 11 Pro Max XR X XS Max Plus Anti-Fingerprint Phone Protective Anti Spy Glass Mobile Screen Protector Film"
+        },
+        {
+          "goodsNameEn": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Pho",
+          "goodsNameCn": "手机及配件, 手机照片和配件, 手机外接闪光灯和自拍灯",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/11/26/2a/176416756158dc3f5b77de2930ccb7f8076797ccfb_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 30030,
+          "sales": 121765,
+          "goodsPriceMin": 3.43,
+          "goodsPriceMax": 6.54,
+          "reviewNum": 4,
+          "rating": 4.79,
+          "mallOpenTime": "2025-06-07T00:00:00.000+08:00",
+          "onSaleTime": "2025-06-07T00:00:00.000+08:00",
+          "goodsId": "93609474",
+          "detailUrl": "93609474",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1596,
+              "catId": 3327,
+              "catName": "Cell Phone Photo & Accessories",
+              "catNameCn": "手机照片和配件",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 1597,
+              "catId": 3328,
+              "catName": "Phone External Flashes & Selfie Lights",
+              "catNameCn": "手机外接闪光灯和自拍灯",
+              "catLevel": 2,
+              "parentCatId": 3327,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Phone, Camera"
+        },
+        {
+          "goodsNameEn": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Pho",
+          "goodsNameCn": "手机及配件, 手机照片和配件, 手机外接闪光灯和自拍灯",
+          "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2025/03/23/18/1742713110ee10fa0f9e218cf9da73c53756501237_thumbnail_405x552.jpg",
+          "thumbnailCn": "",
+          "sold": 6911,
+          "sales": 135255,
+          "goodsPriceMin": 3.81,
+          "goodsPriceMax": 66.14,
+          "reviewNum": 4,
+          "rating": 4.79,
+          "mallOpenTime": "2025-06-07T00:00:00.000+08:00",
+          "onSaleTime": "2025-06-07T00:00:00.000+08:00",
+          "goodsId": "93609481",
+          "detailUrl": "93609481",
+          "platform": "shein",
+          "catItems": [
+            {
+              "id": 381,
+              "catId": 2274,
+              "catName": "Cell Phones & Accessories",
+              "catNameCn": "手机及配件",
+              "catLevel": 0,
+              "parentCatId": 0,
+              "isLeaf": false
+            },
+            {
+              "id": 1596,
+              "catId": 3327,
+              "catName": "Cell Phone Photo & Accessories",
+              "catNameCn": "手机照片和配件",
+              "catLevel": 1,
+              "parentCatId": 2274,
+              "isLeaf": false
+            },
+            {
+              "id": 1597,
+              "catId": 3328,
+              "catName": "Phone External Flashes & Selfie Lights",
+              "catNameCn": "手机外接闪光灯和自拍灯",
+              "catLevel": 2,
+              "parentCatId": 3327,
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "buguangdeng 1 Pc LED Fill Light Selfie Light, LED Phone Light With 3 Lighting Mode, Portable Mini Clip-On Fill Light , Makeup, Live Stream, Zoom Conference Rechargeable Clip Video/Photos Light For Phone, Camera"
+        }
+      ]
+    }
+  ]
+}

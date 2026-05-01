@@ -1,0 +1,2195 @@
+{
+  "platform": "amazon",
+  "catId": 328182011,
+  "catName": "电动和手动工具",
+  "channels": [
+    {
+      "channel": "热销商品",
+      "products": [
+        {
+          "goodsNameEn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "goodsNameCn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "thumbnail": "https://m.media-amazon.com/images/I/512--JLMUsL._AC_SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 13010454,
+          "sales": null,
+          "goodsPriceMin": 18.79,
+          "goodsPriceMax": null,
+          "reviewNum": 1,
+          "rating": 5,
+          "mallOpenTime": "2021-10-22T00:00:00.000+08:00",
+          "onSaleTime": "2026-03-11T00:00:00.000+08:00",
+          "goodsId": "B0GS5BN8BM",
+          "detailUrl": "B0GS5BN8BM",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 14179,
+              "catId": "553188",
+              "catName": "文件",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝"
+        },
+        {
+          "goodsNameEn": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ",
+          "goodsNameCn": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ",
+          "thumbnail": "https://m.media-amazon.com/images/I/51nxSxuo2+L._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 7.98,
+          "goodsPriceMax": null,
+          "reviewNum": 207,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B00631GSSI",
+          "detailUrl": "B00631GSSI",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 13537,
+              "catId": "552518",
+              "catName": "润滑剂",
+              "catLevel": 4,
+              "parentCatId": "552262",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ"
+        },
+        {
+          "goodsNameEn": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function Flooring Siding Remodeling Tool for Commercial Work",
+          "goodsNameCn": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function F",
+          "thumbnail": "https://m.media-amazon.com/images/I/51-hlet9CQL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+          "thumbnailCn": "",
+          "sold": 994213,
+          "sales": null,
+          "goodsPriceMin": 22.89,
+          "goodsPriceMax": null,
+          "reviewNum": 3,
+          "rating": 2.8,
+          "mallOpenTime": "2022-09-21T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-04T00:00:00.000+08:00",
+          "goodsId": "B0CDQCNFQS",
+          "detailUrl": "B0CDQCNFQS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 23499,
+              "catId": "553330",
+              "catName": "撬棒",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function Flooring Siding Remodeling Tool for Commercial Work"
+        },
+        {
+          "goodsNameEn": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charger and Bag (DCK240C2)",
+          "goodsNameCn": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charge",
+          "thumbnail": "https://m.media-amazon.com/images/I/81XPDrUh9sL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 1472546,
+          "sales": null,
+          "goodsPriceMin": 138.99,
+          "goodsPriceMax": null,
+          "reviewNum": 594,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": "2014-02-19T00:00:00.000+08:00",
+          "goodsId": "B00IJ0ALYS",
+          "detailUrl": "B00IJ0ALYS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 10856,
+              "catId": "551236",
+              "catName": "电动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 13215,
+              "catId": "552734",
+              "catName": "组合套件",
+              "catLevel": 4,
+              "parentCatId": "551236",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charger and Bag (DCK240C2)"
+        },
+        {
+          "goodsNameEn": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer, Building Bricks Storage, Teacher Toolbox, 10-1/2-Inch W x 6-1/2-Inch D x 8-1/2-Inch H, 10116 Black",
+          "goodsNameCn": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer,",
+          "thumbnail": "https://m.media-amazon.com/images/I/416bv32ksRL._SY445_SX342_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 2924189,
+          "sales": null,
+          "goodsPriceMin": 19.18,
+          "goodsPriceMax": null,
+          "reviewNum": 53135,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2006-12-01T00:00:00.000+08:00",
+          "goodsId": "B0F3FQMW26",
+          "detailUrl": "B0F3FQMW26",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 12957,
+              "catId": "10140455011",
+              "catName": "工艺品橱柜",
+              "catLevel": 4,
+              "parentCatId": "13400691",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 11494,
+              "catId": "13400691",
+              "catName": "工具组织者",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer, Building Bricks Storage, Teacher Toolbox, 10-1/2-Inch W x 6-1/2-Inch D x 8-1/2-Inch H, 10116 Black"
+        },
+        {
+          "goodsNameEn": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件",
+          "goodsNameCn": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件",
+          "thumbnail": "https://m.media-amazon.com/images/I/31veqtNsGVL._SY445_SX342_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 449036,
+          "sales": null,
+          "goodsPriceMin": 8.75,
+          "goodsPriceMax": null,
+          "reviewNum": 2448,
+          "rating": 4.5,
+          "mallOpenTime": "2022-09-11T00:00:00.000+08:00",
+          "onSaleTime": "2022-09-11T00:00:00.000+08:00",
+          "goodsId": "B0DC5L7CJ8",
+          "detailUrl": "B0DC5L7CJ8",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 19896,
+              "catId": "256292011",
+              "catName": "锯孔机",
+              "catLevel": 6,
+              "parentCatId": "552402",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3079,
+              "catId": "552402",
+              "catName": "锯孔机",
+              "catLevel": 4,
+              "parentCatId": "552796",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2521,
+              "catId": "552796",
+              "catName": "电钻零件",
+              "catLevel": 3,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件"
+        },
+        {
+          "goodsNameEn": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set, CNC Machined Tips with Magnetism, 4\" Long with Storage Box",
+          "goodsNameCn": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set",
+          "thumbnail": "https://m.media-amazon.com/images/I/71p02qVWnjL.__AC_SX300_SY300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 185173,
+          "sales": null,
+          "goodsPriceMin": 9.7,
+          "goodsPriceMax": null,
+          "reviewNum": 5862,
+          "rating": 4.7,
+          "mallOpenTime": "2024-01-29T00:00:00.000+08:00",
+          "onSaleTime": "2024-01-29T00:00:00.000+08:00",
+          "goodsId": "B0CMSZ1QFV",
+          "detailUrl": "B0CMSZ1QFV",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2828,
+              "catId": "552388",
+              "catName": "钻头",
+              "catLevel": 4,
+              "parentCatId": "552796",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4342,
+              "catId": "552400",
+              "catName": "六角柄钻头",
+              "catLevel": 6,
+              "parentCatId": "552416",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 3535,
+              "catId": "552416",
+              "catName": "麻花钻头",
+              "catLevel": 5,
+              "parentCatId": "552388",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2521,
+              "catId": "552796",
+              "catName": "电钻零件",
+              "catLevel": 3,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set, CNC Machined Tips with Magnetism, 4\" Long with Storage Box"
+        },
+        {
+          "goodsNameEn": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for Camping, Hunting, Everyday Carry - 3.25-inch Stainless Steel Blade, 4.5-inch Black/Wood HandleSmall ",
+          "goodsNameCn": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for ",
+          "thumbnail": "https://m.media-amazon.com/images/I/81cs+TE1-SL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 203431,
+          "sales": null,
+          "goodsPriceMin": 26.95,
+          "goodsPriceMax": null,
+          "reviewNum": 98,
+          "rating": 4.8,
+          "mallOpenTime": "2017-02-17T00:00:00.000+08:00",
+          "onSaleTime": "2017-02-17T00:00:00.000+08:00",
+          "goodsId": "B06VX42986",
+          "detailUrl": "B06VX42986",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 18055,
+              "catId": "553222",
+              "catName": "刀具",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 22919,
+              "catId": "553232",
+              "catName": "口袋刀",
+              "catLevel": 6,
+              "parentCatId": "553222",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for Camping, Hunting, Everyday Carry - 3.25-inch Stainless Steel Blade, 4.5-inch Black/Wood HandleSmall Business"
+        },
+        {
+          "goodsNameEn": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purple model number：EC0601 size：Large unit count：3.0Recycled materials +2 moreDiscover more products wit",
+          "goodsNameCn": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purp",
+          "thumbnail": "https://m.media-amazon.com/images/I/71u+okeHkPL._AC_UY218_.jpg",
+          "thumbnailCn": "",
+          "sold": 72614,
+          "sales": null,
+          "goodsPriceMin": 51.49,
+          "goodsPriceMax": null,
+          "reviewNum": 447,
+          "rating": 3.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-05-29T00:00:00.000+08:00",
+          "goodsId": "B0FB8VGGG2",
+          "detailUrl": "B0FB8VGGG2",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 21844,
+              "catId": "552610",
+              "catName": "塑形机配件",
+              "catLevel": 4,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 24008,
+              "catId": "8106542011",
+              "catName": "切割器",
+              "catLevel": 5,
+              "parentCatId": "552610",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purple model number：EC0601 size：Large unit count：3.0Recycled materials +2 moreDiscover more products with sustainability features."
+        },
+        {
+          "goodsNameEn": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 inches",
+          "goodsNameCn": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 i",
+          "thumbnail": "https://m.media-amazon.com/images/I/61mZtlRl-FL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 1186522,
+          "sales": null,
+          "goodsPriceMin": 9.08,
+          "goodsPriceMax": null,
+          "reviewNum": 202,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2006-06-15T08:00:00.000+08:00",
+          "goodsId": "B00004T7WS",
+          "detailUrl": "B00004T7WS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 24384,
+              "catId": "2225051011",
+              "catName": "冲头",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 26984,
+              "catId": "2225057011",
+              "catName": "打孔机",
+              "catLevel": 5,
+              "parentCatId": "2225051011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 inches"
+        }
+      ]
+    },
+    {
+      "channel": "热销新品",
+      "products": [
+        {
+          "goodsNameEn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "goodsNameCn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "thumbnail": "https://m.media-amazon.com/images/I/512--JLMUsL._AC_SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 13010454,
+          "sales": null,
+          "goodsPriceMin": 18.79,
+          "goodsPriceMax": null,
+          "reviewNum": 1,
+          "rating": 5,
+          "mallOpenTime": "2021-10-22T00:00:00.000+08:00",
+          "onSaleTime": "2026-03-11T00:00:00.000+08:00",
+          "goodsId": "B0GS5BN8BM",
+          "detailUrl": "B0GS5BN8BM",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 14179,
+              "catId": "553188",
+              "catName": "文件",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝"
+        },
+        {
+          "goodsNameEn": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ",
+          "goodsNameCn": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ",
+          "thumbnail": "https://m.media-amazon.com/images/I/51nxSxuo2+L._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 7.98,
+          "goodsPriceMax": null,
+          "reviewNum": 207,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B00631GSSI",
+          "detailUrl": "B00631GSSI",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 13537,
+              "catId": "552518",
+              "catName": "润滑剂",
+              "catLevel": 4,
+              "parentCatId": "552262",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ"
+        },
+        {
+          "goodsNameEn": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function Flooring Siding Remodeling Tool for Commercial Work",
+          "goodsNameCn": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function F",
+          "thumbnail": "https://m.media-amazon.com/images/I/51-hlet9CQL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+          "thumbnailCn": "",
+          "sold": 994213,
+          "sales": null,
+          "goodsPriceMin": 22.89,
+          "goodsPriceMax": null,
+          "reviewNum": 3,
+          "rating": 2.8,
+          "mallOpenTime": "2022-09-21T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-04T00:00:00.000+08:00",
+          "goodsId": "B0CDQCNFQS",
+          "detailUrl": "B0CDQCNFQS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 23499,
+              "catId": "553330",
+              "catName": "撬棒",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function Flooring Siding Remodeling Tool for Commercial Work"
+        },
+        {
+          "goodsNameEn": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charger and Bag (DCK240C2)",
+          "goodsNameCn": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charge",
+          "thumbnail": "https://m.media-amazon.com/images/I/81XPDrUh9sL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 1472546,
+          "sales": null,
+          "goodsPriceMin": 138.99,
+          "goodsPriceMax": null,
+          "reviewNum": 594,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": "2014-02-19T00:00:00.000+08:00",
+          "goodsId": "B00IJ0ALYS",
+          "detailUrl": "B00IJ0ALYS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 10856,
+              "catId": "551236",
+              "catName": "电动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 13215,
+              "catId": "552734",
+              "catName": "组合套件",
+              "catLevel": 4,
+              "parentCatId": "551236",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charger and Bag (DCK240C2)"
+        },
+        {
+          "goodsNameEn": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer, Building Bricks Storage, Teacher Toolbox, 10-1/2-Inch W x 6-1/2-Inch D x 8-1/2-Inch H, 10116 Black",
+          "goodsNameCn": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer,",
+          "thumbnail": "https://m.media-amazon.com/images/I/416bv32ksRL._SY445_SX342_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 2924189,
+          "sales": null,
+          "goodsPriceMin": 19.18,
+          "goodsPriceMax": null,
+          "reviewNum": 53135,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2006-12-01T00:00:00.000+08:00",
+          "goodsId": "B0F3FQMW26",
+          "detailUrl": "B0F3FQMW26",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 12957,
+              "catId": "10140455011",
+              "catName": "工艺品橱柜",
+              "catLevel": 4,
+              "parentCatId": "13400691",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 11494,
+              "catId": "13400691",
+              "catName": "工具组织者",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer, Building Bricks Storage, Teacher Toolbox, 10-1/2-Inch W x 6-1/2-Inch D x 8-1/2-Inch H, 10116 Black"
+        },
+        {
+          "goodsNameEn": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件",
+          "goodsNameCn": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件",
+          "thumbnail": "https://m.media-amazon.com/images/I/31veqtNsGVL._SY445_SX342_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 449036,
+          "sales": null,
+          "goodsPriceMin": 8.75,
+          "goodsPriceMax": null,
+          "reviewNum": 2448,
+          "rating": 4.5,
+          "mallOpenTime": "2022-09-11T00:00:00.000+08:00",
+          "onSaleTime": "2022-09-11T00:00:00.000+08:00",
+          "goodsId": "B0DC5L7CJ8",
+          "detailUrl": "B0DC5L7CJ8",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 19896,
+              "catId": "256292011",
+              "catName": "锯孔机",
+              "catLevel": 6,
+              "parentCatId": "552402",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3079,
+              "catId": "552402",
+              "catName": "锯孔机",
+              "catLevel": 4,
+              "parentCatId": "552796",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2521,
+              "catId": "552796",
+              "catName": "电钻零件",
+              "catLevel": 3,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件"
+        },
+        {
+          "goodsNameEn": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set, CNC Machined Tips with Magnetism, 4\" Long with Storage Box",
+          "goodsNameCn": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set",
+          "thumbnail": "https://m.media-amazon.com/images/I/71p02qVWnjL.__AC_SX300_SY300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 185173,
+          "sales": null,
+          "goodsPriceMin": 9.7,
+          "goodsPriceMax": null,
+          "reviewNum": 5862,
+          "rating": 4.7,
+          "mallOpenTime": "2024-01-29T00:00:00.000+08:00",
+          "onSaleTime": "2024-01-29T00:00:00.000+08:00",
+          "goodsId": "B0CMSZ1QFV",
+          "detailUrl": "B0CMSZ1QFV",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2828,
+              "catId": "552388",
+              "catName": "钻头",
+              "catLevel": 4,
+              "parentCatId": "552796",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4342,
+              "catId": "552400",
+              "catName": "六角柄钻头",
+              "catLevel": 6,
+              "parentCatId": "552416",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 3535,
+              "catId": "552416",
+              "catName": "麻花钻头",
+              "catLevel": 5,
+              "parentCatId": "552388",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2521,
+              "catId": "552796",
+              "catName": "电钻零件",
+              "catLevel": 3,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set, CNC Machined Tips with Magnetism, 4\" Long with Storage Box"
+        },
+        {
+          "goodsNameEn": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for Camping, Hunting, Everyday Carry - 3.25-inch Stainless Steel Blade, 4.5-inch Black/Wood HandleSmall ",
+          "goodsNameCn": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for ",
+          "thumbnail": "https://m.media-amazon.com/images/I/81cs+TE1-SL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 203431,
+          "sales": null,
+          "goodsPriceMin": 26.95,
+          "goodsPriceMax": null,
+          "reviewNum": 98,
+          "rating": 4.8,
+          "mallOpenTime": "2017-02-17T00:00:00.000+08:00",
+          "onSaleTime": "2017-02-17T00:00:00.000+08:00",
+          "goodsId": "B06VX42986",
+          "detailUrl": "B06VX42986",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 18055,
+              "catId": "553222",
+              "catName": "刀具",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 22919,
+              "catId": "553232",
+              "catName": "口袋刀",
+              "catLevel": 6,
+              "parentCatId": "553222",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for Camping, Hunting, Everyday Carry - 3.25-inch Stainless Steel Blade, 4.5-inch Black/Wood HandleSmall Business"
+        },
+        {
+          "goodsNameEn": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purple model number：EC0601 size：Large unit count：3.0Recycled materials +2 moreDiscover more products wit",
+          "goodsNameCn": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purp",
+          "thumbnail": "https://m.media-amazon.com/images/I/71u+okeHkPL._AC_UY218_.jpg",
+          "thumbnailCn": "",
+          "sold": 72614,
+          "sales": null,
+          "goodsPriceMin": 51.49,
+          "goodsPriceMax": null,
+          "reviewNum": 447,
+          "rating": 3.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-05-29T00:00:00.000+08:00",
+          "goodsId": "B0FB8VGGG2",
+          "detailUrl": "B0FB8VGGG2",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 21844,
+              "catId": "552610",
+              "catName": "塑形机配件",
+              "catLevel": 4,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 24008,
+              "catId": "8106542011",
+              "catName": "切割器",
+              "catLevel": 5,
+              "parentCatId": "552610",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purple model number：EC0601 size：Large unit count：3.0Recycled materials +2 moreDiscover more products with sustainability features."
+        },
+        {
+          "goodsNameEn": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 inches",
+          "goodsNameCn": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 i",
+          "thumbnail": "https://m.media-amazon.com/images/I/61mZtlRl-FL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 1186522,
+          "sales": null,
+          "goodsPriceMin": 9.08,
+          "goodsPriceMax": null,
+          "reviewNum": 202,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2006-06-15T08:00:00.000+08:00",
+          "goodsId": "B00004T7WS",
+          "detailUrl": "B00004T7WS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 24384,
+              "catId": "2225051011",
+              "catName": "冲头",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 26984,
+              "catId": "2225057011",
+              "catName": "打孔机",
+              "catLevel": 5,
+              "parentCatId": "2225051011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 inches"
+        }
+      ]
+    },
+    {
+      "channel": "新店热销",
+      "products": [
+        {
+          "goodsNameEn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "goodsNameCn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "thumbnail": "https://m.media-amazon.com/images/I/512--JLMUsL._AC_SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 13010454,
+          "sales": null,
+          "goodsPriceMin": 18.79,
+          "goodsPriceMax": null,
+          "reviewNum": 1,
+          "rating": 5,
+          "mallOpenTime": "2021-10-22T00:00:00.000+08:00",
+          "onSaleTime": "2026-03-11T00:00:00.000+08:00",
+          "goodsId": "B0GS5BN8BM",
+          "detailUrl": "B0GS5BN8BM",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 14179,
+              "catId": "553188",
+              "catName": "文件",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝"
+        },
+        {
+          "goodsNameEn": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ",
+          "goodsNameCn": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ",
+          "thumbnail": "https://m.media-amazon.com/images/I/51nxSxuo2+L._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 7.98,
+          "goodsPriceMax": null,
+          "reviewNum": 207,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B00631GSSI",
+          "detailUrl": "B00631GSSI",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 13537,
+              "catId": "552518",
+              "catName": "润滑剂",
+              "catLevel": 4,
+              "parentCatId": "552262",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ"
+        },
+        {
+          "goodsNameEn": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function Flooring Siding Remodeling Tool for Commercial Work",
+          "goodsNameCn": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function F",
+          "thumbnail": "https://m.media-amazon.com/images/I/51-hlet9CQL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+          "thumbnailCn": "",
+          "sold": 994213,
+          "sales": null,
+          "goodsPriceMin": 22.89,
+          "goodsPriceMax": null,
+          "reviewNum": 3,
+          "rating": 2.8,
+          "mallOpenTime": "2022-09-21T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-04T00:00:00.000+08:00",
+          "goodsId": "B0CDQCNFQS",
+          "detailUrl": "B0CDQCNFQS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 23499,
+              "catId": "553330",
+              "catName": "撬棒",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function Flooring Siding Remodeling Tool for Commercial Work"
+        },
+        {
+          "goodsNameEn": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charger and Bag (DCK240C2)",
+          "goodsNameCn": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charge",
+          "thumbnail": "https://m.media-amazon.com/images/I/81XPDrUh9sL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 1472546,
+          "sales": null,
+          "goodsPriceMin": 138.99,
+          "goodsPriceMax": null,
+          "reviewNum": 594,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": "2014-02-19T00:00:00.000+08:00",
+          "goodsId": "B00IJ0ALYS",
+          "detailUrl": "B00IJ0ALYS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 10856,
+              "catId": "551236",
+              "catName": "电动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 13215,
+              "catId": "552734",
+              "catName": "组合套件",
+              "catLevel": 4,
+              "parentCatId": "551236",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charger and Bag (DCK240C2)"
+        },
+        {
+          "goodsNameEn": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer, Building Bricks Storage, Teacher Toolbox, 10-1/2-Inch W x 6-1/2-Inch D x 8-1/2-Inch H, 10116 Black",
+          "goodsNameCn": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer,",
+          "thumbnail": "https://m.media-amazon.com/images/I/416bv32ksRL._SY445_SX342_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 2924189,
+          "sales": null,
+          "goodsPriceMin": 19.18,
+          "goodsPriceMax": null,
+          "reviewNum": 53135,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2006-12-01T00:00:00.000+08:00",
+          "goodsId": "B0F3FQMW26",
+          "detailUrl": "B0F3FQMW26",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 12957,
+              "catId": "10140455011",
+              "catName": "工艺品橱柜",
+              "catLevel": 4,
+              "parentCatId": "13400691",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 11494,
+              "catId": "13400691",
+              "catName": "工具组织者",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer, Building Bricks Storage, Teacher Toolbox, 10-1/2-Inch W x 6-1/2-Inch D x 8-1/2-Inch H, 10116 Black"
+        },
+        {
+          "goodsNameEn": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件",
+          "goodsNameCn": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件",
+          "thumbnail": "https://m.media-amazon.com/images/I/31veqtNsGVL._SY445_SX342_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 449036,
+          "sales": null,
+          "goodsPriceMin": 8.75,
+          "goodsPriceMax": null,
+          "reviewNum": 2448,
+          "rating": 4.5,
+          "mallOpenTime": "2022-09-11T00:00:00.000+08:00",
+          "onSaleTime": "2022-09-11T00:00:00.000+08:00",
+          "goodsId": "B0DC5L7CJ8",
+          "detailUrl": "B0DC5L7CJ8",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 19896,
+              "catId": "256292011",
+              "catName": "锯孔机",
+              "catLevel": 6,
+              "parentCatId": "552402",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3079,
+              "catId": "552402",
+              "catName": "锯孔机",
+              "catLevel": 4,
+              "parentCatId": "552796",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2521,
+              "catId": "552796",
+              "catName": "电钻零件",
+              "catLevel": 3,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件"
+        },
+        {
+          "goodsNameEn": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set, CNC Machined Tips with Magnetism, 4\" Long with Storage Box",
+          "goodsNameCn": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set",
+          "thumbnail": "https://m.media-amazon.com/images/I/71p02qVWnjL.__AC_SX300_SY300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 185173,
+          "sales": null,
+          "goodsPriceMin": 9.7,
+          "goodsPriceMax": null,
+          "reviewNum": 5862,
+          "rating": 4.7,
+          "mallOpenTime": "2024-01-29T00:00:00.000+08:00",
+          "onSaleTime": "2024-01-29T00:00:00.000+08:00",
+          "goodsId": "B0CMSZ1QFV",
+          "detailUrl": "B0CMSZ1QFV",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2828,
+              "catId": "552388",
+              "catName": "钻头",
+              "catLevel": 4,
+              "parentCatId": "552796",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4342,
+              "catId": "552400",
+              "catName": "六角柄钻头",
+              "catLevel": 6,
+              "parentCatId": "552416",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 3535,
+              "catId": "552416",
+              "catName": "麻花钻头",
+              "catLevel": 5,
+              "parentCatId": "552388",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2521,
+              "catId": "552796",
+              "catName": "电钻零件",
+              "catLevel": 3,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set, CNC Machined Tips with Magnetism, 4\" Long with Storage Box"
+        },
+        {
+          "goodsNameEn": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for Camping, Hunting, Everyday Carry - 3.25-inch Stainless Steel Blade, 4.5-inch Black/Wood HandleSmall ",
+          "goodsNameCn": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for ",
+          "thumbnail": "https://m.media-amazon.com/images/I/81cs+TE1-SL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 203431,
+          "sales": null,
+          "goodsPriceMin": 26.95,
+          "goodsPriceMax": null,
+          "reviewNum": 98,
+          "rating": 4.8,
+          "mallOpenTime": "2017-02-17T00:00:00.000+08:00",
+          "onSaleTime": "2017-02-17T00:00:00.000+08:00",
+          "goodsId": "B06VX42986",
+          "detailUrl": "B06VX42986",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 18055,
+              "catId": "553222",
+              "catName": "刀具",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 22919,
+              "catId": "553232",
+              "catName": "口袋刀",
+              "catLevel": 6,
+              "parentCatId": "553222",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for Camping, Hunting, Everyday Carry - 3.25-inch Stainless Steel Blade, 4.5-inch Black/Wood HandleSmall Business"
+        },
+        {
+          "goodsNameEn": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purple model number：EC0601 size：Large unit count：3.0Recycled materials +2 moreDiscover more products wit",
+          "goodsNameCn": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purp",
+          "thumbnail": "https://m.media-amazon.com/images/I/71u+okeHkPL._AC_UY218_.jpg",
+          "thumbnailCn": "",
+          "sold": 72614,
+          "sales": null,
+          "goodsPriceMin": 51.49,
+          "goodsPriceMax": null,
+          "reviewNum": 447,
+          "rating": 3.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-05-29T00:00:00.000+08:00",
+          "goodsId": "B0FB8VGGG2",
+          "detailUrl": "B0FB8VGGG2",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 21844,
+              "catId": "552610",
+              "catName": "塑形机配件",
+              "catLevel": 4,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 24008,
+              "catId": "8106542011",
+              "catName": "切割器",
+              "catLevel": 5,
+              "parentCatId": "552610",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purple model number：EC0601 size：Large unit count：3.0Recycled materials +2 moreDiscover more products with sustainability features."
+        },
+        {
+          "goodsNameEn": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 inches",
+          "goodsNameCn": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 i",
+          "thumbnail": "https://m.media-amazon.com/images/I/61mZtlRl-FL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 1186522,
+          "sales": null,
+          "goodsPriceMin": 9.08,
+          "goodsPriceMax": null,
+          "reviewNum": 202,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2006-06-15T08:00:00.000+08:00",
+          "goodsId": "B00004T7WS",
+          "detailUrl": "B00004T7WS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 24384,
+              "catId": "2225051011",
+              "catName": "冲头",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 26984,
+              "catId": "2225057011",
+              "catName": "打孔机",
+              "catLevel": 5,
+              "parentCatId": "2225051011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 inches"
+        }
+      ]
+    },
+    {
+      "channel": "大卖新品",
+      "products": [
+        {
+          "goodsNameEn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "goodsNameCn": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝",
+          "thumbnail": "https://m.media-amazon.com/images/I/512--JLMUsL._AC_SX679_.jpg",
+          "thumbnailCn": "",
+          "sold": 13010454,
+          "sales": null,
+          "goodsPriceMin": 18.79,
+          "goodsPriceMax": null,
+          "reviewNum": 1,
+          "rating": 5,
+          "mallOpenTime": "2021-10-22T00:00:00.000+08:00",
+          "onSaleTime": "2026-03-11T00:00:00.000+08:00",
+          "goodsId": "B0GS5BN8BM",
+          "detailUrl": "B0GS5BN8BM",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 14179,
+              "catId": "553188",
+              "catName": "文件",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "地板缝隙修复工具，重型木质和乙烯基地板用的复合地板工具，带橡胶垫的碳钢地板吸盘工具，可调节高度的调节器，封闭难看的接缝"
+        },
+        {
+          "goodsNameEn": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ",
+          "goodsNameCn": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ",
+          "thumbnail": "https://m.media-amazon.com/images/I/51nxSxuo2+L._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 0,
+          "sales": null,
+          "goodsPriceMin": 7.98,
+          "goodsPriceMax": null,
+          "reviewNum": 207,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "B00631GSSI",
+          "detailUrl": "B00631GSSI",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 13537,
+              "catId": "552518",
+              "catName": "润滑剂",
+              "catLevel": 4,
+              "parentCatId": "552262",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "WD-40 Specialist Silicone Lubricant with SMART STRAW SPRAYS 2 WAYS, 11 OZ"
+        },
+        {
+          "goodsNameEn": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function Flooring Siding Remodeling Tool for Commercial Work",
+          "goodsNameCn": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function F",
+          "thumbnail": "https://m.media-amazon.com/images/I/51-hlet9CQL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+          "thumbnailCn": "",
+          "sold": 994213,
+          "sales": null,
+          "goodsPriceMin": 22.89,
+          "goodsPriceMax": null,
+          "reviewNum": 3,
+          "rating": 2.8,
+          "mallOpenTime": "2022-09-21T00:00:00.000+08:00",
+          "onSaleTime": "2023-08-04T00:00:00.000+08:00",
+          "goodsId": "B0CDQCNFQS",
+          "detailUrl": "B0CDQCNFQS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 23499,
+              "catId": "553330",
+              "catName": "撬棒",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Trim Puller Tool for Baseboard Removal, Carbon Steel Pry Bar with Ergonomic Handle, Multi-Function Flooring Siding Remodeling Tool for Commercial Work"
+        },
+        {
+          "goodsNameEn": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charger and Bag (DCK240C2)",
+          "goodsNameCn": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charge",
+          "thumbnail": "https://m.media-amazon.com/images/I/81XPDrUh9sL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 1472546,
+          "sales": null,
+          "goodsPriceMin": 138.99,
+          "goodsPriceMax": null,
+          "reviewNum": 594,
+          "rating": 4.7,
+          "mallOpenTime": null,
+          "onSaleTime": "2014-02-19T00:00:00.000+08:00",
+          "goodsId": "B00IJ0ALYS",
+          "detailUrl": "B00IJ0ALYS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 10856,
+              "catId": "551236",
+              "catName": "电动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 13215,
+              "catId": "552734",
+              "catName": "组合套件",
+              "catLevel": 4,
+              "parentCatId": "551236",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "DEWALT 20V MAX Cordless Drill and Impact Driver, Power Tool Combo Kit , Includes 2 Batteries, Charger and Bag (DCK240C2)"
+        },
+        {
+          "goodsNameEn": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer, Building Bricks Storage, Teacher Toolbox, 10-1/2-Inch W x 6-1/2-Inch D x 8-1/2-Inch H, 10116 Black",
+          "goodsNameCn": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer,",
+          "thumbnail": "https://m.media-amazon.com/images/I/416bv32ksRL._SY445_SX342_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 2924189,
+          "sales": null,
+          "goodsPriceMin": 19.18,
+          "goodsPriceMax": null,
+          "reviewNum": 53135,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2006-12-01T00:00:00.000+08:00",
+          "goodsId": "B0F3FQMW26",
+          "detailUrl": "B0F3FQMW26",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 12957,
+              "catId": "10140455011",
+              "catName": "工艺品橱柜",
+              "catLevel": 4,
+              "parentCatId": "13400691",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 11494,
+              "catId": "13400691",
+              "catName": "工具组织者",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Akro-Mils 16-Drawer Plastic Drawer Storage Cabinet for Garage Organization, Beads, Makeup Organizer, Building Bricks Storage, Teacher Toolbox, 10-1/2-Inch W x 6-1/2-Inch D x 8-1/2-Inch H, 10116 Black"
+        },
+        {
+          "goodsNameEn": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件",
+          "goodsNameCn": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件",
+          "thumbnail": "https://m.media-amazon.com/images/I/31veqtNsGVL._SY445_SX342_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 449036,
+          "sales": null,
+          "goodsPriceMin": 8.75,
+          "goodsPriceMax": null,
+          "reviewNum": 2448,
+          "rating": 4.5,
+          "mallOpenTime": "2022-09-11T00:00:00.000+08:00",
+          "onSaleTime": "2022-09-11T00:00:00.000+08:00",
+          "goodsId": "B0DC5L7CJ8",
+          "detailUrl": "B0DC5L7CJ8",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 19896,
+              "catId": "256292011",
+              "catName": "锯孔机",
+              "catLevel": 6,
+              "parentCatId": "552402",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 3079,
+              "catId": "552402",
+              "catName": "锯孔机",
+              "catLevel": 4,
+              "parentCatId": "552796",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2521,
+              "catId": "552796",
+              "catName": "电钻零件",
+              "catLevel": 3,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "6 英寸带心轴的孔锯，用于金属木材和塑料切割，152 毫米双金属孔刀，适用于不同项目，具有光滑平坦的钻孔边缘，快速排屑，方便的孔锯套件"
+        },
+        {
+          "goodsNameEn": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set, CNC Machined Tips with Magnetism, 4\" Long with Storage Box",
+          "goodsNameCn": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set",
+          "thumbnail": "https://m.media-amazon.com/images/I/71p02qVWnjL.__AC_SX300_SY300_QL70_ML2_.jpg",
+          "thumbnailCn": "",
+          "sold": 185173,
+          "sales": null,
+          "goodsPriceMin": 9.7,
+          "goodsPriceMax": null,
+          "reviewNum": 5862,
+          "rating": 4.7,
+          "mallOpenTime": "2024-01-29T00:00:00.000+08:00",
+          "onSaleTime": "2024-01-29T00:00:00.000+08:00",
+          "goodsId": "B0CMSZ1QFV",
+          "detailUrl": "B0CMSZ1QFV",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2828,
+              "catId": "552388",
+              "catName": "钻头",
+              "catLevel": 4,
+              "parentCatId": "552796",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 4342,
+              "catId": "552400",
+              "catName": "六角柄钻头",
+              "catLevel": 6,
+              "parentCatId": "552416",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 3535,
+              "catId": "552416",
+              "catName": "麻花钻头",
+              "catLevel": 5,
+              "parentCatId": "552388",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2521,
+              "catId": "552796",
+              "catName": "电钻零件",
+              "catLevel": 3,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "toolant Impact Hex Head Allen Wrench Drill Bit Set 10pcs (SAE), 1/4\" Hex-Shank S2 Steel Hex Bits Set, CNC Machined Tips with Magnetism, 4\" Long with Storage Box"
+        },
+        {
+          "goodsNameEn": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for Camping, Hunting, Everyday Carry - 3.25-inch Stainless Steel Blade, 4.5-inch Black/Wood HandleSmall ",
+          "goodsNameCn": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for ",
+          "thumbnail": "https://m.media-amazon.com/images/I/81cs+TE1-SL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 203431,
+          "sales": null,
+          "goodsPriceMin": 26.95,
+          "goodsPriceMax": null,
+          "reviewNum": 98,
+          "rating": 4.8,
+          "mallOpenTime": "2017-02-17T00:00:00.000+08:00",
+          "onSaleTime": "2017-02-17T00:00:00.000+08:00",
+          "goodsId": "B06VX42986",
+          "detailUrl": "B06VX42986",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 18055,
+              "catId": "553222",
+              "catName": "刀具",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 22919,
+              "catId": "553232",
+              "catName": "口袋刀",
+              "catLevel": 6,
+              "parentCatId": "553222",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Palmetto Wood Shop Custom Pocket Knife - Laser Engraved Pocket Knife Gift for Men, Custom Knife for Camping, Hunting, Everyday Carry - 3.25-inch Stainless Steel Blade, 4.5-inch Black/Wood HandleSmall Business"
+        },
+        {
+          "goodsNameEn": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purple model number：EC0601 size：Large unit count：3.0Recycled materials +2 moreDiscover more products wit",
+          "goodsNameCn": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purp",
+          "thumbnail": "https://m.media-amazon.com/images/I/71u+okeHkPL._AC_UY218_.jpg",
+          "thumbnailCn": "",
+          "sold": 72614,
+          "sales": null,
+          "goodsPriceMin": 51.49,
+          "goodsPriceMax": null,
+          "reviewNum": 447,
+          "rating": 3.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-05-29T00:00:00.000+08:00",
+          "goodsId": "B0FB8VGGG2",
+          "detailUrl": "B0FB8VGGG2",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 2222,
+              "catId": "552262",
+              "catName": "电动工具零件",
+              "catLevel": 2,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 21844,
+              "catId": "552610",
+              "catName": "塑形机配件",
+              "catLevel": 4,
+              "parentCatId": "552262",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 24008,
+              "catId": "8106542011",
+              "catName": "切割器",
+              "catLevel": 5,
+              "parentCatId": "552610",
+              "isLeaf": true,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "4V Rechargeable Rotary Cordless Electric Scissors ( purple ) part number：DDJD-gr0115-L119 color：purple model number：EC0601 size：Large unit count：3.0Recycled materials +2 moreDiscover more products with sustainability features."
+        },
+        {
+          "goodsNameEn": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 inches",
+          "goodsNameCn": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 i",
+          "thumbnail": "https://m.media-amazon.com/images/I/61mZtlRl-FL._AC_UL320_.jpg",
+          "thumbnailCn": "",
+          "sold": 1186522,
+          "sales": null,
+          "goodsPriceMin": 9.08,
+          "goodsPriceMax": null,
+          "reviewNum": 202,
+          "rating": 4.5,
+          "mallOpenTime": null,
+          "onSaleTime": "2006-06-15T08:00:00.000+08:00",
+          "goodsId": "B00004T7WS",
+          "detailUrl": "B00004T7WS",
+          "platform": "amazon",
+          "catItems": [
+            {
+              "id": 24384,
+              "catId": "2225051011",
+              "catName": "冲头",
+              "catLevel": 4,
+              "parentCatId": "551238",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 26984,
+              "catId": "2225057011",
+              "catName": "打孔机",
+              "catLevel": 5,
+              "parentCatId": "2225051011",
+              "isLeaf": true,
+              "siteId": 1
+            },
+            {
+              "id": 1931,
+              "catId": "328182011",
+              "catName": "电动和手动工具",
+              "catLevel": 1,
+              "parentCatId": "0",
+              "isLeaf": false,
+              "siteId": 1
+            },
+            {
+              "id": 9731,
+              "catId": "551238",
+              "catName": "手动工具",
+              "catLevel": 3,
+              "parentCatId": "328182011",
+              "isLeaf": false,
+              "siteId": 1
+            }
+          ],
+          "goodsName": "Leather Hole Punch Tool - 6 Multi-Hole Sizes for Leather, Rubber, & Plastic - Hobbies & Crafts 8.5 inches"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1755 @@
+{
+  "platform": "sumaitong",
+  "catId": 200000345,
+  "catName": "女装",
+  "channels": [
+    {
+      "channel": "热销商品",
+      "products": [
+        {
+          "goodsNameEn": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym",
+          "goodsNameCn": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S0209a1f20f8b4d538de7b24340316075U.jpg",
+          "thumbnailCn": "",
+          "sold": 59042,
+          "sales": null,
+          "goodsPriceMin": 7.58,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-05-28T00:00:00.000+08:00",
+          "goodsId": "3256808954546842",
+          "detailUrl": "3256808954546842",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8194,
+              "catId": "200000865",
+              "catName": "打底裤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S7b62b25e8bf045f2b1b378a1adc8f3b1W.png",
+          "thumbnailCn": "",
+          "sold": 51647,
+          "sales": null,
+          "goodsPriceMin": 10.37,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-07-22T00:00:00.000+08:00",
+          "goodsId": "1005008429991461",
+          "detailUrl": "1005008429991461",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Tank Top Korean Style",
+          "goodsNameCn": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Ta",
+          "thumbnail": "//ae04.alicdn.com/kf/Sfd98e7483d134c4ebb3277a5f05b3173B.png",
+          "thumbnailCn": "",
+          "sold": 50000,
+          "sales": null,
+          "goodsPriceMin": 3.48,
+          "goodsPriceMax": null,
+          "reviewNum": 6178,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-17T00:00:00.000+08:00",
+          "goodsId": "3256806808766870",
+          "detailUrl": "3256806808766870",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8223,
+              "catId": "200000790",
+              "catName": "背心，吊带",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Tank Top Korean Style"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae04.alicdn.com/kf/S4977ab02d21141b580a24aa3a1026cf8c.png",
+          "thumbnailCn": "",
+          "sold": 50000,
+          "sales": null,
+          "goodsPriceMin": 3.39,
+          "goodsPriceMax": null,
+          "reviewNum": 4959,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "3256808243676709",
+          "detailUrl": "3256808243676709",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S4977ab02d21141b580a24aa3a1026cf8c.png",
+          "thumbnailCn": "",
+          "sold": 48808,
+          "sales": null,
+          "goodsPriceMin": 3.52,
+          "goodsPriceMax": 23,
+          "reviewNum": 4905,
+          "rating": 4.8,
+          "mallOpenTime": "2024-02-28T23:29:16.000+08:00",
+          "onSaleTime": "2024-07-03T00:00:00.000+08:00",
+          "goodsId": "3256807095249832",
+          "detailUrl": "3256807095249832",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S7b62b25e8bf045f2b1b378a1adc8f3b1W.png",
+          "thumbnailCn": "",
+          "sold": 48730,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-03T00:00:00.000+08:00",
+          "goodsId": "1005007281564584",
+          "detailUrl": "1005007281564584",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Color Breathable Unisex Tops",
+          "goodsNameCn": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Col",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S1254a3a6a937481ba578c79eb3adf93ex.png",
+          "thumbnailCn": "",
+          "sold": 42974,
+          "sales": null,
+          "goodsPriceMin": 8.21,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-10T00:00:00.000+08:00",
+          "goodsId": "3256807353467970",
+          "detailUrl": "3256807353467970",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8222,
+              "catId": "200000791",
+              "catName": "T恤",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Color Breathable Unisex Tops"
+        },
+        {
+          "goodsNameEn": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Workout Tops Activewear",
+          "goodsNameCn": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Wo",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S24c70ece64244d44943c5fce52dc4172m.jpg",
+          "thumbnailCn": "",
+          "sold": 41108,
+          "sales": null,
+          "goodsPriceMin": 9.45,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-07-21T00:00:00.000+08:00",
+          "goodsId": "3256807801652281",
+          "detailUrl": "3256807801652281",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Workout Tops Activewear"
+        },
+        {
+          "goodsNameEn": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly Winter Vintage Jackets",
+          "goodsNameCn": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly W",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S37c7d53988a847229f3c341f5b428110s.jpg",
+          "thumbnailCn": "",
+          "sold": 35158,
+          "sales": null,
+          "goodsPriceMin": 22.33,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-09-24T00:00:00.000+08:00",
+          "goodsId": "3256809850781377",
+          "detailUrl": "3256809850781377",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly Winter Vintage Jackets"
+        },
+        {
+          "goodsNameEn": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Color Simple Fashion Vest",
+          "goodsNameCn": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Col",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sf273050c92764dffb03e9225b1597aa67.jpg",
+          "thumbnailCn": "",
+          "sold": 30803,
+          "sales": null,
+          "goodsPriceMin": 4.17,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-15T00:00:00.000+08:00",
+          "goodsId": "3256806984364215",
+          "detailUrl": "3256806984364215",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8223,
+              "catId": "200000790",
+              "catName": "背心，吊带",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Color Simple Fashion Vest"
+        }
+      ]
+    },
+    {
+      "channel": "热销新品",
+      "products": [
+        {
+          "goodsNameEn": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym",
+          "goodsNameCn": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S0209a1f20f8b4d538de7b24340316075U.jpg",
+          "thumbnailCn": "",
+          "sold": 59042,
+          "sales": null,
+          "goodsPriceMin": 7.58,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-05-28T00:00:00.000+08:00",
+          "goodsId": "3256808954546842",
+          "detailUrl": "3256808954546842",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8194,
+              "catId": "200000865",
+              "catName": "打底裤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S7b62b25e8bf045f2b1b378a1adc8f3b1W.png",
+          "thumbnailCn": "",
+          "sold": 51647,
+          "sales": null,
+          "goodsPriceMin": 10.37,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-07-22T00:00:00.000+08:00",
+          "goodsId": "1005008429991461",
+          "detailUrl": "1005008429991461",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Tank Top Korean Style",
+          "goodsNameCn": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Ta",
+          "thumbnail": "//ae04.alicdn.com/kf/Sfd98e7483d134c4ebb3277a5f05b3173B.png",
+          "thumbnailCn": "",
+          "sold": 50000,
+          "sales": null,
+          "goodsPriceMin": 3.48,
+          "goodsPriceMax": null,
+          "reviewNum": 6178,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-17T00:00:00.000+08:00",
+          "goodsId": "3256806808766870",
+          "detailUrl": "3256806808766870",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8223,
+              "catId": "200000790",
+              "catName": "背心，吊带",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Tank Top Korean Style"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae04.alicdn.com/kf/S4977ab02d21141b580a24aa3a1026cf8c.png",
+          "thumbnailCn": "",
+          "sold": 50000,
+          "sales": null,
+          "goodsPriceMin": 3.39,
+          "goodsPriceMax": null,
+          "reviewNum": 4959,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "3256808243676709",
+          "detailUrl": "3256808243676709",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S4977ab02d21141b580a24aa3a1026cf8c.png",
+          "thumbnailCn": "",
+          "sold": 48808,
+          "sales": null,
+          "goodsPriceMin": 3.52,
+          "goodsPriceMax": 23,
+          "reviewNum": 4905,
+          "rating": 4.8,
+          "mallOpenTime": "2024-02-28T23:29:16.000+08:00",
+          "onSaleTime": "2024-07-03T00:00:00.000+08:00",
+          "goodsId": "3256807095249832",
+          "detailUrl": "3256807095249832",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S7b62b25e8bf045f2b1b378a1adc8f3b1W.png",
+          "thumbnailCn": "",
+          "sold": 48730,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-03T00:00:00.000+08:00",
+          "goodsId": "1005007281564584",
+          "detailUrl": "1005007281564584",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Color Breathable Unisex Tops",
+          "goodsNameCn": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Col",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S1254a3a6a937481ba578c79eb3adf93ex.png",
+          "thumbnailCn": "",
+          "sold": 42974,
+          "sales": null,
+          "goodsPriceMin": 8.21,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-10T00:00:00.000+08:00",
+          "goodsId": "3256807353467970",
+          "detailUrl": "3256807353467970",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8222,
+              "catId": "200000791",
+              "catName": "T恤",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Color Breathable Unisex Tops"
+        },
+        {
+          "goodsNameEn": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Workout Tops Activewear",
+          "goodsNameCn": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Wo",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S24c70ece64244d44943c5fce52dc4172m.jpg",
+          "thumbnailCn": "",
+          "sold": 41108,
+          "sales": null,
+          "goodsPriceMin": 9.45,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-07-21T00:00:00.000+08:00",
+          "goodsId": "3256807801652281",
+          "detailUrl": "3256807801652281",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Workout Tops Activewear"
+        },
+        {
+          "goodsNameEn": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly Winter Vintage Jackets",
+          "goodsNameCn": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly W",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S37c7d53988a847229f3c341f5b428110s.jpg",
+          "thumbnailCn": "",
+          "sold": 35158,
+          "sales": null,
+          "goodsPriceMin": 22.33,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-09-24T00:00:00.000+08:00",
+          "goodsId": "3256809850781377",
+          "detailUrl": "3256809850781377",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly Winter Vintage Jackets"
+        },
+        {
+          "goodsNameEn": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Color Simple Fashion Vest",
+          "goodsNameCn": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Col",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sf273050c92764dffb03e9225b1597aa67.jpg",
+          "thumbnailCn": "",
+          "sold": 30803,
+          "sales": null,
+          "goodsPriceMin": 4.17,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-15T00:00:00.000+08:00",
+          "goodsId": "3256806984364215",
+          "detailUrl": "3256806984364215",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8223,
+              "catId": "200000790",
+              "catName": "背心，吊带",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Color Simple Fashion Vest"
+        }
+      ]
+    },
+    {
+      "channel": "新店热销",
+      "products": [
+        {
+          "goodsNameEn": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym",
+          "goodsNameCn": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S0209a1f20f8b4d538de7b24340316075U.jpg",
+          "thumbnailCn": "",
+          "sold": 59042,
+          "sales": null,
+          "goodsPriceMin": 7.58,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-05-28T00:00:00.000+08:00",
+          "goodsId": "3256808954546842",
+          "detailUrl": "3256808954546842",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8194,
+              "catId": "200000865",
+              "catName": "打底裤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S7b62b25e8bf045f2b1b378a1adc8f3b1W.png",
+          "thumbnailCn": "",
+          "sold": 51647,
+          "sales": null,
+          "goodsPriceMin": 10.37,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-07-22T00:00:00.000+08:00",
+          "goodsId": "1005008429991461",
+          "detailUrl": "1005008429991461",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Tank Top Korean Style",
+          "goodsNameCn": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Ta",
+          "thumbnail": "//ae04.alicdn.com/kf/Sfd98e7483d134c4ebb3277a5f05b3173B.png",
+          "thumbnailCn": "",
+          "sold": 50000,
+          "sales": null,
+          "goodsPriceMin": 3.48,
+          "goodsPriceMax": null,
+          "reviewNum": 6178,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-17T00:00:00.000+08:00",
+          "goodsId": "3256806808766870",
+          "detailUrl": "3256806808766870",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8223,
+              "catId": "200000790",
+              "catName": "背心，吊带",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Tank Top Korean Style"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae04.alicdn.com/kf/S4977ab02d21141b580a24aa3a1026cf8c.png",
+          "thumbnailCn": "",
+          "sold": 50000,
+          "sales": null,
+          "goodsPriceMin": 3.39,
+          "goodsPriceMax": null,
+          "reviewNum": 4959,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "3256808243676709",
+          "detailUrl": "3256808243676709",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S4977ab02d21141b580a24aa3a1026cf8c.png",
+          "thumbnailCn": "",
+          "sold": 48808,
+          "sales": null,
+          "goodsPriceMin": 3.52,
+          "goodsPriceMax": 23,
+          "reviewNum": 4905,
+          "rating": 4.8,
+          "mallOpenTime": "2024-02-28T23:29:16.000+08:00",
+          "onSaleTime": "2024-07-03T00:00:00.000+08:00",
+          "goodsId": "3256807095249832",
+          "detailUrl": "3256807095249832",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S7b62b25e8bf045f2b1b378a1adc8f3b1W.png",
+          "thumbnailCn": "",
+          "sold": 48730,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-03T00:00:00.000+08:00",
+          "goodsId": "1005007281564584",
+          "detailUrl": "1005007281564584",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Color Breathable Unisex Tops",
+          "goodsNameCn": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Col",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S1254a3a6a937481ba578c79eb3adf93ex.png",
+          "thumbnailCn": "",
+          "sold": 42974,
+          "sales": null,
+          "goodsPriceMin": 8.21,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-10T00:00:00.000+08:00",
+          "goodsId": "3256807353467970",
+          "detailUrl": "3256807353467970",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8222,
+              "catId": "200000791",
+              "catName": "T恤",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Color Breathable Unisex Tops"
+        },
+        {
+          "goodsNameEn": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Workout Tops Activewear",
+          "goodsNameCn": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Wo",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S24c70ece64244d44943c5fce52dc4172m.jpg",
+          "thumbnailCn": "",
+          "sold": 41108,
+          "sales": null,
+          "goodsPriceMin": 9.45,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-07-21T00:00:00.000+08:00",
+          "goodsId": "3256807801652281",
+          "detailUrl": "3256807801652281",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Workout Tops Activewear"
+        },
+        {
+          "goodsNameEn": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly Winter Vintage Jackets",
+          "goodsNameCn": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly W",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S37c7d53988a847229f3c341f5b428110s.jpg",
+          "thumbnailCn": "",
+          "sold": 35158,
+          "sales": null,
+          "goodsPriceMin": 22.33,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-09-24T00:00:00.000+08:00",
+          "goodsId": "3256809850781377",
+          "detailUrl": "3256809850781377",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly Winter Vintage Jackets"
+        },
+        {
+          "goodsNameEn": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Color Simple Fashion Vest",
+          "goodsNameCn": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Col",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sf273050c92764dffb03e9225b1597aa67.jpg",
+          "thumbnailCn": "",
+          "sold": 30803,
+          "sales": null,
+          "goodsPriceMin": 4.17,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-15T00:00:00.000+08:00",
+          "goodsId": "3256806984364215",
+          "detailUrl": "3256806984364215",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8223,
+              "catId": "200000790",
+              "catName": "背心，吊带",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Color Simple Fashion Vest"
+        }
+      ]
+    },
+    {
+      "channel": "大卖新品",
+      "products": [
+        {
+          "goodsNameEn": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym",
+          "goodsNameCn": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S0209a1f20f8b4d538de7b24340316075U.jpg",
+          "thumbnailCn": "",
+          "sold": 59042,
+          "sales": null,
+          "goodsPriceMin": 7.58,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-05-28T00:00:00.000+08:00",
+          "goodsId": "3256808954546842",
+          "detailUrl": "3256808954546842",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8194,
+              "catId": "200000865",
+              "catName": "打底裤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Yoga Pants Sport Leggings Women Seamless High Waist Push Up Woman Tights Fitness Workout Leggins Gym"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S7b62b25e8bf045f2b1b378a1adc8f3b1W.png",
+          "thumbnailCn": "",
+          "sold": 51647,
+          "sales": null,
+          "goodsPriceMin": 10.37,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-07-22T00:00:00.000+08:00",
+          "goodsId": "1005008429991461",
+          "detailUrl": "1005008429991461",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Tank Top Korean Style",
+          "goodsNameCn": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Ta",
+          "thumbnail": "//ae04.alicdn.com/kf/Sfd98e7483d134c4ebb3277a5f05b3173B.png",
+          "thumbnailCn": "",
+          "sold": 50000,
+          "sales": null,
+          "goodsPriceMin": 3.48,
+          "goodsPriceMax": null,
+          "reviewNum": 6178,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-05-17T00:00:00.000+08:00",
+          "goodsId": "3256806808766870",
+          "detailUrl": "3256806808766870",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8223,
+              "catId": "200000790",
+              "catName": "背心，吊带",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women's Sleeveless Top Tank Underwear Fitted Camisole Sexy Short Top With Thin Straps Plain White Tank Top Korean Style"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae04.alicdn.com/kf/S4977ab02d21141b580a24aa3a1026cf8c.png",
+          "thumbnailCn": "",
+          "sold": 50000,
+          "sales": null,
+          "goodsPriceMin": 3.39,
+          "goodsPriceMax": null,
+          "reviewNum": 4959,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": null,
+          "goodsId": "3256808243676709",
+          "detailUrl": "3256808243676709",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S4977ab02d21141b580a24aa3a1026cf8c.png",
+          "thumbnailCn": "",
+          "sold": 48808,
+          "sales": null,
+          "goodsPriceMin": 3.52,
+          "goodsPriceMax": 23,
+          "reviewNum": 4905,
+          "rating": 4.8,
+          "mallOpenTime": "2024-02-28T23:29:16.000+08:00",
+          "onSaleTime": "2024-07-03T00:00:00.000+08:00",
+          "goodsId": "3256807095249832",
+          "detailUrl": "3256807095249832",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "goodsNameCn": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S7b62b25e8bf045f2b1b378a1adc8f3b1W.png",
+          "thumbnailCn": "",
+          "sold": 48730,
+          "sales": null,
+          "goodsPriceMin": 0.99,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.8,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-03T00:00:00.000+08:00",
+          "goodsId": "1005007281564584",
+          "detailUrl": "1005007281564584",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women Sport Jacket Long Sleeve Shirt Workout Coat Gym Training Clothing Yoga Sportswear"
+        },
+        {
+          "goodsNameEn": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Color Breathable Unisex Tops",
+          "goodsNameCn": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Col",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S1254a3a6a937481ba578c79eb3adf93ex.png",
+          "thumbnailCn": "",
+          "sold": 42974,
+          "sales": null,
+          "goodsPriceMin": 8.21,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-09-10T00:00:00.000+08:00",
+          "goodsId": "3256807353467970",
+          "detailUrl": "3256807353467970",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8222,
+              "catId": "200000791",
+              "catName": "T恤",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "100% Cotton Men's Women Summer T-shirt Loose Short-sleeved Casual Basic T-Shirt Round Neck Solid Color Breathable Unisex Tops"
+        },
+        {
+          "goodsNameEn": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Workout Tops Activewear",
+          "goodsNameCn": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Wo",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S24c70ece64244d44943c5fce52dc4172m.jpg",
+          "thumbnailCn": "",
+          "sold": 41108,
+          "sales": null,
+          "goodsPriceMin": 9.45,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-07-21T00:00:00.000+08:00",
+          "goodsId": "3256807801652281",
+          "detailUrl": "3256807801652281",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Yoga Clothes Windbreaker Sportswear Woman Running Long Sleeve Sweatshirt Sports Jackets Top Women Workout Tops Activewear"
+        },
+        {
+          "goodsNameEn": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly Winter Vintage Jackets",
+          "goodsNameCn": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly W",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S37c7d53988a847229f3c341f5b428110s.jpg",
+          "thumbnailCn": "",
+          "sold": 35158,
+          "sales": null,
+          "goodsPriceMin": 22.33,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2025-09-24T00:00:00.000+08:00",
+          "goodsId": "3256809850781377",
+          "detailUrl": "3256809850781377",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8196,
+              "catId": "200000796",
+              "catName": "外套/大衣",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8229,
+              "catId": "200000801",
+              "catName": "夹克/短外套",
+              "catLevel": 2,
+              "parentCatId": "200000796",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "HH Women's Street Fashion Solid Loose Suede Texture Coats Causal Long Bat Sleeves Lapel Zipper Fly Winter Vintage Jackets"
+        },
+        {
+          "goodsNameEn": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Color Simple Fashion Vest",
+          "goodsNameCn": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Col",
+          "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sf273050c92764dffb03e9225b1597aa67.jpg",
+          "thumbnailCn": "",
+          "sold": 30803,
+          "sales": null,
+          "goodsPriceMin": 4.17,
+          "goodsPriceMax": null,
+          "reviewNum": 0,
+          "rating": 4.9,
+          "mallOpenTime": null,
+          "onSaleTime": "2024-07-15T00:00:00.000+08:00",
+          "goodsId": "3256806984364215",
+          "detailUrl": "3256806984364215",
+          "platform": "sumaitong",
+          "catItems": [
+            {
+              "id": 21,
+              "catId": "200000345",
+              "catName": "女装",
+              "catLevel": 0,
+              "parentCatId": "0",
+              "isLeaf": false
+            },
+            {
+              "id": 8195,
+              "catId": "200000778",
+              "catName": "上衣，T恤",
+              "catLevel": 1,
+              "parentCatId": "200000345",
+              "isLeaf": false
+            },
+            {
+              "id": 8223,
+              "catId": "200000790",
+              "catName": "背心，吊带",
+              "catLevel": 2,
+              "parentCatId": "200000778",
+              "isLeaf": true
+            }
+          ],
+          "goodsName": "Women's Sleeveless Pleated Slim Fit Vest Sexy Hot Girl Short Top With Thin Shoulder Straps Solid Color Simple Fashion Vest"
+        }
+      ]
+    }
+  ]
+}
