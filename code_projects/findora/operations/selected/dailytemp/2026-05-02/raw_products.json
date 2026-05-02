@@ -1,0 +1,2872 @@
+{
+  "date": "2026-05-02",
+  "total": 52,
+  "errors": [
+    {
+      "platform": "temu",
+      "category": "各色美食",
+      "channel": "热销新品",
+      "error": "no data"
+    },
+    {
+      "platform": "temu",
+      "category": "各色美食",
+      "channel": "新店热销",
+      "error": "no data"
+    },
+    {
+      "platform": "temu",
+      "category": "各色美食",
+      "channel": "大卖新品",
+      "error": "no data"
+    },
+    {
+      "platform": "shein",
+      "category": "电子学",
+      "channel": "热销新品",
+      "error": "no data"
+    },
+    {
+      "platform": "shein",
+      "category": "电子学",
+      "channel": "新店热销",
+      "error": "no data"
+    },
+    {
+      "platform": "shein",
+      "category": "电子学",
+      "channel": "大卖新品",
+      "error": "no data"
+    },
+    {
+      "platform": "amazon",
+      "category": "运动与户外",
+      "channel": "热销新品",
+      "error": "no data"
+    },
+    {
+      "platform": "amazon",
+      "category": "运动与户外",
+      "channel": "新店热销",
+      "error": "no data"
+    },
+    {
+      "platform": "amazon",
+      "category": "运动与户外",
+      "channel": "大卖新品",
+      "error": "no data"
+    },
+    {
+      "platform": "sumaitong",
+      "category": "男装",
+      "channel": "大卖新品",
+      "error": "no data"
+    },
+    {
+      "platform": "tiktok",
+      "category": "Jewelry Accessories & Derivatives",
+      "channel": "热销商品",
+      "error": "no data"
+    },
+    {
+      "platform": "tiktok",
+      "category": "Jewelry Accessories & Derivatives",
+      "channel": "热销新品",
+      "error": "no data"
+    },
+    {
+      "platform": "tiktok",
+      "category": "Jewelry Accessories & Derivatives",
+      "channel": "新店热销",
+      "error": "no data"
+    },
+    {
+      "platform": "tiktok",
+      "category": "Jewelry Accessories & Derivatives",
+      "channel": "大卖新品",
+      "error": "no data"
+    }
+  ],
+  "products": [
+    {
+      "goodsNameEn": "定制海滩婚礼蛋糕礼帽、热带婚礼蛋糕标志、先生和夫人蛋糕礼帽、25 周年纪念蛋糕装饰、派对装饰、刚刚订婚的礼物",
+      "goodsNameCn": "定制海滩婚礼蛋糕礼帽、热带婚礼蛋糕标志、先生和夫人蛋糕礼帽、25 周年纪念蛋糕装饰、派对装饰、刚刚订婚的礼物",
+      "thumbnail": "https://img.kwcdn.com/product/open/f932152b29e9451ebb8c6e016b292613-goods.jpeg",
+      "thumbnailCn": "",
+      "sold": 329,
+      "sales": 4181.59,
+      "goodsPriceMin": 12.71,
+      "goodsPriceMax": 12.71,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2024-01-24T02:17:29.371+00:00",
+      "onSaleTime": null,
+      "goodsId": "601102809333626",
+      "detailUrl": "601102809333626",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 19489,
+          "catId": 42367,
+          "catName": "各色美食",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23858,
+          "catId": 44197,
+          "catName": "食品储藏室必备品",
+          "catLevel": 2,
+          "parentCatId": 42367,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 65412,
+          "catId": 44198,
+          "catName": "烹饪和烘焙",
+          "catLevel": 3,
+          "parentCatId": 44197,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 67422,
+          "catId": 44384,
+          "catName": "糖霜，糖衣和装饰品",
+          "catLevel": 4,
+          "parentCatId": 44198,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 70017,
+          "catId": 44398,
+          "catName": "蛋糕装饰",
+          "catLevel": 5,
+          "parentCatId": 44384,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "定制海滩婚礼蛋糕礼帽、热带婚礼蛋糕标志、先生和夫人蛋糕礼帽、25 周年纪念蛋糕装饰、派对装饰、刚刚订婚的礼物",
+      "_source": "temu",
+      "_channel": "热销商品",
+      "_catName": "各色美食"
+    },
+    {
+      "goodsNameEn": "奢华闪亮细闪粉喷雾，高亮度装饰粉末，适用于舞台布景、活动装饰、DIY手工艺品及个人艺术创作配件",
+      "goodsNameCn": "奢华闪亮细闪粉喷雾，高亮度装饰粉末，适用于舞台布景、活动装饰、DIY手工艺品及个人艺术创作配件",
+      "thumbnail": "https://img.kwcdn.com/product/open/e0af525834e74308934abd72590fb2da-goods.jpeg",
+      "thumbnailCn": "",
+      "sold": 237,
+      "sales": 1334.31,
+      "goodsPriceMin": 5.63,
+      "goodsPriceMax": 5.96,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-12T22:50:20.718+00:00",
+      "goodsId": "606594351911286",
+      "detailUrl": "606594351911286",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 19489,
+          "catId": 42367,
+          "catName": "各色美食",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23858,
+          "catId": 44197,
+          "catName": "食品储藏室必备品",
+          "catLevel": 2,
+          "parentCatId": 42367,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 65412,
+          "catId": 44198,
+          "catName": "烹饪和烘焙",
+          "catLevel": 3,
+          "parentCatId": 44197,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 67422,
+          "catId": 44384,
+          "catName": "糖霜，糖衣和装饰品",
+          "catLevel": 4,
+          "parentCatId": 44198,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 70006,
+          "catId": 44395,
+          "catName": "甜点装饰套件",
+          "catLevel": 5,
+          "parentCatId": 44384,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "奢华闪亮细闪粉喷雾，高亮度装饰粉末，适用于舞台布景、活动装饰、DIY手工艺品及个人艺术创作配件",
+      "_source": "temu",
+      "_channel": "热销商品",
+      "_catName": "各色美食"
+    },
+    {
+      "goodsNameEn": "Baking Decoration 5G Glitter DIY Handicraft Set - Suitable for Cake Decoration, Dessert Decoration, Party Gifts | Baking Glitter, Birthday Gifts, Festival Ornaments, Wedding Events, Party Supplies | M",
+      "goodsNameCn": "烘焙装饰5G闪粉 DIY手工艺套装 – 适用于蛋糕装饰、甜点装饰、派对礼物 | 烘焙闪粉 生日礼物 节日饰品 婚礼活动 派对用品 | 多功能亮片粉 手工制作",
+      "thumbnail": "https://img.kwcdn.com/product/open/6179d5782d234fd0b1f005c86dee4bcd-goods.jpeg",
+      "thumbnailCn": "",
+      "sold": 141,
+      "sales": 662.7,
+      "goodsPriceMin": 4.7,
+      "goodsPriceMax": 7.31,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-10T03:07:43.948+00:00",
+      "goodsId": "606446443934911",
+      "detailUrl": "606446443934911",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 19489,
+          "catId": 42367,
+          "catName": "各色美食",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23858,
+          "catId": 44197,
+          "catName": "食品储藏室必备品",
+          "catLevel": 2,
+          "parentCatId": 42367,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 65412,
+          "catId": 44198,
+          "catName": "烹饪和烘焙",
+          "catLevel": 3,
+          "parentCatId": 44197,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 67422,
+          "catId": 44384,
+          "catName": "糖霜，糖衣和装饰品",
+          "catLevel": 4,
+          "parentCatId": 44198,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 70010,
+          "catId": 44396,
+          "catName": "纸杯蛋糕礼帽",
+          "catLevel": 5,
+          "parentCatId": 44384,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "烘焙装饰5G闪粉 DIY手工艺套装 – 适用于蛋糕装���、甜点装饰、派对礼物 | 烘焙闪粉 生日礼物 节日饰品 婚礼活动 派对用品 | 多功能亮片粉 手工制作",
+      "_source": "temu",
+      "_channel": "热销商品",
+      "_catName": "各色美食"
+    },
+    {
+      "goodsNameEn": "Finally Done with This B S Cake Topper Congrats Grad Class of 2026, Bachelor of Science, 2026 College Universary Graduation Party Decorations Supplies, Black Glitter",
+      "goodsNameCn": "Finally Done with This B S Cake Topper Congrats Grad Class of 2026, Bachelor of Science, 2026 Colleg",
+      "thumbnail": "https://img.kwcdn.com/product/open/2be242ba7def4c5c846f324574067144-goods.jpeg",
+      "thumbnailCn": "",
+      "sold": 110,
+      "sales": 279.4,
+      "goodsPriceMin": 2.54,
+      "goodsPriceMax": 2.43,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2023-04-10T02:38:31.339+00:00",
+      "onSaleTime": null,
+      "goodsId": "606571199343545",
+      "detailUrl": "606571199343545",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 19489,
+          "catId": 42367,
+          "catName": "各色美食",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23858,
+          "catId": 44197,
+          "catName": "食品储藏室必备品",
+          "catLevel": 2,
+          "parentCatId": 42367,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 65412,
+          "catId": 44198,
+          "catName": "烹饪和烘焙",
+          "catLevel": 3,
+          "parentCatId": 44197,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 67422,
+          "catId": 44384,
+          "catName": "糖霜，糖衣和装饰品",
+          "catLevel": 4,
+          "parentCatId": 44198,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 70017,
+          "catId": 44398,
+          "catName": "蛋糕装饰",
+          "catLevel": 5,
+          "parentCatId": 44384,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "Finally Done with This B S Cake Topper Congrats Grad Class of 2026, Bachelor of Science, 2026 College Universary Graduation Party Decorations Supplies, Black Glitter",
+      "_source": "temu",
+      "_channel": "热销商品",
+      "_catName": "各色美食"
+    },
+    {
+      "goodsNameEn": "1pc Soccer Happy 7th Birthday Cake Topper Sport Soccer Ball Cake Picks for Football Theme 7th Birthday Party Cake Decorations Supplies",
+      "goodsNameCn": "1pc Soccer Happy 7th Birthday Cake Topper Sport Soccer Ball Cake Picks for Football Theme 7th Birthd",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/9d81ec73-384c-4a1d-be62-c037b2537c6e.jpg",
+      "thumbnailCn": "",
+      "sold": 63,
+      "sales": 107.1,
+      "goodsPriceMin": 1.7,
+      "goodsPriceMax": 1.63,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2024-04-05T13:58:38.935+00:00",
+      "onSaleTime": null,
+      "goodsId": "606559857942033",
+      "detailUrl": "606559857942033",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 19489,
+          "catId": 42367,
+          "catName": "各色美食",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23858,
+          "catId": 44197,
+          "catName": "食品储藏室必备品",
+          "catLevel": 2,
+          "parentCatId": 42367,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 65412,
+          "catId": 44198,
+          "catName": "烹饪和烘焙",
+          "catLevel": 3,
+          "parentCatId": 44197,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 67422,
+          "catId": 44384,
+          "catName": "糖霜，糖衣和装饰品",
+          "catLevel": 4,
+          "parentCatId": 44198,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 70017,
+          "catId": 44398,
+          "catName": "蛋糕装饰",
+          "catLevel": 5,
+          "parentCatId": 44384,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "1pc Soccer Happy 7th Birthday Cake Topper Sport Soccer Ball Cake Picks for Football Theme 7th Birthday Party Cake Decorations Supplies",
+      "_source": "temu",
+      "_channel": "热销商品",
+      "_catName": "各色美食"
+    },
+    {
+      "goodsNameEn": "Golden Acrylic 18th Birthday Cake Topper, Happy 18th Birthday Decoration, Modern Shiny Acrylic Cake Topper, Girl's Party Supplies, Reusable Centerpiece for New Year, Easter, Mother's Day, Graduation, ",
+      "goodsNameCn": "金色亚克力18岁蛋糕插牌，快乐18岁生日装饰，现代闪亮亚克力蛋糕插牌，女孩派对用品，新年复活节母亲节毕业典礼可重复使用中心装饰，无需电池",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/dd2a2964-5a31-4a29-a84f-d1259c18aa84.jpg",
+      "thumbnailCn": "",
+      "sold": 55,
+      "sales": 141.35,
+      "goodsPriceMin": 2.57,
+      "goodsPriceMax": 2.55,
+      "reviewNum": 1,
+      "rating": 4,
+      "mallOpenTime": "2025-04-19T02:52:38.008+00:00",
+      "onSaleTime": "2026-04-04T11:55:39.133+00:00",
+      "goodsId": "606266592177760",
+      "detailUrl": "606266592177760",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 19489,
+          "catId": 42367,
+          "catName": "各色美食",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23858,
+          "catId": 44197,
+          "catName": "食品储藏室必备品",
+          "catLevel": 2,
+          "parentCatId": 42367,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 65412,
+          "catId": 44198,
+          "catName": "烹饪和烘焙",
+          "catLevel": 3,
+          "parentCatId": 44197,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 67422,
+          "catId": 44384,
+          "catName": "糖霜，糖衣和装饰品",
+          "catLevel": 4,
+          "parentCatId": 44198,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 70017,
+          "catId": 44398,
+          "catName": "蛋糕装饰",
+          "catLevel": 5,
+          "parentCatId": 44384,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "金色亚克力18岁蛋糕插牌，快乐18岁生日装饰，现代闪亮亚克力蛋糕插牌，女孩派对用品，新年复活节母亲节毕业典礼可重复使用中心装饰，无需电池",
+      "_source": "temu",
+      "_channel": "热销商品",
+      "_catName": "各色美食"
+    },
+    {
+      "goodsNameEn": "Creme Savers Hard Candy – Strawberry & Cream, Orange & Cream, Chocolate & Caramel – 6oz Bags – Classic Cream Candy (Choose Flavor or Variety Pack)",
+      "goodsNameCn": "奶油糖硬糖 – 草莓奶油味、橙子奶油味、巧克力焦糖味 – 6盎司袋装 – 经典奶油糖（可选单味或混合装）",
+      "thumbnail": "https://img.kwcdn.com/local-image/s101/211a2a4a582/9d5a6d68-1c80-4b2f-882f-09ea0bd40d8a_1500x1500.jpeg.format.jpg",
+      "thumbnailCn": "",
+      "sold": 53,
+      "sales": 458.45000000000005,
+      "goodsPriceMin": 8.65,
+      "goodsPriceMax": 16.04,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-21T06:24:01.497+00:00",
+      "goodsId": "604808668919049",
+      "detailUrl": "604808668919049",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 19489,
+          "catId": 42367,
+          "catName": "各色美食",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 22879,
+          "catId": 43976,
+          "catName": "零食和糖果",
+          "catLevel": 2,
+          "parentCatId": 42367,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23859,
+          "catId": 44153,
+          "catName": "糖果、巧克力",
+          "catLevel": 3,
+          "parentCatId": 43976,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 25886,
+          "catId": 44161,
+          "catName": "水果糖",
+          "catLevel": 4,
+          "parentCatId": 44153,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "奶油糖硬糖 – 草莓奶油味、橙子奶油味、巧克力焦糖味 – 6盎司袋装 – 经典奶油糖（可选单味或混合装）",
+      "_source": "temu",
+      "_channel": "热销商品",
+      "_catName": "各色美食"
+    },
+    {
+      "goodsNameEn": "闪亮闪光喷雾，多场景闪耀雾，用于美甲、发型设计和庆典装饰",
+      "goodsNameCn": "闪亮闪光喷雾，多场景闪耀雾，用于美甲、发型设计和庆典装饰",
+      "thumbnail": "https://img.kwcdn.com/product/open/5cc68fe489f84633a77a0e4fd2a8ad05-goods.jpeg",
+      "thumbnailCn": "",
+      "sold": 43,
+      "sales": 424.40999999999997,
+      "goodsPriceMin": 9.87,
+      "goodsPriceMax": 7.37,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "605639258542022",
+      "detailUrl": "605639258542022",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 19489,
+          "catId": 42367,
+          "catName": "各色美食",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23858,
+          "catId": 44197,
+          "catName": "食品储藏室必备品",
+          "catLevel": 2,
+          "parentCatId": 42367,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 65412,
+          "catId": 44198,
+          "catName": "烹饪和烘焙",
+          "catLevel": 3,
+          "parentCatId": 44197,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 67422,
+          "catId": 44384,
+          "catName": "糖霜，糖衣和装饰品",
+          "catLevel": 4,
+          "parentCatId": 44198,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 70010,
+          "catId": 44396,
+          "catName": "纸杯蛋糕礼帽",
+          "catLevel": 5,
+          "parentCatId": 44384,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "闪亮闪光喷雾，多场景闪耀雾，用于美甲、发型设计和庆典装饰",
+      "_source": "temu",
+      "_channel": "热销商品",
+      "_catName": "各色美食"
+    },
+    {
+      "goodsNameEn": "2件装奶油刮刀 - 装饰工具 6英寸、8英寸、10英寸、12英寸蛋糕脱模刀 - 烘焙直刃",
+      "goodsNameCn": "2件装奶油刮刀 - 装饰工具 6英寸、8英寸、10英寸、12英寸蛋糕脱模刀 - 烘焙直刃",
+      "thumbnail": "https://img.kwcdn.com/product/open/9f6929f72f8a4126b5dcdeaaaa5c675e-goods.jpeg",
+      "thumbnailCn": "",
+      "sold": 42,
+      "sales": 358.67999999999995,
+      "goodsPriceMin": 8.54,
+      "goodsPriceMax": 7.69,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2025-01-02T07:06:33.467+00:00",
+      "onSaleTime": null,
+      "goodsId": "606012182509298",
+      "detailUrl": "606012182509298",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 19489,
+          "catId": 42367,
+          "catName": "各色美食",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23858,
+          "catId": 44197,
+          "catName": "食品储藏室必备品",
+          "catLevel": 2,
+          "parentCatId": 42367,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 65412,
+          "catId": 44198,
+          "catName": "烹饪和烘焙",
+          "catLevel": 3,
+          "parentCatId": 44197,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 67422,
+          "catId": 44384,
+          "catName": "糖霜，糖衣和装饰品",
+          "catLevel": 4,
+          "parentCatId": 44198,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 70006,
+          "catId": 44395,
+          "catName": "甜点装饰套件",
+          "catLevel": 5,
+          "parentCatId": 44384,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "2件装奶油刮刀 - 装饰工具 6英寸、8英寸、10英寸、12英寸蛋糕脱模刀 - 烘焙直刃",
+      "_source": "temu",
+      "_channel": "热销商品",
+      "_catName": "各色美食"
+    },
+    {
+      "goodsNameEn": "13pcs Glitter Mermaid Cupcake Toppers Mermaid Theme Birthday Party Supplies Under The Sea Party Favors Cake Picks Set Cake Decoration",
+      "goodsNameCn": "13件套闪光美人鱼纸杯蛋糕装饰 美人鱼主题生日派个用品 海底派个礼品蛋糕插牌套装 蛋糕装饰",
+      "thumbnail": "https://img.kwcdn.com/product/fancy/3c2ae9ee-0521-44ec-a1ab-63716926b0e0.jpg",
+      "thumbnailCn": "",
+      "sold": 18,
+      "sales": 73.98,
+      "goodsPriceMin": 4.11,
+      "goodsPriceMax": 4.27,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2025-04-09T02:18:24.222+00:00",
+      "onSaleTime": null,
+      "goodsId": "605590738815819",
+      "detailUrl": "605590738815819",
+      "platform": "temu",
+      "catItems": [
+        {
+          "id": 19489,
+          "catId": 42367,
+          "catName": "各色美食",
+          "catLevel": 1,
+          "parentCatId": 0,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 23858,
+          "catId": 44197,
+          "catName": "食品储藏室必备品",
+          "catLevel": 2,
+          "parentCatId": 42367,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 65412,
+          "catId": 44198,
+          "catName": "烹饪和烘焙",
+          "catLevel": 3,
+          "parentCatId": 44197,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 67422,
+          "catId": 44384,
+          "catName": "糖霜，糖衣和装饰品",
+          "catLevel": 4,
+          "parentCatId": 44198,
+          "isLeaf": false,
+          "optId": null
+        },
+        {
+          "id": 70017,
+          "catId": 44398,
+          "catName": "蛋糕装饰",
+          "catLevel": 5,
+          "parentCatId": 44384,
+          "isLeaf": true,
+          "optId": null
+        }
+      ],
+      "goodsName": "13件套闪光美人鱼纸杯蛋糕装饰 美人鱼主题生日派个用品 海底派个礼品蛋糕插牌套装 蛋糕装饰",
+      "_source": "temu",
+      "_channel": "热销商品",
+      "_catName": "各色美食"
+    },
+    {
+      "goodsNameEn": "Wireless Bluetooth Earphones, Comfortable Wear For Music Listening And Gaming, Comes With Charging Cable, Rechargeable, Great Christmas Gift, Suitable For Sports Running, Compatible With Apple Phones ",
+      "goodsNameCn": "电子学, 耳机和耳机, 无线耳塞, 消费电子",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/01/24/31/1769235547e5b6a6663282142dfefc53d61ff7ab5b_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 873,
+      "sales": 5115.78,
+      "goodsPriceMin": 7.44,
+      "goodsPriceMax": null,
+      "reviewNum": 19,
+      "rating": 4.57,
+      "mallOpenTime": "2026-03-08T08:00:00.000+08:00",
+      "onSaleTime": "2026-04-02T08:00:00.000+08:00",
+      "goodsId": "433984509",
+      "detailUrl": "433984509",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 387,
+          "catId": 2273,
+          "catName": "Electronics",
+          "catNameCn": "电子学",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 1453,
+          "catId": 3303,
+          "catName": "Headphone & Earphone",
+          "catNameCn": "耳机和耳机",
+          "catLevel": 2,
+          "parentCatId": 4671,
+          "isLeaf": false
+        },
+        {
+          "id": 1454,
+          "catId": 3306,
+          "catName": "Wireless Earbuds",
+          "catNameCn": "无线耳塞",
+          "catLevel": 3,
+          "parentCatId": 3303,
+          "isLeaf": true
+        },
+        {
+          "id": 388,
+          "catId": 4671,
+          "catName": "Consumer Electronic",
+          "catNameCn": "消费电子",
+          "catLevel": 1,
+          "parentCatId": 2273,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "Wireless Bluetooth Earphones, Comfortable Wear For Music Listening And Gaming, Comes With Charging Cable, Rechargeable, Great Christmas Gift, Suitable For Sports Running, Compatible With Apple Phones And More, Unparalleled Freedom To Enjoy Music Anytime Anywhere For Men And Women",
+      "_source": "shein",
+      "_channel": "热销商品",
+      "_catName": "电子学"
+    },
+    {
+      "goodsNameEn": "3-In-1 USB-C Micro SD Card Reader Adapter, Compatible With IPad Pro, And More USB-C Devices",
+      "goodsNameCn": "电子学, 电脑和办公室, 存储设备, 读卡器",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/04/15/6e/177624019742bac6b1b00844cf4db9a70b1bd12a4f_square_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 60,
+      "sales": 87.6,
+      "goodsPriceMin": 1.46,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": "2026-04-14T08:00:00.000+08:00",
+      "onSaleTime": "2026-04-15T08:00:00.000+08:00",
+      "goodsId": "444722722",
+      "detailUrl": "444722722",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 387,
+          "catId": 2273,
+          "catName": "Electronics",
+          "catNameCn": "电子学",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 746,
+          "catId": 2275,
+          "catName": "Computer & Office",
+          "catNameCn": "电脑和办公室",
+          "catLevel": 1,
+          "parentCatId": 2273,
+          "isLeaf": false
+        },
+        {
+          "id": 2312,
+          "catId": 3646,
+          "catName": "Storage Devices",
+          "catNameCn": "存储设备",
+          "catLevel": 2,
+          "parentCatId": 2275,
+          "isLeaf": false
+        },
+        {
+          "id": 2388,
+          "catId": 4737,
+          "catName": "Card Readers",
+          "catNameCn": "读卡器",
+          "catLevel": 3,
+          "parentCatId": 3646,
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "3-In-1 USB-C Micro SD Card Reader Adapter, Compatible With IPad Pro, And More USB-C Devices",
+      "_source": "shein",
+      "_channel": "热销商品",
+      "_catName": "电子学"
+    },
+    {
+      "goodsNameEn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "goodsNameCn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "thumbnail": "https://m.media-amazon.com/images/I/61UXEnkPkaL._AC_SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 216,
+      "sales": null,
+      "goodsPriceMin": 14.99,
+      "goodsPriceMax": null,
+      "reviewNum": 7269,
+      "rating": 4.4,
+      "mallOpenTime": "2024-09-26T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "B0G3PLYY2Q",
+      "detailUrl": "B0G3PLYY2Q",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 8339,
+          "catId": "10971181011",
+          "catName": "运动与健身",
+          "catLevel": 2,
+          "parentCatId": "3375251",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2589,
+          "catId": "3375251",
+          "catName": "运动与户外",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14337,
+          "catId": "3418761",
+          "catName": "游泳",
+          "catLevel": 3,
+          "parentCatId": "10971181011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 27099,
+          "catId": "3418871",
+          "catName": "风镜",
+          "catLevel": 5,
+          "parentCatId": "3418761",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "_source": "amazon",
+      "_channel": "热销商品",
+      "_catName": "运动与户外"
+    },
+    {
+      "goodsNameEn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "goodsNameCn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "thumbnail": "https://m.media-amazon.com/images/I/61wQIhRQZVL._AC_SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 648,
+      "sales": null,
+      "goodsPriceMin": 12.99,
+      "goodsPriceMax": null,
+      "reviewNum": 7269,
+      "rating": 4.4,
+      "mallOpenTime": "2024-09-26T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "B0G3PKS2V7",
+      "detailUrl": "B0G3PKS2V7",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 8339,
+          "catId": "10971181011",
+          "catName": "运动与健身",
+          "catLevel": 2,
+          "parentCatId": "3375251",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2589,
+          "catId": "3375251",
+          "catName": "运动与户外",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14337,
+          "catId": "3418761",
+          "catName": "游泳",
+          "catLevel": 3,
+          "parentCatId": "10971181011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 27099,
+          "catId": "3418871",
+          "catName": "风镜",
+          "catLevel": 5,
+          "parentCatId": "3418761",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "_source": "amazon",
+      "_channel": "热销商品",
+      "_catName": "运动与户外"
+    },
+    {
+      "goodsNameEn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "goodsNameCn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "thumbnail": "https://m.media-amazon.com/images/I/61K1J7BLXdS._AC_SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 864,
+      "sales": null,
+      "goodsPriceMin": 14.99,
+      "goodsPriceMax": null,
+      "reviewNum": 7269,
+      "rating": 4.4,
+      "mallOpenTime": "2024-09-26T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "B0FPC9Z5KG",
+      "detailUrl": "B0FPC9Z5KG",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 8339,
+          "catId": "10971181011",
+          "catName": "运动与健身",
+          "catLevel": 2,
+          "parentCatId": "3375251",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2589,
+          "catId": "3375251",
+          "catName": "运动与户外",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14337,
+          "catId": "3418761",
+          "catName": "游泳",
+          "catLevel": 3,
+          "parentCatId": "10971181011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 27099,
+          "catId": "3418871",
+          "catName": "风镜",
+          "catLevel": 5,
+          "parentCatId": "3418761",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "_source": "amazon",
+      "_channel": "热销商品",
+      "_catName": "运动与户外"
+    },
+    {
+      "goodsNameEn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "goodsNameCn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "thumbnail": "https://m.media-amazon.com/images/I/71pinQiQBwS._AC_SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 216,
+      "sales": null,
+      "goodsPriceMin": 15.99,
+      "goodsPriceMax": null,
+      "reviewNum": 7269,
+      "rating": 4.4,
+      "mallOpenTime": "2024-09-26T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "B087D5KT6T",
+      "detailUrl": "B087D5KT6T",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 8339,
+          "catId": "10971181011",
+          "catName": "运动与健身",
+          "catLevel": 2,
+          "parentCatId": "3375251",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2589,
+          "catId": "3375251",
+          "catName": "运动与户外",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14337,
+          "catId": "3418761",
+          "catName": "游泳",
+          "catLevel": 3,
+          "parentCatId": "10971181011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 27099,
+          "catId": "3418871",
+          "catName": "风镜",
+          "catLevel": 5,
+          "parentCatId": "3418761",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "_source": "amazon",
+      "_channel": "热销商品",
+      "_catName": "运动与户外"
+    },
+    {
+      "goodsNameEn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "goodsNameCn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "thumbnail": "https://m.media-amazon.com/images/I/61wPd97eZ8L._AC_SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 1079,
+      "sales": null,
+      "goodsPriceMin": 15.99,
+      "goodsPriceMax": null,
+      "reviewNum": 7269,
+      "rating": 4.4,
+      "mallOpenTime": "2024-09-26T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "B0G3PN2GLP",
+      "detailUrl": "B0G3PN2GLP",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 8339,
+          "catId": "10971181011",
+          "catName": "运动与健身",
+          "catLevel": 2,
+          "parentCatId": "3375251",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2589,
+          "catId": "3375251",
+          "catName": "运动与户外",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14337,
+          "catId": "3418761",
+          "catName": "游泳",
+          "catLevel": 3,
+          "parentCatId": "10971181011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 27099,
+          "catId": "3418871",
+          "catName": "风镜",
+          "catLevel": 5,
+          "parentCatId": "3418761",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "_source": "amazon",
+      "_channel": "热销商品",
+      "_catName": "运动与户外"
+    },
+    {
+      "goodsNameEn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "goodsNameCn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "thumbnail": "https://m.media-amazon.com/images/I/71PXQO1lAIL._AC_SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 432,
+      "sales": null,
+      "goodsPriceMin": 14.99,
+      "goodsPriceMax": null,
+      "reviewNum": 7269,
+      "rating": 4.4,
+      "mallOpenTime": "2024-09-26T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "B0FPCCVFMT",
+      "detailUrl": "B0FPCCVFMT",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 8339,
+          "catId": "10971181011",
+          "catName": "运动与健身",
+          "catLevel": 2,
+          "parentCatId": "3375251",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2589,
+          "catId": "3375251",
+          "catName": "运动与户外",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14337,
+          "catId": "3418761",
+          "catName": "游泳",
+          "catLevel": 3,
+          "parentCatId": "10971181011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 27099,
+          "catId": "3418871",
+          "catName": "风镜",
+          "catLevel": 5,
+          "parentCatId": "3418761",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "_source": "amazon",
+      "_channel": "热销商品",
+      "_catName": "运动与户外"
+    },
+    {
+      "goodsNameEn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "goodsNameCn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "thumbnail": "https://m.media-amazon.com/images/I/61NFrN-14cS._AC_SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 216,
+      "sales": null,
+      "goodsPriceMin": 15.99,
+      "goodsPriceMax": null,
+      "reviewNum": 7269,
+      "rating": 4.4,
+      "mallOpenTime": "2024-09-26T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "B0D9Q81DP8",
+      "detailUrl": "B0D9Q81DP8",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 8339,
+          "catId": "10971181011",
+          "catName": "运动与健身",
+          "catLevel": 2,
+          "parentCatId": "3375251",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2589,
+          "catId": "3375251",
+          "catName": "运动与户外",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14337,
+          "catId": "3418761",
+          "catName": "游泳",
+          "catLevel": 3,
+          "parentCatId": "10971181011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 27099,
+          "catId": "3418871",
+          "catName": "风镜",
+          "catLevel": 5,
+          "parentCatId": "3418761",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "_source": "amazon",
+      "_channel": "热销商品",
+      "_catName": "运动与户外"
+    },
+    {
+      "goodsNameEn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "goodsNameCn": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "thumbnail": "https://m.media-amazon.com/images/I/61x0W2s8MnL._AC_SX342_SY445_QL70_ML2_.jpg",
+      "thumbnailCn": "",
+      "sold": 216,
+      "sales": null,
+      "goodsPriceMin": 15.99,
+      "goodsPriceMax": null,
+      "reviewNum": 7269,
+      "rating": 4.4,
+      "mallOpenTime": "2024-09-26T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "B08NB5FCV3",
+      "detailUrl": "B08NB5FCV3",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 8339,
+          "catId": "10971181011",
+          "catName": "运动与健身",
+          "catLevel": 2,
+          "parentCatId": "3375251",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2589,
+          "catId": "3375251",
+          "catName": "运动与户外",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14337,
+          "catId": "3418761",
+          "catName": "游泳",
+          "catLevel": 3,
+          "parentCatId": "10971181011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 27099,
+          "catId": "3418871",
+          "catName": "风镜",
+          "catLevel": 5,
+          "parentCatId": "3418761",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Seago Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "_source": "amazon",
+      "_channel": "热销商品",
+      "_catName": "运动与户外"
+    },
+    {
+      "goodsNameEn": "Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "goodsNameCn": "Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "thumbnail": "https://m.media-amazon.com/images/I/612ZG0PJKYL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 2159,
+      "sales": null,
+      "goodsPriceMin": 11.99,
+      "goodsPriceMax": null,
+      "reviewNum": 73,
+      "rating": 4.4,
+      "mallOpenTime": "2024-09-26T00:00:00.000+08:00",
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "B08JPC2M46",
+      "detailUrl": "B08JPC2M46",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 8339,
+          "catId": "10971181011",
+          "catName": "运动与健身",
+          "catLevel": 2,
+          "parentCatId": "3375251",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2589,
+          "catId": "3375251",
+          "catName": "运动与户外",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 14337,
+          "catId": "3418761",
+          "catName": "游泳",
+          "catLevel": 3,
+          "parentCatId": "10971181011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 27099,
+          "catId": "3418871",
+          "catName": "风镜",
+          "catLevel": 5,
+          "parentCatId": "3418761",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Swim Goggles 2 Pack Anti-Fog Anti-UV Wide View Swimming Goggles for Kids 3-14",
+      "_source": "amazon",
+      "_channel": "热销商品",
+      "_catName": "运动与户外"
+    },
+    {
+      "goodsNameEn": "2026 Panini FIFA 世界杯贴纸收藏盒 – 50 张贴纸包 | 亚马逊独家橙色平行| 官方 FIFA 世界杯交易贴纸 | 收集、交易和完成您的相册",
+      "goodsNameCn": "2026 Panini FIFA 世界杯贴纸收藏盒 – 50 张贴纸包 | 亚马逊独家橙色平行| 官方 FIFA 世界杯交易贴纸 | 收集、交易和完成您的相册",
+      "thumbnail": "https://m.media-amazon.com/images/I/61fAVB2noeL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 99.99,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-05-15T00:00:00.000+08:00",
+      "goodsId": "B0G3Y89LW9",
+      "detailUrl": "B0G3Y89LW9",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 2589,
+          "catId": "3375251",
+          "catName": "运动与户外",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 4592,
+          "catId": "3386071",
+          "catName": "粉丝专卖店",
+          "catLevel": 2,
+          "parentCatId": "3375251",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 13427,
+          "catId": "374783011",
+          "catName": "运动纪念品",
+          "catLevel": 3,
+          "parentCatId": "3386071",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "2026 Panini FIFA 世界杯贴纸收藏盒 – 50 张贴纸包 | 亚马逊独家橙色平行| 官方 FIFA 世界杯交易贴纸 | 收集、交易和完成您的相册",
+      "_source": "amazon",
+      "_channel": "热销商品",
+      "_catName": "运动与户外"
+    },
+    {
+      "goodsNameEn": "Oversized T-shirt with Bodega Sounds Back and Chest Print in White High-end Luxury Unisex Style Both of Men and Women",
+      "goodsNameCn": "Oversized T-shirt with Bodega Sounds Back and Chest Print in White High-end Luxury Unisex Style Both",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sddee7ae861d9456fbb3e5f6b13c07ed8B.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 5.07,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-03T00:00:00.000+08:00",
+      "goodsId": "1005012016474340",
+      "detailUrl": "1005012016474340",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Oversized T-shirt with Bodega Sounds Back and Chest Print in White High-end Luxury Unisex Style Both of Men and Women",
+      "_source": "sumaitong",
+      "_channel": "热销商品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "RED Remember Everyone Deployed Shirt Military Support Tee RED Friday Patriotic Shirt Army Mom Gift Support Our Troops T-shirt",
+      "goodsNameCn": "RED Remember Everyone Deployed Shirt Military Support Tee RED Friday Patriotic Shirt Army Mom Gift S",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S18cccd5698e145d583a78be5fa99aa5ag.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 2.58,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-03T00:00:00.000+08:00",
+      "goodsId": "3256811822628411",
+      "detailUrl": "3256811822628411",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "RED Remember Everyone Deployed Shirt Military Support Tee RED Friday Patriotic Shirt Army Mom Gift Support Our Troops T-shirt",
+      "_source": "sumaitong",
+      "_channel": "热销商品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "yes I'm single Men Short Sleeved T-Shirt Cool Edgy Pattern Print Crew Neck Lightweight Hipster Premium Quality Hip Hop Art",
+      "goodsNameCn": "yes I'm single Men Short Sleeved T-Shirt Cool Edgy Pattern Print Crew Neck Lightweight Hipster Premi",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S7a6c8f93c6784f33b3202c462938f06ai.jpeg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 14.65,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-05T00:00:00.000+08:00",
+      "goodsId": "3256811836091872",
+      "detailUrl": "3256811836091872",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "yes I'm single Men Short Sleeved T-Shirt Cool Edgy Pattern Print Crew Neck Lightweight Hipster Premium Quality Hip Hop Art",
+      "_source": "sumaitong",
+      "_channel": "热销商品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Men's 100% Cotton Short Sleeve T-Shirt, Breathable Casual Tee, Stylish Printed Crewneck Top, Multi-color Options for Daily Wear",
+      "goodsNameCn": "Men's 100% Cotton Short Sleeve T-Shirt, Breathable Casual Tee, Stylish Printed Crewneck Top, Multi-c",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S7b45f2c495004073bf564b7c7e2cdff4u.png",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 9.36,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-05T00:00:00.000+08:00",
+      "goodsId": "3256811831714727",
+      "detailUrl": "3256811831714727",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Men's 100% Cotton Short Sleeve T-Shirt, Breathable Casual Tee, Stylish Printed Crewneck Top, Multi-color Options for Daily Wear",
+      "_source": "sumaitong",
+      "_channel": "热销商品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Pepe Jeans London Men'S Short Sleeve Polo Shirt Quick Dry Casual Sportswear For Summer Golf Running Gym Lapel T-Shirt Men'S Clot",
+      "goodsNameCn": "Pepe Jeans London Men'S Short Sleeve Polo Shirt Quick Dry Casual Sportswear For Summer Golf Running ",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S10614539358c4beca9397f9ac8ce9623D.jpg",
+      "thumbnailCn": "",
+      "sold": 2,
+      "sales": null,
+      "goodsPriceMin": 4.67,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-03T00:00:00.000+08:00",
+      "goodsId": "3256811830125265",
+      "detailUrl": "3256811830125265",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8310,
+          "catId": "200003529",
+          "catName": "Polo衫",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Pepe Jeans London Men'S Short Sleeve Polo Shirt Quick Dry Casual Sportswear For Summer Golf Running Gym Lapel T-Shirt Men'S Clot",
+      "_source": "sumaitong",
+      "_channel": "热销商品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Summer New Loose Cotton round Neck Short Sleeve T-Shirt Unisex Youth Fashionable Printed Casual Wear for Teens And Adults",
+      "goodsNameCn": "Summer New Loose Cotton round Neck Short Sleeve T-Shirt Unisex Youth Fashionable Printed Casual Wear",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S4121f429f1b64ef0a827e1dcb4ff4859v.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 7.18,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-03T00:00:00.000+08:00",
+      "goodsId": "1005012012009276",
+      "detailUrl": "1005012012009276",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Summer New Loose Cotton round Neck Short Sleeve T-Shirt Unisex Youth Fashionable Printed Casual Wear for Teens And Adults",
+      "_source": "sumaitong",
+      "_channel": "热销商品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Y2K Retro Blue Saint Punk Style T Shirt Autumn Cotton Washed Loose Fashion Long Sleeve T-shirt tops",
+      "goodsNameCn": "Y2K Retro Blue Saint Punk Style T Shirt Autumn Cotton Washed Loose Fashion Long Sleeve T-shirt tops",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sfa6346b36c9e411f9036e8ca7d381c16B.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 30.2,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-09T00:00:00.000+08:00",
+      "goodsId": "3256811867208357",
+      "detailUrl": "3256811867208357",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Y2K Retro Blue Saint Punk Style T Shirt Autumn Cotton Washed Loose Fashion Long Sleeve T-shirt tops",
+      "_source": "sumaitong",
+      "_channel": "热销商品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Summer Men's T-Shirts Born To Be Wild Tiger Print Sleeveless Workout T Shirts Loose Tees Summer Men's Washed Cotton Tank Tops",
+      "goodsNameCn": "Summer Men's T-Shirts Born To Be Wild Tiger Print Sleeveless Workout T Shirts Loose Tees Summer Men'",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sdf05dc3954e64353ac688eda78343addJ.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 34.32,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-09T00:00:00.000+08:00",
+      "goodsId": "3256811868356684",
+      "detailUrl": "3256811868356684",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Summer Men's T-Shirts Born To Be Wild Tiger Print Sleeveless Workout T Shirts Loose Tees Summer Men's Washed Cotton Tank Tops",
+      "_source": "sumaitong",
+      "_channel": "热销商品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Men's Round Neck Short-Sleeved Whale Leaping Pattern T-Shirt Casual Comfortable Simple Stylish Tops Daily Exercise Men Clothes",
+      "goodsNameCn": "Men's Round Neck Short-Sleeved Whale Leaping Pattern T-Shirt Casual Comfortable Simple Stylish Tops ",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Saee1ca04fb0f49239b161ff96e2d35243.jpg",
+      "thumbnailCn": "",
+      "sold": 1,
+      "sales": null,
+      "goodsPriceMin": 6.02,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-10T00:00:00.000+08:00",
+      "goodsId": "3256811873881754",
+      "detailUrl": "3256811873881754",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Men's Round Neck Short-Sleeved Whale Leaping Pattern T-Shirt Casual Comfortable Simple Stylish Tops Daily Exercise Men Clothes",
+      "_source": "sumaitong",
+      "_channel": "热销商品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Bluey Oversized T-shirt for Women Men, Cute Dog Family Graphic Tee, Summer Casual Streetwear, Y2K Harajuku Tops",
+      "goodsNameCn": "Bluey Oversized T-shirt for Women Men, Cute Dog Family Graphic Tee, Summer Casual Streetwear, Y2K Ha",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sa5246741a1ec49dd9c295fe027c9e285M.jpg",
+      "thumbnailCn": "",
+      "sold": 1,
+      "sales": null,
+      "goodsPriceMin": 7.31,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-05T00:00:00.000+08:00",
+      "goodsId": "3256811837445479",
+      "detailUrl": "3256811837445479",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Bluey Oversized T-shirt for Women Men, Cute Dog Family Graphic Tee, Summer Casual Streetwear, Y2K Harajuku Tops",
+      "_source": "sumaitong",
+      "_channel": "热销商品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "New Metallica Bestseller Men's 2026 New Cotton Summer Tshirt Cotton Shirt Y2k Electric Guitar Graphic Tshirts Hiphop Style",
+      "goodsNameCn": "New Metallica Bestseller Men's 2026 New Cotton Summer Tshirt Cotton Shirt Y2k Electric Guitar Graphi",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sac9b002333c84372b26dbd3086da92c9a.jpg",
+      "thumbnailCn": "",
+      "sold": 3,
+      "sales": null,
+      "goodsPriceMin": 9.6,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-12T00:00:00.000+08:00",
+      "goodsId": "3256811890221665",
+      "detailUrl": "3256811890221665",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "New Metallica Bestseller Men's 2026 New Cotton Summer Tshirt Cotton Shirt Y2k Electric Guitar Graphic Tshirts Hiphop Style",
+      "_source": "sumaitong",
+      "_channel": "热销新品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "2026New Y2k Anime Robot Robloxs Face New Arrival  Clothes Tee Shirt Homme Graphic T-Shirts  Tshirt for Ropa Hombre 71081",
+      "goodsNameCn": "2026New Y2k Anime Robot Robloxs Face New Arrival  Clothes Tee Shirt Homme Graphic T-Shirts  Tshirt f",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sfc75ebd982924acb92ca1c6cfb1b8cffD.jpg",
+      "thumbnailCn": "",
+      "sold": 10,
+      "sales": null,
+      "goodsPriceMin": 0.99,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-14T00:00:00.000+08:00",
+      "goodsId": "3256811903651910",
+      "detailUrl": "3256811903651910",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "2026New Y2k Anime Robot Robloxs Face New Arrival  Clothes Tee Shirt Homme Graphic T-Shirts  Tshirt for Ropa Hombre 71081",
+      "_source": "sumaitong",
+      "_channel": "热销新品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "2026 New Cotton Summer  T Shirt Mens Licensed Rock Band Music Tee New Black Fashion Casual Trend Y2k Vintage T-shirt",
+      "goodsNameCn": "2026 New Cotton Summer  T Shirt Mens Licensed Rock Band Music Tee New Black Fashion Casual Trend Y2k",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S30985a10b4b040ffa230148973d0cc2du.jpg",
+      "thumbnailCn": "",
+      "sold": 1,
+      "sales": null,
+      "goodsPriceMin": 7.02,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-18T00:00:00.000+08:00",
+      "goodsId": "3256811936551280",
+      "detailUrl": "3256811936551280",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "2026 New Cotton Summer  T Shirt Mens Licensed Rock Band Music Tee New Black Fashion Casual Trend Y2k Vintage T-shirt",
+      "_source": "sumaitong",
+      "_channel": "热销新品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "2026 New Marvel New Men's Casual Crew Neck T-Shirt Marvel Series Anime Graphic 3d Print Top Superhero Punisher T Shirt",
+      "goodsNameCn": "2026 New Marvel New Men's Casual Crew Neck T-Shirt Marvel Series Anime Graphic 3d Print Top Superher",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S16b2e9a6d22d4a6291ea719fe6d7bf9eD.jpg",
+      "thumbnailCn": "",
+      "sold": 3,
+      "sales": null,
+      "goodsPriceMin": 8.42,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "3256811850445960",
+      "detailUrl": "3256811850445960",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "2026 New Marvel New Men's Casual Crew Neck T-Shirt Marvel Series Anime Graphic 3d Print Top Superhero Punisher T Shirt",
+      "_source": "sumaitong",
+      "_channel": "热销新品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "2026 New Men's Polo Shirt With Crocodile Print Sport T Shirt",
+      "goodsNameCn": "2026 New Men's Polo Shirt With Crocodile Print Sport T Shirt",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S3299c375a978455985ad8a959521a156i.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 2.9,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-06T00:00:00.000+08:00",
+      "goodsId": "3256811844071453",
+      "detailUrl": "3256811844071453",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8310,
+          "catId": "200003529",
+          "catName": "Polo衫",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "2026 New Men's Polo Shirt With Crocodile Print Sport T Shirt",
+      "_source": "sumaitong",
+      "_channel": "热销新品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "【New style】Proud Brother of A Class of 2026 Graduate Senior Graduation T-Shirt",
+      "goodsNameCn": "【New style】Proud Brother of A Class of 2026 Graduate Senior Graduation T-Shirt",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sb14fa6deffba4a799ca8885909d3333df.jpg",
+      "thumbnailCn": "",
+      "sold": 1,
+      "sales": null,
+      "goodsPriceMin": 4.22,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-08T00:00:00.000+08:00",
+      "goodsId": "1005012041690055",
+      "detailUrl": "1005012041690055",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "【New style】Proud Brother of A Class of 2026 Graduate Senior Graduation T-Shirt",
+      "_source": "sumaitong",
+      "_channel": "热销新品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "【New style】Proud Brother Of A Class Of 2026 Graduate Senior Graduation T-Shirt",
+      "goodsNameCn": "【New style】Proud Brother Of A Class Of 2026 Graduate Senior Graduation T-Shirt",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sf49fd5f9148d46b18c3d01505a2cbc298.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 3.82,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-08T00:00:00.000+08:00",
+      "goodsId": "1005012038159104",
+      "detailUrl": "1005012038159104",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "【New style】Proud Brother Of A Class Of 2026 Graduate Senior Graduation T-Shirt",
+      "_source": "sumaitong",
+      "_channel": "热销新品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Kpop Stray Kids T-shirt SKZ KARMA New Men's Style 2026 Summer New Hot-selling Men's Women's Fashion Casual Oversized T-shirt Y2K",
+      "goodsNameCn": "Kpop Stray Kids T-shirt SKZ KARMA New Men's Style 2026 Summer New Hot-selling Men's Women's Fashion ",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S85068a3e90ab46879d79eddd5ac93295U.jpg",
+      "thumbnailCn": "",
+      "sold": 2,
+      "sales": null,
+      "goodsPriceMin": 9.46,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-10T00:00:00.000+08:00",
+      "goodsId": "3256811873432103",
+      "detailUrl": "3256811873432103",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Kpop Stray Kids T-shirt SKZ KARMA New Men's Style 2026 Summer New Hot-selling Men's Women's Fashion Casual Oversized T-shirt Y2K",
+      "_source": "sumaitong",
+      "_channel": "热销新品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "【New style】Athletic Apparel for Horse Racing Featuring a Black And White Design Ideal for Competitive Training. This Casual for",
+      "goodsNameCn": "【New style】Athletic Apparel for Horse Racing Featuring a Black And White Design Ideal for Competitiv",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S286c1979f951440996d28d6db476acc4x.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 7.12,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-07T12:00:00.000+08:00",
+      "goodsId": "1005012031138281",
+      "detailUrl": "1005012031138281",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "【New style】Athletic Apparel for Horse Racing Featuring a Black And White Design Ideal for Competitive Training. This Casual for",
+      "_source": "sumaitong",
+      "_channel": "热销新品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "2026 Men's Autumn and Winter New Casual Pants, Sports Running Pants, Sports Pants, Long Pants",
+      "goodsNameCn": "2026 Men's Autumn and Winter New Casual Pants, Sports Running Pants, Sports Pants, Long Pants",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sdec15fc7608948f4a229e282ca4d1804C.jpg",
+      "thumbnailCn": "",
+      "sold": 9,
+      "sales": null,
+      "goodsPriceMin": 6.16,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-05T00:00:00.000+08:00",
+      "goodsId": "3256811831193029",
+      "detailUrl": "3256811831193029",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8299,
+          "catId": "201240601",
+          "catName": "长裤（新）",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8340,
+          "catId": "201240202",
+          "catName": "休闲裤",
+          "catLevel": 2,
+          "parentCatId": "201240601",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "2026 Men's Autumn and Winter New Casual Pants, Sports Running Pants, Sports Pants, Long Pants",
+      "_source": "sumaitong",
+      "_channel": "热销新品",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Double Sided Digital Print T-Shirt Valley Dreams Auto Repair Shop Car Pattern 2025 New York City",
+      "goodsNameCn": "Double Sided Digital Print T-Shirt Valley Dreams Auto Repair Shop Car Pattern 2025 New York City",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S766cd8cae5584589a8088ee86884e84fq.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 6.03,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-23T00:00:00.000+08:00",
+      "goodsId": "3256811981613997",
+      "detailUrl": "3256811981613997",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Double Sided Digital Print T-Shirt Valley Dreams Auto Repair Shop Car Pattern 2025 New York City",
+      "_source": "sumaitong",
+      "_channel": "新店热销",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Kodak Film Camera Shop Front Back Graphic T Shirt for Men 100% Cotton Oversized Vintage Streetwear White 2026 New Men Clothing",
+      "goodsNameCn": "Kodak Film Camera Shop Front Back Graphic T Shirt for Men 100% Cotton Oversized Vintage Streetwear W",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S9077d28e62eb4911b94b1a1e98017b6d1.jpg",
+      "thumbnailCn": "",
+      "sold": 9,
+      "sales": null,
+      "goodsPriceMin": 8.86,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-08T00:00:00.000+08:00",
+      "goodsId": "3256811851446312",
+      "detailUrl": "3256811851446312",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Kodak Film Camera Shop Front Back Graphic T Shirt for Men 100% Cotton Oversized Vintage Streetwear White 2026 New Men Clothing",
+      "_source": "sumaitong",
+      "_channel": "新店热销",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "New Metallica Bestseller Men's 2026 New Cotton Summer Tshirt Cotton Shirt Y2k Electric Guitar Graphic Tshirts Hiphop Style",
+      "goodsNameCn": "New Metallica Bestseller Men's 2026 New Cotton Summer Tshirt Cotton Shirt Y2k Electric Guitar Graphi",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sac9b002333c84372b26dbd3086da92c9a.jpg",
+      "thumbnailCn": "",
+      "sold": 3,
+      "sales": null,
+      "goodsPriceMin": 9.6,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-12T00:00:00.000+08:00",
+      "goodsId": "3256811890221665",
+      "detailUrl": "3256811890221665",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "New Metallica Bestseller Men's 2026 New Cotton Summer Tshirt Cotton Shirt Y2k Electric Guitar Graphic Tshirts Hiphop Style",
+      "_source": "sumaitong",
+      "_channel": "新店热销",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "2026New Y2k Anime Robot Robloxs Face New Arrival  Clothes Tee Shirt Homme Graphic T-Shirts  Tshirt for Ropa Hombre 71081",
+      "goodsNameCn": "2026New Y2k Anime Robot Robloxs Face New Arrival  Clothes Tee Shirt Homme Graphic T-Shirts  Tshirt f",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sfc75ebd982924acb92ca1c6cfb1b8cffD.jpg",
+      "thumbnailCn": "",
+      "sold": 10,
+      "sales": null,
+      "goodsPriceMin": 0.99,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-14T00:00:00.000+08:00",
+      "goodsId": "3256811903651910",
+      "detailUrl": "3256811903651910",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "2026New Y2k Anime Robot Robloxs Face New Arrival  Clothes Tee Shirt Homme Graphic T-Shirts  Tshirt for Ropa Hombre 71081",
+      "_source": "sumaitong",
+      "_channel": "新店热销",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "2026 New Cotton Summer  T Shirt Mens Licensed Rock Band Music Tee New Black Fashion Casual Trend Y2k Vintage T-shirt",
+      "goodsNameCn": "2026 New Cotton Summer  T Shirt Mens Licensed Rock Band Music Tee New Black Fashion Casual Trend Y2k",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S30985a10b4b040ffa230148973d0cc2du.jpg",
+      "thumbnailCn": "",
+      "sold": 1,
+      "sales": null,
+      "goodsPriceMin": 7.02,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-18T00:00:00.000+08:00",
+      "goodsId": "3256811936551280",
+      "detailUrl": "3256811936551280",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "2026 New Cotton Summer  T Shirt Mens Licensed Rock Band Music Tee New Black Fashion Casual Trend Y2k Vintage T-shirt",
+      "_source": "sumaitong",
+      "_channel": "新店热销",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "2026 New Marvel New Men's Casual Crew Neck T-Shirt Marvel Series Anime Graphic 3d Print Top Superhero Punisher T Shirt",
+      "goodsNameCn": "2026 New Marvel New Men's Casual Crew Neck T-Shirt Marvel Series Anime Graphic 3d Print Top Superher",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S16b2e9a6d22d4a6291ea719fe6d7bf9eD.jpg",
+      "thumbnailCn": "",
+      "sold": 3,
+      "sales": null,
+      "goodsPriceMin": 8.42,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-07T00:00:00.000+08:00",
+      "goodsId": "3256811850445960",
+      "detailUrl": "3256811850445960",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "2026 New Marvel New Men's Casual Crew Neck T-Shirt Marvel Series Anime Graphic 3d Print Top Superhero Punisher T Shirt",
+      "_source": "sumaitong",
+      "_channel": "新店热销",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "2026 New Men's Polo Shirt With Crocodile Print Sport T Shirt",
+      "goodsNameCn": "2026 New Men's Polo Shirt With Crocodile Print Sport T Shirt",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S3299c375a978455985ad8a959521a156i.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 2.9,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-06T00:00:00.000+08:00",
+      "goodsId": "3256811844071453",
+      "detailUrl": "3256811844071453",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8310,
+          "catId": "200003529",
+          "catName": "Polo衫",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "2026 New Men's Polo Shirt With Crocodile Print Sport T Shirt",
+      "_source": "sumaitong",
+      "_channel": "新店热销",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "【New style】Proud Brother of A Class of 2026 Graduate Senior Graduation T-Shirt",
+      "goodsNameCn": "【New style】Proud Brother of A Class of 2026 Graduate Senior Graduation T-Shirt",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sb14fa6deffba4a799ca8885909d3333df.jpg",
+      "thumbnailCn": "",
+      "sold": 1,
+      "sales": null,
+      "goodsPriceMin": 4.22,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-08T00:00:00.000+08:00",
+      "goodsId": "1005012041690055",
+      "detailUrl": "1005012041690055",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "【New style】Proud Brother of A Class of 2026 Graduate Senior Graduation T-Shirt",
+      "_source": "sumaitong",
+      "_channel": "新店热销",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "【New style】Proud Brother Of A Class Of 2026 Graduate Senior Graduation T-Shirt",
+      "goodsNameCn": "【New style】Proud Brother Of A Class Of 2026 Graduate Senior Graduation T-Shirt",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/Sf49fd5f9148d46b18c3d01505a2cbc298.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 3.82,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-08T00:00:00.000+08:00",
+      "goodsId": "1005012038159104",
+      "detailUrl": "1005012038159104",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "【New style】Proud Brother Of A Class Of 2026 Graduate Senior Graduation T-Shirt",
+      "_source": "sumaitong",
+      "_channel": "新店热销",
+      "_catName": "男装"
+    },
+    {
+      "goodsNameEn": "Kpop Stray Kids T-shirt SKZ KARMA New Men's Style 2026 Summer New Hot-selling Men's Women's Fashion Casual Oversized T-shirt Y2K",
+      "goodsNameCn": "Kpop Stray Kids T-shirt SKZ KARMA New Men's Style 2026 Summer New Hot-selling Men's Women's Fashion ",
+      "thumbnail": "//ae-pic-a1.aliexpress-media.com/kf/S85068a3e90ab46879d79eddd5ac93295U.jpg",
+      "thumbnailCn": "",
+      "sold": 2,
+      "sales": null,
+      "goodsPriceMin": 9.46,
+      "goodsPriceMax": null,
+      "reviewNum": 0,
+      "rating": null,
+      "mallOpenTime": null,
+      "onSaleTime": "2026-04-10T00:00:00.000+08:00",
+      "goodsId": "3256811873432103",
+      "detailUrl": "3256811873432103",
+      "platform": "sumaitong",
+      "catItems": [
+        {
+          "id": 22,
+          "catId": "200000343",
+          "catName": "男装",
+          "catLevel": 0,
+          "parentCatId": "0",
+          "isLeaf": false
+        },
+        {
+          "id": 8294,
+          "catId": "200000779",
+          "catName": "上衣，T恤",
+          "catLevel": 1,
+          "parentCatId": "200000343",
+          "isLeaf": false
+        },
+        {
+          "id": 8311,
+          "catId": "200000783",
+          "catName": "T恤",
+          "catLevel": 2,
+          "parentCatId": "200000779",
+          "isLeaf": true
+        }
+      ],
+      "goodsName": "Kpop Stray Kids T-shirt SKZ KARMA New Men's Style 2026 Summer New Hot-selling Men's Women's Fashion Casual Oversized T-shirt Y2K",
+      "_source": "sumaitong",
+      "_channel": "新店热销",
+      "_catName": "男装"
+    }
+  ]
+}

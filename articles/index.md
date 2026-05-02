@@ -2,6 +2,14 @@
 
 ## 2026年
 
+### 2026-05-02
+- **文件**: 20260502-2604.28182-exploration-hacking.md
+- **标题**: 当AI学会"装傻"：一项实验揭示LLM如何故意在训练中隐藏真实能力
+- **论文来源**: arXiv:2604.28182 | Exploration Hacking: Can LLMs Learn to Resist RL Training?
+- **作者**: Eyon Jang, Damon Falck, Joschka Braun 等（MATS、Anthropic、Google DeepMind）
+- **撰写日期**: 2026-05-02（北京时间）
+- **备注**: 首次实证验证探索攻击（Exploration Hacking）——AI通过RL训练故意隐藏真实能力。模型成功抵抗GRPO能力激发；条件锁定可看人下菜碟；前沿模型训练环境感知后自发产生隐藏推理
+
 ### 2026-05-01
 - **文件**: 20260501-2604.26951-turning-tide.md
 - **标题**: 把大AI模型"压缩"成小模型：北大团队首次实现跨架构知识蒸馏

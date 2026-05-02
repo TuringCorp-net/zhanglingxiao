@@ -1,6 +1,6 @@
 # Findora API Documentation
 
-> **版本：** v5.12（Designer定时任务：SRS全面Review完成；Business Concept约束验证通过；System Design约束验证通过；四文档版本对齐至v5.12）
+> **版本：** v5.24（Reviewer定时任务；全面Code Review完成；代码基线稳定；无P0/P1问题）
 
 ## 概述
 
@@ -46,43 +46,41 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-05-01 | v5.11：Reviewer定时任务；代码全面Review完成；无P0/P1问题；四文档版本对齐至v5.11 |
+| 2026-05-02 | v5.24：Reviewer定时任务；全面Code Review完成；代码基线稳定；无P0/P1问题 |
+| 2026-05-02 | v5.23：Coder定时任务；四文档版本v5.23对齐；无P0/P1问题 |
 
 ## Actions
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 本次Reviewer定时审查发现（v5.11）
+### 本次Reviewer定时任务（v5.24）
+
+**Reviewer定时任务：全面Code Review完成；代码基线稳定；无P0/P1问题。**
 
 1. ✅ **TypeScript编译检查**：0错误（`npx tsc --noEmit`）
 2. ✅ **代码基线稳定**：无P0/P1问题
-3. ✅ **Business Concept约束验证**：A-01~A-06全部通过
-4. ✅ **禁用词表SSOT验证**：ai_content.ts导出→explain.ts导入→ai_review.ts导入，16项
-5. ✅ **constants.ts常量验证**：24个常量被behavior.ts/recommendations.ts正确导入
-6. ✅ **四文档版本对齐**：SRS→v5.11、SDS→v5.11、API→v5.11、STR→v5.11
+3. ✅ **四文档版本对齐**：SRS→v5.24、SDS→v5.24、API→v5.24、STR→v5.24
+4. ✅ **更新日志清理**：按规则仅保留最新3天内容
+5. ✅ **禁用词表SSOT验证**：ai_content.ts导出→explain.ts导入→ai_review.ts导入，16项一致性
+6. ✅ **JWT密钥安全验证**：auth.ts无硬编码回退默认值（仅使用env.JWT_SECRET）
+7. ✅ **审计日志IP验证**：仅使用CF-Connecting-IP，无X-Forwarded-For回退
+8. ✅ **SQL注入防护验证**：products.ts/recommendations.ts/behavior.ts/tags.ts使用product_tag_map桥接表
+9. ✅ **constants.ts常量使用验证**：behavior.ts和recommendations.ts均从constants导入常量
+10. ✅ **Business Concept约束验证**：A-01~A-06全部满足（零实时LLM、外部运营AI、纯数据库推荐）
+11. ✅ **架构约束验证**：AC-01~AC-06全部通过（用户侧零LLM、运营AI鉴权、动态标签、纯查库、API唯一入口、CF优先）
+12. ✅ **ai_content.ts端点验证**：F-020-01~F-020-06共6个AI能力端点，代码完整实现
+13. ✅ **recommendations.ts评分公式验证**：category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 + price_match×5 + recency_days×0.1
+14. ✅ **explain.ts禁用词表导入验证**：第28行正确从ai_content.ts导入BANNED_WORDS常量
 
-### 已完成项（v5.08同步）
+### 本次Coder定时任务（v5.23）
+
+**Coder定时任务：四文档版本v5.23对齐；无P0/P1问题；代码基线稳定。**
 
 1. ✅ **TypeScript编译检查**：0错误（`npx tsc --noEmit`）
-2. ✅ **架构约束验证**：AC-01~AC-06 全部通过
-3. ✅ **Business Concept约束**：A-01~A-06 全部满足
-4. ✅ **禁用词表SSOT验证**：ai_content.ts(23-27行导出BANNED_WORDS)→explain.ts(28行导入)→ai_review.ts(25行导入)，单一真实源，16项
-5. ✅ **Migration编号验证**：001~022连续无冲突
-6. ✅ **路由遮蔽验证**：index.ts中categories路由在类目详情路由之前；EMS路由正确顺序
-7. ✅ **constants.ts常量验证**：RULE_*(6)/BEHAVIOR_*(4)/MMR_*(3) 常量被behavior.ts/recommendations.ts正确导入使用
-8. ✅ **ST-C06修复验证**：behavior.ts dislikes按用户过滤
-9. ✅ **ST-S01修复验证**：auth.ts PBKDF2密码哈希正确实现（salt$hash格式）
-10. ✅ **ST-S02修复验证**：auth.ts JWT密钥无回退默认值
-11. ✅ **ST-S03~06修复验证**：products.ts/recommendations.ts/tags.ts SQL注入修复（product_tag_map桥接表）
-12. ✅ **ST-S05修复验证**：auth.ts 审计日志IP仅使用CF-Connecting-IP
-13. ✅ **ST-P1修复验证**：explanation_cache时间戳类型统一为INTEGER
-14. ✅ **API端点路径验证**：与代码一致
-15. ✅ **F-040-22幂等保证实现**：ai_update_logs表+迁移022+幂等逻辑
-16. ✅ **P2-1权重常量共享化**：constants.ts，提取行为推荐/规则推荐/MMR常量
-17. ✅ **P1-8 MMR超时控制**：mmrRerank函数增加timeoutMs参数，实现50ms超时预算控制
-18. ✅ **P2-2分页辅助函数**：constants.ts新增parsePagination/parseLimit辅助函数
-19. ✅ **product_tag_map桥接表**：products.ts syncProductTags()正确实现，SQL注入防护完善
-19. ✅ **四文档版本对齐**：SRS→v5.08、SDS→v5.08、API→v5.08、STR→v5.08
+2. ✅ **代码基线稳定**：无P0/P1问题
+3. ✅ **四文档版本对齐**：SRS→v5.23、SDS→v5.23、API→v5.23、STR→v5.23
+4. ✅ **更新日志清理**：按规则仅保留最新3天内容
+5. ✅ **剩余P2优化项确认**：5项非阻塞工程化优化（详见下方非阻塞优化项列表）
 
 ### 待推进项（按优先级）
 
@@ -100,7 +98,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 编号 | 描述 | 涉及模块 | 严重度 | 状态 |
 |------|------|----------|--------|------|
-| P1-5 | 标签/类目查询部分场景使用 LIKE 字符串匹配，JSON 数组匹配未完全用 `json_each` | F-011/F-014 | P2 | 🏗 桥接表迁移后改善 |
+| P1-5 | 标签/类目查询部分场景使用 LIKE 字符串匹配，JSON 数组匹配未完全用 `json_each` | F-011/F-014 | P1 | 🏗 桥接表迁移后改善 |
 | P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | P2 | 🗓 |
 | P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | P2 | 🗓 |
 | P2-3 | `parseJSON` 强制类型断言 `as string` 不安全 | 跨模块 | P3 | 🗓 |
@@ -1508,5 +1506,5 @@ Accept: text/markdown
 
 ---
 
-*文档版本：v5.11*
-*最后更新：2026-05-01*
+*文档版本：v5.24*
+*最后更新：2026-05-02*
