@@ -22,11 +22,11 @@
 
 const crawlState = {
   // 最后更新时间
-  lastUpdated: "2026-05-01T10:10:00.000Z",
-  // 本次采集: temu(39316), shein(2274), amazon(328182011), sumaitong(200000345), tiktok(600942)
-  // 完成时间: 2026-05-01T10:10:00.000Z
-  // 失败: 无
-  // 采集结果: 50个商品，筛选10个精选
+  lastUpdated: "2026-05-02T11:05:00.000Z",
+  // 本次采集: 图书(44933), 书籍和杂志(13087), 工具(228013), 服饰配饰(200000297), Luggage & Bags(824584)
+  // 完成时间: 2026-05-02T11:05:00.000Z
+  // 采集结果: 200个商品，去重后49个，筛选10个精选
+  // 精选分布: Temu(6), Amazon(3), Shein(2)
 
   // 各平台类目状态
   platforms: {
@@ -35,9 +35,9 @@ const crawlState = {
       sort: "sold",
       siteId: null,
       categories: [
-        { catId: 1, catName: "CD和黑胶唱片", lastCrawled: "2026-04-25T00:15:00.000Z" },
-        { catId: 653, catName: "办公用品", lastCrawled: "2026-04-25T02:04:34.812Z" },
-        { catId: 1464, catName: "宠物用品", lastCrawled: "2026-04-25T03:04:23.156Z" },
+        { catId: 1, catName: "CD和黑胶唱片", lastCrawled: "2026-05-02T01:06:35.512Z" },
+        { catId: 653, catName: "办公用品", lastCrawled: "2026-05-02T01:06:35.512Z" },
+        { catId: 1464, catName: "宠物用品", lastCrawled: "2026-05-02T10:02:10.713Z" },
         { catId: 2542, catName: "电子", lastCrawled: "2026-04-26T00:09:00.000Z" },
         { catId: 4673, catName: "工业和科学", lastCrawled: "2026-04-26T08:45:00.000Z" },
         { catId: 9711, catName: "家居、厨房用品", lastCrawled: "2026-04-26T02:03:34.916Z" },
@@ -56,8 +56,8 @@ const crawlState = {
         { catId: 31148, catName: "运动与户外用品", lastCrawled: "2026-04-30T14:00:00.000Z" },
         { catId: 39278, catName: "收藏品和工艺品", lastCrawled: "2026-05-01T14:00:00.000Z" },
         { catId: 39316, catName: "艺术品、工艺品和缝纫用品", lastCrawled: "2026-05-01T10:10:00.000Z" },
-        { catId: 42367, catName: "各色美食", lastCrawled: null },
-        { catId: 44933, catName: "图书", lastCrawled: "2026-04-30T02:06:00.841Z" }
+        { catId: 42367, catName: "各色美食", lastCrawled: "2026-05-02T10:30:00.000Z" },
+        { catId: 44933, catName: "图书", lastCrawled: "2026-05-02T11:05:00.000Z" }
       ]
     },
 
@@ -66,8 +66,8 @@ const crawlState = {
       sort: "sold",
       siteId: null,
       categories: [
-        { catId: 2032, catName: "家居与生活", lastCrawled: "2026-04-25T00:15:00.000Z" },
-        { catId: 3631, catName: "服饰配饰", lastCrawled: "2026-04-25T02:04:34.812Z" },
+        { catId: 2032, catName: "家居与生活", lastCrawled: "2026-05-02T01:06:35.512Z" },
+        { catId: 3631, catName: "服饰配饰", lastCrawled: "2026-05-02T10:02:10.713Z" },
         { catId: 3637, catName: "箱包和行李箱", lastCrawled: "2026-04-25T03:04:23.156Z" },
         { catId: 3650, catName: "家电", lastCrawled: "2026-04-26T08:45:00.000Z" },
         { catId: 2026, catName: "男人", lastCrawled: "2026-04-26T02:03:34.916Z" },
@@ -86,8 +86,8 @@ const crawlState = {
         { catId: 3657, catName: "汽车类", lastCrawled: "2026-04-30T14:00:00.000Z" },
         { catId: 3195, catName: "运动与户外", lastCrawled: "2026-05-01T14:00:00.000Z" },
         { catId: 2274, catName: "手机及配件", lastCrawled: "2026-05-01T10:10:00.000Z" },
-        { catId: 2273, catName: "电子学", lastCrawled: null },
-        { catId: 13087, catName: "书籍和杂志", lastCrawled: null },
+        { catId: 2273, catName: "电子学", lastCrawled: "2026-05-02T10:30:00.000Z" },
+        { catId: 13087, catName: "书籍和杂志", lastCrawled: "2026-05-02T11:05:00.000Z" },
         { catId: 13086, catName: "食品和饮料", lastCrawled: "2026-04-30T02:06:00.841Z" }
       ]
     },
@@ -97,8 +97,8 @@ const crawlState = {
       sort: "monthSold",
       siteId: null,
       categories: [
-        { catId: 2619525011, catName: "家电", lastCrawled: "2026-04-25T00:15:00.000Z" },
-        { catId: 2617941011, catName: "艺术、手工艺", lastCrawled: "2026-04-25T02:04:34.812Z" },
+        { catId: 2619525011, catName: "家电", lastCrawled: "2026-05-02T01:06:35.512Z" },
+        { catId: 2617941011, catName: "艺术、手工艺", lastCrawled: "2026-05-02T10:02:10.713Z" },
         { catId: 15684181, catName: "汽车", lastCrawled: "2026-04-25T03:04:23.156Z" },
         { catId: 165796011, catName: "婴儿产品", lastCrawled: "2026-04-26T00:09:00.000Z" },
         { catId: 3760911, catName: "美容与护理", lastCrawled: "2026-04-26T08:45:00.000Z" },
@@ -116,8 +116,8 @@ const crawlState = {
         { catId: 2972638011, catName: "庭院、草坪和园艺", lastCrawled: "2026-04-30T14:00:00.000Z" },
         { catId: 2619533011, catName: "宠物用品", lastCrawled: "2026-05-01T14:00:00.000Z" },
         { catId: 328182011, catName: "电动和手动工具", lastCrawled: "2026-05-01T10:10:00.000Z" },
-        { catId: 3375251, catName: "运动与户外", lastCrawled: null },
-        { catId: 228013, catName: "工具", lastCrawled: null },
+        { catId: 3375251, catName: "运动与户外", lastCrawled: "2026-05-02T10:30:00.000Z" },
+        { catId: 228013, catName: "工具", lastCrawled: "2026-05-02T11:05:00.000Z" },
         { catId: 165793011, catName: "玩具", lastCrawled: "2026-04-30T02:06:00.841Z" },
         { catId: 468642, catName: "视频游戏", lastCrawled: "2026-04-27T03:06:00.000Z" }
       ]
@@ -128,7 +128,7 @@ const crawlState = {
       sort: "totalSold",
       siteId: 1,
       categories: [
-        { catId: 6, catName: "家用电器", lastCrawled: "2026-04-25T00:15:00.000Z" },
+        { catId: 6, catName: "家用电器", lastCrawled: "2026-05-02T10:02:10.713Z" },
         { catId: 7, catName: "电脑和办公", lastCrawled: "2026-04-25T02:04:34.812Z" },
         { catId: 13, catName: "家装（硬装）", lastCrawled: "2026-04-25T03:04:23.156Z" },
         { catId: 15, catName: "家居用品", lastCrawled: "2026-04-26T00:09:00.000Z" },
@@ -149,8 +149,8 @@ const crawlState = {
         { catId: 1511, catName: "手表", lastCrawled: "2026-04-30T14:00:00.000Z" },
         { catId: 1524, catName: "箱包", lastCrawled: "2026-05-01T14:00:00.000Z" },
         { catId: 200000345, catName: "女装", lastCrawled: "2026-05-01T10:10:00.000Z" },
-        { catId: 200000343, catName: "男装", lastCrawled: null },
-        { catId: 200000297, catName: "服饰配饰", lastCrawled: null },
+        { catId: 200000343, catName: "男装", lastCrawled: "2026-05-02T10:30:00.000Z" },
+        { catId: 200000297, catName: "服饰配饰", lastCrawled: "2026-05-02T11:05:00.000Z" },
         { catId: 200165144, catName: "接发与发套", lastCrawled: null },
         { catId: 200574005, catName: "男女内衣及家居服", lastCrawled: null },
         { catId: 200000532, catName: "新奇特及特殊用途服装", lastCrawled: null },
@@ -166,8 +166,8 @@ const crawlState = {
       sort: "totalSold",
       siteId: 1,
       categories: [
-        { catId: 604206, catName: "Toys & Hobbies", lastCrawled: "2026-04-25T00:15:00.000Z" },
-        { catId: 603014, catName: "Sports & Outdoor", lastCrawled: "2026-04-25T02:04:34.812Z" },
+        { catId: 604206, catName: "Toys & Hobbies", lastCrawled: "2026-05-02T01:06:35.512Z" },
+        { catId: 603014, catName: "Sports & Outdoor", lastCrawled: "2026-05-02T10:02:10.713Z" },
         { catId: 604453, catName: "Furniture", lastCrawled: "2026-04-25T03:04:23.156Z" },
         { catId: 951432, catName: "Collectibles", lastCrawled: "2026-04-26T00:09:00.000Z" },
         { catId: 605248, catName: "Fashion Accessories", lastCrawled: "2026-04-26T08:45:00.000Z" },
@@ -189,8 +189,8 @@ const crawlState = {
         { catId: 600154, catName: "Textiles & Soft Furnishings", lastCrawled: "2026-04-30T14:00:00.000Z" },
         { catId: 604579, catName: "Tools & Hardware", lastCrawled: "2026-05-01T14:00:00.000Z" },
         { catId: 600942, catName: "Household Appliances", lastCrawled: "2026-05-01T10:10:00.000Z" },
-        { catId: 953224, catName: "Jewelry Accessories & Derivatives", lastCrawled: null },
-        { catId: 824584, catName: "Luggage & Bags", lastCrawled: null },
+        { catId: 953224, catName: "Jewelry Accessories & Derivatives", lastCrawled: "2026-05-02T10:30:00.000Z" },
+        { catId: 824584, catName: "Luggage & Bags", lastCrawled: "2026-05-02T11:05:00.000Z" },
         { catId: 801928, catName: "Books, Magazines & Audio", lastCrawled: null },
         { catId: 802184, catName: "Kids' Fashion", lastCrawled: null },
         { catId: 601303, catName: "Muslim Fashion", lastCrawled: "2026-04-30T02:06:00.841Z" }
