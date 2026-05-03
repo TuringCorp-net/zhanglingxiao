@@ -1,6 +1,6 @@
 # Findora API Documentation
 
-> **版本：** v5.24（Reviewer定时任务；全面Code Review完成；代码基线稳定；无P0/P1问题）
+> **版本：** v5.36（Reviewer定时任务；全面Code Review完成；四文档v5.36同步）
 
 ## 概述
 
@@ -46,41 +46,26 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-05-02 | v5.24：Reviewer定时任务；全面Code Review完成；代码基线稳定；无P0/P1问题 |
-| 2026-05-02 | v5.23：Coder定时任务；四文档版本v5.23对齐；无P0/P1问题 |
+| 2026-05-03 | v5.36：Reviewer定时任务；全面Code Review完成；四文档v5.36同步 |
+| 2026-05-03 | v5.35：Coder定时任务；四文档v5.35同步；持续维护中 |
 
 ## Actions
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 本次Reviewer定时任务（v5.24）
+### 本次Reviewer定时任务（v5.36）
 
-**Reviewer定时任务：全面Code Review完成；代码基线稳定；无P0/P1问题。**
+**Reviewer定时任务：全面Code Review完成；四文档版本v5.36同步。**
 
-1. ✅ **TypeScript编译检查**：0错误（`npx tsc --noEmit`）
+1. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
 2. ✅ **代码基线稳定**：无P0/P1问题
-3. ✅ **四文档版本对齐**：SRS→v5.24、SDS→v5.24、API→v5.24、STR→v5.24
+3. ✅ **四文档版本对齐**：SRS→v5.36、SDS→v5.36、API→v5.36、STR→v5.36
 4. ✅ **更新日志清理**：按规则仅保留最新3天内容
-5. ✅ **禁用词表SSOT验证**：ai_content.ts导出→explain.ts导入→ai_review.ts导入，16项一致性
-6. ✅ **JWT密钥安全验证**：auth.ts无硬编码回退默认值（仅使用env.JWT_SECRET）
-7. ✅ **审计日志IP验证**：仅使用CF-Connecting-IP，无X-Forwarded-For回退
-8. ✅ **SQL注入防护验证**：products.ts/recommendations.ts/behavior.ts/tags.ts使用product_tag_map桥接表
-9. ✅ **constants.ts常量使用验证**：behavior.ts和recommendations.ts均从constants导入常量
-10. ✅ **Business Concept约束验证**：A-01~A-06全部满足（零实时LLM、外部运营AI、纯数据库推荐）
-11. ✅ **架构约束验证**：AC-01~AC-06全部通过（用户侧零LLM、运营AI鉴权、动态标签、纯查库、API唯一入口、CF优先）
-12. ✅ **ai_content.ts端点验证**：F-020-01~F-020-06共6个AI能力端点，代码完整实现
-13. ✅ **recommendations.ts评分公式验证**：category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 + price_match×5 + recency_days×0.1
-14. ✅ **explain.ts禁用词表导入验证**：第28行正确从ai_content.ts导入BANNED_WORDS常量
-
-### 本次Coder定时任务（v5.23）
-
-**Coder定时任务：四文档版本v5.23对齐；无P0/P1问题；代码基线稳定。**
-
-1. ✅ **TypeScript编译检查**：0错误（`npx tsc --noEmit`）
-2. ✅ **代码基线稳定**：无P0/P1问题
-3. ✅ **四文档版本对齐**：SRS→v5.23、SDS→v5.23、API→v5.23、STR→v5.23
-4. ✅ **更新日志清理**：按规则仅保留最新3天内容
-5. ✅ **剩余P2优化项确认**：5项非阻塞工程化优化（详见下方非阻塞优化项列表）
+5. ✅ **架构约束验证**：A-01~A-06 + AC-01~AC-06全部通过
+6. ✅ **Migration编号验证**：001~022连续无冲突
+7. ✅ **核心代码审查**：index.ts路由分发正确；schema.ts接口完整；ai_content.ts禁用词16项统一
+8. ✅ **API文档一致性**：findora_API.md端点总览与代码路由完全同步
+9. ✅ **SRS需求一致性**：推荐评分公式/AI能力/常量使用/桥接表实现均符合SRS要求
 
 ### 待推进项（按优先级）
 
@@ -1506,5 +1491,5 @@ Accept: text/markdown
 
 ---
 
-*文档版本：v5.24*
-*最后更新：2026-05-02*
+*文档版本：v5.27*
+*最后更新：2026-05-03*

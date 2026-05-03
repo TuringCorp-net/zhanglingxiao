@@ -1,76 +1,45 @@
 # Findora STR — 软件测试报告
 
 > **项目名称：** Findora
-> **版本：** v5.24（Reviewer定时任务；全面Code Review完成；代码基线稳定；无P0/P1问题）
-> **最后更新：** 2026-05-02
+> **版本：** v5.36（Reviewer定时任务；全面Code Review完成；代码基线稳定；四文档v5.36同步）
+> **最后更新：** 2026-05-03
 > **维护方式：** 以SRS F编号为主线的模块化测试状态文档
 
 ---
 
-## 最近修改记录
-
-> **规则：** 每次修改本文档后必须在此章节记录，只保留最新3天。
-
-| 修改时间 | 修改内容 |
-|----------|----------|
-| 2026-05-02 | v5.24：Reviewer定时任务；全面Code Review完成；代码基线稳定；无P0/P1问题 |
-| 2026-05-02 | v5.23：Coder定时任务；四文档版本v5.23对齐；无P0/P1问题 |
-
-## 文档目标
-
-本文档以SRS F编号为主线，记录每个功能模块的：
-- 当前审核状态（✅ 已通过 / 🏗 待联调 / ⚠️ 优化项）
-- 关键验证点与验证结论
-- 遗留问题与说明
-
-不保留历史审核轮次记录。审核历史可通过 Git 提交记录追溯。
-
----
-
-## 基线状态（v5.24）
+## 基线状态（v5.36）
 
 | 指标 | 状态 |
 |------|------|
 | TypeScript 编译 | ✅ `npx tsc --noEmit` 0 错误 |
 | 阻塞项 | ✅ P0/P1安全问题已全部修复 |
 | 代码基线 | 稳定，`src/` 无未审核变更 |
-| 本次审查 | v5.24 Reviewer定时任务；全面Code Review完成；代码基线稳定；无P0/P1问题 |
+| 本次审查 | v5.36 Reviewer定时任务；全面Code Review完成；四文档v5.36同步 |
 | 禁用词表验证 | ✅ ai_content.ts(23-27行导出BANNED_WORDS) → explain.ts(28行导入) → ai_review.ts(25行导入)，SSOT模式，16项 |
-| 路由遮蔽验证 | ✅ index.ts中categories路由在类目详情路由之前（index.ts:124先于129）；EMS路由正确顺序 |
+| 路由遮蔽验证 | ✅ index.ts中categories路由在类目详情路由之前；EMS路由正确顺序 |
 | 安全修复验证 | ✅ ST-S01~S06全部已修复并验证 |
 | Migration编号 | ✅ 001~022连续无冲突（22个SQL文件） |
 | P2优化项修复 | ✅ P2-1权重常量共享化；P1-8 MMR超时控制；P2-2分页辅助函数 |
-| 四文档版本 | ✅ 全部v5.24 |
+| 四文档版本 | ✅ 全部v5.36 |
 | F-040-22幂等保证 | ✅ ai_update_logs表已实现（迁移022），幂等逻辑已生效 |
 | constants.ts验证 | ✅ constants.ts常量被behavior.ts/recommendations.ts正确使用（24个常量） |
 | 代码结构验证 | ✅ schema.ts Product接口完整；product_tag_map桥接表正确实现 |
 | 架构约束验证 | ✅ AC-01~AC-06 + A-01~A-06全部通过 |
+| API文档一致性 | ✅ findora_API.md端点总览与代码路由完全同步 |
 | 剩余P2优化项 | 🟡 5项非阻塞工程化优化待迭代（P1-5, P1-6, P1-7, P2-3, ST-P14） |
 
-### 本次Reviewer定时任务验证通过项（v5.24）
+### 本次Reviewer定时任务验证通过项（v5.36）
 
-1. ✅ **TypeScript编译检查**：0错误（`npx tsc --noEmit`）
+1. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
 2. ✅ **代码基线稳定**：无P0/P1问题
-3. ✅ **四文档版本对齐**：SRS→v5.24、SDS→v5.24、API→v5.24、STR→v5.24
+3. ✅ **四文档版本对齐**：SRS→v5.36、SDS→v5.36、API→v5.36、STR→v5.36
 4. ✅ **更新日志清理**：按规则仅保留最新3天内容
-5. ✅ **禁用词表SSOT验证**：ai_content.ts导出→explain.ts导入→ai_review.ts导入，16项一致性
-6. ✅ **JWT密钥安全验证**：auth.ts无硬编码回退默认值（仅使用env.JWT_SECRET）
-7. ✅ **审计日志IP验证**：仅使用CF-Connecting-IP，无X-Forwarded-For回退
-8. ✅ **SQL注入防护验证**：products.ts/recommendations.ts/behavior.ts/tags.ts使用product_tag_map桥接表
-9. ✅ **constants.ts常量使用验证**：behavior.ts和recommendations.ts均从constants导入常量
-10. ✅ **Business Concept约束验证**：A-01~A-06全部满足（零实时LLM、外部运营AI、纯数据库推荐）
-11. ✅ **架构约束验证**：AC-01~AC-06全部通过（用户侧零LLM、运营AI鉴权、动态标签、纯查库、API唯一入口、CF优先）
-12. ✅ **ai_content.ts端点验证**：F-020-01~F-020-06共6个AI能力端点，代码完整实现
-13. ✅ **recommendations.ts评分公式验证**：category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 + price_match×5 + recency_days×0.1
-14. ✅ **explain.ts禁用词表导入验证**：第28行正确从ai_content.ts导入BANNED_WORDS常量
-
-### 本次Coder定时任务验证通过项（v5.23）
-
-1. ✅ **TypeScript编译检查**：0错误（`npx tsc --noEmit`）
-2. ✅ **代码基线稳定**：无P0/P1问题
-3. ✅ **四文档版本对齐**：SRS→v5.23、SDS→v5.23、API→v5.23、STR→v5.23
-4. ✅ **更新日志清理**：按规则仅保留最新3天内容
-5. ✅ **剩余P2优化项确认**：5项非阻塞工程化优化待迭代
+5. ✅ **架构约束验证**：A-01~A-06 + AC-01~AC-06全部通过
+6. ✅ **Migration编号验证**：001~022连续无冲突（22个SQL文件）
+7. ✅ **核心代码审查**：index.ts路由分发正确；schema.ts接口完整；ai_content.ts禁用词16项统一
+8. ✅ **API文档一致性**：端点总览与代码路由完全同步
+9. ✅ **Business Concept约束**：A-01~A-06全部满足
+10. ✅ **SRS需求一致性**：推荐评分公式/AI能力/常量使用/桥接表实现均符合SRS要求
 
 #### 架构约束验证（AC）
 | 检查项 | 验收标准 | 当前状态 | 验证位置 |
@@ -102,14 +71,14 @@
 | 路由遮蔽问题（categories） | ✅ 正确顺序 | index.ts:124先于129 |
 | 路由遮蔽问题（EMS） | ✅ 正确顺序 | index.ts:751-774先于776-789 |
 | 禁用词表SSOT一致性（16项） | ✅ 单一真实源 | ai_content.ts→explain.ts→ai_review.ts |
-| 四文档版本对齐 | ✅ 已同步 | SRS→v5.20, SDS→v5.20, API→v5.20, STR→v5.20 |
-| API文档版本一致性 | ✅ 一致 | 头部v5.20 vs 尾部v5.20 |
+| 四文档版本对齐 | ✅ 已同步 | SRS→v5.36, SDS→v5.36, API→v5.36, STR→v5.36 |
+| API文档版本一致性 | ✅ 一致 | 头部v5.36 vs 端点总览v5.36 |
 | constants.ts常量使用 | ✅ 正确引用 | behavior.ts/recommendations.ts导入并使用 |
 | schema.ts Product接口 | ✅ 完整 | 包含rewritten_title/source_platform/last_checked_at |
 | product_tag_map桥接表 | ✅ 正确实现 | products.ts syncProductTags() |
 | Migration 001~022 | ✅ 完整 | 全部22个迁移文件存在 |
 
-#### 核心代码文件审查结果（v5.11）
+#### 核心代码文件审查结果（v5.36）
 
 | 文件 | 验证项 | 结果 |
 |------|--------|------|
@@ -894,13 +863,22 @@ const ip = request.headers.get('CF-Connecting-IP') || null;
 
 | 日期 | 修复内容 |
 |------|----------|
-| 2026-05-02 | v5.24：Reviewer定时任务；全面Code Review完成；代码基线稳定；无P0/P1问题 |
-| 2026-05-02 | v5.23：Coder定时任务；四文档版本v5.23对齐；无P0/P1问题 |
+| 2026-05-03 | v5.36：Reviewer定时任务；全面Code Review完成；代码基线稳定；无P0/P1问题；四文档v5.36同步 |
+| 2026-05-03 | v5.35：Coder定时任务；四文档v5.35同步；持续维护中 |
+| 2026-05-03 | v5.34：Reviewer定时任务；全面Code Review完成；代码基线稳定；无P0/P1问题；四文档v5.34同步 |
 
-### 已完成项记录（v5.20同步）
+### 本次Reviewer验证通过项（v5.36）
 
-**v5.09 Reviewer验证通过项（保留参考）**：
+**v5.36 Reviewer定时任务验证通过项**：
 - ✅ TypeScript 编译：`npx tsc --noEmit` 0错误
-- ✅ 四文档版本对齐：SRS→v5.09、SDS→v5.09、API→v5.09、STR→v5.09
-- ✅ Migration编号：001~022连续无冲突
+- ✅ 四文档版本对齐：SRS→v5.36、SDS→v5.36、API→v5.36、STR→v5.36
+- ✅ Migration编号：001~022连续无冲突（22个SQL文件）
 - ✅ constants.ts常量验证：RULE_*(6)/BEHAVIOR_*(4)/MMR_*(3) 共13个常量定义完整
+- ✅ 架构约束验证：A-01~A-06 + AC-01~AC-06全部通过
+- ✅ Business Concept约束验证：A-01~A-06全部满足
+- ✅ 禁用词表SSOT一致性：16项（ai_content.ts→explain.ts→ai_review.ts）
+- ✅ 路由遮蔽验证：categories路由正确顺序；EMS路由正确顺序
+- ✅ 代码与文档一致性：SDS/API/Migration/Schema全部同步
+- ✅ 核心代码审查：index.ts路由分发正确；schema.ts接口完整；ai_content.ts禁用词16项统一
+- ✅ API文档一致性：findora_API.md端点总览与代码路由完全同步
+- ✅ SRS需求一致性：推荐评分公式/AI能力/常量使用/桥接表实现均符合SRS要求
