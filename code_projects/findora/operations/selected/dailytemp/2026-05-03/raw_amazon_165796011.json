@@ -1,0 +1,2368 @@
+{
+  "platform": "amazon",
+  "category": "婴儿产品",
+  "catId": 165796011,
+  "total": 40,
+  "products": [
+    {
+      "goodsNameEn": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-Top Packs (768 Wipes Total), Packaging May Vary($2.86$2.86/100 count)",
+      "goodsNameCn": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-To",
+      "thumbnail": "https://m.media-amazon.com/images/I/81KJo22+X0L._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 6348536,
+      "sales": null,
+      "goodsPriceMin": 21.99,
+      "goodsPriceMax": null,
+      "reviewNum": 124,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2019-05-23T00:00:00.000+08:00",
+      "goodsId": "B07SCL613T",
+      "detailUrl": "B07SCL613T",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-Top Packs (768 Wipes Total), Packaging May Vary($2.86$2.86/100 count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "goodsNameCn": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "thumbnail": "https://m.media-amazon.com/images/I/614C96nCLoL._AC_UY218_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 19.99,
+      "goodsPriceMax": null,
+      "reviewNum": 2799,
+      "rating": 4.9,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B0DF1FDKR4",
+      "detailUrl": "B0DF1FDKR4",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 151,
+          "catId": "166777011",
+          "catName": "喂食",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 357,
+          "catId": "166779011",
+          "catName": "奶瓶喂养",
+          "catLevel": 3,
+          "parentCatId": "166777011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2269,
+          "catId": "25131713011",
+          "catName": "消毒器",
+          "catLevel": 4,
+          "parentCatId": "166779011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Packs($2.52$2.52/100 count)",
+      "goodsNameCn": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Pa",
+      "thumbnail": "https://m.media-amazon.com/images/I/71gbIUpYmcL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 20.45,
+      "goodsPriceMax": null,
+      "reviewNum": 511,
+      "rating": 4.7,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B07H53W5WP",
+      "detailUrl": "B07H53W5WP",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 354,
+          "catId": "166887011",
+          "catName": "如厕训练",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 857,
+          "catId": "166891011",
+          "catName": "训练尿裤",
+          "catLevel": 3,
+          "parentCatId": "166887011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Packs($2.52$2.52/100 count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "goodsNameCn": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "thumbnail": "https://m.media-amazon.com/images/I/81tAiN-jAVL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 3640897,
+      "sales": null,
+      "goodsPriceMin": 17.29,
+      "goodsPriceMax": null,
+      "reviewNum": 77,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2020-12-16T08:00:00.000+08:00",
+      "goodsId": "B08QRKY3NJ",
+      "detailUrl": "B08QRKY3NJ",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented & Hypoallergenic, 720 Count (12 Packs)Safer chemicalsDiscover more products with sustainability featu",
+      "goodsNameCn": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented &",
+      "thumbnail": "https://m.media-amazon.com/images/I/813fvE8SHRL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 8145704,
+      "sales": null,
+      "goodsPriceMin": 44.97,
+      "goodsPriceMax": null,
+      "reviewNum": 823,
+      "rating": 4.7,
+      "mallOpenTime": "2012-07-12T08:00:00.000+08:00",
+      "onSaleTime": "2012-07-12T08:00:00.000+08:00",
+      "goodsId": "B008KJEYLO",
+      "detailUrl": "B008KJEYLO",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented & Hypoallergenic, 720 Count (12 Packs)Safer chemicalsDiscover more products with sustainability features.",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mode, 2 in 1 Forehead & Object Mode($19.99$19.99/count)",
+      "goodsNameCn": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mo",
+      "thumbnail": "https://m.media-amazon.com/images/I/51JdQWimMaL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 2974235,
+      "sales": null,
+      "goodsPriceMin": 19.99,
+      "goodsPriceMax": null,
+      "reviewNum": 1163,
+      "rating": 4.5,
+      "mallOpenTime": "2020-01-26T00:00:00.000+08:00",
+      "onSaleTime": "2020-01-26T00:00:00.000+08:00",
+      "goodsId": "B0824XNJSW",
+      "detailUrl": "B0824XNJSW",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 663,
+          "catId": "166862011",
+          "catName": "体温计",
+          "catLevel": 4,
+          "parentCatId": "17720258011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 37,
+          "catId": "17720255011",
+          "catName": "婴儿护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 128,
+          "catId": "17720258011",
+          "catName": "健康",
+          "catLevel": 3,
+          "parentCatId": "17720255011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mode, 2 in 1 Forehead & Object Mode($19.99$19.99/count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "goodsNameCn": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "thumbnail": "https://m.media-amazon.com/images/I/81ZQ13SAn1L._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 1586391,
+      "sales": null,
+      "goodsPriceMin": 11.33,
+      "goodsPriceMax": null,
+      "reviewNum": 124,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2019-05-23T00:00:00.000+08:00",
+      "goodsId": "B08QRT84WJ",
+      "detailUrl": "B08QRT84WJ",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "goodsNameCn": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "thumbnail": "https://m.media-amazon.com/images/I/71Qix2av1yL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 821601,
+      "sales": null,
+      "goodsPriceMin": 15.99,
+      "goodsPriceMax": null,
+      "reviewNum": 18,
+      "rating": 4.6,
+      "mallOpenTime": "2022-10-27T08:00:00.000+08:00",
+      "onSaleTime": "2022-10-27T08:00:00.000+08:00",
+      "goodsId": "B0BKQDPP1Z",
+      "detailUrl": "B0BKQDPP1Z",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1016,
+          "catId": "166843011",
+          "catName": "辅料",
+          "catLevel": 3,
+          "parentCatId": "8446318011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 3261,
+          "catId": "8446255011",
+          "catName": "婴儿车风扇",
+          "catLevel": 4,
+          "parentCatId": "166843011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 770,
+          "catId": "8446318011",
+          "catName": "婴儿车",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "goodsNameCn": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "thumbnail": "https://m.media-amazon.com/images/I/61SKiAellPL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 778254,
+      "sales": null,
+      "goodsPriceMin": 29.94,
+      "goodsPriceMax": null,
+      "reviewNum": 239,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2022-10-12T08:00:00.000+08:00",
+      "goodsId": "B0BJ13K7FR",
+      "detailUrl": "B0BJ13K7FR",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴儿皮肤护理,15 盎司",
+      "goodsNameCn": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴儿皮肤护理,15 盎司",
+      "thumbnail": "https://m.media-amazon.com/images/I/61LnA0ZseyL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 4.98,
+      "goodsPriceMax": null,
+      "reviewNum": 3,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B0009STDJW",
+      "detailUrl": "B0009STDJW",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 234,
+          "catId": "166740011",
+          "catName": "皮肤护理",
+          "catLevel": 4,
+          "parentCatId": "17720257011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 37,
+          "catId": "17720255011",
+          "catName": "婴儿护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 69,
+          "catId": "17720257011",
+          "catName": "仪容仪表",
+          "catLevel": 3,
+          "parentCatId": "17720255011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 805,
+          "catId": "322266011",
+          "catName": "爽身粉",
+          "catLevel": 5,
+          "parentCatId": "166740011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴儿皮肤护理,15 盎司",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-Top Packs (768 Wipes Total), Packaging May Vary($2.86$2.86/100 count)",
+      "goodsNameCn": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-To",
+      "thumbnail": "https://m.media-amazon.com/images/I/81KJo22+X0L._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 6348536,
+      "sales": null,
+      "goodsPriceMin": 21.99,
+      "goodsPriceMax": null,
+      "reviewNum": 124,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2019-05-23T00:00:00.000+08:00",
+      "goodsId": "B07SCL613T",
+      "detailUrl": "B07SCL613T",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-Top Packs (768 Wipes Total), Packaging May Vary($2.86$2.86/100 count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "goodsNameCn": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "thumbnail": "https://m.media-amazon.com/images/I/614C96nCLoL._AC_UY218_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 19.99,
+      "goodsPriceMax": null,
+      "reviewNum": 2799,
+      "rating": 4.9,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B0DF1FDKR4",
+      "detailUrl": "B0DF1FDKR4",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 151,
+          "catId": "166777011",
+          "catName": "喂食",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 357,
+          "catId": "166779011",
+          "catName": "奶瓶喂养",
+          "catLevel": 3,
+          "parentCatId": "166777011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2269,
+          "catId": "25131713011",
+          "catName": "消毒器",
+          "catLevel": 4,
+          "parentCatId": "166779011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Packs($2.52$2.52/100 count)",
+      "goodsNameCn": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Pa",
+      "thumbnail": "https://m.media-amazon.com/images/I/71gbIUpYmcL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 20.45,
+      "goodsPriceMax": null,
+      "reviewNum": 511,
+      "rating": 4.7,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B07H53W5WP",
+      "detailUrl": "B07H53W5WP",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 354,
+          "catId": "166887011",
+          "catName": "如厕训练",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 857,
+          "catId": "166891011",
+          "catName": "训练尿裤",
+          "catLevel": 3,
+          "parentCatId": "166887011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Packs($2.52$2.52/100 count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "goodsNameCn": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "thumbnail": "https://m.media-amazon.com/images/I/81tAiN-jAVL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 3640897,
+      "sales": null,
+      "goodsPriceMin": 17.29,
+      "goodsPriceMax": null,
+      "reviewNum": 77,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2020-12-16T08:00:00.000+08:00",
+      "goodsId": "B08QRKY3NJ",
+      "detailUrl": "B08QRKY3NJ",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented & Hypoallergenic, 720 Count (12 Packs)Safer chemicalsDiscover more products with sustainability featu",
+      "goodsNameCn": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented &",
+      "thumbnail": "https://m.media-amazon.com/images/I/813fvE8SHRL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 8145704,
+      "sales": null,
+      "goodsPriceMin": 44.97,
+      "goodsPriceMax": null,
+      "reviewNum": 823,
+      "rating": 4.7,
+      "mallOpenTime": "2012-07-12T08:00:00.000+08:00",
+      "onSaleTime": "2012-07-12T08:00:00.000+08:00",
+      "goodsId": "B008KJEYLO",
+      "detailUrl": "B008KJEYLO",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented & Hypoallergenic, 720 Count (12 Packs)Safer chemicalsDiscover more products with sustainability features.",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mode, 2 in 1 Forehead & Object Mode($19.99$19.99/count)",
+      "goodsNameCn": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mo",
+      "thumbnail": "https://m.media-amazon.com/images/I/51JdQWimMaL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 2974235,
+      "sales": null,
+      "goodsPriceMin": 19.99,
+      "goodsPriceMax": null,
+      "reviewNum": 1163,
+      "rating": 4.5,
+      "mallOpenTime": "2020-01-26T00:00:00.000+08:00",
+      "onSaleTime": "2020-01-26T00:00:00.000+08:00",
+      "goodsId": "B0824XNJSW",
+      "detailUrl": "B0824XNJSW",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 663,
+          "catId": "166862011",
+          "catName": "体温计",
+          "catLevel": 4,
+          "parentCatId": "17720258011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 37,
+          "catId": "17720255011",
+          "catName": "婴儿护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 128,
+          "catId": "17720258011",
+          "catName": "健康",
+          "catLevel": 3,
+          "parentCatId": "17720255011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mode, 2 in 1 Forehead & Object Mode($19.99$19.99/count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "goodsNameCn": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "thumbnail": "https://m.media-amazon.com/images/I/81ZQ13SAn1L._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 1586391,
+      "sales": null,
+      "goodsPriceMin": 11.33,
+      "goodsPriceMax": null,
+      "reviewNum": 124,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2019-05-23T00:00:00.000+08:00",
+      "goodsId": "B08QRT84WJ",
+      "detailUrl": "B08QRT84WJ",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "goodsNameCn": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "thumbnail": "https://m.media-amazon.com/images/I/71Qix2av1yL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 821601,
+      "sales": null,
+      "goodsPriceMin": 15.99,
+      "goodsPriceMax": null,
+      "reviewNum": 18,
+      "rating": 4.6,
+      "mallOpenTime": "2022-10-27T08:00:00.000+08:00",
+      "onSaleTime": "2022-10-27T08:00:00.000+08:00",
+      "goodsId": "B0BKQDPP1Z",
+      "detailUrl": "B0BKQDPP1Z",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1016,
+          "catId": "166843011",
+          "catName": "辅料",
+          "catLevel": 3,
+          "parentCatId": "8446318011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 3261,
+          "catId": "8446255011",
+          "catName": "婴儿车风扇",
+          "catLevel": 4,
+          "parentCatId": "166843011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 770,
+          "catId": "8446318011",
+          "catName": "婴儿车",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "goodsNameCn": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "thumbnail": "https://m.media-amazon.com/images/I/61SKiAellPL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 778254,
+      "sales": null,
+      "goodsPriceMin": 29.94,
+      "goodsPriceMax": null,
+      "reviewNum": 239,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2022-10-12T08:00:00.000+08:00",
+      "goodsId": "B0BJ13K7FR",
+      "detailUrl": "B0BJ13K7FR",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴��皮肤护理,15 盎司",
+      "goodsNameCn": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴��皮肤护理,15 盎司",
+      "thumbnail": "https://m.media-amazon.com/images/I/61LnA0ZseyL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 4.98,
+      "goodsPriceMax": null,
+      "reviewNum": 3,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B0009STDJW",
+      "detailUrl": "B0009STDJW",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 234,
+          "catId": "166740011",
+          "catName": "皮肤护理",
+          "catLevel": 4,
+          "parentCatId": "17720257011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 37,
+          "catId": "17720255011",
+          "catName": "婴儿护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 69,
+          "catId": "17720257011",
+          "catName": "仪容仪表",
+          "catLevel": 3,
+          "parentCatId": "17720255011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 805,
+          "catId": "322266011",
+          "catName": "爽身粉",
+          "catLevel": 5,
+          "parentCatId": "166740011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴��皮肤护理,15 盎司",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-Top Packs (768 Wipes Total), Packaging May Vary($2.86$2.86/100 count)",
+      "goodsNameCn": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-To",
+      "thumbnail": "https://m.media-amazon.com/images/I/81KJo22+X0L._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 6348536,
+      "sales": null,
+      "goodsPriceMin": 21.99,
+      "goodsPriceMax": null,
+      "reviewNum": 124,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2019-05-23T00:00:00.000+08:00",
+      "goodsId": "B07SCL613T",
+      "detailUrl": "B07SCL613T",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-Top Packs (768 Wipes Total), Packaging May Vary($2.86$2.86/100 count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "goodsNameCn": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "thumbnail": "https://m.media-amazon.com/images/I/614C96nCLoL._AC_UY218_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 19.99,
+      "goodsPriceMax": null,
+      "reviewNum": 2799,
+      "rating": 4.9,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B0DF1FDKR4",
+      "detailUrl": "B0DF1FDKR4",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 151,
+          "catId": "166777011",
+          "catName": "喂食",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 357,
+          "catId": "166779011",
+          "catName": "奶瓶喂养",
+          "catLevel": 3,
+          "parentCatId": "166777011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2269,
+          "catId": "25131713011",
+          "catName": "消毒器",
+          "catLevel": 4,
+          "parentCatId": "166779011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Packs($2.52$2.52/100 count)",
+      "goodsNameCn": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Pa",
+      "thumbnail": "https://m.media-amazon.com/images/I/71gbIUpYmcL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 20.45,
+      "goodsPriceMax": null,
+      "reviewNum": 511,
+      "rating": 4.7,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B07H53W5WP",
+      "detailUrl": "B07H53W5WP",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 354,
+          "catId": "166887011",
+          "catName": "如厕训练",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 857,
+          "catId": "166891011",
+          "catName": "训练尿裤",
+          "catLevel": 3,
+          "parentCatId": "166887011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Packs($2.52$2.52/100 count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "goodsNameCn": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "thumbnail": "https://m.media-amazon.com/images/I/81tAiN-jAVL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 3640897,
+      "sales": null,
+      "goodsPriceMin": 17.29,
+      "goodsPriceMax": null,
+      "reviewNum": 77,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2020-12-16T08:00:00.000+08:00",
+      "goodsId": "B08QRKY3NJ",
+      "detailUrl": "B08QRKY3NJ",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented & Hypoallergenic, 720 Count (12 Packs)Safer chemicalsDiscover more products with sustainability featu",
+      "goodsNameCn": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented &",
+      "thumbnail": "https://m.media-amazon.com/images/I/813fvE8SHRL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 8145704,
+      "sales": null,
+      "goodsPriceMin": 44.97,
+      "goodsPriceMax": null,
+      "reviewNum": 823,
+      "rating": 4.7,
+      "mallOpenTime": "2012-07-12T08:00:00.000+08:00",
+      "onSaleTime": "2012-07-12T08:00:00.000+08:00",
+      "goodsId": "B008KJEYLO",
+      "detailUrl": "B008KJEYLO",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented & Hypoallergenic, 720 Count (12 Packs)Safer chemicalsDiscover more products with sustainability features.",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mode, 2 in 1 Forehead & Object Mode($19.99$19.99/count)",
+      "goodsNameCn": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mo",
+      "thumbnail": "https://m.media-amazon.com/images/I/51JdQWimMaL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 2974235,
+      "sales": null,
+      "goodsPriceMin": 19.99,
+      "goodsPriceMax": null,
+      "reviewNum": 1163,
+      "rating": 4.5,
+      "mallOpenTime": "2020-01-26T00:00:00.000+08:00",
+      "onSaleTime": "2020-01-26T00:00:00.000+08:00",
+      "goodsId": "B0824XNJSW",
+      "detailUrl": "B0824XNJSW",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 663,
+          "catId": "166862011",
+          "catName": "体温计",
+          "catLevel": 4,
+          "parentCatId": "17720258011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 37,
+          "catId": "17720255011",
+          "catName": "婴儿护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 128,
+          "catId": "17720258011",
+          "catName": "健康",
+          "catLevel": 3,
+          "parentCatId": "17720255011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mode, 2 in 1 Forehead & Object Mode($19.99$19.99/count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "goodsNameCn": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "thumbnail": "https://m.media-amazon.com/images/I/81ZQ13SAn1L._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 1586391,
+      "sales": null,
+      "goodsPriceMin": 11.33,
+      "goodsPriceMax": null,
+      "reviewNum": 124,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2019-05-23T00:00:00.000+08:00",
+      "goodsId": "B08QRT84WJ",
+      "detailUrl": "B08QRT84WJ",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "goodsNameCn": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "thumbnail": "https://m.media-amazon.com/images/I/71Qix2av1yL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 821601,
+      "sales": null,
+      "goodsPriceMin": 15.99,
+      "goodsPriceMax": null,
+      "reviewNum": 18,
+      "rating": 4.6,
+      "mallOpenTime": "2022-10-27T08:00:00.000+08:00",
+      "onSaleTime": "2022-10-27T08:00:00.000+08:00",
+      "goodsId": "B0BKQDPP1Z",
+      "detailUrl": "B0BKQDPP1Z",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1016,
+          "catId": "166843011",
+          "catName": "辅料",
+          "catLevel": 3,
+          "parentCatId": "8446318011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 3261,
+          "catId": "8446255011",
+          "catName": "婴儿车风扇",
+          "catLevel": 4,
+          "parentCatId": "166843011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 770,
+          "catId": "8446318011",
+          "catName": "婴儿车",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "goodsNameCn": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "thumbnail": "https://m.media-amazon.com/images/I/61SKiAellPL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 778254,
+      "sales": null,
+      "goodsPriceMin": 29.94,
+      "goodsPriceMax": null,
+      "reviewNum": 239,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2022-10-12T08:00:00.000+08:00",
+      "goodsId": "B0BJ13K7FR",
+      "detailUrl": "B0BJ13K7FR",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴��皮肤护理,15 盎司",
+      "goodsNameCn": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴��皮肤护理,15 盎司",
+      "thumbnail": "https://m.media-amazon.com/images/I/61LnA0ZseyL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 4.98,
+      "goodsPriceMax": null,
+      "reviewNum": 3,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B0009STDJW",
+      "detailUrl": "B0009STDJW",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 234,
+          "catId": "166740011",
+          "catName": "皮肤护理",
+          "catLevel": 4,
+          "parentCatId": "17720257011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 37,
+          "catId": "17720255011",
+          "catName": "婴儿护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 69,
+          "catId": "17720257011",
+          "catName": "仪容仪表",
+          "catLevel": 3,
+          "parentCatId": "17720255011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 805,
+          "catId": "322266011",
+          "catName": "爽身粉",
+          "catLevel": 5,
+          "parentCatId": "166740011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴��皮肤护理,15 盎司",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-Top Packs (768 Wipes Total), Packaging May Vary($2.86$2.86/100 count)",
+      "goodsNameCn": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-To",
+      "thumbnail": "https://m.media-amazon.com/images/I/81KJo22+X0L._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 6348536,
+      "sales": null,
+      "goodsPriceMin": 21.99,
+      "goodsPriceMax": null,
+      "reviewNum": 124,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2019-05-23T00:00:00.000+08:00",
+      "goodsId": "B07SCL613T",
+      "detailUrl": "B07SCL613T",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies Natural Care Sensitive Baby Wipes, Unscented, Hypoallergenic, 99% Purified Water, 12 Flip-Top Packs (768 Wipes Total), Packaging May Vary($2.86$2.86/100 count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "goodsNameCn": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "thumbnail": "https://m.media-amazon.com/images/I/614C96nCLoL._AC_UY218_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 19.99,
+      "goodsPriceMax": null,
+      "reviewNum": 2799,
+      "rating": 4.9,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B0DF1FDKR4",
+      "detailUrl": "B0DF1FDKR4",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 151,
+          "catId": "166777011",
+          "catName": "喂食",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 357,
+          "catId": "166779011",
+          "catName": "奶瓶喂养",
+          "catLevel": 3,
+          "parentCatId": "166777011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 2269,
+          "catId": "25131713011",
+          "catName": "消毒器",
+          "catLevel": 4,
+          "parentCatId": "166779011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Momcozy 官方洗涤块适用于 Momcozy KleanPal Pro 婴儿奶瓶清洗机,120 片洗涤剂片",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Packs($2.52$2.52/100 count)",
+      "goodsNameCn": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Pa",
+      "thumbnail": "https://m.media-amazon.com/images/I/71gbIUpYmcL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 20.45,
+      "goodsPriceMax": null,
+      "reviewNum": 511,
+      "rating": 4.7,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B07H53W5WP",
+      "detailUrl": "B07H53W5WP",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 354,
+          "catId": "166887011",
+          "catName": "如厕训练",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 857,
+          "catId": "166891011",
+          "catName": "训练尿裤",
+          "catLevel": 3,
+          "parentCatId": "166887011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Baby Wipes, Unscented, Hypoallergenic, Alcohol-Free, With Aloe and Vitamin E, 810 Count, Flip-Top Packs($2.52$2.52/100 count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "goodsNameCn": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "thumbnail": "https://m.media-amazon.com/images/I/81tAiN-jAVL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 3640897,
+      "sales": null,
+      "goodsPriceMin": 17.29,
+      "goodsPriceMax": null,
+      "reviewNum": 77,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2020-12-16T08:00:00.000+08:00",
+      "goodsId": "B08QRKY3NJ",
+      "detailUrl": "B08QRKY3NJ",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies Simply Clean 无香型婴儿尿布湿巾,11 个翻盖包(共 704 张湿巾),包装可能有所不同",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented & Hypoallergenic, 720 Count (12 Packs)Safer chemicalsDiscover more products with sustainability featu",
+      "goodsNameCn": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented &",
+      "thumbnail": "https://m.media-amazon.com/images/I/813fvE8SHRL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 8145704,
+      "sales": null,
+      "goodsPriceMin": 44.97,
+      "goodsPriceMax": null,
+      "reviewNum": 823,
+      "rating": 4.7,
+      "mallOpenTime": "2012-07-12T08:00:00.000+08:00",
+      "onSaleTime": "2012-07-12T08:00:00.000+08:00",
+      "goodsId": "B008KJEYLO",
+      "detailUrl": "B008KJEYLO",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "WaterWipes Sensitive+ Newborn & Baby Wipes, 3-In-1 Cleans, Cares, Protects, 99.9% Water, Unscented & Hypoallergenic, 720 Count (12 Packs)Safer chemicalsDiscover more products with sustainability features.",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mode, 2 in 1 Forehead & Object Mode($19.99$19.99/count)",
+      "goodsNameCn": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mo",
+      "thumbnail": "https://m.media-amazon.com/images/I/51JdQWimMaL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 2974235,
+      "sales": null,
+      "goodsPriceMin": 19.99,
+      "goodsPriceMax": null,
+      "reviewNum": 1163,
+      "rating": 4.5,
+      "mallOpenTime": "2020-01-26T00:00:00.000+08:00",
+      "onSaleTime": "2020-01-26T00:00:00.000+08:00",
+      "goodsId": "B0824XNJSW",
+      "detailUrl": "B0824XNJSW",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 663,
+          "catId": "166862011",
+          "catName": "体温计",
+          "catLevel": 4,
+          "parentCatId": "17720258011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 37,
+          "catId": "17720255011",
+          "catName": "婴儿护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 128,
+          "catId": "17720258011",
+          "catName": "健康",
+          "catLevel": 3,
+          "parentCatId": "17720255011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "No-Touch Thermometer for Adults and Kids, Accurate Digital Baby Thermometer, Fever Alarm & Silent Mode, 2 in 1 Forehead & Object Mode($19.99$19.99/count)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "goodsNameCn": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "thumbnail": "https://m.media-amazon.com/images/I/81ZQ13SAn1L._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 1586391,
+      "sales": null,
+      "goodsPriceMin": 11.33,
+      "goodsPriceMax": null,
+      "reviewNum": 124,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2019-05-23T00:00:00.000+08:00",
+      "goodsId": "B08QRT84WJ",
+      "detailUrl": "B08QRT84WJ",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Huggies 天然护理敏感婴儿湿巾,无香味,低致敏性,6 个翻盖包装(共 288 张湿巾)",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "goodsNameCn": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "thumbnail": "https://m.media-amazon.com/images/I/71Qix2av1yL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 821601,
+      "sales": null,
+      "goodsPriceMin": 15.99,
+      "goodsPriceMax": null,
+      "reviewNum": 18,
+      "rating": 4.6,
+      "mallOpenTime": "2022-10-27T08:00:00.000+08:00",
+      "onSaleTime": "2022-10-27T08:00:00.000+08:00",
+      "goodsId": "B0BKQDPP1Z",
+      "detailUrl": "B0BKQDPP1Z",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1016,
+          "catId": "166843011",
+          "catName": "辅料",
+          "catLevel": 3,
+          "parentCatId": "8446318011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 3261,
+          "catId": "8446255011",
+          "catName": "婴儿车风扇",
+          "catLevel": 4,
+          "parentCatId": "166843011",
+          "isLeaf": true,
+          "siteId": 1
+        },
+        {
+          "id": 770,
+          "catId": "8446318011",
+          "catName": "婴儿车",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Gaiatop 迷你便携式婴儿车风扇,电池供电小夹子,可拆卸 3 速充电,360° 旋转灵活三脚架,适用于汽车座椅、婴儿床、跑步机旅行黑色碳排放发现更多具有可持续发展特性的商品。",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "goodsNameCn": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "thumbnail": "https://m.media-amazon.com/images/I/61SKiAellPL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 778254,
+      "sales": null,
+      "goodsPriceMin": 29.94,
+      "goodsPriceMax": null,
+      "reviewNum": 239,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": "2022-10-12T08:00:00.000+08:00",
+      "goodsId": "B0BJ13K7FR",
+      "detailUrl": "B0BJ13K7FR",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 106,
+          "catId": "166764011",
+          "catName": "护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1177,
+          "catId": "166776011",
+          "catName": "抹布",
+          "catLevel": 3,
+          "parentCatId": "166764011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 1869,
+          "catId": "677974011",
+          "catName": "湿巾",
+          "catLevel": 4,
+          "parentCatId": "166776011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Pampers 帮宝适 敏感婴儿湿巾,水基,防过敏,无香味,18 个翻盖包装(共 1008 张湿巾)[包装可能有所不同]",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴��皮肤护理,15 盎司",
+      "goodsNameCn": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴��皮肤护理,15 盎司",
+      "thumbnail": "https://m.media-amazon.com/images/I/61LnA0ZseyL._AC_UL320_.jpg",
+      "thumbnailCn": "",
+      "sold": 0,
+      "sales": null,
+      "goodsPriceMin": 4.98,
+      "goodsPriceMax": null,
+      "reviewNum": 3,
+      "rating": 4.8,
+      "mallOpenTime": null,
+      "onSaleTime": null,
+      "goodsId": "B0009STDJW",
+      "detailUrl": "B0009STDJW",
+      "platform": "amazon",
+      "catItems": [
+        {
+          "id": 13,
+          "catId": "165796011",
+          "catName": "婴儿产品",
+          "catLevel": 1,
+          "parentCatId": "0",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 234,
+          "catId": "166740011",
+          "catName": "皮肤护理",
+          "catLevel": 4,
+          "parentCatId": "17720257011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 37,
+          "catId": "17720255011",
+          "catName": "婴儿护理",
+          "catLevel": 2,
+          "parentCatId": "165796011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 69,
+          "catId": "17720257011",
+          "catName": "仪容仪表",
+          "catLevel": 3,
+          "parentCatId": "17720255011",
+          "isLeaf": false,
+          "siteId": 1
+        },
+        {
+          "id": 805,
+          "catId": "322266011",
+          "catName": "爽身粉",
+          "catLevel": 5,
+          "parentCatId": "166740011",
+          "isLeaf": true,
+          "siteId": 1
+        }
+      ],
+      "goodsName": "Johnson's 婴儿爽身粉含天然玉米淀粉、芦荟和维生素 E,适合娇嫩肌肤,低致敏性,不含对羟基苯甲酸酯、邻苯二甲酸盐和染料,温和婴��皮肤护理,15 盎司",
+      "catName": "婴儿产品",
+      "catId": 165796011,
+      "subChannel": "大卖新品"
+    }
+  ]
+}

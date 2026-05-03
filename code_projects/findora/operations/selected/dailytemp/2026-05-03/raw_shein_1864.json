@@ -1,0 +1,2368 @@
+{
+  "platform": "shein",
+  "category": "美容与健康",
+  "catId": 1864,
+  "total": 40,
+  "products": [
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Plum Sauce Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday M",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/01/12/31/1768213345df3b2a3076d97159cdc6f6f4f42f8697_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12630,
+      "sales": 341100,
+      "goodsPriceMin": 3.79,
+      "goodsPriceMax": null,
+      "reviewNum": 35,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-11-13T08:00:00.000+08:00",
+      "goodsId": "327528507",
+      "detailUrl": "327528507",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Plum Sauce Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Mauvelous Henna Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birth",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/02/09/ac/1770635270621c15a42e26418d8e08cb979e5475b7_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 38567,
+      "sales": 341100,
+      "goodsPriceMin": 3.6,
+      "goodsPriceMax": 69.82,
+      "reviewNum": 1000,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-03-31T00:00:00.000+08:00",
+      "goodsId": "67554665",
+      "detailUrl": "67554665",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Mauvelous Henna Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Chocoholic Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday M",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/02/04/80/1770202048d1b31d6d4d741c282d513aa82c627dfd_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 170651,
+      "sales": 341100,
+      "goodsPriceMin": 4.86,
+      "goodsPriceMax": 8.56,
+      "reviewNum": 1000,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-11-13T08:00:00.000+08:00",
+      "goodsId": "327509983",
+      "detailUrl": "327509983",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Chocoholic Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Mojave Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gir",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/50/17641264357579cf46fd22b9daa7e734f82e4f7ba1_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 111281,
+      "sales": 202826,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 1000,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2021-07-22T08:00:00.000+08:00",
+      "goodsId": "3202376",
+      "detailUrl": "3202376",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Mojave Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Brazen Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gir",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/c3/1764126400d4df17af719390e360302e44cae12e66_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 13335,
+      "sales": 195027,
+      "goodsPriceMin": 2.59,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2021-07-22T08:00:00.000+08:00",
+      "goodsId": "3202448",
+      "detailUrl": "3202448",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Brazen Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Crimson Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gi",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/db/17641267165a828ea97a38cc887081c2f17be0f930_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 75300,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": null,
+      "goodsId": "1196410",
+      "detailUrl": "1196410",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Crimson Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Misty Rose Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women",
+      "goodsNameCn": "美容���健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/1c/1764126353b57bee9ce6e52f92d86e69decfa263fc_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 164735,
+      "sales": 172437,
+      "goodsPriceMin": 2.29,
+      "goodsPriceMax": 48.16,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1196414",
+      "detailUrl": "1196414",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容���健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Misty Rose Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-City Nights Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Liner Lip Combo Brand Beauty Makeup Face Paint Cosmeti",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/7c/176412664450053b6749577b6be2407f5d3b4c01ac_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12724,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1196395",
+      "detailUrl": "1196395",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-City Nights Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Liner Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Neutral Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gi",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/09/29/3f/175911610328d1ffbea8cbf8066106325bc1a82cc6_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 215916,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": 48.88,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1469403",
+      "detailUrl": "1469403",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Neutral Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Color Bloom Liquid Blush-Cutie Pie Liquid Blush Liquid Waterproof Long Lasting High Pigment Non-Fading Lasting Glow Lightweight Face Makeup Rare Brand Beauty Makeup Face Paint Cosmetic For Wom",
+      "goodsNameCn": "美容与健康, 彩妆, 腮红, 脸部化妆",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/04/17/18/1744856786e9d1448a4083f4ff010b2b270471705c_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12825,
+      "sales": 356034,
+      "goodsPriceMin": 5.19,
+      "goodsPriceMax": 108.57,
+      "reviewNum": 1000,
+      "rating": 4.97,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2024-02-22T00:00:00.000+08:00",
+      "goodsId": "32283883",
+      "detailUrl": "32283883",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 1126,
+          "catId": 2257,
+          "catName": "Blush",
+          "catNameCn": "腮红",
+          "catLevel": 3,
+          "parentCatId": 2265,
+          "isLeaf": true
+        },
+        {
+          "id": 456,
+          "catId": 2265,
+          "catName": "Face Make Up",
+          "catNameCn": "脸部化妆",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Color Bloom Liquid Blush-Cutie Pie Liquid Blush Liquid Waterproof Long Lasting High Pigment Non-Fading Lasting Glow Lightweight Face Makeup Rare Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销商品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Plum Sauce Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday M",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/01/12/31/1768213345df3b2a3076d97159cdc6f6f4f42f8697_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12630,
+      "sales": 341100,
+      "goodsPriceMin": 3.79,
+      "goodsPriceMax": null,
+      "reviewNum": 35,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-11-13T08:00:00.000+08:00",
+      "goodsId": "327528507",
+      "detailUrl": "327528507",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Plum Sauce Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Mauvelous Henna Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birth",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/02/09/ac/1770635270621c15a42e26418d8e08cb979e5475b7_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 38567,
+      "sales": 341100,
+      "goodsPriceMin": 3.6,
+      "goodsPriceMax": 69.82,
+      "reviewNum": 1000,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-03-31T00:00:00.000+08:00",
+      "goodsId": "67554665",
+      "detailUrl": "67554665",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Mauvelous Henna Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Chocoholic Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday M",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/02/04/80/1770202048d1b31d6d4d741c282d513aa82c627dfd_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 170651,
+      "sales": 341100,
+      "goodsPriceMin": 4.86,
+      "goodsPriceMax": 8.56,
+      "reviewNum": 1000,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-11-13T08:00:00.000+08:00",
+      "goodsId": "327509983",
+      "detailUrl": "327509983",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Chocoholic Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Mojave Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gir",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/50/17641264357579cf46fd22b9daa7e734f82e4f7ba1_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 111281,
+      "sales": 202826,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 1000,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2021-07-22T08:00:00.000+08:00",
+      "goodsId": "3202376",
+      "detailUrl": "3202376",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Mojave Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Brazen Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gir",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/c3/1764126400d4df17af719390e360302e44cae12e66_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 13335,
+      "sales": 195027,
+      "goodsPriceMin": 2.59,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2021-07-22T08:00:00.000+08:00",
+      "goodsId": "3202448",
+      "detailUrl": "3202448",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Brazen Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Crimson Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gi",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/db/17641267165a828ea97a38cc887081c2f17be0f930_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 75300,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": null,
+      "goodsId": "1196410",
+      "detailUrl": "1196410",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Crimson Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Misty Rose Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/1c/1764126353b57bee9ce6e52f92d86e69decfa263fc_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 164735,
+      "sales": 172437,
+      "goodsPriceMin": 2.29,
+      "goodsPriceMax": 48.16,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1196414",
+      "detailUrl": "1196414",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Misty Rose Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-City Nights Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Liner Lip Combo Brand Beauty Makeup Face Paint Cosmeti",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/7c/176412664450053b6749577b6be2407f5d3b4c01ac_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12724,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1196395",
+      "detailUrl": "1196395",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-City Nights Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Liner Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Neutral Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gi",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/09/29/3f/175911610328d1ffbea8cbf8066106325bc1a82cc6_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 215916,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": 48.88,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1469403",
+      "detailUrl": "1469403",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Neutral Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Color Bloom Liquid Blush-Cutie Pie Liquid Blush Liquid Waterproof Long Lasting High Pigment Non-Fading Lasting Glow Lightweight Face Makeup Rare Brand Beauty Makeup Face Paint Cosmetic For Wom",
+      "goodsNameCn": "美容与健康, 彩妆, 腮红, 脸部化妆",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/04/17/18/1744856786e9d1448a4083f4ff010b2b270471705c_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12825,
+      "sales": 356034,
+      "goodsPriceMin": 5.19,
+      "goodsPriceMax": 108.57,
+      "reviewNum": 1000,
+      "rating": 4.97,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2024-02-22T00:00:00.000+08:00",
+      "goodsId": "32283883",
+      "detailUrl": "32283883",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 1126,
+          "catId": 2257,
+          "catName": "Blush",
+          "catNameCn": "腮红",
+          "catLevel": 3,
+          "parentCatId": 2265,
+          "isLeaf": true
+        },
+        {
+          "id": 456,
+          "catId": 2265,
+          "catName": "Face Make Up",
+          "catNameCn": "脸部化妆",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Color Bloom Liquid Blush-Cutie Pie Liquid Blush Liquid Waterproof Long Lasting High Pigment Non-Fading Lasting Glow Lightweight Face Makeup Rare Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "热销新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Plum Sauce Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday M",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/01/12/31/1768213345df3b2a3076d97159cdc6f6f4f42f8697_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12630,
+      "sales": 341100,
+      "goodsPriceMin": 3.79,
+      "goodsPriceMax": null,
+      "reviewNum": 35,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-11-13T08:00:00.000+08:00",
+      "goodsId": "327528507",
+      "detailUrl": "327528507",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Plum Sauce Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Mauvelous Henna Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birth",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/02/09/ac/1770635270621c15a42e26418d8e08cb979e5475b7_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 38567,
+      "sales": 341100,
+      "goodsPriceMin": 3.6,
+      "goodsPriceMax": 69.82,
+      "reviewNum": 1000,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-03-31T00:00:00.000+08:00",
+      "goodsId": "67554665",
+      "detailUrl": "67554665",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Mauvelous Henna Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Chocoholic Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday M",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/02/04/80/1770202048d1b31d6d4d741c282d513aa82c627dfd_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 170651,
+      "sales": 341100,
+      "goodsPriceMin": 4.86,
+      "goodsPriceMax": 8.56,
+      "reviewNum": 1000,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-11-13T08:00:00.000+08:00",
+      "goodsId": "327509983",
+      "detailUrl": "327509983",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Chocoholic Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Mojave Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gir",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/50/17641264357579cf46fd22b9daa7e734f82e4f7ba1_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 111281,
+      "sales": 202826,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 1000,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2021-07-22T08:00:00.000+08:00",
+      "goodsId": "3202376",
+      "detailUrl": "3202376",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Mojave Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Brazen Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gir",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/c3/1764126400d4df17af719390e360302e44cae12e66_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 13335,
+      "sales": 195027,
+      "goodsPriceMin": 2.59,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2021-07-22T08:00:00.000+08:00",
+      "goodsId": "3202448",
+      "detailUrl": "3202448",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Brazen Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Crimson Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gi",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/db/17641267165a828ea97a38cc887081c2f17be0f930_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 75300,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": null,
+      "goodsId": "1196410",
+      "detailUrl": "1196410",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Crimson Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Misty Rose Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/1c/1764126353b57bee9ce6e52f92d86e69decfa263fc_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 164735,
+      "sales": 172437,
+      "goodsPriceMin": 2.29,
+      "goodsPriceMax": 48.16,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1196414",
+      "detailUrl": "1196414",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Misty Rose Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-City Nights Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Liner Lip Combo Brand Beauty Makeup Face Paint Cosmeti",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/7c/176412664450053b6749577b6be2407f5d3b4c01ac_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12724,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1196395",
+      "detailUrl": "1196395",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-City Nights Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Liner Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Neutral Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gi",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/09/29/3f/175911610328d1ffbea8cbf8066106325bc1a82cc6_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 215916,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": 48.88,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1469403",
+      "detailUrl": "1469403",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Neutral Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Color Bloom Liquid Blush-Cutie Pie Liquid Blush Liquid Waterproof Long Lasting High Pigment Non-Fading Lasting Glow Lightweight Face Makeup Rare Brand Beauty Makeup Face Paint Cosmetic For Wom",
+      "goodsNameCn": "美容与健康, 彩妆, 腮红, 脸部化妆",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/04/17/18/1744856786e9d1448a4083f4ff010b2b270471705c_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12825,
+      "sales": 356034,
+      "goodsPriceMin": 5.19,
+      "goodsPriceMax": 108.57,
+      "reviewNum": 1000,
+      "rating": 4.97,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2024-02-22T00:00:00.000+08:00",
+      "goodsId": "32283883",
+      "detailUrl": "32283883",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 1126,
+          "catId": 2257,
+          "catName": "Blush",
+          "catNameCn": "腮红",
+          "catLevel": 3,
+          "parentCatId": 2265,
+          "isLeaf": true
+        },
+        {
+          "id": 456,
+          "catId": 2265,
+          "catName": "Face Make Up",
+          "catNameCn": "脸部化妆",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Color Bloom Liquid Blush-Cutie Pie Liquid Blush Liquid Waterproof Long Lasting High Pigment Non-Fading Lasting Glow Lightweight Face Makeup Rare Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "新店热销"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Plum Sauce Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday M",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/01/12/31/1768213345df3b2a3076d97159cdc6f6f4f42f8697_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12630,
+      "sales": 341100,
+      "goodsPriceMin": 3.79,
+      "goodsPriceMax": null,
+      "reviewNum": 35,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-11-13T08:00:00.000+08:00",
+      "goodsId": "327528507",
+      "detailUrl": "327528507",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Plum Sauce Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Mauvelous Henna Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birth",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/02/09/ac/1770635270621c15a42e26418d8e08cb979e5475b7_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 38567,
+      "sales": 341100,
+      "goodsPriceMin": 3.6,
+      "goodsPriceMax": 69.82,
+      "reviewNum": 1000,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-03-31T00:00:00.000+08:00",
+      "goodsId": "67554665",
+      "detailUrl": "67554665",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Mauvelous Henna Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Chocoholic Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday M",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/02/04/80/1770202048d1b31d6d4d741c282d513aa82c627dfd_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 170651,
+      "sales": 341100,
+      "goodsPriceMin": 4.86,
+      "goodsPriceMax": 8.56,
+      "reviewNum": 1000,
+      "rating": 4.84,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2025-11-13T08:00:00.000+08:00",
+      "goodsId": "327509983",
+      "detailUrl": "327509983",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Chocoholic Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Mojave Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gir",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/50/17641264357579cf46fd22b9daa7e734f82e4f7ba1_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 111281,
+      "sales": 202826,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 1000,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2021-07-22T08:00:00.000+08:00",
+      "goodsId": "3202376",
+      "detailUrl": "3202376",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Mojave Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Brazen Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gir",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/c3/1764126400d4df17af719390e360302e44cae12e66_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 13335,
+      "sales": 195027,
+      "goodsPriceMin": 2.59,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2021-07-22T08:00:00.000+08:00",
+      "goodsId": "3202448",
+      "detailUrl": "3202448",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Brazen Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Crimson Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gi",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/db/17641267165a828ea97a38cc887081c2f17be0f930_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 75300,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": null,
+      "goodsId": "1196410",
+      "detailUrl": "1196410",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Crimson Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Misty Rose Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/1c/1764126353b57bee9ce6e52f92d86e69decfa263fc_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 164735,
+      "sales": 172437,
+      "goodsPriceMin": 2.29,
+      "goodsPriceMax": 48.16,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1196414",
+      "detailUrl": "1196414",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Misty Rose Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-City Nights Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Liner Lip Combo Brand Beauty Makeup Face Paint Cosmeti",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/7c/176412664450053b6749577b6be2407f5d3b4c01ac_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12724,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": null,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1196395",
+      "detailUrl": "1196395",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-City Nights Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Liner Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM So Lippy Lip Liner-Neutral Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Gi",
+      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/09/29/3f/175911610328d1ffbea8cbf8066106325bc1a82cc6_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 215916,
+      "sales": 202557,
+      "goodsPriceMin": 2.69,
+      "goodsPriceMax": 48.88,
+      "reviewNum": 50,
+      "rating": 4.91,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2020-10-28T19:22:13.000+08:00",
+      "goodsId": "1469403",
+      "detailUrl": "1469403",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 4401,
+          "catId": 2263,
+          "catName": "Lip Liner",
+          "catNameCn": "唇线笔",
+          "catLevel": 3,
+          "parentCatId": 2266,
+          "isLeaf": true
+        },
+        {
+          "id": 1569,
+          "catId": 2266,
+          "catName": "Lips",
+          "catNameCn": "嘴唇",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM So Lippy Lip Liner-Neutral Creamy Matte Lip Liner Pencil High Pigment Not Easy To Fade Silky Smooth Matte Contour Tint Lip Makeup Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "大卖新品"
+    },
+    {
+      "goodsNameEn": "SHEGLAM Color Bloom Liquid Blush-Cutie Pie Liquid Blush Liquid Waterproof Long Lasting High Pigment Non-Fading Lasting Glow Lightweight Face Makeup Rare Brand Beauty Makeup Face Paint Cosmetic For Wom",
+      "goodsNameCn": "美容与健康, 彩妆, 腮红, 脸部化妆",
+      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/04/17/18/1744856786e9d1448a4083f4ff010b2b270471705c_thumbnail_405x552.jpg",
+      "thumbnailCn": "",
+      "sold": 12825,
+      "sales": 356034,
+      "goodsPriceMin": 5.19,
+      "goodsPriceMax": 108.57,
+      "reviewNum": 1000,
+      "rating": 4.97,
+      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
+      "onSaleTime": "2024-02-22T00:00:00.000+08:00",
+      "goodsId": "32283883",
+      "detailUrl": "32283883",
+      "platform": "shein",
+      "catItems": [
+        {
+          "id": 34,
+          "catId": 1864,
+          "catName": "Beauty & Health",
+          "catNameCn": "美容与健康",
+          "catLevel": 0,
+          "parentCatId": 0,
+          "isLeaf": false
+        },
+        {
+          "id": 455,
+          "catId": 2042,
+          "catName": "Makeup",
+          "catNameCn": "彩妆",
+          "catLevel": 1,
+          "parentCatId": 1864,
+          "isLeaf": false
+        },
+        {
+          "id": 1126,
+          "catId": 2257,
+          "catName": "Blush",
+          "catNameCn": "腮红",
+          "catLevel": 3,
+          "parentCatId": 2265,
+          "isLeaf": true
+        },
+        {
+          "id": 456,
+          "catId": 2265,
+          "catName": "Face Make Up",
+          "catNameCn": "脸部化妆",
+          "catLevel": 2,
+          "parentCatId": 2042,
+          "isLeaf": false
+        }
+      ],
+      "goodsName": "SHEGLAM Color Bloom Liquid Blush-Cutie Pie Liquid Blush Liquid Waterproof Long Lasting High Pigment Non-Fading Lasting Glow Lightweight Face Makeup Rare Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
+      "catName": "美容与健康",
+      "catId": 1864,
+      "subChannel": "大卖新品"
+    }
+  ]
+}

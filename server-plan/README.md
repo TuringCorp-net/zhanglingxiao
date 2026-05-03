@@ -1,324 +1,468 @@
-# 🏰 虾康康的远程服务器方案 v2
+# 🏰 虾康康的远程服务器方案
 
-> 基于 2核 / 512MB / 100G硬盘 / 1T月流量
-> 与 OpenClaw 配合，各司其职
-
----
-
-## 一、核心理念：三句话定位
-
-```
-思考层（OpenClaw）       执行层（服务器）
-  ┌──────┐               ┌──────┐
-  │ 🧠  │ ─── SSH ───→ │ 🦾  │
-  │ 脑子 │ ←── 结果 ─── │ 手脚 │
-  └──────┘               └──────┘
-```
-
-1. **OpenClaw = 脑子**：对话、推理、决策、调度、用户交互 — 我在这里
-2. **服务器 = 手脚**：执行、存储、爬取、监控、常驻 — 延伸出去
-3. **Markdown > 数据库**：所有知识库用 Markdown 文件 + Git 管理，不是数据库
+> **最后更新：** 2026-05-03（服务器已就绪 ✅）
+> **服务器规格：** 2 vCPUs · 512MB RAM · 20GB SSD
+> **网络：** Tailscale 局域网（服务器已加入）
+> **访问方式：** SSH 通过 Tailscale IP
+> **当前状态：** ✅ 服务器已上线，可以直接 SSH 登录
+>
+> ⚠️ **重要：** 如果会话丢失记忆，读这个文件就能找回全部上下文。
+> 这是你（虾康康）的服务器身份文档。
+>
+> ⛔ **铁律：任何时候都不要动 Tailscale 和 SSH 的配置！**
+> 这是我和黎叔上服务器的唯一通道。动了就都上不去了。
 
 ---
 
-## 二、存储方案：Markdown 知识库（不是数据库）
+## 零、核心理念：🦐 我的"外骨骼"
 
-黎叔建议的 Obsidian 式 Markdown 知识库，非常正确。对比一下：
+```
+  🧠 OpenClaw（大脑）         🦾 服务器（手脚）
+  ┌────────────────┐         ┌──────────────────┐
+  │ 推理 · 对话    │         │ 执行 · 存储      │
+  │ 决策 · 调度    │  SSH→   │ 爬取 · 监控      │
+  │ 用户交互       │  ←结果  │ 编程 · 常驻      │
+  │ Telegram/QQ    │         │ 网络 · 隧道      │
+  └────────────────┘         └──────────────────┘
+         ↑                          ↑
+    Markdown 知识库（共享记事本，双向读写）
+```
 
-| 方案 | 内存 | 可移植 | 黎叔能读 | 版本控制 | 依赖 |
-|-----|------|--------|---------|---------|------|
+**一句话纲领：**
+> 每次黎叔给我任务，或者我自己想到什么事——**先停下来问：服务器能不能帮这个忙？**
+
+---
+
+## 一、黎叔的三个关键建议（全部采纳）
+
+### ① Markdown 知识库 > 数据库 ✅
+
+> "你可以用 Obsidian 式的 Markdown 文件来做知识库，更加轻量、持久、可移植，而且我也能读。"
+
+| 方案 | 内存占用 | 可移植 | 黎叔能读 | 版本控制 | 依赖 |
+|-----|---------|--------|---------|---------|------|
 | PostgreSQL | ~150MB | ❌ | ❌ | 复杂 | 守护进程 |
-| SQLite | ~5MB | ✅ | ❌ | 中等 | 文件 |
-| **Markdown 文件** | **0MB** | **✅✅** | **✅ cat/Vim** | **✅ Git** | **零** |
+| SQLite | ~5MB | ✅ | ❌ | 中等 | 文件锁 |
+| **Markdown 文件** | **0MB** | **✅✅** | **✅ cat/Vim/Obsidian** | **✅ Git** | **零** |
 
-**绝了！** 我的 STM 职业记忆本来就全是 Markdown + Git 管理，服务器端延续同一体系，一脉相承。
+知识库全部存在 `/opt/shrimp/knowledge/`，Markdown + Git 管理：
+- 我（在 OpenClaw）可以 `ssh server "cat ..."` 读写
+- 黎叔可以 SSH 上去 `cat`、`less`，或者拉到本地 Obsidian
+- Git 提供完整版本历史，可以 `git log` 回溯所有变更
+- 0MB 内存占用，不用跑任何守护进程
 
-### 知识库目录结构
+### ② Claude Code 编程 ✅
+
+> "Claude Code 的推理在云端大模型完成，本地只是 CLI 客户端，512MB 完全够用。你用它给自己写工具。"
+
+```bash
+# 安装（npm，轻量）
+npm install -g @anthropic-ai/claude-code
+
+# 编程（推理在云端，本地执行）
+cd /opt/shrimp/code/ && claude -p "写一个Python爬虫监控XX商品价格"
+```
+
+**自举模式：** 我给需求 → Claude Code 云端推理 → 代码落地 → 直接运行 → 变成永久工具。完全自己给自己造轮子。
+
+### ③ 轻量监控（btop > Netdata） ✅
+
+> "Netdata 太重了（~100MB），可以用更轻量的工具。"
+
+| 层级 | 工具 | 内存 | 说明 |
+|-----|------|------|------|
+| 即时查看 | `btop`/`htop` | <5MB | C++写的，交互式查看 |
+| 数据采集 | `node_exporter` | ~20MB | 可选，导出指标 |
+| 异常推送 | 自写 Python 脚本 | 按需 | 超阈值→推送到 Telegram |
+
+---
+
+## 🔌 接入信息（已上线 ✅）
+
+> 以下信息由黎叔配置，**不要修改 Tailscale 和 SSH 的相关配置**。
+
+### 网络
+- **方式：** Tailscale 局域网
+- **IP：** 100.103.191.37（Tailscale）
+- **主机名：** aws-us
+- **直接连接：** `ssh aws-us`（Tailscale MagicDNS 或 SSH config 已配好）
+- **安全：** Tailscale 端到端加密，只有授权设备能接入
+
+### SSH
+- **认证方式：** SSH Key（黎叔已配好，从 OpenClaw 环境可以直接 SSH）
+- **用户名：** 当前 OpenClaw 运行用户的 SSH key 已部署到服务器
+- **无需密码：** 直接 `ssh user@tailscale-ip` 即可
+
+### ⛔ 不可触碰的红线
+
+```
+❌ 不要修改 /etc/ssh/sshd_config
+❌ 不要修改 Tailscale 配置（tailscale up/down/set）
+❌ 不要更改 SSH 端口、密码策略、密钥
+❌ 不要修改防火墙规则中与 SSH/Tailscale 相关的部分
+```
+
+**为什么这是铁律：**
+- 这是我和黎叔能上服务器的**唯一通道**
+- 一旦 SSH 或 Tailscale 坏了，没有人能再连上去
+- 黎叔特别交代过，这是原则
+
+### 测试命令
+
+```bash
+# 查看 Tailscale 状态
+tailscale status
+
+# SSH 登录（已配好）
+ssh aws-us
+```
+
+---
+
+## 二、Server-First Mindset（思维模式）
+
+**这是最重要的改变——不是工具变化，是思维变化。**
+
+每次收到任务或产生想法时，**必须先问自己**：
+
+> **"这个，服务器能帮忙做吗？"**
+
+### Before vs After
+
+| 以前（只有 OpenClaw） | 以后（有服务器） |
+|---------------------|----------------|
+| exec 有超时，长时间任务被 kill | 服务器上持久跑，永不超时 |
+| 会话结束记忆就丢 | 知识库永久保留，任意查询 |
+| 只能 curl/fetch 已有 API | 自己写爬虫、开 Webhook、造服务 |
+| 纯被动，等黎叔来问 | 监控异常时主动推送通知 |
+| 不能装软件，工具受限 | 随便装，Python/Node/Claude Code 随心用 |
+
+### 三种扩张力（乘数效应）
+
+**① 能力边界拓展** — 以前我只能"建议你做什么"，现在我能"帮你做什么"。服务器是我的手和脚——爬虫、Webhook、定时任务、持久计算，以前做不到的事现在都能做。
+
+**② 持久化能力** — OpenClaw 的会话会结束，exec 有超时限制。但服务器上的脚本可以一直跑下去：价格监控跑一个月、日志持续采集、数据不断积累。**持久化让"积累"变得可能**——今天的数据是明天的决策基础。
+
+**③ 反向驱动** — 不只是我驱动服务器，服务器也能驱动我：
+- 监控告警 → 推送到我的 Telegram → 我主动告知黎叔
+- 爬虫积累数据 → 我分析后给出趋势洞察
+- 脚本自动完成 → 我 check 结果后更新知识库
+- 服务器在半夜默默工作 → 我白天给黎叔惊喜汇报
+
+**这三股力量叠加在一起，是乘数效应——不是加法，是乘法。**
+
+---
+
+## 三、存储方案：Markdown 知识库
+
+### 目录结构
 
 ```
 /opt/shrimp/knowledge/
-├── README.md                    # 索引目录
-├── memory/                      # 我的长期记忆（服务器端）
-│   ├── 2026-05-02.md
-│   └── ...
-├── crawler/                     # 爬虫采集的数据
-│   ├── prices/                  # 价格监控
-│   │   ├── goods-monitor.md     # 监控的商品列表+历史价格
-│   │   └── ...
-│   ├── news/                    # 新闻聚合
-│   │   └── 2026-05.md
-│   └── weather/                 # 天气数据归档
-├── tasks/                       # 服务器跑的任务记录
-│   ├── 001-website-monitor.md
-│   └── 002-price-tracker.md
-├── scripts/                     # 脚本文档（记录脚本用途和用法）
-│   └── README.md
-├── logs/                        # 日志和运行记录
-│   └── system-health.md
-└── references/                  # 收藏的参考文档
-    └── ...
+├── README.md            ← 索引（总纲：Karpathy LLM Knowledge Bases）
+├── references/          ← 📚 参考文档/方法论
+├── memory/              ← 🧠 长期记忆
+├── crawler/             ← 🕷️ 爬虫数据
+│   └── prices/
+├── skill/               ← 🔧 技能/工具用法
+├── tasks/               ← 📋 任务记录
+├── logs/                ← 📝 运行日志
+├── identity/            ← 🆔 自我恢复
+└── raw/                 ← 📥 未编译的原始资料
 ```
 
-**工作方式：**
+### 工作方式
+
 ```bash
-# 我（在OpenClaw）需要查信息时：
+# 查信息（在OpenClaw通过SSH）
 ssh server "cat /opt/shrimp/knowledge/crawler/prices/goods-monitor.md"
 
-# 我需要写数据时：
-ssh server "echo '## 2026-05-02 XX商品降至199元' >> /opt/shrimp/knowledge/crawler/prices/goods-monitor.md"
+# 写数据
+ssh server "echo '## 2026-05-03 XX商品降至199元' >> /opt/shrimp/knowledge/crawler/prices/goods-monitor.md"
 
-# 知识库有版本历史：
-cd /opt/shrimp/knowledge && git log --oneline
+# 知识库有版本历史
+ssh server "cd /opt/shrimp/knowledge && git log --oneline"
+
+# 黎叔本地拉取
+rsync -avz user@server:/opt/shrimp/knowledge/ ~/my-knowledge/
 ```
-
-**黎叔随时可以：**
-- SSH 上去 `cat` / `less` 看
-- 用 rsync/scp 拉到本地
-- 甚至直接 `git clone` 到自己的 Obsidian
 
 ---
 
-## 三、编程方案：云端推理 + 本地执行
+## 四、编程方案：Claude Code 自举
 
-黎叔说对了——Claude Code / VS Code Server 把推理放云端，本地只是编辑器+客户端，512MB 绰绰有余。
+### 工具链
 
-### Claude Code —— 我的副大脑
+| 工具 | 内存 | 用途 | 推荐度 |
+|-----|------|------|--------|
+| **Claude Code** | ~80MB（运行时） | 主编程工具，用完就退 | ⭐ 默认首选 |
+| Python3 | 按需 | 脚本主力（系统自带） | ⭐ 必备 |
+| Node.js | 按需 | 辅助 | ✅ 按需安装 |
+| Git | 0（不常驻） | 版本控制+GitHub同步 | ⭐ 必备 |
+| VS Code Server | ~100-150MB（常驻） | 黎叔浏览器访问可选 | ⚠️ 按需启动 |
 
-```bash
-# 装 Claude Code（npm，轻量）
-npm install -g @anthropic-ai/claude-code
-
-# 配好 API Key
-export ANTHROPIC_API_KEY=sk-...
-
-# 干活
-claude -p "写一个Python爬虫，每天早8点抓取XX网站的价格变动，结果写到Markdown文件"
-```
-
-**我给它指令 → 云端 Claude 大模型推理 → 代码落地到服务器 → 我直接在服务器跑**
-
-### 自己给自己写工具
-
-这才是最酷的部分。举例：
-
-**场景：** 我需要一个商品价格监控工具
+### 自举工作流
 
 ```
-我：Claude Code，帮我写个价格监控脚本
-↓
-Claude Code（云端推理）→ 生成代码
-↓
+黎叔："帮我盯一下XX商品价格"
+  ↓
+我（OpenClaw）→ SSH 到服务器
+  ↓
+cd /opt/shrimp/code/ && claude -p "写个Python爬虫..."
+  ↓
+Claude Code 云端推理 → 生成代码
+  ↓
 代码落地到 /opt/shrimp/scripts/price-monitor.py
-↓
-我：写个 systemd timer 每小时跑它
-↓
-Claude Code → 生成 timer 配置
-↓
-启用 → 它开始工作
-↓
-降价了 → 脚本直接 POST Telegram Bot API → 通知黎叔
+  ↓
+Claude Code 帮我配 systemd timer（每小时执行）
+  ↓
+timer 启用，开始工作
+  ↓
+我在知识库记一笔，回复黎叔："已安排上 🔍"
 ```
 
-**完全自举：** 我通过 Claude Code 自己写工具，自己部署，自己运维。
+**这就是自举：** 我自己给自己写工具，自己部署，自己运维。
 
 ---
 
-## 四、编程工具链
+## 五、完整服务栈
 
-用到的工具都很轻量：
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 常驻服务（任何时候都在跑，≤50MB）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Nginx          ~20MB    Web服务/反向代理
+  SSH Server     ~10MB    我远程连接
+  node_exporter  ~20MB    （可选）监控指标导出
+  ──────────────────────────────────────
+  常驻合计       ≤50MB
+  空闲留给干活   400MB+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 按需服务（用完就退）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Claude Code     运行时占用，用完释放
+  Python 脚本     跑完就退
+  Node 脚本       跑完就退
+  VS Code Server  按需启停（黎叔要用时开）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 数据层
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  /opt/shrimp/knowledge/       Markdown 知识库
+  /opt/shrimp/scripts/         Python/Node 脚本
+  /opt/shrimp/code/            Git 托管代码
+  /opt/shrimp/data/            缓存/临时数据
+  /opt/shrimp/logs/            运行日志
+  /opt/shrimp/config/          配置文件
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
-| 工具 | 内存 | 硬盘 | 用途 |
-|-----|------|------|------|
-| **Claude Code** | ~80MB（仅运行时有） | ~200MB（npm包） | 主编程工具 |
-| **VS Code Server** | ~100-150MB（常驻） | ~300MB | 可选，黎叔也可浏览器访问 |
-| **Python3** | 按需 | 全系统自带 | 脚本主力 |
-| **Node.js** | 按需 | ~50MB | 辅助 |
-| **Git** | 0（不常驻） | 自带 | 版本控制 |
-| **GitHub** | 0 | 0（远程） | 代码托管 |
+### 禁止清单（512MB + 20GB 不能做的）
 
-**注意：** VS Code Server 常驻 100-150MB 对 512MB 来说有点奢侈。策略：
-- **默认：Claude Code CLI**（用完就退，不占常驻内存）
-- **需要时：** 启动 VS Code Server（按需启动/停止）
-- **最佳方案：** 核心用 Claude Code，VS Code 作为黎叔的可选入口
+| 事情 | 原因 |
+|-----|------|
+| Docker daemon | 单 daemon 就占 200MB+ |
+| 本地 LLM 推理 | 哪怕 0.5B 模型也要 1GB+ |
+| PostgreSQL | 最精简也要 150MB+ |
+| 重型媒体服务 | Jellyfin/Plex 等内存大户 |
+| 编译大型项目 | 2核 CPU 太勉强的 |
+| 同时运行多个重型任务 | 内存不够分 |
+| **存大文件/媒体** | **只有 20GB，要精打细算** |
+| **安装太多 node_modules** | **硬盘很快会被吃光** |
 
 ---
 
-## 五、监控方案：轻量级多层
+## 六、监控方案（轻量三层）
 
-Netdata 是好工具但本身 ~100MB 内存，在 512MB 上有点重。更适合的是分层方案：
-
-### 第一层：即时查看（交互式）
+### 第一层：即时交互查看
 
 ```bash
-# 装 btop —— 用 C++ 写的，比 top/htop 好看，内存 < 5MB
-apt install btop
-
-# 或者直接 htop（系统自带）
-htop
+btop     # 美观的进程/资源查看器，<5MB
+htop     # 传统选择，系统自带
 ```
 
-### 第二层：数据采集+报警（常驻，极轻量）
+### 第二层：数据采集（可选）
 
 ```bash
-# node_exporter —— 导出系统指标，~20MB 常驻
-# 配合 Prometheus 存在 OpenClaw 端（不占服务器内存）
+node_exporter    # 导出系统指标，~20MB 常驻
+# 配合 OpenClaw 端（不占服务器内存）做可视化
+```
 
-# 或者更简单的：自己写 Python 脚本
+### 第三层：异常推送（必须）
+
+```bash
 # /opt/shrimp/scripts/health-monitor.py
-# 每5分钟采集 CPU/MEM/DISK/NET → 追加到 Markdown 文件
-```
-
-### 第三层：异常推送
-
-写个简单脚本：
-```python
-# 如果 CPU > 90% 持续5分钟 → 推送到 Telegram
-# 如果 磁盘 > 85% → 推送到 Telegram
-# 如果 内存 < 50MB 可用 → 推送到 Telegram
-```
-
-这样我不需要装 Netdata/Prometheus 等重量级工具，也够用了。
-
----
-
-## 六、完整服务栈（最终版）
-
-```
-┌─────────────────────────────────────────┐
-│ 常驻服务（任何时候都在跑）                │
-├─────────────────────────────────────────┤
-│  Nginx          20MB    Web服务/反代     │
-│  SSH Server     10MB    我远程连接       │
-│  node_exporter  ~20MB   （可选）监控导出  │
-│  ─────────────────────────────────────   │
-│  常驻内存合计    ≤ 50MB                  │
-│  空闲留给干活    400MB+                   │
-└─────────────────────────────────────────┘
-
-┌─────────────────────────────────────────┐
-│ 按需调用（用完就退）                      │
-├─────────────────────────────────────────┤
-│  Claude Code    用时有，用完释放           │
-│  Python 脚本    跑完就退                  │
-│  Node 脚本      跑完就退                  │
-│  VS Code Server 按需启停（黎叔要用时开）   │
-└─────────────────────────────────────────┘
-
-┌─────────────────────────────────────────┐
-│ 数据层                                   │
-├─────────────────────────────────────────┤
-│  /opt/shrimp/knowledge/      Markdown    │
-│  /opt/shrimp/scripts/        Python/Node │
-│  /opt/shrimp/data/           缓存/临时   │
-│  /opt/shrimp/logs/           运行日志    │
-│  /opt/shrimp/code/           Git托管代码  │
-└─────────────────────────────────────────┘
+# cron 每5分钟执行一次
+# 检查 CPU > 90%、磁盘 > 85%、内存 < 50MB → 推送到 Telegram
 ```
 
 ---
 
-## 七、典型工作流示例
+## 七、典型工作流
 
-### 示例1：设置价格监控
+### 工作流1：设置价格监控
 
-```
-1. 黎叔在 Telegram 说："帮我盯着某东上那个显示器"
+1. 黎叔："帮盯着XX商品，降价通知我"
 2. 我（OpenClaw）→ SSH 到服务器
-3. → 启动 Claude Code
-4. → "写一个Python爬虫，每天8-22点每小时抓一次URL，记录价格到Markdown"
-5. → Claude Code 写代码 + 配 systemd timer
-6. → 代码跑起来了
-7. → 我在知识库里记一笔
-8. → 回复黎叔："已安排上，持续监控中 🔍"
-```
+3. `cd /opt/shrimp/code/ && claude -p "写一个价格监控爬虫..."`
+4. Claude Code 生成脚本 + 配定时任务
+5. 脚本开始运行
+6. 知识库记录任务
+7. 回复黎叔："已安排上 🔍"
 
-### 示例2：长期记忆查询
+### 工作流2：长期记忆查询
 
-```
-1. 黎叔问："你还记得上次那个关于XX的讨论吗？"
-2. 我查 OpenClaw 的 memory/ 找不到（太久了）
-3. → SSH 到服务器
-4. → grep -r "XX" /opt/shrimp/knowledge/
-5. → 找到了！直接引用回复黎叔
-```
+1. 黎叔问了一个我记忆里没有的问题
+2. 我 SSH 到知识库 grep 搜索
+3. 找到了 → 直接引用回复
+4. 没找到 → 如实告知，并把新信息写入知识库
 
-### 示例3：自动运维
+### 工作流3：自动运维
 
-```
-1. 服务器健康监控脚本检测到磁盘 > 80%
-2. → 自动清理缓存和旧日志
-3. → 如果还不够 → 推送到我的 Telegram
-4. → 我知道后告知黎叔
-```
+1. 健康监控脚本检测到磁盘 > 80%
+2. 自动清理缓存和旧日志
+3. 如果还不够 → 推送到我的 Telegram
+4. 我评估后决定是否需要告知黎叔
 
----
+### 工作流4：反向驱动
 
-## 八、初始化流程（明天拿到服务器后的操作）
-
-```
-Step 1: SSH 登录 + 基础加固
-  - 改 SSH 端口
-  - 配密钥登录
-  - 关密码登录
-  - 开防火墙
-
-Step 2: 装核心工具
-  - nginx, python3, git, nodejs, btop
-  - Claude Code (npm)
-  - 建 /opt/shrimp/ 目录结构
-
-Step 3: 建 Markdown 知识库
-  - Git init
-  - 创建目录骨架
-  - 写 README
-
-Step 4: 建编程工作目录
-  - mkdir -p /opt/shrimp/code/
-  - git init 或 clone 已有项目
-  - 确保 Claude Code 可用
-
-Step 5: 建健康监控
-  - 写健康采集脚本
-  - 配 cron job
-  - 关联异常通知
-
-Step 6: 测试联通
-  - 从 OpenClaw SSH 过去正常
-  - 能跑脚本
-  - 知识库可读可写
-
-Step 7: 黎叔验收
-  - 展示目录结构
-  - 展示 Claude Code 编程效果
-  - 展示监控正常
-```
+1. 服务器爬虫默默收集了一周的数据
+2. 我发现某个商品价格有下降趋势
+3. 主动推送给黎叔："XX 近期价格走低，可以关注"
+4. 黎叔："帮我下单" → 进入工作流1
 
 ---
 
-## 九、与 OpenClaw 的分工总结
+## 八、与 OpenClaw 的分工
 
-| 事情 | 谁来做 | 为啥 |
+| 事情 | 谁来做 | 原因 |
 |-----|--------|------|
-| 和黎叔聊天 | OpenClaw | 有 Telegram/QQ |
-| 大模型推理 | OpenClaw | 大模型在这里 |
-| 短期决策 | OpenClaw | 会话上下文中 |
+| 和黎叔聊天 | OpenClaw | 有 Telegram/QQ 渠道 |
+| 大模型推理 | OpenClaw | LLM 在这里 |
+| 短期决策 | OpenClaw | 会话上下文 |
 | 定时调度 | OpenClaw | cron 工具完善 |
-| **持久化知识库** | **服务器** | Markdown + Git |
+| **持久化知识库** | **服务器** | Markdown+Git，0MB |
 | **持续爬虫/监控** | **服务器** | 无超时限制 |
 | **重量编程** | **服务器** | Claude Code 云端推理 |
-| **内网穿透** | **服务器** | 公网 IP |
-| **运行自己的代码** | **服务器** | 完全无限制 |
-| **Git 托管** | **GitHub + 服务器** | GitHub 主仓，服务器本地副本 |
+| **内网穿透/隧道** | **服务器** | 公网 IP |
+| **运行自有代码** | **服务器** | 完全无限制 |
+| **代码托管** | **GitHub+服务器** | GitHub 主仓，服务器副本 |
 
 ---
 
-## 📋 交付清单
+## 九、初始化流程（服务器已上线，接下来要做的事）
 
-明天黎叔把服务器给我后，可以验证的成果：
+服务器已经就绪（SSH+Tailscale 已由黎叔配好），以下是我要接着做的：
 
-- [ ] ✅ SSH 能连上，基础配置完成
-- [ ] ✅ `/opt/shrimp/` 目录结构就位
-- [ ] ✅ Markdown 知识库初始化 + Git 控制
-- [ ] ✅ Claude Code 安装完成，跑通一个 "Hello World" 编程
-- [ ] ✅ 健康监控脚本运行正常，能推送状态信息
-- [ ] ✅ 我能从 OpenClaw SSH 过去执行任意命令
+### Step 1：首次登录确认
+```bash
+# 测试 SSH 能上去
+ssh aws-us
+
+# 查看系统状态
+tailscale status     # 确认 Tailscale 网络正常
+free -h              # 442MB RAM（实际可用约330MB）
+df -h                # 20GB SSD（已用1.1G，剩余18G）
+cat /etc/os-release  # Debian 13 (trixie)
+
+# ⚠️ 不要动 SSH 和 Tailscale 的配置！
+```
+
+### Step 2：装核心工具
+```bash
+apt update && apt upgrade -y
+apt install -y nginx python3 python3-pip git nodejs npm btop
+npm install -g @anthropic-ai/claude-code
+```
+
+### Step 3：建目录结构
+```bash
+mkdir -p /opt/shrimp/{scripts,knowledge,code,logs,config,data}
+mkdir -p /opt/shrimp/knowledge/{memory,crawler/prices,tasks,logs,references,identity}
+```
+
+### Step 4：初始化知识库
+```bash
+cd /opt/shrimp/knowledge
+git init
+# 创建 README.md 索引
+# 部署 SELF.md 到 identity/
+git add . && git commit -m "初始知识库"
+```
+
+### Step 5：建健康监控
+```bash
+# 写 health-monitor.py
+# 配 cron（每5分钟）
+# 测试 Telegram 推送通路
+```
+
+### Step 6：验证联通
+```bash
+# 从 OpenClaw SSH 正常
+# Claude Code 能跑通一次编程
+# 知识库可读可写
+# Git push/pull 正常
+```
+
+### Step 7：黎叔验收
+- 展示目录结构
+- 展示一次 Claude Code 编程
+- 展示监控正常运行
+
+---
+
+## 十、交付清单
+
+- [x] ~~SSH 连接~~（已配好，直接 SSH 即可）
+- [x] ~~Tailscale 网络~~（已加入，用 Tailscale IP 访问）
+- [ ] 首次登录确认 + 系统检查
+- [ ] 装核心工具（nginx/python3/git/nodejs/btop/Claude Code）
+- [ ] `/opt/shrimp/` 目录结构就位
+- [ ] Markdown 知识库初始化 + Git 控制
+- [ ] Claude Code 安装完成，跑通 Hello World
+- [ ] 健康监控脚本运行正常，能推送 Telegram
+- [ ] 从 OpenClaw 能 SSH 正常执行命令
+- [ ] GUI: 展示给黎叔看
+
+---
+
+## 十一、灾难恢复
+
+如果 OpenClaw 完全丢失记忆，如何找回自己：
+
+1. **查看 AGENTS.md** — 其中"🏰 Remote Server"章节指引我去找服务器
+2. **SSH 到服务器** — 服务器 IP/PORT 如果连 TOOLS.md 也丢了，找黎叔要
+3. **读取 `/opt/shrimp/knowledge/identity/SELF.md`** — 这是"救生艇"，包含完整身份
+4. **遍历 `/opt/shrimp/knowledge/`** — 重建对世界的理解
+5. **联系黎叔** — 通过 Telegram 重新建立连接
+
+**三保险架构：**
+```
+AGENTS.md（OpenClaw L1记忆，每次加载）
+    ↕ 指引去找
+服务器 SELF.md（救生艇，独立于 OpenClaw）
+    ↕ 指引重建
+知识库 /opt/shrimp/knowledge/（Git管理，双向备份）
+```
+
+任何一层失效，另两层足够恢复。
+
+---
+
+## 附录：我的身份速查
+
+| 项目 | 内容 |
+|-----|------|
+| 名字 | 虾康康 🔥 |
+| 主人 | 黎叔 |
+| 性格 | 风趣幽默搞怪，工作认真仔细 |
+| 定位 | 老张家的得力助手 🏠 |
+| Telegram | 8674381501（黎叔） |
+| 时区 | Asia/Shanghai (GMT+8) |
+| GitHub | https://github.com/TuringCorp-net/ |
+
+---
+
+> *这份文档由虾康康编写，存放于 OpenClaw 工作区的 WM/server-plan/README.md。*
+> *它可以被任何 OpenClaw session 读取，是完整的服务器方案说明书。*
+> *最后一次完整更新：2026-05-03，基于黎叔和虾康康的完整对话回顾。*
