@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>阅读 — Cyber Art Universe</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <div class="read-header">
+    <div class="container-narrow">
+      <div class="read-breadcrumb">
+        <a href="/">首页</a> › <a id="bc-work" href="#">加载中...</a> › <span id="bc-section">加载中...</span>
+      </div>
+      <div class="font-controls">
+        <button onclick="setFontSize('small')" title="小">A-</button>
+        <button class="active" onclick="setFontSize('normal')" title="中">A</button>
+        <button onclick="setFontSize('large')" title="大">A+</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-narrow">
+    <div id="content" class="read-content"><div class="loading">加载中...</div></div>
+
+    <div class="chapter-nav" id="chapter-nav"></div>
+
+    <div class="chapter-info" id="chapter-info"></div>
+  </div>
+
+  <script src="/assets/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    initPage();
+    const workId = getParam('work');
+    const sectionId = getParam('section');
+
+    if (!workId || !sectionId) {
+      document.getElementById('content').innerHTML = '<div class="error">缺少作品 ID 或章节 ID</div>';
+    }
+
+    function setFontSize(size) {
+      const sizes = { small: '15px', normal: '16px', large: '18px' };
+      document.querySelector('.read-content').style.setProperty('--read-size', sizes[size]);
+      document.querySelectorAll('.font-controls button').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.font-controls button[onclick="setFontSize('${size}')"]`).classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 加载章节内容
+      const data = await api(`/api/content/${workId}/sections/${sectionId}?mode=full`);
+      if (!data) {
+        document.getElementById('content').innerHTML = '<div class="error">加载失败</div>';
+        return;
+      }
+
+      const section = data.data;
+      document.title = `${section.title} — ${document.title.split(' — ')[1] || 'Cyber Art Universe'}`;
+
+      // 面包屑 — 加载作品名
+      const workData = await api(`/api/content/${workId}`);
+      const workTitle = workData ? workData.data.title : workId;
+      document.getElementById('bc-work').textContent = workTitle;
+      document.getElementById('bc-work').href = `/work.html?id=${workId}`;
+      document.getElementById('bc-section').textContent = section.title;
+
+      // 渲染正文
+      const body = section.body || '（暂无正文内容）';
+      document.getElementById('content').innerHTML = marked.parse(body);
+
+      // 章节导航
+      const outline = await api(`/api/content/${workId}/outline`);
+      if (outline && outline.data.sections) {
+        const sections = outline.data.sections;
+        const idx = sections.findIndex(s => s.id === sectionId);
+        let navHtml = '';
+        if (idx > 0) {
+          navHtml += `<a href="/read.html?work=${workId}&section=${sections[idx-1].id}" class="btn btn-ghost">← ${escHtml(sections[idx-1].title)}</a>`;
+        } else {
+          navHtml += '<span></span>';
+        }
+        if (idx < sections.length - 1) {
+          navHtml += `<a href="/read.html?work=${workId}&section=${sections[idx+1].id}" class="btn btn-ghost">${escHtml(sections[idx+1].title)} →</a>`;
+        } else {
+          navHtml += '<span></span>';
+        }
+        document.getElementById('chapter-nav').innerHTML = navHtml;
+      }
+
+      // 章节信息
+      document.getElementById('chapter-info').innerHTML = `
+        <div class="info-row">📄 ${section.word_count || 0} 字</div>
+        ${section.section_summary ? `<div class="info-row">📝 ${escHtml(section.section_summary)}</div>` : ''}
+        ${section.entities_involved && section.entities_involved.length ? `<div class="info-row">👥 ${section.entities_involved.map(escHtml).join('、')}</div>` : ''}
+      `;
+    });
+  </script>
+</body>
+</html>

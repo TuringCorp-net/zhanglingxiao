@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品详情 — Cyber Art Universe</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <div id="global-nav"></div>
+
+  <div class="container">
+    <a href="javascript:history.back()" class="back-link">← 返回</a>
+    <div id="work-detail"><div class="loading">加载中...</div></div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <span>Cyber Art Universe</span>
+      <div>
+        <a href="/">首页</a>
+        <a href="/browse.html">探索</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/app.js"></script>
+  <script>
+    initPage();
+    const workId = getParam('id');
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!workId) {
+        document.getElementById('work-detail').innerHTML = '<div class="error">缺少作品 ID</div>';
+        return;
+      }
+
+      const [workData, outlineData] = await Promise.all([
+        api(`/api/content/${workId}`),
+        api(`/api/content/${workId}/outline`)
+      ]);
+
+      if (!workData) {
+        document.getElementById('work-detail').innerHTML = '<div class="error">作品不存在</div>';
+        return;
+      }
+
+      const w = workData.data;
+      document.title = `${w.title} — Cyber Art Universe`;
+
+      const tags = (w.tags || []).map(t => `<span class="tag">#${t}</span>`).join(' ');
+
+      document.getElementById('work-detail').innerHTML = `
+        <div class="work-hero">
+          <h1>${escHtml(w.title)}</h1>
+          <div class="meta">${escHtml(w.author)} · ${typeLabel(w.type)} · ${statusLabel(w.status)} · ${formatDate(w.updated_at)} 更新</div>
+          ${w.summary ? `<div class="desc">${escHtml(w.summary)}</div>` : ''}
+          <div class="tag-list">${tags}</div>
+        </div>
+
+        <div class="section-header"><h2>目录</h2></div>
+        <div class="chapter-list" id="chapters"></div>
+
+        <div class="section-header"><h2>角色</h2></div>
+        <div id="entities-area"><div class="empty">暂无角色信息</div></div>
+      `;
+
+      // 章节列表
+      if (outlineData && outlineData.data.sections) {
+        document.getElementById('chapters').innerHTML = renderChapterList(outlineData.data.sections, workId);
+      } else {
+        document.getElementById('chapters').innerHTML = '<div class="empty">暂无章节</div>';
+      }
+
+      // 实体列表（角色等）
+      const entityData = await api(`/api/content/${workId}/entities?limit=50`);
+      if (entityData && entityData.data && entityData.data.length > 0) {
+        const eHtml = entityData.data.map(e => `
+          <span class="tag" style="margin:0.2rem;">${escHtml(e.name)} (${typeLabel(e.type)})</span>
+        `).join('');
+        document.getElementById('entities-area').innerHTML = eHtml || '<div class="empty">暂无角色信息</div>';
+      }
+    });
+  </script>
+</body>
+</html>

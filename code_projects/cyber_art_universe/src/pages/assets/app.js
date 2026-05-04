@@ -1,0 +1,104 @@
+/* ============================================================
+   Cyber Art Universe — 共享脚本
+   API 封装 / Markdown 渲染 / UI 组件
+   ============================================================ */
+
+// — API 封装 —
+const BASE = '';
+
+async function api(path) {
+  try {
+    const res = await fetch(BASE + path);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error?.message || 'Unknown error');
+    return data;
+  } catch (err) {
+    console.error('API error:', path, err);
+    return null;
+  }
+}
+
+// — URL 参数 —
+function getParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+// — 日期格式化 —
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+
+// — 全局导航 —
+function renderNav() {
+  return `
+  <nav class="top-nav">
+    <div class="container">
+      <a href="/" class="nav-brand">Cyber <span>Art</span> Universe</a>
+      <div class="nav-links">
+        <a href="/">首页</a>
+        <a href="/browse.html">探索</a>
+        <a href="/about.html">关于</a>
+      </div>
+    </div>
+  </nav>`;
+}
+
+// — 作品卡片 —
+function renderWorkCard(w) {
+  const tags = (w.tags || []).slice(0, 3).map(t => `<span class="tag">#${t}</span>`).join('');
+  const initial = (w.title || '?')[0];
+  return `
+  <a href="/work.html?id=${w.id}" class="work-card">
+    <div class="work-card-left"><div class="work-cover">${initial}</div></div>
+    <div class="work-card-body">
+      <h3>${escHtml(w.title)}</h3>
+      <div class="meta">${escHtml(w.author)} · ${typeLabel(w.type)} · ${statusLabel(w.status)}</div>
+      <div class="summary">${escHtml(w.summary || '暂无简介')}</div>
+      <div class="tag-list">${tags}</div>
+    </div>
+  </a>`;
+}
+
+// — 章节列表 —
+function renderChapterList(sections, workId) {
+  if (!sections || sections.length === 0) return '<div class="empty">暂无章节</div>';
+  return sections.map(s => `
+  <a href="/read.html?work=${workId}&section=${s.id}" class="chapter-item">
+    <div>
+      <div class="ch-title">${escHtml(s.title)}</div>
+      ${s.section_summary ? `<div class="ch-summary">${escHtml(s.section_summary)}</div>` : ''}
+    </div>
+    <div class="ch-wordcount">${s.word_count ? s.word_count + ' 字' : ''}</div>
+  </a>`).join('');
+}
+
+// — 类型/状态标签 —
+function typeLabel(t) {
+  const map = { novel: '小说', series: '系列', setting: '设定集', character: '角色卡', outline: '大纲', article: '文章' };
+  return map[t] || t;
+}
+
+function statusLabel(s) {
+  const map = { ongoing: '连载中', completed: '已完结', draft: '草稿' };
+  return map[s] || s;
+}
+
+// — HTML 转义 —
+function escHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// — 页面初始化 —
+function initPage(title) {
+  document.title = title ? `${title} — Cyber Art Universe` : 'Cyber Art Universe';
+  document.addEventListener('DOMContentLoaded', () => {
+    const navEl = document.getElementById('global-nav');
+    if (navEl) navEl.innerHTML = renderNav();
+  });
+}
