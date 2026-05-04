@@ -1,0 +1,36 @@
+{
+  "date": "2026-05-04",
+  "status": {
+    "temu": {
+      "catId": 9711,
+      "catName": "家居、厨房用品",
+      "productsCount": 40,
+      "lastCrawled": "2026-05-04T00:04:59.414Z"
+    },
+    "shein": {
+      "catId": 2031,
+      "catName": "孩子们",
+      "productsCount": 40,
+      "lastCrawled": "2026-05-04T00:05:01.606Z"
+    },
+    "amazon": {
+      "catId": 2335752011,
+      "catName": "手机",
+      "productsCount": 40,
+      "lastCrawled": "2026-05-04T00:05:05.351Z"
+    },
+    "sumaitong": {
+      "catId": 15,
+      "catName": "家居用品",
+      "productsCount": 40,
+      "lastCrawled": "2026-05-04T00:05:08.890Z"
+    },
+    "tiktok": {
+      "catId": 600024,
+      "catName": "Kitchenware",
+      "productsCount": 40,
+      "lastCrawled": "2026-05-04T00:05:17.985Z"
+    }
+  },
+  "updatedAt": "2026-05-04T00:05:21.946Z"
+}

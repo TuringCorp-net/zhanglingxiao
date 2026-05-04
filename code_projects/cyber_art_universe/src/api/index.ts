@@ -47,7 +47,7 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
   }
 
   // === API 路由 ===
-  const path = pathname.slice(4); // 去掉 /api
+  const path = pathname.slice(5); // 去掉 /api/
   const segments = path.split('/').filter(Boolean);
 
   // 健康检查

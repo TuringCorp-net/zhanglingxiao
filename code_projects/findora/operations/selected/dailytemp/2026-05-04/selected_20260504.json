@@ -1,0 +1,598 @@
+[
+  {
+    "goodsNameEn": "42pcs Girls Butterfly, Fruit, Animal, Cartoon, Flower, Rainbow Random Style Hair Clips, Simple Bangs Hairpins, Everyday Use & Gift",
+    "goodsNameCn": "儿童配件, 儿童发饰, 孩子们",
+    "thumbnail": "//img.ltwebstatic.com/images3_spmp/2025/03/09/de/174152238968c57e141285ba955cd33fa66fddc40a_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 26900,
+    "sales": 80700,
+    "goodsPriceMin": 3,
+    "goodsPriceMax": null,
+    "reviewNum": 1000,
+    "rating": 4.81,
+    "mallOpenTime": "2023-03-26T08:00:00.000+08:00",
+    "onSaleTime": "2025-03-09T08:00:00.000+08:00",
+    "goodsId": "61142559",
+    "detailUrl": "61142559",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 113,
+        "catId": 2022,
+        "catName": "Kids Accessories",
+        "catNameCn": "儿童配件",
+        "catLevel": 1,
+        "parentCatId": 2031,
+        "isLeaf": false
+      },
+      {
+        "id": 670,
+        "catId": 2023,
+        "catName": "Kids Hair Accessories",
+        "catNameCn": "儿童发饰",
+        "catLevel": 2,
+        "parentCatId": 2022,
+        "isLeaf": true
+      },
+      {
+        "id": 24,
+        "catId": 2031,
+        "catName": "Kids",
+        "catNameCn": "孩子们",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      }
+    ],
+    "goodsName": "42pcs Girls Butterfly, Fruit, Animal, Cartoon, Flower, Rainbow Random Style Hair Clips, Simple Bangs Hairpins, Everyday Use & Gift",
+    "_source": {
+      "platform": "shein",
+      "platformName": "Shein",
+      "catId": 2031,
+      "catName": "孩子们",
+      "channel": "热销商品",
+      "crawlTime": "2026-05-04T00:05:01.606Z"
+    },
+    "_score": 35.909256840007224
+  },
+  {
+    "goodsNameEn": "42pcs Girls Butterfly, Fruit, Animal, Cartoon, Flower, Rainbow Random Style Hair Clips, Simple Bangs Hairpins, Everyday Use & Gift",
+    "goodsNameCn": "儿童配件, 儿童发饰, 孩子们",
+    "thumbnail": "//img.ltwebstatic.com/images3_spmp/2025/03/09/de/174152238968c57e141285ba955cd33fa66fddc40a_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 26900,
+    "sales": 80700,
+    "goodsPriceMin": 3,
+    "goodsPriceMax": null,
+    "reviewNum": 1000,
+    "rating": 4.81,
+    "mallOpenTime": "2023-03-26T08:00:00.000+08:00",
+    "onSaleTime": "2025-03-09T08:00:00.000+08:00",
+    "goodsId": "61142559",
+    "detailUrl": "61142559",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 113,
+        "catId": 2022,
+        "catName": "Kids Accessories",
+        "catNameCn": "儿童配件",
+        "catLevel": 1,
+        "parentCatId": 2031,
+        "isLeaf": false
+      },
+      {
+        "id": 670,
+        "catId": 2023,
+        "catName": "Kids Hair Accessories",
+        "catNameCn": "儿童发饰",
+        "catLevel": 2,
+        "parentCatId": 2022,
+        "isLeaf": true
+      },
+      {
+        "id": 24,
+        "catId": 2031,
+        "catName": "Kids",
+        "catNameCn": "孩子们",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      }
+    ],
+    "goodsName": "42pcs Girls Butterfly, Fruit, Animal, Cartoon, Flower, Rainbow Random Style Hair Clips, Simple Bangs Hairpins, Everyday Use & Gift",
+    "_source": {
+      "platform": "shein",
+      "platformName": "Shein",
+      "catId": 2031,
+      "catName": "孩子们",
+      "channel": "热销新品",
+      "crawlTime": "2026-05-04T00:05:01.606Z"
+    },
+    "_score": 35.909256840007224
+  },
+  {
+    "goodsNameEn": "42pcs Girls Butterfly, Fruit, Animal, Cartoon, Flower, Rainbow Random Style Hair Clips, Simple Bangs Hairpins, Everyday Use & Gift",
+    "goodsNameCn": "儿童配件, 儿童发饰, 孩子们",
+    "thumbnail": "//img.ltwebstatic.com/images3_spmp/2025/03/09/de/174152238968c57e141285ba955cd33fa66fddc40a_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 26900,
+    "sales": 80700,
+    "goodsPriceMin": 3,
+    "goodsPriceMax": null,
+    "reviewNum": 1000,
+    "rating": 4.81,
+    "mallOpenTime": "2023-03-26T08:00:00.000+08:00",
+    "onSaleTime": "2025-03-09T08:00:00.000+08:00",
+    "goodsId": "61142559",
+    "detailUrl": "61142559",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 113,
+        "catId": 2022,
+        "catName": "Kids Accessories",
+        "catNameCn": "儿童配件",
+        "catLevel": 1,
+        "parentCatId": 2031,
+        "isLeaf": false
+      },
+      {
+        "id": 670,
+        "catId": 2023,
+        "catName": "Kids Hair Accessories",
+        "catNameCn": "儿童发饰",
+        "catLevel": 2,
+        "parentCatId": 2022,
+        "isLeaf": true
+      },
+      {
+        "id": 24,
+        "catId": 2031,
+        "catName": "Kids",
+        "catNameCn": "孩子们",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      }
+    ],
+    "goodsName": "42pcs Girls Butterfly, Fruit, Animal, Cartoon, Flower, Rainbow Random Style Hair Clips, Simple Bangs Hairpins, Everyday Use & Gift",
+    "_source": {
+      "platform": "shein",
+      "platformName": "Shein",
+      "catId": 2031,
+      "catName": "孩子们",
+      "channel": "新店热销",
+      "crawlTime": "2026-05-04T00:05:01.606Z"
+    },
+    "_score": 35.909256840007224
+  },
+  {
+    "goodsNameEn": "42pcs Girls Butterfly, Fruit, Animal, Cartoon, Flower, Rainbow Random Style Hair Clips, Simple Bangs Hairpins, Everyday Use & Gift",
+    "goodsNameCn": "儿童配件, 儿童发饰, 孩子们",
+    "thumbnail": "//img.ltwebstatic.com/images3_spmp/2025/03/09/de/174152238968c57e141285ba955cd33fa66fddc40a_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 26900,
+    "sales": 80700,
+    "goodsPriceMin": 3,
+    "goodsPriceMax": null,
+    "reviewNum": 1000,
+    "rating": 4.81,
+    "mallOpenTime": "2023-03-26T08:00:00.000+08:00",
+    "onSaleTime": "2025-03-09T08:00:00.000+08:00",
+    "goodsId": "61142559",
+    "detailUrl": "61142559",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 113,
+        "catId": 2022,
+        "catName": "Kids Accessories",
+        "catNameCn": "儿童配件",
+        "catLevel": 1,
+        "parentCatId": 2031,
+        "isLeaf": false
+      },
+      {
+        "id": 670,
+        "catId": 2023,
+        "catName": "Kids Hair Accessories",
+        "catNameCn": "儿童发饰",
+        "catLevel": 2,
+        "parentCatId": 2022,
+        "isLeaf": true
+      },
+      {
+        "id": 24,
+        "catId": 2031,
+        "catName": "Kids",
+        "catNameCn": "孩子们",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      }
+    ],
+    "goodsName": "42pcs Girls Butterfly, Fruit, Animal, Cartoon, Flower, Rainbow Random Style Hair Clips, Simple Bangs Hairpins, Everyday Use & Gift",
+    "_source": {
+      "platform": "shein",
+      "platformName": "Shein",
+      "catId": 2031,
+      "catName": "孩子们",
+      "channel": "大卖新品",
+      "crawlTime": "2026-05-04T00:05:01.606Z"
+    },
+    "_score": 35.909256840007224
+  },
+  {
+    "goodsNameEn": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatch S11 S10 SE,AirPods 3,iPad mini Air,SS 三星 Galaxy S2 5 S26可回收材料，及另外 2 项发现更多具有可持续发展特性的商品。",
+    "goodsNameCn": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatc",
+    "thumbnail": "https://m.media-amazon.com/images/I/61ShyBOFoWL._AC_UY218_.jpg",
+    "thumbnailCn": "",
+    "sold": 651026,
+    "sales": null,
+    "goodsPriceMin": 8.99,
+    "goodsPriceMax": null,
+    "reviewNum": 121,
+    "rating": 4.6,
+    "mallOpenTime": "2020-10-10T08:00:00.000+08:00",
+    "onSaleTime": "2020-10-10T08:00:00.000+08:00",
+    "goodsId": "B07Z66MK6L",
+    "detailUrl": "B07Z66MK6L",
+    "platform": "amazon",
+    "catItems": [
+      {
+        "id": 177,
+        "catId": "21209107011",
+        "catName": "电缆",
+        "catLevel": 3,
+        "parentCatId": "2407755011",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 241,
+        "catId": "21209126011",
+        "catName": "OTG适配器",
+        "catLevel": 4,
+        "parentCatId": "21209107011",
+        "isLeaf": true,
+        "siteId": 1
+      },
+      {
+        "id": 55,
+        "catId": "2335752011",
+        "catName": "手机",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 81,
+        "catId": "2407755011",
+        "catName": "辅料",
+        "catLevel": 2,
+        "parentCatId": "2335752011",
+        "isLeaf": false,
+        "siteId": 1
+      }
+    ],
+    "goodsName": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatch S11 S10 SE,AirPods 3,iPad mini Air,SS 三星 Galaxy S2 5 S26可回收材料，及另外 2 项发现更多具有可持续发展特性的商品。",
+    "_source": {
+      "platform": "amazon",
+      "platformName": "Amazon",
+      "catId": 2335752011,
+      "catName": "手机",
+      "channel": "热销商品",
+      "crawlTime": "2026-05-04T00:05:05.351Z"
+    },
+    "_score": 34.64079499994904
+  },
+  {
+    "goodsNameEn": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatch S11 S10 SE,AirPods 3,iPad mini Air,SS 三星 Galaxy S2 5 S26可回收材料，及另外 2 项发现更多具有可持续发展特性的商品。",
+    "goodsNameCn": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatc",
+    "thumbnail": "https://m.media-amazon.com/images/I/61ShyBOFoWL._AC_UY218_.jpg",
+    "thumbnailCn": "",
+    "sold": 651026,
+    "sales": null,
+    "goodsPriceMin": 8.99,
+    "goodsPriceMax": null,
+    "reviewNum": 121,
+    "rating": 4.6,
+    "mallOpenTime": "2020-10-10T08:00:00.000+08:00",
+    "onSaleTime": "2020-10-10T08:00:00.000+08:00",
+    "goodsId": "B07Z66MK6L",
+    "detailUrl": "B07Z66MK6L",
+    "platform": "amazon",
+    "catItems": [
+      {
+        "id": 177,
+        "catId": "21209107011",
+        "catName": "电缆",
+        "catLevel": 3,
+        "parentCatId": "2407755011",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 241,
+        "catId": "21209126011",
+        "catName": "OTG适配器",
+        "catLevel": 4,
+        "parentCatId": "21209107011",
+        "isLeaf": true,
+        "siteId": 1
+      },
+      {
+        "id": 55,
+        "catId": "2335752011",
+        "catName": "手机",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 81,
+        "catId": "2407755011",
+        "catName": "辅料",
+        "catLevel": 2,
+        "parentCatId": "2335752011",
+        "isLeaf": false,
+        "siteId": 1
+      }
+    ],
+    "goodsName": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatch S11 S10 SE,AirPods 3,iPad mini Air,SS 三星 Galaxy S2 5 S26可回收材料，及另外 2 项发现更多具有可持续发展特性的商品。",
+    "_source": {
+      "platform": "amazon",
+      "platformName": "Amazon",
+      "catId": 2335752011,
+      "catName": "手机",
+      "channel": "热销新品",
+      "crawlTime": "2026-05-04T00:05:05.351Z"
+    },
+    "_score": 34.64079499994904
+  },
+  {
+    "goodsNameEn": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatch S11 S10 SE,AirPods 3,iPad mini Air,SS 三星 Galaxy S2 5 S26可回收材料，及另外 2 项发现更多具有可持续发展特性的商品。",
+    "goodsNameCn": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatc",
+    "thumbnail": "https://m.media-amazon.com/images/I/61ShyBOFoWL._AC_UY218_.jpg",
+    "thumbnailCn": "",
+    "sold": 651026,
+    "sales": null,
+    "goodsPriceMin": 8.99,
+    "goodsPriceMax": null,
+    "reviewNum": 121,
+    "rating": 4.6,
+    "mallOpenTime": "2020-10-10T08:00:00.000+08:00",
+    "onSaleTime": "2020-10-10T08:00:00.000+08:00",
+    "goodsId": "B07Z66MK6L",
+    "detailUrl": "B07Z66MK6L",
+    "platform": "amazon",
+    "catItems": [
+      {
+        "id": 177,
+        "catId": "21209107011",
+        "catName": "电缆",
+        "catLevel": 3,
+        "parentCatId": "2407755011",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 241,
+        "catId": "21209126011",
+        "catName": "OTG适配器",
+        "catLevel": 4,
+        "parentCatId": "21209107011",
+        "isLeaf": true,
+        "siteId": 1
+      },
+      {
+        "id": 55,
+        "catId": "2335752011",
+        "catName": "手机",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 81,
+        "catId": "2407755011",
+        "catName": "辅料",
+        "catLevel": 2,
+        "parentCatId": "2335752011",
+        "isLeaf": false,
+        "siteId": 1
+      }
+    ],
+    "goodsName": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatch S11 S10 SE,AirPods 3,iPad mini Air,SS 三星 Galaxy S2 5 S26可回收材料，及另外 2 项发现更多具有可持续发展特性的商品。",
+    "_source": {
+      "platform": "amazon",
+      "platformName": "Amazon",
+      "catId": 2335752011,
+      "catName": "手机",
+      "channel": "新店热销",
+      "crawlTime": "2026-05-04T00:05:05.351Z"
+    },
+    "_score": 34.64079499994904
+  },
+  {
+    "goodsNameEn": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatch S11 S10 SE,AirPods 3,iPad mini Air,SS 三星 Galaxy S2 5 S26可回收材料，及另外 2 项发现更多具有可持续发展特性的商品。",
+    "goodsNameCn": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatc",
+    "thumbnail": "https://m.media-amazon.com/images/I/61ShyBOFoWL._AC_UY218_.jpg",
+    "thumbnailCn": "",
+    "sold": 651026,
+    "sales": null,
+    "goodsPriceMin": 8.99,
+    "goodsPriceMax": null,
+    "reviewNum": 121,
+    "rating": 4.6,
+    "mallOpenTime": "2020-10-10T08:00:00.000+08:00",
+    "onSaleTime": "2020-10-10T08:00:00.000+08:00",
+    "goodsId": "B07Z66MK6L",
+    "detailUrl": "B07Z66MK6L",
+    "platform": "amazon",
+    "catItems": [
+      {
+        "id": 177,
+        "catId": "21209107011",
+        "catName": "电缆",
+        "catLevel": 3,
+        "parentCatId": "2407755011",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 241,
+        "catId": "21209126011",
+        "catName": "OTG适配器",
+        "catLevel": 4,
+        "parentCatId": "21209107011",
+        "isLeaf": true,
+        "siteId": 1
+      },
+      {
+        "id": 55,
+        "catId": "2335752011",
+        "catName": "手机",
+        "catLevel": 1,
+        "parentCatId": "0",
+        "isLeaf": false,
+        "siteId": 1
+      },
+      {
+        "id": 81,
+        "catId": "2407755011",
+        "catName": "辅料",
+        "catLevel": 2,
+        "parentCatId": "2335752011",
+        "isLeaf": false,
+        "siteId": 1
+      }
+    ],
+    "goodsName": "Basesailor USB C 适配器,USBC 母头到 USB A 公头适配器,C 型转换器充电器适用于 iPhone 17 17e Pro Max,16 15,Apple Watch iWatch S11 S10 SE,AirPods 3,iPad mini Air,SS 三星 Galaxy S2 5 S26可回收材料，及另外 2 项发现更多具有可持续发展特性的商品。",
+    "_source": {
+      "platform": "amazon",
+      "platformName": "Amazon",
+      "catId": 2335752011,
+      "catName": "手机",
+      "channel": "大卖新品",
+      "crawlTime": "2026-05-04T00:05:05.351Z"
+    },
+    "_score": 34.64079499994904
+  },
+  {
+    "goodsNameEn": "503pcs Girls' Colorful Faux Pearl Sequin Butterfly Hair Clips, Girl's Side Bangs Clips, Minimalist Bangs Clips, Elastic Non-Damaging Hair Ties, Hair Scrunchies, Hair Claws, Hair Pins, Suitable For Dai",
+    "goodsNameCn": "儿童配件, 儿童发饰, 孩子们",
+    "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/03/06/98/1772790203f1a6185b627e290c5aaae8f38a10e348_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 27500,
+    "sales": 134750,
+    "goodsPriceMin": 4.9,
+    "goodsPriceMax": null,
+    "reviewNum": 4,
+    "rating": 4.81,
+    "mallOpenTime": "2023-03-26T08:00:00.000+08:00",
+    "onSaleTime": "2025-03-09T08:00:00.000+08:00",
+    "goodsId": "419147978",
+    "detailUrl": "419147978",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 113,
+        "catId": 2022,
+        "catName": "Kids Accessories",
+        "catNameCn": "儿童配件",
+        "catLevel": 1,
+        "parentCatId": 2031,
+        "isLeaf": false
+      },
+      {
+        "id": 670,
+        "catId": 2023,
+        "catName": "Kids Hair Accessories",
+        "catNameCn": "儿童发饰",
+        "catLevel": 2,
+        "parentCatId": 2022,
+        "isLeaf": true
+      },
+      {
+        "id": 24,
+        "catId": 2031,
+        "catName": "Kids",
+        "catNameCn": "孩子们",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      }
+    ],
+    "goodsName": "503pcs Girls' Colorful Faux Pearl Sequin Butterfly Hair Clips, Girl's Side Bangs Clips, Minimalist Bangs Clips, Elastic Non-Damaging Hair Ties, Hair Scrunchies, Hair Claws, Hair Pins, Suitable For Daily Use And Back To School",
+    "_source": {
+      "platform": "shein",
+      "platformName": "Shein",
+      "catId": 2031,
+      "catName": "孩子们",
+      "channel": "热销商品",
+      "crawlTime": "2026-05-04T00:05:01.606Z"
+    },
+    "_score": 32.93799808149079
+  },
+  {
+    "goodsNameEn": "503pcs Girls' Colorful Faux Pearl Sequin Butterfly Hair Clips, Girl's Side Bangs Clips, Minimalist Bangs Clips, Elastic Non-Damaging Hair Ties, Hair Scrunchies, Hair Claws, Hair Pins, Suitable For Dai",
+    "goodsNameCn": "儿童配件, 儿童发饰, 孩子们",
+    "thumbnail": "//img.ltwebstatic.com/v4/j/spmp/2026/03/06/98/1772790203f1a6185b627e290c5aaae8f38a10e348_thumbnail_405x552.jpg",
+    "thumbnailCn": "",
+    "sold": 27500,
+    "sales": 134750,
+    "goodsPriceMin": 4.9,
+    "goodsPriceMax": null,
+    "reviewNum": 4,
+    "rating": 4.81,
+    "mallOpenTime": "2023-03-26T08:00:00.000+08:00",
+    "onSaleTime": "2025-03-09T08:00:00.000+08:00",
+    "goodsId": "419147978",
+    "detailUrl": "419147978",
+    "platform": "shein",
+    "catItems": [
+      {
+        "id": 113,
+        "catId": 2022,
+        "catName": "Kids Accessories",
+        "catNameCn": "儿童配件",
+        "catLevel": 1,
+        "parentCatId": 2031,
+        "isLeaf": false
+      },
+      {
+        "id": 670,
+        "catId": 2023,
+        "catName": "Kids Hair Accessories",
+        "catNameCn": "儿童发饰",
+        "catLevel": 2,
+        "parentCatId": 2022,
+        "isLeaf": true
+      },
+      {
+        "id": 24,
+        "catId": 2031,
+        "catName": "Kids",
+        "catNameCn": "孩子们",
+        "catLevel": 0,
+        "parentCatId": 0,
+        "isLeaf": false
+      }
+    ],
+    "goodsName": "503pcs Girls' Colorful Faux Pearl Sequin Butterfly Hair Clips, Girl's Side Bangs Clips, Minimalist Bangs Clips, Elastic Non-Damaging Hair Ties, Hair Scrunchies, Hair Claws, Hair Pins, Suitable For Daily Use And Back To School",
+    "_source": {
+      "platform": "shein",
+      "platformName": "Shein",
+      "catId": 2031,
+      "catName": "孩子们",
+      "channel": "热销新品",
+      "crawlTime": "2026-05-04T00:05:01.606Z"
+    },
+    "_score": 32.93799808149079
+  }
+]

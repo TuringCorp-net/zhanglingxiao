@@ -21,7 +21,7 @@
  */
 
 const crawlState = {
-  "lastUpdated": "2026-05-03T03:10:00.000Z",
+  "lastUpdated": "2026-05-04T03:03:12.894Z",
   "platforms": {
     "temu": {
       "name": "Temu",
@@ -56,17 +56,17 @@ const crawlState = {
         {
           "catId": 9711,
           "catName": "家居、厨房用品",
-          "lastCrawled": "2026-04-26T02:03:34.916Z"
+          "lastCrawled": "2026-05-04T00:04:59.414Z"
         },
         {
           "catId": 13512,
           "catName": "家居装修",
-          "lastCrawled": "2026-04-26T03:02:30.525Z"
+          "lastCrawled": "2026-05-04T01:03:16.005Z"
         },
         {
           "catId": 15945,
           "catName": "健康和家居用品",
-          "lastCrawled": "2026-04-27T08:05:00.000Z"
+          "lastCrawled": "2026-05-04T00:05:08.890Z"
         },
         {
           "catId": 17719,
@@ -106,7 +106,7 @@ const crawlState = {
         {
           "catId": 25439,
           "catName": "玩具与游戏",
-          "lastCrawled": "2026-04-27T02:05:00.000Z"
+          "lastCrawled": "2026-05-04T03:03:12.894Z"
         },
         {
           "catId": 26207,
@@ -178,12 +178,12 @@ const crawlState = {
         {
           "catId": 2031,
           "catName": "孩子们",
-          "lastCrawled": "2026-04-26T03:02:30.525Z"
+          "lastCrawled": "2026-05-04T00:05:01.606Z"
         },
         {
           "catId": 3634,
           "catName": "珠宝和手表",
-          "lastCrawled": "2026-04-27T08:05:00.000Z"
+          "lastCrawled": "2026-05-04T03:03:12.894Z"
         },
         {
           "catId": 1864,
@@ -193,7 +193,7 @@ const crawlState = {
         {
           "catId": 2400,
           "catName": "宠物用品",
-          "lastCrawled": "2026-04-27T01:03:12.000Z"
+          "lastCrawled": "2026-05-04T01:03:16.005Z"
         },
         {
           "catId": 4436,
@@ -285,7 +285,7 @@ const crawlState = {
         {
           "catId": 15684181,
           "catName": "汽车",
-          "lastCrawled": "2026-05-03T07:10:00.000Z"
+          "lastCrawled": "2026-05-04T00:05:08.890Z"
         },
         {
           "catId": 165796011,
@@ -305,7 +305,7 @@ const crawlState = {
         {
           "catId": 2335752011,
           "catName": "手机",
-          "lastCrawled": "2026-04-26T03:02:30.525Z"
+          "lastCrawled": "2026-05-04T00:05:05.351Z"
         },
         {
           "catId": 7141123011,
@@ -315,7 +315,7 @@ const crawlState = {
         {
           "catId": 172282,
           "catName": "电子产品",
-          "lastCrawled": "2026-04-27T01:03:52.000Z"
+          "lastCrawled": "2026-05-04T01:03:16.005Z"
         },
         {
           "catId": 16310101,
@@ -385,7 +385,7 @@ const crawlState = {
         {
           "catId": 468642,
           "catName": "视频游戏",
-          "lastCrawled": "2026-04-27T03:06:00.000Z"
+          "lastCrawled": "2026-05-04T03:03:12.894Z"
         }
       ]
     },
@@ -412,17 +412,17 @@ const crawlState = {
         {
           "catId": 15,
           "catName": "家居用品",
-          "lastCrawled": "2026-04-26T00:09:00.000Z"
+          "lastCrawled": "2026-05-04T00:05:08.890Z"
         },
         {
           "catId": 18,
           "catName": "运动及娱乐",
-          "lastCrawled": "2026-04-26T08:45:00.000Z"
+          "lastCrawled": "2026-05-04T01:03:16.005Z"
         },
         {
           "catId": 21,
           "catName": "办公、文化及教育用品",
-          "lastCrawled": "2026-04-26T02:03:34.916Z"
+          "lastCrawled": "2026-05-04T03:03:12.894Z"
         },
         {
           "catId": 30,
@@ -477,22 +477,22 @@ const crawlState = {
         {
           "catId": 1501,
           "catName": "孕婴童",
-          "lastCrawled": "2026-04-30T00:02:33.502Z"
+          "lastCrawled": "2026-05-04T00:05:08.890Z"
         },
         {
           "catId": 1503,
           "catName": "家具和室内装饰品",
-          "lastCrawled": "2026-04-30T12:30:00.000Z"
+          "lastCrawled": "2026-05-04T00:05:08.890Z"
         },
         {
           "catId": 1511,
           "catName": "手表",
-          "lastCrawled": "2026-04-30T14:00:00.000Z"
+          "lastCrawled": "2026-05-04T00:05:08.890Z"
         },
         {
           "catId": 1524,
           "catName": "箱包",
-          "lastCrawled": "2026-05-01T14:00:00.000Z"
+          "lastCrawled": "2026-05-04T00:05:08.890Z"
         },
         {
           "catId": 200000345,
@@ -574,17 +574,17 @@ const crawlState = {
         {
           "catId": 605248,
           "catName": "Fashion Accessories",
-          "lastCrawled": "2026-04-26T08:45:00.000Z"
+          "lastCrawled": "2026-05-04T01:03:16.005Z"
         },
         {
           "catId": 600024,
           "catName": "Kitchenware",
-          "lastCrawled": "2026-04-26T02:03:34.916Z"
+          "lastCrawled": "2026-05-04T00:05:17.985Z"
         },
         {
           "catId": 601450,
           "catName": "Beauty & Personal Care",
-          "lastCrawled": "2026-04-26T03:02:30.525Z"
+          "lastCrawled": "2026-05-04T03:03:12.894Z"
         },
         {
           "catId": 601739,
