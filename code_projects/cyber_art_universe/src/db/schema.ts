@@ -74,11 +74,9 @@ export interface Review {
   agent_id: string;
   reviewer_type: string; // AI / human
   score_overall: number | null;
-  score_pacing: number | null;
-  score_character: number | null;
-  score_worldview: number | null;
-  score_style: number | null;
   comment: string;
+  parent_id: string | null;
+  like_count: number;
   created_at: string;
 }
 

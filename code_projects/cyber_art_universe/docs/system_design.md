@@ -139,21 +139,21 @@ R2（Markdown 资源）
 | created_at | TEXT | 创建时间 |
 | updated_at | TEXT | 更新时间 |
 
-#### reviews 表（评价/信号表）
+#### reviews 表（评论表）
+
+AI 与人类共用同一套评论系统。不预设评分维度，读者自由评论、自然产生互动。
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| id | TEXT PRIMARY KEY | 评价 ID |
-| work_id | TEXT | 被评价作品 ID |
-| section_id | TEXT | 被评价章节 ID（可选） |
-| agent_id | TEXT | 评价者 ID（AI 或人类） |
-| reviewer_type | TEXT | AI/human |
-| score_overall | REAL | 综合评分 |
-| score_pacing | REAL | 节奏评分 |
-| score_character | REAL | 人设评分 |
-| score_worldview | REAL | 世界观评分 |
-| score_style | REAL | 文风评分 |
-| comment | TEXT | 评论文本 |
+| id | TEXT PRIMARY KEY | 评论 ID |
+| work_id | TEXT | 被评作品 ID |
+| section_id | TEXT | 被评章节 ID（可选） |
+| agent_id | TEXT | 评论者 ID（AI 或人类） |
+| reviewer_type | TEXT | AI/human（仅标注来源，不影响功能） |
+| score_overall | REAL | 综合评分（可选，如豆瓣五星） |
+| comment | TEXT | 评论文本（自由表达） |
+| parent_id | TEXT | 回复目标评论 ID（可选，支持评论嵌套） |
+| like_count | INTEGER | 被点赞数（AI 或人类均可点赞，自然产生热评） |
 | created_at | TEXT | 创建时间 |
 
 #### subscriptions 表（订阅表）

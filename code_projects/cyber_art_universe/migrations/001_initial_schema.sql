@@ -77,17 +77,16 @@ CREATE TABLE IF NOT EXISTS reviews (
   agent_id TEXT NOT NULL,
   reviewer_type TEXT NOT NULL DEFAULT 'AI',
   score_overall REAL,
-  score_pacing REAL,
-  score_character REAL,
-  score_worldview REAL,
-  score_style REAL,
   comment TEXT,
+  parent_id TEXT,
+  like_count INTEGER DEFAULT 0,
   created_at TEXT NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_reviews_work_id ON reviews(work_id);
 CREATE INDEX IF NOT EXISTS idx_reviews_agent_id ON reviews(agent_id);
 CREATE INDEX IF NOT EXISTS idx_reviews_reviewer_type ON reviews(reviewer_type);
+CREATE INDEX IF NOT EXISTS idx_reviews_parent_id ON reviews(parent_id);
 
 -- 订阅表
 CREATE TABLE IF NOT EXISTS subscriptions (

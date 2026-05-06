@@ -11,7 +11,7 @@ import {
   listEntities, getEntity, getTimeline, compareSections,
   createEntity, updateEntity, deleteEntity,
 } from './entities';
-import { submitReview, listReviews, getReview } from './reviews';
+import { submitReview, listReviews, getReview, likeReview } from './reviews';
 import { getEventFeed, createEvent, listRankings, getRanking } from './events';
 import { listSubscriptions, createSubscription, deleteSubscription } from './subscriptions';
 import { searchContent, retrieveInWork } from './search';
@@ -145,6 +145,11 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     // 评价 — 提交
     if (request.method === 'POST' && segments[0] === 'reviews' && !segments[1]) {
       return submitReview(env, request);
+    }
+
+    // 评价 — 点赞
+    if (request.method === 'POST' && segments[0] === 'reviews' && segments[1] && segments[2] === 'like' && !segments[3]) {
+      return likeReview(env, request, segments[1]);
     }
 
     // 订阅 — 创建
