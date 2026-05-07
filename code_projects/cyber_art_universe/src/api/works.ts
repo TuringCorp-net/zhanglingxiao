@@ -24,12 +24,18 @@ import { parsePagination } from '../lib/constants';
 export async function listWorks(env: Env, request: Request): Promise<Response> {
   const url = new URL(request.url);
   const { page, limit, offset } = parsePagination(url);
-  const type = url.searchParams.get('type');
+  const category = url.searchParams.get('category');
+  const type = url.searchParams.get('type') || 'novel';
   const tag = url.searchParams.get('tag');
   const status = url.searchParams.get('status') || 'active';
 
   let whereClause = 'WHERE w.status = ?';
   const bindings: (string | number)[] = [status];
+
+  if (category) {
+    whereClause += ' AND w.category = ?';
+    bindings.push(category);
+  }
 
   if (type) {
     whereClause += ' AND w.type = ?';
@@ -47,7 +53,7 @@ export async function listWorks(env: Env, request: Request): Promise<Response> {
   const total = countResult?.total || 0;
 
   const result = await env.DB.prepare(
-    `SELECT w.id, w.title, w.type, w.author, w.tags, w.status, w.summary, w.version, w.created_at, w.updated_at
+    `SELECT w.id, w.title, w.type, w.category, w.author, w.creation_attribution, w.audience, w.tags, w.status, w.summary, w.version, w.created_at, w.updated_at
      FROM works w ${whereClause} ORDER BY w.updated_at DESC LIMIT ? OFFSET ?`
   ).bind(...bindings, limit, offset).all<Record<string, unknown>>();
 
@@ -214,9 +220,12 @@ export async function createWork(env: Env, request: Request): Promise<Response> 
 
   // 写入 D1
   await env.DB.prepare(`
-    INSERT INTO works (id, title, type, author, tags, status, summary, r2_object_key, version, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)
-  `).bind(id, body.title, type, body.author, tags, status, body.summary || null, r2Key, now, now).run();
+    INSERT INTO works (id, title, type, category, author, creation_attribution, audience, tags, status, summary, r2_object_key, version, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)
+  `).bind(id, body.title, type, body.category || '', body.author,
+    body.creation_attribution || 'original',
+    Array.isArray(body.audience) ? JSON.stringify(body.audience) : '[]',
+    tags, status, body.summary || null, r2Key, now, now).run();
 
   return new Response(JSON.stringify(jsonSuccess({ id, r2_object_key: r2Key })), {
     status: 201, headers: { 'Content-Type': 'application/json' },
@@ -252,7 +261,9 @@ export async function updateWork(env: Env, request: Request, id: string): Promis
   const fields: string[] = ['updated_at = ?'];
   const bindings: (string | number | null)[] = [now];
   const fieldMap: Record<string, unknown> = {
-    title: body.title, type: body.type, author: body.author,
+    title: body.title, type: body.type, category: body.category, author: body.author,
+    creation_attribution: body.creation_attribution,
+    audience: Array.isArray(body.audience) ? JSON.stringify(body.audience) : body.audience,
     status: body.status, summary: body.summary,
     tags: Array.isArray(body.tags) ? JSON.stringify(body.tags) : body.tags,
   };

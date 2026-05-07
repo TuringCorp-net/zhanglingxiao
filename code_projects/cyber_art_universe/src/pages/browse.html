@@ -10,17 +10,20 @@
   <div id="global-nav"></div>
 
   <div class="container">
-    <a href="javascript:history.back()" class="back-link">← 返回</a>
+    <a href="/" class="back-link">← 返回</a>
     <div class="page-header"><h2>探索作品</h2></div>
 
     <div class="filter-bar">
-      <select id="filter-type" onchange="loadWorks()">
-        <option value="">全部类型</option>
-        <option value="novel">小说</option>
-        <option value="setting">设定集</option>
-        <option value="character">角色卡</option>
-        <option value="outline">大纲</option>
-        <option value="article">文章</option>
+      <select id="filter-category" onchange="loadWorks()">
+        <option value="">全部题材</option>
+        <option value="fantasy">奇幻·玄幻</option>
+        <option value="science-fiction">科幻</option>
+        <option value="romance">言情·恋爱</option>
+        <option value="contemporary">都市·现实</option>
+        <option value="adventure">动作·冒险</option>
+        <option value="mystery-thriller">悬疑·惊悚</option>
+        <option value="historical">历史·架空</option>
+        <option value="young-adult">青春·成长</option>
       </select>
     </div>
 
@@ -37,28 +40,26 @@
 
   <script src="/assets/app.js"></script>
   <script>
-    initPage();
+    initPage('探索作品');
     let page = 1;
 
     document.addEventListener('DOMContentLoaded', () => {
-      const type = getParam('type');
-      if (type) document.getElementById('filter-type').value = type;
+      const cat = getParam('category');
+      if (cat) document.getElementById('filter-category').value = cat;
       loadWorks();
     });
 
     async function loadWorks() {
-      const type = document.getElementById('filter-type').value;
-      let path = `/api/catalog?status=active&limit=20&page=${page}`;
-      if (type) path += `&type=${type}`;
+      const cat = document.getElementById('filter-category').value;
+      let path = `/api/catalog?type=novel&status=active&limit=20&page=${page}`;
+      if (cat) path += `&category=${cat}`;
 
       const data = await api(path);
       const el = document.getElementById('work-list');
-
       if (!data || !data.data || data.data.length === 0) {
         el.innerHTML = '<div class="empty">暂无作品</div>';
         return;
       }
-
       el.innerHTML = data.data.map(renderWorkCard).join('');
 
       const total = data.meta?.total || 0;

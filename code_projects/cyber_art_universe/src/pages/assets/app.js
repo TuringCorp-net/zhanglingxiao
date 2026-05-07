@@ -41,6 +41,7 @@ function renderNav() {
         <a href="/">首页</a>
         <a href="/browse.html">探索</a>
         <a href="/about.html">关于</a>
+        <button class="login-btn" onclick="alert('登录功能即将上线')">登录</button>
       </div>
     </div>
   </nav>`;

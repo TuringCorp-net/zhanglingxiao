@@ -19,6 +19,7 @@
 | 版本 | 日期 | 说明 |
 |------|------|------|
 | v1.0.0 | 2026-05-06 | 初始版本，与 SRS v1.0.0、STR v1.0.0 对齐 |
+| v1.1.0 | 2026-05-06 | reviews 表简化 + L1 分类落地，works 表新增 category/creation_attribution/audience；前端 Read+Write 双入口；新增 /write.html |
 
 ---
 
@@ -176,7 +177,7 @@
 
 | 表名 | 列数 | 索引 | 用途 |
 |------|------|------|------|
-| `works` | 12 | 4 | 作品主表 |
+| `works` | 15 | 4 | 作品主表（含 category/creation_attribution/audience） |
 | `sections` | 12 | 2 | 章节表，`works(id) ON DELETE CASCADE` |
 | `entities` | 10 | 2 | 实体表，`works(id) ON DELETE CASCADE` |
 | `agents` | 8 | 1 | AI 参与者配置表 |

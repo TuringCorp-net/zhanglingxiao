@@ -60,6 +60,8 @@ ul, ol { list-style: none; }
 .nav-links { display: flex; gap: 1.5rem; align-items: center; }
 .nav-links a { color: var(--text-dim); font-size: 0.9rem; }
 .nav-links a:hover { color: var(--text); }
+.login-btn { padding: 0.35rem 0.85rem; border-radius: var(--radius); font-size: 0.8rem; border: 1px solid var(--border); background: transparent; color: var(--text-dim); transition: all 0.2s; }
+.login-btn:hover { border-color: var(--accent-light); color: var(--text); }
 
 /* — Hero — */
 .hero {
@@ -80,6 +82,20 @@ ul, ol { list-style: none; }
 .btn-primary:hover { background: var(--accent-light); color: #fff; }
 .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
 .btn-ghost:hover { border-color: var(--accent-light); color: var(--text); }
+
+/* — Dual Entry — */
+.dual-entry { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 640px; margin: 2rem auto 0; }
+.entry-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 2.5rem 1.5rem; border-radius: var(--radius); border: 1px solid var(--border);
+  background: var(--bg-card); transition: all 0.25s; text-align: center;
+}
+.entry-card:hover { transform: translateY(-4px); }
+.entry-card.read:hover { border-color: var(--accent-light); box-shadow: 0 0 30px rgba(124,58,237,0.15); }
+.entry-card.write:hover { border-color: var(--cyan); box-shadow: 0 0 30px rgba(6,182,212,0.15); }
+.entry-card .entry-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.entry-card h3 { font-size: 1.3rem; margin-bottom: 0.35rem; }
+.entry-card p { color: var(--text-dim); font-size: 0.85rem; line-height: 1.5; }
 
 /* — Category Cards — */
 .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; }

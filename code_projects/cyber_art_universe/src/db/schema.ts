@@ -6,8 +6,11 @@
 export interface Work {
   id: string;
   title: string;
-  type: string; // novel / series / setting / character / outline / article
+  type: string; // 内部字段：novel / series / setting / character / outline / article
+  category: string; // 对外题材分类 key：fantasy/science-fiction/romance/contemporary/adventure/mystery-thriller/historical/young-adult
   author: string;
+  creation_attribution: string; // original / fanfiction / ai-assisted
+  audience: string; // JSON 数组：male_lead / female_lead / no_cp / BL / GL / LGBTQ+
   tags: string; // JSON 数组
   status: string; // ongoing / completed / draft
   summary: string;
