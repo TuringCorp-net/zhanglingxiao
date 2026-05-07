@@ -17,6 +17,7 @@ import { listSubscriptions, createSubscription, deleteSubscription } from './sub
 import { searchContent, retrieveInWork } from './search';
 import { handleAIManifest, handleLLMsTxt, handleOpenAPI } from './discovery';
 import { handleMCP } from './mcp';
+import { handleWriteRoute } from './write/index';
 
 // ============================================================
 // Admin 鉴权
@@ -165,6 +166,18 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     // MCP
     if (request.method === 'POST' && segments[0] === 'mcp' && !segments[1]) {
       return handleMCP(env, request);
+    }
+
+    // ================================================================
+    // Write 侧（Story Forger）
+    // ================================================================
+    if (segments[0] === 'write') {
+      if (!isAdmin(request, env)) {
+        return new Response(JSON.stringify(jsonError(ErrorCodes.ADMIN_KEY_REQUIRED, 'Admin authorization required')), {
+          status: 401, headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      return handleWriteRoute(env, request, segments.slice(1));
     }
 
     // ================================================================

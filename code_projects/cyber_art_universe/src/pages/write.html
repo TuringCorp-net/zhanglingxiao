@@ -5,32 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Write — Story Forger — Cyber Art Universe</title>
   <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .workspace-bar { display:flex; gap:0.75rem; align-items:center; padding:1rem 0; flex-wrap:wrap; }
+    .workspace-bar select { flex:1; min-width:200px; padding:0.5rem 0.75rem; border-radius:var(--radius); border:1px solid var(--border); background:var(--bg-card); color:var(--text); font-size:0.9rem; }
+    .workspace-bar input { flex:0 0 auto; width:280px; padding:0.5rem 0.75rem; border-radius:var(--radius); border:1px solid var(--border); background:var(--bg-card); color:var(--text); font-size:0.8rem; }
+    .corkboard-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:0.75rem; }
+    .corkboard-card { padding:1.25rem; border-radius:var(--radius); background:var(--bg-card); border:1px solid var(--border); cursor:pointer; transition:all 0.15s; }
+    .corkboard-card:hover { border-color:var(--cyan); background:var(--bg-hover); transform:translateY(-2px); }
+    .card-status { font-size:1.3rem; margin-bottom:0.3rem; }
+    .card-title { font-weight:600; margin-bottom:0.15rem; }
+    .card-meta { font-size:0.78rem; color:var(--text-dim); margin-bottom:0.35rem; }
+    .card-summary { font-size:0.82rem; color:var(--text-dim); line-height:1.4; }
+    .editor-panel { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); z-index:200; padding:1.5rem; }
+    .editor-panel.active { display:flex; flex-direction:column; }
+    .editor-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+    .editor-body { flex:1; width:100%; background:var(--bg-card); color:var(--text); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; font-family:var(--font); font-size:1rem; line-height:1.8; resize:none; }
+    .editor-toolbar { display:flex; gap:0.5rem; margin-top:0.75rem; }
+    .work-actions { display:flex; gap:0.5rem; }
+  </style>
 </head>
 <body>
   <div id="global-nav"></div>
 
-  <section class="hero">
-    <h1><span>Story</span> Forger</h1>
-    <p>面向创作者的 AI 辅助写作操作系统 — 世界观构建 · 长篇规划 · 一致性生产 · 分发辅助</p>
-  </section>
+  <div class="container">
+    <a href="/" class="back-link">← 返回首页</a>
+    <div class="page-header"><h2>Story Forger <span style="color:var(--cyan)">写作台</span></h2></div>
 
-  <div class="container-narrow" style="text-align:center;padding:3rem 0;">
-    <div class="read-content">
-      <h2>即将上线</h2>
-      <p>Story Forger 是 Cyber Art Universe 的创作引擎，覆盖长篇写作全流程。</p>
-      <p>当前正在开发中，敬请期待。</p>
-      <p style="margin-top:2rem;"><a href="/" class="btn btn-ghost">返回首页</a></p>
+    <div class="workspace-bar">
+      <select id="workspace-selector" onchange="onWorkspaceChange()">
+        <option value="">请先设置 Admin Key...</option>
+      </select>
+      <input id="admin-key-input" type="password" placeholder="Admin Key" onchange="setAdminKey()">
+      <div id="work-actions" class="work-actions"></div>
     </div>
+
+    <div id="corkboard"><div class="loading">请选择作品...</div></div>
+  </div>
+
+  <!-- 章节编辑器 -->
+  <div id="editor-panel" class="editor-panel">
+    <div class="editor-header">
+      <h3 id="editor-title"></h3>
+      <div>
+        <button class="btn btn-ghost" id="editor-ai-btn" onclick="aiGenerate(document.getElementById('editor-work-id').value)">🤖 AI 生成</button>
+        <button class="btn btn-primary" onclick="saveChapter()">💾 保存</button>
+        <button class="btn btn-ghost" onclick="closeEditor()">✕ 关闭</button>
+      </div>
+    </div>
+    <textarea id="editor-body" class="editor-body" placeholder="在这里写你的故事..."></textarea>
+    <input type="hidden" id="editor-section-id">
+    <input type="hidden" id="editor-work-id">
   </div>
 
   <footer class="footer">
     <div class="container">
-      <span>Cyber Art Universe</span>
+      <span>Story Forger · Cyber Art Universe</span>
       <div><a href="/">首页</a></div>
     </div>
   </footer>
 
   <script src="/assets/app.js"></script>
-  <script>initPage('Write — Story Forger');</script>
+  <script src="/write.js"></script>
 </body>
 </html>

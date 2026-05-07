@@ -34,6 +34,8 @@ export const ErrorCodes = {
   // 业务逻辑 — 内容相关
   WORK_NOT_FOUND: 'WORK_NOT_FOUND',
   SECTION_NOT_FOUND: 'SECTION_NOT_FOUND',
+  WORK_NOT_PUBLISHABLE: 'WORK_NOT_PUBLISHABLE',
+  WORK_STATUS_CONFLICT: 'WORK_STATUS_CONFLICT',
   ENTITY_NOT_FOUND: 'ENTITY_NOT_FOUND',
   SUBSCRIPTION_NOT_FOUND: 'SUBSCRIPTION_NOT_FOUND',
   RANKING_NOT_FOUND: 'RANKING_NOT_FOUND',
@@ -73,6 +75,8 @@ export const ErrorMessages: Record<ErrorCode, string> = {
 
   [ErrorCodes.WORK_NOT_FOUND]: 'Work not found',
   [ErrorCodes.SECTION_NOT_FOUND]: 'Section not found',
+  [ErrorCodes.WORK_NOT_PUBLISHABLE]: 'Work does not meet publish requirements',
+  [ErrorCodes.WORK_STATUS_CONFLICT]: 'Invalid status transition for this work',
   [ErrorCodes.ENTITY_NOT_FOUND]: 'Entity not found',
   [ErrorCodes.SUBSCRIPTION_NOT_FOUND]: 'Subscription not found',
   [ErrorCodes.RANKING_NOT_FOUND]: 'Ranking not found',
