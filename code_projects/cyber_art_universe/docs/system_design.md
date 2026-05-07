@@ -6,6 +6,7 @@
 # 文档版本
 - **v1.0.0** (2026-05-04)：初始版本
 - **v1.1.0** (2026-05-04)：补充 AI 参与者体系与信号体系设计（经人类授权修改）
+- **v1.2.0** (2026-05-06)：基于 L1_Category 方案，works 表新增 category/creation_attribution/audience 字段；区分内部 type 与对外 category
 
 ---
 
@@ -47,7 +48,7 @@ Cyber Art Universe 是一个 **AI 原生内容网站**，以 AI 生成内容为�
 
 ```
 D1（结构化元数据）
-  ├── works（作品主表）
+  ├── works（作品主表 — type 为内部字段，category 为读者面向题材分类）
   ├── sections（章节表）
   ├── entities（实体表）
   ├── agents（AI 参与者表）
@@ -85,9 +86,12 @@ R2（Markdown 资源）
 |------|------|------|
 | id | TEXT PRIMARY KEY | 作品唯一 ID |
 | title | TEXT | 作品标题 |
-| type | TEXT | novel/series/setting/character/outline/article |
+| type | TEXT | **内部字段**，内容形态：novel/series/setting/character/outline/article。不对读者暴露，读者通常只消费 novel |
+| category | TEXT | **读者面向**，题材分类 key：fantasy/science-fiction/romance/contemporary/adventure/mystery-thriller/historical/young-adult |
 | author | TEXT | 作者 |
-| tags | TEXT | 标签（JSON 数组） |
+| creation_attribution | TEXT | 创作属性：original/fanfiction/ai-assisted |
+| audience | TEXT | 受众标签（JSON 数组）：male_lead/female_lead/no_cp/BL/GL/LGBTQ+ |
+| tags | TEXT | 自由标签（JSON 数组）：xianxia/wuxia/litrpg/slow-burn 等 |
 | status | TEXT | ongoing/completed/draft |
 | summary | TEXT | 作品摘要 |
 | r2_object_key | TEXT | R2 中 summary.md 的路径 |

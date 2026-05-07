@@ -276,15 +276,39 @@ Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作�
 ### 6. CitationAnchor（引用锚点）
 可精确引用的锚点
 
-### 内容类型扩展
+### 内容形态（`type`，内部系统字段）
 
-通过 `type` 字段区分：
-- `novel` — 小说
-- `series` — 系列作品
-- `setting` — 世界观/设定集
-- `character` — 角色卡
-- `outline` — 大纲
+`type` 是系统内部字段，区分内容的**创作形态**。读者通常只消费 `novel`，其他形态是 Story Forger 创作工作区的资产，是否对外暴露由作者决定。
+
+- `novel` — 小说（读者直接消费的叙事内容）
+- `series` — 系列作品（多部小说的合集）
+- `setting` — 世界观/设定集（作者的设定参考文档）
+- `character` — 角色卡（作者的角色参考文档）
+- `outline` — 大纲（可公开的故事纲要，也可设为私密）
 - `article` — 文章/随笔
+
+### 题材分类（`category`，读者面向字段）
+
+基于 L1_Category 方案，8 个全球兼容题材分类，读者按此浏览和筛选作品：
+
+| category_key | 中文名 | 典型标签 |
+|-------------|--------|---------|
+| `fantasy` | 奇幻·玄幻 | xianxia, cultivation, litrpg, romantasy |
+| `science-fiction` | 科幻 | cyberpunk, space-opera, dystopian, AI |
+| `romance` | 言情·恋爱 | sweet-pet, ancient-romance, BL, GL |
+| `contemporary` | 都市·现实 | workplace, farming, slice-of-life |
+| `adventure` | 动作·冒险 | wuxia, xianxia-action, expedition |
+| `mystery-thriller` | 悬疑·惊悚 | detective, horror, psychological |
+| `historical` | 历史·架空 | alternate-history, ancient-politics |
+| `young-adult` | 青春·成长 | campus, coming-of-age, new-adult |
+
+分类 Key 存储于 D1，多语言标签映射存储于 KV。
+
+### 辅助维度（过滤/标签）
+
+- **创作属性**：`original`（原创）/ `fanfiction`（同人）/ `ai-assisted`（AI 协作）
+- **受众**：male_lead / female_lead / no_cp / BL / GL / LGBTQ+
+- **标签**：`xianxia`, `wuxia`, `litrpg`, `slow-burn`, `revenge` 等自由标签体系
 
 ---
 
@@ -294,8 +318,8 @@ Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作�
 
 ```
 根节点
-  └── 类型节点（novel / series / setting / character / outline / article）
-        └── 分类节点（如：科幻、奇幻、现实主义等）
+  └── 题材分类节点（fantasy / science-fiction / romance / contemporary / adventure / mystery-thriller / historical / young-adult）
+        └── 内容形态过滤（novel / setting / character...）
               └── 单作品节点（Work）
                     ├── 章节节点（Section）
                     │     ├── 段落块（Chunk）

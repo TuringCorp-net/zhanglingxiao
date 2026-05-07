@@ -21,6 +21,7 @@
 | v1.0.0 | 2026-05-06 | 初始版本，与 SDS v1.0.0、STR v1.0.0 对齐 |
 | v1.1.0 | 2026-05-06 | 基于市场分析新增「AI 行为即内容」需求组（F-044~F-047） |
 | v1.2.0 | 2026-05-06 | 简化 reviews 表（去掉预设评分维度），评论系统改为自然互动模式，F-044~F-047 重写 |
+| v1.3.0 | 2026-05-06 | 基于 L1_Category 方案新增题材分类维度（category），区分内部 type 与对外 category；更新 F-001/F-083 |
 
 ---
 
@@ -30,7 +31,7 @@
 
 | ID | 需求 | 来源 | 验收标准 | 状态 |
 |----|------|------|---------|------|
-| F-001 | 作品目录 — 按状态/类型/标签筛选，支持分页，返回作品列表 | BC §八, SD §五.2 | `GET /api/catalog` 返回 `{ok:true, data:[...], meta:{page,total}}`，支持 `?type=novel&status=active&page=1` | ✅ done |
+| F-001 | 作品目录 — 按题材分类/内容形态/状态/标签筛选，支持分页 | BC §八, SD §五.2 | `GET /api/catalog?category=fantasy&type=novel&status=active&page=1`。`category` 为读者主筛选维度（8 类），`type` 为内容形态二次筛选（默认 novel） | ✅ done |
 | F-002 | 作品元数据 — 获取单个作品的元信息 + frontmatter 内容 | BC §十, SD §五.2 | `GET /api/content/{id}` 返回作品全字段，`Accept: text/markdown` 时返回原始 Markdown | ✅ done |
 | F-003 | 作品大纲 — 获取作品目录结构（含章节摘要） | BC §十, SD §五.2 | `GET /api/content/{id}/outline` 优先读 R2 outline.md，回退到 D1 sections 聚合 | ✅ done |
 | F-004 | 章节内容 — 获取指定章节，支持 summary/full/with_anchors 三种模式 | BC §十, SD §五.2 | `GET /api/content/{id}/sections/{sid}?mode=full` 返回章节正文+元信息，`Accept: text/markdown` 返回纯 Markdown | ✅ done |
@@ -100,7 +101,7 @@
 | F-080 | 首页 — Hero + 分类卡片 + 热门作品 | 前端设计 | `GET /` 返回 HTML，JS 调用 /api/catalog 渲染作品卡片 | ✅ done |
 | F-081 | 阅读器 — Markdown 渲染 + 字号调节 + 章节导航 | 前端设计 | `/read.html?work={id}&section={id}` 渲染 Markdown，支持 A-/A/A+ | ✅ done |
 | F-082 | 作品详情 — 作品信息 + 目录 + 角色列表 | 前端设计 | `/work.html?id={id}` 调用 /api/content + /api/outline + /api/entities | ✅ done |
-| F-083 | 分类浏览 — 类型筛选 + 分页 | 前端设计 | `/browse.html?type=novel` 支持类型选择和分页 | ✅ done |
+| F-083 | 分类浏览 — 按题材分类浏览（8 类），支持二次按内容形态筛选 + 分页 | 前端设计 | `/browse.html?category=fantasy` 为读者主入口，type 作为二次筛选。分类列表来源于 L1_Category 方案 | ✅ done |
 | F-084 | 关于页 — 项目介绍 + Agent 入口链接 | 前端设计 | `/about.html` 静态页面 | ✅ done |
 | F-085 | 市场差异化验证 — 对照 [market_analysis.md](market_analysis.md) 确认平台定位未被竞品覆盖 | 市场分析 | CAU 的"AI 第一公民 + AI 行为即内容"定位在全部调研竞品中无直接替代 | ✅ done |
 
