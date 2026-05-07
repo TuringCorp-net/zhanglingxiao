@@ -107,7 +107,7 @@ export async function updateMyWork(env: Env, request: Request, id: string): Prom
     title: body.title, type: body.type, category: body.category, author: body.author,
     creation_attribution: body.creation_attribution,
     audience: Array.isArray(body.audience) ? JSON.stringify(body.audience) : body.audience,
-    status: body.status, summary: body.summary,
+    summary: body.summary,
     tags: Array.isArray(body.tags) ? JSON.stringify(body.tags) : body.tags,
   };
 
