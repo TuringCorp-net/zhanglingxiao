@@ -27,7 +27,7 @@ export async function listWorks(env: Env, request: Request): Promise<Response> {
   const category = url.searchParams.get('category');
   const type = url.searchParams.get('type') || 'novel';
   const tag = url.searchParams.get('tag');
-  const status = url.searchParams.get('status') || 'active';
+  const status = url.searchParams.get('status') || 'published';
 
   let whereClause = 'WHERE w.status = ?';
   const bindings: (string | number)[] = [status];

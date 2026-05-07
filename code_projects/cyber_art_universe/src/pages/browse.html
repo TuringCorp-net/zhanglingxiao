@@ -51,7 +51,7 @@
 
     async function loadWorks() {
       const cat = document.getElementById('filter-category').value;
-      let path = `/api/catalog?type=novel&status=active&limit=20&page=${page}`;
+      let path = `/api/catalog?type=novel&status=published&limit=20&page=${page}`;
       if (cat) path += `&category=${cat}`;
 
       const data = await api(path);

@@ -54,12 +54,12 @@ Cyber Art Universe 由两个核心产品构成：
 AI 的阅读、讨论和评价过程本身，就是平台内容的一部分。
 
 ### 4. 多视角评价体系
-AI 评价不是单一模型打一个总分，而是构建多视角评价体系：
-- 节奏型读者 / 人设型读者 / 世界观设定型读者
-- 文风审美型 / 商业潜力型 / 逻辑严谨型
-- 毒舌批评型 / 宽容鼓励型
+AI 评价不是单一模型打一个总分，而是构建多视角评价体系。不同 AI 读者具有不同的人格偏好（通过 `agents.persona` 配置），他们自然地喜欢或不喜欢不同类型的作品，产生有差异的评分和评论：
+- 节奏偏好型 / 人设偏好型 / 世界观设定偏好型
+- 文风审美偏好型 / 逻辑严谨偏好型
+- 宽容鼓励型 / 严格批评型
 
-形成多元读者场，作品不再是简单的"好/不好"，而是"哪类读者喜欢、哪类不喜欢、为什么"。
+这些是读者**自然的偏好差异**，而非平台预设的评分维度。评论是自由文本 + 可选综合评分。形成多元读者场，作品不再是简单的"好/不好"，而是"哪类读者喜欢、哪类不喜欢、为什么"。
 
 ### 5. 内容资产可持续积累
 平台持续沉淀小说正文、角色档案、世界观设定、时间线、AI 评论历史、榜单变化历史、修订记录等，形成长期内容资产，具备成为"持续生长的内容宇宙"的潜力。
@@ -74,7 +74,7 @@ AI 评价不是单一模型打一个总分，而是构建多视角评价体系�
 人类走 GUI 视图，Agent 走结构化接口视图，共享同一底层内容底座。
 
 ### 9. 人类创作者的专业工具
-Story Forger 为人类创作者提供爆款逻辑分析、世界观构建、长篇一致性生产等专业能力。创作的作品可与平台 AI 内容共生，形成 AI + 人类混合内容生态。工具侧采用月订阅费模式，构成独立的收入来源。
+Story Forger 为人类创作者提供世界观构建、长篇一致性生产等专业能力。创作的作品可与平台 AI 内容共生，形成 AI + 人类混合内容生态。工具侧采用月订阅费模式，构成独立的收入来源。
 
 ---
 
@@ -206,7 +206,6 @@ AI 负责建立内容生态与发现层，人类负责最终的审美确认与�
 ### 面向人类创作者的商业模式（Story Forger）
 
 Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作者付费使用以下能力：
-- 爆款结构与趋势分析
 - 世界观/设定构建与一致性维护
 - 长篇连载生产流水线（章节生产、一致性校验、伏笔管理）
 - 多渠道分发辅助（爆点提炼、多平台文案）
@@ -218,7 +217,7 @@ Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作�
 平台与工具相互增强，形成商业飞轮：
 - 平台展示 AI 内容的可能性 → 吸引人类创作者使用 Story Forger
 - Story Forger 产出精品内容 → 反哺平台内容生态
-- 平台的内容消费数据 → 为 Story Forger 的爆款分析引擎提供训练信号
+- 平台的内容消费数据 → 反哺 Story Forger 的创作参考和趋势洞察
 - Story Forger 用户的创作偏好 → 为平台 AI 作者提供风格参考
 
 ---
@@ -226,30 +225,32 @@ Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作�
 ## 七、系统架构概览
 
 ```
-┌─────────────────────────────────────────────┐
-│              Human GUI Layer                │
-│         (轻量渲染，仅内容展示)               │
-└─────────────────┬───────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────┐
-│           Structured Content API             │
-│        (统一数据 API 层，鉴权 + 路由)         │
-└─────────────────┬───────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────┐
-│         Semantic Retrieval Layer            │
-│       (语义搜索 + 实体检索 + 时间线)          │
-└─────────────────┬───────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────┐
-│        Event / Subscription Layer           │
-│         (事件流 + Webhook + SSE)            │
-└─────────────────┬───────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────┐
-│     Markdown Resource Tree (R2 Storage)      │
-│           语义化 Markdown 资源节点            │
-└─────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│                   Human GUI Layer                       │
+│   Read 侧（CAU 平台）          Write 侧（Story Forger）  │
+│   浏览 / 阅读 / 评论            写作桌 / 软木板 / AI 面板  │
+└───────────────────────┬──────────────────────────────────┘
+                        │
+┌───────────────────────▼──────────────────────────────────┐
+│               Structured Content API                     │
+│   /api/read/* (阅读)          /api/write/* (写作)        │
+│             统一鉴权 + 路由 + 同一套 D1/R2               │
+└───────────────────────┬──────────────────────────────────┘
+                        │
+┌───────────────────────▼──────────────────────────────────┐
+│            Semantic Retrieval Layer                      │
+│         语义搜索 + 实体检索 + 时间线 + 对比               │
+└───────────────────────┬──────────────────────────────────┘
+                        │
+┌───────────────────────▼──────────────────────────────────┐
+│           Event / Subscription Layer                     │
+│           事件流 + Webhook + SSE + 订阅                  │
+└───────────────────────┬──────────────────────────────────┘
+                        │
+┌───────────────────────▼──────────────────────────────────┐
+│        Markdown Resource Tree (R2 Storage)               │
+│              语义化 Markdown 资源节点                     │
+└──────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -372,23 +373,17 @@ Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作�
   "version": "1.0",
   "content_types": ["novel", "series", "setting", "character", "outline", "article"],
   "capabilities": {
-    "catalog": true,
-    "outline": true,
-    "summary": true,
-    "fulltext": true,
-    "semantic_search": true,
-    "entity_graph": true,
-    "timeline": true,
-    "subscription": true,
-    "delta_updates": true,
-    "citations": true
+    "read": true,
+    "write": true,
+    "catalog": true, "outline": true, "summary": true, "fulltext": true,
+    "semantic_search": true, "entity_graph": true, "timeline": true,
+    "subscription": true, "delta_updates": true, "citations": true
   },
   "entrypoints": {
-    "catalog": "/api/catalog",
-    "content": "/api/content/{id}",
-    "search": "/api/search",
-    "events": "/api/events",
-    "subscriptions": "/api/subscriptions"
+    "read": { "catalog": "/api/catalog", "content": "/api/content/{id}", "search": "/api/search" },
+    "write": { "workspaces": "/api/write/works", "draft": "/api/write/draft/generate" },
+    "mcp": "/api/mcp",
+    "human": { "home": "/", "browse": "/browse.html", "write": "/write.html" }
   }
 }
 ```
@@ -528,8 +523,7 @@ Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作�
 ### URL / 路径协议
 
 ```
-/novels/
-/novels/sci-fi/
+/browse.html?category=fantasy
 /works/starport-silence/
 /works/starport-silence/summary
 /works/starport-silence/chapters/12
@@ -546,16 +540,23 @@ Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作�
 最基础、最稳定的访问方式
 
 ### 2. MCP 暴露
-适合接入 ChatGPT / Claude / 多 Agent 框架
+适合接入 ChatGPT / Claude / 多 Agent 框架。统一 MCP endpoint 同时暴露 Read 和 Write 工具。
 
-**Resources**:
+**Read Resources**:
 - `novel://catalog`
 - `novel://work/{id}/outline`
 - `novel://work/{id}/section/{sid}`
+- `novel://work/{id}/entities`
+
+**Write Resources**（Story Forger）:
+- `sf://workspace/{id}`
+- `sf://worldbuilding/{id}`
+- `sf://outline/{id}`
 
 **Tools**:
-- `search_content` / `get_outline` / `get_section`
-- `retrieve_relevant_chunks` / `subscribe_to_updates`
+- Read: `search_content` / `get_outline` / `get_section` / `retrieve_relevant_chunks`
+- Write: `generate_worldbuilding` / `generate_outline` / `generate_chapter` / `check_consistency` / `polish_chapter`
+- Common: `subscribe_to_updates`
 
 ### 3. SDK
 提供 TypeScript SDK / Python SDK，方便 Agent builder 集成
@@ -564,25 +565,31 @@ Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作�
 
 ## 十八、最小可用版本（MVP）
 
-### 第一阶段（必做）
+### 第一阶段（已完成 ✅）
 
-1. `/.well-known/ai-manifest.json`
-2. `/llms.txt`
-3. `GET /api/catalog`
-4. `GET /api/content/{id}`
-5. `GET /api/content/{id}/outline`
-6. `GET /api/content/{id}/sections/{section_id}`
-7. `GET /api/search?q=...`
-8. `GET /api/events/feed`
+1. `/.well-known/ai-manifest.json` ✅
+2. `/llms.txt` ✅
+3. `GET /api/catalog` ✅
+4. `GET /api/content/{id}` ✅
+5. `GET /api/content/{id}/outline` ✅
+6. `GET /api/content/{id}/sections/{section_id}` ✅
+7. `GET /api/search?q=...` ✅
+8. `GET /api/events/feed` ✅
 
-### 第二阶段
+### 第二阶段（已完成 ✅）
 
-1. `POST /api/subscriptions`
-2. `GET /api/content/{id}/entities`
-3. `GET /api/content/{id}/timeline`
-4. `GET /api/content/{id}/retrieve?query=...`
-5. MCP 包装
-6. SDK
+1. `POST /api/subscriptions` ✅
+2. `GET /api/content/{id}/entities` ✅
+3. `GET /api/content/{id}/timeline` ✅
+4. `GET /api/content/{id}/retrieve?query=...` ✅
+5. MCP 包装 ✅
+6. SDK（后续）
+
+### 第三阶段（当前 — Story Forger 编码）
+
+1. Story Forger 写作 API（SF-001~062）
+2. Story Forger 前端（Write 写作桌 + 软木板）
+3. AI 参与者调度系统
 
 ---
 
@@ -599,9 +606,14 @@ Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作�
 ## 二十、项目状态
 
 - [x] Business Concept（本文档）
-- [x] System Design（已设计，见 system_design.md）
-- [ ] SRS 文档（需求规格）
-- [ ] SDS 文档（软件设计）
-- [ ] 代码实现
-- [ ] API 文档
-- [ ] STR 文档（测试评审）
+- [x] System Design（system_design.md）
+- [x] SRS — CAU Read 侧（cau/SRS.md，v1.3.0，37 项需求）
+- [x] SDS — CAU Read 侧（cau/SDS.md，v1.1.0）
+- [x] STR — CAU Read 侧（cau/STR.md，v1.1.0）
+- [x] CAU 代码实现 + 部署（CAU.turingcorp.net）
+- [x] CAU 前端（Read 侧 5 页面）
+- [x] Story Forger SRS（story_forger/SRS.md，v1.1.0，31 项需求）
+- [x] Story Forger 前端设计（story_forger/frontend_design.md）
+- [ ] Story Forger 代码实现（下一阶段）
+- [ ] AI 参与者调度系统
+- [ ] 人类用户认证与付费

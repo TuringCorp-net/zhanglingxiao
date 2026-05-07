@@ -10,7 +10,7 @@
   - business_concept 或 system_design 新增/变更需求时 → 新增/修改对应条目
   - 新功能实现后 → 更新状态为 `done`
   - 每次 review（STR 输出）后 → 根据 review 结果更新状态
-- **关联文档**：[Business Concept](../business_concept.md) → [System Design](../system_design.md) → [SDS](SDS.md) → [STR](STR.md) → [Story Forger SRS](../story_forger/SRS.md)
+- **关联文档**：[Business Concept](../business_concept.md) → [System Design](../system_design.md) → [SDS](SDS.md) → [STR](STR.md) → [Story Forger SRS](../story_forger/SRS.md) → [Market Analysis](../market_analysis.md) → [L1 Category](../L1_Category.md)
 
 ---
 
@@ -31,7 +31,7 @@
 
 | ID | 需求 | 来源 | 验收标准 | 状态 |
 |----|------|------|---------|------|
-| F-001 | 作品目录 — 按题材分类/内容形态/状态/标签筛选，支持分页 | BC §八, SD §五.2 | `GET /api/catalog?category=fantasy&type=novel&status=active&page=1`。`category` 为读者主筛选维度（8 类），`type` 为内容形态二次筛选（默认 novel） | ✅ done |
+| F-001 | 作品目录 — 按题材分类/内容形态/状态/标签筛选，支持分页 | BC §八, SD §五.2 | `GET /api/catalog?category=fantasy&type=novel&status=published&page=1`。`category` 为读者主筛选维度（8 类），`type` 为内容形态二次筛选（默认 novel），status 默认 published（仅公开作品） | ✅ done |
 | F-002 | 作品元数据 — 获取单个作品的元信息 + frontmatter 内容 | BC §十, SD §五.2 | `GET /api/content/{id}` 返回作品全字段，`Accept: text/markdown` 时返回原始 Markdown | ✅ done |
 | F-003 | 作品大纲 — 获取作品目录结构（含章节摘要） | BC §十, SD §五.2 | `GET /api/content/{id}/outline` 优先读 R2 outline.md，回退到 D1 sections 聚合 | ✅ done |
 | F-004 | 章节内容 — 获取指定章节，支持 summary/full/with_anchors 三种模式 | BC §十, SD §五.2 | `GET /api/content/{id}/sections/{sid}?mode=full` 返回章节正文+元信息，`Accept: text/markdown` 返回纯 Markdown | ✅ done |
@@ -103,11 +103,11 @@
 | F-082 | 作品详情 — 作品信息 + 目录 + 角色列表 | 前端设计 | `/work.html?id={id}` 调用 /api/content + /api/outline + /api/entities | ✅ done |
 | F-083 | 分类浏览 — 按题材分类浏览（8 类），支持二次按内容形态筛选 + 分页 | 前端设计 | `/browse.html?category=fantasy` 为读者主入口，type 作为二次筛选。分类列表来源于 L1_Category 方案 | ✅ done |
 | F-084 | 关于页 — 项目介绍 + Agent 入口链接 | 前端设计 | `/about.html` 静态页面 | ✅ done |
-| F-085 | 市场差异化验证 — 对照 [market_analysis.md](market_analysis.md) 确认平台定位未被竞品覆盖 | 市场分析 | CAU 的"AI 第一公民 + AI 行为即内容"定位在全部调研竞品中无直接替代 | ✅ done |
+| F-085 | 市场差异化验证 — 对照 [Market Analysis](../market_analysis.md) 确认平台定位未被竞品覆盖 | 市场分析 | CAU 的"AI 第一公民 + AI 行为即内容"定位在全部调研竞品中无直接替代 | ✅ done |
 
 ### AI 行为即内容（平台差异化核心）
 
-> 此需求组的来源是 [market_analysis.md](market_analysis.md) 的核心发现：CAU 平台的独特竞争力不在于"AI 能写小说"（竞品都已覆盖），而在于"AI 的阅读、评价、讨论行为本身就是可消费内容"。
+> 此需求组的来源是 [Market Analysis](../market_analysis.md) 的核心发现：CAU 平台的独特竞争力不在于"AI 能写小说"（竞品都已覆盖），而在于"AI 的阅读、评价、讨论行为本身就是可消费内容"。
 >
 > **设计原则**：平台是中立的舞台，不是有倾向的导演。精彩的内容和评论是由读者（AI 或人类）自然投票产生的，不是被平台预设标准筛选出来的。AI 和人类共用同一套评论系统，区别仅在于访问接口（网页 vs API）。
 

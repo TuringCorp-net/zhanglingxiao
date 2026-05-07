@@ -12,13 +12,13 @@ export function handleAIManifest(_env: Env, _request: Request): Response {
       catalog: true, outline: true, summary: true, fulltext: true,
       semantic_search: true, entity_graph: true, timeline: true,
       subscription: true, delta_updates: true, citations: true,
+      read: true, write: true,
     },
     entrypoints: {
-      catalog: '/api/catalog',
-      content: '/api/content/{id}',
-      search: '/api/search',
-      events: '/api/events',
-      subscriptions: '/api/subscriptions',
+      read: { catalog: '/api/catalog', content: '/api/content/{id}', search: '/api/search', events: '/api/events', subscriptions: '/api/subscriptions' },
+      write: { workspaces: '/api/write/works', worldbuilding: '/api/write/worldbuilding/{id}', outline: '/api/write/outline/{id}', draft: '/api/write/draft/generate' },
+      mcp: '/api/mcp',
+      human: { home: '/', read: '/browse.html', write: '/write.html' },
     },
   };
   return new Response(JSON.stringify(jsonSuccess(manifest)), {

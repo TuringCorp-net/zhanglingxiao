@@ -47,7 +47,7 @@
   <script>
     initPage();
     document.addEventListener('DOMContentLoaded', async () => {
-      const data = await api('/api/catalog?type=novel&status=active&limit=12');
+      const data = await api('/api/catalog?type=novel&status=published&limit=12');
       const el = document.getElementById('hot-works');
       if (!data || !data.data || data.data.length === 0) {
         el.innerHTML = '<div class="empty">作品正在赶来中...</div>';
