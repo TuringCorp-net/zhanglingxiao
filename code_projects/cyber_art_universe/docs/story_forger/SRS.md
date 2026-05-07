@@ -15,7 +15,8 @@
 
 | 版本 | 日期 | 说明 |
 |------|------|------|
-| v1.0.0 | 2026-05-07 | 初始版本，4 模块功能需求 + 作品状态生命周期 |
+| v1.0.0 | 2026-05-07 | 初始版本，6 模块功能需求 + 作品状态生命周期 |
+| v1.1.0 | 2026-05-07 | 基于 UI 设计讨论，新增 SF-025（章节拖拽重排）、SF-060（双模式 UI）；SF-032 补充 lint 严重等级 |
 
 ---
 
@@ -119,6 +120,7 @@ Story Forger 与 CAU 共用 `works.status` 字段。状态流转定义了作品�
 | SF-022 | 编辑大纲 — 手动调整章节顺序、增删章节、修改标题和摘要 | `PUT /api/write/outline/{work_id}` | ⏳ 待实现 |
 | SF-023 | 伏笔账本 — AI 从大纲和已有章节中提取伏笔线索，追踪埋点与回收状态 | `POST /api/write/outline/{work_id}/foreshadowing` 生成/更新伏笔账本，存储在 R2 `works/{id}/foreshadowing.md` | ⏳ 待实现 |
 | SF-024 | 冲突地图 — AI 生成主线/支线冲突的起因—升级—代价—回收路径 | `POST /api/write/outline/{work_id}/conflicts` 生成冲突地图 | ⏳ 待实现 |
+| SF-025 | 章节拖拽重排 — 支持软木板视图下拖拽调整章节顺序，批量更新 order_index | `PATCH /api/write/outline/{work_id}/reorder`，接受 `[{id, order_index}, ...]`，原子更新 | ⏳ 待实现 |
 
 ### 模块四：章节生产流水线
 
@@ -132,7 +134,7 @@ Intent Card → Draft v0 → Consistency Check → Polish → Draft v1 (中稿)
 |----|------|---------|------|
 | SF-030 | 意图卡（Intent Card）— 每次写章节前，定义本章目标、结构要求、伏笔回收点 | `POST /api/write/draft/intent` 接受 `{work_id, chapter_index, goal, hooks, foreshadowing_ids}` | ⏳ 待实现 |
 | SF-031 | 初稿生成（Draft v0）— AI 根据意图卡 + 设定圣经约束 + 大纲上下文，生成章节正文 | `POST /api/write/draft/generate` 输出写入 R2 `works/{id}/chapters/ch_{idx}.md`，并写入 D1 sections 表 | ⏳ 待实现 |
-| SF-032 | 一致性校验（Consistency Check）— 对照设定圣经、大纲、伏笔账本、历史章节，检测矛盾 | `POST /api/write/draft/check/{work_id}/{section_id}` 返回矛盾清单 + 修改建议 | ⏳ 待实现 |
+| SF-032 | 一致性校验（Consistency Check）— 对照设定圣经、大纲、伏笔账本、历史章节，检测矛盾。每条问题标注严重等级（⚠ warning / 🔴 error） | `POST /api/write/draft/check/{work_id}/{section_id}` 返回 `[{severity: 'warning'|'error', type, description, location, suggestion}]` | ⏳ 待实现 |
 | SF-033 | 润色优化（Polish）— AI 根据一致性校验结果和风格要求，优化章节 | `POST /api/write/draft/polish` 接受 `{section_id, fix_issues: [...], style_notes}` | ⏳ 待实现 |
 | SF-034 | 中稿输出（Draft v1）— 输出最终版本，附带审校报告和设定更新建议 | `GET /api/write/draft/output/{section_id}` 返回正文 + 审校报告 | ⏳ 待实现 |
 | SF-035 | 章节重写 — 对已有章节进行重写，保留意图卡约束 | `POST /api/write/draft/rewrite/{section_id}` | ⏳ 待实现 |
@@ -152,6 +154,16 @@ Intent Card → Draft v0 → Consistency Check → Polish → Draft v1 (中稿)
 | SF-050 | MCP Resources — 暴露世界观、大纲、章节等资源 | MCP `resources/list` 包含 `sf://workspace/{id}`, `sf://worldbuilding/{id}`, `sf://outline/{id}` | ⏳ 待实现 |
 | SF-051 | MCP Tools — 暴露 AI 可调用的写作工具 | `generate_worldbuilding`, `generate_outline`, `generate_chapter`, `check_consistency`, `polish_chapter` | ⏳ 待实现 |
 | SF-052 | MCP 与 REST 共底 — MCP 工具和 REST API 调用同一套处理函数 | MCP `tools/call generate_chapter` 内部调用 `POST /api/write/draft/generate` 的逻辑 | ⏳ 待实现 |
+
+### 模块七：双模式 UI（前端）
+
+> 此模块的需求源自 [UI 设计讨论](frontend_design.md)。Story Forger 采用 Scrivener 活页夹 + 软木板的融合范式，提供软木板视图（规划）和写作桌视图（写作），一键切换。
+
+| ID | 需求 | 验收标准 | 状态 |
+|----|------|---------|------|
+| SF-060 | 软木板视图 — 章节卡片网格，可拖拽排序，点击进入写作桌 | 每张卡片显示：标题/状态图标/字数/摘要。拖拽松手后自动 PATCH 更新 order_index | ⏳ 待实现 |
+| SF-061 | 写作桌视图 — 左活页夹（结构导航）+ 中写作区 + 右活页夹（信息/AI），面板可折叠/拖拽宽度 | 左活页夹默认显示总纲/世界观/人物树/章节树/伏笔账本。中写作区支持 Markdown 编辑+预览。右活页夹默认 Info/Lint/Suggest/Chat 四个 Tab | ⏳ 待实现 |
+| SF-062 | 活页夹面板系统 — 左右活页夹可独立折叠/展开，拖拽边缘调整宽度，面板内容可上下滚动 | 折叠时仅显示图标列（60px），hover 展开。宽度调整保存到 localStorage | ⏳ 待实现 |
 
 ---
 
@@ -246,10 +258,10 @@ works/{work_id}/
 | 状态 | 数量 |
 |------|------|
 | ✅ done | 0 |
-| ⏳ 待实现 | 28 |
+| ⏳ 待实现 | 31 |
 | 🔴 阻塞 | 0 |
 
-**总计**：28 项需求，均为待实现（全新模块）。
+**总计**：31 项需求，均为待实现（全新模块）。
 
 ### MVP 优先实施建议
 
