@@ -8,7 +8,7 @@
 - **与传统 STR 的区别**：传统 STR 是独立测试团队的产物。本 STR 由 AI Reviewer 生成，侧重"SRS 需求覆盖度 + 代码质量 + 架构一致性"三个维度。不包含手工测试用例。
 - **何时更新**：每次代码变更后进行一轮 review，更新本报告。
 - **审核方法**：对照 SRS 逐项检查 → 审查代码实现 → 标记问题等级（P0/P1/P2/Info）→ 给出建议。
-- **关联文档**：[SRS.md](SRS.md) → [SDS.md](SDS.md) → [system_design.md](system_design.md) → 本文档
+- **关联文档**：[SRS](SRS.md) → [SDS](SDS.md) → [System Design](../system_design.md) → 本文档
 
 ---
 

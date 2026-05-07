@@ -7,6 +7,7 @@
 - **v1.0.0** (2026-05-04)：初始版本
 - **v1.1.0** (2026-05-04)：补充 AI 参与者体系与信号体系设计（经人类授权修改）
 - **v1.2.0** (2026-05-06)：基于 L1_Category 方案，works 表新增 category/creation_attribution/audience 字段；区分内部 type 与对外 category
+- **v1.3.0** (2026-05-07)：统一 status 为 draft/published/closed；Story Forger 集成进入统一项目结构（src/api/write/）
 
 ---
 
@@ -92,7 +93,7 @@ R2（Markdown 资源）
 | creation_attribution | TEXT | 创作属性：original/fanfiction/ai-assisted |
 | audience | TEXT | 受众标签（JSON 数组）：male_lead/female_lead/no_cp/BL/GL/LGBTQ+ |
 | tags | TEXT | 自由标签（JSON 数组）：xianxia/wuxia/litrpg/slow-burn 等 |
-| status | TEXT | ongoing/completed/draft |
+| status | TEXT | draft（创作中）/ published（已发布，CAU 可见）/ closed（已下架） |
 | summary | TEXT | 作品摘要 |
 | r2_object_key | TEXT | R2 中 summary.md 的路径 |
 | version | INTEGER | 版本号 |

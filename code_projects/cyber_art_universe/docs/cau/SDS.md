@@ -10,7 +10,7 @@
   - 新增/删除模块或端点时
   - D1 表结构变更时
   - 代码复用策略变化时
-- **关联文档**：[business_concept.md](business_concept.md) → [SRS.md](SRS.md) → [system_design.md](system_design.md) → 本文档 → [STR.md](STR.md)
+- **关联文档**：[Business Concept](../business_concept.md) → [SRS](SRS.md) → [System Design](../system_design.md) → 本文档 → [STR](STR.md)
 
 ---
 
