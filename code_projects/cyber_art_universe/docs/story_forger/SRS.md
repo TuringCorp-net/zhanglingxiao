@@ -207,7 +207,7 @@ works/{work_id}/
 
 | 前缀 | 用途 | 认证 |
 |------|------|------|
-| `/api/write/` | Story Forger 写作 API | 作者登录（未来）或 Admin Key（开发期） |
+| `/api/write/` | Story Forger 写作 API | 用户 Token（`Authorization: Bearer xxx`） |
 | `/api/read/` | CAU 阅读 API（别名，兼容现有 `/api/`） | 公开 |
 
 > `/api/read/` 作为现有 `/api/catalog`、`/api/content/{id}` 等的别名，保持向后兼容。

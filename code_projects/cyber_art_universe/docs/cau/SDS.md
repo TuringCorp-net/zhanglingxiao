@@ -195,7 +195,7 @@
 | agents 表管理 API | 未定义 | ⏳ 待实现 | 当前 agents 表仅建表，调度系统后续接入 |
 | 语义搜索 | 提到 AI Search 的可能 | 当前用 D1 `LIKE` 实现 | 遵循"检索与推理分离"原则，"检索"用 SQL，不做向量嵌入 |
 | rankings 存储 | 提到缓存在 D1 或 R2 | 当前从 R2 读取 JSON 缓存 | 等待外部调度系统写入 |
-| ADMIN_KEY secret 值 | 未明确 | `CAU-TuringCorp-13572468` (已通过 wrangler secret 设置) | 部署时设置 |
+| USER_TOKEN secret | 未明确 | `CAU-TuringCorp-13572468` (已通过 wrangler secret 设置) | 部署时设置 |
 | OpenAPI 规范 | 仅 5 端点 | 17 端点完整覆盖 | 2026-05-08 补全 |
 | likeReview 去重 | 无去重 | ?reviewer_id 基本去重 | 2026-05-08 添加 |
 | R2 写入错误处理 | 静默失败 | worldbuilding.ts 已加 try/catch | 2026-05-08 修复 |

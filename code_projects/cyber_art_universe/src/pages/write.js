@@ -1,9 +1,9 @@
 // Story Forger — 写作桌 UI（软木板 + 三栏写作桌双模式）
 // ============================================================
 
-// — Layer 0: Admin Key + HTTP 封装 —
-const ADMIN_KEY_KEY = 'sf_admin_key';
-let adminKey = localStorage.getItem(ADMIN_KEY_KEY) || '';
+// — Layer 0: 用户 Token + HTTP 封装 —
+const USER_TOKEN_KEY = 'sf_user_token';
+let userToken = localStorage.getItem(USER_TOKEN_KEY) || '';
 
 // HTML 属性值转义（比 escHtml 多处理单引号，用于 onclick 等属性）
 function escAttr(str) {
@@ -12,14 +12,14 @@ function escAttr(str) {
 }
 
 function hGet(path) {
-  return fetch(path, { headers: { 'X-Admin-Key': adminKey } })
+  return fetch(path, { headers: { 'Authorization': `Bearer ${userToken}` } })
     .then(r => r.json())
     .catch(err => { console.error('hGet error:', path, err); return null; });
 }
 function hPost(path, body) {
   return fetch(path, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Admin-Key': adminKey },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${userToken}` },
     body: JSON.stringify(body),
   }).then(r => r.json())
     .catch(err => { console.error('hPost error:', path, err); return null; });
@@ -27,7 +27,7 @@ function hPost(path, body) {
 function hPut(path, body) {
   return fetch(path, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Admin-Key': adminKey },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${userToken}` },
     body: JSON.stringify(body),
   }).then(r => r.json())
     .catch(err => { console.error('hPut error:', path, err); return null; });
@@ -35,7 +35,7 @@ function hPut(path, body) {
 function hPatch(path, body) {
   const opts = {
     method: 'PATCH',
-    headers: { 'X-Admin-Key': adminKey },
+    headers: { 'Authorization': `Bearer ${userToken}` },
   };
   if (body) {
     opts.headers['Content-Type'] = 'application/json';
@@ -118,9 +118,9 @@ function applyClasses() {
 }
 
 // — Layer 3: 工作区加载 —
-function setAdminKey() {
-  adminKey = qs('#admin-key-input').value.trim();
-  localStorage.setItem(ADMIN_KEY_KEY, adminKey);
+function setUserToken() {
+  userToken = qs('#user-token-input').value.trim();
+  localStorage.setItem(USER_TOKEN_KEY, userToken);
   loadWorkspaces();
 }
 
@@ -130,7 +130,7 @@ async function loadWorkspaces() {
 
   const data = await hGet('/api/write/works');
   if (!data || !data.ok) {
-    sel.innerHTML = '<option value="">加载失败，请检查 Admin Key</option>';
+    sel.innerHTML = '<option value="">加载失败，请检查 用户 Token</option>';
     return;
   }
 
@@ -766,7 +766,7 @@ function togglePreview() {
 // — 初始化 —
 document.addEventListener('DOMContentLoaded', () => {
   qs('#global-nav').innerHTML = renderNav();
-  qs('#admin-key-input').value = adminKey;
+  qs('#user-token-input').value = userToken;
   loadState();
   applyClasses();
 
@@ -799,5 +799,5 @@ document.addEventListener('DOMContentLoaded', () => {
     if (header) header.classList.toggle('open', isOpen);
   }
 
-  if (adminKey) loadWorkspaces();
+  if (userToken) loadWorkspaces();
 });

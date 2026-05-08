@@ -122,7 +122,7 @@
 
 | ID | 需求 | 来源 | 验收标准 | 状态 |
 |----|------|------|---------|------|
-| F-090 | Admin 鉴权 — X-Admin-Key 保护管理端点 | SD §四 | 所有 `/api/admin/*` 端点返回 401 当 key 不匹配 | ✅ done |
+| F-090 | 用户认证 — `Authorization: Bearer` 保护写操作端点 | SD §四 | 所有 `/api/write/*` 端点返回 401 当 token 不匹配 | ✅ done |
 | F-091 | D1 数据库 — 7 张核心表（works/sections/entities/agents/reviews/subscriptions/events） | SD §三 | 迁移脚本可执行，表结构符合设计 | ✅ done |
 | F-092 | R2 存储 — Markdown 内容存储（works/{id}/summary.md, chapters/, outline.md） | SD §三 | 创建/读取/删除作品时 R2 文件同步 | ✅ done |
 

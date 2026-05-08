@@ -117,7 +117,7 @@ export interface Env {
   DB: D1Database;
   WORKS_BUCKET: R2Bucket;
   ASSETS: Fetcher;
-  ADMIN_KEY?: string;
+  USER_TOKEN?: string;
   AI_PROVIDER?: string;
   AI_API_KEY?: string;
 }

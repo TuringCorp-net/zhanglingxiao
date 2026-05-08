@@ -37,11 +37,12 @@
 
 | 页面 | 文件 | 说明 |
 |------|------|------|
-| 首页 | `index.html` | Hero + 分类导航 + 热门作品 |
-| 浏览 | `browse.html` | 类型/标签筛选 + 分页列表 |
-| 作品 | `work.html?id={id}` | 信息 + 章节目录 + 角色 |
-| 阅读 | `read.html?work={id}&section={id}` | Markdown 渲染 + 导航 + 字号调节 |
-| 关于 | `about.html` | 项目介绍 + Agent 入口 |
+| 首页 | `index.html` | Read 模式：分类横条 + 作品列表。导航栏 Read/Write 双 tab 切换 |
+| 作品 | `work.html?id={id}` | 作品信息 + 章节目录 + 角色列表 |
+| 阅读 | `read.html?work={id}&section={id}` | Markdown 渲染 + 字体调节 + 章节导航 |
+| 写作 | `write.html` | Story Forger 写作桌（Write 侧） |
+
+> browse.html（探索页）和 about.html（关于页）已合并/移除。类目筛选移至首页横条，Agent 入口信息已在 llms.txt / ai-manifest.json 中覆盖。
 
 ## 五、数据流
 

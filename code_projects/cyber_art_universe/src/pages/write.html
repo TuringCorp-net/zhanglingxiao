@@ -6,15 +6,15 @@
   <title>Write — Story Forger — Cyber Art Universe</title>
   <link rel="stylesheet" href="/assets/style.css">
 </head>
-<body>
+<body data-page="write">
   <div id="global-nav"></div>
 
   <!-- 工具栏（软木板和写作桌共享） -->
   <div class="sf-toolbar">
     <select id="workspace-selector" onchange="onWorkspaceChange()">
-      <option value="">请先设置 Admin Key...</option>
+      <option value="">请先设置用户 Token...</option>
     </select>
-    <input id="admin-key-input" type="password" placeholder="Admin Key" onchange="setAdminKey()">
+    <input id="user-token-input" type="password" placeholder="用户 Token" onchange="setUserToken()">
     <button id="mode-toggle" class="btn btn-ghost" onclick="toggleMode()" style="white-space:nowrap">🖊 写作桌</button>
     <div id="work-actions" style="display:flex;gap:0.4rem"></div>
   </div>
@@ -120,8 +120,8 @@
 
   <footer class="footer">
     <div class="container">
-      <span>Story Forger · Cyber Art Universe</span>
-      <div><a href="/">首页</a></div>
+      <span>Story Forger · Powered by <a href="https://turingcorp.net">TuringCorp.net</a>. All rights reserved. <a href="#" onclick="alert('Terms of Use 即将上线');return false">Terms of Use</a></span>
+      <a href="/.well-known/ai-manifest.json">AI Entry</a>
     </div>
   </footer>
 

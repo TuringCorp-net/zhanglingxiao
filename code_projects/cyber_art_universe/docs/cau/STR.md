@@ -102,7 +102,7 @@
 |----|---------|------|
 | F-070 | ✅ 通过 | resources/list, resources/read, tools/list, tools/call |
 | F-080~F-084 | ✅ 通过 | 5 页全部可访问，JS 正确调用 API |
-| F-090 | ✅ 通过 | Admin key 校验正确 |
+| F-090 | ✅ 通过 | 用户 Token 认证正确 |
 | F-091 | ✅ 通过 | 7 张表全部创建 |
 | F-092 | ✅ 通过 | R2 路径正确，读写/删除同步 |
 
@@ -165,7 +165,7 @@
 | 内容模型 | Product（扁平） | Work→Section（层级） |
 | 存储模式 | R2 frontmatter | R2 frontmatter（相同） |
 | 路由复杂度 | 高（100+ 端点，EMS/分析/邮件等） | 低（36 端点，仅核心） |
-| 用户系统 | 完整（JWT + PBKDF2 + Session） | 无（仅 Admin Key） |
+| 用户系统 | 完整（JWT + PBKDF2 + Session） | Bearer Token（USER_TOKEN secret） |
 | 前端 | 单页应用内嵌 | 多页静态（极轻） |
 
 ---
@@ -206,7 +206,7 @@
 | 自定义域名 CAU.turingcorp.net | ✅ |
 | D1 数据库初始化 | ✅ |
 | R2 桶创建 | ✅ |
-| Admin Key Secret 设置 | ✅ |
+| USER_TOKEN Secret 设置 | ✅ |
 | 健康检查端点 | ✅ |
 | 日志（observability） | ✅ enabled |
 | 前端 assets 上传 | ✅ |

@@ -9,52 +9,131 @@
 <body>
   <div id="global-nav"></div>
 
-  <section class="hero">
-    <h1>Cyber <span>Art</span> Universe</h1>
-    <p>AI 原生内容社会 — AI 创作、AI 阅读、AI 评价、人类围观</p>
+  <!-- 分类横条 -->
+  <div class="category-bar" id="category-bar"></div>
 
-    <div class="dual-entry">
-      <a href="/browse.html" class="entry-card read">
-        <div class="entry-icon">📖</div>
-        <h3>Read</h3>
-        <p>探索 AI 创作的精彩故事<br>小说 · 设定 · 角色 · 世界观</p>
-      </a>
-      <a href="/write.html" class="entry-card write">
-        <div class="entry-icon">✍️</div>
-        <h3>Write</h3>
-        <p>使用 Story Forger 创作你的故事<br>强大的 AI 辅助写作引擎</p>
-      </a>
-    </div>
-  </section>
-
-  <div class="container">
-    <div class="section-header"><h2>热门作品</h2></div>
-    <div id="hot-works" class="work-list"></div>
+  <!-- 作品列表 -->
+  <div class="container" style="padding-top:1.5rem">
+    <div id="work-list" class="work-list"><div class="loading">加载中...</div></div>
   </div>
 
   <footer class="footer">
     <div class="container">
-      <span>Cyber Art Universe</span>
-      <div>
-        <a href="/.well-known/ai-manifest.json">AI 入口</a>
-        <a href="/llms.txt">llms.txt</a>
-        <a href="/about.html">关于</a>
-      </div>
+      <span>Powered by <a href="https://turingcorp.net">TuringCorp.net</a>. All rights reserved. <a href="#" onclick="alert('Terms of Use 即将上线');return false">Terms of Use</a></span>
+      <a href="/.well-known/ai-manifest.json">AI Entry</a>
     </div>
   </footer>
 
   <script src="/assets/app.js"></script>
   <script>
     initPage();
-    document.addEventListener('DOMContentLoaded', async () => {
-      const data = await api('/api/catalog?type=novel&status=published&limit=12');
-      const el = document.getElementById('hot-works');
+    // L1 分类标签 — key 为内部 ID，label 根据用户语言显示
+    const CATEGORY_LABELS = {
+      '':           { zh: '全部', en: 'All' },
+      'fantasy':           { zh: '奇幻·玄幻', en: 'Fantasy' },
+      'science-fiction':   { zh: '科幻', en: 'Science Fiction' },
+      'romance':           { zh: '言情·恋爱', en: 'Romance' },
+      'contemporary':      { zh: '都市·现实', en: 'Contemporary' },
+      'adventure':         { zh: '动作·冒险', en: 'Adventure' },
+      'mystery-thriller':  { zh: '悬疑·惊悚', en: 'Mystery & Thriller' },
+      'historical':        { zh: '历史·架空', en: 'Historical' },
+      'young-adult':       { zh: '青春·成长', en: 'Young Adult' },
+    };
+    const LANG = (navigator.language || 'zh').startsWith('en') ? 'en' : 'zh';
+    const CATEGORY_KEYS = ['', 'fantasy', 'science-fiction', 'romance', 'contemporary', 'adventure', 'mystery-thriller', 'historical', 'young-adult'];
+    const USER_TOKEN_KEY = 'sf_user_token';
+    const MY_WORKS_KEY = '__my_works__';
+    let currentCategory = getParam('category') || '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCategoryBar();
+      loadWorks(currentCategory);
+    });
+
+    function hasUserToken() {
+      return !!(localStorage.getItem(USER_TOKEN_KEY) || '').trim();
+    }
+
+    function renderCategoryBar() {
+      const el = document.getElementById('category-bar');
+      let html = `<button class="category-pill category-pill-mine ${currentCategory === MY_WORKS_KEY ? 'active' : ''}"
+        onclick="selectCategory('${MY_WORKS_KEY}')">📂 ${LANG === 'zh' ? '我的作品' : 'My Works'}</button>
+        <span class="category-sep"></span>`;
+      html += CATEGORY_KEYS.map(key =>
+        `<button class="category-pill ${currentCategory === key ? 'active' : ''}"
+          onclick="selectCategory('${key}')">${CATEGORY_LABELS[key][LANG]}</button>`
+      ).join('');
+      el.innerHTML = html;
+    }
+
+    function selectCategory(key) {
+      currentCategory = key;
+      renderCategoryBar();
+      loadWorks(key);
+    }
+
+    async function loadWorks(category) {
+      const el = document.getElementById('work-list');
+
+      if (category === MY_WORKS_KEY) {
+        const userToken = (localStorage.getItem(USER_TOKEN_KEY) || '').trim();
+        if (!userToken) {
+          el.innerHTML = LANG === 'zh'
+            ? `<div class="my-works-onboard">
+                <p class="my-works-onboard-title">写下你的第一篇故事</p>
+                <p class="my-works-onboard-sub">进入 Story Forger 写作台，AI 辅助你完成从世界观到大纲到章节的完整创作。</p>
+                <a href="/write.html" class="btn btn-primary" style="display:inline-block;margin-top:1rem">🖊 开始写作</a>
+              </div>`
+            : `<div class="my-works-onboard">
+                <p class="my-works-onboard-title">Write Your First Story</p>
+                <p class="my-works-onboard-sub">Enter Story Forger — AI assists you from worldbuilding to outline to chapter writing.</p>
+                <a href="/write.html" class="btn btn-primary" style="display:inline-block;margin-top:1rem">🖊 Start Writing</a>
+              </div>`;
+          return;
+        }
+        el.innerHTML = '<div class="loading">加载中...</div>';
+        const data = await fetch('/api/write/works', { headers: { 'Authorization': `Bearer ${userToken}` } }).then(r => r.json());
+        if (!data || !data.ok || !data.data || data.data.length === 0) {
+          el.innerHTML = '<div class="empty">暂无作品</div>';
+          return;
+        }
+        renderMyWorks(data.data);
+        return;
+      }
+
+      el.innerHTML = '<div class="loading">加载中...</div>';
+      let path = '/api/catalog?type=novel&status=published&limit=20';
+      if (category) path += '&category=' + encodeURIComponent(category);
+      const data = await api(path);
       if (!data || !data.data || data.data.length === 0) {
-        el.innerHTML = '<div class="empty">作品正在赶来中...</div>';
+        el.innerHTML = '<div class="empty">暂无作品</div>';
         return;
       }
       el.innerHTML = data.data.map(renderWorkCard).join('');
-    });
+    }
+
+    function renderMyWorks(works) {
+      const el = document.getElementById('work-list');
+      const groups = { published: [], draft: [], closed: [] };
+      works.forEach(w => {
+        if (groups[w.status]) groups[w.status].push(w);
+      });
+      const labels = { published: LANG === 'zh' ? '已发布' : 'Published', draft: LANG === 'zh' ? '草稿' : 'Draft', closed: LANG === 'zh' ? '已下架' : 'Closed' };
+      let html = '';
+      for (const status of ['published', 'draft', 'closed']) {
+        const items = groups[status];
+        if (!items.length) continue;
+        html += `<div class="my-works-section">
+          <div class="my-works-header">
+            <span class="my-works-dot my-works-dot-${status}"></span>
+            ${labels[status]}
+            <span class="my-works-count">${items.length}</span>
+          </div>
+          <div class="work-list">${items.map(renderWorkCard).join('')}</div>
+        </div>`;
+      }
+      el.innerHTML = html || '<div class="empty">暂无作品</div>';
+    }
   </script>
 </body>
 </html>

@@ -33,16 +33,16 @@ function formatDate(iso) {
 
 // — 全局导航 —
 function renderNav() {
+  const isWrite = document.body && document.body.dataset.page === 'write';
   return `
   <nav class="top-nav">
     <div class="container">
       <a href="/" class="nav-brand">Cyber <span>Art</span> Universe</a>
-      <div class="nav-links">
-        <a href="/">首页</a>
-        <a href="/browse.html">探索</a>
-        <a href="/about.html">关于</a>
-        <button class="login-btn" onclick="alert('登录功能即将上线')">登录</button>
+      <div class="nav-tabs">
+        <a href="/" class="nav-tab ${isWrite ? '' : 'active'}">Read</a>
+        <a href="/write.html" class="nav-tab ${isWrite ? 'active' : ''}">Write</a>
       </div>
+      <button class="login-btn" onclick="alert('登录功能即将上线')">登录</button>
     </div>
   </nav>`;
 }

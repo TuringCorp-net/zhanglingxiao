@@ -250,7 +250,7 @@ planned ──→ draft ──→ draft_v0 ──→ draft_v1 ──→ done
 |------|---------|-------------------|
 | 入口 | 首页 Read 卡片 / `/browse.html` | 首页 Write 卡片 / `/write.html` |
 | 主色 | 紫 (`--accent`) | 青 (`--cyan`) |
-| 用户 | 读者（公开） | 作者（需登录，开发期用 Admin Key） |
+| 用户 | 读者（公开） | 作者（需登录，`Authorization: Bearer` token） |
 | 重点页面 | `/read.html`（章节阅读） | `/write.html`（写作桌） |
 | 共享 | assets/style.css 变量、app.js API 封装 | 同上 |
 | CSP | 轻量 HTML 页面 | 中等复杂度 SPA 式页面 |
@@ -274,7 +274,7 @@ planned ──→ draft ──→ draft_v0 ──→ draft_v1 ──→ done
 - 写作桌视图（左活页夹 + 写作区 + 右活页夹）
 - 活页夹内容：章节树、人物列表（只读）、当前章节信息
 - Markdown 写作区（textarea + 实时预览）
-- Admin Key 认证
+- Bearer Token 认证
 
 **第二阶段（规划增强）**：
 - 软木板视图 + 拖拽排序

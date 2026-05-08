@@ -17,12 +17,13 @@ import { handleMCP } from './mcp';
 import { handleWriteRoute } from './write/index';
 
 // ============================================================
-// Admin 鉴权（通过 Cloudflare Secret ADMIN_KEY）
+// 用户认证（通过 Cloudflare Secret USER_TOKEN）
 // ============================================================
-function isAdmin(request: Request, env: Env): boolean {
-  const adminKey = request.headers.get('X-Admin-Key');
-  if (!adminKey || !env.ADMIN_KEY) return false;
-  return adminKey === env.ADMIN_KEY;
+function isAuthenticated(request: Request, env: Env): boolean {
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader || !env.USER_TOKEN) return false;
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
+  return token === env.USER_TOKEN;
 }
 
 // ============================================================
@@ -169,8 +170,8 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     // Write 侧（Story Forger）
     // ================================================================
     if (segments[0] === 'write') {
-      if (!isAdmin(request, env)) {
-        return new Response(JSON.stringify(jsonError(ErrorCodes.ADMIN_KEY_REQUIRED, 'Admin authorization required')), {
+      if (!isAuthenticated(request, env)) {
+        return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'Authentication required')), {
           status: 401, headers: { 'Content-Type': 'application/json' },
         });
       }

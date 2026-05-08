@@ -11,7 +11,7 @@ export const ErrorCodes = {
   // 认证 & 授权
   UNAUTHORIZED: 'UNAUTHORIZED',
   FORBIDDEN: 'FORBIDDEN',
-  ADMIN_KEY_REQUIRED: 'ADMIN_KEY_REQUIRED',
+  AUTH_REQUIRED: 'AUTH_REQUIRED',
 
   // 资源冲突
   DUPLICATE_ENTRY: 'DUPLICATE_ENTRY',
@@ -57,7 +57,7 @@ export const ErrorMessages: Record<ErrorCode, string> = {
 
   [ErrorCodes.UNAUTHORIZED]: 'Unauthorized access',
   [ErrorCodes.FORBIDDEN]: 'Forbidden',
-  [ErrorCodes.ADMIN_KEY_REQUIRED]: 'Admin authorization required',
+  [ErrorCodes.AUTH_REQUIRED]: 'Authentication required',
 
   [ErrorCodes.DUPLICATE_ENTRY]: 'Duplicate entry',
   [ErrorCodes.RESOURCE_CONFLICT]: 'Resource conflict',

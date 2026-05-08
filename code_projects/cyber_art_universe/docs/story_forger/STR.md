@@ -239,7 +239,7 @@
 | AI 端点返回 503（密钥未配） | ⚠️ 需设置 `AI_PROVIDER` + `AI_API_KEY` |
 | 端到端测试 | ⚠️ 测试方案已完成，待测试数据就绪后执行。见 [tests/README.md](../../tests/README.md) |
 | 前端 write.html + write.js 可访问 | ✅ |
-| Admin Key 鉴权 | ✅ |
+| 用户 Token 认证 | ✅ |
 
 ---
 
