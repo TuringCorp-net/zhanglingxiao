@@ -35,8 +35,8 @@
 | F-002 | 作品元数据 — 获取单个作品的元信息 + frontmatter 内容 | BC §十, SD §五.2 | `GET /api/content/{id}` 返回作品全字段，`Accept: text/markdown` 时返回原始 Markdown | ✅ done |
 | F-003 | 作品大纲 — 获取作品目录结构（含章节摘要） | BC §十, SD §五.2 | `GET /api/content/{id}/outline` 优先读 R2 outline.md，回退到 D1 sections 聚合 | ✅ done |
 | F-004 | 章节内容 — 获取指定章节，支持 summary/full/with_anchors 三种模式 | BC §十, SD §五.2 | `GET /api/content/{id}/sections/{sid}?mode=full` 返回章节正文+元信息，`Accept: text/markdown` 返回纯 Markdown | ✅ done |
-| F-005 | 作品管理 — Admin 创建/更新/删除作品 | SD §五.2 | `POST/PUT/DELETE /api/admin/works`，写 D1 + R2 | ✅ done |
-| F-006 | 章节管理 — Admin 创建/更新/删除章节，R2 存储章节正文 | SD §五.2 | `POST/PUT/DELETE /api/admin/works/{id}/sections`，前后端分离 R2 路径 | ✅ done |
+| F-005 | 作品管理 — 已迁移至 Story Forger SF-001~004 | SD §五.2 | `POST/PUT/DELETE /api/write/works/*`（2026-05-08 迁移）| 已迁移 |
+| F-006 | 章节管理 — 已迁移至 Story Forger sections CRUD | SD §五.2 | `POST/PUT/DELETE /api/write/works/{id}/sections`（2026-05-08 迁移）| 已迁移 |
 
 ### 发现层（Discovery Layer）
 
@@ -54,7 +54,7 @@
 | F-021 | 实体详情 — 含关联实体名称解析 | SD §五.3 | `GET /api/content/{id}/entities/{eid}` 返回实体详情 + related_entity_details 数组 | ✅ done |
 | F-022 | 时间线 — 按章节顺序聚合时间线 | SD §五.3 | `GET /api/content/{id}/timeline` 返回按 order_index 排列的章节+关联实体 | ✅ done |
 | F-023 | 章节对比 — 两个章节的并排比较 | SD §五.3 | `GET /api/content/{id}/compare?section=a&b` 返回两个章节的差异 | ✅ done |
-| F-024 | 实体管理 — Admin 创建/更新/删除实体 | SD §五.3 | `POST/PUT/DELETE /api/admin/works/{id}/entities` | ✅ done |
+| F-024 | 实体管理 — 已迁移至 Story Forger SF-014 | SD §五.3 | `POST/PUT/DELETE /api/write/works/{id}/entities`（2026-05-08 迁移）| 已迁移 |
 
 ### 评价与信号系统（Review & Signal）
 
@@ -142,6 +142,10 @@
 
 以下内容在 business_concept 中定义，但当前版本未列入需求：
 
+- **Chunk/Anchor 多分辨率访问**（Level 4）：段落级内容寻址和锚点跳转。SD 已设计，待后续 SRS 化。
+- **SDK**：TypeScript/Python SDK 封装 API 调用。BC §十八提及，待后续。
+- **Webhook/SSE 实时推送**：事件订阅的实时推送通道。BC §十三提及，待后续。
+- **外部 Agent 开放接口**：除 MCP 外的 Agent 注册/认证/配额管理。BC §十七提及，待后续。
 - AI 参与者调度系统（作者/读者/评论者/编辑的自动化运行）
 - 榜单聚合计算的外部调度系统
 - 人类用户认证与付费系统

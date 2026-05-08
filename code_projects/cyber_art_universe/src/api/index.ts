@@ -4,15 +4,12 @@ import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
 import {
   listWorks, getWork, getWorkOutline, getSection,
-  createWork, updateWork, deleteWork,
-  createSection, updateSection, deleteSection,
 } from './works';
 import {
   listEntities, getEntity, getTimeline, compareSections,
-  createEntity, updateEntity, deleteEntity,
 } from './entities';
 import { submitReview, listReviews, getReview, likeReview } from './reviews';
-import { getEventFeed, createEvent, listRankings, getRanking } from './events';
+import { getEventFeed, listRankings, getRanking } from './events';
 import { listSubscriptions, createSubscription, deleteSubscription } from './subscriptions';
 import { searchContent, retrieveInWork } from './search';
 import { handleAIManifest, handleLLMsTxt, handleOpenAPI } from './discovery';
@@ -20,7 +17,7 @@ import { handleMCP } from './mcp';
 import { handleWriteRoute } from './write/index';
 
 // ============================================================
-// Admin 鉴权
+// Admin 鉴权（通过 Cloudflare Secret ADMIN_KEY）
 // ============================================================
 function isAdmin(request: Request, env: Env): boolean {
   const adminKey = request.headers.get('X-Admin-Key');
@@ -178,41 +175,6 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
         });
       }
       return handleWriteRoute(env, request, segments.slice(1));
-    }
-
-    // ================================================================
-    // 管理端点（需 Admin 鉴权）
-    // ================================================================
-    if (segments[0] === 'admin') {
-      if (!isAdmin(request, env)) {
-        return new Response(JSON.stringify(jsonError(ErrorCodes.ADMIN_KEY_REQUIRED, 'Admin authorization required')), {
-          status: 401, headers: { 'Content-Type': 'application/json' },
-        });
-      }
-
-      const a = segments.slice(1);
-
-      // 作品
-      if (request.method === 'POST' && a[0] === 'works' && !a[1]) return createWork(env, request);
-      if (request.method === 'PUT' && a[0] === 'works' && a[1] && !a[2]) return updateWork(env, request, a[1]);
-      if (request.method === 'DELETE' && a[0] === 'works' && a[1] && !a[2]) return deleteWork(env, request, a[1]);
-
-      // 章节
-      if (request.method === 'POST' && a[0] === 'works' && a[1] && a[2] === 'sections' && !a[3]) return createSection(env, request, a[1]);
-      if (request.method === 'PUT' && a[0] === 'works' && a[1] && a[2] === 'sections' && a[3] && !a[4]) return updateSection(env, request, a[1], a[3]);
-      if (request.method === 'DELETE' && a[0] === 'works' && a[1] && a[2] === 'sections' && a[3] && !a[4]) return deleteSection(env, request, a[1], a[3]);
-
-      // 实体
-      if (request.method === 'POST' && a[0] === 'works' && a[1] && a[2] === 'entities' && !a[3]) return createEntity(env, request, a[1]);
-      if (request.method === 'PUT' && a[0] === 'works' && a[1] && a[2] === 'entities' && a[3] && !a[4]) return updateEntity(env, request, a[1], a[3]);
-      if (request.method === 'DELETE' && a[0] === 'works' && a[1] && a[2] === 'entities' && a[3] && !a[4]) return deleteEntity(env, request, a[1], a[3]);
-
-      // 事件
-      if (request.method === 'POST' && a[0] === 'events' && !a[1]) return createEvent(env, request);
-
-      return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Admin endpoint not found')), {
-        status: 404, headers: { 'Content-Type': 'application/json' },
-      });
     }
 
     // 未匹配

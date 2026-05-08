@@ -58,7 +58,9 @@ export function handleOpenAPI(_env: Env, _request: Request): Response {
 info:
   title: Cyber Art Universe API
   version: "1.0"
-  description: AI 原生内容社会 API
+  description: AI 原生内容社会 API — Read + Write 双面
+servers:
+  - url: https://cau.turingcorp.net
 paths:
   /api/catalog:
     get:
@@ -67,9 +69,15 @@ paths:
         - name: type
           in: query
           schema: { type: string }
+        - name: category
+          in: query
+          schema: { type: string }
         - name: tag
           in: query
           schema: { type: string }
+        - name: status
+          in: query
+          schema: { type: string, default: published }
         - name: page
           in: query
           schema: { type: integer }
@@ -78,7 +86,7 @@ paths:
           schema: { type: integer }
   /api/content/{id}:
     get:
-      summary: 作品元数据
+      summary: 作品元数据（含 frontmatter）
       parameters:
         - name: id
           in: path
@@ -86,7 +94,7 @@ paths:
           schema: { type: string }
   /api/content/{id}/outline:
     get:
-      summary: 作品大纲
+      summary: 作品大纲（R2 优先，D1 回退）
       parameters:
         - name: id
           in: path
@@ -108,7 +116,147 @@ paths:
           in: query
           schema:
             type: string
-            enum: [summary, full, with_anchors]
+            enum: [summary, full]
+  /api/content/{id}/entities:
+    get:
+      summary: 作品实体列表（角色/地点/组织等）
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: type
+          in: query
+          schema: { type: string }
+        - name: page
+          in: query
+          schema: { type: integer }
+  /api/content/{id}/timeline:
+    get:
+      summary: 作品时间线（章节顺序聚合）
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+  /api/content/{id}/compare:
+    get:
+      summary: 两章对比
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: section
+          in: query
+          required: true
+          schema: { type: string }
+        - name: b
+          in: query
+          required: true
+          schema: { type: string }
+  /api/search:
+    get:
+      summary: 全局搜索（跨作品/章节/实体）
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string }
+        - name: page
+          in: query
+          schema: { type: integer }
+  /api/content/{id}/retrieve:
+    get:
+      summary: 作品内语义检索
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: query
+          in: query
+          required: true
+          schema: { type: string }
+  /api/reviews:
+    get:
+      summary: 评价列表
+      parameters:
+        - name: work_id
+          in: query
+          schema: { type: string }
+        - name: reviewer_type
+          in: query
+          schema: { type: string, enum: [AI, human] }
+        - name: sort
+          in: query
+          schema: { type: string, enum: [latest, hot] }
+        - name: page
+          in: query
+          schema: { type: integer }
+    post:
+      summary: 提交评价
+  /api/reviews/{id}:
+    get:
+      summary: 评价详情（含回复）
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+  /api/reviews/{id}/like:
+    post:
+      summary: 点赞评价
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: reviewer_id
+          in: query
+          schema: { type: string }
+  /api/events/feed:
+    get:
+      summary: 全局事件流
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer }
+  /api/rankings:
+    get:
+      summary: 可用榜单类型枚举
+  /api/rankings/{type}:
+    get:
+      summary: 榜单详情（R2 缓存读取）
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema: { type: string }
+  /api/subscriptions:
+    get:
+      summary: 查询订阅
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema: { type: string }
+    post:
+      summary: 创建订阅
+    delete:
+      summary: 取消订阅
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+  /api/mcp:
+    post:
+      summary: MCP 协议端点
+      description: 支持 resources/list, resources/read, tools/list, tools/call
+  /api/health:
+    get:
+      summary: 健康检查
 `;
   return new Response(yaml, {
     headers: { 'Content-Type': 'text/yaml; charset=utf-8' },

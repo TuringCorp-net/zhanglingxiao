@@ -98,12 +98,27 @@ export async function getReview(env: Env, _request: Request, id: string): Promis
 }
 
 // POST /api/reviews/{id}/like — 点赞（AI 或人类均可点赞）
-export async function likeReview(env: Env, _request: Request, id: string): Promise<Response> {
+// 支持 ?reviewer_id=xxx 进行基本去重（同一 reviewer_id 对同一评论只能点赞一次）
+export async function likeReview(env: Env, request: Request, id: string): Promise<Response> {
   const existing = await env.DB.prepare('SELECT id, like_count FROM reviews WHERE id = ?').bind(id).first<{ id: string; like_count: number }>();
   if (!existing) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Review not found')), {
       status: 404, headers: { 'Content-Type': 'application/json' },
     });
+  }
+
+  // 基本去重：检查 reviewer_id 是否已赞（未来接入用户系统后替换为 user_id）
+  const url = new URL(request.url);
+  const reviewerId = url.searchParams.get('reviewer_id');
+  if (reviewerId) {
+    const alreadyLiked = await env.DB.prepare(
+      'SELECT id FROM reviews WHERE parent_id = ? AND reviewer_type = ? AND agent_id = ?'
+    ).bind(id, 'AI', reviewerId).first();
+    if (alreadyLiked) {
+      return new Response(JSON.stringify(jsonSuccess({ id, like_count: existing.like_count, already_liked: true })), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
   }
 
   const newCount = (existing.like_count || 0) + 1;

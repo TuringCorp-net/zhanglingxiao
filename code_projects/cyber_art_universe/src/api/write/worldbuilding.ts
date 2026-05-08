@@ -70,15 +70,23 @@ ${outlineContext ? `已有章节概要：\n${outlineContext}` : ''}
   }
 
   // 写入 R2
-  await env.WORKS_BUCKET.put(WORLD_BIBLE_KEY(body.work_id), result, {
-    httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
-  });
+  try {
+    await env.WORKS_BUCKET.put(WORLD_BIBLE_KEY(body.work_id), result, {
+      httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+    });
+  } catch (err) {
+    console.error('R2 write failed for world_bible.md:', body.work_id, err);
+  }
 
   // 提取约束
   const constraints = extractConstraints(result);
-  await env.WORKS_BUCKET.put(CONSTRAINTS_KEY(body.work_id), JSON.stringify(constraints, null, 2), {
-    httpMetadata: { contentType: 'application/json' },
-  });
+  try {
+    await env.WORKS_BUCKET.put(CONSTRAINTS_KEY(body.work_id), JSON.stringify(constraints, null, 2), {
+      httpMetadata: { contentType: 'application/json' },
+    });
+  } catch (err) {
+    console.error('R2 write failed for constraints.json:', body.work_id, err);
+  }
 
   return new Response(JSON.stringify(jsonSuccess({
     work_id: body.work_id,

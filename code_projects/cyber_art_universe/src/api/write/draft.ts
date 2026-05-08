@@ -300,3 +300,116 @@ export async function outputDraft(env: Env, _request: Request, sectionId: string
     headers: { 'Content-Type': 'application/json' },
   });
 }
+
+// POST /api/write/draft/rewrite/{section_id} — SF-035 章节重写
+// 保留意图卡约束，重新生成章节。适用场景：作者对当前版本不满意，想重新生成。
+export async function rewriteSection(env: Env, request: Request, sectionId: string): Promise<Response> {
+  const body = await request.json() as { work_id: string; style_notes?: string; instructions?: string };
+  if (!body.work_id) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id is required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const section = await env.DB.prepare(
+    'SELECT id, title, order_index, section_summary, version FROM sections WHERE id = ? AND work_id = ?'
+  ).bind(sectionId, body.work_id).first<{ id: string; title: string; order_index: number; section_summary: string; version: number }>();
+  if (!section) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.SECTION_NOT_FOUND, 'Section not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const work = await env.DB.prepare('SELECT id, title, category FROM works WHERE id = ?').bind(body.work_id).first<Record<string, unknown>>();
+  if (!work) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 读取原有意图卡（如果存在）
+  const intentsKey = `works/${body.work_id}/intents/${sectionId}.json`;
+  let intentCard: Record<string, unknown> = {};
+  try {
+    const intentObj = await env.WORKS_BUCKET.get(intentsKey);
+    if (intentObj) intentCard = await intentObj.json() as Record<string, unknown>;
+  } catch { /* 无意图卡也继续 */ }
+
+  // 读取现有内容（作为改写参考）
+  const existingContent = await readSectionMarkdown(env, body.work_id, sectionId);
+
+  // 收集上下文（复用 generateDraft 的模式）
+  const wbObj = await env.WORKS_BUCKET.get(WORLD_BIBLE_KEY(body.work_id));
+  const worldContext = wbObj ? (await wbObj.text()).substring(0, 2000) : '(无世界观)';
+
+  const prevSections = await env.DB.prepare(
+    'SELECT title, section_summary FROM sections WHERE work_id = ? AND order_index < ? ORDER BY order_index DESC LIMIT 3'
+  ).bind(body.work_id, section.order_index).all<{ title: string; section_summary: string }>();
+
+  const prevContext = (prevSections.results || []).reverse()
+    .map(s => `「${s.title}」: ${s.section_summary || '(无摘要)'}`).join('\n');
+
+  const intentContext = intentCard.goal
+    ? `本章意图：${intentCard.goal}${intentCard.hooks ? '\n埋钩子：' + JSON.stringify(intentCard.hooks) : ''}${intentCard.foreshadowing_ids ? '\n回收伏笔：' + JSON.stringify(intentCard.foreshadowing_ids) : ''}`
+    : '(无意图卡)';
+
+  const prompt = `你是一位专业小说作家。请为以下章节重新撰写正文。
+
+## 作品信息
+标题：${work.title || '未知'}
+类别：${work.category || '未知'}
+
+## 世界观约束
+${worldContext}
+
+## 前文概要
+${prevContext || '(此为开头章节)'}
+
+## 本章信息
+标题：${section.title}
+简介：${section.section_summary || '(无)'}
+${intentContext}
+
+${body.instructions ? `## 重写要求\n${body.instructions}` : ''}
+${body.style_notes ? `## 风格备注\n${body.style_notes}` : ''}
+
+${existingContent?.body ? `## 当前版本（供参考，请改进）\n${existingContent.body.substring(0, 1500)}` : ''}
+
+请直接用 Markdown 格式写出本章正文。不要输出 JSON 包装，直接输出章节内容。`;
+
+  const result = await generateWithAI(env, prompt, { maxTokens: 4096 });
+  if (!result) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, 'AI service unavailable')), {
+      status: 503, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const newVersion = (section.version || 0) + 1;
+  const frontmatter = {
+    title: section.title,
+    order_index: section.order_index,
+    ai_generated: true,
+    ai_rewritten: true,
+    version: newVersion,
+    rewritten_at: new Date().toISOString(),
+  };
+
+  const r2Key = await writeSectionContent(env, body.work_id, sectionId, frontmatter, result);
+
+  const wordCount = result.replace(/[#*\-\s]/g, '').length;
+  await env.DB.prepare(
+    'UPDATE sections SET word_count = ?, version = ?, updated_at = ? WHERE id = ?'
+  ).bind(wordCount, newVersion, new Date().toISOString(), sectionId).run();
+
+  return new Response(JSON.stringify(jsonSuccess({
+    section_id: sectionId,
+    work_id: body.work_id,
+    title: section.title,
+    body: result,
+    word_count: wordCount,
+    version: newVersion,
+    r2_object_key: r2Key,
+  })), {
+    status: 201, headers: { 'Content-Type': 'application/json' },
+  });
+}

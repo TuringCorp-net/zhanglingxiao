@@ -8,7 +8,7 @@
 - **与传统 STR 的区别**：传统 STR 是独立测试团队的产物。本 STR 由 AI Reviewer 生成，侧重"SRS 需求覆盖度 + 代码质量 + 架构一致性"三个维度。不包含手工测试用例。
 - **何时更新**：每次代码变更后进行一轮 review，更新本报告。
 - **审核方法**：对照 SRS 逐项检查 → 审查代码实现 → 标记问题等级（P0/P1/P2/Info）→ 给出建议。
-- **关联文档**：[SRS](SRS.md) → [SDS](SDS.md) → [System Design](../system_design.md) → 本文档
+- **关联文档**：[SRS](SRS.md) → [SDS](SDS.md) → [System Design](../system_design.md) → 本文档 → [端到端测试方案](../../tests/README.md)
 
 ---
 
@@ -18,12 +18,13 @@
 |------|------|------|
 | v1.0.0 | 2026-05-06 | 初始版本，代码首次全面审核 |
 | v1.1.0 | 2026-05-07 | reviews 表简化 + L1 分类落地 + 前端 Read/Write 双入口。无新增 P0/P1 |
+| v1.1.2 | 2026-05-08 | Three-Role 闭环迭代：SRS 完备性检查 + OpenAPI 补全（17 端点）+ likeReview 去重 + R2 错误日志 |
 
 ---
 
 ## 一、审核范围
 
-- **审核范围**：CAU Read 侧代码（23 个文件，~2,140 行）。**不包含** Story Forger Write 侧（尚未编码）。
+- **审核范围**：CAU 全栈代码（36 个文件，~4,125 行）。Write 侧（Story Forger）由独立 STR 审核。
 - **审核维度**：
   1. SRS 需求覆盖度（32 项需求逐一验证）
   2. 代码质量（类型安全、错误处理、SQL 安全、一致性）
@@ -210,6 +211,7 @@
 | 日志（observability） | ✅ enabled |
 | 前端 assets 上传 | ✅ |
 | 无 cron 触发器 | ⚠️ 当前不需要，后续榜单调度需添加 |
+| 端到端测试 | ⚠️ 测试方案已完成，待测试数据就绪后执行。见 [tests/README.md](../../tests/README.md) |
 
 ---
 
