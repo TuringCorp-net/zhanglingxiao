@@ -32,6 +32,7 @@ import {
   COLLAB_TAG_MIN_USERS,
   RULE_WEIGHT,
   BEHAVIOR_WEIGHT,
+  parseLimit,
 } from '../lib/constants';
 
 // ============================================================
@@ -618,7 +619,7 @@ export async function getBehavioralRecommendations(env: Env, request: Request): 
   const url = new URL(request.url);
   const email = request.headers.get('X-User-Email');
   const anonymous_id = request.headers.get('X-Anonymous-Id');
-  const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 100);
+  const limit = parseLimit(url, 20);
 
   if (!email && !anonymous_id) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'Email or anonymous_id is required')), {

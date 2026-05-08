@@ -3,6 +3,7 @@
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parsePagination } from '../lib/constants';
 
 function generateId(): string {
   return crypto.randomUUID();
@@ -494,9 +495,7 @@ export async function listSubscriptions(env: Env, request: Request): Promise<Res
     const url = new URL(request.url);
     const status = url.searchParams.get('status');
     const tier = url.searchParams.get('tier');
-    const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
-    const offset = (page - 1) * limit;
+    const { page, limit, offset } = parsePagination(url, 50);
 
     let conditions: string[] = [];
     const bindings: any[] = [];
@@ -779,9 +778,7 @@ export async function listExclusiveContent(env: Env, request: Request): Promise<
   try {
     const url = new URL(request.url);
     const contentType = url.searchParams.get('content_type');
-    const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
-    const offset = (page - 1) * limit;
+    const { page, limit, offset } = parsePagination(url, 50);
 
     let query = `
       SELECT ec.*, mt.code as tier_code, mt.name as tier_name

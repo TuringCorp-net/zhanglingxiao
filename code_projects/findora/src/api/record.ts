@@ -2,6 +2,7 @@
 import { Env, Record as RecordEntity } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parsePagination, parseLimit } from '../lib/constants';
 import { verifySessionToken, createAuditLog } from './auth';
 
 // Helper to extract user ID from request
@@ -119,9 +120,7 @@ export async function listRecords(env: Env, request: Request, enterpriseId: stri
   }
 
   const url = new URL(request.url);
-  const page = parseInt(url.searchParams.get('page') || '1');
-  const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 100);
-  const offset = (page - 1) * limit;
+  const { page, limit, offset } = parsePagination(url, 20);
   const recordType = url.searchParams.get('record_type');
   const status = url.searchParams.get('status');
 
@@ -412,7 +411,7 @@ export async function getExpiringRecords(env: Env, request: Request): Promise<Re
 
   const url = new URL(request.url);
   const days = parseInt(url.searchParams.get('days') || '30');
-  const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 100);
+  const limit = parseLimit(url, 20);
 
   // Get user's enterprises
   const memberships = await env.DB.prepare(

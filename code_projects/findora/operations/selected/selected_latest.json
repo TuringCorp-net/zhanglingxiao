@@ -1,610 +1,264 @@
-{
-  "date": "2026-05-03",
-  "total": 10,
-  "products": [
-    {
-      "goodsNameEn": "Baby Soft Bib, Simple Plain Color Blank Pattern Adjustable Size Silicone Bib for 1 Year Old +, Christmas, Halloween, Thanksgiving Day Gift Easter Gift",
-      "goodsNameCn": "婴儿围兜，简约纯色空白图案可调节尺寸硅胶围兜餐厅1岁+",
-      "thumbnail": "https://img.kwcdn.com/product/fancy/809be95c-bd6e-4b21-b659-22e00132aa9d.jpg",
-      "thumbnailCn": "https://cbu01.alicdn.com/O1CN016F5sEE1uJNUFFyqCz_!!2212150866016-0-cib.jpg",
-      "sold": 150000,
-      "sales": 502500,
-      "goodsPriceMin": 3.35,
-      "goodsPriceMax": 5.27,
-      "reviewNum": 2761,
-      "rating": 4.8,
-      "mallOpenTime": "2023-07-03T00:19:01.078+00:00",
-      "onSaleTime": "2023-07-03T00:19:01.079+00:00",
-      "goodsId": "601099516057259",
-      "detailUrl": "601099516057259",
-      "platform": "temu",
-      "catItems": [
-        {
-          "id": 13367,
-          "catId": 26207,
-          "catName": "母婴用品",
-          "catLevel": 1,
-          "parentCatId": 0,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 15676,
-          "catId": 26218,
-          "catName": "婴幼儿喂养用品",
-          "catLevel": 2,
-          "parentCatId": 26207,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 23102,
-          "catId": 26233,
-          "catName": "婴儿围兜和饱嗝布",
-          "catLevel": 3,
-          "parentCatId": 26218,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 26195,
-          "catId": 26565,
-          "catName": "婴儿围兜和饱嗝布套装",
-          "catLevel": 4,
-          "parentCatId": 26233,
-          "isLeaf": true,
-          "optId": 2505
-        }
-      ],
-      "goodsName": "婴儿围兜，简约纯色空白图案可调节尺寸硅胶围兜餐厅1岁+",
-      "catName": "母婴用品",
-      "catId": 26207,
-      "subChannel": "热销商品",
-      "_score": 7,
-      "_reasons": [
-        "creative"
-      ]
-    },
-    {
-      "goodsNameEn": "SHEGLAM Color Bloom Liquid Blush-Cutie Pie Liquid Blush Liquid Waterproof Long Lasting High Pigment Non-Fading Lasting Glow Lightweight Face Makeup Rare Brand Beauty Makeup Face Paint Cosmetic For Wom",
-      "goodsNameCn": "美容与健康, 彩妆, 腮红, 脸部化妆",
-      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2025/04/17/18/1744856786e9d1448a4083f4ff010b2b270471705c_thumbnail_405x552.jpg",
-      "thumbnailCn": "",
-      "sold": 12825,
-      "sales": 356034,
-      "goodsPriceMin": 5.19,
-      "goodsPriceMax": 108.57,
-      "reviewNum": 1000,
-      "rating": 4.97,
-      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
-      "onSaleTime": "2024-02-22T00:00:00.000+08:00",
-      "goodsId": "32283883",
-      "detailUrl": "32283883",
-      "platform": "shein",
-      "catItems": [
-        {
-          "id": 34,
-          "catId": 1864,
-          "catName": "Beauty & Health",
-          "catNameCn": "美容与健康",
-          "catLevel": 0,
-          "parentCatId": 0,
-          "isLeaf": false
-        },
-        {
-          "id": 455,
-          "catId": 2042,
-          "catName": "Makeup",
-          "catNameCn": "彩妆",
-          "catLevel": 1,
-          "parentCatId": 1864,
-          "isLeaf": false
-        },
-        {
-          "id": 1126,
-          "catId": 2257,
-          "catName": "Blush",
-          "catNameCn": "腮红",
-          "catLevel": 3,
-          "parentCatId": 2265,
-          "isLeaf": true
-        },
-        {
-          "id": 456,
-          "catId": 2265,
-          "catName": "Face Make Up",
-          "catNameCn": "脸部化妆",
-          "catLevel": 2,
-          "parentCatId": 2042,
-          "isLeaf": false
-        }
-      ],
-      "goodsName": "SHEGLAM Color Bloom Liquid Blush-Cutie Pie Liquid Blush Liquid Waterproof Long Lasting High Pigment Non-Fading Lasting Glow Lightweight Face Makeup Rare Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
-      "catName": "美容与健康",
-      "catId": 1864,
-      "subChannel": "热销商品",
-      "_score": 7,
-      "_reasons": [
-        "creative"
-      ]
-    },
-    {
-      "goodsNameEn": "Mom, I Want to Hear Your Story - The Gift That is a Keepsake Journal of Her Life - Mother's Day Gift Birthday Gift Elegantly  Designed",
-      "goodsNameCn": "Mom, I Want to Hear Your Story - The Gift That is a Keepsake Journal of Her Life - Mother's Day Gift",
-      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/3442745931734b6090537c228ff65fe7~tplv-fhlh96nyum-crop-webp:2048:2048.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
-      "thumbnailCn": "",
-      "sold": 275251,
-      "sales": null,
-      "goodsPriceMin": 13.52,
-      "goodsPriceMax": 12.95,
-      "reviewNum": 11561,
-      "rating": 4.8,
-      "mallOpenTime": null,
-      "onSaleTime": "2024-03-24T03:50:35.995+08:00",
-      "goodsId": "1729442270340355037",
-      "detailUrl": "1729442270340355037",
-      "platform": "tiktok",
-      "catItems": [
-        {
-          "id": 10594,
-          "catId": "801928",
-          "catName": "Books, Magazines & Audio",
-          "catLevel": 1,
-          "parentCatId": "0",
-          "isLeaf": false
-        },
-        {
-          "id": 12310,
-          "catId": "986760",
-          "catName": "Literature & Art",
-          "catLevel": 2,
-          "parentCatId": "801928",
-          "isLeaf": false
-        },
-        {
-          "id": 12311,
-          "catId": "926856",
-          "catName": "Literature",
-          "catLevel": 3,
-          "parentCatId": "986760",
-          "isLeaf": true
-        }
-      ],
-      "goodsName": "Mom, I Want to Hear Your Story - The Gift That is a Keepsake Journal of Her Life - Mother's Day Gift Birthday Gift Elegantly  Designed",
-      "catName": "Books, Magazines & Audio",
-      "catId": 801928,
-      "subChannel": "热销商品",
-      "_score": 7,
-      "_reasons": [
-        "creative"
-      ]
-    },
-    {
-      "goodsNameEn": "Dad, I Want to Hear Your Story - The Gift Your Dad Will Love! Father's Day Journal Share His Personal Story Workbook Diaries Storybook",
-      "goodsNameCn": "Dad, I Want to Hear Your Story - The Gift Your Dad Will Love! Father's Day Journal Share His Persona",
-      "thumbnail": "https://p16-oec-general-useast8.ttcdn-us.com/tos-useast8-i-rt0ujvrtvp-tx2/5689e481fcd14bf98cd7f3f33c43fa28~tplv-fhlh96nyum-crop-webp:800:800.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
-      "thumbnailCn": "",
-      "sold": 229664,
-      "sales": null,
-      "goodsPriceMin": 14.46,
-      "goodsPriceMax": 12.95,
-      "reviewNum": 7198,
-      "rating": 4.7,
-      "mallOpenTime": null,
-      "onSaleTime": "2024-06-14T08:13:27.458+08:00",
-      "goodsId": "1729442274890519517",
-      "detailUrl": "1729442274890519517",
-      "platform": "tiktok",
-      "catItems": [
-        {
-          "id": 10594,
-          "catId": "801928",
-          "catName": "Books, Magazines & Audio",
-          "catLevel": 1,
-          "parentCatId": "0",
-          "isLeaf": false
-        },
-        {
-          "id": 12310,
-          "catId": "986760",
-          "catName": "Literature & Art",
-          "catLevel": 2,
-          "parentCatId": "801928",
-          "isLeaf": false
-        },
-        {
-          "id": 12311,
-          "catId": "926856",
-          "catName": "Literature",
-          "catLevel": 3,
-          "parentCatId": "986760",
-          "isLeaf": true
-        }
-      ],
-      "goodsName": "Dad, I Want to Hear Your Story - The Gift Your Dad Will Love! Father's Day Journal Share His Personal Story Workbook Diaries Storybook",
-      "catName": "Books, Magazines & Audio",
-      "catId": 801928,
-      "subChannel": "热销商品",
-      "_score": 7,
-      "_reasons": [
-        "creative"
-      ]
-    },
-    {
-      "goodsNameEn": "Spiritual Warfare Prayers Book - Modern Edition | Christian Prayer Book for Anxiety, Fear, Protection, Healing, Temptation & Spiritual Attacks | Daily Devotional Prayers for Women and Men | Scripture-",
-      "goodsNameCn": "Spiritual Warfare Prayers Book - Modern Edition | Christian Prayer Book for Anxiety, Fear, Protectio",
-      "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/0ff9d4cf0e714cfba5c647ccefed5ecc~tplv-fhlh96nyum-crop-webp:1394:1394.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast5&from=2378011839",
-      "thumbnailCn": "",
-      "sold": 163566,
-      "sales": null,
-      "goodsPriceMin": 7.77,
-      "goodsPriceMax": 9.99,
-      "reviewNum": 13599,
-      "rating": 4.8,
-      "mallOpenTime": null,
-      "onSaleTime": "2024-12-30T08:21:40.788+08:00",
-      "goodsId": "1730281141976666671",
-      "detailUrl": "1730281141976666671",
-      "platform": "tiktok",
-      "catItems": [
-        {
-          "id": 10594,
-          "catId": "801928",
-          "catName": "Books, Magazines & Audio",
-          "catLevel": 1,
-          "parentCatId": "0",
-          "isLeaf": false
-        },
-        {
-          "id": 11174,
-          "catId": "927112",
-          "catName": "Humanities & Social Sciences",
-          "catLevel": 2,
-          "parentCatId": "801928",
-          "isLeaf": false
-        },
-        {
-          "id": 11404,
-          "catId": "927624",
-          "catName": "Religion & Philosophy",
-          "catLevel": 3,
-          "parentCatId": "927112",
-          "isLeaf": true
-        }
-      ],
-      "goodsName": "Spiritual Warfare Prayers Book - Modern Edition | Christian Prayer Book for Anxiety, Fear, Protection, Healing, Temptation & Spiritual Attacks | Daily Devotional Prayers for Women and Men | Scripture-Based Faith Gift | Pocket Prayer Book",
-      "catName": "Books, Magazines & Audio",
-      "catId": 801928,
-      "subChannel": "热销商品",
-      "_score": 7,
-      "_reasons": [
-        "stress"
-      ]
-    },
-    {
-      "goodsNameEn": "4pcs Young Stroller Wheel Covers, Polyester Dust And Dust Resistant, Easy to Clean Home Entrance Use - Ideal Thanksgiving And Christmas Gift, Outdoor Return, Dust Resistant",
-      "goodsNameCn": "4PC年轻婴儿婴儿车轮盖,聚酯防尘防尘,便于清洁的家居入口使用,室外返回,防尘，旅行装备",
-      "thumbnail": "https://img.kwcdn.com/product/fancy/0e6eadbb-7027-44f4-a97a-31a50e7caad0.jpg",
-      "thumbnailCn": "https://cbu01.alicdn.com/O1CN014Bq5op1lHFPEFIqft_!!2921944793-0-cib.jpg",
-      "sold": 100000,
-      "sales": 459999.99999999994,
-      "goodsPriceMin": 4.6,
-      "goodsPriceMax": 5.06,
-      "reviewNum": 206,
-      "rating": 4.7,
-      "mallOpenTime": "2023-04-04T00:59:13.703+00:00",
-      "onSaleTime": "2025-01-06T05:51:33.414+00:00",
-      "goodsId": "601099928709898",
-      "detailUrl": "601099928709898",
-      "platform": "temu",
-      "catItems": [
-        {
-          "id": 13367,
-          "catId": 26207,
-          "catName": "母婴用品",
-          "catLevel": 1,
-          "parentCatId": 0,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 27201,
-          "catId": 26284,
-          "catName": "婴儿旅行装备",
-          "catLevel": 2,
-          "parentCatId": 26207,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 30460,
-          "catId": 26292,
-          "catName": "婴儿推车及配件",
-          "catLevel": 3,
-          "parentCatId": 26284,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 32417,
-          "catId": 26294,
-          "catName": "婴儿推车配件",
-          "catLevel": 4,
-          "parentCatId": 26292,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 32864,
-          "catId": 26850,
-          "catName": "其他（婴儿推车配件）",
-          "catLevel": 5,
-          "parentCatId": 26294,
-          "isLeaf": true,
-          "optId": null
-        }
-      ],
-      "goodsName": "4PC年轻婴儿婴儿车轮盖,聚酯防尘防尘,便于清洁的家居入口使用,室外返回,防尘，旅行装备",
-      "catName": "母婴用品",
-      "catId": 26207,
-      "subChannel": "热销商品",
-      "_score": 6,
-      "_reasons": [
-        "creative"
-      ]
-    },
-    {
-      "goodsNameEn": "Outdoor Items: Anti-Wandering Rope, Anti-Loss Rope, Anti-Loss Protective Belt, Anti-Wandering Wristband",
-      "goodsNameCn": "儿童防走丢绳婴儿出门",
-      "thumbnail": "https://img.kwcdn.com/product/fancy/8221ff42-f60e-4876-a18f-634fed11824f.jpg",
-      "thumbnailCn": "https://cbu01.alicdn.com/O1CN01jL9VeV1Xm1K2G1gww_!!2206875142965-0-cib.jpg",
-      "sold": 150000,
-      "sales": 475500,
-      "goodsPriceMin": 3.17,
-      "goodsPriceMax": 3.24,
-      "reviewNum": 3120,
-      "rating": 4.8,
-      "mallOpenTime": "2023-07-28T10:14:41.346+00:00",
-      "onSaleTime": "2024-04-08T17:01:26.000+00:00",
-      "goodsId": "601099541097625",
-      "detailUrl": "601099541097625",
-      "platform": "temu",
-      "catItems": [
-        {
-          "id": 13367,
-          "catId": 26207,
-          "catName": "母婴用品",
-          "catLevel": 1,
-          "parentCatId": 0,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 27201,
-          "catId": 26284,
-          "catName": "婴儿旅行装备",
-          "catLevel": 2,
-          "parentCatId": 26207,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 34687,
-          "catId": 26842,
-          "catName": "安全手绳、牵引带",
-          "catLevel": 3,
-          "parentCatId": 26284,
-          "isLeaf": true,
-          "optId": null
-        }
-      ],
-      "goodsName": "儿童防走丢绳婴儿出门",
-      "catName": "母婴用品",
-      "catId": 26207,
-      "subChannel": "热销商品",
-      "_score": 5,
-      "_reasons": []
-    },
-    {
-      "goodsNameEn": "1505 pièces mini élastiques à cheveux colorés et outils de coiffure, parfaits pour accessoires de cheveux pour femmes, choix idéal pour cadeaux",
-      "goodsNameCn": "1505件迷你彩色发圈与造型工具，女性发饰佳选，馈赠理想之选",
-      "thumbnail": "https://img.kwcdn.com/product/fancy/e20fe136-9035-405e-9cd5-9da1436592b8.jpg",
-      "thumbnailCn": "",
-      "sold": 150000,
-      "sales": 555000,
-      "goodsPriceMin": 3.7,
-      "goodsPriceMax": 3.5,
-      "reviewNum": 12357,
-      "rating": 4.9,
-      "mallOpenTime": "2023-04-01T15:10:30.110+00:00",
-      "onSaleTime": "2023-08-27T22:56:00.412+00:00",
-      "goodsId": "601099518713474",
-      "detailUrl": "601099518713474",
-      "platform": "temu",
-      "catItems": [
-        {
-          "id": 13367,
-          "catId": 26207,
-          "catName": "母婴用品",
-          "catLevel": 1,
-          "parentCatId": 0,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 27816,
-          "catId": 26297,
-          "catName": "婴幼儿洗护用品",
-          "catLevel": 2,
-          "parentCatId": 26207,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 32020,
-          "catId": 26305,
-          "catName": "宝宝头发护理",
-          "catLevel": 3,
-          "parentCatId": 26297,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 32612,
-          "catId": 26306,
-          "catName": "女婴发饰",
-          "catLevel": 4,
-          "parentCatId": 26305,
-          "isLeaf": false,
-          "optId": 3025
-        },
-        {
-          "id": 35507,
-          "catId": 26920,
-          "catName": "女婴发绳",
-          "catLevel": 5,
-          "parentCatId": 26306,
-          "isLeaf": true,
-          "optId": null
-        }
-      ],
-      "goodsName": "1505件迷你彩色发圈与造型工具，女性发饰佳选，馈赠理想之选",
-      "catName": "母婴用品",
-      "catId": 26207,
-      "subChannel": "热销商品",
-      "_score": 5,
-      "_reasons": []
-    },
-    {
-      "goodsNameEn": "Calcetines infantiles de dibujos animados de primavera/otoño con suela, calcetines de piso para los primeros pasos del bebé con lazo, calcetines zapato de suela suave antideslizante para niños",
-      "goodsNameCn": "春秋款卡通婴儿皮底袜宝宝学步地板袜蝴蝶结防滑儿童软 底鞋袜",
-      "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/520842c4f7e785eebbbdefa15fd7b10e.jpg",
-      "thumbnailCn": "https://cbu01.alicdn.com/O1CN01iZekI41g5j7qI5gN5_!!2213183254091-0-cib.jpg",
-      "sold": 100000,
-      "sales": 617000,
-      "goodsPriceMin": 6.17,
-      "goodsPriceMax": 10.34,
-      "reviewNum": 6115,
-      "rating": 4.8,
-      "mallOpenTime": "2023-07-02T23:35:45.036+00:00",
-      "onSaleTime": "2023-07-02T23:35:45.036+00:00",
-      "goodsId": "601099518222711",
-      "detailUrl": "601099518222711",
-      "platform": "temu",
-      "catItems": [
-        {
-          "id": 13367,
-          "catId": 26207,
-          "catName": "母婴用品",
-          "catLevel": 1,
-          "parentCatId": 0,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 28964,
-          "catId": 26307,
-          "catName": "服装和配饰",
-          "catLevel": 2,
-          "parentCatId": 26207,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 29301,
-          "catId": 26308,
-          "catName": "女婴服装和鞋靴",
-          "catLevel": 3,
-          "parentCatId": 26307,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 32072,
-          "catId": 26388,
-          "catName": "女婴服饰配件",
-          "catLevel": 4,
-          "parentCatId": 26308,
-          "isLeaf": false,
-          "optId": null
-        },
-        {
-          "id": 34819,
-          "catId": 26923,
-          "catName": "女婴袜子",
-          "catLevel": 5,
-          "parentCatId": 26388,
-          "isLeaf": true,
-          "optId": null
-        }
-      ],
-      "goodsName": "春秋款卡通婴儿皮底袜宝宝学步地板袜蝴蝶结防滑儿童软 底鞋袜",
-      "catName": "母婴用品",
-      "catId": 26207,
-      "subChannel": "热销商品",
-      "_score": 5,
-      "_reasons": []
-    },
-    {
-      "goodsNameEn": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Mauvelous Henna Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birth",
-      "goodsNameCn": "美容与健康, 彩妆, 唇线笔, 嘴唇",
-      "thumbnail": "//img.ltwebstatic.com/v4/j/pi/2026/02/09/ac/1770635270621c15a42e26418d8e08cb979e5475b7_thumbnail_405x552.jpg",
-      "thumbnailCn": "",
-      "sold": 38567,
-      "sales": 341100,
-      "goodsPriceMin": 3.6,
-      "goodsPriceMax": 69.82,
-      "reviewNum": 1000,
-      "rating": 4.84,
-      "mallOpenTime": "2018-01-09T11:40:12.000+08:00",
-      "onSaleTime": "2025-03-31T00:00:00.000+08:00",
-      "goodsId": "67554665",
-      "detailUrl": "67554665",
-      "platform": "shein",
-      "catItems": [
-        {
-          "id": 34,
-          "catId": 1864,
-          "catName": "Beauty & Health",
-          "catNameCn": "美容与健康",
-          "catLevel": 0,
-          "parentCatId": 0,
-          "isLeaf": false
-        },
-        {
-          "id": 455,
-          "catId": 2042,
-          "catName": "Makeup",
-          "catNameCn": "彩妆",
-          "catLevel": 1,
-          "parentCatId": 1864,
-          "isLeaf": false
-        },
-        {
-          "id": 4401,
-          "catId": 2263,
-          "catName": "Lip Liner",
-          "catNameCn": "唇线笔",
-          "catLevel": 3,
-          "parentCatId": 2266,
-          "isLeaf": true
-        },
-        {
-          "id": 1569,
-          "catId": 2266,
-          "catName": "Lips",
-          "catNameCn": "嘴唇",
-          "catLevel": 2,
-          "parentCatId": 2042,
-          "isLeaf": false
-        }
-      ],
-      "goodsName": "SHEGLAM Fall In Line Peel Off Lip Liner Stain-Mauvelous Henna Lip Combo Brand Beauty Makeup Face Paint Cosmetic For Women Girls Perfect For Spring Summer Ideal For Y2K Fancy Fashion Suitable For Birthday Mother'S Day Gift Rave Party Ready Best Color",
-      "catName": "美容与健康",
-      "catId": 1864,
-      "subChannel": "热销商品",
-      "_score": 5,
-      "_reasons": []
-    }
-  ]
-}
+[
+  {
+    "rank": 1,
+    "id": "2026-05-05-001",
+    "platform": "Temu",
+    "catName": "汽车用品",
+    "score": 120,
+    "nameEn": "120W Portable Car Vacuum Cleaner | Rechargeable Handheld Automotive Vacuum Cleaner for Car, Wireless",
+    "sold": 100000,
+    "priceMin": 13.86,
+    "priceMax": 13.86,
+    "reviewNum": 20850,
+    "rating": 4.5,
+    "goodsId": "601099519105676",
+    "thumbnail": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/0cd5fabde2909f25c49d9cc38a58ee67.jpg",
+    "reasons": [
+      "🔥热销爆款(销量100k)",
+      "⭐口碑炸裂(评论20.9k/评分4.5)",
+      "✨超级新奇(趣味元素密集)",
+      "💰价格友好($13.86)",
+      "🚗 汽车新奇好物"
+    ],
+    "tags": [
+      "hot",
+      "trusted",
+      "novel",
+      "bargain"
+    ]
+  },
+  {
+    "rank": 2,
+    "id": "2026-05-05-002",
+    "platform": "Temu",
+    "catName": "汽车用品",
+    "score": 110,
+    "nameEn": "150PSI Portable Air Compressor with Tire Pressure Gauge & LED Display - 3X Faster One-Touch Smart Co",
+    "sold": 150000,
+    "priceMin": 41.02,
+    "priceMax": 41.54,
+    "reviewNum": 2840,
+    "rating": 4.7,
+    "goodsId": "601101560968489",
+    "thumbnail": "https://img.kwcdn.com/product/fancy/70005d16-b76d-4523-91af-d4cf5d0e0091.jpg",
+    "reasons": [
+      "🔥热销爆款(销量150k)",
+      "⭐口碑炸裂(评论2.8k/评分4.7)",
+      "✨超级新奇(趣味元素密集)",
+      "中档价($41.02)",
+      "🚗 汽车新奇好物"
+    ],
+    "tags": [
+      "hot",
+      "trusted",
+      "novel"
+    ]
+  },
+  {
+    "rank": 3,
+    "id": "2026-05-05-003",
+    "platform": "Temu",
+    "catName": "汽车用品",
+    "score": 100,
+    "nameEn": "Portable High-Pressure Cleaning Machine | Flexible And Easy to Use, Anti Slip Handle, Suitable for C",
+    "sold": 100000,
+    "priceMin": 7.82,
+    "priceMax": 5.76,
+    "reviewNum": 11611,
+    "rating": 4.5,
+    "goodsId": "601100079281791",
+    "thumbnail": "https://img.kwcdn.com/product/fancy/c4b7b964-d8bb-42be-89db-fb64affffb37.jpg",
+    "reasons": [
+      "🔥热销爆款(销量100k)",
+      "⭐口碑炸裂(评论11.6k/评分4.5)",
+      "有新意",
+      "💰价格友好($7.82)",
+      "🚗 汽车新奇好物"
+    ],
+    "tags": [
+      "hot",
+      "trusted",
+      "bargain"
+    ]
+  },
+  {
+    "rank": 4,
+    "id": "2026-05-05-004",
+    "platform": "速卖通",
+    "catName": "摩托车装备配件",
+    "score": 87,
+    "nameEn": "Double sided magic sponge for motorcycles, pots, and kitchens - heavy-duty grease cleaning sponge",
+    "sold": 100000,
+    "priceMin": 0.8,
+    "priceMax": null,
+    "reviewNum": 18843,
+    "rating": 4.6,
+    "goodsId": "1005007564041432",
+    "thumbnail": "//ae04.alicdn.com/kf/S2530e38e50fc4ab5ac9c580f0afa3a21m.jpg",
+    "reasons": [
+      "🔥热销爆款(销量100k)",
+      "⭐口碑炸裂(评论18.8k/评分4.6)",
+      "超低价($0.8)",
+      "🏍️ 稀缺品类(摩托车装备)"
+    ],
+    "tags": [
+      "hot",
+      "trusted",
+      "bargain"
+    ]
+  },
+  {
+    "rank": 5,
+    "id": "2026-05-05-005",
+    "platform": "速卖通",
+    "catName": "摩托车装备配件",
+    "score": 81,
+    "nameEn": "SEAMETAL Motorcycle Back Seat Helmet Strips Elastic Rope Motorcycle Helmet Fixed Strap Adjustment Fi",
+    "sold": 100000,
+    "priceMin": 0.8,
+    "priceMax": null,
+    "reviewNum": 16653,
+    "rating": 4.7,
+    "goodsId": "1005007391573890",
+    "thumbnail": "//ae04.alicdn.com/kf/Sb36ee9c308494f7d9522ffec2eee8d5a3.jpg",
+    "reasons": [
+      "🔥热销爆款(销量100k)",
+      "⭐口碑炸裂(评论16.7k/评分4.7)",
+      "超低价($0.8)",
+      "🏍️ 稀缺品类(摩托车装备)"
+    ],
+    "tags": [
+      "hot",
+      "trusted",
+      "bargain"
+    ]
+  },
+  {
+    "rank": 6,
+    "id": "2026-05-05-006",
+    "platform": "Amazon",
+    "catName": "健康与家居",
+    "score": 80,
+    "nameEn": "Affresh 洗衣机清洁剂，强力去除泵、阀门和软管内部深处的异味细菌和污垢，6 片缓释片，6 个月用量更安全的化学品探索更多具有可持续发展特性的产品。",
+    "sold": 16003094,
+    "priceMin": 11.98,
+    "priceMax": null,
+    "reviewNum": 2885,
+    "rating": 4.7,
+    "goodsId": "B00C91Q86I",
+    "thumbnail": "https://m.media-amazon.com/images/I/61epM8fFvFL._AC_UL320_.jpg",
+    "reasons": [
+      "🔥热销爆款(销量16003k)",
+      "⭐口碑炸裂(评论2.9k/评分4.7)",
+      "💰价格友好($11.98)",
+      "🏥 健康类好物"
+    ],
+    "tags": [
+      "hot",
+      "trusted",
+      "bargain"
+    ]
+  },
+  {
+    "rank": 7,
+    "id": "2026-05-05-007",
+    "platform": "Shein",
+    "catName": "办公和学校用品",
+    "score": 79,
+    "nameEn": "YWWBLD 50pcs Funny Cat Sticker Set For Smartphone, Laptop, Water Bottle, Notebook And Other Waterpro",
+    "sold": 6622,
+    "priceMin": 2.02,
+    "priceMax": 6,
+    "reviewNum": 1000,
+    "rating": 4.95,
+    "goodsId": "46741053",
+    "thumbnail": "//img.ltwebstatic.com/images3_spmp/2024/10/21/ec/172947138203b46791212904014a0075e60d798ff2_thumbnail_405x552.jpg",
+    "reasons": [
+      "销量不错(6622)",
+      "⭐口碑炸裂(评论1.0k/评分4.95)",
+      "相当有趣(多个新奇元素)",
+      "超低价($2.02)"
+    ],
+    "tags": [
+      "trusted",
+      "novel",
+      "bargain"
+    ]
+  },
+  {
+    "rank": 8,
+    "id": "2026-05-05-008",
+    "platform": "TikTok",
+    "catName": "Womenswear & Underwear",
+    "score": 79,
+    "nameEn": "FeelinGirl Shapewear for Women Butt Lifter Bodysuit  Tummy Control Shapewear Seamless Womenswear Com",
+    "sold": 438456,
+    "priceMin": 21.99,
+    "priceMax": 25.99,
+    "reviewNum": 44050,
+    "rating": 4.3,
+    "goodsId": "1729385924325380593",
+    "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/2e89deb8b37846be900a3e9258de73cb~tplv-fhlh96nyum-crop-webp:980:980.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+    "reasons": [
+      "🔥热销爆款(销量438k)",
+      "好评如潮(评论44050/评分4.3)",
+      "💰价格友好($21.99)"
+    ],
+    "tags": [
+      "hot",
+      "trusted",
+      "bargain"
+    ]
+  },
+  {
+    "rank": 9,
+    "id": "2026-05-05-009",
+    "platform": "速卖通",
+    "catName": "摩托车装备配件",
+    "score": 78,
+    "nameEn": "High-Four-edged serrated eccentric drill for dry drilling of ceramic tiles, glass, marble, concrete,",
+    "sold": 50000,
+    "priceMin": 0.8,
+    "priceMax": null,
+    "reviewNum": 12329,
+    "rating": 4.7,
+    "goodsId": "1005007970827373",
+    "thumbnail": "//ae04.alicdn.com/kf/Saec90a30518949f583906017c5def2e3O.jpg",
+    "reasons": [
+      "热销好品(销量50k)",
+      "⭐口碑炸裂(评论12.3k/评分4.7)",
+      "超低价($0.8)",
+      "🏍️ 稀缺品类(摩托车装备)"
+    ],
+    "tags": [
+      "hot",
+      "trusted",
+      "bargain"
+    ]
+  },
+  {
+    "rank": 10,
+    "id": "2026-05-05-010",
+    "platform": "TikTok",
+    "catName": "Womenswear & Underwear",
+    "score": 77,
+    "nameEn": "Women's Trendy Round Neck Long Sleeve Crop Tee, Casual Crew Neck T-shirt, Women's Slim-fitting Top f",
+    "sold": 593338,
+    "priceMin": 9.53,
+    "priceMax": 55.12,
+    "reviewNum": 33745,
+    "rating": 4.6,
+    "goodsId": "1729400340518441214",
+    "thumbnail": "https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/e37155f503ac490388b1a4ab66c42887~tplv-fhlh96nyum-crop-webp:1350:1800.webp?dr=12190&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=607f11de&idc=useast8&from=2378011839",
+    "reasons": [
+      "🔥热销爆款(销量593k)",
+      "⭐口碑炸裂(评论33.7k/评分4.6)",
+      "💰价格友好($9.53)"
+    ],
+    "tags": [
+      "hot",
+      "trusted",
+      "bargain"
+    ]
+  }
+]

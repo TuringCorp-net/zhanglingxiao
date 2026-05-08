@@ -21,6 +21,7 @@
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parsePagination } from '../lib/constants';
 // ST-P4修复：禁用词表统一从ai_content.ts导入（Single Source of Truth）
 import { validateAgainstBannedWords, BANNED_WORDS } from './ai_content';
 
@@ -1026,14 +1027,16 @@ export async function getReviewRecordById(env: Env, request: Request, reviewId: 
 export async function listAIReviewRecords(env: Env, request: Request): Promise<Response> {
   const url = new URL(request.url);
 
+  const { page, limit } = parsePagination(url, 20);
+
   const params = {
     status: (url.searchParams.get('status') || undefined) as ReviewStatus | undefined,
     content_type: (url.searchParams.get('content_type') || undefined) as ContentType | undefined,
     category: url.searchParams.get('category') || undefined,
     is_high_risk: url.searchParams.get('is_high_risk') === 'true' ? true :
                  url.searchParams.get('is_high_risk') === 'false' ? false : undefined,
-    page: parseInt(url.searchParams.get('page') || '1'),
-    limit: parseInt(url.searchParams.get('limit') || '20'),
+    page,
+    limit,
   };
 
   const result = await listReviewRecords(env, params);

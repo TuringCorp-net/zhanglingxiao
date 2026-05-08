@@ -4,6 +4,7 @@
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parsePagination } from '../lib/constants';
 
 // Email configuration interface
 interface EmailConfig {
@@ -301,7 +302,7 @@ export async function sendSubscriptionConfirmation(env: Env, request: Request): 
   }
 }
 
-// POST /api/email/send-weekly - F-013-07 (weekly newsletter trigger)
+// POST /api/admin/email/send-weekly - F-013-07 (weekly newsletter trigger)
 export async function sendWeeklyNewsletter(env: Env, request: Request): Promise<Response> {
   try {
     await ensureEmailLogTable(env);
@@ -450,7 +451,7 @@ export async function sendWeeklyNewsletter(env: Env, request: Request): Promise<
   }
 }
 
-// POST /api/email/send-unsubscription-confirmation - F-013-07
+// POST /api/admin/email/send-unsubscription-confirmation - F-013-07
 export async function sendUnsubscriptionConfirmation(env: Env, request: Request): Promise<Response> {
   try {
     await ensureEmailLogTable(env);
@@ -530,7 +531,7 @@ export async function sendUnsubscriptionConfirmation(env: Env, request: Request)
   }
 }
 
-// POST /api/email/send-reengagement - F-013-07 (recall email for dormant users)
+// POST /api/admin/email/send-reengagement - F-013-07 (recall email for dormant users)
 export async function sendReengagementEmail(env: Env, request: Request): Promise<Response> {
   try {
     await ensureEmailLogTable(env);
@@ -640,9 +641,7 @@ export async function getEmailLogs(env: Env, request: Request): Promise<Response
   const url = new URL(request.url);
   const event_type = url.searchParams.get('event_type');
   const status = url.searchParams.get('status');
-  const page = Math.max(1, parseInt(url.searchParams.get('page') || '1'));
-  const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') || '50')));
-  const offset = (page - 1) * limit;
+  const { page, limit, offset } = parsePagination(url, 50);
 
   let where = 'WHERE 1=1';
   const bindings: (string | number)[] = [];

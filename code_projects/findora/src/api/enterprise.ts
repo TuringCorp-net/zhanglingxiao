@@ -2,6 +2,7 @@
 import { Env, Enterprise, EnterpriseMember } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parsePagination } from '../lib/constants';
 import { verifySessionToken, createAuditLog } from './auth';
 
 // Helper to extract user ID from request
@@ -103,9 +104,7 @@ export async function listEnterprises(env: Env, request: Request): Promise<Respo
   }
 
   const url = new URL(request.url);
-  const page = parseInt(url.searchParams.get('page') || '1');
-  const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 100);
-  const offset = (page - 1) * limit;
+  const { page, limit, offset } = parsePagination(url, 20);
 
   // Get enterprises where user is a member
   const countResult = await env.DB.prepare(`

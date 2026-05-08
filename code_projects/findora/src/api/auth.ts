@@ -119,6 +119,15 @@ async function verifySessionToken(env: Env, token: string): Promise<{ userId: st
   return { userId: decoded.userId };
 }
 
+// ST-C05修复：提取Bearer token认证逻辑，消除auth.ts中3处重复的认证头解析
+async function verifyBearerAuth(env: Env, request: Request): Promise<string | null> {
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  const token = authHeader.substring(7);
+  const decoded = await verifySessionToken(env, token);
+  return decoded?.userId ?? null;
+}
+
 async function createAuditLog(
   env: Env,
   enterpriseId: string | null,
@@ -280,26 +289,18 @@ export async function login(env: Env, request: Request): Promise<Response> {
 
 // POST /api/auth/logout - User logout
 export async function logout(env: Env, request: Request): Promise<Response> {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  // ST-C05：使用提取的认证辅助函数替代重复的Bearer token解析
+  const userId = await verifyBearerAuth(env, request);
+  if (!userId) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'No token provided')), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const token = authHeader.substring(7);
-  const decoded = await verifySessionToken(env, token);
-  if (!decoded) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Invalid token')), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
   // Delete session
-  await env.DB.prepare('DELETE FROM user_sessions WHERE token = ?').bind(token).run();
-  await createAuditLog(env, null, decoded.userId, 'logout', 'auth', null, request);
+  await env.DB.prepare('DELETE FROM user_sessions WHERE user_id = ?').bind(userId).run();
+  await createAuditLog(env, null, userId, 'logout', 'auth', null, request);
 
   return new Response(JSON.stringify(jsonSuccess({ message: 'Logged out successfully' })), {
     headers: { 'Content-Type': 'application/json' },
@@ -308,24 +309,16 @@ export async function logout(env: Env, request: Request): Promise<Response> {
 
 // GET /api/auth/me - Get current user
 export async function getCurrentUser(env: Env, request: Request): Promise<Response> {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  // ST-C05：使用提取的认证辅助函数替代重复的Bearer token解析
+  const userId = await verifyBearerAuth(env, request);
+  if (!userId) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'No token provided')), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const token = authHeader.substring(7);
-  const decoded = await verifySessionToken(env, token);
-  if (!decoded) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Invalid or expired token')), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const user = await env.DB.prepare('SELECT id, email, name, phone, avatar_url, status, email_verified_at, last_login_at, created_at FROM ems_users WHERE id = ?').bind(decoded.userId).first<Record<string, unknown>>();
+  const user = await env.DB.prepare('SELECT id, email, name, phone, avatar_url, status, email_verified_at, last_login_at, created_at FROM ems_users WHERE id = ?').bind(userId).first<Record<string, unknown>>();
   if (!user) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'User not found')), {
       status: 404,
@@ -416,18 +409,10 @@ export async function refreshSession(env: Env, request: Request): Promise<Respon
 
 // POST /api/auth/change-password - Change password
 export async function changePassword(env: Env, request: Request): Promise<Response> {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  // ST-C05：使用提取的认证辅助函数替代重复的Bearer token解析
+  const userId = await verifyBearerAuth(env, request);
+  if (!userId) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'No token provided')), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const token = authHeader.substring(7);
-  const decoded = await verifySessionToken(env, token);
-  if (!decoded) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.UNAUTHORIZED, 'Invalid or expired token')), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -448,7 +433,7 @@ export async function changePassword(env: Env, request: Request): Promise<Respon
     });
   }
 
-  const user = await env.DB.prepare('SELECT password_hash FROM ems_users WHERE id = ?').bind(decoded.userId).first<Record<string, unknown>>();
+  const user = await env.DB.prepare('SELECT password_hash FROM ems_users WHERE id = ?').bind(userId).first<Record<string, unknown>>();
   if (!user) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'User not found')), {
       status: 404,
@@ -469,9 +454,9 @@ export async function changePassword(env: Env, request: Request): Promise<Respon
   const newSalt = generateRandomSalt();
   const newHash = await hashPassword(body.new_password, newSalt);
   const now = new Date().toISOString();
-  await env.DB.prepare('UPDATE ems_users SET password_hash = ?, updated_at = ? WHERE id = ?').bind(newHash, now, decoded.userId).run();
+  await env.DB.prepare('UPDATE ems_users SET password_hash = ?, updated_at = ? WHERE id = ?').bind(newHash, now, userId).run();
 
-  await createAuditLog(env, null, decoded.userId, 'update', 'user', decoded.userId, request, { field: 'password' });
+  await createAuditLog(env, null, userId, 'update', 'user', userId, request, { field: 'password' });
 
   return new Response(JSON.stringify(jsonSuccess({ message: 'Password changed successfully' })), {
     headers: { 'Content-Type': 'application/json' },

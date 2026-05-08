@@ -1,8 +1,8 @@
 // Admin Subscribers API - F-013-06, F-013-08, F-013-09
 import { Env, User } from '../../db/schema';
-import { jsonSuccess, jsonError } from '../../lib/response';
+import { jsonSuccess, jsonError, parseJSON } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { parseJSON } from '../../lib/response';
+import { parsePagination } from '../../lib/constants';
 
 function parseUser(row: Record<string, unknown>) {
   const u = row as unknown as User;
@@ -149,9 +149,7 @@ export async function listSubscribers(env: Env, request: Request): Promise<Respo
   const url = new URL(request.url);
   const status = url.searchParams.get('status');
   const category = url.searchParams.get('category');
-  const page = Math.max(1, parseInt(url.searchParams.get('page') || '1'));
-  const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') || '50')));
-  const offset = (page - 1) * limit;
+  const { page, limit, offset } = parsePagination(url, 50);
 
   let where = 'WHERE 1=1';
   const bindings: (string | number)[] = [];

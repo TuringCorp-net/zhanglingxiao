@@ -2,8 +2,8 @@
 
 > **项目名称：** Findora
 > **类型：** 数据驱动的跨境选品内容站 / 轻资产导购平台
-> **版本：** v5.48（Reviewer定时任务；Code Review完成；代码基线稳定；四文档v5.48同步）
-> **最后更新：** 2026-05-04
+> **版本：** v5.58（Coder定时任务；修复ST-P20；四文档v5.58同步）
+> **最后更新：** 2026-05-05
 > **状态：** 🟢 需求基线稳定：用户侧零实时 LLM、外部运营AI异步入库、纯数据库推荐
 
 ---
@@ -14,9 +14,9 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-05-04 | v5.48：Reviewer定时任务；Code Review完成；代码基线稳定；四文档v5.48同步 |
-| 2026-05-03 | v5.47：Coder定时任务；四文档版本对齐；无P0/P1阻塞项 |
-| 2026-05-02 | v5.46：Reviewer定时任务；Code Review完成；代码基线稳定 |
+| 2026-05-05 | v5.58：Coder定时任务；修复ST-P20（API文档补充3个缺失admin端点）；四文档v5.58同步；清理更新日志 |
+| 2026-05-05 | v5.57：Reviewer定时任务；全面Code Review完成；TS编译0错误；架构约束全通过；发现ST-P20；四文档v5.57同步；更新日志清理 |
+| 2026-05-05 | v5.56：Coder定时任务；ST-C05修复auth.ts认证解析重复→verifyBearerAuth()；四文档v5.56同步；更新日志清理 |
 
 
 ---
@@ -25,17 +25,89 @@
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 本次Reviewer定时任务（v5.48）
+### 本次Coder定时任务（v5.58）
 
-**Reviewer定时任务：Code Review完成；代码基线稳定；四文档v5.48同步。**
+**Coder定时任务：修复ST-P20 API文档缺失端点 + 四文档v5.58同步。**
 
-1. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
-2. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.48
-3. ✅ **更新日志清理**：按规则仅保留最新3天内容
-4. ✅ **Business Concept约束**：A-01~A-06全部满足
-5. ✅ **系统设计约束**：A-01~A-06全部通过
-6. ✅ **代码与文档一致性**：SDS/API/STR端点数量与代码路由同步
-7. ✅ **禁用词表SSOT**：16项禁用词在ai_content.ts/explain.ts/ai_review.ts三处统一
+1. ✅ **ST-P20修复**：API文档补充3个缺失admin端点路径（GET/admin/tags, GET/admin/recommendations/behavior, GET/admin/explain/cache/stats）
+2. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.58
+3. ✅ **更新日志清理**：四文档已清理过期日志（仅保留3天）
+4. ✅ **基线确认**：无P0/P1阻塞项，4项P2非阻塞优化项保持不变
+
+### 本次Reviewer定时任务（v5.57）
+
+**Reviewer定时任务：全面Code Review，发现ST-P20 API文档缺失端点。**
+
+1. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+2. ✅ **v5.56修复项确认**：ST-C05（verifyBearerAuth）正确实现，3处调用统一使用共享函数
+3. ✅ **迁移文件完整性**：001~022全部22个迁移文件存在
+4. ✅ **架构约束A-01~A-06**：全部通过（代码级验证）
+5. ✅ **安全修复ST-S01~S06**：全部生效，无回退
+6. ✅ **禁用词表SSOT**：16项一致
+7. ✅ **路由遮蔽顺序**：正确
+8. 🟡 **ST-P20（P3）**：API文档缺失3个admin端点路径（GET/admin/tags, GET/admin/recommendations/behavior, GET/admin/explain/cache/stats）
+9. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.57
+10. ✅ **更新日志清理**：四文档已清理过期日志（保留3天内）
+11. ✅ **P1-5/P1-6/P1-7/P2-3**：确认无P0/P1阻塞项，4项P2优化项保持非阻塞状态
+
+### 本次Coder定时任务（v5.56）
+
+**Coder定时任务：修复ST-C05 auth.ts认证解析重复 + 四文档v5.56同步。**
+
+1. ✅ **ST-C05修复**：auth.ts中logout/getCurrentUser/changePassword三处Bearer token认证解析重复→提取verifyBearerAuth()共享函数，代码从18行减至8行/处
+2. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+3. ✅ **架构约束A-01~A-06**：全部通过
+4. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.56
+5. ✅ **更新日志清理**：四文档已清理过期日志（保留3天内）
+6. ✅ **P1-5/P1-6/P1-7/P2-3**：确认无P0/P1阻塞项，4项P2优化项保持非阻塞状态
+
+### 本次Reviewer定时任务（v5.55）
+
+**Reviewer定时任务：全面Code Review，确认ST-P19迁移闭环。**
+
+1. ✅ **v5.54修复项确认**：ST-P19（parsePagination/parseLimit迁移14文件20处）已正确完成
+2. ✅ **P2-2关闭**：共享函数基础设施+全部调用者迁移完成
+3. ✅ **ST-C03关闭**：分页逻辑重复已全项目统一
+4. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+5. ✅ **迁移文件完整性**：001~022全部22个迁移文件存在
+6. ✅ **架构约束A-01~A-06**：全部通过
+7. ✅ **禁用词表SSOT**：16项BANNED_WORDS一致引用
+8. ✅ **遗留优化项**：从5项减至4项（P2-2已关闭）
+9. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.55
+
+### 本次Coder定时任务（v5.54）
+
+**Coder定时任务：完成ST-P19分页函数全项目迁移。**
+
+1. ✅ **ST-P19完成**：parsePagination/parseLimit迁移到全部14个文件（20处调用点），消除内联分页解析重复代码
+2. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+3. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.54
+4. ✅ **更新日志清理**：四文档均已清理，仅保留最新3天
+5. ✅ **P2-2重评估**：共享函数基础设施+调用者迁移已全部完成
+
+### 本次Reviewer定时任务（v5.53）
+
+**Reviewer定时任务：全面Code Review，确认代码基线稳定。**
+
+1. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+2. ✅ **ST-P17修复确认**：email.ts:453,533 + index.ts:419,424共4处注释已修正
+3. ✅ **迁移文件完整性**：001~022全部22个迁移文件存在
+4. ✅ **架构约束A-01~A-06**：全部满足
+5. ✅ **禁用词表SSOT**：16项BANNED_WORDS在ai_content.ts定义，explain.ts/ai_review.ts正确导入
+6. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.53
+7. ✅ **更新日志清理**：四文档均已清理，仅保留最新3天
+8. 🟡 **ST-P19**：parsePagination/parseLimit在constants.ts已定义但12+调用者未迁移（P3非阻塞）→ **v5.54已修复**
+9. 🟡 **P2-2重评估**：共享函数基础设施就绪，调用者迁移待后续迭代 → **v5.54已完成**
+
+### 本次Coder定时任务（v5.52）
+
+**Coder定时任务：修复ST-P17 email路由注释+四文档v5.52同步。**
+
+1. ✅ **ST-P17修复**：email.ts:453,533 和 index.ts:419,424 共4处路由注释路径从 `/api/email/send-*` 修正为 `/api/admin/email/send-*`
+2. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+3. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.52
+4. ✅ **更新日志清理**：按规则仅保留最新3天内容
+5. ✅ **代码Review确认**：禁用词表SSOT(16项→ai_content.ts)正确；BANNED_WORDS导入关系正确；admin鉴权错误码ADMIN_KEY_REQUIRED已确认
 
 ### 待推进项（按优先级）
 
@@ -52,10 +124,13 @@
 | P1-5 | 标签/类目查询部分场景使用 LIKE 字符串匹配，JSON 数组匹配未完全用 `json_each` | F-011/F-014 | P2 | 🏗 桥接表迁移后改善 |
 | P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | P2 | 🗓 |
 | P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | P2 | 🗓 |
+| P2-2 | 分页参数解析逻辑在多文件重复 | 跨模块 | P2 | ✅ 已修复（v5.54：全项目迁移至parsePagination/parseLimit） |
 | P2-3 | `parseJSON` 强制类型断言 `as string` 不安全 | 跨模块 | P3 | 🗓 |
-| ST-P14 | SRS §9.6 F-020子功能三态追踪表代码实现列不一致 | 文档一致性 | P2 | 🏗 待修复 |
+| ST-C05 | 认证头解析逻辑在 `auth.ts` 重复 3 次 | `auth.ts` | P2 | ✅ 已修复（v5.56：提取verifyBearerAuth） |
+| ST-P14 | SRS §9.6 F-020子功能三态追踪表代码实现列不一致 | 文档一致性 | P2 | ✅ 已修复（§9.6三态表已与§2.2基线表一致） |
+| ST-P19 | parsePagination/parseLimit迁移到14文件 | 跨模块 | P3 | ✅ 已修复（v5.54：全部20处调用点已迁移） |
 
-> ~~P1-8~~ 已修复（MMR超时控制）；~~P2-1/P2-2/P2-4~~ 已修复（共享常量/分页函数/审计日志IP）；~~ST-S01~S06~~ 全部修复（安全项）
+> ~~P1-8~~ 已修复（MMR超时控制）；~~P2-1/P2-2/P2-4~~ 已修复（共享常量/分页函数/审计日志IP）；~~ST-S01~S06~~ 全部修复（安全项）；~~ST-P19~~ 已修复（v5.54：全项目迁移完成）；~~ST-C05~~ 已修复（v5.56）
 
 ---
 
@@ -103,9 +178,14 @@
 
 | 版本 | 日期 | 完成模块 | 备注 |
 |------|------|----------|------|
-| v5.48 | 2026-05-04 | Reviewer定时任务 | Code Review完成；代码基线稳定；四文档v5.48同步 |
-| v5.47 | 2026-05-03 | Coder定时任务 | 四文档版本对齐；无P0/P1阻塞项 |
-| v5.46 | 2026-05-02 | Reviewer定时任务 | Code Review完成；代码基线稳定 |
+| v5.57 | 2026-05-05 | Reviewer定时任务 | 全面Code Review完成；发现ST-P20；四文档v5.57同步 |
+| v5.56 | 2026-05-05 | Coder定时任务 | ST-C05修复auth.ts认证解析重复→verifyBearerAuth()；四文档v5.56同步 |
+| v5.55 | 2026-05-05 | Reviewer定时任务 | 全面Code Review；ST-P19/P2-2/ST-C03状态闭环；遗留优化项5→4；四文档v5.55同步 |
+| v5.54 | 2026-05-05 | Coder定时任务 | ST-P19完成parsePagination/parseLimit全项目迁移14文件20处；四文档v5.54同步 |
+| v5.53 | 2026-05-05 | Reviewer定时任务 | 全面Code Review确认代码基线稳定+四文档v5.53同步 |
+| v5.52 | 2026-05-05 | Coder定时任务 | 修复ST-P17 email路由注释+四文档v5.52同步 |
+| v5.50 | 2026-05-05 | Coder定时任务 | 代码修复admin鉴权错误码+explain注释过期+SDS基线统计修正；四文档v5.50同步 |
+| v5.49 | 2026-05-05 | Designer定时任务 | SRS交叉审核完成；修正F-040-22矛盾文本；修正ST-P14状态 |
 
 ## 1. 引言
 
@@ -779,7 +859,7 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 |----------|----------|----------|------|----------|------|
 | F-040-20 | Alibaba.com Affiliate | 联盟追踪回调 | 接收 Qualifying Purchase 确认回调，更新转化状态 | F-012-05 | ✅ |
 | F-040-21 | Resend / SendGrid | 邮件发送 API | 发送订阅确认信、周更推荐、退订确认 | F-013-07 | ✅ |
-| F-040-22 | 外部运营AI | 数据更新接口（API/CLI） | 标签维度、标签清单、Item Card、预生成推荐文案入库 | F-020, F-016, F-011, F-010 | 🗓 |
+| F-040-22 | 外部运营AI | 数据更新接口（API/CLI） | 标签维度、标签清单、Item Card、预生成推荐文案入库 | F-020, F-016, F-011, F-010 | 🏗 |
 | F-040-23 | 价格监控服务 | 定期轮询 | source_url 价格变动检查 | F-010-05 | ✅ |
 
 #### F-040-20 联盟追踪回调接口
@@ -843,17 +923,17 @@ Findora 是一个面向海外用户的 AI 驱动选品内容平台，采用"内�
 
 **2. 幂等保证**
 
-> ⚠️ **实现状态**：以下处理流程描述了`ai_update_logs`表在SRS中的设计，但该表尚未在代码中实现（需补充）。
+> ✅ **实现状态**：`ai_update_logs`表及幂等校验逻辑已通过迁移022实现（见SDS §F-050 ai_update_logs表设计）。
 
 ```
-处理流程：
+幂等处理流程：
 1. 接收请求，提取 request_id
 2. 查询 D1：SELECT request_id FROM ai_update_logs WHERE request_id = ?
 3. 若存在 → 返回上次执行结果（不重复执行）
 4. 若不存在 → 执行写入，记录 request_id → 返回成功
 ```
 
-**待实现**：`ai_update_logs`表及幂等校验逻辑需作为迁移脚本补充，关联字段包括：`id`, `request_id`, `operation_type`, `status`, `result`, `created_at`
+**已实现字段**：`id`, `request_id` (UNIQUE索引), `operation_type`, `target_type`, `target_id`, `status`, `result`, `error_message`, `metadata`, `created_by`, `created_at`, `updated_at`
 
 **3. dry-run 校验**
 

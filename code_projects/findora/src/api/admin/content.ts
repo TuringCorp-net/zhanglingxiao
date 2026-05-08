@@ -3,6 +3,7 @@
 import { Env, Product, List } from '../../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
+import { parsePagination } from '../../lib/constants';
 
 // Content workflow states
 type WorkflowStatus = 'idea' | 'in_review' | 'approved' | 'published' | 'archived';
@@ -268,9 +269,7 @@ export async function createTopic(env: Env, request: Request): Promise<Response>
 export async function listTopics(env: Env, request: Request): Promise<Response> {
   const url = new URL(request.url);
   const status = url.searchParams.get('status') as WorkflowStatus | null;
-  const page = parseInt(url.searchParams.get('page') || '1');
-  const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 100);
-  const offset = (page - 1) * limit;
+  const { page, limit, offset } = parsePagination(url, 20);
 
   let query = 'SELECT * FROM content_topics WHERE 1=1';
   const bindings: (string | number)[] = [];

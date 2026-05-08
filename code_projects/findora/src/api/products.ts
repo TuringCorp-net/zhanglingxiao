@@ -2,6 +2,7 @@
 import { Env, Product, CreateProductRequest } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parsePagination, parseLimit } from '../lib/constants';
 import {
   buildProductContent,
   getAcceptsMarkdown,
@@ -108,9 +109,7 @@ export async function listProducts(env: Env, request: Request): Promise<Response
   const tag = url.searchParams.get('tag');
   const priceMin = url.searchParams.get('price_min');
   const priceMax = url.searchParams.get('price_max');
-  const page = parseInt(url.searchParams.get('page') || '1');
-  const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 100);
-  const offset = (page - 1) * limit;
+  const { page, limit, offset } = parsePagination(url, 20);
 
   // Sorting: newest, popular (clicks count in 30 days), price_asc, price_desc
   const sortBy = url.searchParams.get('sort_by') || 'newest';
@@ -792,7 +791,7 @@ export async function importProducts(env: Env, request: Request): Promise<Respon
 // GET /api/trending - F-001-05 (Trending Now content section)
 export async function getTrending(env: Env, request: Request): Promise<Response> {
   const url = new URL(request.url);
-  const limit = Math.min(parseInt(url.searchParams.get('limit') || '10'), 50);
+  const limit = parseLimit(url, 10);
 
   // Get trending products based on click count in last 7 days, weighted by recency
   const result = await env.DB.prepare(`

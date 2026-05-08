@@ -15,7 +15,7 @@
 //   6. "People who viewed [product] also liked this" (fallback)
 //
 // AI expansion: 20-40 words, NO banned words, English only
-// Banned: best/safest/guaranteed/proven/clinically/miracle/revolutionary/lifesaving
+// Banned words: imported from ai_content.ts (16 items, SSOT)
 //
 // Cache TTL (SRS Section 4.7.4):
 //   - User × Product: 24h

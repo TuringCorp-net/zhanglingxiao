@@ -1,6 +1,6 @@
 # Findora SDS — 软件设计规格说明书
 
-> **版本：** v5.48（Reviewer定时任务；Code Review完成；代码基线稳定；四文档v5.48同步）
+> **版本：** v5.58（Coder定时任务；修复ST-P20；四文档v5.58同步）
 
 ---
 
@@ -10,25 +10,86 @@
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-05-04 | v5.48：Reviewer定时任务；Code Review完成；代码基线稳定；四文档v5.48同步 |
-| 2026-05-03 | v5.47：Coder定时任务；四文档版本对齐；无P0/P1阻塞项 |
-| 2026-05-02 | v5.46：Reviewer定时任务；Code Review完成；代码基线稳定 |
+| 2026-05-05 | v5.58：Coder定时任务；修复ST-P20（API文档补充3个缺失admin端点）；四文档v5.58同步；清理更新日志 |
+| 2026-05-05 | v5.57：Reviewer定时任务；全面Code Review完成；TS编译0错误；发现ST-P20；四文档v5.57同步 |
+| 2026-05-05 | v5.56：Coder定时任务；修复ST-C05（auth.ts认证Bearer token解析3处重复→提取verifyBearerAuth()）；TS编译0错误；四文档v5.56同步 |
 
 ## Actions
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 本次Reviewer定时任务（v5.48）
+### 本次Coder定时任务（v5.58）
 
-**Reviewer定时任务：Code Review完成；代码基线稳定；四文档v5.48同步。**
+**Coder定时任务：修复ST-P20 API文档缺失端点 + 四文档v5.58同步。**
 
-1. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
-2. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.48
-3. ✅ **更新日志清理**：按规则仅保留最新3天内容
-4. ✅ **Business Concept约束**：A-01~A-06全部满足
-5. ✅ **系统设计约束**：A-01~A-06全部通过
-6. ✅ **代码与文档一致性**：SDS/API/STR端点数量与代码路由同步
-7. ✅ **禁用词表SSOT**：16项禁用词在ai_content.ts/explain.ts/ai_review.ts三处统一
+1. ✅ **ST-P20修复**：API文档补充3个缺失admin端点路径（GET/admin/tags, GET/admin/recommendations/behavior, GET/admin/explain/cache/stats）
+2. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.58
+3. ✅ **更新日志清理**：四文档已清理过期日志（仅保留3天）
+4. ✅ **TS编译验证**：`npx tsc --noEmit` 0错误（v5.56确认，无新增代码变更）
+5. ✅ **基线确认**：无P0/P1阻塞项，4项P2非阻塞优化项（P1-5/P1-6/P1-7/P2-3）保持不变
+
+### 本次Reviewer定时任务（v5.57）
+
+**Reviewer定时任务：全面Code Review，发现ST-P20 API文档缺失端点。**
+
+1. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+2. ✅ **v5.56修复项确认**：ST-C05（verifyBearerAuth）正确实现
+3. ✅ **迁移文件完整性**：001~022全部22个迁移文件存在
+4. ✅ **架构约束A-01~A-06**：全部通过
+5. 🟡 **ST-P20（P3）**：API文档缺失3个admin端点路径
+6. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.57
+7. ✅ **P1-5/P1-6/P1-7/P2-3**：确认无P0/P1阻塞项
+
+### 本次Coder定时任务（v5.56）
+
+**Coder定时任务：修复ST-C05 auth.ts认证解析重复 + 四文档v5.56同步。**
+
+1. ✅ **ST-C05修复**：auth.ts中logout/getCurrentUser/changePassword三处Bearer token认证解析重复→提取verifyBearerAuth()共享函数，减少代码重复
+2. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+3. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.56
+4. ✅ **更新日志清理**：SRS/SDS/API/STR四文档已清理过期日志
+5. ✅ **P1-5/P1-6/P1-7/P2-3**：确认4项P2优化项保持非阻塞状态（无P0/P1阻塞项需处理）
+
+### 本次Reviewer定时任务（v5.55）
+
+**Reviewer定时任务：全面Code Review，确认ST-P19迁移闭环。**
+
+1. ✅ **v5.54修复项确认**：ST-P19（parsePagination/parseLimit迁移14文件20处）已完成
+2. ✅ **P2-2关闭**：共享函数基础设施+全部调用者迁移完成
+3. ✅ **ST-C03关闭**：分页逻辑重复已全项目统一
+4. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误
+5. ✅ **迁移完整性**：001~022全部22个迁移文件存在
+6. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.55
+
+### 本次Coder定时任务（v5.54）
+
+**Coder定时任务：完成ST-P19分页函数全项目迁移。**
+
+1. ✅ **ST-P19完成**：全部14个文件20处调用点已采用parsePagination/parseLimit共享函数
+2. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+3. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.54
+4. ✅ **P2-2彻底关闭**：共享函数基础设施+调用者迁移已全部完成
+
+### 本次Reviewer定时任务（v5.53）
+
+**Reviewer定时任务：全面Code Review，确认代码基线稳定。**
+
+1. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+2. ✅ **ST-P17修复确认**：email.ts/index.ts共4处注释已修正
+3. ✅ **迁移文件完整性**：001~022全部22个迁移文件存在
+4. ✅ **架构约束A-01~A-06**：全部满足
+5. ✅ **更新日志清理**：四文档均已清理
+6. 🟡 **P2-2重评估**：parsePagination/parseLimit基础设施就绪，调用者迁移待后续迭代（ST-P19）→ **v5.54已完成**
+
+### 本次Coder定时任务（v5.52）
+
+**Coder定时任务：修复ST-P17 email路由注释+四文档v5.52同步。**
+
+1. ✅ **ST-P17修复**：email.ts:453,533 和 index.ts:419,424 共4处路由注释路径从 `/api/email/send-*` 修正为 `/api/admin/email/send-*`
+2. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+3. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.52
+4. ✅ **更新日志清理**：按规则仅保留最新3天内容
+5. ✅ **代码Review确认**：禁用词表SSOT正确；BANNED_WORDS导入关系正确
 
 > ⚠️ **术语澄清**：以下"运营AI"指外部运营AI（系统外的自动化脚本/Agent），**不是用户侧的实时LLM调用**。根据A-01架构约束，用户侧零实时LLM，禁止在推荐/浏览链路中调用大模型。
 
@@ -46,9 +107,9 @@
 | P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | P2 | 🗓 |
 | P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | P2 | 🗓 |
 | P2-3 | `parseJSON` 强制类型断言 `as string` 不安全 | 跨模块 | P3 | 🗓 |
-| ST-P14 | SRS §9.6 F-020子功能三态追踪表代码实现列不一致 | 文档一致性 | P2 | 🏗 待修复 |
+| ST-C05 | 认证头解析逻辑在 `auth.ts` 重复 3 次 | `auth.ts` | P2 | ✅ 已修复（v5.56：提取verifyBearerAuth） |
 
-> ~~P1-8~~ 已修复（MMR超时控制）；~~P2-1/P2-2/P2-4~~ 已修复（共享常量/分页函数/审计日志IP）；~~ST-S01~S06~~ 全部修复（安全项）
+> ~~P1-8~~ 已修复（MMR超时控制）；~~P2-1/P2-2/P2-4~~ 已修复（共享常量/分页函数/审计日志IP）；~~ST-S01~S06~~ 全部修复（安全项）；~~ST-C05~~ 已修复（v5.56）
 
 ---
 
@@ -614,7 +675,7 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 
 ---
 
-## 当前基线状态（v5.45）
+## 当前基线状态（v5.58）
 
 | 指标 | 数值 | 备注 |
 |------|------|------|
@@ -622,14 +683,16 @@ score = category_match×10 + tag_match×3 + click_count×1 + favorite_count×2 +
 | 需求设计(🗓) | 149项 | 100% |
 | 代码实现(🏗) | 149项 | 100% |
 | 功能审核(✅) | 134项 | 90% |
-| 待AI联调(🏗) | 15项 | F-016(4项)+F-020(6项)+F-040-22(1项)等 |
+| 待AI联调(🏗) | 15项 | F-016(2项:F-016-01/04)+F-020(6项)+F-040-22(1项)+其他(6项含F-010-04等) |
 | 完成度 | 90% | |
 | TypeScript编译 | ✅ 0错误 | `npx tsc --noEmit` |
 | 架构约束 | ✅ A-01~A-06全部通过 | |
 | Migration编号 | ✅ 001~022连续无冲突 | |
-| 四文档版本 | ✅ 全部v5.45 | |
+| 四文档版本 | ✅ 全部v5.58 | |
 | P0/P1安全项 | ✅ 全部修复 | ST-S01~S06 |
-| ST-S05修复 | ✅ 审计日志IP仅使用CF-Connecting-IP | |
+| P2优化项 | 🟡 4项非阻塞 | P1-5, P1-6, P1-7, P2-3 |
+| ST-P19 | ✅ 已修复 | parsePagination/parseLimit全项目迁移完成 |
+| ST-P20 | ✅ 已修复（v5.58） | API文档补充3个缺失admin端点 |
 
 **无 CRITICAL/HIGH 阻塞项。**
 

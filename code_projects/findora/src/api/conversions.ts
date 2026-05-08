@@ -4,6 +4,7 @@
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parsePagination } from '../lib/constants';
 
 // Create conversions table if not exists
 async function ensureConversionsTable(env: Env): Promise<void> {
@@ -126,9 +127,7 @@ export async function listConversions(env: Env, request: Request): Promise<Respo
   const partner = url.searchParams.get('partner');
   const start_date = url.searchParams.get('start_date');
   const end_date = url.searchParams.get('end_date');
-  const page = Math.max(1, parseInt(url.searchParams.get('page') || '1'));
-  const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') || '50')));
-  const offset = (page - 1) * limit;
+  const { page, limit, offset } = parsePagination(url, 50);
 
   let where = 'WHERE 1=1';
   const bindings: (string | number)[] = [];

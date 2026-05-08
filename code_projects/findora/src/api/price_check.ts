@@ -13,6 +13,7 @@
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parseLimit } from '../lib/constants';
 
 // Ensure price_history table exists
 async function ensurePriceHistoryTable(env: Env): Promise<void> {
@@ -287,7 +288,7 @@ export async function getPriceHistory(env: Env, request: Request, productId: str
 
     const url = new URL(request.url);
     const days = Math.min(365, Math.max(1, parseInt(url.searchParams.get('days') || '30')));
-    const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') || '30')));
+    const limit = parseLimit(url, 30);
 
     // Get price history
     const history = await env.DB.prepare(`
@@ -363,7 +364,7 @@ export async function listPriceChanges(env: Env, request: Request): Promise<Resp
     const url = new URL(request.url);
     const days = Math.min(90, Math.max(1, parseInt(url.searchParams.get('days') || '7')));
     const status = url.searchParams.get('status'); // increased, decreased, new_price, unchanged
-    const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') || '50')));
+    const limit = parseLimit(url, 50);
     const offset = Math.max(0, parseInt(url.searchParams.get('offset') || '0'));
 
     let where = `WHERE ph.checked_at >= datetime('now', '-' || ? || ' days')`;

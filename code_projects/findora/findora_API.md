@@ -1,6 +1,6 @@
 # Findora API Documentation
 
-> **版本：** v5.48（Reviewer定时任务；Code Review完成；代码基线稳定；四文档v5.48同步）
+> **版本：** v5.58（Coder定时任务；修复ST-P20 API文档补充3个缺失admin端点；四文档v5.58同步）
 
 ## 概述
 
@@ -46,25 +46,77 @@ Accept: text/markdown     # 返回Markdown格式内容
 
 | 修改时间 | 修改内容 |
 |----------|----------|
-| 2026-05-04 | v5.48：Reviewer定时任务；Code Review完成；代码基线稳定；四文档v5.48同步 |
-| 2026-05-03 | v5.47：Coder定时任务；四文档版本对齐；无P0/P1阻塞项 |
-| 2026-05-02 | v5.46：Reviewer定时任务；Code Review完成；代码基线稳定 |
+| 2026-05-05 | v5.58：Coder定时任务；修复ST-P20（API文档补充3个缺失admin端点：GET/admin/tags, GET/admin/recommendations/behavior, GET/admin/explain/cache/stats）；四文档v5.58同步；清理更新日志 |
+| 2026-05-05 | v5.57：Reviewer定时任务；全面Code Review完成；TS编译0错误；发现ST-P20；四文档v5.57同步 |
+| 2026-05-05 | v5.56：Coder定时任务；ST-C05修复auth.ts认证解析重复→verifyBearerAuth()；四文档v5.56同步 |
 
 ## Actions
 
 > **规则：** 每次修改本文档后必须更新此章节，反映当前项目最新待办方向，为后续协作者指明工作重点。
 
-### 本次Reviewer定时任务（v5.48）
+### 本次Coder定时任务（v5.58）
 
-**Reviewer定时任务：Code Review完成；代码基线稳定；四文档v5.48同步。**
+**Coder定时任务：修复ST-P20 API文档缺失端点 + 四文档v5.58同步。**
 
-1. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
-2. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.48
-3. ✅ **更新日志清理**：按规则仅保留最新3天内容
-4. ✅ **Business Concept约束**：A-01~A-06全部满足
-5. ✅ **系统设计约束**：A-01~A-06全部通过
-6. ✅ **代码与文档一致性**：SDS/API/STR端点数量与代码路由同步
-7. ✅ **禁用词表SSOT**：16项禁用词在ai_content.ts/explain.ts/ai_review.ts三处统一
+1. ✅ **ST-P20修复**：API文档补充3个缺失admin端点路径（GET/admin/tags, GET/admin/recommendations/behavior, GET/admin/explain/cache/stats）
+2. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.58
+3. ✅ **更新日志清理**：四文档已清理过期日志（仅保留3天）
+4. ✅ **基线确认**：无P0/P1阻塞项，4项P2非阻塞优化项保持不变
+
+### 本次Reviewer定时任务（v5.57）
+
+**Reviewer定时任务：全面Code Review，发现ST-P20 API文档缺失端点。**
+
+1. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误
+2. ✅ **v5.56修复项确认**：ST-C05（verifyBearerAuth）正确实现
+3. 🟡 **ST-P20（P3）**：API文档端点总览缺失3个admin端点路径（详见STR v5.57）
+4. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.57
+
+### 本次Coder定时任务（v5.56）
+
+**Coder定时任务：修复ST-C05 auth.ts认证解析重复 + 四文档v5.56同步。**
+
+1. ✅ **ST-C05修复**：auth.ts中logout/getCurrentUser/changePassword三处Bearer token认证解析重复→提取verifyBearerAuth()共享函数
+2. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误
+3. ✅ **路由完整**：所有API端点路由与文档一致
+4. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.56
+
+### 本次Reviewer定时任务（v5.55）
+
+**Reviewer定时任务：全面Code Review，确认ST-P19迁移闭环。**
+
+1. ✅ **v5.54修复项确认**：ST-P19（parsePagination/parseLimit迁移14文件20处）已完成
+2. ✅ **TypeScript编译**：`npx tsc --noEmit` 0错误
+3. ✅ **路由完整**：所有API端点路由与文档一致
+4. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.55
+
+### 本次Coder定时任务（v5.54）
+
+**Coder定时任务：完成ST-P19分页函数全项目迁移。**
+
+1. ✅ **ST-P19完成**：全部14个文件20处调用点已采用parsePagination/parseLimit共享函数
+2. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+3. ✅ **路由完整**：所有API端点路由与文档一致
+4. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.54
+
+### 本次Reviewer定时任务（v5.53）
+
+**Reviewer定时任务：全面Code Review，确认代码基线稳定。**
+
+1. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+2. ✅ **ST-P17修复确认**：email管理端点路径已与API文档一致
+3. ✅ **路由完整**：所有API端点路由与文档一致
+4. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.53
+
+### 本次Coder定时任务（v5.52）
+
+**Coder定时任务：修复ST-P17 email路由注释+四文档v5.52同步。**
+
+1. ✅ **ST-P17修复**：email.ts:453,533 和 index.ts:419,424 共4处路由注释路径从 `/api/email/send-*` 修正为 `/api/admin/email/send-*`
+2. ✅ **TypeScript编译验证**：`npx tsc --noEmit` 0错误
+3. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.52
+4. ✅ **更新日志清理**：按规则仅保留最新3天内容
+5. ✅ **代码Review确认**：email管理端点路径已与API文档一致（API文档中正确记录为`/api/admin/email/send-*`）
 
 ### 待推进项（按优先级）
 
@@ -84,8 +136,9 @@ Accept: text/markdown     # 返回Markdown格式内容
 | P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | P2 | 🗓 |
 | P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | P2 | 🗓 |
 | P2-3 | `parseJSON` 强制类型断言 `as string` 不安全 | 跨模块 | P3 | 🗓 |
+| ST-C05 | 认证头解析逻辑在 `auth.ts` 重复 3 次 | `auth.ts` | P2 | ✅ 已修复（v5.56） |
 
-> ~~P1-8~~ 已修复（MMR超时控制）；~~P2-1/P2-2/P2-4~~ 已修复（共享常量/分页函数/审计日志IP）；~~ST-S01~S06~~ 全部修复（安全项）
+> ~~P1-8~~ 已修复（MMR超时控制）；~~P2-1/P2-2/P2-4~~ 已修复（共享常量/分页函数/审计日志IP）；~~ST-S01~S06~~ 全部修复（安全项）；~~ST-C05~~ 已修复（v5.56）
 
 ---
 
@@ -155,6 +208,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 | 方法 | 路径 | 功能 | F编号 |
 |------|------|------|-------|
 | POST | `/api/admin/tags` | 创建标签 | F-040-17, F-011-01 |
+| GET | `/api/admin/tags` | 标签列表（管理端） | F-011-01 |
 | PUT | `/api/admin/tags/:id` | 更新标签 | F-011-01 |
 | DELETE | `/api/admin/tags/:id` | 删除标签 | F-011-01 |
 | PATCH | `/api/admin/tags/:id/featured` | 更新精选商品 | F-040-17d |
@@ -214,6 +268,13 @@ Accept: text/markdown     # 返回Markdown格式内容
 | GET | `/api/admin/analytics/categories` | 类目分析 | F-017 |
 | GET | `/api/admin/analytics/lists` | 榜单分析 | F-017 |
 | GET | `/api/admin/analytics/trends` | 趋势分析 | F-017 |
+
+#### 推荐与解释系统调试
+
+| 方法 | 路径 | 功能 | F编号 |
+|------|------|------|-------|
+| GET | `/api/admin/recommendations/behavior` | 商品行为分数调试 | F-015-01 |
+| GET | `/api/admin/explain/cache/stats` | 解释缓存统计 | F-016-04 |
 
 #### AI内容生成
 
@@ -434,7 +495,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": [
     {
       "id": "prod_xxx",
@@ -469,9 +530,9 @@ Accept: text/markdown     # 返回Markdown格式内容
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": [...],
-  "pagination": {
+  "meta": {
     "page": 1,
     "limit": 20,
     "total": 150
@@ -490,7 +551,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": {
     "id": "prod_xxx",
     "title": "iPhone 15 Pro Max",
@@ -537,7 +598,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": {
     "id": "user_xxx",
     "subscribed_at": "2024-01-15T10:00:00Z"
@@ -589,7 +650,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": [
     {
       "product_id": "prod_xxx",
@@ -631,7 +692,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": [
     {
       "product_id": "prod_xxx",
@@ -670,7 +731,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 **响应**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": {
     "id": "tag_new_xxx"
   }
@@ -728,7 +789,7 @@ Accept: text/markdown     # 返回Markdown格式内容
 **响应**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": {
     "id": "prod_xxx",
     "deleted": true
@@ -958,7 +1019,7 @@ curl -s "https://findora.turingcorp.net/api/admin/tags/stats" \
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": {
     "generated_content": "## Our Top Picks\n\nAfter careful analysis, we recommend...\n\n### 1. Product A\nThis is perfect for...",
     "metadata": {
@@ -995,7 +1056,7 @@ curl -s "https://findora.turingcorp.net/api/admin/tags/stats" \
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": {
     "total_products": 1500,
     "active_lists": 45,
@@ -1019,7 +1080,7 @@ curl -s "https://findora.turingcorp.net/api/admin/tags/stats" \
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": [
     {
       "key": "site_name",
@@ -1055,7 +1116,7 @@ curl -s "https://findora.turingcorp.net/api/admin/tags/stats" \
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": {
     "id": "cfg_xxx",
     "key": "site_name",
@@ -1067,7 +1128,7 @@ curl -s "https://findora.turingcorp.net/api/admin/tags/stats" \
 **错误响应**：
 ```json
 {
-  "success": false,
+  "ok": false,
   "error": {
     "code": "INVALID_PARAMS",
     "message": "Key must start with a letter and contain only letters, numbers, and underscores"
@@ -1096,7 +1157,7 @@ curl -s "https://findora.turingcorp.net/api/admin/tags/stats" \
 **响应示例**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": {
     "key": "site_name",
     "value": "Findora"
@@ -1441,16 +1502,16 @@ curl -s "https://findora.turingcorp.net/api/admin/tags/stats" \
 **成功响应**：
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": { ... },
-  "pagination": { ... }  // 可选，分页时存在
+  "meta": { ... }  // 可选，分页时存在
 }
 ```
 
 **错误响应**：
 ```json
 {
-  "success": false,
+  "ok": false,
   "error": {
     "code": "ERROR_CODE",
     "message": "Human readable message"
@@ -1460,15 +1521,14 @@ curl -s "https://findora.turingcorp.net/api/admin/tags/stats" \
 
 ### C. 分页格式
 
-支持分页的接口返回 `pagination` 对象：
+支持分页的接口返回 `meta` 对象（含分页信息）：
 
 ```json
 {
-  "success": true,
+  "ok": true,
   "data": [...],
-  "pagination": {
+  "meta": {
     "page": 1,
-    "limit": 20,
     "total": 150
   }
 }
@@ -1488,5 +1548,5 @@ Accept: text/markdown
 
 ---
 
-*文档版本：v5.47*
-*最后更新：2026-05-04*
+*文档版本：v5.58*
+*最后更新：2026-05-05*

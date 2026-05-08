@@ -3,6 +3,7 @@
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parsePagination } from '../lib/constants';
 
 function generateId(): string {
   return crypto.randomUUID();
@@ -183,9 +184,7 @@ export async function listTranslationKeys(env: Env, request: Request): Promise<R
   try {
     const url = new URL(request.url);
     const module = url.searchParams.get('module');
-    const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
-    const offset = (page - 1) * limit;
+    const { page, limit, offset } = parsePagination(url, 50);
 
     let query = 'SELECT * FROM translation_keys';
     const bindings: any[] = [];
@@ -402,9 +401,7 @@ export async function getSyncQueue(env: Env, request: Request): Promise<Response
   try {
     const url = new URL(request.url);
     const status = url.searchParams.get('status') || 'pending';
-    const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
-    const offset = (page - 1) * limit;
+    const { page, limit, offset } = parsePagination(url, 50);
 
     const result = await env.DB
       .prepare(`

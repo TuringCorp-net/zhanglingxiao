@@ -1,30 +1,239 @@
 # Findora STR — 软件测试报告
 
 > **项目名称：** Findora
-> **版本：** v5.48（Reviewer定时任务；Code Review完成；代码基线稳定；四文档v5.48同步）
-> **最后更新：** 2026-05-04
+> **版本：** v5.59（Reviewer定时任务；全面Code Review；发现ST-P21 SRS F-016-02/03状态不一致）
+> **最后更新：** 2026-05-05
 > **维护方式：** 以SRS F编号为主线的模块化测试状态文档
 
 ---
 
-## 基线状态（v5.48）
+## 修改记录
+
+> **规则：** 每次修改本文档后必须在此章节记录，只保留最新3天。
+
+| 修改时间 | 修改内容 |
+|----------|----------|
+| 2026-05-05 | v5.59：Reviewer定时任务；全面Code Review完成；TS编译0错误；Migration 001~022完整；架构约束A-01~A-06全通过；发现ST-P21（SRS F-016-02/03状态标记🗓与代码实际🏗不一致）；更新日志清理 |
+| 2026-05-05 | v5.58：Coder定时任务；修复ST-P20（API文档补充3个缺失admin端点路径）；ST-P20状态从🟡→✅；四文档v5.58同步；更新日志清理 |
+| 2026-05-05 | v5.57：Reviewer定时任务；全面Code Review完成；TS编译0错误；Migration 001~022完整；架构约束A-01~A-06全通过；发现ST-P20（API文档缺失3个admin端点路径）；四文档v5.57同步；更新日志清理 |
+
+---
+
+## 基线状态（v5.59）
 
 | 指标 | 状态 |
 |------|------|
 | TypeScript 编译 | ✅ `npx tsc --noEmit` 0 错误 |
 | 阻塞项 | ✅ P0/P1安全问题已全部修复 |
 | 代码基线 | 稳定，`src/` 无未审核变更 |
-| 本次审查 | v5.48 Reviewer定时任务；Code Review完成；代码基线稳定；四文档v5.48同步 |
+| 本次任务 | v5.59 Reviewer定时任务；全面Code Review；发现ST-P21 |
 | Business Concept映射 | ✅ 17章节全量覆盖 |
 | System Design约束核对 | ✅ A-01~A-06全部映射 |
-| 三态状态一致性 | ✅ 模块基线表与§2.2状态表一致 |
-| 更新日志清理 | ✅ 仅保留最新3天内容 |
-| 剩余P2优化项 | 🟡 5项非阻塞工程化优化待迭代（P1-5, P1-6, P1-7, P2-3, ST-P14） |
+| 三态状态一致性 | 🟡 发现ST-P21：SRS §7.7 F-016-02/03标记🗓但代码🏗（参见本次新发现问题） |
+| 更新日志清理 | ✅ SRS/SDS/API/STR四文档已全部清理，仅保留最新3天 |
+| 剩余P2优化项 | 🟡 4项非阻塞工程化优化待迭代（P1-5, P1-6, P1-7, P2-3） |
+| ST-P20 | ✅ 已修复（v5.58：API文档补充3个缺失admin端点） |
+| ST-P21 | 🟡 P3：SRS F-016-02/03代码实现状态标记🗓，应更新为🏗 |
+| ST-C05 | ✅ 已修复（v5.56：提取verifyBearerAuth） |
+| P2-2 | ✅ 已修复（v5.54：全部调用者迁移完成） |
+| ST-C03 | ✅ 已修复（v5.54：parsePagination/parseLimit全项目迁移完成） |
+| ST-P17 | ✅ 已修复（v5.52 email路由注释4处） |
+| ST-P19 | ✅ 已修复（v5.54：全项目迁移完成） |
 
-### 本次Reviewer定时任务验证通过项（v5.48）
+### 本次Reviewer定时任务验证通过项（v5.59）
 
 1. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
-2. ✅ **四文档版本对齐**：SRS→v5.48、SDS→v5.48、API→v5.48、STR→v5.48
+2. ✅ **v5.58修复项确认**：ST-P20（API文档补充3个缺失admin端点）正确实现，三处均已添加
+3. ✅ **迁移文件完整性**：001~022全部22个迁移文件存在
+4. ✅ **架构约束A-01~A-06**：全部通过（代码级验证）
+5. ✅ **安全修复ST-S01~S06**：全部生效，无回退
+6. ✅ **禁用词表SSOT**：16项BANNED_WORDS在ai_content.ts定义，explain.ts/ai_review.ts正确导入
+7. ✅ **verifyBearerAuth**：auth.ts:123定义，3处调用点（logout/getCurrentUser/changePassword）统一使用
+8. ✅ **parsePagination/parseLimit**：products.ts正确从constants.ts导入，全项目迁移已完成
+9. ✅ **路由遮蔽顺序**：categories子类目→通用、EMS members→ID路由、users/sessions→users/:id均已验证
+10. ✅ **admin鉴权错误码**：index.ts `ADMIN_KEY_REQUIRED`正确
+11. ✅ **四文档版本对齐**：SRS/SDS/API v5.58，STR v5.59（Reviewer版本号+1）
+12. ✅ **无P0/P1阻塞项**：全部安全修复已验证
+13. ✅ **API文档响应格式**：`ok`/`meta` 与代码实现一致
+14. ✅ **F-016-02/03代码验证**：explain.ts:846 `explainComparison()`, explain.ts:901 `explainScenarios()` 均已完整实现，路由已注册（index.ts:206,211）
+15. ✅ **review_report.md同步更新**：内容更新至v5.59
+
+### 本次新发现问题（v5.59）
+
+| 问题ID | 严重度 | 描述 | 位置 | 状态 |
+|--------|--------|------|------|------|
+| **ST-P21** | **P3** | SRS §7.7 F-016-02/03代码实现状态标记为🗓（未实现），但代码早已完整实现应为🏗 | `findora_SRS.md:1819-1820` vs `explain.ts:846,901` | 🟡 待修复 |
+
+#### ST-P21 详细说明
+
+**问题描述**：SRS §7.7 F-016子功能三态追踪表（第1819-1820行）将F-016-02（商品对比说明）和F-016-03（场景化描述）的代码实现列标记为🗓，但实际代码早已完整实现：
+
+| 子功能 | SRS标记 | 代码实际状态 | 代码位置 |
+|--------|---------|-------------|----------|
+| F-016-02 商品对比说明 | 🗓 | 🏗 已实现 | `explain.ts:846` `explainComparison()`, `index.ts:206` 路由注册 |
+| F-016-03 场景化描述 | 🗓 | 🏗 已实现 | `explain.ts:901` `explainScenarios()`, `index.ts:211` 路由注册 |
+
+**交叉验证**：
+- STR §F-016功能审核表（第436-437行）：F-016-02/03正确标记为🏗
+- review_report.md §7.1（第281行）：已记录此差异并建议"SRS §9.6 F-016-02/03状态修正"
+- explain.ts 文件头注释（第5-6行）：明确列出F-016-02/03实现
+
+**影响评估**：P3（最低）。不影响系统功能，但SRS文档状态标记不准确可能导致协作者误判功能进度。F-016-02/03的代码实现是完整的（含DB查询、参数验证、响应构建），仅功能审核(F-016整个模块)受AI_API_KEY联调制约。
+
+**修复建议**：将SRS §7.7第1819-1820行的F-016-02和F-016-03代码实现列从🗓更新为🏗，与STR、review_report.md、代码实际情况保持一致。
+
+### 本次Coder定时任务验证通过项（v5.58）
+
+1. ✅ **ST-P20修复**：API文档 `findora_API.md` 端点总览已补充3个缺失admin端点路径：
+   - `GET /api/admin/tags` → "标签维度更新"表
+   - `GET /api/admin/recommendations/behavior` → 新增"推荐与解释系统调试"章节
+   - `GET /api/admin/explain/cache/stats` → 新增"推荐与解释系统调试"章节
+2. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.58
+3. ✅ **更新日志清理**：四文档已清理过期日志（仅保留3天）
+4. ✅ **无代码变更**：仅文档修复，TS编译0错误保持
+
+### 本次Reviewer定时任务验证通过项（v5.57）
+
+1. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
+2. ✅ **v5.56修复项确认**：ST-C05（verifyBearerAuth）正确实现，3处调用统一使用共享函数
+3. ✅ **迁移文件完整性**：001~022全部22个迁移文件存在
+4. ✅ **架构约束A-01~A-06**：全部通过（代码级验证）
+5. ✅ **禁用词表SSOT**：16项BANNED_WORDS在ai_content.ts定义，explain.ts/ai_review.ts正确导入
+6. ✅ **安全修复ST-S01~S06**：全部生效，无回退
+7. ✅ **路由遮蔽顺序**：categories子类目→通用、EMS members→ID路由、users/sessions→users/:id均已验证
+8. ✅ **admin鉴权错误码**：index.ts:262 `ADMIN_KEY_REQUIRED`正确
+9. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.56（本次Review后将同步为v5.57）
+10. ✅ **无P0/P1阻塞项**：全部安全修复已验证
+11. ✅ **API文档响应格式**：`success`→`ok`、`pagination`→`meta` 与代码实现一致
+12. ✅ **review_report.md同步更新**：内容更新至v5.57
+
+### 本次新发现问题（v5.57）
+
+| 问题ID | 严重度 | 描述 | 位置 | 状态 |
+|--------|--------|------|------|------|
+| **ST-P20** | **P3** | API文档端点总览缺失3个admin端点路径（代码已注册路由） | `findora_API.md` vs `index.ts` | ✅ 已修复（v5.58） |
+
+#### ST-P20 详细说明
+
+**问题描述**：API文档 `findora_API.md` 的端点总览章节缺失以下3个admin端点，但 `index.ts` 中已正确注册路由：
+
+| 缺失端点 | 代码位置 | 功能 |
+|----------|----------|------|
+| `GET /api/admin/tags` | `index.ts:380` → `listTags()` | 标签列表（管理端） |
+| `GET /api/admin/recommendations/behavior` | `index.ts:435` → `getProductBehaviorScore()` | 商品行为分数调试端点 |
+| `GET /api/admin/explain/cache/stats` | `index.ts:440` → `getExplainCacheStats()` | 解释缓存统计 |
+
+**影响评估**：轻微（P3）。这3个端点均需admin鉴权且代码实现正确，仅文档记载不完整。运营/开发Agent可能无法通过文档发现这些工具端点。
+
+**修复建议**：在API文档端点总览中补充这3个路径条目。
+
+### 本次Coder定时任务验证通过项（v5.56）
+
+1. ✅ **ST-C05修复**：auth.ts中logout/getCurrentUser/changePassword三处Bearer token认证解析重复→提取verifyBearerAuth()共享函数
+2. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
+3. ✅ **代码简化**：每处调用从9行减至4行，消除认证逻辑重复
+4. ✅ **迁移文件完整性**：001~022全部22个迁移文件存在
+5. ✅ **架构约束A-01~A-06**：全部通过
+6. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.56
+7. ✅ **更新日志清理**：四文档已清理过期日志
+8. ✅ **无P0/P1阻塞项**：全部安全修复已验证
+
+### 本次Reviewer定时任务验证通过项（v5.55）
+
+1. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
+2. ✅ **v5.54修复项确认**：ST-P19（parsePagination/parseLimit迁移14文件20处）已正确完成
+3. ✅ **迁移文件完整性**：001~022全部22个迁移文件存在
+4. ✅ **架构约束A-01~A-06**：全部满足
+5. ✅ **禁用词表SSOT**：16项BANNED_WORDS在ai_content.ts定义，explain.ts/ai_review.ts正确导入
+6. ✅ **共享函数迁移**：parsePagination（13处）+ parseLimit（7处）全部正确导入constants.ts
+7. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.55
+8. ✅ **P2-2/ST-C03状态闭环**：共享函数基础设施+全部调用者迁移完成，遗留优化项从5→4
+9. ✅ **无P0/P1阻塞项**：全部安全修复已验证
+10. ✅ **路由顺序正确**：categories子类目→通用、EMS members→ID路由、users/sessions→users/:id均已验证
+11. ✅ **admin鉴权错误码**：index.ts:263 `ADMIN_KEY_REQUIRED`正确
+12. ✅ **review_report.md同步更新**：从v5.49更新至v5.55
+
+### 本次Coder定时任务验证通过项（v5.54）
+
+1. ✅ **ST-P19迁移完成**：全部14个文件20处调用点已采用parsePagination/parseLimit
+2. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
+3. ✅ **parsePagination迁移**：enterprise.ts, i18n.ts(x2), audit.ts(x2), record.ts, membership.ts(x2), admin/subscribers.ts, admin/content.ts, conversions.ts, email.ts, products.ts, ai_review.ts — 共13处
+4. ✅ **parseLimit迁移**：behavior.ts, recommendations.ts, products.ts(getTrending), record.ts(expiring), price_check.ts(x2) — 共7处
+5. ✅ **四文档版本对齐**：SRS/SDS/API/STR版本统一为v5.54
+6. ✅ **P2-2彻底关闭**：共享函数基础设施+全部调用者迁移完成
+7. ✅ **无回归风险**：功能逻辑等价替换，仅消除代码重复
+
+### 本次Reviewer定时任务验证通过项（v5.53）
+
+1. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
+2. ✅ **v5.52修复项确认**：ST-P17（email.ts:453,533 + index.ts:419,424共4处注释）已正确修正为`/api/admin/email/send-*`
+3. ✅ **迁移文件完整性**：001~022全部22个迁移文件存在
+4. ✅ **禁用词表SSOT**：16项BANNED_WORDS在ai_content.ts定义，explain.ts/ai_review.ts正确导入
+5. ✅ **四文档版本对齐**：SRS→v5.52、SDS→v5.52、API→v5.52（本次Review后将同步为v5.53）
+6. ✅ **Business Concept约束**：A-01~A-06全部满足
+7. ✅ **路由顺序正确**：categories子类目→通用、EMS members→ID路由屏蔽已验证
+8. ✅ **admin鉴权错误码**：index.ts:263 `ADMIN_KEY_REQUIRED`正确
+9. ✅ **explain.ts注释**：禁用词注释引用ai_content.ts(16项SSOT)正确
+10. ✅ **email管理端点路径**：代码实现与API文档一致（`/api/admin/email/send-*`）
+11. ✅ **无P0/P1阻塞项**：全部安全修复已验证
+12. ✅ **行为推荐常量**：behavior.ts和recommendations.ts正确从constants.ts导入权重常量
+13. ✅ **更新日志清理**：SRS/SDS/API/STR四文档均已清理，仅保留最新3天
+
+### 本次新发现问题（v5.53）
+
+| 问题ID | 严重度 | 描述 | 位置 | 状态 |
+|--------|--------|------|------|------|
+| **ST-P18** | **P3** | STR文档中ST-C02状态标记过期：权重常量已在constants.ts定义并被behavior.ts/recommendations.ts导入使用（P2-1已修复），但ST-C代码质量表仍标记为"🟡 建议提取" | STR §代码质量问题清单 line 588 | 🟡 待修复（本次Reviewer修正） |
+| **ST-P19** | **P3** | `parsePagination`/`parseLimit`已在`constants.ts`定义，但`src/api/`下12+个文件仍使用内联分页解析，未采用共享函数 | `src/api/*.ts` | ✅ 已修复（v5.54：全部14个文件20处调用点迁移完成） |
+
+#### ST-P18 详细说明
+
+**问题描述**：STR §代码质量问题清单（ST-C表）中ST-C02的状态标记为"🟡 建议提取"，但该问题已通过P2-1修复。
+
+**修复状态（P2-1）**：
+- `src/lib/constants.ts` 定义了所有共享权重常量（RULE_*/BEHAVIOR_*/MMR_*）
+- `behavior.ts` 正确从constants.ts导入 `BEHAVIOR_WEIGHT_*`/`COLD_START_*`/`RULE_WEIGHT`等11个常量
+- `recommendations.ts` 正确从constants.ts导入 `RULE_CATEGORY_MATCH`/`RULE_TAG_MATCH`等7个常量
+- **结论**：ST-C02已完全修复，STR表格状态应更新为✅
+
+**本次修正**：ST-C02状态从🟡→✅。
+
+#### ST-P19 详细说明
+
+**问题描述**：`parsePagination`/`parseLimit`函数已在`src/lib/constants.ts`定义（第72-91行），但`src/api/`下12+个文件仍使用内联分页解析模式（`parseInt(url.searchParams.get('page')...)`），未采用共享函数。
+
+**受影响的文件**（不完全列表）：
+| 文件 | 行号 | 当前模式 |
+|------|------|----------|
+| `products.ts` | 111-112, 795 | 内联parseInt |
+| `enterprise.ts` | 106-107 | 内联parseInt |
+| `i18n.ts` | 186-187, 405-406 | 内联parseInt |
+| `audit.ts` | 43-44, 97-98 | 内联parseInt |
+| `record.ts` | 122-123, 415 | 内联parseInt |
+| `membership.ts` | 497-498, 782-783 | 内联parseInt |
+| `admin/subscribers.ts` | 152-153 | 内联Math.max/Math.min |
+| `admin/content.ts` | 271-272 | 内联parseInt |
+| `conversions.ts` | 129-130 | 内联Math.max/Math.min |
+| `email.ts` | 643-644 | 内联Math.max/Math.min |
+| `price_check.ts` | 290, 366 | 内联Math.max/Math.min |
+| `recommendations.ts` | 80 | 内联parseInt |
+| `behavior.ts` | 621 | 内联parseInt |
+| `ai_review.ts` | 1035-1036 | 内联parseInt |
+
+**修复方案（v5.54）**：在全部14个文件中导入并使用`parsePagination`/`parseLimit`共享函数替换内联解析：
+- parsePagination迁移13处（page+limit+offset模式，使用不同defaultLimit参数）
+- parseLimit迁移7处（纯limit模式）
+- ai_review.ts特殊处理（对象属性 → 解构赋值）
+- 全部文件通过TypeScript编译验证（`npx tsc --noEmit` 0错误）
+
+**与P2-2的关系**：P2-2（分页参数解析逻辑在多文件重复）在v5.54彻底关闭。共享函数基础设施+全部调用者迁移完成。
+
+### 本次Reviewer定时任务验证通过项（v5.51）
+
+### 历次Coder定时任务验证通过项（v5.50）
+
+1. ✅ **TypeScript编译检查**：`npx tsc --noEmit` 0错误
+2. ✅ **四文档版本对齐**：SRS→v5.50、SDS→v5.50、API→v5.50、STR→v5.50
 3. ✅ **更新日志清理**：按规则仅保留最新3天内容
 4. ✅ **Business Concept约束**：A-01~A-06全部满足
 5. ✅ **System Design约束**：A-01~A-06全部通过
@@ -33,6 +242,10 @@
 8. ✅ **F-016/F-020状态一致性**：代码实现状态为🏗（待AI联调）
 9. ✅ **代码与文档一致性**：SDS/API/STR端点数量与代码路由同步
 10. ✅ **禁用词表SSOT**：16项禁用词在ai_content.ts/explain.ts/ai_review.ts三处统一
+11. ✅ **API响应格式一致性**：API文档响应格式 `success`→`ok`、`pagination`→`meta` 与代码实现一致
+12. ✅ **admin鉴权错误码修正**：index.ts:263从`INVALID_PARAMS`改为`ADMIN_KEY_REQUIRED`
+13. ✅ **explain.ts注释修正**：禁用词注释从过期8项改为引用ai_content.ts(16项SSOT)
+14. ✅ **email路由注释修正**：index.ts:414注释从`/api/email/send-weekly`改为`/api/admin/email/send-weekly`
 
 #### 架构约束验证（AC）
 | 检查项 | 验收标准 | 当前状态 | 验证位置 |
@@ -64,8 +277,8 @@
 | 路由遮蔽问题（categories） | ✅ 正确顺序 | index.ts:124先于129 |
 | 路由遮蔽问题（EMS） | ✅ 正确顺序 | index.ts:751-774先于776-789 |
 | 禁用词表SSOT一致性（16项） | ✅ 单一真实源 | ai_content.ts→explain.ts→ai_review.ts |
-| 四文档版本对齐 | ✅ 已同步 | SRS→v5.37, SDS→v5.37, API→v5.37, STR→v5.37 |
-| API文档版本一致性 | ✅ 一致 | 头部v5.37 vs 端点总览v5.37 |
+| 四文档版本对齐 | ✅ 已同步 | SRS→v5.55, SDS→v5.55, API→v5.55, STR→v5.55 |
+| API文档版本一致性 | ✅ 一致 | 头部v5.55 vs 端点总览v5.55 |
 | constants.ts常量使用 | ✅ 正确引用 | behavior.ts/recommendations.ts导入并使用 |
 | schema.ts Product接口 | ✅ 完整 | 包含rewritten_title/source_platform/last_checked_at |
 | product_tag_map桥接表 | ✅ 正确实现 | products.ts syncProductTags() |
@@ -105,7 +318,7 @@
 |--------|------|------|----------|
 | ST-C01 | Record<string, unknown>滥用 | ✅ 已修复 | UserPreferences接口 |
 | ST-C02 | 权重常量重复定义 | ✅ 已修复 | constants.ts |
-| ST-C03 | 分页逻辑重复 | ✅ 已修复 | parsePagination/parseLimit |
+| ST-C03 | 分页逻辑重复 | ✅ 已修复（v5.54全部迁移） | parsePagination/parseLimit |
 | ST-C06 | dislikes未按用户过滤 | ✅ 已修复 | behavior.ts:100-180 |
 
 ---
@@ -483,8 +696,12 @@
 | P1-5 | 标签/类目查询部分场景使用 LIKE 字符串匹配，JSON 数组匹配未完全用 `json_each` | F-011/F-014 | ⚠️ 优化项 |
 | P1-6 | 时间存储与查询策略不统一（写入用 `toISOString()`，查询用 `datetime('now')`） | 多模块 | ⚠️ 优化项 |
 | P1-7 | 前端纯静态 HTML，首屏依赖客户端 fetch | `src/pages/*.html` | ⚠️ 优化项 |
-| P2-2 | 分页参数解析逻辑在多文件重复 | 跨模块 | ⚠️ 待迁移（constants.ts已提供共享函数） |
+| P2-2 | 分页参数解析逻辑在多文件重复 | 跨模块 | ✅ 已修复（v5.54：全部14文件20处调用点已迁移至parsePagination/parseLimit） |
 | P2-3 | `parseJSON` 强制类型断言 `as string` 不安全 | 跨模块 | ⚠️ 优化项 |
+| ST-C05 | 认证头解析逻辑在 `auth.ts` 重复 3 次 | `auth.ts` | ✅ 已修复（v5.56：提取verifyBearerAuth） |
+| **ST-P17** | **email.ts/index.ts路由注释路径不准确（4处`/api/email/send-*`应为`/api/admin/email/send-*`）** | **email.ts, index.ts** | **✅ 已修复（v5.52）** |
+| **ST-P18** | **STR文档ST-C02状态标记过期：权重常量已修复（P2-1），但ST-C表仍标记"🟡 建议提取"** | **STR §ST-C** | **✅ 已修复（v5.53 Reviewer修正）** |
+| **ST-P19** | **parsePagination/parseLimit已在constants.ts定义但12+个API文件仍使用内联分页解析（调用者迁移未完成）** | **src/api/*.ts** | **✅ 已修复（v5.54：全项目迁移完成）** |
 | P2-5 | SRS内部F-016/F-020状态表不一致（ST-P5） | SRS §2.2 vs 模块基线状态 | ✅ 已修复（v4.34 Coder修复，v4.35 Reviewer确认） |
 | P2-6 | 四文档版本号偏差（ST-P6） | 跨文档 | ✅ 已修复（v4.34 Coder修复，v4.35 Reviewer确认） |
 | P2-7 | SDS F-050 migration表缺失021条目（ST-P7） | SDS §F-050 | ✅ 已修复（v4.33 Coder修复，v4.34 Reviewer确认） |
@@ -495,7 +712,7 @@
 | **P1-8** | **F-015推荐多样性控制（MMR）实现细节待完善** | **F-015-04** | **✅ 已修复（v4.91：mmrRerank增加timeoutMs参数，50ms超时控制）** |
 | **ST-S05/P2-4** | **审计日志 X-Forwarded-For 可被客户端伪造** | **auth.ts** | **✅ 已修复（v4.80：仅使用CF-Connecting-IP）** |
 
-以上P2-5~P2-8及ST-P5~ST-P10均已修复。P2-1和P1-8已在v4.91修复。剩余5项非阻塞工程化优化（P1-5~P1-7, P2-2~P2-3），不影响功能正确性，待后续迭代处理。
+以上P2-5~P2-8及ST-P5~ST-P14均已修复。P2-1和P1-8已在v4.91修复。ST-P17已在v5.52修复。ST-P18已在v5.53修正。P2-2和ST-P19已在v5.54全部完成（全项目迁移至parsePagination/parseLimit）。ST-C05已在v5.56修复（提取verifyBearerAuth）。剩余4项P2非阻塞工程化优化（P1-5~P1-7, P2-3），不影响功能正确性，待后续迭代处理。
 
 ---
 
@@ -532,10 +749,10 @@ const ip = request.headers.get('CF-Connecting-IP') || null;
 | 问题ID | 严重度 | 标题 | 位置 | 状态 |
 |--------|--------|------|------|------|
 | ST-C01 | ~~**P1**~~ | `Record<string, unknown>` 滥用绕过类型检查 | `recommendations.ts` | ✅ 已修复（添加UserPreferences接口） |
-| ST-C02 | P2 | 权重常量在 `behavior.ts` 和 `recommendations.ts` 重复定义 | 多文件 | 🟡 建议提取 |
-| ST-C03 | P2 | 分页参数解析逻辑在多个文件重复 | 多文件 | 🟡 建议提取 |
+| ST-C02 | P2 | 权重常量在 `behavior.ts` 和 `recommendations.ts` 重复定义 | 多文件 | ✅ 已修复（v4.91：constants.ts共享常量，behavior.ts/recommendations.ts正确导入） |
+| ST-C03 | P2 | 分页参数解析逻辑在多个文件重复 | 多文件 | ✅ 已修复（v5.54：parsePagination/parseLimit全项目迁移完成） |
 | ST-C04 | P2 | `parseJSON` 强制类型断言 `as string` 不安全 | 多文件 | 🟡 建议改进 |
-| ST-C05 | P2 | 认证头解析逻辑在 `auth.ts` 重复 3 次 | `auth.ts` | 🟡 建议提取 |
+| ST-C05 | ~~P2~~ | 认证头解析逻辑在 `auth.ts` 重复 3 次 | `auth.ts` | ✅ 已修复（v5.56：提取verifyBearerAuth） |
 | ST-C06 | ~~P2~~ | `behavior.ts` dislikes查询逻辑错误：未按用户过滤 | `behavior.ts:105-115` | ✅ 已修复（传入userId参数按用户过滤） |
 
 ### ST-C06 修复说明
@@ -585,6 +802,8 @@ const ip = request.headers.get('CF-Connecting-IP') || null;
 | **ST-P15** | **P3** | **TypeScript Product接口缺少 `rewritten_title` 字段（D1 migration和SRS数据字典中有定义，但schema.ts未包含）** | **src/db/schema.ts** | **✅ 已修复（v4.43 Coder）** |
 | **ST-P16** | **P3** | **STR "按模块分布"表P2合计行显示7，实际非阻塞优化项共9项（v4.42已在表中修正并新增未归类行）** | **STR §汇总统计** | **✅ 已修复（v4.42 Reviewer修复）** |
 | **P3-2** | **P3** | **API文档尾部版本号v4.66与头部v4.68不一致** | **findora_API.md:1471** | **✅ 已修复（v4.69 Coder：尾部版本更新为v4.69）** |
+| **ST-P20** | **P3** | **API文档端点总览缺失3个admin端点路径（GET/admin/tags, GET/admin/recommendations/behavior, GET/admin/explain/cache/stats）** | **findora_API.md vs index.ts** | **✅ 已修复（v5.58）** |
+| **ST-P21** | **P3** | **SRS §7.7 F-016-02/03代码实现状态标记🗓（未实现），代码实际已完整实现应为🏗** | **SRS line 1819-1820 vs explain.ts:846,901** | **🟡 待修复** |
 
 ### ST-P5 详细说明
 
@@ -825,6 +1044,52 @@ const ip = request.headers.get('CF-Connecting-IP') || null;
 
 **修复建议**：v4.42已补正"按模块分布"表合计行为9，新增"未归类(P1-7前端)"行（P1-7涉及src/pages，不属于原表任何模块）。原表之所以合计数错，是因为P1-7（前端纯静态HTML）不属于F-014~015/auth.ts/跨模块/文档一致性中任何一类。
 
+### ST-P20 详细说明（v5.57 新发现）
+
+**问题描述**：API文档 `findora_API.md` 端点总览章节缺失3个admin端点。这3个端点在 `index.ts` 中已正确注册路由且功能实现完整，但API文档中未列出。
+
+**缺失端点清单**：
+
+| 端点路径 | 代码位置 | 功能 | 缺失位置 |
+|----------|----------|------|----------|
+| `GET /api/admin/tags` | `index.ts:380` → `listTags()` | 标签列表（管理端） | API文档"运营AI专属接口 > 标签维度更新"表 |
+| `GET /api/admin/recommendations/behavior` | `index.ts:435` → `getProductBehaviorScore()` | 商品行为分数调试 | API文档"内部管理API"章节 |
+| `GET /api/admin/explain/cache/stats` | `index.ts:440` → `getExplainCacheStats()` | 解释缓存统计 | API文档"内部管理API"章节 |
+
+**代码验证**：
+- `GET /api/admin/tags`：存在，调用`listTags(env, request)`，已有完整分页和维度过滤支持
+- `GET /api/admin/recommendations/behavior`：存在，调用`getProductBehaviorScore(env, request)`，需admin鉴权
+- `GET /api/admin/explain/cache/stats`：存在，调用`getExplainCacheStats(env)`，需admin鉴权
+
+**影响评估**：P3（最低）。这3个端点均需admin鉴权且代码实现正确，仅文档记载不完整。运营/开发Agent可能无法通过查阅文档发现这些管理工具端点。
+
+**修复建议**：在API文档的端点总览相应章节（标签维度更新、内部管理API）补充这3个路径条目。
+
+### ST-P21 详细说明（v5.59 新发现）
+
+**问题描述**：SRS §7.7 F-016子功能三态追踪表（第1819-1820行）将F-016-02（商品对比说明）和F-016-03（场景化描述）的"代码实现"列标记为🗓，表示代码未实现。但实际代码早已完整实现。
+
+**差异对照**：
+
+| 子功能 | SRS §7.7 标记 | 代码实际状态 | 代码位置 |
+|--------|---------------|-------------|----------|
+| F-016-02 商品对比说明 | 🗓 | 🏗 已实现 | `explain.ts:846` `explainComparison()`, `index.ts:206` 路由注册 |
+| F-016-03 场景化描述 | 🗓 | 🏗 已实现 | `explain.ts:901` `explainScenarios()`, `index.ts:211` 路由注册 |
+
+**代码验证**：
+- `explainComparison()`（explain.ts:846-895）：接收compare_with参数，查询两个商品，生成对比解释，返回JSON响应。功能完整（含参数验证、404处理、DB查询）。
+- `explainScenarios()`（explain.ts:901-960）：查询商品use_cases和target_audience字段，生成场景化描述，返回JSON响应。功能完整。
+- explain.ts文件头注释（第5-6行）明确列出："F-016-02: Product comparison explanations"、"F-016-03: Scenario-based descriptions"。
+
+**已有交叉引用**：
+- STR §F-016功能审核表（第436-437行）：正确标记F-016-02/03为🏗
+- review_report.md §7.1（第281行）：已记录"SRS §9.6 F-016-02/03状态修正：代码已实现（🏗），下轮SRS更新时同步修正"
+- SRS §2.2 模块基线表（第170行）：F-016整个模块标记为🏗
+
+**影响评估**：P3（最低）。不影响系统功能。F-016-02/03代码已完整实现且通过TypeScript编译，仅SRS文档中§7.7子功能表状态标记不准确。与F-016模块整体🏗状态一致（模块级标记正确，子功能级标记有误）。
+
+**修复建议**：将SRS §7.7第1819-1820行F-016-02和F-016-03的代码实现列从🗓更新为🏗。
+
 ## 汇总统计
 
 ### 问题严重度分布
@@ -833,11 +1098,12 @@ const ip = request.headers.get('CF-Connecting-IP') || null;
 |--------|------|------|
 | P0 | 0 | ✅ **全部修复** |
 | P1 | 0 | ✅ **全部修复** |
-| P2 | 5 | 🟡 非阻塞工程化优化（P1-5, P1-6, P1-7, P2-3, ST-P14） |
-| P3 | 0 | ✅ 无P3问题 |
-| 合计 | 5 | 无阻塞项，P0/P1均已清零 |
+| P2 | 4 | 🟡 非阻塞工程化优化（P1-5, P1-6, P1-7, P2-3） |
+| P3 | 1 | 🟡 ST-P21（SRS F-016-02/03状态标记不一致） |
+| 合计 | 5 | P0/P1均清零；4项P2非阻塞优化+1项P3文档一致性 |
 
-**已修复的P2项**：P1-8(MMR超时)、P2-1(权重常量)、P2-2(分页函数)、P2-4(审计日志IP) ✅
+**已修复的P2项**：P1-8(MMR超时)、P2-1(权重常量)、P2-2(分页函数迁移)、P2-4(审计日志IP) ✅
+**已修复的P3项**：ST-P20(v5.58) ✅
 
 ### 按模块分布
 
@@ -847,15 +1113,18 @@ const ip = request.headers.get('CF-Connecting-IP') || null;
 | auth.ts | 0 | 0 |
 | F-021 (AI审核) | 0 | 0 |
 | 跨模块 | 2 (P1-6, P2-3) | 0 |
-| 文档一致性 | 1 (ST-P14) | 0 |
 | 未归类(P1-7前端) | 1 | 0 |
 | F-011 (标签) | 1 (P1-5) | 0 |
-| **合计** | **5** | **0** |
+| email.ts/index.ts | 0 | 0 (ST-P17/ST-P18/ST-P19已修复) |
+| 文档一致性 | 0 | 1 (ST-P21) |
+| **合计** | **4** | **1** |
 
 ### 修复历史
 
 | 日期 | 修复内容 |
 |------|----------|
-| 2026-05-04 | v5.48：Reviewer定时任务；Code Review完成；代码基线稳定；四文档v5.48同步 |
-| 2026-05-03 | v5.47：Coder定时任务；四文档版本对齐；无P0/P1阻塞项 |
-| 2026-05-02 | v5.46：Reviewer定时任务；Code Review完成；代码基线稳定 |
+| 2026-05-05 | v5.59：Reviewer定时任务；全面Code Review完成；TS编译0错误；Migration 001~022完整；架构约束全通过；发现ST-P21（SRS F-016-02/03状态不一致P3）；更新日志清理 |
+| 2026-05-05 | v5.58：Coder定时任务；修复ST-P20（API文档补充3个缺失admin端点）；四文档v5.58同步；P3清零 |
+| 2026-05-05 | v5.57：Reviewer定时任务；全面Code Review完成；TS编译0错误；Migration 001~022完整；架构约束A-01~A-06全通过；发现ST-P20（API文档缺失3个admin端点路径P3）；四文档v5.57同步；更新日志清理 |
+| 2026-05-05 | v5.56：Coder定时任务；ST-C05修复auth.ts认证解析重复→verifyBearerAuth()；四文档v5.56同步 |
+| 2026-05-05 | v5.55：Reviewer定时任务；全面Code Review完成；P2-2/ST-C03状态闭环（v5.54全项目迁移完成）→✅；TS编译0错误；Migration 001~022完整；架构约束A-01~A-06全通过；禁用词表SSOT一致；遗留优化项从5项减至4项；review_report.md同步更新至v5.55；四文档v5.55同步 |

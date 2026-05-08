@@ -20,6 +20,7 @@ import {
   RULE_PRICE_MATCH,
   RULE_RECENCY_DAYS,
   RULE_RECENCY_MAX_DAYS,
+  parseLimit,
 } from '../lib/constants';
 
 // Price ranges for F-014-03
@@ -77,7 +78,7 @@ export async function getRecommendations(env: Env, request: Request): Promise<Re
   const url = new URL(request.url);
   const email = request.headers.get('X-User-Email');
   const anonymous_id = request.headers.get('X-Anonymous-Id');
-  const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 100);
+  const limit = parseLimit(url, 20);
 
   if (!email && !anonymous_id) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'Email or anonymous_id is required')), {

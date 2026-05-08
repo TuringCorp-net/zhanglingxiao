@@ -260,7 +260,7 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
 
     if (segments[0] === 'admin') {
       if (!isAdmin(request, env)) {
-        return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'Admin authorization required')), {
+        return new Response(JSON.stringify(jsonError(ErrorCodes.ADMIN_KEY_REQUIRED, 'Admin authorization required')), {
           status: 401,
           headers: { 'Content-Type': 'application/json' },
         });
@@ -411,17 +411,17 @@ async function handleRequest(env: Env, request: Request): Promise<Response> {
         return getConversionStats(env, request);
       }
 
-      // POST /api/email/send-weekly - F-013-07
+      // POST /api/admin/email/send-weekly - F-013-07
       if (request.method === 'POST' && segments[1] === 'email' && segments[2] === 'send-weekly') {
         return sendWeeklyNewsletter(env, request);
       }
 
-      // POST /api/email/send-unsubscription-confirmation - F-013-07
+      // POST /api/admin/email/send-unsubscription-confirmation - F-013-07
       if (request.method === 'POST' && segments[1] === 'email' && segments[2] === 'send-unsubscription-confirmation') {
         return sendUnsubscriptionConfirmation(env, request);
       }
 
-      // POST /api/email/send-reengagement - F-013-07
+      // POST /api/admin/email/send-reengagement - F-013-07
       if (request.method === 'POST' && segments[1] === 'email' && segments[2] === 'send-reengagement') {
         return sendReengagementEmail(env, request);
       }

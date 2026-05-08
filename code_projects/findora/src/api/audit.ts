@@ -2,6 +2,7 @@
 import { Env, AuditLog } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
+import { parsePagination } from '../lib/constants';
 import { verifySessionToken } from './auth';
 
 // Helper to extract user ID from request
@@ -40,9 +41,7 @@ export async function listAuditLogs(env: Env, request: Request, enterpriseId: st
   }
 
   const url = new URL(request.url);
-  const page = parseInt(url.searchParams.get('page') || '1');
-  const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
-  const offset = (page - 1) * limit;
+  const { page, limit, offset } = parsePagination(url, 50);
   const action = url.searchParams.get('action');
   const resourceType = url.searchParams.get('resource_type');
   const userIdFilter = url.searchParams.get('user_id');
@@ -94,9 +93,7 @@ export async function listMyAuditLogs(env: Env, request: Request): Promise<Respo
   }
 
   const url = new URL(request.url);
-  const page = parseInt(url.searchParams.get('page') || '1');
-  const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
-  const offset = (page - 1) * limit;
+  const { page, limit, offset } = parsePagination(url, 50);
   const action = url.searchParams.get('action');
   const resourceType = url.searchParams.get('resource_type');
 
