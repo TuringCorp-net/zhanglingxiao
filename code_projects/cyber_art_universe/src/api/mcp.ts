@@ -48,8 +48,7 @@ async function handleResourcesList(env: Env, request: Request): Promise<Response
       // Write 侧（sf://）— SF-050 MCP Resources
       { uri: 'sf://workspace/{id}', name: '写作工作区', description: 'Story Forger 工作区（需认证）' },
       { uri: 'sf://worldbuilding/{id}', name: '世界观设定', description: '作品的设定圣经' },
-      { uri: 'sf://foreshadowing/{id}', name: '伏笔账本', description: '作品的伏笔线索追踪' },
-      { uri: 'sf://conflicts/{id}', name: '冲突地图', description: '作品的冲突结构分析' },
+      { uri: 'sf://foreshadowing/{id}', name: '伏笔账本', description: '作品的伏笔暗线规划与追踪' },
     ],
   })), {
     headers: { 'Content-Type': 'application/json' },

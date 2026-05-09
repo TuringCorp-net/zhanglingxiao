@@ -19,6 +19,7 @@
 | v1.0.0 | 2026-05-07 | Phase 0-5 代码首次审核 |
 | v1.0.1 | 2026-05-08 | 添加端到端测试方案双向链接 |
 | v1.2.0 | 2026-05-08 | 9 项延期需求全部实现：伏笔、冲突、重写、营销、MCP Write。31/31 全部完成 |
+| v1.7.0 | 2026-05-09 | 冲突地图删除 + 伏笔 Markdown 模板 + 双模式合并为统一写作桌 |
 
 ---
 
@@ -75,8 +76,8 @@
 
 | ID | 审核结果 | 备注 |
 |----|---------|------|
-| SF-060 | ✅ 通过 | 软木板卡片网格 + 拖拽排序 + 状态筛选 + 点击进入写作桌 |
-| SF-061 | ✅ 通过 | 三栏写作桌：左活页夹（总纲/世界观/人物树/章节树/伏笔）+ 中写作区（Markdown 编辑/预览）+ 右活页夹（Info/Lint/Suggest/Chat 四 Tab） |
+| SF-060 | ❌ 已合并 | 软木板功能已合并入 SF-061：卡片网格→章节树，拖拽→章节树拖拽，筛选→章节树筛选按钮 |
+| SF-061 | ✅ 通过 | 三栏写作桌统一界面：左活页夹（总纲/世界观/人物树/章节树含拖拽筛选/伏笔）+ 中写作区（Markdown 编辑/预览）+ 右活页夹（Info/Lint/Suggest/Chat 四 Tab） |
 | SF-062 | ✅ 通过 | 活页夹折叠/展开到 60px 图标模式，拖拽边缘调整宽度（180-500px），状态持久化到 localStorage |
 
 **覆盖度结果**：22/22 ✅ 通过，0 阻塞项
@@ -258,7 +259,6 @@
 | 文件 | 行数 | 审核结果 |
 |------|------|---------|
 | `src/api/write/foreshadowing.ts` | ~140 | ✅ 遵循 outline.ts JSON 解析 + R2 存储模式 |
-| `src/api/write/conflicts.ts` | ~135 | ✅ 与 foreshadowing 对称设计，overwrite 保护正确 |
 | `src/api/write/marketing.ts` | ~195 | ✅ 三个端点共用 R2 存储，format 路由正确 |
 | `src/api/write/draft.ts`（追加）| +>90 | ✅ rewriteSection 复用 generateDraft 上下文模式 |
 | `src/api/write/index.ts`（追加）| +>35 | ✅ 新路由 dispatch 清晰，import 完整 |
@@ -268,7 +268,7 @@
 ### 注意事项
 
 - AI 端点依赖 `AI_PROVIDER` + `AI_API_KEY` Cloudflare secrets 配置（待用户提供 key）
-- 伏笔/冲突/营销端点 503 返回友好提示（AI 不可用时）
+- 伏笔/营销端点 503 返回友好提示（AI 不可用时）
 - MCP Write 工具和 Read 工具共用同一条 `/api/mcp` 端点，通过 `params.name` 区分
 
 ### 下一迭代优先事项

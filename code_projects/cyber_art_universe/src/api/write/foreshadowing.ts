@@ -1,13 +1,209 @@
-// Story Forger — 伏笔账本 (SF-023)
-// AI 从章节中提取伏笔线索，追踪埋点与回收状态
+// Story Forger — 伏笔账本（SF-023）（多语言 + 规划导向 + 结构化模板）
+//
+// 设计原则（区别于"AI 扫描已有章节提取伏笔"的反向做法）：
+//   伏笔是作者主动设计的暗线。AI 的角色是：
+//     1. 帮助作者在写作前基于大纲/世界观规划伏笔网络
+//     2. M6 一致性校验时正向检查伏笔是否按计划回收
+//   不做：AI 全盘扫描已写好的章节来"发现"伏笔
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
+import { workContentPath, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
 
-const FORESHADOWING_KEY = (workId: string) => `works/${workId}/foreshadowing.json`;
+// ============================================================
+// 伏笔账本 — 结构化模板（中英双语）
+// ============================================================
 
-// POST /api/write/foreshadowing/generate
+const FORESHADOWING_TEMPLATE_ZH = `# 伏笔账本
+
+> 伏笔是横跨多个章节的暗线。好的伏笔让读者在回收时恍然大悟。
+> 本文档帮助你在写作前主动规划伏笔网络，而非事后扫描。
+
+## 一、伏笔策略总览
+
+<!-- 用一段话描述整部作品的伏笔策略：密集还是稀疏？以什么类型的伏笔为主？-->
+
+## 二、伏笔条目
+
+<!-- 每条伏笔一张卡片。可反复添加。写作前至少规划 3 条核心伏笔 -->
+
+### 伏笔 #1：{伏笔名称}
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | 身份伏笔 / 道具伏笔 / 对白伏笔 / 能力伏笔 / 事件伏笔 / 意象伏笔 |
+| **强度** | 🔴 核心（贯穿全书）/ 🟡 重要（跨多章）/ 🟢 彩蛋（轻量） |
+| **关联人物** | |
+| **关联章节范围** | 第 ? 章 ～ 第 ? 章 |
+
+**埋种计划**：
+- 埋种章节：第 ? 章
+- 埋种方式：<!-- 用什么方式让读者接触到这个伏笔？一句对白？一个场景？一个道具？-->
+
+**发展路径**：
+- 第 ? 章 — 强化暗示：<!-- 如何再次暗示或加强 -->
+- 第 ? 章 — 部分揭示：<!-- 读者开始意识到什么？-->
+- 第 ? 章 — 误导/反转（可选）：<!-- 是否有意误导读者？-->
+
+**回收计划**：
+- 回收章节：第 ? 章
+- 回收方式：<!-- 如何让读者恍然大悟、拍案叫绝？-->
+
+**状态**：🌱 已规划 / 🌿 已埋种 / 🌳 发展中 / 💡 部分揭示 / ✅ 已回收
+
+---
+
+### 伏笔 #2：{伏笔名称}
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | |
+| **强度** | |
+| **关联人物** | |
+| **关联章节范围** | |
+
+**埋种计划**：
+- 埋种章节：第 ? 章
+- 埋种方式：
+
+**发展路径**：
+- 第 ? 章 — 强化暗示：
+- 第 ? 章 — 部分揭示：
+- 第 ? 章 — 误导/反转：
+
+**回收计划**：
+- 回收章节：第 ? 章
+- 回收方式：
+
+**状态**：🌱 已规划
+
+---
+
+### 伏笔 #3：{伏笔名称}
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | |
+| **强度** | |
+| **关联人物** | |
+| **关联章节范围** | |
+
+**埋种计划**：
+- 埋种章节：第 ? 章
+- 埋种方式：
+
+**发展路径**：
+- 第 ? 章 — 强化暗示：
+- 第 ? 章 — 部分揭示：
+- 第 ? 章 — 误导/反转：
+
+**回收计划**：
+- 回收章节：第 ? 章
+- 回收方式：
+
+**状态**：🌱 已规划
+`;
+
+const FORESHADOWING_TEMPLATE_EN = `# Foreshadowing Ledger
+
+> Foreshadowing is the art of planting clues across chapters. Great foreshadowing makes readers gasp in hindsight.
+> This document helps you proactively plan your foreshadowing network before writing — not scan chapters after the fact.
+
+## I. Foreshadowing Strategy Overview
+
+<!-- Describe your overall foreshadowing strategy in a paragraph: dense or sparse? What types dominate? -->
+
+## II. Foreshadowing Entries
+
+<!-- Each entry is a card. Add more as needed. Plan at least 3 core hooks before writing. -->
+
+### Hook #1: {Hook Name}
+
+| Field | Content |
+|------|------|
+| **Type** | Identity / Prop / Dialogue / Ability / Event / Imagery |
+| **Intensity** | 🔴 Core (throughout) / 🟡 Major (multi-chapter) / 🟢 Minor (Easter egg) |
+| **Related Characters** | |
+| **Chapter Range** | ch? ~ ch? |
+
+**Planting Plan**:
+- Plant in chapter: ch?
+- Method: <!-- How will readers encounter this clue? A line of dialogue? A scene? An object? -->
+
+**Development Path**:
+- ch? — Reinforcement: <!-- How to reinforce the hint -->
+- ch? — Partial Reveal: <!-- What does the reader begin to suspect? -->
+- ch? — Misdirection (optional): <!-- Any intentional misdirection? -->
+
+**Payoff Plan**:
+- Resolve in chapter: ch?
+- Method: <!-- How to make readers gasp "I should have seen it!"? -->
+
+**Status**: 🌱 Planned / 🌿 Planted / 🌳 Developing / 💡 Partially Revealed / ✅ Resolved
+
+---
+
+### Hook #2: {Hook Name}
+
+| Field | Content |
+|------|------|
+| **Type** | |
+| **Intensity** | |
+| **Related Characters** | |
+| **Chapter Range** | |
+
+**Planting Plan**:
+- Plant in chapter: ch?
+- Method:
+
+**Development Path**:
+- ch? — Reinforcement:
+- ch? — Partial Reveal:
+- ch? — Misdirection:
+
+**Payoff Plan**:
+- Resolve in chapter: ch?
+- Method:
+
+**Status**: 🌱 Planned
+
+---
+
+### Hook #3: {Hook Name}
+
+| Field | Content |
+|------|------|
+| **Type** | |
+| **Intensity** | |
+| **Related Characters** | |
+| **Chapter Range** | |
+
+**Planting Plan**:
+- Plant in chapter: ch?
+- Method:
+
+**Development Path**:
+- ch? — Reinforcement:
+- ch? — Partial Reveal:
+- ch? — Misdirection:
+
+**Payoff Plan**:
+- Resolve in chapter: ch?
+- Method:
+
+**Status**: 🌱 Planned
+`;
+
+function getForeshadowingTemplate(lang: Lang): string {
+  return lang === 'en' ? FORESHADOWING_TEMPLATE_EN : FORESHADOWING_TEMPLATE_ZH;
+}
+
+// ============================================================
+// POST /api/write/foreshadowing/generate?lang=zh|en
+// 规划导向：AI 基于大纲和世界观帮助作者设计伏笔网络
+// ============================================================
+
 export async function generateForeshadowing(env: Env, request: Request): Promise<Response> {
   const body = await request.json() as { work_id: string; style_notes?: string };
   if (!body.work_id) {
@@ -16,129 +212,110 @@ export async function generateForeshadowing(env: Env, request: Request): Promise
     });
   }
 
-  // 作品存在性检查
-  const work = await env.DB.prepare('SELECT id, title FROM works WHERE id = ?').bind(body.work_id).first();
+  const lang = extractLang(request);
+  const langLabel = LANG_LABELS[lang];
+
+  const work = await env.DB.prepare('SELECT id, title, category FROM works WHERE id = ?').bind(body.work_id).first<{ id: string; title: string; category: string }>();
   if (!work) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
       status: 404, headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  // overwrite 保护
-  const url = new URL(request.url);
-  if (url.searchParams.get('overwrite') !== 'true') {
-    const existing = await env.WORKS_BUCKET.get(FORESHADOWING_KEY(body.work_id));
-    if (existing) {
-      return new Response(JSON.stringify(jsonError(ErrorCodes.RESOURCE_CONFLICT, '伏笔账本已存在。使用 ?overwrite=true 重新生成')), {
-        status: 409, headers: { 'Content-Type': 'application/json' },
-      });
-    }
-  }
+  // 收集规划上下文（不是扫描已有章节，而是基于框架做规划）
+  let worldContext = '';
+  const wb = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'world_bible.md'));
+  if (wb) worldContext = (await wb.text()).substring(0, 2000);
 
-  // 收集上下文：所有章节摘要
+  let outlineContext = '';
+  const outline = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'outline.md'));
+  if (outline) outlineContext = (await outline.text()).substring(0, 2000);
+
+  // 已有章节标题（作为规划参考，不扫描内容）
   const sections = await env.DB.prepare(
-    'SELECT id, title, order_index, section_summary, word_count FROM sections WHERE work_id = ? ORDER BY order_index'
-  ).bind(body.work_id).all<{ id: string; title: string; order_index: number; section_summary: string; word_count: number }>();
+    'SELECT title, order_index FROM sections WHERE work_id = ? ORDER BY order_index'
+  ).bind(body.work_id).all<{ title: string; order_index: number }>();
+  const chapterTitles = (sections.results || []).map(s => `第${s.order_index + 1}章「${s.title}」`).join('、');
 
-  const chapterContexts = (sections.results || []).map(s =>
-    `第${s.order_index + 1}章「${s.title}」: ${s.section_summary || '(无摘要)'}`
-  ).join('\n');
+  const template = getForeshadowingTemplate(lang);
 
-  if ((sections.results || []).length === 0) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_PUBLISHABLE, '作品无章节，无法提取伏笔线索')), {
-      status: 400, headers: { 'Content-Type': 'application/json' },
-    });
-  }
+  const prompt = `你是一位资深故事架构师。请帮助作者为作品《${work.title}》设计伏笔网络。
 
-  const prompt = `你是一位资深故事编辑。请仔细阅读以下章节摘要，提取所有伏笔线索（foreshadowing hooks）。
+## 伏笔规划原则
+- 伏笔是主动设计的暗线，不是写完再找的线索
+- 好的伏笔有多阶段发展：埋种→强化→部分揭示→（可选误导）→回收
+- 伏笔类型包括：身份伏笔（角色真实身份）、道具伏笔（契诃夫之枪）、对白伏笔（某句话后来获得全新含义）、能力伏笔（隐藏力量）、事件伏笔（看似无关的事件后来串联）、意象伏笔（反复出现的符号）
 
-伏笔的定义：
-- 作者在早期章节中埋下的暗示、悬念、未解之谜
-- 一个角色说/做的某件事，暗示未来会发生的事
-- 悬而未决的冲突或问题
-- 反复出现的意象或主题元素
+## 作品信息
+题材：${work.category || '未指定'}
+${chapterTitles ? `章节结构：${chapterTitles}` : '(尚未规划章节)'}
 
-对每条伏笔，请判断其"回收状态"：
-- "planted" — 已埋下，尚未回收
-- "developing" — 正在发展中
-- "resolved" — 已回收/解答
-
+${worldContext ? `【世界观设定】\n${worldContext}\n` : ''}
+${outlineContext ? `【长篇框架】\n${outlineContext}\n` : ''}
 ${body.style_notes ? `作者备注：${body.style_notes}` : ''}
 
-## 章节摘要
-${chapterContexts.substring(0, 4000)}
+请按照以下伏笔账本模板结构，在模板的 <!-- 注释 --> 位置和空白字段中填入规划内容。至少规划 3 条伏笔。
+用${langLabel}输出。
 
-请严格按以下 JSON 格式输出，不要包含任何其他文本：
-{
-  "hooks": [
-    {
-      "id": "h_001",
-      "description": "伏笔描述（一句话）",
-      "planted_in": "埋在第几章（如 第1章）",
-      "expected_payoff_in": "预计在第几章回收，如不确定填 'unknown'",
-      "status": "planted | developing | resolved",
-      "notes": "补充说明"
-    }
-  ]
-}`;
+输出模板：
+${template}`;
 
-  const result = await generateWithAI(env, prompt, { maxTokens: 2048 });
+  const result = await generateWithAI(env, prompt, { maxTokens: 4096 });
   if (!result) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, 'AI service unavailable')), {
       status: 503, headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  let parsed: { hooks?: Array<Record<string, unknown>> };
+  // 写入 R2（存储 Markdown 格式的伏笔账本，而非 JSON）
   try {
-    const jsonMatch = result.match(/\{[\s\S]*\}/);
-    if (jsonMatch) parsed = JSON.parse(jsonMatch[0]);
-    else parsed = {};
-  } catch {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.EXTERNAL_SERVICE_ERROR, 'AI returned invalid JSON')), {
-      status: 500, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const hooks = parsed.hooks || [];
-  const summary = {
-    total: hooks.length,
-    planted: hooks.filter((h: Record<string, unknown>) => h.status === 'planted').length,
-    developing: hooks.filter((h: Record<string, unknown>) => h.status === 'developing').length,
-    resolved: hooks.filter((h: Record<string, unknown>) => h.status === 'resolved').length,
-  };
-
-  const data = { work_id: body.work_id, hooks, summary, generated_at: new Date().toISOString() };
-
-  try {
-    await env.WORKS_BUCKET.put(FORESHADOWING_KEY(body.work_id), JSON.stringify(data, null, 2), {
-      httpMetadata: { contentType: 'application/json' },
+    await env.WORKS_BUCKET.put(workContentPath(body.work_id, lang, 'foreshadowing.md'), result, {
+      httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
     });
   } catch (err) {
-    console.error('R2 write failed for foreshadowing.json:', body.work_id, err);
+    console.error('R2 write failed for foreshadowing.md:', body.work_id, lang, err);
   }
 
-  return new Response(JSON.stringify(jsonSuccess(data)), {
-    status: 201, headers: { 'Content-Type': 'application/json' },
+  return new Response(JSON.stringify(jsonSuccess({
+    work_id: body.work_id,
+    lang,
+    content: result,
+  })), {
+    headers: { 'Content-Type': 'application/json' },
   });
 }
 
-// GET /api/write/foreshadowing/{work_id}
-export async function readForeshadowing(env: Env, _request: Request, workId: string): Promise<Response> {
-  const obj = await env.WORKS_BUCKET.get(FORESHADOWING_KEY(workId));
+// ============================================================
+// GET /api/write/foreshadowing/{work_id}?lang=zh|en
+// 返回伏笔账本内容（Markdown），无内容时返回结构化模板
+// ============================================================
+
+export async function readForeshadowing(env: Env, request: Request, workId: string): Promise<Response> {
+  const lang = extractLang(request);
+  const key = workContentPath(workId, lang, 'foreshadowing.md');
+  const obj = await env.WORKS_BUCKET.get(key);
   if (!obj) {
+    const template = getForeshadowingTemplate(lang);
     return new Response(JSON.stringify(jsonSuccess({
       work_id: workId,
-      hooks: [],
-      summary: { total: 0, planted: 0, developing: 0, resolved: 0 },
-      message: '伏笔账本尚未生成。使用 POST /api/write/foreshadowing/generate 生成',
+      lang,
+      content: template,
+      is_template: true,
+      message: lang === 'en'
+        ? 'Foreshadowing ledger not yet created. Below is the planning template.'
+        : '伏笔账本尚未创建，以下为规划模板。',
     })), {
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const text = await obj.text();
-  return new Response(JSON.stringify(jsonSuccess(JSON.parse(text))), {
+  const content = await obj.text();
+  return new Response(JSON.stringify(jsonSuccess({
+    work_id: workId,
+    lang,
+    content,
+    is_template: false,
+  })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }

@@ -7,7 +7,7 @@
 - **本文档是 Story Forger 的功能需求清单**。Story Forger 是 Cyber Art Universe 的写作侧引擎，与 CAU 平台（阅读侧）共享同一套 D1/R2 基础设施，是同一个项目的 Write 面。
 - **与传统 SRS 的区别**：同 CAU SRS — 文档追踪需求，代码是 truth source。
 - **何时更新**：业务需求变更 / 新模块实现 / Review 发现问题时。
-- **关联文档**：[CAU Business Concept](../business_concept.md) → [CAU System Design](../system_design.md) → [Story Forger Original Concept](original_concept.md) → 本文档 → [CAU SRS](../cau/SRS.md)
+- **关联文档**：[CAU Business Concept](../business_concept.md) → [Story Forger Original Concept](original_concept.md) → 本文档 → [Story Forger System Design](system_design.md) → [CAU SRS](../cau/SRS.md)
 
 ---
 
@@ -18,6 +18,9 @@
 | v1.0.0 | 2026-05-07 | 初始版本，6 模块功能需求 + 作品状态生命周期 |
 | v1.2.0 | 2026-05-08 | SF-060（软木板拖拽）、SF-061（写作桌三栏）、SF-062（活页夹）全部实现 |
 | v1.4.0 | 2026-05-08 | SF-023~052 全部实现：伏笔账本、冲突地图、章节重写、营销辅助、MCP Write 工具。SF-025 合并入 SF-022 |
+| v1.5.0 | 2026-05-09 | SF-015（世界观结构化模板）、SF-063（写作引导流程）|
+| v1.6.0 | 2026-05-09 | SF-016（多语言支持：中英双语模板 + R2 语言路径 + 双语生成 + 前端语言切换）|
+| v1.7.0 | 2026-05-09 | 全员模板化：M2 长篇框架模板、M3 人物卡模板、M5 意图卡模板、M6 营销卡模板全部固化（中英双语）。各模块读取时返回模板框架而非空。|
 
 ---
 
@@ -111,6 +114,10 @@ Story Forger 与 CAU 共用 `works.status` 字段。状态流转定义了作品�
 | SF-012 | 更新设定圣经 — 手动编辑或 AI 增量修改 | `PUT /api/write/worldbuilding/{work_id}` | ✅ 已实现 |
 | SF-013 | 设定约束清单 — 从圣经中提取可用于一致性校验的关键约束 | `GET /api/write/worldbuilding/{work_id}/constraints` 返回结构化约束列表 | ✅ 已实现 |
 | SF-014 | 角色/实体管理 — 创建、编辑、删除角色卡、地点卡、道具卡 | `POST/PUT/DELETE /api/write/works/{id}/entities`（独立端点，不再复用 CAU admin）| ✅ 已实现 |
+| SF-015 | 世界观结构化模板 — 创建作品时自动初始化带有完整框架的 world_bible.md（6 大章节框架，中英双语）。首次打开世界观面板时，展示结构化空模板而非空白文档，引导作者按框架填写 | `GET /api/write/worldbuilding/{work_id}` 当 R2 无内容时，返回对应语言的 BIBLE_TEMPLATE。模板作为 AI 生成的 prompt 约束 | ✅ 已实现 |
+| SF-016 | 多语言支持 — R2 存储按语言前缀分目录。所有 Write API 支持 `?lang=` 参数。生成端点支持 `bilingual: true` 双语并行生成（默认 zh+en）。前端提供语言切换器和双语生成复选框 | 首批支持 zh/en。扩展新语种只需添加语言代码和对应模板 | ✅ 已实现 |
+| SF-017 | 长篇框架模板 — M2 产出结构化 outline.md 模板（故事概览→主线阶段→支线→节奏→转折点→伏笔规划）。首次打开总纲面板时展示模板框架，引导作者填写 | `GET /api/write/outline/{work_id}` 无内容时返回双语长篇框架模板。AI 生成时在模板框架内填充。前端总纲面板展示完整框架 | ✅ 已实现 |
+| SF-018 | 人物卡模板 — M3 创建角色时自动写入 R2 人物卡文件（6 章框架：基本信息→性格动机→能力限制→关系网络→成长弧线→语言行为）。`GET .../{eid}/card` 返回人物卡，无内容时返回模板 | 创建 character 类型实体时自动生成模板。人物树点击角色→在写作区展示人物卡。中英双语模板 | ✅ 已实现 |
 
 ### 模块三：目录与长篇框架引擎
 
@@ -119,8 +126,8 @@ Story Forger 与 CAU 共用 `works.status` 字段。状态流转定义了作品�
 | SF-020 | 生成大纲 — AI 根据设定圣经生成分阶段/分幕的目录结构 | `POST /api/write/outline/generate` 输出写入 R2 `works/{id}/outline.md` 和 D1 sections 表 | ✅ 已实现 |
 | SF-021 | 读取大纲 — 返回当前目录结构（含章节摘要） | `GET /api/write/outline/{work_id}` 返回完整大纲 | ✅ 已实现 |
 | SF-022 | 编辑大纲 — 手动调整章节顺序、增删章节、修改标题和摘要 | `PUT /api/write/outline/{work_id}` | ✅ 已实现 |
-| SF-023 | 伏笔账本 — AI 从大纲和已有章节中提取伏笔线索，追踪埋点与回收状态 | `POST /api/write/foreshadowing/generate` 生成伏笔账本，`GET /api/write/foreshadowing/{work_id}` 读取。存储 R2 `works/{id}/foreshadowing.json` | ✅ 已实现 |
-| SF-024 | 冲突地图 — AI 生成主线/支线冲突的起因—升级—代价—回收路径 | `POST /api/write/conflicts/generate` 生成冲突地图，`GET /api/write/conflicts/{work_id}` 读取。存储 R2 `works/{id}/conflicts.json` | ✅ 已实现 |
+| SF-023 | 伏笔账本 — 规划导向：AI 基于大纲/世界观帮助作者主动设计伏笔网络（6 种类型 + 5 阶段生命周期 + 3 级强度）。存储为结构化 Markdown 模板。M6 一致性校验正向检查伏笔执行情况 | `POST /api/write/foreshadowing/generate`（规划），`GET /api/write/foreshadowing/{work_id}`（读取，无内容时返回双语模板）。存储 R2 `works/{id}/{lang}/foreshadowing.md`。不做全盘扫描已有章节 | ✅ 已实现 |
+| SF-024 | ~~冲突地图~~ | **已删除**。冲突的本质已融入 M2 长篇框架（核心冲突、阶段划分、转折点），不需要独立模块 | ❌ 已移除 |
 | SF-025 | 章节拖拽重排 — 支持软木板视图下拖拽调整章节顺序，批量更新 order_index | **已合并入 SF-022**。frontend 拖拽 → `PUT /api/write/outline/{work_id}`（含完整 order_index）→ 重排即保存。不另建专用端点 | ✅ 由 SF-022 覆盖 |
 
 ### 模块四：章节生产流水线
@@ -162,9 +169,10 @@ Intent Card → Draft v0 → Consistency Check → Polish → Draft v1 (中稿)
 
 | ID | 需求 | 验收标准 | 状态 |
 |----|------|---------|------|
-| SF-060 | 软木板视图 — 章节卡片网格，可拖拽排序，点击进入写作桌 | 每张卡片显示：标题/状态图标/字数/摘要。拖拽松手后自动 PATCH 更新 order_index | ✅ 已实现 |
-| SF-061 | 写作桌视图 — 左活页夹（结构导航）+ 中写作区 + 右活页夹（信息/AI），面板可折叠/拖拽宽度 | 左活页夹默认显示总纲/世界观/人物树/章节树/伏笔账本。中写作区支持 Markdown 编辑+预览。右活页夹默认 Info/Lint/Suggest/Chat 四个 Tab | ✅ 已实现 |
-| SF-062 | 活页夹面板系统 — 左右活页夹可独立折叠/展开，拖拽边缘调整宽度，面板内容可上下滚动 | 折叠时仅显示图标列（60px），hover 展开。宽度调整保存到 localStorage | ✅ 已实现 |
+| SF-060 | ~~软木板视图~~ | **已删除**。软木板功能已合并入 SF-061 写作桌：章节卡片→章节树，拖拽排序→章节树拖拽，状态筛选→章节树筛选按钮 | ❌ 已合并 |
+| SF-061 | 写作桌统一界面 — 左活页夹（五大面板）+ 中写作区（编辑所有内容）+ 右活页夹（AI 辅助）。不再区分规划/写作模式 | 左：总纲/世界观/人物树/章节树(可拖拽+筛选)/伏笔。中：Markdown 编辑+预览。右：Info/Lint/Suggest/Chat 四 Tab | ✅ 已实现 |
+| SF-062 | 活页夹面板系统 — 左右活页夹可独立折叠/展开，拖拽边缘调整宽度 | 折叠时仅显示图标列（60px）。宽度调整保存到 localStorage | ✅ 已实现 |
+| SF-063 | 写作引导流程 — 页面顶部始终显示 M1→M6 流水线引导条，显示模块状态，点击跳转 | 引导条在工具栏下方始终可见。每一步根据 R2 资产判定状态 | ⏳ 待实现 |
 
 ---
 
@@ -189,7 +197,6 @@ works/{work_id}/
 ├── story_bible.md          # 项目圣经（风格/口吻/禁区）
 ├── outline.md              # 大纲（已有）
 ├── foreshadowing.md        # 伏笔账本（SF 新增）
-├── conflicts.md            # 冲突地图（SF 新增）
 ├── chapters/               # 章节正文（已有）
 ├── summaries/              # 章节摘要（已有）
 ├── characters/             # 角色卡（已有）
@@ -258,21 +265,22 @@ works/{work_id}/
 
 | 状态 | 数量 |
 |------|------|
-| ✅ done | 31 |
-| ⏳ 待实现 | 0 |
+| ✅ done | 34 |
+| ⏳ 待实现 | 1 |
+| ❌ 已移除 | 1 |
 | 🔴 阻塞 | 0 |
 
-**总计**：31 项需求，全部实现。
+**总计**：36 项需求（34 已实现 + 1 待实现 + 1 已移除）。待实现：SF-063（写作引导流程）。已移除：SF-024（冲突地图）。
 
 ### 实现清单
 
 | 模块 | 需求 ID | 状态 |
 |------|--------|------|
 | 工作区管理 | SF-001~005 | ✅ |
-| 世界观引擎 | SF-010~014 | ✅ |
-| 大纲引擎 | SF-020~022 | ✅（SF-025 合并入 SF-022）|
-| 大纲增强 | SF-023~024 | ✅ 伏笔账本 + 冲突地图 |
+| 世界观引擎 | SF-010~018 | ✅ 全部实现 |
+| 大纲引擎 | SF-020~022 | ✅（SF-025 合并入 SF-022）+ SF-017 长篇框架模板 |
+| 伏笔账本 | SF-023 | ✅ 规划导向模板（Markdown）+ 正向校验 |
 | 章节生产流水线 | SF-030~035 | ✅（含章节重写）|
 | 营销辅助 | SF-040~042 | ✅ 金句提炼 + 标题生成 + 分发改写 |
 | MCP Write | SF-050~052 | ✅ Resources + Tools + 共底 |
-| 双模式 UI | SF-060~062 | ✅ |
+| 写作桌 UI | SF-060~063 | ❌ SF-060（已合并）, ✅ SF-061~062, ⏳ SF-063 |

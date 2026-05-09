@@ -1,11 +1,9 @@
-// 章节生产流水线 — SF-030~034
+// 章节生产流水线 — SF-030~034（多语言支持）
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
-import { writeSectionContent, readSectionMarkdown } from '../../lib/work_content';
-
-const WORLD_BIBLE_KEY = (workId: string) => `works/${workId}/world_bible.md`;
+import { writeSectionContent, readSectionMarkdown, workContentPath, extractLang } from '../../lib/work_content';
 
 // POST /api/write/draft/intent
 export async function createIntent(env: Env, request: Request): Promise<Response> {
@@ -27,12 +25,13 @@ export async function createIntent(env: Env, request: Request): Promise<Response
     created_at: new Date().toISOString(),
   };
 
-  const key = `works/${body.work_id}/intents/${body.section_id || crypto.randomUUID()}.json`;
+  const lang = extractLang(request);
+  const key = workContentPath(body.work_id, lang, `intents/${body.section_id || crypto.randomUUID()}.json`);
   await env.WORKS_BUCKET.put(key, JSON.stringify(intent, null, 2), {
     httpMetadata: { contentType: 'application/json' },
   });
 
-  return new Response(JSON.stringify(jsonSuccess({ key, ...intent })), {
+  return new Response(JSON.stringify(jsonSuccess({ key, lang, ...intent })), {
     status: 201, headers: { 'Content-Type': 'application/json' },
   });
 }
@@ -45,6 +44,8 @@ export async function generateDraft(env: Env, request: Request): Promise<Respons
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
+
+  const lang = extractLang(request);
 
   const section = await env.DB.prepare(
     'SELECT id, title, order_index, section_summary FROM sections WHERE id = ? AND work_id = ?'
@@ -62,9 +63,9 @@ export async function generateDraft(env: Env, request: Request): Promise<Respons
     });
   }
 
-  // 构建写作上下文
+  // 构建写作上下文（语言感知）
   let worldContext = '';
-  const wb = await env.WORKS_BUCKET.get(WORLD_BIBLE_KEY(body.work_id));
+  const wb = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'world_bible.md'));
   if (wb) worldContext = (await wb.text()).substring(0, 3000);
 
   // 前 3 章摘要
@@ -75,9 +76,10 @@ export async function generateDraft(env: Env, request: Request): Promise<Respons
     `- ${s.title}: ${s.section_summary || '无摘要'} (${s.word_count}字)`
   ).join('\n');
 
-  // 意图卡
+  // 意图卡（语言感知路径）
   let intentContext = '';
-  const intents = await env.WORKS_BUCKET.list({ prefix: `works/${body.work_id}/intents/` });
+  const intentsPrefix = workContentPath(body.work_id, lang, 'intents/');
+  const intents = await env.WORKS_BUCKET.list({ prefix: intentsPrefix });
   for (const obj of intents.objects || []) {
     const raw = await env.WORKS_BUCKET.get(obj.key);
     if (raw) {
@@ -110,13 +112,13 @@ ${section.section_summary ? `【章节摘要】${section.section_summary}` : ''}
     });
   }
 
-  // 写入 R2
+  // 写入 R2（语言感知）
   await writeSectionContent(env, body.work_id, body.section_id, {
     title: section.title,
     order_index: section.order_index,
     ai_generated: true,
     version: 0,
-  }, result);
+  }, result, lang);
 
   // 更新 D1
   const wordCount = result.replace(/[#*\-\s]/g, '').length;
@@ -147,16 +149,17 @@ export async function checkConsistency(env: Env, _request: Request, workId: stri
     });
   }
 
-  const content = await readSectionMarkdown(env, workId, sectionId);
+  const lang = extractLang(_request);
+  const content = await readSectionMarkdown(env, workId, sectionId, lang);
   if (!content || !content.body) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'Section has no content to check')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  // 读取约束上下文
+  // 读取约束上下文（语言感知）
   let constraintsContext = '';
-  const constraintsObj = await env.WORKS_BUCKET.get(`works/${workId}/constraints.json`);
+  const constraintsObj = await env.WORKS_BUCKET.get(workContentPath(workId, lang, 'constraints.json'));
   if (constraintsObj) {
     const constraints = JSON.parse(await constraintsObj.text());
     constraintsContext = (constraints || []).map((c: { section: string; rule: string }) => `- [${c.section}] ${c.rule}`).join('\n');
@@ -198,8 +201,8 @@ ${sectionBody}
     if (jsonMatch) issues = JSON.parse(jsonMatch[0]).issues || [];
   } catch { /* keep empty issues */ }
 
-  // 缓存检查结果
-  await env.WORKS_BUCKET.put(`works/${workId}/checks/${sectionId}.json`, JSON.stringify(issues, null, 2), {
+  // 缓存检查结果（语言感知）
+  await env.WORKS_BUCKET.put(workContentPath(workId, lang, `checks/${sectionId}.json`), JSON.stringify(issues, null, 2), {
     httpMetadata: { contentType: 'application/json' },
   });
 
@@ -217,7 +220,8 @@ export async function polishDraft(env: Env, request: Request): Promise<Response>
     });
   }
 
-  const content = await readSectionMarkdown(env, body.work_id, body.section_id);
+  const lang = extractLang(request);
+  const content = await readSectionMarkdown(env, body.work_id, body.section_id, lang);
   if (!content || !content.body) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'Section has no content')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
@@ -243,12 +247,12 @@ ${content.body}
     });
   }
 
-  // 版本化写入
+  // 版本化写入（语言感知）
   await writeSectionContent(env, body.work_id, body.section_id, {
     ...(content.frontmatter || {}),
     version: 1,
     ai_polished: true,
-  }, result);
+  }, result, lang);
 
   const wordCount = result.replace(/[#*\-\s]/g, '').length;
   const now = new Date().toISOString();
@@ -265,9 +269,9 @@ ${content.body}
   });
 }
 
-// GET /api/write/draft/output/{section_id}
-export async function outputDraft(env: Env, _request: Request, sectionId: string): Promise<Response> {
-  // 需要 work_id 来构建 R2 路径。从 D1 获取。
+// GET /api/write/draft/output/{section_id}?lang=zh|en
+export async function outputDraft(env: Env, request: Request, sectionId: string): Promise<Response> {
+  const lang = extractLang(request);
   const section = await env.DB.prepare('SELECT id, work_id, title, word_count, version, section_summary FROM sections WHERE id = ?').bind(sectionId).first<Record<string, unknown>>();
   if (!section) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.SECTION_NOT_FOUND, 'Section not found')), {
@@ -275,11 +279,11 @@ export async function outputDraft(env: Env, _request: Request, sectionId: string
     });
   }
 
-  const content = await readSectionMarkdown(env, section.work_id as string, sectionId);
+  const content = await readSectionMarkdown(env, section.work_id as string, sectionId, lang);
 
-  // 读取检查结果
+  // 读取检查结果（语言感知）
   let checkIssues: Array<Record<string, unknown>> = [];
-  const checkObj = await env.WORKS_BUCKET.get(`works/${section.work_id}/checks/${sectionId}.json`);
+  const checkObj = await env.WORKS_BUCKET.get(workContentPath(section.work_id as string, lang, `checks/${sectionId}.json`));
   if (checkObj) checkIssues = JSON.parse(await checkObj.text());
 
   return new Response(JSON.stringify(jsonSuccess({
@@ -302,7 +306,6 @@ export async function outputDraft(env: Env, _request: Request, sectionId: string
 }
 
 // POST /api/write/draft/rewrite/{section_id} — SF-035 章节重写
-// 保留意图卡约束，重新生成章节。适用场景：作者对当前版本不满意，想重新生成。
 export async function rewriteSection(env: Env, request: Request, sectionId: string): Promise<Response> {
   const body = await request.json() as { work_id: string; style_notes?: string; instructions?: string };
   if (!body.work_id) {
@@ -310,6 +313,8 @@ export async function rewriteSection(env: Env, request: Request, sectionId: stri
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
+
+  const lang = extractLang(request);
 
   const section = await env.DB.prepare(
     'SELECT id, title, order_index, section_summary, version FROM sections WHERE id = ? AND work_id = ?'
@@ -327,19 +332,19 @@ export async function rewriteSection(env: Env, request: Request, sectionId: stri
     });
   }
 
-  // 读取原有意图卡（如果存在）
-  const intentsKey = `works/${body.work_id}/intents/${sectionId}.json`;
+  // 读取原有意图卡（语言感知）
+  const intentsKey = workContentPath(body.work_id, lang, `intents/${sectionId}.json`);
   let intentCard: Record<string, unknown> = {};
   try {
     const intentObj = await env.WORKS_BUCKET.get(intentsKey);
     if (intentObj) intentCard = await intentObj.json() as Record<string, unknown>;
   } catch { /* 无意图卡也继续 */ }
 
-  // 读取现有内容（作为改写参考）
-  const existingContent = await readSectionMarkdown(env, body.work_id, sectionId);
+  // 读取现有内容（语言感知）
+  const existingContent = await readSectionMarkdown(env, body.work_id, sectionId, lang);
 
-  // 收集上下文（复用 generateDraft 的模式）
-  const wbObj = await env.WORKS_BUCKET.get(WORLD_BIBLE_KEY(body.work_id));
+  // 收集上下文（语言感知）
+  const wbObj = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'world_bible.md'));
   const worldContext = wbObj ? (await wbObj.text()).substring(0, 2000) : '(无世界观)';
 
   const prevSections = await env.DB.prepare(
@@ -394,7 +399,7 @@ ${existingContent?.body ? `## 当前版本（供参考，请改进）\n${existin
     rewritten_at: new Date().toISOString(),
   };
 
-  const r2Key = await writeSectionContent(env, body.work_id, sectionId, frontmatter, result);
+  const r2Key = await writeSectionContent(env, body.work_id, sectionId, frontmatter, result, lang);
 
   const wordCount = result.replace(/[#*\-\s]/g, '').length;
   await env.DB.prepare(

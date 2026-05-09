@@ -1,12 +1,9 @@
-// Story Forger — 营销与分发辅助 (SF-040~042)
-// 金句提取、标题/简介生成、多平台分发改写
+// Story Forger — 营销与分发辅助 (SF-040~042)（多语言支持）
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
-
-const MARKETING_KEY = (workId: string, sectionId: string, type: string) =>
-  `works/${workId}/marketing/${sectionId}_${type}.json`;
+import { workContentPath, sectionR2Key, extractLang } from '../../lib/work_content';
 
 // POST /api/write/marketing/extract/{section_id} — SF-040 爆点提炼
 export async function extractHooks(env: Env, request: Request, sectionId: string): Promise<Response> {
@@ -26,9 +23,9 @@ export async function extractHooks(env: Env, request: Request, sectionId: string
     });
   }
 
-  // 读取章节正文
-  const r2Key = `works/${body.work_id}/chapters/${sectionId}.md`;
-  const r2Obj = await env.WORKS_BUCKET.get(r2Key);
+  // 读取章节正文（语言感知）
+  const lang = extractLang(request);
+  const r2Obj = await env.WORKS_BUCKET.get(sectionR2Key(body.work_id, sectionId, lang));
   const chapterBody = r2Obj ? (await r2Obj.text()).substring(0, 4000) : '(无正文)';
 
   const prompt = `你是一位资深内容营销编辑。请从以下章节中提取可作为营销素材的内容。
@@ -74,7 +71,7 @@ ${chapterBody}
   };
 
   try {
-    await env.WORKS_BUCKET.put(MARKETING_KEY(body.work_id, sectionId, 'extract'), JSON.stringify(data, null, 2), {
+    await env.WORKS_BUCKET.put(workContentPath(body.work_id, lang, `marketing/${sectionId}_extract.json`), JSON.stringify(data, null, 2), {
       httpMetadata: { contentType: 'application/json' },
     });
   } catch (err) {
@@ -144,9 +141,10 @@ ${body.style_notes ? `作者备注：${body.style_notes}` : ''}
     generated_at: new Date().toISOString(),
   };
 
+  const lang = extractLang(request);
   try {
     await env.WORKS_BUCKET.put(
-      `works/${workId}/marketing/titles.json`, JSON.stringify(data, null, 2),
+      workContentPath(workId, lang, 'marketing/titles.json'), JSON.stringify(data, null, 2),
       { httpMetadata: { contentType: 'application/json' } },
     );
   } catch (err) {
@@ -178,8 +176,8 @@ export async function repurposeSection(env: Env, request: Request, sectionId: st
     });
   }
 
-  const r2Key = `works/${body.work_id}/chapters/${sectionId}.md`;
-  const r2Obj = await env.WORKS_BUCKET.get(r2Key);
+  const lang = extractLang(request);
+  const r2Obj = await env.WORKS_BUCKET.get(sectionR2Key(body.work_id, sectionId, lang));
   const chapterBody = r2Obj ? (await r2Obj.text()).substring(0, 3000) : '(无正文)';
 
   const formatPrompts: Record<string, string> = {
@@ -217,7 +215,7 @@ ${body.style_notes ? `风格要求：${body.style_notes}` : ''}
 
   try {
     await env.WORKS_BUCKET.put(
-      MARKETING_KEY(body.work_id, sectionId, `repurpose_${format}`), JSON.stringify(data, null, 2),
+      workContentPath(body.work_id, lang, `marketing/${sectionId}_repurpose_${format}.json`), JSON.stringify(data, null, 2),
       { httpMetadata: { contentType: 'application/json' } },
     );
   } catch (err) {

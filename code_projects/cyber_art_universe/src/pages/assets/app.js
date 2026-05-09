@@ -47,16 +47,27 @@ function renderNav() {
   </nav>`;
 }
 
+// — 分类标签映射 —
+function categoryLabel(c) {
+  const map = {
+    'fantasy': '奇幻·玄幻', 'science-fiction': '科幻', 'romance': '言情·恋爱',
+    'contemporary': '都市·现实', 'adventure': '动作·冒险', 'mystery-thriller': '悬疑·惊悚',
+    'historical': '历史·架空', 'young-adult': '青春·成长'
+  };
+  return map[c] || '';
+}
+
 // — 作品卡片 —
 function renderWorkCard(w) {
   const tags = (w.tags || []).slice(0, 3).map(t => `<span class="tag">#${t}</span>`).join('');
   const initial = (w.title || '?')[0];
+  const cat = categoryLabel(w.category);
   return `
   <a href="/work.html?id=${w.id}" class="work-card">
     <div class="work-card-left"><div class="work-cover">${initial}</div></div>
     <div class="work-card-body">
       <h3>${escHtml(w.title)}</h3>
-      <div class="meta">${escHtml(w.author)} · ${typeLabel(w.type)} · ${statusLabel(w.status)}</div>
+      <div class="meta">${escHtml(w.author)}${cat ? ` · ${cat}` : ''}</div>
       <div class="summary">${escHtml(w.summary || '暂无简介')}</div>
       <div class="tag-list">${tags}</div>
     </div>

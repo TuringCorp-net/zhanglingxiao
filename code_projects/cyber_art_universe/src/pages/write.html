@@ -9,29 +9,31 @@
 <body data-page="write">
   <div id="global-nav"></div>
 
-  <!-- 工具栏（软木板和写作桌共享） -->
+  <!-- 工具栏 -->
   <div class="sf-toolbar">
     <select id="workspace-selector" onchange="onWorkspaceChange()">
       <option value="">请先设置用户 Token...</option>
     </select>
     <input id="user-token-input" type="password" placeholder="用户 Token" onchange="setUserToken()">
-    <button id="mode-toggle" class="btn btn-ghost" onclick="toggleMode()" style="white-space:nowrap">🖊 写作桌</button>
+    <label class="lang-selector" title="界面/生成语言">
+      🌐 <select id="lang-select" onchange="onLangChange()">
+        <option value="zh">中文</option>
+        <option value="en">English</option>
+      </select>
+    </label>
+    <label class="bilingual-check" id="bilingual-label" title="默认同时生成中英双语版本（AI 成本 ×2）">
+      <input type="checkbox" id="bilingual-checkbox" checked onchange="onBilingualChange()"> 双语生成
+    </label>
     <div id="work-actions" style="display:flex;gap:0.4rem"></div>
   </div>
 
-  <!-- ==================== 软木板模式 ==================== -->
-  <div id="corkboard-mode" class="sf-mode active">
-    <div class="corkboard-filters">
-      <button class="corkboard-filter-btn active" data-filter="all" onclick="setCorkboardFilter('all')">全部</button>
-      <button class="corkboard-filter-btn" data-filter="draft" onclick="setCorkboardFilter('draft')">✍️ 写作中</button>
-      <button class="corkboard-filter-btn" data-filter="done" onclick="setCorkboardFilter('done')">✅ 已完成</button>
-    </div>
-    <div id="corkboard"><div class="loading">请选择作品...</div></div>
+  <!-- 写作引导流程 -->
+  <div id="pipeline-guide" class="pipeline-guide" style="display:none">
+    <div class="pipeline-steps" id="pipeline-steps"></div>
   </div>
 
-  <!-- ==================== 写作桌模式 ==================== -->
-  <div id="writing-desk-mode" class="sf-mode">
-    <div id="writing-desk" class="writing-desk">
+  <!-- 写作桌（唯一界面） -->
+  <div id="writing-desk" class="writing-desk">
 
       <!-- 左活页夹 -->
       <aside id="left-binder" class="binder-panel binder-left">
@@ -62,6 +64,11 @@
           <div class="binder-section" data-section="chapters">
             <div class="binder-section-header open" onclick="toggleBinderSection('chapters')">
               📑 章节树 <span class="binder-arrow">▶</span>
+            </div>
+            <div class="chapter-filters" id="chapter-filters" style="display:none">
+              <button class="chapter-filter-btn active" data-filter="all">全部</button>
+              <button class="chapter-filter-btn" data-filter="draft">✍️ 写作中</button>
+              <button class="chapter-filter-btn" data-filter="done">✅ 已完成</button>
             </div>
             <div class="binder-section-body open" id="chapter-tree"></div>
           </div>
@@ -115,7 +122,6 @@
           </div>
         </div>
       </aside>
-    </div>
   </div>
 
   <footer class="footer">
