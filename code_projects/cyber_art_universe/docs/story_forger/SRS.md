@@ -21,6 +21,7 @@
 | v1.5.0 | 2026-05-09 | SF-015（世界观结构化模板）、SF-063（写作引导流程）|
 | v1.6.0 | 2026-05-09 | SF-016（多语言支持：中英双语模板 + R2 语言路径 + 双语生成 + 前端语言切换）|
 | v1.7.0 | 2026-05-09 | 全员模板化：M2 长篇框架模板、M3 人物卡模板、M5 意图卡模板、M6 营销卡模板全部固化（中英双语）。各模块读取时返回模板框架而非空。|
+| v1.8.0 | 2026-05-11 | 经典作品案例分析驱动优化：M5 意图卡新增 emotional_goal / POV / 可选媒介字段；M3 人物卡新增 arc_type + 跨模块交叉引用（M1/M4）；M4 伏笔账本新增依赖的 M1 规则 |
 
 ---
 
@@ -117,7 +118,7 @@ Story Forger 与 CAU 共用 `works.status` 字段。状态流转定义了作品�
 | SF-015 | 世界观结构化模板 — 创建作品时自动初始化带有完整框架的 world_bible.md（6 大章节框架，中英双语）。首次打开世界观面板时，展示结构化空模板而非空白文档，引导作者按框架填写 | `GET /api/write/worldbuilding/{work_id}` 当 R2 无内容时，返回对应语言的 BIBLE_TEMPLATE。模板作为 AI 生成的 prompt 约束 | ✅ 已实现 |
 | SF-016 | 多语言支持 — R2 存储按语言前缀分目录。所有 Write API 支持 `?lang=` 参数。生成端点支持 `bilingual: true` 双语并行生成（默认 zh+en）。前端提供语言切换器和双语生成复选框 | 首批支持 zh/en。扩展新语种只需添加语言代码和对应模板 | ✅ 已实现 |
 | SF-017 | 长篇框架模板 — M2 产出结构化 outline.md 模板（故事概览→主线阶段→支线→节奏→转折点→伏笔规划）。首次打开总纲面板时展示模板框架，引导作者填写 | `GET /api/write/outline/{work_id}` 无内容时返回双语长篇框架模板。AI 生成时在模板框架内填充。前端总纲面板展示完整框架 | ✅ 已实现 |
-| SF-018 | 人物卡模板 — M3 创建角色时自动写入 R2 人物卡文件（6 章框架：基本信息→性格动机→能力限制→关系网络→成长弧线→语言行为）。`GET .../{eid}/card` 返回人物卡，无内容时返回模板 | 创建 character 类型实体时自动生成模板。人物树点击角色→在写作区展示人物卡。中英双语模板 | ✅ 已实现 |
+| SF-018 | 人物卡模板 — M3 创建角色时自动写入 R2 人物卡文件（6 章框架：基本信息→性格动机→能力限制（含 M1/M4 交叉引用）→关系网络→成长弧线（含 arc_type）→语言行为）。`GET .../{eid}/card` 返回人物卡，无内容时返回模板 | 创建 character 类型实体时自动生成模板。人物树点击角色→在写作区展示人物卡。中英双语模板。v1.8.0：新增 arc_type（弧线类型）、关联的 M1 世界规则、关联的 M4 伏笔 | ✅ 已实现 |
 
 ### 模块三：目录与长篇框架引擎
 
@@ -126,7 +127,7 @@ Story Forger 与 CAU 共用 `works.status` 字段。状态流转定义了作品�
 | SF-020 | 生成大纲 — AI 根据设定圣经生成分阶段/分幕的目录结构 | `POST /api/write/outline/generate` 输出写入 R2 `works/{id}/outline.md` 和 D1 sections 表 | ✅ 已实现 |
 | SF-021 | 读取大纲 — 返回当前目录结构（含章节摘要） | `GET /api/write/outline/{work_id}` 返回完整大纲 | ✅ 已实现 |
 | SF-022 | 编辑大纲 — 手动调整章节顺序、增删章节、修改标题和摘要 | `PUT /api/write/outline/{work_id}` | ✅ 已实现 |
-| SF-023 | 伏笔账本 — 规划导向：AI 基于大纲/世界观帮助作者主动设计伏笔网络（6 种类型 + 5 阶段生命周期 + 3 级强度）。存储为结构化 Markdown 模板。M6 一致性校验正向检查伏笔执行情况 | `POST /api/write/foreshadowing/generate`（规划），`GET /api/write/foreshadowing/{work_id}`（读取，无内容时返回双语模板）。存储 R2 `works/{id}/{lang}/foreshadowing.md`。不做全盘扫描已有章节 | ✅ 已实现 |
+| SF-023 | 伏笔账本 — 规划导向：AI 基于大纲/世界观帮助作者主动设计伏笔网络（6 种类型 + 5 阶段生命周期 + 3 级强度）。每条伏笔含"依赖的 M1 规则"交叉引用。存储为结构化 Markdown 模板。M6 一致性校验正向检查伏笔执行情况 | `POST /api/write/foreshadowing/generate`（规划），`GET /api/write/foreshadowing/{work_id}`（读取，无内容时返回双语模板）。存储 R2 `works/{id}/{lang}/foreshadowing.md`。不做全盘扫描已有章节。v1.8.0：新增依赖的 M1 规则字段 | ✅ 已实现 |
 | SF-024 | ~~冲突地图~~ | **已删除**。冲突的本质已融入 M2 长篇框架（核心冲突、阶段划分、转折点），不需要独立模块 | ❌ 已移除 |
 | SF-025 | 章节拖拽重排 — 支持软木板视图下拖拽调整章节顺序，批量更新 order_index | **已合并入 SF-022**。frontend 拖拽 → `PUT /api/write/outline/{work_id}`（含完整 order_index）→ 重排即保存。不另建专用端点 | ✅ 由 SF-022 覆盖 |
 
@@ -140,7 +141,7 @@ Intent Card → Draft v0 → Consistency Check → Polish → Draft v1 (中稿)
 
 | ID | 需求 | 验收标准 | 状态 |
 |----|------|---------|------|
-| SF-030 | 意图卡（Intent Card）— 每次写章节前，定义本章目标、结构要求、伏笔回收点 | `POST /api/write/draft/intent` 接受 `{work_id, chapter_index, goal, hooks, foreshadowing_ids}` | ✅ 已实现 |
+| SF-030 | 意图卡（Intent Card）— 每次写章节前，定义本章目标、情绪目标、POV 策略、结构要求、伏笔回收点，支持可选媒介特定字段（视觉关键词、镜头备注、游戏目标、分支等） | `POST /api/write/draft/intent` 接受 `{work_id, chapter_index, goal, emotional_goal?, pov_character?, pov_strategy?, visual_keywords?, camera_notes?, gameplay_goal?, player_learning_goal?, branching?, scene_type?, hooks, foreshadowing_ids, style_notes?}` | ✅ 已实现 |
 | SF-031 | 初稿生成（Draft v0）— AI 根据意图卡 + 设定圣经约束 + 大纲上下文，生成章节正文 | `POST /api/write/draft/generate` 输出写入 R2 `works/{id}/chapters/ch_{idx}.md`，并写入 D1 sections 表 | ✅ 已实现 |
 | SF-032 | 一致性校验（Consistency Check）— 对照设定圣经、大纲、伏笔账本、历史章节，检测矛盾。每条问题标注严重等级（⚠ warning / 🔴 error） | `POST /api/write/draft/check/{work_id}/{section_id}` 返回 `[{severity: 'warning'|'error', type, description, location, suggestion}]` | ✅ 已实现 |
 | SF-033 | 润色优化（Polish）— AI 根据一致性校验结果和风格要求，优化章节 | `POST /api/write/draft/polish` 接受 `{section_id, fix_issues: [...], style_notes}` | ✅ 已实现 |

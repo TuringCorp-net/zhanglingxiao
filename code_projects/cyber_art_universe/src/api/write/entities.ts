@@ -49,6 +49,12 @@ const CHARACTER_CARD_TEMPLATE_ZH = (name: string) => `# 人物卡：${name}
 ### 资源与人脉
 <!-- 角色可调用的外部资源 -->
 
+### 关联的 M1 世界规则
+<!-- 列出此角色受约束的世界规则，如："一、力量体系——魔法需要等价交换" -->
+
+### 关联的 M4 伏笔
+<!-- 与此角色相关的伏笔 ID 列表，如：h_001, h_003 -->
+
 ## 四、关系网络
 
 ### 与主角的关系
@@ -57,6 +63,8 @@ const CHARACTER_CARD_TEMPLATE_ZH = (name: string) => `# 人物卡：${name}
 ### 情感关系
 
 ## 五、成长弧线
+
+- **弧线类型**：<!-- 成长(growth) / 堕落(fall) / 救赎(redemption) / 悲剧(tragic) / 觉醒(awakening) / 稳定(steady) -->
 
 ### 起点状态
 <!-- 角色在故事开始时的处境和心理状态 -->
@@ -116,6 +124,12 @@ const CHARACTER_CARD_TEMPLATE_EN = (name: string) => `# Character Card: ${name}
 ### Resources & Connections
 <!-- External resources the character can call upon -->
 
+### Related M1 World Rules
+<!-- List the world rules that constrain this character, e.g. "I. Power System — magic requires equivalent exchange" -->
+
+### Related M4 Foreshadowing
+<!-- Foreshadowing hook IDs related to this character, e.g. h_001, h_003 -->
+
 ## IV. Relationship Network
 
 ### Relationship with Protagonist
@@ -124,6 +138,8 @@ const CHARACTER_CARD_TEMPLATE_EN = (name: string) => `# Character Card: ${name}
 ### Romantic / Emotional Relationships
 
 ## V. Growth Arc
+
+- **Arc Type**: <!-- growth / fall / redemption / tragic / awakening / steady -->
 
 ### Starting State
 <!-- The character's situation and mental state at the beginning of the story -->

@@ -7,7 +7,15 @@ import { writeSectionContent, readSectionMarkdown, workContentPath, extractLang 
 
 // POST /api/write/draft/intent
 export async function createIntent(env: Env, request: Request): Promise<Response> {
-  const body = await request.json() as { work_id: string; section_id?: string; chapter_index?: number; goal: string; hooks?: string[]; foreshadowing_ids?: string[]; style_notes?: string };
+  const body = await request.json() as {
+    work_id: string; section_id?: string; chapter_index?: number;
+    goal: string; emotional_goal?: string;
+    pov_character?: string; pov_strategy?: string;
+    visual_keywords?: string[]; camera_notes?: string;
+    gameplay_goal?: string; player_learning_goal?: string;
+    branching?: string; scene_type?: string;
+    hooks?: string[]; foreshadowing_ids?: string[]; style_notes?: string;
+  };
   if (!body.work_id || !body.goal) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id and goal are required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
@@ -19,6 +27,15 @@ export async function createIntent(env: Env, request: Request): Promise<Response
     section_id: body.section_id || null,
     chapter_index: body.chapter_index || null,
     goal: body.goal,
+    emotional_goal: body.emotional_goal || null,
+    pov_character: body.pov_character || null,
+    pov_strategy: body.pov_strategy || null,
+    visual_keywords: body.visual_keywords || null,
+    camera_notes: body.camera_notes || null,
+    gameplay_goal: body.gameplay_goal || null,
+    player_learning_goal: body.player_learning_goal || null,
+    branching: body.branching || null,
+    scene_type: body.scene_type || null,
     hooks: body.hooks || [],
     foreshadowing_ids: body.foreshadowing_ids || [],
     style_notes: body.style_notes || null,
@@ -85,7 +102,9 @@ export async function generateDraft(env: Env, request: Request): Promise<Respons
     if (raw) {
       const data = JSON.parse(await raw.text());
       if (data.section_id === body.section_id) {
-        intentContext = `本章目标：${data.goal}\n钩子：${(data.hooks || []).join('、')}\n风格：${data.style_notes || '无'}`;
+        const emoGoal = data.emotional_goal ? `\n情绪目标：${data.emotional_goal}` : '';
+        const povInfo = data.pov_character ? `\n视角角色：${data.pov_character}${data.pov_strategy ? `（策略：${data.pov_strategy}）` : ''}` : '';
+        intentContext = `本章目标：${data.goal}${emoGoal}${povInfo}\n钩子：${(data.hooks || []).join('、')}\n风格：${data.style_notes || '无'}`;
         break;
       }
     }

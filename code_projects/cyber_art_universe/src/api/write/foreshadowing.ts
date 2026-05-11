@@ -36,6 +36,7 @@ const FORESHADOWING_TEMPLATE_ZH = `# 伏笔账本
 | **强度** | 🔴 核心（贯穿全书）/ 🟡 重要（跨多章）/ 🟢 彩蛋（轻量） |
 | **关联人物** | |
 | **关联章节范围** | 第 ? 章 ～ 第 ? 章 |
+| **依赖的 M1 规则** | <!-- 此伏笔依赖的世界规则，如："三、禁忌——不得直视神祇" --> |
 
 **埋种计划**：
 - 埋种章节：第 ? 章
@@ -126,6 +127,7 @@ const FORESHADOWING_TEMPLATE_EN = `# Foreshadowing Ledger
 | **Intensity** | 🔴 Core (throughout) / 🟡 Major (multi-chapter) / 🟢 Minor (Easter egg) |
 | **Related Characters** | |
 | **Chapter Range** | ch? ~ ch? |
+| **Depends on M1 Rule** | <!-- World rule this hook depends on, e.g. "III. Taboos -- never gaze upon the deity" --> |
 
 **Planting Plan**:
 - Plant in chapter: ch?
