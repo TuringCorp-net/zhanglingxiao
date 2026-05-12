@@ -89,9 +89,9 @@
 
       // 章节信息
       document.getElementById('chapter-info').innerHTML = `
-        <div class="info-row">📄 ${section.word_count || 0} 字</div>
-        ${section.section_summary ? `<div class="info-row">📝 ${escHtml(section.section_summary)}</div>` : ''}
-        ${section.entities_involved && section.entities_involved.length ? `<div class="info-row">👥 ${section.entities_involved.map(escHtml).join('、')}</div>` : ''}
+        <div class="info-row">${section.word_count || 0} 字</div>
+        ${section.section_summary ? `<div class="info-row">${escHtml(section.section_summary)}</div>` : ''}
+        ${section.entities_involved && section.entities_involved.length ? `<div class="info-row">${section.entities_involved.map(escHtml).join('、')}</div>` : ''}
       `;
     });
   </script>

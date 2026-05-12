@@ -57,7 +57,7 @@
     function renderCategoryBar() {
       const el = document.getElementById('category-bar');
       let html = `<button class="category-pill category-pill-mine ${currentCategory === MY_WORKS_KEY ? 'active' : ''}"
-        onclick="selectCategory('${MY_WORKS_KEY}')">📂 ${LANG === 'zh' ? '我的作品' : 'My Works'}</button>
+        onclick="selectCategory('${MY_WORKS_KEY}')">${LANG === 'zh' ? '我的作品' : 'My Works'}</button>
         <span class="category-sep"></span>`;
       html += CATEGORY_KEYS.map(key =>
         `<button class="category-pill ${currentCategory === key ? 'active' : ''}"
@@ -82,12 +82,12 @@
             ? `<div class="my-works-onboard">
                 <p class="my-works-onboard-title">写下你的第一篇故事</p>
                 <p class="my-works-onboard-sub">进入 Story Forger 写作台，AI 辅助你完成从世界观到大纲到章节的完整创作。</p>
-                <a href="/write.html" class="btn btn-primary" style="display:inline-block;margin-top:1rem">🖊 开始写作</a>
+                <a href="/write.html" class="btn btn-primary" style="display:inline-block;margin-top:1rem">开始写作</a>
               </div>`
             : `<div class="my-works-onboard">
                 <p class="my-works-onboard-title">Write Your First Story</p>
                 <p class="my-works-onboard-sub">Enter Story Forger — AI assists you from worldbuilding to outline to chapter writing.</p>
-                <a href="/write.html" class="btn btn-primary" style="display:inline-block;margin-top:1rem">🖊 Start Writing</a>
+                <a href="/write.html" class="btn btn-primary" style="display:inline-block;margin-top:1rem">Start Writing</a>
               </div>`;
           return;
         }
