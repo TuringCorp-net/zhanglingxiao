@@ -414,16 +414,14 @@ function toggleElf() {
 }
 
 function startElfDrag(e) {
-  if (e.target.closest('.elf-avatar') || e.target.closest('.elf-action-btn')) return; // 不拦截点击
+  if (e.target.closest('.elf-avatar') || e.target.closest('.elf-action-btn')) return;
   e.preventDefault();
   const elf = qs('#story-elf');
   const rect = elf.getBoundingClientRect();
   const offsetX = e.clientX - rect.left;
   const offsetY = e.clientY - rect.top;
-  elf.style.right = 'auto';
-  elf.style.bottom = 'auto';
-  elf.style.left = (rect.left) + 'px';
-  elf.style.top = (rect.top) + 'px';
+  elf.style.left = rect.left + 'px';
+  elf.style.top = rect.top + 'px';
 
   function onMove(ev) {
     elf.style.left = Math.max(0, Math.min(window.innerWidth - 80, ev.clientX - offsetX)) + 'px';
@@ -582,6 +580,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = qs(`.binder-section[data-section="${name}"] .binder-section-header`);
     if (body) body.classList.toggle('open', isOpen);
     if (header) header.classList.toggle('open', isOpen);
+  }
+
+  // Story Elf 初始位置（右下角）
+  const elf = qs('#story-elf');
+  if (elf) {
+    elf.style.left = (window.innerWidth - 100) + 'px';
+    elf.style.top = (window.innerHeight - 180) + 'px';
   }
 
   if (userToken) loadWorkspaces();
