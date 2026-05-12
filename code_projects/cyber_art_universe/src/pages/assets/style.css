@@ -496,13 +496,11 @@ ul, ol { list-style: none; }
 /* — Writing Desk Grid — */
 .writing-desk {
   display: grid;
-  grid-template-columns: 250px 1fr 280px;
+  grid-template-columns: 250px 1fr;
   height: calc(100vh - 95px);
   overflow: hidden;
 }
-.writing-desk.left-collapsed  { grid-template-columns: 60px 1fr 280px; }
-.writing-desk.right-collapsed { grid-template-columns: 250px 1fr 60px; }
-.writing-desk.both-collapsed  { grid-template-columns: 60px 1fr 60px; }
+.writing-desk.left-collapsed { grid-template-columns: 60px 1fr; }
 
 /* — Binder Panel — */
 .binder-panel {
@@ -512,7 +510,6 @@ ul, ol { list-style: none; }
   display: flex; flex-direction: column;
   position: relative;
 }
-.binder-right { border-right: none; border-left: 1px solid var(--border); }
 .binder-collapse-btn {
   position: absolute; top: 0.5rem; z-index: 10;
   width: 24px; height: 24px; border-radius: 4px;
@@ -522,7 +519,6 @@ ul, ol { list-style: none; }
   transition: all 0.15s;
 }
 .binder-left .binder-collapse-btn { right: 0.5rem; }
-.binder-right .binder-collapse-btn { left: 0.5rem; }
 .binder-collapse-btn:hover { border-color: var(--accent-light); color: var(--text); }
 
 .binder-icon-bar {
@@ -541,7 +537,6 @@ ul, ol { list-style: none; }
   transition: background 0.15s;
 }
 .binder-left .binder-resize-handle { right: 0; }
-.binder-right .binder-resize-handle { left: 0; }
 .binder-resize-handle:hover, .binder-resize-handle.active { background: var(--accent); }
 
 /* — Binder Sections — */
@@ -597,21 +592,81 @@ ul, ol { list-style: none; }
   border-left-color: var(--accent);
 }
 
-/* — Binder Tabs — */
-.binder-tabs {
-  display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0;
+/* — Story Elf — floating draggable AI companion — */
+.story-elf {
+  position: fixed; z-index: 200;
+  right: 24px; bottom: 24px;
+  display: flex; flex-direction: column; align-items: center;
+  user-select: none;
 }
-.binder-tab {
-  flex: 1; padding: 0.45rem 0.3rem; font-size: 0.7rem; font-weight: 600;
-  background: transparent; border: none; border-bottom: 2px solid transparent;
-  color: var(--text-dim); cursor: pointer; transition: all 0.15s;
-  text-align: center;
+.elf-body {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  cursor: grab;
 }
-.binder-tab:hover { color: var(--text); background: var(--bg-hover); }
-.binder-tab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
-.binder-tab-content {
-  flex: 1; overflow-y: auto; padding: 0.75rem; font-size: 0.82rem;
+.elf-body:active { cursor: grabbing; }
+.elf-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 12px rgba(124,58,237,0.3);
 }
+.elf-avatar:hover { transform: scale(1.08); box-shadow: 0 4px 20px rgba(124,58,237,0.5); }
+.elf-face {
+  font-size: 0.8rem; font-weight: 800; color: var(--text-on-accent);
+  letter-spacing: -0.5px;
+}
+.elf-actions {
+  display: flex; gap: 4px;
+}
+.elf-action-btn {
+  width: 26px; height: 20px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--bg-card);
+  color: var(--text-dim); font-size: 0.58rem; cursor: pointer;
+  transition: all 0.15s; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.elf-action-btn:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(6,182,212,0.08); }
+
+/* — Elf Dialog — */
+.elf-dialog {
+  position: absolute; right: 56px; bottom: 0;
+  width: 280px; max-height: 360px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex; flex-direction: column;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  animation: elf-dialog-in 0.2s ease;
+}
+@keyframes elf-dialog-in { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
+.elf-dialog-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border);
+  font-size: 0.8rem; font-weight: 600; color: var(--cyan);
+}
+.elf-dialog-close {
+  width: 22px; height: 22px; border-radius: 50%; border: none;
+  background: transparent; color: var(--text-muted);
+  font-size: 1rem; cursor: pointer; line-height: 1;
+}
+.elf-dialog-close:hover { color: var(--text); background: var(--bg-hover); }
+.elf-chat-messages {
+  flex: 1; overflow-y: auto; padding: 0.5rem;
+  display: flex; flex-direction: column; gap: 0.4rem;
+  min-height: 120px; max-height: 240px;
+}
+.elf-chat-input-row {
+  display: flex; gap: 0.3rem; padding: 0.4rem 0.5rem;
+  border-top: 1px solid var(--border);
+}
+.elf-chat-input-row input {
+  flex: 1; padding: 0.35rem 0.5rem; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text); font-size: 0.75rem; outline: none;
+}
+.elf-chat-input-row input:focus { border-color: var(--accent-light); }
+
+/* — old binder-tabs / tab-content / chat — removed, replaced by elf — */
 
 /* — Writing Area — */
 .writing-area {

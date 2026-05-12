@@ -96,33 +96,30 @@
         </div>
       </main>
 
-      <!-- 右活页夹 -->
-      <aside id="right-binder" class="binder-panel binder-right">
-        <div class="binder-resize-handle"></div>
-        <div class="binder-collapse-btn" onclick="toggleBinder('right')" data-i18n-title="action.toggle_binder">&gt;</div>
-        <div class="binder-icon-bar">
-          <span data-i18n-title="right_tab.info" data-i18n="right_icon.info">信</span>
-          <span data-i18n-title="right_tab.lint" data-i18n="right_icon.lint">检</span>
-          <span data-i18n-title="right_tab.suggest" data-i18n="right_icon.suggest">议</span>
-          <span data-i18n-title="right_tab.chat" data-i18n="right_icon.chat">聊</span>
-        </div>
-        <div class="binder-tabs">
-          <button class="binder-tab active" data-tab="info" onclick="switchRightTab('info')" data-i18n="right_tab.info">信息</button>
-          <button class="binder-tab" data-tab="lint" onclick="switchRightTab('lint')" data-i18n="right_tab.lint">检查</button>
-          <button class="binder-tab" data-tab="suggest" onclick="switchRightTab('suggest')" data-i18n="right_tab.suggest">建议</button>
-          <button class="binder-tab" data-tab="chat" onclick="switchRightTab('chat')" data-i18n="right_tab.chat">对话</button>
-        </div>
-        <div class="binder-tab-content" id="tab-info"><div class="empty" data-i18n="right_tab.info">选择章节查看信息</div></div>
-        <div class="binder-tab-content" id="tab-lint" style="display:none"><div class="empty">选择章节后运行检查</div></div>
-        <div class="binder-tab-content" id="tab-suggest" style="display:none"><div class="empty">AI 建议即将推出</div></div>
-        <div class="binder-tab-content" id="tab-chat" style="display:none">
-          <div id="chat-messages" class="chat-messages"></div>
-          <div class="chat-input-row">
-            <input id="chat-input" data-i18n-placeholder="chat.placeholder" placeholder="让 AI 帮你修改这段..." onkeydown="if(event.key==='Enter')sendChat()">
-            <button class="btn btn-primary btn-sm" onclick="sendChat()" style="padding:0.35rem 0.75rem;font-size:0.75rem" data-i18n="action.send">发送</button>
-          </div>
-        </div>
-      </aside>
+  </div>
+
+  <!-- Story Elf — 浮动可拖拽 AI 助手 -->
+  <div id="story-elf" class="story-elf">
+    <div class="elf-dialog" id="elf-dialog" style="display:none">
+      <div class="elf-dialog-header">
+        <span>Story Elf</span>
+        <button class="elf-dialog-close" onclick="toggleElf()">×</button>
+      </div>
+      <div class="elf-chat-messages" id="elf-chat-messages"></div>
+      <div class="elf-chat-input-row">
+        <input id="elf-chat-input" data-i18n-placeholder="chat.placeholder" placeholder="让 AI 帮你修改这段..." onkeydown="if(event.key==='Enter')elfSendChat()">
+        <button class="btn btn-primary btn-sm" onclick="elfSendChat()" style="padding:0.3rem 0.6rem;font-size:0.7rem" data-i18n="action.send">发送</button>
+      </div>
+    </div>
+    <div class="elf-body" onmousedown="startElfDrag(event)">
+      <div class="elf-avatar" onclick="toggleElf()" title="Story Elf">
+        <div class="elf-face">SE</div>
+      </div>
+      <div class="elf-actions">
+        <button class="elf-action-btn" onclick="elfCheck()" data-i18n-title="right_tab.lint" title="检查">检</button>
+        <button class="elf-action-btn" onclick="elfSuggest()" data-i18n-title="right_tab.suggest" title="建议">议</button>
+      </div>
+    </div>
   </div>
 
   <footer class="footer">

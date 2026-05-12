@@ -418,7 +418,7 @@ async function loadSectionInfo(workId, sectionId) {
 async function loadLintResults() {
   const wid = state.currentWorkId, sid = state.currentSectionId;
   if (!wid || !sid) return;
-  const el = qs('#tab-lint');
+  const el = qs('#elf-chat-messages');
   el.innerHTML = '';
   el.appendChild(loadingHTML());
   const data = await hPost(`/api/write/draft/check/${wid}/${sid}`, {});

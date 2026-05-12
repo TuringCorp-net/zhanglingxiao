@@ -10,8 +10,6 @@ const DEFAULT_STATE = {
   currentSectionId: null,
   currentSectionTitle: '',
   leftBinderCollapsed: false,
-  rightBinderCollapsed: false,
-  rightTab: 'info',
   leftSectionStates: {
     original_concept: false,
     synopsis: true,
@@ -40,8 +38,6 @@ function loadState() {
 function saveState() {
   localStorage.setItem('sf_desk_state', JSON.stringify({
     leftBinderCollapsed: state.leftBinderCollapsed,
-    rightBinderCollapsed: state.rightBinderCollapsed,
-    rightTab: state.rightTab,
     leftSectionStates: state.leftSectionStates,
     chapterFilter: state.chapterFilter,
     leftWidth: state.leftWidth,
@@ -59,20 +55,14 @@ function qsa(sel) { return document.querySelectorAll(sel); }
 function applyClasses() {
   const desk = qs('#writing-desk');
   if (!desk) return;
-  desk.classList.toggle('left-collapsed', state.leftBinderCollapsed && !state.rightBinderCollapsed);
-  desk.classList.toggle('right-collapsed', !state.leftBinderCollapsed && state.rightBinderCollapsed);
-  desk.classList.toggle('both-collapsed', state.leftBinderCollapsed && state.rightBinderCollapsed);
-  desk.style.gridTemplateColumns = `${state.leftWidth}px 1fr ${state.rightWidth}px`;
+  desk.classList.toggle('left-collapsed', state.leftBinderCollapsed);
+  desk.style.gridTemplateColumns = state.leftBinderCollapsed ? '60px 1fr' : `${state.leftWidth}px 1fr`;
 
   const leftBinder = qs('#left-binder');
-  const rightBinder = qs('#right-binder');
   if (leftBinder) leftBinder.classList.toggle('collapsed', state.leftBinderCollapsed);
-  if (rightBinder) rightBinder.classList.toggle('collapsed', state.rightBinderCollapsed);
 
   const leftBtn = leftBinder?.querySelector('.binder-collapse-btn');
-  const rightBtn = rightBinder?.querySelector('.binder-collapse-btn');
   if (leftBtn) leftBtn.textContent = state.leftBinderCollapsed ? '>' : '<';
-  if (rightBtn) rightBtn.textContent = state.rightBinderCollapsed ? '<' : '>';
 }
 
 // ============================================================
@@ -316,18 +306,15 @@ async function initWritingDesk(workId, sectionId, sectionTitle) {
     loadBinderContent('chapters');
   }
 
-  switchRightTab(state.rightTab, true);
-
   if (sectionId) {
     state.currentSectionId = sectionId;
     state.currentSectionTitle = sectionTitle || '';
-    qs('#writing-section-title').textContent = sectionTitle || '选择章节';
+    qs('#writing-section-title').textContent = sectionTitle || t('writing.select_title');
     await loadSectionIntoEditor(workId, sectionId);
-    loadSectionInfo(workId, sectionId);
   } else {
-    qs('#writing-section-title').textContent = '选择左侧章节开始写作';
+    qs('#writing-section-title').textContent = t('writing.select_title');
     qs('#writing-editor').value = '';
-    qs('#writing-preview').innerHTML = '<div class="empty">预览将在此显示</div>';
+    qs('#writing-preview').innerHTML = '<div class="empty">' + t('label.preview_holder') + '</div>';
   }
 }
 
@@ -342,9 +329,7 @@ function selectSectionInDesk(sectionId, title) {
   state.currentSectionTitle = title;
   qs('#writing-section-title').textContent = title;
   loadSectionIntoEditor(state.currentWorkId, sectionId);
-  loadSectionInfo(state.currentWorkId, sectionId);
   loadBinderContent('chapters');
-  switchRightTab('info', true);
 }
 
 // — Markdown 预览 —
@@ -418,17 +403,94 @@ async function aiPolishSection() {
 }
 
 // ============================================================
-// Layer 6: 右活页夹
+// Layer 6: Story Elf — 浮动 AI 助手
 // ============================================================
 
-function switchRightTab(tab, silent) {
-  state.rightTab = tab;
-  qsa('.binder-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-  qsa('.binder-tab-content').forEach(c => c.style.display = c.id === `tab-${tab}` ? 'block' : 'none');
+function toggleElf() {
+  const dialog = qs('#elf-dialog');
+  if (!dialog) return;
+  const open = dialog.style.display !== 'none';
+  dialog.style.display = open ? 'none' : 'flex';
+}
 
-  if (tab === 'lint' && state.currentSectionId && !silent) loadLintResults();
-  if (tab === 'info' && state.currentSectionId && !silent) loadSectionInfo(state.currentWorkId, state.currentSectionId);
-  if (!silent) saveState();
+function startElfDrag(e) {
+  if (e.target.closest('.elf-avatar') || e.target.closest('.elf-action-btn')) return; // 不拦截点击
+  e.preventDefault();
+  const elf = qs('#story-elf');
+  const rect = elf.getBoundingClientRect();
+  const offsetX = e.clientX - rect.left;
+  const offsetY = e.clientY - rect.top;
+  elf.style.right = 'auto';
+  elf.style.bottom = 'auto';
+  elf.style.left = (rect.left) + 'px';
+  elf.style.top = (rect.top) + 'px';
+
+  function onMove(ev) {
+    elf.style.left = Math.max(0, Math.min(window.innerWidth - 80, ev.clientX - offsetX)) + 'px';
+    elf.style.top = Math.max(0, Math.min(window.innerHeight - 120, ev.clientY - offsetY)) + 'px';
+  }
+  function onUp() {
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  }
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+}
+
+function elfCheck() {
+  const dialog = qs('#elf-dialog');
+  if (dialog) dialog.style.display = 'flex';
+  if (state.currentSectionId) loadLintResults();
+}
+
+function elfSuggest() {
+  const dialog = qs('#elf-dialog');
+  if (dialog) dialog.style.display = 'flex';
+  const input = qs('#elf-chat-input');
+  if (input) {
+    input.value = t('prompt.ai_polish_confirm');
+    elfSendChat();
+  }
+}
+
+function elfSendChat() {
+  const input = qs('#elf-chat-input');
+  const msg = input.value.trim();
+  if (!msg || !state.currentSectionId) return;
+  const msgsEl = qs('#elf-chat-messages');
+
+  const userMsg = qs('#tmpl-chat-msg-user').content.cloneNode(true);
+  userMsg.querySelector('.chat-msg').textContent = msg;
+  msgsEl.appendChild(userMsg);
+  input.value = '';
+
+  const thinkingMsg = qs('#tmpl-chat-msg-ai').content.cloneNode(true);
+  const thinkEl = thinkingMsg.querySelector('.chat-msg');
+  thinkEl.id = 'elf-chat-loading';
+  thinkEl.textContent = t('label.ai_thinking');
+  msgsEl.appendChild(thinkingMsg);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+
+  hPost('/api/write/draft/polish', {
+    work_id: state.currentWorkId,
+    section_id: state.currentSectionId,
+    style_notes: msg,
+  }).then(data => {
+    const loadingEl = qs('#elf-chat-loading');
+    if (loadingEl) loadingEl.remove();
+    const aiMsg = qs('#tmpl-chat-msg-ai').content.cloneNode(true);
+    const aiEl = aiMsg.querySelector('.chat-msg');
+    if (data?.ok) {
+      aiEl.textContent = t('label.updated_editor');
+      qs('#writing-editor').value = data.data.body || '';
+      refreshPreview();
+    } else {
+      aiEl.style.setProperty('color', 'var(--error)');
+      aiEl.textContent = t('prompt.save_failed') + (data?.error?.message || '');
+    }
+    msgsEl.appendChild(aiMsg);
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+  });
 }
 
 // ============================================================
@@ -438,8 +500,6 @@ function switchRightTab(tab, silent) {
 function toggleBinder(side) {
   if (side === 'left') {
     state.leftBinderCollapsed = !state.leftBinderCollapsed;
-  } else {
-    state.rightBinderCollapsed = !state.rightBinderCollapsed;
   }
   applyClasses();
   saveState();
@@ -447,10 +507,7 @@ function toggleBinder(side) {
 
 function initBinderResize() {
   const leftHandle = qs('#left-binder .binder-resize-handle');
-  const rightHandle = qs('#right-binder .binder-resize-handle');
-
   if (leftHandle) leftHandle.addEventListener('mousedown', (e) => startResize(e, 'left'));
-  if (rightHandle) rightHandle.addEventListener('mousedown', (e) => startResize(e, 'right'));
 }
 
 function startResize(e, side) {
