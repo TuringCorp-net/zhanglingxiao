@@ -487,7 +487,7 @@ async function sendChat() {
     qs('#writing-editor').value = data.data.body || '';
     refreshPreview();
   } else {
-    aiEl.style.color = '#ef4444';
+    aiEl.style.setProperty('color', 'var(--error)');
     aiEl.textContent = '出错了: ' + (data?.error?.message || '');
   }
   msgsEl.appendChild(aiMsg);
