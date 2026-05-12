@@ -106,11 +106,6 @@
       document.getElementById('elf-dialog').style.display = 'none';
     });
 
-    var avatar = document.querySelector('.elf-avatar');
-    if (avatar) avatar.addEventListener('click', function (e) {
-      if (!drag.moved) StoryElf.toggle();
-    });
-
     var sendBtn = document.getElementById('elf-send-btn');
     if (sendBtn) sendBtn.addEventListener('click', function () { StoryElf.sendChat(); });
   }
@@ -138,7 +133,8 @@
   function onDragUp() {
     document.removeEventListener('mousemove', onDragMove);
     document.removeEventListener('mouseup', onDragUp);
-    if (drag.moved) savePosition();
+    if (drag.moved) { savePosition(); }
+    else { StoryElf.toggle(); }
     drag.moved = false;
   }
 
