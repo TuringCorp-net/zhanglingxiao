@@ -413,23 +413,38 @@ function toggleElf() {
   dialog.style.display = open ? 'none' : 'flex';
 }
 
+let elfDrag = { moved: false, startX: 0, startY: 0, offsetX: 0, offsetY: 0 };
+
 function startElfDrag(e) {
-  if (e.target.closest('.elf-avatar') || e.target.closest('.elf-action-btn')) return;
+  if (e.target.closest('.elf-action-btn') || e.target.closest('.elf-dialog') || e.target.closest('input')) return;
   e.preventDefault();
   const elf = qs('#story-elf');
   const rect = elf.getBoundingClientRect();
-  const offsetX = e.clientX - rect.left;
-  const offsetY = e.clientY - rect.top;
+  elfDrag = {
+    moved: false,
+    startX: e.clientX, startY: e.clientY,
+    offsetX: e.clientX - rect.left,
+    offsetY: e.clientY - rect.top,
+  };
   elf.style.left = rect.left + 'px';
   elf.style.top = rect.top + 'px';
 
   function onMove(ev) {
-    elf.style.left = Math.max(0, Math.min(window.innerWidth - 80, ev.clientX - offsetX)) + 'px';
-    elf.style.top = Math.max(0, Math.min(window.innerHeight - 120, ev.clientY - offsetY)) + 'px';
+    const dx = Math.abs(ev.clientX - elfDrag.startX);
+    const dy = Math.abs(ev.clientY - elfDrag.startY);
+    if (dx > 3 || dy > 3) elfDrag.moved = true;
+    if (elfDrag.moved) {
+      elf.style.left = Math.max(0, Math.min(window.innerWidth - 170, ev.clientX - elfDrag.offsetX)) + 'px';
+      elf.style.top = Math.max(0, Math.min(window.innerHeight - 220, ev.clientY - elfDrag.offsetY)) + 'px';
+    }
   }
   function onUp() {
     document.removeEventListener('mousemove', onMove);
     document.removeEventListener('mouseup', onUp);
+    // 没移动 = 点击头像 → 打开对话框
+    if (!elfDrag.moved && e.target.closest('.elf-avatar')) {
+      toggleElf();
+    }
   }
   document.addEventListener('mousemove', onMove);
   document.addEventListener('mouseup', onUp);
@@ -582,11 +597,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (header) header.classList.toggle('open', isOpen);
   }
 
-  // Story Elf 初始位置（右下角）
+  // Story Elf 初始位置（右下角，距边缘 100px）
   const elf = qs('#story-elf');
   if (elf) {
-    elf.style.left = (window.innerWidth - 100) + 'px';
-    elf.style.top = (window.innerHeight - 180) + 'px';
+    elf.style.left = (window.innerWidth - 250) + 'px';
+    elf.style.top = (window.innerHeight - 300) + 'px';
   }
 
   if (userToken) loadWorkspaces();
