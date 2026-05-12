@@ -55,7 +55,7 @@ function renderNav() {
           <span class="lang-opt ${lang === 'zh' ? 'active' : ''}">CN</span>
           <span class="lang-opt ${lang === 'en' ? 'active' : ''}">EN</span>
         </div>
-        <button class="login-btn" onclick="${isWrite ? `var t=prompt('输入用户 Token（调试功能，未来由登录替代）',typeof userToken!=='undefined'?userToken:'');if(t){localStorage.setItem('sf_user_token',t);location.reload()}` : `alert('登录功能即将上线')`}">登录</button>
+        <button class="login-btn" onclick="${isWrite ? `var tk=prompt(t('prompt.token_debug'),typeof userToken!=='undefined'?userToken:'');if(tk){localStorage.setItem('sf_user_token',tk);location.reload()}` : `alert(t('prompt.login_coming'))`}" data-i18n="nav.login">${t('nav.login')}</button>
       </div>
     </div>
   </nav>`;
@@ -70,12 +70,7 @@ function switchLang(lang) {
 
 // — 分类标签映射 —
 function categoryLabel(c) {
-  const map = {
-    'fantasy': '奇幻·玄幻', 'science-fiction': '科幻', 'romance': '言情·恋爱',
-    'contemporary': '都市·现实', 'adventure': '动作·冒险', 'mystery-thriller': '悬疑·惊悚',
-    'historical': '历史·架空', 'young-adult': '青春·成长'
-  };
-  return map[c] || '';
+  return t('category.' + c, '');
 }
 
 // — 作品卡片 —
@@ -89,7 +84,7 @@ function renderWorkCard(w) {
     <div class="work-card-body">
       <h3>${escHtml(w.title)}</h3>
       <div class="meta">${escHtml(w.author)}${cat ? ` · ${cat}` : ''}</div>
-      <div class="summary">${escHtml(w.summary || '暂无简介')}</div>
+      <div class="summary">${escHtml(w.summary || t('label.no_summary'))}</div>
       <div class="tag-list">${tags}</div>
     </div>
   </a>`;
@@ -97,14 +92,14 @@ function renderWorkCard(w) {
 
 // — 章节列表 —
 function renderChapterList(sections, workId) {
-  if (!sections || sections.length === 0) return '<div class="empty">暂无章节</div>';
+  if (!sections || sections.length === 0) return '<div class="empty">' + t('label.no_chapters') + '</div>';
   return sections.map(s => `
   <a href="/read.html?work=${workId}&section=${s.id}" class="chapter-item">
     <div>
       <div class="ch-title">${escHtml(s.title)}</div>
       ${s.section_summary ? `<div class="ch-summary">${escHtml(s.section_summary)}</div>` : ''}
     </div>
-    <div class="ch-wordcount">${s.word_count ? s.word_count + ' 字' : ''}</div>
+    <div class="ch-wordcount">${s.word_count ? s.word_count + t('label.word_count') : ''}</div>
   </a>`).join('');
 }
 

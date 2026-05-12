@@ -20,54 +20,59 @@
       <!-- 左活页夹 -->
       <aside id="left-binder" class="binder-panel binder-left">
         <div class="binder-resize-handle"></div>
-        <div class="binder-collapse-btn" onclick="toggleBinder('left')" title="折叠/展开">&lt;</div>
+        <div class="binder-collapse-btn" onclick="toggleBinder('left')" data-i18n-title="action.toggle_binder">&lt;</div>
         <div class="binder-workspace">
           <select id="workspace-selector" onchange="onWorkspaceChange()">
-            <option value="">选择作品...</option>
+            <option value="" data-i18n="label.select_work">选择作品...</option>
           </select>
         </div>
         <div class="binder-icon-bar">
-          <span title="原始构想">构</span><span title="总纲">纲</span><span title="世界观">世</span><span title="人物">人</span><span title="章节">章</span><span title="伏笔">伏</span>
+          <span data-i18n-title="binder.original_concept" data-i18n="binder_icon.original_concept">构</span>
+          <span data-i18n-title="binder.synopsis" data-i18n="binder_icon.synopsis">纲</span>
+          <span data-i18n-title="binder.worldbuilding" data-i18n="binder_icon.worldbuilding">世</span>
+          <span data-i18n-title="binder.characters" data-i18n="binder_icon.characters">人</span>
+          <span data-i18n-title="binder.chapters" data-i18n="binder_icon.chapters">章</span>
+          <span data-i18n-title="binder.foreshadowing" data-i18n="binder_icon.foreshadowing">伏</span>
         </div>
         <div class="binder-sections">
           <div class="binder-section" data-section="original_concept">
             <div class="binder-section-header" onclick="toggleBinderSection('original_concept')">
-              原始构想 <span class="binder-arrow">&gt;</span>
+              <span data-i18n="binder.original_concept">原始构想</span> <span class="binder-arrow">&gt;</span>
             </div>
             <div class="binder-section-body"></div>
           </div>
           <div class="binder-section" data-section="synopsis">
             <div class="binder-section-header open" onclick="toggleBinderSection('synopsis')">
-              总纲 <span class="binder-arrow">&gt;</span>
+              <span data-i18n="binder.synopsis">总纲</span> <span class="binder-arrow">&gt;</span>
             </div>
             <div class="binder-section-body open"></div>
           </div>
           <div class="binder-section" data-section="worldbuilding">
             <div class="binder-section-header" onclick="toggleBinderSection('worldbuilding')">
-              世界观 <span class="binder-arrow">&gt;</span>
+              <span data-i18n="binder.worldbuilding">世界观</span> <span class="binder-arrow">&gt;</span>
             </div>
             <div class="binder-section-body"></div>
           </div>
           <div class="binder-section" data-section="characters">
             <div class="binder-section-header" onclick="toggleBinderSection('characters')">
-              人物树 <span class="binder-arrow">&gt;</span>
+              <span data-i18n="binder.characters">人物树</span> <span class="binder-arrow">&gt;</span>
             </div>
             <div class="binder-section-body"></div>
           </div>
           <div class="binder-section" data-section="chapters">
             <div class="binder-section-header open" onclick="toggleBinderSection('chapters')">
-              章节树 <span class="binder-arrow">&gt;</span>
+              <span data-i18n="binder.chapters">章节树</span> <span class="binder-arrow">&gt;</span>
             </div>
             <div class="chapter-filters" id="chapter-filters" style="display:none">
-              <button class="chapter-filter-btn active" data-filter="all">全部</button>
-              <button class="chapter-filter-btn" data-filter="draft">写作中</button>
-              <button class="chapter-filter-btn" data-filter="done">已完成</button>
+              <button class="chapter-filter-btn active" data-filter="all" data-i18n="chapter_filter.all">全部</button>
+              <button class="chapter-filter-btn" data-filter="draft" data-i18n="chapter_filter.draft">写作中</button>
+              <button class="chapter-filter-btn" data-filter="done" data-i18n="chapter_filter.done">已完成</button>
             </div>
             <div class="binder-section-body open" id="chapter-tree"></div>
           </div>
           <div class="binder-section" data-section="foreshadowing">
             <div class="binder-section-header" onclick="toggleBinderSection('foreshadowing')">
-              伏笔账本 <span class="binder-arrow">&gt;</span>
+              <span data-i18n="binder.foreshadowing">伏笔账本</span> <span class="binder-arrow">&gt;</span>
             </div>
             <div class="binder-section-body" id="foreshadowing-list"></div>
           </div>
@@ -77,41 +82,44 @@
       <!-- 中写作区 -->
       <main class="writing-area">
         <div class="writing-header">
-          <span class="writing-header-title" id="writing-section-title">选择左侧章节开始写作</span>
+          <span class="writing-header-title" id="writing-section-title" data-i18n="writing.select_title">选择左侧章节开始写作</span>
           <div class="writing-header-actions">
-            <button class="preview-toggle-btn" onclick="togglePreview()" title="切换编辑/预览">预览</button>
-            <button class="btn btn-ghost btn-sm" onclick="aiGenerateForSection()" style="padding:0.3rem 0.75rem;font-size:0.8rem">AI 生成</button>
-            <button class="btn btn-ghost btn-sm" onclick="aiPolishSection()" style="padding:0.3rem 0.75rem;font-size:0.8rem">润色</button>
-            <button class="btn btn-primary btn-sm" onclick="saveCurrentSection()" style="padding:0.3rem 0.75rem;font-size:0.8rem">保存</button>
+            <button class="preview-toggle-btn" onclick="togglePreview()" data-i18n-title="writing.preview" data-i18n="writing.preview">预览</button>
+            <button class="btn btn-ghost btn-sm" onclick="aiGenerateForSection()" style="padding:0.3rem 0.75rem;font-size:0.8rem" data-i18n="writing.ai_generate">AI 生成</button>
+            <button class="btn btn-ghost btn-sm" onclick="aiPolishSection()" style="padding:0.3rem 0.75rem;font-size:0.8rem" data-i18n="writing.polish">润色</button>
+            <button class="btn btn-primary btn-sm" onclick="saveCurrentSection()" style="padding:0.3rem 0.75rem;font-size:0.8rem" data-i18n="writing.save">保存</button>
           </div>
         </div>
         <div class="writing-split" id="writing-split">
-          <textarea id="writing-editor" class="writing-editor" placeholder="在这里写你的故事...&#10;&#10;选择左侧章节树中的章节开始写作，或点击「AI 生成」让 AI 帮你写初稿。"></textarea>
-          <div id="writing-preview" class="writing-preview"><div class="empty">预览将在此显示</div></div>
+          <textarea id="writing-editor" class="writing-editor" data-i18n-placeholder="editor.placeholder" placeholder="在这里写你的故事...&#10;&#10;选择左侧章节树中的章节开始写作，或点击「AI 生成」让 AI 帮你写初稿。"></textarea>
+          <div id="writing-preview" class="writing-preview"><div class="empty" data-i18n="label.preview_holder">预览将在此显示</div></div>
         </div>
       </main>
 
       <!-- 右活页夹 -->
       <aside id="right-binder" class="binder-panel binder-right">
         <div class="binder-resize-handle"></div>
-        <div class="binder-collapse-btn" onclick="toggleBinder('right')" title="折叠/展开">&gt;</div>
+        <div class="binder-collapse-btn" onclick="toggleBinder('right')" data-i18n-title="action.toggle_binder">&gt;</div>
         <div class="binder-icon-bar">
-          <span title="信息">信</span><span title="检查">检</span><span title="建议">议</span><span title="对话">聊</span>
+          <span data-i18n-title="right_tab.info" data-i18n="right_icon.info">信</span>
+          <span data-i18n-title="right_tab.lint" data-i18n="right_icon.lint">检</span>
+          <span data-i18n-title="right_tab.suggest" data-i18n="right_icon.suggest">议</span>
+          <span data-i18n-title="right_tab.chat" data-i18n="right_icon.chat">聊</span>
         </div>
         <div class="binder-tabs">
-          <button class="binder-tab active" data-tab="info" onclick="switchRightTab('info')">信息</button>
-          <button class="binder-tab" data-tab="lint" onclick="switchRightTab('lint')">检查</button>
-          <button class="binder-tab" data-tab="suggest" onclick="switchRightTab('suggest')">建议</button>
-          <button class="binder-tab" data-tab="chat" onclick="switchRightTab('chat')">对话</button>
+          <button class="binder-tab active" data-tab="info" onclick="switchRightTab('info')" data-i18n="right_tab.info">信息</button>
+          <button class="binder-tab" data-tab="lint" onclick="switchRightTab('lint')" data-i18n="right_tab.lint">检查</button>
+          <button class="binder-tab" data-tab="suggest" onclick="switchRightTab('suggest')" data-i18n="right_tab.suggest">建议</button>
+          <button class="binder-tab" data-tab="chat" onclick="switchRightTab('chat')" data-i18n="right_tab.chat">对话</button>
         </div>
-        <div class="binder-tab-content" id="tab-info"><div class="empty">选择章节查看信息</div></div>
+        <div class="binder-tab-content" id="tab-info"><div class="empty" data-i18n="right_tab.info">选择章节查看信息</div></div>
         <div class="binder-tab-content" id="tab-lint" style="display:none"><div class="empty">选择章节后运行检查</div></div>
         <div class="binder-tab-content" id="tab-suggest" style="display:none"><div class="empty">AI 建议即将推出</div></div>
         <div class="binder-tab-content" id="tab-chat" style="display:none">
           <div id="chat-messages" class="chat-messages"></div>
           <div class="chat-input-row">
-            <input id="chat-input" placeholder="让 AI 帮你修改这段..." onkeydown="if(event.key==='Enter')sendChat()">
-            <button class="btn btn-primary btn-sm" onclick="sendChat()" style="padding:0.35rem 0.75rem;font-size:0.75rem">发送</button>
+            <input id="chat-input" data-i18n-placeholder="chat.placeholder" placeholder="让 AI 帮你修改这段..." onkeydown="if(event.key==='Enter')sendChat()">
+            <button class="btn btn-primary btn-sm" onclick="sendChat()" style="padding:0.35rem 0.75rem;font-size:0.75rem" data-i18n="action.send">发送</button>
           </div>
         </div>
       </aside>
@@ -119,21 +127,21 @@
 
   <footer class="footer">
     <div class="container">
-      <span>Story Forger · Powered by <a href="https://turingcorp.net">TuringCorp.net</a>. All rights reserved. <a href="#" onclick="alert('Terms of Use 即将上线');return false">Terms of Use</a></span>
+      <span>Powered by <a href="https://turingcorp.net">TuringCorp.net</a>. All rights reserved. <a href="#" onclick="alert('Terms of Use 即将上线');return false">Terms of Use</a></span>
       <a href="/.well-known/ai-manifest.json">AI Entry</a>
     </div>
   </footer>
 
   <!-- UI 模板 -->
-  <template id="tmpl-loading"><div class="loading" style="padding:1rem;font-size:0.8rem">加载中...</div></template>
+  <template id="tmpl-loading"><div class="loading" style="padding:1rem;font-size:0.8rem"><span data-i18n="label.loading">加载中...</span></div></template>
   <template id="tmpl-error"><div class="error" style="padding:1rem;font-size:0.8rem"><span class="err-msg"></span></div></template>
 
   <template id="tmpl-m0-panel">
     <div class="oc-panel-wrap">
-      <textarea class="oc-editor" placeholder="在这里自由记录你的原始构想、灵感碎片、创作冲动...&#10;&#10;没有任何模板限制。用你自己的方式，写任何你想写的内容。&#10;&#10;这份记录只有你能修改，Story Elf 不会触碰它。"></textarea>
+      <textarea class="oc-editor"></textarea>
       <div class="oc-actions">
-        <button class="btn btn-primary btn-sm oc-save-btn">保存</button>
-        <span class="text-muted oc-hint">M0 · 仅作者可编辑 · Story Elf 不可修改</span>
+        <button class="btn btn-primary btn-sm oc-save-btn" data-i18n="writing.save">保存</button>
+        <span class="text-muted oc-hint" data-i18n="m0.hint">M0 · 仅作者可编辑 · Story Elf 不可修改</span>
       </div>
     </div>
   </template>
@@ -149,21 +157,21 @@
 
   <template id="tmpl-worldbuilding-panel">
     <div class="wb-panel">
-      <div class="template-notice wb-notice" style="display:none">以下为设定框架。请按章节标题逐步填写，或点击下方「AI 生成」。</div>
+      <div class="template-notice wb-notice" style="display:none" data-i18n="template_notice.worldbuilding">以下为设定框架。请按章节标题逐步填写，或点击下方「AI 生成」。</div>
       <div class="bible-content wb-content"></div>
       <div class="wb-actions">
-        <button class="btn btn-ghost wb-gen-btn">AI 生成</button>
-        <button class="btn btn-ghost wb-edit-btn" style="display:none">编辑</button>
+        <button class="btn btn-ghost wb-gen-btn" data-i18n="action.ai_generate">AI 生成</button>
+        <button class="btn btn-ghost wb-edit-btn" style="display:none" data-i18n="action.edit">编辑</button>
       </div>
     </div>
   </template>
 
   <template id="tmpl-foreshadowing-panel">
     <div class="fh-panel">
-      <div class="template-notice fh-notice" style="display:none">以下为伏笔规划模板。请逐条填写你的伏笔设计，或点击下方「AI 规划」。</div>
+      <div class="template-notice fh-notice" style="display:none" data-i18n="template_notice.foreshadowing">以下为伏笔规划模板。请逐条填写你的伏笔设计，或点击下方「AI 规划」。</div>
       <div class="bible-content fh-content"></div>
       <div class="fh-actions">
-        <button class="btn btn-ghost fh-gen-btn">AI 规划</button>
+        <button class="btn btn-ghost fh-gen-btn" data-i18n="action.ai_plan">AI 规划</button>
       </div>
     </div>
   </template>
@@ -191,10 +199,10 @@
 
   <template id="tmpl-section-info">
     <div class="info-rows">
-      <div class="info-row"><strong>字数:</strong> <span class="info-wordcount">0</span></div>
+      <div class="info-row"><strong data-i18n="label.word_count">字数:</strong> <span class="info-wordcount">0</span></div>
       <div class="info-row"><strong>版本:</strong> v<span class="info-version">0</span></div>
       <div class="info-row info-ai-badge"></div>
-      <div class="info-row info-polish-badge" style="display:none">已 AI 润色</div>
+      <div class="info-row info-polish-badge" style="display:none" data-i18n="status.ai_polished">已 AI 润色</div>
       <div class="info-row warn info-issues" style="display:none"></div>
       <div class="text-muted info-disclaimer"></div>
     </div>
@@ -218,6 +226,7 @@
   </template>
 
   <script src="/assets/app.js"></script>
+  <script src="/i18n-data.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="/write-api.js"></script>
   <script src="/write-panels.js"></script>

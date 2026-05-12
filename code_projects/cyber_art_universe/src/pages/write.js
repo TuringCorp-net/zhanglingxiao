@@ -80,16 +80,16 @@ function applyClasses() {
 // ============================================================
 
 const PIPELINE_STEPS = [
-  { id: 'M0', label: { zh: '原始构想', en: 'Original Concept' }, module: 'original_concept' },
-  { id: 'M1', label: { zh: '世界观', en: 'Worldbuilding' }, module: 'worldbuilding' },
-  { id: 'M2', label: { zh: '主线剧情', en: 'Main Plot' }, module: 'outline' },
-  { id: 'M3', label: { zh: '人物卡', en: 'Characters' }, module: 'characters' },
-  { id: 'M4', label: { zh: '伏笔/冲突', en: 'Foreshadowing' }, module: 'foreshadowing' },
-  { id: 'M5', label: { zh: '章节蓝图', en: 'Chapter Blueprint' }, module: 'chapters' },
-  { id: 'M6', label: { zh: '逐章编写', en: 'Chapter Writing' }, module: 'writing' },
+  { id: 'M0', module: 'original_concept' },
+  { id: 'M1', module: 'worldbuilding' },
+  { id: 'M2', module: 'outline' },
+  { id: 'M3', module: 'characters' },
+  { id: 'M4', module: 'foreshadowing' },
+  { id: 'M5', module: 'chapters' },
+  { id: 'M6', module: 'writing' },
 ];
 
-function plabel(step) { return step.label[currentLang] || step.label.zh; }
+function plabel(step) { return t('pipeline.' + step.id); }
 
 function renderPipelineSkeleton(stepsEl, workId) {
   let html = '';

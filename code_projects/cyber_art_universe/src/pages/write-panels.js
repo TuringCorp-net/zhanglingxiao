@@ -25,7 +25,7 @@ async function saveOriginalConcept() {
   const resp = await hPut(`/api/write/original-concept/${wid}`, { content });
   if (resp?.ok) {
     const btn = qs('.oc-save-btn');
-    if (btn) { btn.textContent = '已保存'; setTimeout(() => { btn.textContent = '保存'; }, 1500); }
+    if (btn) { btn.textContent = t('writing.saved'); setTimeout(() => { btn.textContent = t('writing.save'); }, 1500); }
     refreshPipelineGuide(wid);
   } else {
     alert('保存失败: ' + (resp?.error?.message || ''));
@@ -163,7 +163,7 @@ function renderCharacterTree(entities) {
     const div = document.createElement('div');
     div.className = 'empty';
     div.style.cssText = 'padding:1rem;font-size:0.8rem';
-    div.innerHTML = '暂无角色<div style="margin-top:0.4rem;font-size:0.7rem;color:var(--text-muted)">在软木板视图中点击「+ 新章节」创建大纲后，可添加角色</div>';
+    div.innerHTML = t('label.no_characters');
     return div;
   }
   const byType = {};
@@ -172,7 +172,7 @@ function renderCharacterTree(entities) {
     if (!byType[t]) byType[t] = [];
     byType[t].push(e);
   });
-  const labels = { character: '角色', location: '地点', organization: '组织', concept: '概念', item: '物品', term: '术语', event: '事件' };
+  var labels = {}; ['character','location','organization','concept','item','term','event'].forEach(function(t){labels[t]=window.t('entity_type.'+t);});
   const frag = document.createDocumentFragment();
   for (const [t, items] of Object.entries(byType)) {
     const grp = qs('#tmpl-entity-group').content.cloneNode(true);
@@ -212,7 +212,7 @@ function renderChapterTree(sections) {
     const div = document.createElement('div');
     div.className = 'empty';
     div.style.cssText = 'padding:1rem;font-size:0.8rem';
-    div.innerHTML = '暂无章节<div style="margin-top:0.4rem"><button class="btn btn-ghost" style="padding:0.2rem 0.5rem;font-size:0.7rem" onclick="generateOutline(\'' + wid + '\')">AI 生成大纲</button></div>';
+    div.innerHTML = t('label.no_chapters') + '<div style="margin-top:0.4rem"><button class="btn btn-ghost" style="padding:0.2rem 0.5rem;font-size:0.7rem" onclick="generateOutline(\'' + wid + '\')">' + t('action.generate_outline') + '</button></div>';
     return div;
   }
 
@@ -235,13 +235,13 @@ function renderChapterTree(sections) {
     const div = document.createElement('div');
     div.className = 'empty';
     div.style.cssText = 'padding:1rem;font-size:0.8rem';
-    div.textContent = '没有匹配的章节';
+    div.textContent = t('label.no_match');
     return div;
   }
 
   const frag = document.createDocumentFragment();
   filtered.forEach(s => {
-    const statusIcon = s.version === 0 ? (s.word_count > 0 ? '[draft]' : '[new]') : (s.word_count > 0 ? '[done]' : '[planned]');
+    const statusIcon = s.version === 0 ? (s.word_count > 0 ? t('chapter_status.draft') : t('chapter_status.new')) : (s.word_count > 0 ? t('chapter_status.done') : t('chapter_status.planned'));
     const isActive = s.id === state.currentSectionId;
     const item = qs('#tmpl-chapter-item').content.cloneNode(true);
     const root = item.querySelector('.chapter-tree-item');
@@ -399,12 +399,12 @@ async function loadSectionInfo(workId, sectionId) {
     const tmpl = qs('#tmpl-section-info').content.cloneNode(true);
     tmpl.querySelector('.info-wordcount').textContent = d.word_count || 0;
     tmpl.querySelector('.info-version').textContent = d.version || 0;
-    tmpl.querySelector('.info-ai-badge').textContent = d.audit_report?.ai_generated ? 'AI 生成' : '人工撰写';
+    tmpl.querySelector('.info-ai-badge').textContent = d.audit_report?.ai_generated ? t('status.ai_generated') : t('status.human_written');
     if (d.audit_report?.ai_polished) tmpl.querySelector('.info-polish-badge').style.display = '';
     if (d.audit_report?.unresolved_issues) {
       const issuesEl = tmpl.querySelector('.info-issues');
       issuesEl.style.display = '';
-      issuesEl.textContent = '未解决问题: ' + d.audit_report.unresolved_issues;
+      issuesEl.textContent = t('status.unresolved') + ': ' + d.audit_report.unresolved_issues;
     }
     tmpl.querySelector('.info-disclaimer').textContent = d.audit_report?.disclaimer || '';
     el.innerHTML = '';
@@ -429,14 +429,14 @@ async function loadLintResults() {
       const div = document.createElement('div');
       div.className = 'empty';
       div.style.cssText = 'padding:1rem;font-size:0.8rem';
-      div.textContent = '未发现问题';
+      div.textContent = t('status.no_issues');
       el.appendChild(div);
     } else {
       issues.forEach(i => {
         const item = qs('#tmpl-lint-item').content.cloneNode(true);
         const root = item.querySelector('.lint-item');
         root.className = 'lint-item lint-' + (i.severity === 'error' ? 'error' : 'warning');
-        item.querySelector('.lint-severity').textContent = i.severity === 'error' ? '严重' : '警告';
+        item.querySelector('.lint-severity').textContent = i.severity === 'error' ? t('status.error') : t('status.warning');
         const typeEl = item.querySelector('.lint-type');
         if (i.type) typeEl.innerHTML = '<strong>' + escHtml(i.type) + '</strong>';
         else typeEl.remove();
@@ -449,7 +449,7 @@ async function loadLintResults() {
     }
   } else {
     el.innerHTML = '';
-    el.appendChild(errorHTML(data?.error?.message || 'AI 服务不可用'));
+    el.appendChild(errorHTML(data?.error?.message || t('prompt.ai_unavailable')));
   }
 }
 
