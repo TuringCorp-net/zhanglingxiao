@@ -13,6 +13,7 @@ import { generateOutline, readOutline, updateOutline } from './outline';
 import { createIntent, generateDraft, checkConsistency, polishDraft, outputDraft, rewriteSection } from './draft';
 import { generateForeshadowing, readForeshadowing } from './foreshadowing';
 import { extractHooks, generateTitles, repurposeSection } from './marketing';
+import { readOriginalConcept, updateOriginalConcept } from './original_concept';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -65,6 +66,16 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
     if (resourceId && !subResource && !action) {
       if (request.method === 'GET') return readWorldbuilding(env, request, resourceId);
       if (request.method === 'PUT') return updateWorldbuilding(env, request, resourceId);
+    }
+  }
+
+  // ================================================================
+  // M0 原始构想（Story Elf 禁止修改，外部 AI/Agent 视为作者可读写）
+  // ================================================================
+  if (resource === 'original-concept') {
+    if (resourceId && !subResource && !action) {
+      if (request.method === 'GET') return readOriginalConcept(env, request, resourceId);
+      if (request.method === 'PUT') return updateOriginalConcept(env, request, resourceId);
     }
   }
 

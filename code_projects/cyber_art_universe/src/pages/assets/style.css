@@ -414,6 +414,20 @@ ul, ol { list-style: none; }
   margin-bottom: 0.5rem; border: 1px dashed rgba(124,58,237,0.3);
 }
 
+/* — M0 原始构想编辑器 — */
+.oc-editor {
+  width: 100%; min-height: 200px; resize: vertical;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.5rem 0.6rem; font-size: 0.78rem; line-height: 1.6;
+  font-family: inherit; box-sizing: border-box;
+  margin-bottom: 0.3rem;
+}
+.oc-editor:focus { border-color: var(--cyan); outline: none; }
+.oc-editor::placeholder {
+  color: var(--text-muted); font-style: italic;
+}
+
 /* — Mode Containers — */
 .sf-mode { display: none; }
 .sf-mode.active { display: block; }

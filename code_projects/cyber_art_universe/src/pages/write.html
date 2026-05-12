@@ -40,9 +40,15 @@
         <div class="binder-resize-handle"></div>
         <div class="binder-collapse-btn" onclick="toggleBinder('left')" title="折叠/展开">◀</div>
         <div class="binder-icon-bar">
-          <span title="总纲">📖</span><span title="世界观">🌍</span><span title="人物">👤</span><span title="章节">📑</span><span title="伏笔">🎯</span>
+          <span title="原始构想">💡</span><span title="总纲">📖</span><span title="世界观">🌍</span><span title="人物">👤</span><span title="章节">📑</span><span title="伏笔">🎯</span>
         </div>
         <div class="binder-sections">
+          <div class="binder-section" data-section="original_concept">
+            <div class="binder-section-header" onclick="toggleBinderSection('original_concept')">
+              💡 原始构想 <span class="binder-arrow">▶</span>
+            </div>
+            <div class="binder-section-body"></div>
+          </div>
           <div class="binder-section" data-section="synopsis">
             <div class="binder-section-header open" onclick="toggleBinderSection('synopsis')">
               📖 总纲 <span class="binder-arrow">▶</span>

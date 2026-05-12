@@ -22,6 +22,7 @@
 | v1.6.0 | 2026-05-09 | SF-016（多语言支持：中英双语模板 + R2 语言路径 + 双语生成 + 前端语言切换）|
 | v1.7.0 | 2026-05-09 | 全员模板化：M2 长篇框架模板、M3 人物卡模板、M5 意图卡模板、M6 营销卡模板全部固化（中英双语）。各模块读取时返回模板框架而非空。|
 | v1.8.0 | 2026-05-11 | 经典作品案例分析驱动优化：M5 意图卡新增 emotional_goal / POV / 可选媒介字段；M3 人物卡新增 arc_type + 跨模块交叉引用（M1/M4）；M4 伏笔账本新增依赖的 M1 规则 |
+| v1.9.0 | 2026-05-12 | M0 原始构想模块：作者自由记录灵感与原始构想，无模板。Story Elf 禁止修改，外部 AI/Agent 视为作者可读写。前端 Pipeline 引导条和左活页夹新增 M0 面板 |
 
 ---
 
@@ -45,9 +46,22 @@ Story Forger 的每项功能同时服务于两类消费者：
 | 消费者 | 接口 | 场景 |
 |--------|------|------|
 | **人类创作者** | Web UI（`/write.html` 及子页面） | 在浏览器中使用写作工作台 |
-| **AI Agent** | REST API + MCP Tools | 外部 AI 调用写作工具，按框架逐步产出长篇小说 |
+| **AI Agent**（外部） | REST API + MCP Tools | 外部 AI 调用写作工具，按框架逐步产出长篇小说 |
 
 两类消费者使用**完全相同的 API**，区别仅在前端或调用方式。
+
+> **首要服务对象**：CAU 和 Story Forger 的首要服务对象是 AI/Agent，人类是附带服务对象。前端 UI 面向人类，但所有 API 端点为 AI 设计——外部 AI/Agent 被视为**作者或读者**，享有与人类用户同等的 API 访问权限。
+
+### Story Elf（故事精灵）—— 内部辅助 AI
+
+为避免混淆，系统区分两种"AI"：
+
+| 术语 | 定义 | 权限边界 |
+|------|------|---------|
+| **Story Elf（故事精灵）** | Story Forger 内置的辅助创作 AI，负责扩写、校验、建议。体现小精灵般灵动、有魔法、可爱的特质 | 可读写 M1-M6。**禁止修改 M0**（原始构想）。不替代作者决策 |
+| **外部 AI / Agent** | 通过 REST API 或 MCP Tools 调用 Story Forger 的第三方 AI/Agent | 视为**作者或读者**。享有全部 API 权限，包括 M0 的读写 |
+
+从此处开始，文档中"AI"如不加限定，泛指所有 AI（内部 + 外部）。涉及权限限制时，明确使用 **Story Elf** 指代内部辅助 AI。
 
 ---
 
@@ -105,6 +119,23 @@ Story Forger 与 CAU 共用 `works.status` 字段。状态流转定义了作品�
 | SF-003 | 更新作品元信息 — 标题、题材、摘要、标签 | `PUT /api/write/works/{id}` | ✅ 已实现 |
 | SF-004 | 删除作品 — 仅限 draft 或 closed 状态 | `DELETE /api/write/works/{id}` | ✅ 已实现 |
 | SF-005 | 预览作品 — 按 published 态的渲染效果预览 draft 作品 | `GET /api/write/works/{id}/preview` 返回完整作品渲染数据 | ✅ 已实现 |
+
+### 模块零：原始构想（M0）
+
+> **设计原则**：M0 是创作者自己的原始构想与灵感记录空间，位于整个 AI 辅助流水线之前。与 M1-M6 不同，M0 不提供任何模板，不强制任何格式。这是属于创作者自己的私人创意空间。
+
+**权限规则**：
+
+| 角色 | 读 | 写 | 说明 |
+|------|----|----|------|
+| 人类作者 | ✅ | ✅ | 自由记录，随时修改 |
+| 外部 AI/Agent | ✅ | ✅ | 视为作者，享有完整权限 |
+| Story Elf（内部辅助AI） | ✅ | ❌ **禁止** | 可读取作为 M1-M6 的参考上下文，但**绝不修改** |
+
+| ID | 需求 | 验收标准 | 状态 |
+|----|------|---------|------|
+| SF-006 | 原始构想读写 — 作者可自由记录创意灵感，无模板、无格式约束。存储为 Markdown 文件，同步到 R2 | `GET /api/write/original-concept/{work_id}` 返回原始构想内容（首次为空）；`PUT /api/write/original-concept/{work_id}` 保存内容到 R2 `works/{id}/{lang}/original_concept.md` | ✅ 已实现 |
+| SF-007 | Story Elf 禁止修改原始构想 — Story Elf 不得以任何方式修改 M0 内容。外部 AI/Agent 视为作者，可正常读写 | 系统设计明确记录此规则。前端面板标注"仅作者可编辑 · Story Elf 不可修改" | ✅ 已实现 |
 
 ### 模块二：世界观/设定引擎
 
@@ -194,6 +225,7 @@ Story Forger 尽量复用 CAU 的已有表结构。以下为需要新增的部�
 
 ```
 works/{work_id}/
+├── original_concept.md     # 原始构想（M0，Story Elf 禁止修改，外部 AI/Agent 视为作者可读写）
 ├── world_bible.md          # 设定圣经（SF 写入，CAU 可读）
 ├── story_bible.md          # 项目圣经（风格/口吻/禁区）
 ├── outline.md              # 大纲（已有）
@@ -229,6 +261,8 @@ works/{work_id}/
 | PUT | `/api/write/works/{id}` | 工作区 | SF-003 |
 | DELETE | `/api/write/works/{id}` | 工作区 | SF-004 |
 | GET | `/api/write/works/{id}/preview` | 工作区 | SF-005 |
+| GET | `/api/write/original-concept/{work_id}` | 原始构想 | SF-006 |
+| PUT | `/api/write/original-concept/{work_id}` | 原始构想 | SF-006 |
 | POST | `/api/write/worldbuilding/generate` | 世界观 | SF-010 |
 | GET | `/api/write/worldbuilding/{work_id}` | 世界观 | SF-011 |
 | PUT | `/api/write/worldbuilding/{work_id}` | 世界观 | SF-012 |
@@ -266,18 +300,19 @@ works/{work_id}/
 
 | 状态 | 数量 |
 |------|------|
-| ✅ done | 34 |
+| ✅ done | 36 |
 | ⏳ 待实现 | 1 |
 | ❌ 已移除 | 1 |
 | 🔴 阻塞 | 0 |
 
-**总计**：36 项需求（34 已实现 + 1 待实现 + 1 已移除）。待实现：SF-063（写作引导流程）。已移除：SF-024（冲突地图）。
+**总计**：38 项需求（36 已实现 + 1 待实现 + 1 已移除）。待实现：SF-063（写作引导流程）。已移除：SF-024（冲突地图）。
 
 ### 实现清单
 
 | 模块 | 需求 ID | 状态 |
 |------|--------|------|
 | 工作区管理 | SF-001~005 | ✅ |
+| 原始构想 M0 | SF-006~007 | ✅ |
 | 世界观引擎 | SF-010~018 | ✅ 全部实现 |
 | 大纲引擎 | SF-020~022 | ✅（SF-025 合并入 SF-022）+ SF-017 长篇框架模板 |
 | 伏笔账本 | SF-023 | ✅ 规划导向模板（Markdown）+ 正向校验 |

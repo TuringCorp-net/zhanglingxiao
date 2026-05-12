@@ -60,6 +60,7 @@ const DEFAULT_STATE = {
   rightBinderCollapsed: false,
   rightTab: 'info',
   leftSectionStates: {
+    original_concept: false,
     synopsis: true,
     worldbuilding: false,
     characters: false,
@@ -122,6 +123,7 @@ function applyClasses() {
 
 // — Layer 3: 写作引导流程 —
 const PIPELINE_STEPS = [
+  { id: 'M0', label: '原始构想', icon: '💡', module: 'original_concept' },
   { id: 'M1', label: '世界观', icon: '🌍', module: 'worldbuilding' },
   { id: 'M2', label: '主线剧情', icon: '📖', module: 'outline' },
   { id: 'M3', label: '人物卡', icon: '👤', module: 'characters' },
@@ -140,7 +142,8 @@ async function refreshPipelineGuide(workId) {
   stepsEl.innerHTML = '<span style="font-size:0.75rem;color:var(--text-dim)">检查中...</span>';
 
   // 并行检查各模块状态
-  const [wb, outline, entities, fh, sections] = await Promise.all([
+  const [oc, wb, outline, entities, fh, sections] = await Promise.all([
+    hGet(`/api/write/original-concept/${workId}`),
     hGet(`/api/write/worldbuilding/${workId}`),
     hGet(`/api/write/outline/${workId}`),
     hGet(`/api/content/${workId}/entities`),
@@ -149,6 +152,7 @@ async function refreshPipelineGuide(workId) {
   ]);
 
   const statuses = {
+    M0: checkOriginalConceptStatus(oc),
     M1: checkBibleStatus(wb),
     M2: checkOutlineStatus(outline),
     M3: checkEntitiesStatus(entities),
@@ -179,6 +183,12 @@ async function refreshPipelineGuide(workId) {
   });
 
   stepsEl.innerHTML = html;
+}
+
+function checkOriginalConceptStatus(oc) {
+  if (!oc?.ok || oc.data?.is_empty) return 'empty';
+  const content = oc.data?.content || '';
+  return content.trim().length > 50 ? 'done' : 'in_progress';
 }
 
 function checkBibleStatus(wb) {
@@ -236,6 +246,7 @@ function goToPipelineStep(module, workId) {
   }
 
   const sectionMap = {
+    original_concept: 'original_concept',
     worldbuilding: 'worldbuilding',
     outline: 'synopsis',
     characters: 'characters',
@@ -394,6 +405,18 @@ async function loadBinderContent(sectionName) {
   bodyEl.innerHTML = '<div class="loading" style="padding:1rem;font-size:0.8rem">加载中...</div>';
 
   switch (sectionName) {
+    case 'original_concept': {
+      const oc = await hGet(`/api/write/original-concept/${wid}`);
+      const content = (oc?.ok && oc.data?.content) ? oc.data.content : '';
+      bodyEl.innerHTML = `<div class="binder-text-preview" style="max-height:50vh;overflow-y:auto;display:flex;flex-direction:column">
+        <textarea id="original-concept-editor" class="oc-editor" placeholder="在这里自由记录你的原始构想、灵感碎片、创作冲动...&#10;&#10;没有任何模板限制。用你自己的方式，写任何你想写的内容。&#10;&#10;这份记录只有你能修改，AI 不会触碰它。">${escHtml(content)}</textarea>
+        <div style="padding:0.4rem 0;display:flex;gap:0.35rem">
+          <button class="btn btn-primary btn-sm" onclick="saveOriginalConcept()" style="padding:0.25rem 0.6rem;font-size:0.72rem">💾 保存</button>
+          <span class="text-muted" style="font-size:0.65rem;align-self:center">M0 · Story Elf 不可修改 · 外部 AI/Agent 视为作者</span>
+        </div>
+      </div>`;
+      break;
+    }
     case 'synopsis': {
       const [work, outline] = await Promise.all([
         hGet(`/api/write/works/${wid}`),
@@ -651,6 +674,22 @@ function renderBibleContent(md) {
     .replace(/\n\n/g, '<br><br>')
     .replace(/\n/g, '<br>');
   return html;
+}
+
+async function saveOriginalConcept() {
+  const wid = state.currentWorkId;
+  if (!wid) return;
+  const editor = qs('#original-concept-editor');
+  if (!editor) return;
+  const content = editor.value;
+  const resp = await hPut(`/api/write/original-concept/${wid}`, { content });
+  if (resp?.ok) {
+    const btn = qs('.binder-section[data-section="original_concept"] .btn-primary');
+    if (btn) { btn.textContent = '✅ 已保存'; setTimeout(() => { btn.textContent = '💾 保存'; }, 1500); }
+    refreshPipelineGuide(wid);
+  } else {
+    alert('保存失败: ' + (resp?.error?.message || ''));
+  }
 }
 
 function editWorldbuilding(workId) {
@@ -965,7 +1004,13 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       e.preventDefault();
-      saveCurrentSection();
+      // 如果原始构想编辑器可见且聚焦，保存原始构想
+      const ocEditor = qs('#original-concept-editor');
+      if (ocEditor && ocEditor === document.activeElement) {
+        saveOriginalConcept();
+      } else {
+        saveCurrentSection();
+      }
     }
   });
 

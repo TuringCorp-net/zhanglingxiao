@@ -3,7 +3,7 @@ import { Env, Work } from '../../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { parsePagination } from '../../lib/constants';
-import { buildWorkFrontmatter, writeWorkContent, readWorkContent, workR2Key, sectionR2Key, writeSectionContent, readSectionMarkdown } from '../../lib/work_content';
+import { buildWorkFrontmatter, writeWorkContent, readWorkContent, workR2Key, sectionR2Key, writeSectionContent, readSectionMarkdown, workContentPath } from '../../lib/work_content';
 
 // GET /api/write/works
 // 注意：当前无用户认证，返回所有作品。未来接入用户系统后需加 WHERE author = ? 过滤。
@@ -58,6 +58,11 @@ export async function createDraftWork(env: Env, request: Request): Promise<Respo
     summary: body.summary || null,
     tags: parseJSON<string[]>(tags, []),
   }));
+
+  // M0 原始构想：创建时即初始化空文件
+  await env.WORKS_BUCKET.put(workContentPath(id, 'zh', 'original_concept.md'), '', {
+    httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+  });
 
   await env.DB.prepare(`
     INSERT INTO works (id, title, type, category, author, creation_attribution, audience, tags, status, summary, r2_object_key, version, created_at, updated_at)
