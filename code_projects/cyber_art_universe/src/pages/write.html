@@ -137,8 +137,103 @@
     </div>
   </footer>
 
+  <!-- UI 模板 -->
+  <template id="tmpl-loading"><div class="loading" style="padding:1rem;font-size:0.8rem">加载中...</div></template>
+  <template id="tmpl-error"><div class="error" style="padding:1rem;font-size:0.8rem"><span class="err-msg"></span></div></template>
+
+  <template id="tmpl-m0-panel">
+    <div class="oc-panel-wrap">
+      <textarea class="oc-editor" placeholder="在这里自由记录你的原始构想、灵感碎片、创作冲动...&#10;&#10;没有任何模板限制。用你自己的方式，写任何你想写的内容。&#10;&#10;这份记录只有你能修改，Story Elf 不会触碰它。"></textarea>
+      <div class="oc-actions">
+        <button class="btn btn-primary btn-sm oc-save-btn">💾 保存</button>
+        <span class="text-muted oc-hint">M0 · 仅作者可编辑 · Story Elf 不可修改</span>
+      </div>
+    </div>
+  </template>
+
+  <template id="tmpl-synopsis-panel">
+    <div class="synopsis-panel">
+      <strong class="synopsis-title"></strong>
+      <div class="text-dim synopsis-summary"></div>
+      <div class="text-muted synopsis-meta"></div>
+      <div class="synopsis-outline"></div>
+    </div>
+  </template>
+
+  <template id="tmpl-worldbuilding-panel">
+    <div class="wb-panel">
+      <div class="template-notice wb-notice" style="display:none">📋 以下为设定框架。请按章节标题逐步填写，或点击下方「🤖 AI 生成」。</div>
+      <div class="bible-content wb-content"></div>
+      <div class="wb-actions">
+        <button class="btn btn-ghost wb-gen-btn">🤖 AI 生成</button>
+        <button class="btn btn-ghost wb-edit-btn" style="display:none">✏️ 编辑</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tmpl-foreshadowing-panel">
+    <div class="fh-panel">
+      <div class="template-notice fh-notice" style="display:none">📋 以下为伏笔规划模板。请逐条填写你的伏笔设计，或点击下方「🤖 AI 规划」。</div>
+      <div class="bible-content fh-content"></div>
+      <div class="fh-actions">
+        <button class="btn btn-ghost fh-gen-btn">🤖 AI 规划</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tmpl-chapter-item">
+    <div class="chapter-tree-item" draggable="true">
+      <span class="chapter-status-icon"></span>
+      <span class="chapter-title"></span>
+      <span class="chapter-wordcount text-muted"></span>
+    </div>
+  </template>
+
+  <template id="tmpl-entity-group">
+    <div class="entity-group">
+      <div class="entity-group-title"></div>
+    </div>
+  </template>
+
+  <template id="tmpl-entity-item">
+    <div class="entity-item">
+      <span class="entity-name"></span>
+      <span class="entity-type-tag"></span>
+    </div>
+  </template>
+
+  <template id="tmpl-section-info">
+    <div class="info-rows">
+      <div class="info-row"><strong>字数:</strong> <span class="info-wordcount">0</span></div>
+      <div class="info-row"><strong>版本:</strong> v<span class="info-version">0</span></div>
+      <div class="info-row info-ai-badge"></div>
+      <div class="info-row info-polish-badge" style="display:none">✨ 已 AI 润色</div>
+      <div class="info-row warn info-issues" style="display:none"></div>
+      <div class="text-muted info-disclaimer"></div>
+    </div>
+  </template>
+
+  <template id="tmpl-lint-item">
+    <div class="lint-item">
+      <div class="lint-severity"></div>
+      <div class="lint-type"></div>
+      <div class="text-dim lint-desc"></div>
+      <div class="lint-suggestion"></div>
+    </div>
+  </template>
+
+  <template id="tmpl-chat-msg-user">
+    <div class="chat-msg chat-user"></div>
+  </template>
+
+  <template id="tmpl-chat-msg-ai">
+    <div class="chat-msg chat-ai"></div>
+  </template>
+
   <script src="/assets/app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="/write-api.js"></script>
+  <script src="/write-panels.js"></script>
   <script src="/write.js"></script>
 </body>
 </html>

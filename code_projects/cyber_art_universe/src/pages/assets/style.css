@@ -427,6 +427,35 @@ ul, ol { list-style: none; }
 .oc-editor::placeholder {
   color: var(--text-muted); font-style: italic;
 }
+.oc-panel-wrap { display: flex; flex-direction: column; }
+.oc-actions { padding: 0.4rem 0; display: flex; gap: 0.35rem; }
+.oc-hint { font-size: 0.65rem; align-self: center; }
+
+/* — Synopsis Panel — */
+.synopsis-panel { padding: 0.5rem 0.75rem; font-size: 0.82rem; }
+.synopsis-summary { margin-top: 0.3rem; }
+.synopsis-meta { margin-top: 0.4rem; font-size: 0.72rem; }
+
+/* — Worldbuilding / Foreshadowing Panels — */
+.wb-panel, .fh-panel { }
+.wb-actions { padding: 0.25rem 0.75rem 0.5rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.fh-actions { padding: 0.25rem 0.75rem 0.5rem; }
+
+/* — Section Info Tab — */
+.info-rows { font-size: 0.82rem; }
+.info-rows .info-row { margin-bottom: 0.25rem; }
+.info-rows .info-row.warn { color: var(--sf-warn); }
+.info-rows .info-disclaimer { margin-top: 0.5rem; font-size: 0.7rem; }
+
+/* — Lint Items — */
+.lint-item .lint-type { font-size: 0.75rem; margin-top: 0.1rem; }
+.lint-item .lint-desc { font-size: 0.75rem; margin-top: 0.15rem; }
+.lint-item .lint-suggestion { font-size: 0.7rem; color: var(--cyan); margin-top: 0.15rem; }
+
+/* — Chapter / Entity tree item children — */
+.chapter-title { flex: 1; }
+.chapter-wordcount { font-size: 0.7rem; }
+.entity-item { cursor: pointer; }
 
 /* — Mode Containers — */
 .sf-mode { display: none; }
