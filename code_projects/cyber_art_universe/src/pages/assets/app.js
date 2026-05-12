@@ -43,7 +43,6 @@ function renderNav() {
         <a href="/" class="nav-tab ${isWrite ? '' : 'active'}">Read</a>
         <a href="/write.html" class="nav-tab ${isWrite ? 'active' : ''}">Write</a>
       </div>
-      ${isWrite ? `
       <div class="nav-right">
         <div class="lang-pill" onclick="switchLang(currentLang === 'zh' ? 'en' : 'zh')" title="切换语言">
           <span class="lang-knob ${lang === 'en' ? 'right' : ''}"></span>
@@ -51,15 +50,17 @@ function renderNav() {
           <span class="lang-opt ${lang === 'en' ? 'active' : ''}">EN</span>
         </div>
         <button class="login-btn" onclick="alert('登录功能即将上线')">登录</button>
-        <input id="nav-token-input" class="nav-token" type="password" placeholder="Token" onchange="setUserToken()">
+        ${isWrite ? `<input id="nav-token-input" class="nav-token" type="password" placeholder="Token" onchange="setUserToken()">` : ''}
       </div>
-      ` : `
-      <div class="nav-right">
-        <button class="login-btn" onclick="alert('登录功能即将上线')">登录</button>
-      </div>
-      `}
     </div>
   </nav>`;
+}
+
+// — 语言切换（共享版本，Write 页面会被 write-api.js 覆盖） —
+function switchLang(lang) {
+  if (typeof currentLang !== 'undefined' && lang === currentLang) return;
+  localStorage.setItem('sf_lang', lang);
+  location.reload();
 }
 
 // — 分类标签映射 —
