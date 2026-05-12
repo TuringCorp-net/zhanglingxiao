@@ -49,8 +49,7 @@ function renderNav() {
           <span class="lang-opt ${lang === 'zh' ? 'active' : ''}">CN</span>
           <span class="lang-opt ${lang === 'en' ? 'active' : ''}">EN</span>
         </div>
-        <button class="login-btn" onclick="alert('登录功能即将上线')">登录</button>
-        ${isWrite ? `<input id="nav-token-input" class="nav-token" type="password" placeholder="Token" onchange="setUserToken()">` : ''}
+        <button class="login-btn" onclick="${isWrite ? `var t=prompt('输入用户 Token（调试功能，未来由登录替代）',typeof userToken!=='undefined'?userToken:'');if(t){localStorage.setItem('sf_user_token',t);location.reload()}` : `alert('登录功能即将上线')`}">登录</button>
       </div>
     </div>
   </nav>`;

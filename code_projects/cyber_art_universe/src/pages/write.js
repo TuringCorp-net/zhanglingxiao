@@ -80,22 +80,50 @@ function applyClasses() {
 // ============================================================
 
 const PIPELINE_STEPS = [
-  { id: 'M0', label: '原始构想', module: 'original_concept' },
-  { id: 'M1', label: '世界观', module: 'worldbuilding' },
-  { id: 'M2', label: '主线剧情', module: 'outline' },
-  { id: 'M3', label: '人物卡', module: 'characters' },
-  { id: 'M4', label: '伏笔/冲突', module: 'foreshadowing' },
-  { id: 'M5', label: '章节蓝图', module: 'chapters' },
-  { id: 'M6', label: '逐章编写', module: 'writing' },
+  { id: 'M0', label: { zh: '原始构想', en: 'Original Concept' }, module: 'original_concept' },
+  { id: 'M1', label: { zh: '世界观', en: 'Worldbuilding' }, module: 'worldbuilding' },
+  { id: 'M2', label: { zh: '主线剧情', en: 'Main Plot' }, module: 'outline' },
+  { id: 'M3', label: { zh: '人物卡', en: 'Characters' }, module: 'characters' },
+  { id: 'M4', label: { zh: '伏笔/冲突', en: 'Foreshadowing' }, module: 'foreshadowing' },
+  { id: 'M5', label: { zh: '章节蓝图', en: 'Chapter Blueprint' }, module: 'chapters' },
+  { id: 'M6', label: { zh: '逐章编写', en: 'Chapter Writing' }, module: 'writing' },
 ];
+
+function plabel(step) { return step.label[currentLang] || step.label.zh; }
+
+function renderPipelineSkeleton(stepsEl, workId) {
+  let html = '';
+  PIPELINE_STEPS.forEach((step, i) => {
+    html += `<div class="pipeline-step empty" data-module="${step.module}" data-step="${step.id}" onclick="goToPipelineStep('${step.module}', '${workId}')">
+      <span class="pipeline-label">${plabel(step)}</span>
+      <span class="pipeline-id">${step.id}</span>
+    </div>`;
+    if (i < PIPELINE_STEPS.length - 1) html += '<span class="pipeline-arrow">&rsaquo;</span>';
+  });
+  stepsEl.innerHTML = html;
+}
+
+function updatePipelineStatuses(statuses) {
+  PIPELINE_STEPS.forEach((step, i) => {
+    const el = qs(`.pipeline-step[data-step="${step.id}"]`);
+    if (!el) return;
+    const s = statuses[step.id];
+    const cls = s === 'done' ? 'done' : s === 'in_progress' ? 'in-progress' : 'empty';
+    const prev = i > 0 ? statuses[PIPELINE_STEPS[i - 1].id] : null;
+    const suggested = s === 'empty' && (i === 0 || prev === 'done');
+    el.className = `pipeline-step ${cls}${suggested ? ' suggested' : ''}`;
+    el.title = suggested ? '建议从这里开始' : '';
+    el.querySelector('.pipeline-label').textContent = plabel(step);
+  });
+}
 
 async function refreshPipelineGuide(workId) {
   const guide = qs('#pipeline-guide');
   const stepsEl = qs('#pipeline-steps');
   if (!guide || !stepsEl || !workId) return;
-
   guide.style.display = 'block';
-  stepsEl.innerHTML = '<span style="font-size:0.75rem;color:var(--text-dim)">检查中...</span>';
+
+  renderPipelineSkeleton(stepsEl, workId);
 
   const [oc, wb, outline, entities, fh, sections] = await Promise.all([
     hGet(`/api/write/original-concept/${workId}`),
@@ -106,7 +134,7 @@ async function refreshPipelineGuide(workId) {
     hGet(`/api/write/outline/${workId}`),
   ]);
 
-  const statuses = {
+  updatePipelineStatuses({
     M0: checkOriginalConceptStatus(oc),
     M1: checkBibleStatus(wb),
     M2: checkOutlineStatus(outline),
@@ -114,24 +142,7 @@ async function refreshPipelineGuide(workId) {
     M4: checkForeshadowingStatus(fh),
     M5: checkChapterBlueprintStatus(sections),
     M6: checkChapterContentStatus(sections),
-  };
-
-  let html = '';
-  PIPELINE_STEPS.forEach((step, i) => {
-    const s = statuses[step.id];
-    const statusClass = s === 'done' ? 'done' : s === 'in_progress' ? 'in-progress' : 'empty';
-    const isLast = i === PIPELINE_STEPS.length - 1;
-    const suggested = s === 'empty' && (i === 0 || statuses[PIPELINE_STEPS[i - 1].id] === 'done');
-    const stepClass = `pipeline-step ${statusClass}${suggested ? ' suggested' : ''}`;
-
-    html += `<div class="${stepClass}" data-module="${step.module}" data-step="${step.id}" onclick="goToPipelineStep('${step.module}', '${workId}')" title="${suggested ? '建议从这里开始' : ''}">
-      <span class="pipeline-label">${step.label}</span>
-      <span class="pipeline-id">${step.id}</span>
-    </div>`;
-    if (!isLast) html += '<span class="pipeline-arrow">&rsaquo;</span>';
   });
-
-  stepsEl.innerHTML = html;
 }
 
 function checkOriginalConceptStatus(oc) {
@@ -490,8 +501,6 @@ function togglePreview() {
 
 document.addEventListener('DOMContentLoaded', () => {
   qs('#global-nav').innerHTML = renderNav();
-  const tokenInput = qs('#nav-token-input');
-  if (tokenInput) tokenInput.value = userToken;
   loadState();
   applyClasses();
 

@@ -344,15 +344,6 @@ ul, ol { list-style: none; }
 .lang-opt.active { color: var(--text-on-accent); }
 .lang-pill:hover { border-color: var(--ui-knob); }
 
-/* — Nav: token input — */
-.nav-token {
-  width: 140px; padding: 0.3rem 0.5rem; border-radius: 4px;
-  border: 1px solid var(--border); background: transparent;
-  color: var(--text-dim); font-size: 0.72rem;
-}
-.nav-token::placeholder { color: var(--text-muted); }
-.nav-token:focus { border-color: var(--accent-light); outline: none; }
-
 /* — Pipeline Guide（写作引导流程） — */
 .pipeline-guide {
   padding: 0.75rem 1.5rem;

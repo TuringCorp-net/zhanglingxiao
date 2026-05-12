@@ -52,15 +52,7 @@ function hPatch(path, body) {
     .catch(err => { console.error('hPatch error:', path, err); return null; });
 }
 
-// — 语言/双语偏好持久化 —
-
-function setUserToken() {
-  const input = qs('#nav-token-input');
-  if (!input) return;
-  userToken = input.value.trim();
-  localStorage.setItem(USER_TOKEN_KEY, userToken);
-  loadWorkspaces();
-}
+// — 语言切换 —
 
 function switchLang(lang) {
   if (lang === currentLang) return;
