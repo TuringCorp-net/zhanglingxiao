@@ -46,6 +46,7 @@
 
       const w = workData.data;
       document.title = `${w.title} — Cyber Art Universe`;
+      StoryElf.setContext({ page: 'read', work_id: workId, work_title: w.title });
 
       const tags = (w.tags || []).map(t => `<span class="tag">#${t}</span>`).join(' ');
 

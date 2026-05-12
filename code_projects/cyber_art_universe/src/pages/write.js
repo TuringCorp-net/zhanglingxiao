@@ -254,6 +254,7 @@ function onWorkspaceChange() {
   saveState();
   refreshPipelineGuide(id);
   initWritingDesk(id);
+  updateElfContext();
 }
 
 // ============================================================
@@ -330,6 +331,7 @@ function selectSectionInDesk(sectionId, title) {
   qs('#writing-section-title').textContent = title;
   loadSectionIntoEditor(state.currentWorkId, sectionId);
   loadBinderContent('chapters');
+  updateElfContext();
 }
 
 // — Markdown 预览 —
@@ -405,6 +407,18 @@ async function aiPolishSection() {
 // ============================================================
 // Layer 6: Story Elf — Write 侧行为覆盖
 // ============================================================
+
+StoryElf.setPage('write');
+
+// 更新上下文：告诉 Elf 用户正在写什么
+function updateElfContext() {
+  StoryElf.setContext({
+    page: 'write',
+    work_id: state.currentWorkId,
+    section_id: state.currentSectionId,
+    section_title: state.currentSectionTitle,
+  });
+}
 
 // 设置 Write 侧操作按钮
 StoryElf.setActions([

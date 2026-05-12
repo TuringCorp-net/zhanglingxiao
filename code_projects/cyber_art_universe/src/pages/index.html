@@ -35,6 +35,7 @@
     var currentCategory = getParam('category') || '';
 
     document.addEventListener('DOMContentLoaded', function () {
+      StoryElf.setContext({ page: 'browse' });
       renderCategoryBar();
       loadWorks(currentCategory);
     });

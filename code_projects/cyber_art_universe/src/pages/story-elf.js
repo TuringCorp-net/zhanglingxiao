@@ -208,5 +208,10 @@
         ? '让 AI 帮你修改这段...'
         : '和 Story Elf 聊聊这部作品...';
     },
+
+    // 上下文感知：页面自动传入当前阅读/写作位置，Elf 天然知道用户在哪里
+    _ctx: null,
+    setContext: function (ctx) { StoryElf._ctx = ctx; },
+    getContext: function () { return StoryElf._ctx; },
   };
 })();

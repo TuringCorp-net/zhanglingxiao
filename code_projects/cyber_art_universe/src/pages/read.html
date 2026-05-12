@@ -66,6 +66,15 @@
       document.getElementById('bc-work').href = `/work.html?id=${workId}`;
       document.getElementById('bc-section').textContent = section.title;
 
+      // Story Elf 上下文：告诉 Elf 读者正在读哪部作品的哪一章
+      StoryElf.setContext({
+        page: 'read',
+        work_id: workId,
+        work_title: workTitle,
+        section_id: sectionId,
+        section_title: section.title,
+      });
+
       // 渲染正文
       const body = section.body || '（暂无正文内容）';
       document.getElementById('content').innerHTML = marked.parse(body);

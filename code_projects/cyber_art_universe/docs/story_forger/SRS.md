@@ -23,6 +23,7 @@
 | v1.7.0 | 2026-05-09 | 全员模板化：M2 长篇框架模板、M3 人物卡模板、M5 意图卡模板、M6 营销卡模板全部固化（中英双语）。各模块读取时返回模板框架而非空。|
 | v1.8.0 | 2026-05-11 | 经典作品案例分析驱动优化：M5 意图卡新增 emotional_goal / POV / 可选媒介字段；M3 人物卡新增 arc_type + 跨模块交叉引用（M1/M4）；M4 伏笔账本新增依赖的 M1 规则 |
 | v1.9.0 | 2026-05-12 | M0 原始构想模块：作者自由记录灵感与原始构想，无模板。Story Elf 禁止修改，外部 AI/Agent 视为作者可读写。前端 Pipeline 引导条和左活页夹新增 M0 面板 |
+| v2.0.0 | 2026-05-12 | Story Elf：横跨 Read/Write 的浮动 AI 伴侣（Context-Aware）。自包含组件 story-elf.js。位置跨页面保持 |
 
 ---
 
@@ -195,7 +196,18 @@ Intent Card → Draft v0 → Consistency Check → Polish → Draft v1 (中稿)
 | SF-051 | MCP Tools — 暴露 AI 可调用的写作工具 | 5 个 Write 工具：`generate_worldbuilding`, `generate_outline`, `generate_chapter`, `check_consistency`, `polish_chapter` | ✅ 已实现 |
 | SF-052 | MCP 与 REST 共底 — MCP 工具和 REST API 调用同一套处理函数 | 每个 MCP tool 内部构造 mock Request，调用 Write handler（与现有 Read 工具相同模式）| ✅ 已实现 |
 
-### 模块七：双模式 UI（前端）
+### 模块七：Story Elf — 浮动 AI 伴侣
+
+> **设计原则**：Story Elf 是横跨 Read / Write 两侧的浮动 AI 伴侣。以 IP 形象（小精灵）呈现，可拖拽至屏幕任意位置，位置跨页面保持。Read 侧为"伴读精灵"，Write 侧为"写作精灵"。核心差异化能力：**上下文感知**——用户无需复制粘贴，Elf 天然知道用户当前在读哪个作品的哪一章、在写哪个模块。
+
+| ID | 需求 | 验收标准 | 状态 |
+|----|------|---------|------|
+| SF-053 | Story Elf 浮动组件 — 自包含 JS 文件，任何页面引用即可出现。可拖拽、位置跨页面保持（localStorage） | `<script src="/story-elf.js">` 即可使用。`window.StoryElf` API 暴露。CSS/HTML/拖动逻辑全部封装 | ✅ 已实现 |
+| SF-054 | Context-Aware 上下文感知 — 页面自动将当前阅读/写作位置传给 Elf。用户无需复制粘贴 | `StoryElf.setContext({ page, work_id, section_id, ... })` 在页面关键节点调用。Elf 对话时可读取上下文 | ✅ 已实现 |
+| SF-055 | Write 侧写作精灵 — 一致性检查、建议、对话式润色 | 右下角浮动按钮「检」「议」+ 对话框。Elf 知道当前章节/面板上下文 | ✅ 已实现 |
+| SF-056 | Read 侧伴读精灵 — 浮动形象 + 对话框，未来支持根据阅读位置提供分析、推荐 | Story Elf 在所有 Read 页面出现。上下文感知已接入（work_id/section_id），AI 后端待实现 | ✅ 组件已部署，AI 功能待实现 |
+
+### 模块八：双模式 UI（前端）
 
 > 此模块的需求源自 [UI 设计讨论](frontend_design.md)。Story Forger 采用 Scrivener 活页夹 + 软木板的融合范式，提供软木板视图（规划）和写作桌视图（写作），一键切换。
 
@@ -300,12 +312,12 @@ works/{work_id}/
 
 | 状态 | 数量 |
 |------|------|
-| ✅ done | 36 |
-| ⏳ 待实现 | 1 |
+| ✅ done | 39 |
+| ⏳ 待实现 | 2 |
 | ❌ 已移除 | 1 |
 | 🔴 阻塞 | 0 |
 
-**总计**：38 项需求（36 已实现 + 1 待实现 + 1 已移除）。待实现：SF-063（写作引导流程）。已移除：SF-024（冲突地图）。
+**总计**：42 项需求（39 已实现 + 2 待实现 + 1 已移除）。待实现：SF-056（Read 侧 AI 伴读后端）、SF-063（写作引导流程）。已移除：SF-024（冲突地图）。
 
 ### 实现清单
 
@@ -313,6 +325,7 @@ works/{work_id}/
 |------|--------|------|
 | 工作区管理 | SF-001~005 | ✅ |
 | 原始构想 M0 | SF-006~007 | ✅ |
+| Story Elf | SF-053~055 | ✅ 组件已部署；SF-056 ⏳ Read 侧 AI 后端待实现 |
 | 世界观引擎 | SF-010~018 | ✅ 全部实现 |
 | 大纲引擎 | SF-020~022 | ✅（SF-025 合并入 SF-022）+ SF-017 长篇框架模板 |
 | 伏笔账本 | SF-023 | ✅ 规划导向模板（Markdown）+ 正向校验 |
