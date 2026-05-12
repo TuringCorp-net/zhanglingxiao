@@ -5,8 +5,9 @@ const USER_TOKEN_KEY = 'sf_user_token';
 const LANG_KEY = 'sf_lang';
 const BILINGUAL_KEY = 'sf_bilingual';
 let userToken = localStorage.getItem(USER_TOKEN_KEY) || '';
-let currentLang = localStorage.getItem(LANG_KEY) || 'zh';
 let bilingual = localStorage.getItem(BILINGUAL_KEY) !== 'false';
+// currentLang 已在 app.js 中声明为全局 var，此处仅同步初始值
+currentLang = localStorage.getItem(LANG_KEY) || currentLang;
 
 function langParam() { return `lang=${currentLang}`; }
 

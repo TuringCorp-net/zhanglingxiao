@@ -19,6 +19,12 @@ async function api(path) {
   }
 }
 
+// — 全局语言（Read/Write 共享，write-api.js 按需覆盖值） —
+var currentLang = (function() {
+  try { return localStorage.getItem('sf_lang') || 'zh'; }
+  catch (e) { return 'zh'; }
+})();
+
 // — URL 参数 —
 function getParam(name) {
   return new URLSearchParams(window.location.search).get(name);
