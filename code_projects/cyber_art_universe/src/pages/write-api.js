@@ -66,8 +66,12 @@ function switchLang(lang) {
   if (lang === currentLang) return;
   currentLang = lang;
   localStorage.setItem(LANG_KEY, currentLang);
-  // 更新导航按钮状态
-  qsa('.nav-lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === (lang === 'zh' ? 'CN' : 'EN')));
+  // 更新 pill toggle 状态
+  const knob = qs('.lang-knob');
+  if (knob) knob.classList.toggle('right', lang === 'en');
+  qsa('.lang-opt').forEach(opt => {
+    opt.classList.toggle('active', opt.textContent.trim() === (lang === 'zh' ? 'CN' : 'EN'));
+  });
   if (typeof state !== 'undefined' && state.currentWorkId) {
     refreshPipelineGuide(state.currentWorkId);
     for (const [name, isOpen] of Object.entries(state.leftSectionStates)) {
@@ -78,9 +82,4 @@ function switchLang(lang) {
     }
     initWritingDesk(state.currentWorkId, state.currentSectionId, state.currentSectionTitle);
   }
-}
-
-function onBilingualChange() {
-  bilingual = qs('#nav-bilingual-checkbox').checked;
-  localStorage.setItem(BILINGUAL_KEY, bilingual.toString());
 }

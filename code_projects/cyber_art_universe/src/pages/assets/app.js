@@ -44,16 +44,20 @@ function renderNav() {
         <a href="/write.html" class="nav-tab ${isWrite ? 'active' : ''}">Write</a>
       </div>
       ${isWrite ? `
-      <div class="nav-lang">
-        <button class="nav-lang-btn ${lang === 'zh' ? 'active' : ''}" onclick="switchLang('zh')">CN</button>
-        <button class="nav-lang-btn ${lang === 'en' ? 'active' : ''}" onclick="switchLang('en')">EN</button>
-        <label class="nav-bilingual" title="AI 同时生成中英双语">
-          <input type="checkbox" id="nav-bilingual-checkbox" ${typeof bilingual !== 'undefined' && bilingual ? 'checked' : ''} onchange="onBilingualChange()"> 双语
-        </label>
+      <div class="nav-right">
+        <div class="lang-pill" onclick="switchLang(currentLang === 'zh' ? 'en' : 'zh')" title="切换语言">
+          <span class="lang-knob ${lang === 'en' ? 'right' : ''}"></span>
+          <span class="lang-opt ${lang === 'zh' ? 'active' : ''}">CN</span>
+          <span class="lang-opt ${lang === 'en' ? 'active' : ''}">EN</span>
+        </div>
+        <button class="login-btn" onclick="alert('登录功能即将上线')">登录</button>
+        <input id="nav-token-input" class="nav-token" type="password" placeholder="Token" onchange="setUserToken()">
       </div>
-      ` : ''}
-      <button class="login-btn" onclick="alert('登录功能即将上线')">登录</button>
-      ${isWrite ? `<input id="nav-token-input" class="nav-token" type="password" placeholder="Token" onchange="setUserToken()">` : ''}
+      ` : `
+      <div class="nav-right">
+        <button class="login-btn" onclick="alert('登录功能即将上线')">登录</button>
+      </div>
+      `}
     </div>
   </nav>`;
 }
