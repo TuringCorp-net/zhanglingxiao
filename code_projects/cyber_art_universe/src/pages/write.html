@@ -98,30 +98,6 @@
 
   </div>
 
-  <!-- Story Elf — 浮动可拖拽 AI 助手 -->
-  <div id="story-elf" class="story-elf">
-    <div class="elf-dialog" id="elf-dialog" style="display:none">
-      <div class="elf-dialog-header">
-        <span>Story Elf</span>
-        <button class="elf-dialog-close" onclick="toggleElf()">×</button>
-      </div>
-      <div class="elf-chat-messages" id="elf-chat-messages"></div>
-      <div class="elf-chat-input-row">
-        <input id="elf-chat-input" data-i18n-placeholder="chat.placeholder" placeholder="让 AI 帮你修改这段..." onkeydown="if(event.key==='Enter')elfSendChat()">
-        <button class="btn btn-primary btn-sm" onclick="elfSendChat()" style="padding:0.3rem 0.6rem;font-size:0.7rem" data-i18n="action.send">发送</button>
-      </div>
-    </div>
-    <div class="elf-body" onmousedown="startElfDrag(event)">
-      <div class="elf-avatar" title="Story Elf">
-        <img src="/assets/story-elf.png" alt="Story Elf" class="elf-img">
-      </div>
-      <div class="elf-actions">
-        <button class="elf-action-btn" onclick="elfCheck()" data-i18n-title="right_tab.lint" title="检查">检</button>
-        <button class="elf-action-btn" onclick="elfSuggest()" data-i18n-title="right_tab.suggest" title="建议">议</button>
-      </div>
-    </div>
-  </div>
-
   <footer class="footer">
     <div class="container">
       <span>Powered by <a href="https://turingcorp.net">TuringCorp.net</a>. All rights reserved. <a href="#" onclick="alert('Terms of Use 即将上线');return false">Terms of Use</a></span>
@@ -224,6 +200,7 @@
 
   <script src="/assets/app.js"></script>
   <script src="/i18n-data.js"></script>
+  <script src="/story-elf.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="/write-api.js"></script>
   <script src="/write-panels.js"></script>

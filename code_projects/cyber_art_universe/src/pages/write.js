@@ -403,108 +403,44 @@ async function aiPolishSection() {
 }
 
 // ============================================================
-// Layer 6: Story Elf — 浮动 AI 助手
+// Layer 6: Story Elf — Write 侧行为覆盖
 // ============================================================
 
-function toggleElf() {
-  const dialog = qs('#elf-dialog');
-  if (!dialog) return;
-  const open = dialog.style.display !== 'none';
-  dialog.style.display = open ? 'none' : 'flex';
-}
+// 设置 Write 侧操作按钮
+StoryElf.setActions([
+  { label: '检', title: '检查', onClick: function () { StoryElf.toggle(); if (state.currentSectionId) loadLintResults(); } },
+  { label: '议', title: '建议', onClick: function () { StoryElf.toggle(); var inp = document.getElementById('elf-chat-input'); if (inp) { inp.value = t('prompt.ai_polish_confirm'); StoryElf.sendChat(); } } },
+]);
 
-let elfDrag = { moved: false, startX: 0, startY: 0, offsetX: 0, offsetY: 0 };
-
-function startElfDrag(e) {
-  if (e.target.closest('.elf-action-btn') || e.target.closest('.elf-dialog') || e.target.closest('input')) return;
-  e.preventDefault();
-  const elf = qs('#story-elf');
-  const rect = elf.getBoundingClientRect();
-  elfDrag = {
-    moved: false,
-    startX: e.clientX, startY: e.clientY,
-    offsetX: e.clientX - rect.left,
-    offsetY: e.clientY - rect.top,
-  };
-  elf.style.left = rect.left + 'px';
-  elf.style.top = rect.top + 'px';
-
-  function onMove(ev) {
-    const dx = Math.abs(ev.clientX - elfDrag.startX);
-    const dy = Math.abs(ev.clientY - elfDrag.startY);
-    if (dx > 3 || dy > 3) elfDrag.moved = true;
-    if (elfDrag.moved) {
-      elf.style.left = Math.max(0, Math.min(window.innerWidth - 170, ev.clientX - elfDrag.offsetX)) + 'px';
-      elf.style.top = Math.max(0, Math.min(window.innerHeight - 220, ev.clientY - elfDrag.offsetY)) + 'px';
-    }
-  }
-  function onUp() {
-    document.removeEventListener('mousemove', onMove);
-    document.removeEventListener('mouseup', onUp);
-    // 没移动 = 点击头像 → 打开对话框
-    if (!elfDrag.moved && e.target.closest('.elf-avatar')) {
-      toggleElf();
-    }
-  }
-  document.addEventListener('mousemove', onMove);
-  document.addEventListener('mouseup', onUp);
-}
-
-function elfCheck() {
-  const dialog = qs('#elf-dialog');
-  if (dialog) dialog.style.display = 'flex';
-  if (state.currentSectionId) loadLintResults();
-}
-
-function elfSuggest() {
-  const dialog = qs('#elf-dialog');
-  if (dialog) dialog.style.display = 'flex';
-  const input = qs('#elf-chat-input');
-  if (input) {
-    input.value = t('prompt.ai_polish_confirm');
-    elfSendChat();
-  }
-}
-
-function elfSendChat() {
-  const input = qs('#elf-chat-input');
-  const msg = input.value.trim();
+// 覆盖 sendChat：Write 侧调用 AI polish
+StoryElf.sendChat = function () {
+  var msg = StoryElf.getInput();
   if (!msg || !state.currentSectionId) return;
-  const msgsEl = qs('#elf-chat-messages');
-
-  const userMsg = qs('#tmpl-chat-msg-user').content.cloneNode(true);
-  userMsg.querySelector('.chat-msg').textContent = msg;
-  msgsEl.appendChild(userMsg);
-  input.value = '';
-
-  const thinkingMsg = qs('#tmpl-chat-msg-ai').content.cloneNode(true);
-  const thinkEl = thinkingMsg.querySelector('.chat-msg');
-  thinkEl.id = 'elf-chat-loading';
-  thinkEl.textContent = t('label.ai_thinking');
-  msgsEl.appendChild(thinkingMsg);
-  msgsEl.scrollTop = msgsEl.scrollHeight;
+  StoryElf.addMessage(msg, 'user');
+  StoryElf.clearInput();
+  StoryElf.addMessage(t('label.ai_thinking'), 'ai');
+  var loadingEl = document.querySelector('#elf-chat-messages .elf-chat-msg:last-child');
 
   hPost('/api/write/draft/polish', {
     work_id: state.currentWorkId,
     section_id: state.currentSectionId,
     style_notes: msg,
-  }).then(data => {
-    const loadingEl = qs('#elf-chat-loading');
+  }).then(function (data) {
     if (loadingEl) loadingEl.remove();
-    const aiMsg = qs('#tmpl-chat-msg-ai').content.cloneNode(true);
-    const aiEl = aiMsg.querySelector('.chat-msg');
-    if (data?.ok) {
-      aiEl.textContent = t('label.updated_editor');
+    if (data && data.ok) {
+      StoryElf.addMessage(t('label.updated_editor'), 'ai');
       qs('#writing-editor').value = data.data.body || '';
       refreshPreview();
     } else {
-      aiEl.style.setProperty('color', 'var(--error)');
-      aiEl.textContent = t('prompt.save_failed') + (data?.error?.message || '');
+      var errEl = document.createElement('div');
+      errEl.className = 'elf-chat-msg ai';
+      errEl.style.color = 'var(--error)';
+      errEl.textContent = t('prompt.save_failed') + ((data && data.error && data.error.message) || '');
+      var msgs = document.getElementById('elf-chat-messages');
+      if (msgs) { msgs.appendChild(errEl); msgs.scrollTop = msgs.scrollHeight; }
     }
-    msgsEl.appendChild(aiMsg);
-    msgsEl.scrollTop = msgsEl.scrollHeight;
   });
-}
+};
 
 // ============================================================
 // Layer 7: 活页夹折叠与宽度调整
@@ -595,13 +531,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = qs(`.binder-section[data-section="${name}"] .binder-section-header`);
     if (body) body.classList.toggle('open', isOpen);
     if (header) header.classList.toggle('open', isOpen);
-  }
-
-  // Story Elf 初始位置（右下角，距边缘 100px）
-  const elf = qs('#story-elf');
-  if (elf) {
-    elf.style.left = (window.innerWidth - 250) + 'px';
-    elf.style.top = (window.innerHeight - 300) + 'px';
   }
 
   if (userToken) loadWorkspaces();
