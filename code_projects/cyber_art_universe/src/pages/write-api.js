@@ -55,15 +55,20 @@ function hPatch(path, body) {
 // — 语言/双语偏好持久化 —
 
 function setUserToken() {
-  userToken = qs('#user-token-input').value.trim();
+  const input = qs('#nav-token-input');
+  if (!input) return;
+  userToken = input.value.trim();
   localStorage.setItem(USER_TOKEN_KEY, userToken);
   loadWorkspaces();
 }
 
-function onLangChange() {
-  currentLang = qs('#lang-select').value;
+function switchLang(lang) {
+  if (lang === currentLang) return;
+  currentLang = lang;
   localStorage.setItem(LANG_KEY, currentLang);
-  if (state.currentWorkId) {
+  // 更新导航按钮状态
+  qsa('.nav-lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === (lang === 'zh' ? 'CN' : 'EN')));
+  if (typeof state !== 'undefined' && state.currentWorkId) {
     refreshPipelineGuide(state.currentWorkId);
     for (const [name, isOpen] of Object.entries(state.leftSectionStates)) {
       if (isOpen) {
@@ -76,6 +81,6 @@ function onLangChange() {
 }
 
 function onBilingualChange() {
-  bilingual = qs('#bilingual-checkbox').checked;
+  bilingual = qs('#nav-bilingual-checkbox').checked;
   localStorage.setItem(BILINGUAL_KEY, bilingual.toString());
 }

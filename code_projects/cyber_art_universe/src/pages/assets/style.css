@@ -291,48 +291,50 @@ ul, ol { list-style: none; }
    Story Forger — 写作桌 UI
    ============================================================ */
 
-/* — Toolbar — */
-.sf-toolbar {
-  display: flex; gap: 0.75rem; align-items: center;
-  padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
-  background: var(--bg-card); flex-wrap: wrap;
-}
-.sf-toolbar select, .sf-toolbar input {
-  padding: 0.5rem 0.75rem; border-radius: var(--radius);
-  border: 1px solid var(--border); background: var(--bg-card);
-  color: var(--text); font-size: 0.85rem; outline: none;
-}
-.sf-toolbar select:focus, .sf-toolbar input:focus { border-color: var(--accent-light); }
-.sf-toolbar select { flex: 1; min-width: 200px; }
-.sf-toolbar input { flex: 0 0 auto; width: 240px; }
-.lang-selector {
+/* — Nav: language toggle — */
+.nav-lang {
   display: flex; align-items: center; gap: 0.3rem;
-  font-size: 0.78rem; color: var(--text-dim);
-  white-space: nowrap; user-select: none;
 }
-.lang-selector select {
-  padding: 0.35rem 0.5rem; min-width: auto; width: auto;
-  font-size: 0.78rem; border-radius: 6px;
-  border: 1px solid var(--border); background: var(--bg);
-  color: var(--text); cursor: pointer;
+.nav-lang-btn {
+  padding: 0.25rem 0.45rem; border-radius: 4px;
+  font-size: 0.72rem; font-weight: 600;
+  border: 1px solid transparent; background: transparent;
+  color: var(--text-muted); cursor: pointer;
+  transition: all 0.15s; font-family: var(--mono);
+  text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-color: transparent;
 }
-.bilingual-check {
-  display: flex; align-items: center; gap: 0.3rem;
-  font-size: 0.72rem; color: var(--text-muted);
-  white-space: nowrap; user-select: none; cursor: pointer;
+.nav-lang-btn:hover { color: var(--text); text-decoration-color: var(--text-muted); }
+.nav-lang-btn.active {
+  color: #fff; background: var(--accent);
+  border-color: var(--accent); text-decoration: none;
+  box-shadow: 0 0 8px rgba(124,58,237,0.2);
 }
-.bilingual-check input[type="checkbox"] {
+.nav-bilingual {
+  display: flex; align-items: center; gap: 0.2rem; margin-left: 0.2rem;
+  font-size: 0.65rem; color: var(--text-muted);
+  white-space: nowrap; cursor: pointer; user-select: none;
+}
+.nav-bilingual input[type="checkbox"] {
   width: auto; flex: none; accent-color: var(--cyan);
 }
+.nav-token {
+  width: 140px; padding: 0.3rem 0.5rem; border-radius: 4px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-dim); font-size: 0.72rem; margin-left: 0.5rem;
+}
+.nav-token::placeholder { color: var(--text-muted); }
+.nav-token:focus { border-color: var(--accent-light); outline: none; }
 
 /* — Pipeline Guide（写作引导流程） — */
 .pipeline-guide {
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(6,182,212,0.04) 0%, var(--bg-card) 100%);
+  background: var(--bg-card);
 }
 .pipeline-steps {
   display: flex; align-items: center; gap: 0;
+  justify-content: center;
   overflow-x: auto; white-space: nowrap;
 }
 .pipeline-step {
@@ -367,8 +369,6 @@ ul, ol { list-style: none; }
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
 }
-.pipeline-step .pipeline-status { font-size: 0.7rem; font-weight: 700; }
-.pipeline-step .pipeline-icon { font-size: 0.9rem; }
 .pipeline-step .pipeline-label { font-size: 0.75rem; }
 .pipeline-step .pipeline-id {
   font-size: 0.6rem; color: inherit; opacity: 0.5;
@@ -461,11 +461,25 @@ ul, ol { list-style: none; }
 .sf-mode { display: none; }
 .sf-mode.active { display: block; }
 
+/* — Binder workspace selector — */
+.binder-workspace {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.binder-workspace select {
+  width: 100%; padding: 0.4rem 0.5rem; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text); font-size: 0.78rem; outline: none;
+  cursor: pointer;
+}
+.binder-workspace select:focus { border-color: var(--cyan); }
+.binder-panel.collapsed .binder-workspace { display: none; }
+
 /* — Writing Desk Grid — */
 .writing-desk {
   display: grid;
   grid-template-columns: 250px 1fr 280px;
-  height: calc(100vh - 110px);
+  height: calc(100vh - 95px);
   overflow: hidden;
 }
 .writing-desk.left-collapsed  { grid-template-columns: 60px 1fr 280px; }

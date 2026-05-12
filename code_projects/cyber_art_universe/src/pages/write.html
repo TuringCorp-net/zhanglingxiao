@@ -9,36 +9,23 @@
 <body data-page="write">
   <div id="global-nav"></div>
 
-  <!-- 工具栏 -->
-  <div class="sf-toolbar">
-    <select id="workspace-selector" onchange="onWorkspaceChange()">
-      <option value="">请先设置用户 Token...</option>
-    </select>
-    <input id="user-token-input" type="password" placeholder="用户 Token" onchange="setUserToken()">
-    <label class="lang-selector" title="界面/生成语言">
-      <select id="lang-select" onchange="onLangChange()">
-        <option value="zh">中文</option>
-        <option value="en">English</option>
-      </select>
-    </label>
-    <label class="bilingual-check" id="bilingual-label" title="默认同时生成中英双语版本（AI 成本 x2）">
-      <input type="checkbox" id="bilingual-checkbox" checked onchange="onBilingualChange()"> 双语生成
-    </label>
-    <div id="work-actions" style="display:flex;gap:0.4rem"></div>
-  </div>
-
   <!-- 写作引导流程 -->
   <div id="pipeline-guide" class="pipeline-guide" style="display:none">
     <div class="pipeline-steps" id="pipeline-steps"></div>
   </div>
 
-  <!-- 写作桌（唯一界面） -->
+  <!-- 写作桌 -->
   <div id="writing-desk" class="writing-desk">
 
       <!-- 左活页夹 -->
       <aside id="left-binder" class="binder-panel binder-left">
         <div class="binder-resize-handle"></div>
         <div class="binder-collapse-btn" onclick="toggleBinder('left')" title="折叠/展开">&lt;</div>
+        <div class="binder-workspace">
+          <select id="workspace-selector" onchange="onWorkspaceChange()">
+            <option value="">选择作品...</option>
+          </select>
+        </div>
         <div class="binder-icon-bar">
           <span title="原始构想">构</span><span title="总纲">纲</span><span title="世界观">世</span><span title="人物">人</span><span title="章节">章</span><span title="伏笔">伏</span>
         </div>

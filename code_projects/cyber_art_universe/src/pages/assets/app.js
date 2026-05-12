@@ -34,6 +34,7 @@ function formatDate(iso) {
 // — 全局导航 —
 function renderNav() {
   const isWrite = document.body && document.body.dataset.page === 'write';
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'zh';
   return `
   <nav class="top-nav">
     <div class="container">
@@ -42,7 +43,17 @@ function renderNav() {
         <a href="/" class="nav-tab ${isWrite ? '' : 'active'}">Read</a>
         <a href="/write.html" class="nav-tab ${isWrite ? 'active' : ''}">Write</a>
       </div>
+      ${isWrite ? `
+      <div class="nav-lang">
+        <button class="nav-lang-btn ${lang === 'zh' ? 'active' : ''}" onclick="switchLang('zh')">CN</button>
+        <button class="nav-lang-btn ${lang === 'en' ? 'active' : ''}" onclick="switchLang('en')">EN</button>
+        <label class="nav-bilingual" title="AI 同时生成中英双语">
+          <input type="checkbox" id="nav-bilingual-checkbox" ${typeof bilingual !== 'undefined' && bilingual ? 'checked' : ''} onchange="onBilingualChange()"> 双语
+        </label>
+      </div>
+      ` : ''}
       <button class="login-btn" onclick="alert('登录功能即将上线')">登录</button>
+      ${isWrite ? `<input id="nav-token-input" class="nav-token" type="password" placeholder="Token" onchange="setUserToken()">` : ''}
     </div>
   </nav>`;
 }

@@ -253,18 +253,11 @@ function onWorkspaceChange() {
   saveState();
   refreshPipelineGuide(id);
   initWritingDesk(id);
-  qs('#work-actions').innerHTML = renderActions(id);
 }
 
 // ============================================================
-// Layer 4: 工具栏操作
+// Layer 4: 作品级操作（被面板调用）
 // ============================================================
-
-function renderActions(workId) {
-  return `<button class="btn btn-ghost btn-sm" onclick="generateOutline('${workId}')" style="padding:0.3rem 0.75rem;font-size:0.8rem">生成大纲</button>
-    <button class="btn btn-ghost btn-sm" onclick="createChapter('${workId}')" style="padding:0.3rem 0.75rem;font-size:0.8rem">+ 新章节</button>
-    <button class="btn btn-primary btn-sm" onclick="publishWork('${workId}')" style="padding:0.3rem 0.75rem;font-size:0.8rem">发布</button>`;
-}
 
 async function generateOutline(workId) {
   if (!confirm('AI 将为此作品生成大纲，确认？')) return;
@@ -289,17 +282,6 @@ async function createChapter(workId) {
     loadBinderContent('chapters');
   } else {
     alert('创建失败: ' + (resp?.error?.message || ''));
-  }
-}
-
-async function publishWork(workId) {
-  if (!confirm('发布后作品将在 CAU 公开可见，确认发布？')) return;
-  const data = await hPatch(`/api/write/works/${workId}/publish`);
-  if (data?.ok) {
-    alert('已发布！');
-    loadWorkspaces();
-  } else {
-    alert('发布失败: ' + (data?.error?.message || '未知错误'));
   }
 }
 
@@ -508,9 +490,8 @@ function togglePreview() {
 
 document.addEventListener('DOMContentLoaded', () => {
   qs('#global-nav').innerHTML = renderNav();
-  qs('#user-token-input').value = userToken;
-  qs('#lang-select').value = currentLang;
-  qs('#bilingual-checkbox').checked = bilingual;
+  const tokenInput = qs('#nav-token-input');
+  if (tokenInput) tokenInput.value = userToken;
   loadState();
   applyClasses();
 
