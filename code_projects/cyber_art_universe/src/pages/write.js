@@ -71,8 +71,8 @@ function applyClasses() {
 
   const leftBtn = leftBinder?.querySelector('.binder-collapse-btn');
   const rightBtn = rightBinder?.querySelector('.binder-collapse-btn');
-  if (leftBtn) leftBtn.textContent = state.leftBinderCollapsed ? '▶' : '◀';
-  if (rightBtn) rightBtn.textContent = state.rightBinderCollapsed ? '◀' : '▶';
+  if (leftBtn) leftBtn.textContent = state.leftBinderCollapsed ? '>' : '<';
+  if (rightBtn) rightBtn.textContent = state.rightBinderCollapsed ? '<' : '>';
 }
 
 // ============================================================
@@ -80,13 +80,13 @@ function applyClasses() {
 // ============================================================
 
 const PIPELINE_STEPS = [
-  { id: 'M0', label: '原始构想', icon: '💡', module: 'original_concept' },
-  { id: 'M1', label: '世界观', icon: '🌍', module: 'worldbuilding' },
-  { id: 'M2', label: '主线剧情', icon: '📖', module: 'outline' },
-  { id: 'M3', label: '人物卡', icon: '👤', module: 'characters' },
-  { id: 'M4', label: '伏笔/冲突', icon: '🎯', module: 'foreshadowing' },
-  { id: 'M5', label: '章节蓝图', icon: '📋', module: 'chapters' },
-  { id: 'M6', label: '逐章编写', icon: '✍️', module: 'writing' },
+  { id: 'M0', label: '原始构想', module: 'original_concept' },
+  { id: 'M1', label: '世界观', module: 'worldbuilding' },
+  { id: 'M2', label: '主线剧情', module: 'outline' },
+  { id: 'M3', label: '人物卡', module: 'characters' },
+  { id: 'M4', label: '伏笔/冲突', module: 'foreshadowing' },
+  { id: 'M5', label: '章节蓝图', module: 'chapters' },
+  { id: 'M6', label: '逐章编写', module: 'writing' },
 ];
 
 async function refreshPipelineGuide(workId) {
@@ -120,18 +120,15 @@ async function refreshPipelineGuide(workId) {
   PIPELINE_STEPS.forEach((step, i) => {
     const s = statuses[step.id];
     const statusClass = s === 'done' ? 'done' : s === 'in_progress' ? 'in-progress' : 'empty';
-    const statusIcon = s === 'done' ? '✓' : s === 'in_progress' ? '●' : '○';
     const isLast = i === PIPELINE_STEPS.length - 1;
     const suggested = s === 'empty' && (i === 0 || statuses[PIPELINE_STEPS[i - 1].id] === 'done');
     const stepClass = `pipeline-step ${statusClass}${suggested ? ' suggested' : ''}`;
 
     html += `<div class="${stepClass}" data-module="${step.module}" data-step="${step.id}" onclick="goToPipelineStep('${step.module}', '${workId}')" title="${suggested ? '建议从这里开始' : ''}">
-      <span class="pipeline-status">${statusIcon}</span>
-      <span class="pipeline-icon">${step.icon}</span>
       <span class="pipeline-label">${step.label}</span>
       <span class="pipeline-id">${step.id}</span>
     </div>`;
-    if (!isLast) html += '<span class="pipeline-arrow">→</span>';
+    if (!isLast) html += '<span class="pipeline-arrow">&rsaquo;</span>';
   });
 
   stepsEl.innerHTML = html;
@@ -264,9 +261,9 @@ function onWorkspaceChange() {
 // ============================================================
 
 function renderActions(workId) {
-  return `<button class="btn btn-ghost btn-sm" onclick="generateOutline('${workId}')" style="padding:0.3rem 0.75rem;font-size:0.8rem">🤖 生成大纲</button>
+  return `<button class="btn btn-ghost btn-sm" onclick="generateOutline('${workId}')" style="padding:0.3rem 0.75rem;font-size:0.8rem">生成大纲</button>
     <button class="btn btn-ghost btn-sm" onclick="createChapter('${workId}')" style="padding:0.3rem 0.75rem;font-size:0.8rem">+ 新章节</button>
-    <button class="btn btn-primary btn-sm" onclick="publishWork('${workId}')" style="padding:0.3rem 0.75rem;font-size:0.8rem">📢 发布</button>`;
+    <button class="btn btn-primary btn-sm" onclick="publishWork('${workId}')" style="padding:0.3rem 0.75rem;font-size:0.8rem">发布</button>`;
 }
 
 async function generateOutline(workId) {
@@ -387,8 +384,8 @@ async function saveCurrentSection() {
   const resp = await hPut(`/api/write/works/${workId}/sections/${sectionId}`, { title, body });
   if (resp?.ok) {
     const btn = qs('.writing-header-actions .btn-primary');
-    btn.textContent = '✅ 已保存';
-    setTimeout(() => { btn.textContent = '💾 保存'; }, 1500);
+    btn.textContent = '已保存';
+    setTimeout(() => { btn.textContent = '保存'; }, 1500);
   } else {
     alert('保存失败: ' + (resp?.error?.message || ''));
   }
@@ -498,10 +495,10 @@ function togglePreview() {
   split.classList.toggle('preview-on');
   const btn = qs('.preview-toggle-btn');
   if (split.classList.contains('preview-on')) {
-    btn.textContent = '✍️ 编辑';
+    btn.textContent = '编辑';
     refreshPreview();
   } else {
-    btn.textContent = '👁 预览';
+    btn.textContent = '预览';
   }
 }
 

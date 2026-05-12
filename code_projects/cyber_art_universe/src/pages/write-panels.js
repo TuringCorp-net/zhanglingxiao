@@ -25,7 +25,7 @@ async function saveOriginalConcept() {
   const resp = await hPut(`/api/write/original-concept/${wid}`, { content });
   if (resp?.ok) {
     const btn = qs('.oc-save-btn');
-    if (btn) { btn.textContent = '✅ 已保存'; setTimeout(() => { btn.textContent = '💾 保存'; }, 1500); }
+    if (btn) { btn.textContent = '已保存'; setTimeout(() => { btn.textContent = '保存'; }, 1500); }
     refreshPipelineGuide(wid);
   } else {
     alert('保存失败: ' + (resp?.error?.message || ''));
@@ -83,7 +83,7 @@ async function loadBinderContent(sectionName) {
         const isTemplate = outline.data.is_template;
         const outlineDiv = tmpl.querySelector('.synopsis-outline');
         outlineDiv.innerHTML = ''
-          + (isTemplate ? '<div class="template-notice">📋 以下为长篇框架模板。请填写或使用「🤖 生成大纲」。</div>' : '')
+          + (isTemplate ? '<div class="template-notice">以下为长篇框架模板。请填写或使用「AI 生成大纲」。</div>' : '')
           + '<div class="bible-content">' + renderBibleContent(outline.data.outline_md) + '</div>';
       }
       bodyEl.innerHTML = '';
@@ -101,10 +101,10 @@ async function loadBinderContent(sectionName) {
       const genBtn = tmpl.querySelector('.wb-gen-btn');
       if (isTemplate) {
         notice.style.display = 'block';
-        genBtn.textContent = '🤖 AI 生成';
+        genBtn.textContent = 'AI 生成';
       } else {
         editBtn.style.display = '';
-        genBtn.textContent = '🤖 重新生成';
+        genBtn.textContent = '重新生成';
       }
       genBtn.onclick = () => generateWorldbuilding(wid);
       editBtn.onclick = () => editWorldbuilding(wid);
@@ -142,9 +142,9 @@ async function loadBinderContent(sectionName) {
       const tmpl = qs('#tmpl-foreshadowing-panel').content.cloneNode(true);
       if (isTemplate) {
         tmpl.querySelector('.fh-notice').style.display = 'block';
-        tmpl.querySelector('.fh-gen-btn').textContent = '🤖 AI 规划';
+        tmpl.querySelector('.fh-gen-btn').textContent = 'AI 规划';
       } else {
-        tmpl.querySelector('.fh-gen-btn').textContent = '🤖 重新规划';
+        tmpl.querySelector('.fh-gen-btn').textContent = '重新规划';
       }
       tmpl.querySelector('.fh-gen-btn').onclick = () => generateForeshadowing(wid);
       tmpl.querySelector('.fh-content').innerHTML = renderBibleContent(fh.data.content);
@@ -172,7 +172,7 @@ function renderCharacterTree(entities) {
     if (!byType[t]) byType[t] = [];
     byType[t].push(e);
   });
-  const labels = { character: '👤 角色', location: '📍 地点', organization: '🏛 组织', concept: '💭 概念', item: '📦 物品', term: '📖 术语', event: '📅 事件' };
+  const labels = { character: '角色', location: '地点', organization: '组织', concept: '概念', item: '物品', term: '术语', event: '事件' };
   const frag = document.createDocumentFragment();
   for (const [t, items] of Object.entries(byType)) {
     const grp = qs('#tmpl-entity-group').content.cloneNode(true);
@@ -199,7 +199,7 @@ async function viewCharacterCard(entityId, name) {
   const data = await hGet(`/api/write/works/${wid}/entities/${entityId}/card`);
   if (data?.ok) {
     qs('#writing-editor').value = data.data.content || '';
-    qs('#writing-section-title').textContent = '👤 ' + name;
+    qs('#writing-section-title').textContent = name;
     refreshPreview();
   }
 }
@@ -212,7 +212,7 @@ function renderChapterTree(sections) {
     const div = document.createElement('div');
     div.className = 'empty';
     div.style.cssText = 'padding:1rem;font-size:0.8rem';
-    div.innerHTML = '暂无章节<div style="margin-top:0.4rem"><button class="btn btn-ghost" style="padding:0.2rem 0.5rem;font-size:0.7rem" onclick="generateOutline(\'' + wid + '\')">🤖 AI 生成大纲</button></div>';
+    div.innerHTML = '暂无章节<div style="margin-top:0.4rem"><button class="btn btn-ghost" style="padding:0.2rem 0.5rem;font-size:0.7rem" onclick="generateOutline(\'' + wid + '\')">AI 生成大纲</button></div>';
     return div;
   }
 
@@ -241,7 +241,7 @@ function renderChapterTree(sections) {
 
   const frag = document.createDocumentFragment();
   filtered.forEach(s => {
-    const statusIcon = s.version === 0 ? (s.word_count > 0 ? '📝' : '✍️') : (s.word_count > 0 ? '✅' : '⏳');
+    const statusIcon = s.version === 0 ? (s.word_count > 0 ? '[draft]' : '[new]') : (s.word_count > 0 ? '[done]' : '[planned]');
     const isActive = s.id === state.currentSectionId;
     const item = qs('#tmpl-chapter-item').content.cloneNode(true);
     const root = item.querySelector('.chapter-tree-item');
@@ -342,7 +342,7 @@ function renderBibleContent(md) {
     .replace(/^## (.+)$/gm, '<h3 class="bible-h2">$1</h3>')
     .replace(/^### (.+)$/gm, '<h4 class="bible-h3">$1</h4>')
     .replace(/^&gt; (.+)$/gm, '<blockquote class="bible-quote">$1</blockquote>')
-    .replace(/<!-- (.+?) -->/g, '<span class="bible-comment">💬 $1</span>')
+    .replace(/<!-- (.+?) -->/g, '<span class="bible-comment">$1</span>')
     .replace(/^- \[([ x])\] (.+)$/gm, '<div class="bible-checklist"><input type="checkbox" $1disabled> $2</div>')
     .replace(/\n\n/g, '<br><br>')
     .replace(/\n/g, '<br>');
@@ -399,12 +399,12 @@ async function loadSectionInfo(workId, sectionId) {
     const tmpl = qs('#tmpl-section-info').content.cloneNode(true);
     tmpl.querySelector('.info-wordcount').textContent = d.word_count || 0;
     tmpl.querySelector('.info-version').textContent = d.version || 0;
-    tmpl.querySelector('.info-ai-badge').textContent = d.audit_report?.ai_generated ? '🤖 AI 生成' : '✍️ 人工撰写';
+    tmpl.querySelector('.info-ai-badge').textContent = d.audit_report?.ai_generated ? 'AI 生成' : '人工撰写';
     if (d.audit_report?.ai_polished) tmpl.querySelector('.info-polish-badge').style.display = '';
     if (d.audit_report?.unresolved_issues) {
       const issuesEl = tmpl.querySelector('.info-issues');
       issuesEl.style.display = '';
-      issuesEl.textContent = '⚠ 未解决问题: ' + d.audit_report.unresolved_issues;
+      issuesEl.textContent = '未解决问题: ' + d.audit_report.unresolved_issues;
     }
     tmpl.querySelector('.info-disclaimer').textContent = d.audit_report?.disclaimer || '';
     el.innerHTML = '';
@@ -429,20 +429,20 @@ async function loadLintResults() {
       const div = document.createElement('div');
       div.className = 'empty';
       div.style.cssText = 'padding:1rem;font-size:0.8rem';
-      div.textContent = '✅ 未发现问题';
+      div.textContent = '未发现问题';
       el.appendChild(div);
     } else {
       issues.forEach(i => {
         const item = qs('#tmpl-lint-item').content.cloneNode(true);
         const root = item.querySelector('.lint-item');
         root.className = 'lint-item lint-' + (i.severity === 'error' ? 'error' : 'warning');
-        item.querySelector('.lint-severity').textContent = i.severity === 'error' ? '🔴 严重' : '⚠️ 警告';
+        item.querySelector('.lint-severity').textContent = i.severity === 'error' ? '严重' : '警告';
         const typeEl = item.querySelector('.lint-type');
         if (i.type) typeEl.innerHTML = '<strong>' + escHtml(i.type) + '</strong>';
         else typeEl.remove();
         item.querySelector('.lint-desc').textContent = i.description || '';
         const sugEl = item.querySelector('.lint-suggestion');
-        if (i.suggestion) sugEl.textContent = '💡 ' + i.suggestion;
+        if (i.suggestion) sugEl.textContent = i.suggestion;
         else sugEl.remove();
         el.appendChild(item);
       });
