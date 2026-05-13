@@ -191,7 +191,6 @@ async function loadM0() {
   left.innerHTML = '';
   left.appendChild(qs('#tmpl-m0-hints').content.cloneNode(true));
 
-  // editor-title removed: qs('#editor-title').textContent =t('pipeline.M0');
   var data = await hGet('/api/write/original-concept/' + state.currentWorkId);
   qs('#writing-editor').value = (data && data.ok && data.data.content) ? data.data.content : '';
   showEditorActions(true);
@@ -217,7 +216,6 @@ async function loadBibleModule(module, apiPath, noticeKey) {
   } else {
     left.appendChild(errorHTML(t('label.load_failed')));
   }
-  // editor-title removed: qs('#editor-title').textContent =t('pipeline.' + (module === 'worldbuilding' ? 'M1' : 'M2'));
   qs('#writing-editor').value = (data && data.ok && data.content) ? data.content : '';
   showEditorActions(true);
 }
@@ -226,7 +224,6 @@ async function loadBibleModule(module, apiPath, noticeKey) {
 // M3: 人物卡
 // ============================================================
 async function loadM3() {
-  // editor-title removed: qs('#editor-title').textContent =t('pipeline.M3');
   qs('#writing-editor').value = '';
   showEditorActions(false);
   await renderEntityCardList();
@@ -267,7 +264,6 @@ async function renderEntityCardList() {
 
 async function openEntityCard(entityId, name) {
   state.currentEntityId = entityId;
-  // editor-title removed: qs('#editor-title').textContent =name;
   var data = await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
   qs('#writing-editor').value = (data && data.ok && data.data.content) ? data.data.content : '';
   showEditorActions(true);
@@ -279,7 +275,6 @@ async function openEntityCard(entityId, name) {
 // M4: 伏笔账本
 // ============================================================
 async function loadM4() {
-  // editor-title removed: qs('#editor-title').textContent =t('pipeline.M4');
   qs('#writing-editor').value = '';
   showEditorActions(false);
   await renderFhCardList();
@@ -322,7 +317,6 @@ async function renderFhCardList() {
 
 function openFhCard(fhId, title, content) {
   state.currentFhId = fhId;
-  // editor-title removed: qs('#editor-title').textContent =title;
   qs('#writing-editor').value = content || '';
   showEditorActions(true);
   renderFhCardList();
@@ -332,14 +326,12 @@ function openFhCard(fhId, title, content) {
 // M5 / M6: 章节蓝图 / 逐章编写
 // ============================================================
 async function loadM5() {
-  // editor-title removed: qs('#editor-title').textContent =t('pipeline.M5');
   qs('#writing-editor').value = '';
   showEditorActions(false);
   await loadChapterCardList();
 }
 
 async function loadM6() {
-  // editor-title removed: qs('#editor-title').textContent =t('pipeline.M6');
   qs('#writing-editor').value = '';
   showEditorActions(false);
   await loadChapterCardList();
@@ -401,7 +393,6 @@ async function loadChapterCardList() {
 async function openChapter(sectionId, title) {
   state.currentSectionId = sectionId;
   state.currentSectionTitle = title;
-  // editor-title removed: qs('#editor-title').textContent =title;
 
   if (state.currentModule === 'chapters') {
     // M5: 意图卡填空式 - 简化版直接加载 JSON 为文本
