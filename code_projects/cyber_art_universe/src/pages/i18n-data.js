@@ -30,7 +30,7 @@ var I18N = {
     M1: { zh: '世界观',   en: 'World Bible' },
     M2: { zh: '主线剧情', en: 'Main Plot' },
     M3: { zh: '人物卡',   en: 'Characters' },
-    M4: { zh: '伏笔/冲突', en: 'Foreshadowing' },
+    M4: { zh: '伏笔账本', en: 'Foreshadowing' },
     M5: { zh: '章节蓝图', en: 'Chapter Blueprint' },
     M6: { zh: '逐章编写', en: 'Chapter Writing' },
   },

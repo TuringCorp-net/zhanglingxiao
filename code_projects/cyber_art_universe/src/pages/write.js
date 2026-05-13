@@ -63,7 +63,7 @@ function plabel(s) { return t('pipeline.' + s.id); }
 function renderPipelineSkeleton(el, workId) {
   var h = '';
   PIPELINE_STEPS.forEach(function (s, i) {
-    h += '<div class="pipeline-step empty" data-module="' + s.module + '" data-step="' + s.id + '" onclick="switchModule(\'' + s.module + '\')">'
+    h += '<div class="pipeline-step" data-module="' + s.module + '" data-step="' + s.id + '" onclick="switchModule(\'' + s.module + '\')">'
       + '<span class="pipeline-label">' + plabel(s) + '</span>'
       + '<span class="pipeline-id">' + s.id + '</span></div>';
     if (i < PIPELINE_STEPS.length - 1) h += '<span class="pipeline-arrow">&rsaquo;</span>';
@@ -72,16 +72,10 @@ function renderPipelineSkeleton(el, workId) {
 }
 
 function updatePipelineStatuses(statuses) {
-  PIPELINE_STEPS.forEach(function (s, i) {
+  // 未来可在此根据 statuses 更新视觉状态；当前统一外观
+  PIPELINE_STEPS.forEach(function (s) {
     var el = qs('.pipeline-step[data-step="' + s.id + '"]');
-    if (!el) return;
-    var st = statuses[s.id];
-    var cls = st === 'done' ? 'done' : st === 'in_progress' ? 'in-progress' : 'empty';
-    var prev = i > 0 ? statuses[PIPELINE_STEPS[i - 1].id] : null;
-    var sug = st === 'empty' && (i === 0 || prev === 'done');
-    el.className = 'pipeline-step ' + cls + (sug ? ' suggested' : '');
-    el.title = sug ? t('label.suggest_start') : '';
-    el.querySelector('.pipeline-label').textContent = plabel(s);
+    if (el) el.querySelector('.pipeline-label').textContent = plabel(s);
   });
 }
 
@@ -198,7 +192,7 @@ async function loadM0() {
   left.innerHTML = '';
   left.appendChild(qs('#tmpl-m0-hints').content.cloneNode(true));
 
-  qs('#editor-title').textContent = t('pipeline.M0');
+  // editor-title removed: qs('#editor-title').textContent =t('pipeline.M0');
   var data = await hGet('/api/write/original-concept/' + state.currentWorkId);
   qs('#writing-editor').value = (data && data.ok && data.data.content) ? data.data.content : '';
   showEditorActions(true);
@@ -224,7 +218,7 @@ async function loadBibleModule(module, apiPath, noticeKey) {
   } else {
     left.appendChild(errorHTML(t('label.load_failed')));
   }
-  qs('#editor-title').textContent = t('pipeline.' + (module === 'worldbuilding' ? 'M1' : 'M2'));
+  // editor-title removed: qs('#editor-title').textContent =t('pipeline.' + (module === 'worldbuilding' ? 'M1' : 'M2'));
   qs('#writing-editor').value = (data && data.ok && data.content) ? data.content : '';
   showEditorActions(true);
 }
@@ -233,7 +227,7 @@ async function loadBibleModule(module, apiPath, noticeKey) {
 // M3: 人物卡
 // ============================================================
 async function loadM3() {
-  qs('#editor-title').textContent = t('pipeline.M3');
+  // editor-title removed: qs('#editor-title').textContent =t('pipeline.M3');
   qs('#writing-editor').value = '';
   showEditorActions(false);
   await renderEntityCardList();
@@ -274,7 +268,7 @@ async function renderEntityCardList() {
 
 async function openEntityCard(entityId, name) {
   state.currentEntityId = entityId;
-  qs('#editor-title').textContent = name;
+  // editor-title removed: qs('#editor-title').textContent =name;
   var data = await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
   qs('#writing-editor').value = (data && data.ok && data.data.content) ? data.data.content : '';
   showEditorActions(true);
@@ -286,7 +280,7 @@ async function openEntityCard(entityId, name) {
 // M4: 伏笔账本
 // ============================================================
 async function loadM4() {
-  qs('#editor-title').textContent = t('pipeline.M4');
+  // editor-title removed: qs('#editor-title').textContent =t('pipeline.M4');
   qs('#writing-editor').value = '';
   showEditorActions(false);
   await renderFhCardList();
@@ -329,7 +323,7 @@ async function renderFhCardList() {
 
 function openFhCard(fhId, title, content) {
   state.currentFhId = fhId;
-  qs('#editor-title').textContent = title;
+  // editor-title removed: qs('#editor-title').textContent =title;
   qs('#writing-editor').value = content || '';
   showEditorActions(true);
   renderFhCardList();
@@ -339,14 +333,14 @@ function openFhCard(fhId, title, content) {
 // M5 / M6: 章节蓝图 / 逐章编写
 // ============================================================
 async function loadM5() {
-  qs('#editor-title').textContent = t('pipeline.M5');
+  // editor-title removed: qs('#editor-title').textContent =t('pipeline.M5');
   qs('#writing-editor').value = '';
   showEditorActions(false);
   await loadChapterCardList();
 }
 
 async function loadM6() {
-  qs('#editor-title').textContent = t('pipeline.M6');
+  // editor-title removed: qs('#editor-title').textContent =t('pipeline.M6');
   qs('#writing-editor').value = '';
   showEditorActions(false);
   await loadChapterCardList();
@@ -408,7 +402,7 @@ async function loadChapterCardList() {
 async function openChapter(sectionId, title) {
   state.currentSectionId = sectionId;
   state.currentSectionTitle = title;
-  qs('#editor-title').textContent = title;
+  // editor-title removed: qs('#editor-title').textContent =title;
 
   if (state.currentModule === 'chapters') {
     // M5: 意图卡填空式 - 简化版直接加载 JSON 为文本
