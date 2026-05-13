@@ -9,93 +9,33 @@
 <body data-page="write">
   <div id="global-nav"></div>
 
-  <!-- 写作引导流程 -->
-  <div id="pipeline-guide" class="pipeline-guide" style="display:none">
-    <div class="pipeline-steps" id="pipeline-steps"></div>
+  <!-- Pipeline 引导条 + 作品选择 -->
+  <div class="pipeline-bar" id="pipeline-bar">
+    <select id="workspace-selector" class="ws-select" onchange="onWorkspaceChange()">
+      <option value="">选择作品...</option>
+    </select>
+    <div id="pipeline-guide" class="pipeline-guide" style="display:none">
+      <div class="pipeline-steps" id="pipeline-steps"></div>
+    </div>
   </div>
 
-  <!-- 写作桌 -->
-  <div id="writing-desk" class="writing-desk">
-
-      <!-- 左活页夹 -->
-      <aside id="left-binder" class="binder-panel binder-left">
-        <div class="binder-resize-handle"></div>
-        <div class="binder-collapse-btn" onclick="toggleBinder('left')" data-i18n-title="action.toggle_binder">&lt;</div>
-        <div class="binder-workspace">
-          <select id="workspace-selector" onchange="onWorkspaceChange()">
-            <option value="" data-i18n="label.select_work">选择作品...</option>
-          </select>
+  <!-- 左右分栏写作区 -->
+  <div id="split-view" class="split-view" style="display:none">
+    <div class="split-left" id="split-left">
+      <div class="left-panel-empty">选择 Pipeline 步骤开始</div>
+    </div>
+    <div class="split-divider" id="split-divider"></div>
+    <div class="split-right">
+      <div class="editor-header">
+        <span class="editor-title" id="editor-title">选择 Pipeline 步骤开始</span>
+        <div class="editor-actions" id="editor-actions">
+          <button class="btn btn-ghost btn-sm" onclick="aiGenerateForModule()">AI 生成</button>
+          <button class="btn btn-ghost btn-sm" onclick="aiPolishForModule()">润色</button>
+          <button class="btn btn-primary btn-sm" onclick="saveModuleContent()">保存</button>
         </div>
-        <div class="binder-icon-bar">
-          <span data-i18n-title="binder.original_concept" data-i18n="binder_icon.original_concept">构</span>
-          <span data-i18n-title="binder.synopsis" data-i18n="binder_icon.synopsis">纲</span>
-          <span data-i18n-title="binder.worldbuilding" data-i18n="binder_icon.worldbuilding">世</span>
-          <span data-i18n-title="binder.characters" data-i18n="binder_icon.characters">人</span>
-          <span data-i18n-title="binder.chapters" data-i18n="binder_icon.chapters">章</span>
-          <span data-i18n-title="binder.foreshadowing" data-i18n="binder_icon.foreshadowing">伏</span>
-        </div>
-        <div class="binder-sections">
-          <div class="binder-section" data-section="original_concept">
-            <div class="binder-section-header" onclick="toggleBinderSection('original_concept')">
-              <span data-i18n="binder.original_concept">原始构想</span> <span class="binder-arrow">&gt;</span>
-            </div>
-            <div class="binder-section-body"></div>
-          </div>
-          <div class="binder-section" data-section="synopsis">
-            <div class="binder-section-header open" onclick="toggleBinderSection('synopsis')">
-              <span data-i18n="binder.synopsis">总纲</span> <span class="binder-arrow">&gt;</span>
-            </div>
-            <div class="binder-section-body open"></div>
-          </div>
-          <div class="binder-section" data-section="worldbuilding">
-            <div class="binder-section-header" onclick="toggleBinderSection('worldbuilding')">
-              <span data-i18n="binder.worldbuilding">世界观</span> <span class="binder-arrow">&gt;</span>
-            </div>
-            <div class="binder-section-body"></div>
-          </div>
-          <div class="binder-section" data-section="characters">
-            <div class="binder-section-header" onclick="toggleBinderSection('characters')">
-              <span data-i18n="binder.characters">人物树</span> <span class="binder-arrow">&gt;</span>
-            </div>
-            <div class="binder-section-body"></div>
-          </div>
-          <div class="binder-section" data-section="chapters">
-            <div class="binder-section-header open" onclick="toggleBinderSection('chapters')">
-              <span data-i18n="binder.chapters">章节树</span> <span class="binder-arrow">&gt;</span>
-            </div>
-            <div class="chapter-filters" id="chapter-filters" style="display:none">
-              <button class="chapter-filter-btn active" data-filter="all" data-i18n="chapter_filter.all">全部</button>
-              <button class="chapter-filter-btn" data-filter="draft" data-i18n="chapter_filter.draft">写作中</button>
-              <button class="chapter-filter-btn" data-filter="done" data-i18n="chapter_filter.done">已完成</button>
-            </div>
-            <div class="binder-section-body open" id="chapter-tree"></div>
-          </div>
-          <div class="binder-section" data-section="foreshadowing">
-            <div class="binder-section-header" onclick="toggleBinderSection('foreshadowing')">
-              <span data-i18n="binder.foreshadowing">伏笔账本</span> <span class="binder-arrow">&gt;</span>
-            </div>
-            <div class="binder-section-body" id="foreshadowing-list"></div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- 中写作区 -->
-      <main class="writing-area">
-        <div class="writing-header">
-          <span class="writing-header-title" id="writing-section-title" data-i18n="writing.select_title">选择左侧章节开始写作</span>
-          <div class="writing-header-actions">
-            <button class="preview-toggle-btn" onclick="togglePreview()" data-i18n-title="writing.preview" data-i18n="writing.preview">预览</button>
-            <button class="btn btn-ghost btn-sm" onclick="aiGenerateForSection()" style="padding:0.3rem 0.75rem;font-size:0.8rem" data-i18n="writing.ai_generate">AI 生成</button>
-            <button class="btn btn-ghost btn-sm" onclick="aiPolishSection()" style="padding:0.3rem 0.75rem;font-size:0.8rem" data-i18n="writing.polish">润色</button>
-            <button class="btn btn-primary btn-sm" onclick="saveCurrentSection()" style="padding:0.3rem 0.75rem;font-size:0.8rem" data-i18n="writing.save">保存</button>
-          </div>
-        </div>
-        <div class="writing-split" id="writing-split">
-          <textarea id="writing-editor" class="writing-editor" data-i18n-placeholder="editor.placeholder" placeholder="在这里写你的故事...&#10;&#10;选择左侧章节树中的章节开始写作，或点击「AI 生成」让 AI 帮你写初稿。"></textarea>
-          <div id="writing-preview" class="writing-preview"><div class="empty" data-i18n="label.preview_holder">预览将在此显示</div></div>
-        </div>
-      </main>
-
+      </div>
+      <textarea id="writing-editor" class="writing-editor" placeholder="选择 Pipeline 步骤和具体内容开始写作..."></textarea>
+    </div>
   </div>
 
   <footer class="footer">
@@ -106,96 +46,39 @@
   </footer>
 
   <!-- UI 模板 -->
-  <template id="tmpl-loading"><div class="loading" style="padding:1rem;font-size:0.8rem"><span data-i18n="label.loading">加载中...</span></div></template>
+  <template id="tmpl-loading"><div class="loading" style="padding:1rem;font-size:0.8rem">加载中...</div></template>
   <template id="tmpl-error"><div class="error" style="padding:1rem;font-size:0.8rem"><span class="err-msg"></span></div></template>
-
-  <template id="tmpl-m0-panel">
-    <div class="oc-panel-wrap">
-      <textarea class="oc-editor"></textarea>
-      <div class="oc-actions">
-        <button class="btn btn-primary btn-sm oc-save-btn" data-i18n="writing.save">保存</button>
-        <span class="text-muted oc-hint" data-i18n="m0.hint">M0 · 仅作者可编辑 · Story Elf 不可修改</span>
-      </div>
+  <template id="tmpl-chat-msg-user"><div class="chat-msg chat-user"></div></template>
+  <template id="tmpl-chat-msg-ai"><div class="chat-msg chat-ai"></div></template>
+  <template id="tmpl-m0-hints">
+    <div class="m0-hints">
+      <h3 class="left-panel-title">原始构想</h3>
+      <p class="hint-item">记录你的灵感碎片——任何格式，任何内容。</p>
+      <p class="hint-item">想想你喜欢的作品：它们的开头是怎样的？</p>
+      <p class="hint-item">你想传达的核心情感是什么？</p>
+      <p class="hint-item">有没有一个画面、一句对白或一个人物一直在你脑中？</p>
+      <p class="hint-item">不要编辑自己——让想法自由流淌。</p>
     </div>
   </template>
-
-  <template id="tmpl-synopsis-panel">
-    <div class="synopsis-panel">
-      <strong class="synopsis-title"></strong>
-      <div class="text-dim synopsis-summary"></div>
-      <div class="text-muted synopsis-meta"></div>
-      <div class="synopsis-outline"></div>
+  <template id="tmpl-entity-card-item">
+    <div class="card-item" data-entity-id="">
+      <span class="card-item-name"></span>
+      <span class="card-item-meta"></span>
     </div>
   </template>
-
-  <template id="tmpl-worldbuilding-panel">
-    <div class="wb-panel">
-      <div class="template-notice wb-notice" style="display:none" data-i18n="template_notice.worldbuilding">以下为设定框架。请按章节标题逐步填写，或点击下方「AI 生成」。</div>
-      <div class="bible-content wb-content"></div>
-      <div class="wb-actions">
-        <button class="btn btn-ghost wb-gen-btn" data-i18n="action.ai_generate">AI 生成</button>
-        <button class="btn btn-ghost wb-edit-btn" style="display:none" data-i18n="action.edit">编辑</button>
-      </div>
+  <template id="tmpl-chapter-card-item">
+    <div class="card-item chapter-card" data-section-id="" draggable="true">
+      <span class="card-status"></span>
+      <span class="card-item-name"></span>
+      <span class="card-item-meta"></span>
     </div>
   </template>
-
-  <template id="tmpl-foreshadowing-panel">
-    <div class="fh-panel">
-      <div class="template-notice fh-notice" style="display:none" data-i18n="template_notice.foreshadowing">以下为伏笔规划模板。请逐条填写你的伏笔设计，或点击下方「AI 规划」。</div>
-      <div class="bible-content fh-content"></div>
-      <div class="fh-actions">
-        <button class="btn btn-ghost fh-gen-btn" data-i18n="action.ai_plan">AI 规划</button>
-      </div>
+  <template id="tmpl-fh-card-item">
+    <div class="card-item fh-card" data-fh-id="">
+      <span class="card-status"></span>
+      <span class="card-item-name"></span>
+      <span class="card-item-meta"></span>
     </div>
-  </template>
-
-  <template id="tmpl-chapter-item">
-    <div class="chapter-tree-item" draggable="true">
-      <span class="chapter-status-icon"></span>
-      <span class="chapter-title"></span>
-      <span class="chapter-wordcount text-muted"></span>
-    </div>
-  </template>
-
-  <template id="tmpl-entity-group">
-    <div class="entity-group">
-      <div class="entity-group-title"></div>
-    </div>
-  </template>
-
-  <template id="tmpl-entity-item">
-    <div class="entity-item">
-      <span class="entity-name"></span>
-      <span class="entity-type-tag"></span>
-    </div>
-  </template>
-
-  <template id="tmpl-section-info">
-    <div class="info-rows">
-      <div class="info-row"><strong data-i18n="label.word_count">字数:</strong> <span class="info-wordcount">0</span></div>
-      <div class="info-row"><strong>版本:</strong> v<span class="info-version">0</span></div>
-      <div class="info-row info-ai-badge"></div>
-      <div class="info-row info-polish-badge" style="display:none" data-i18n="status.ai_polished">已 AI 润色</div>
-      <div class="info-row warn info-issues" style="display:none"></div>
-      <div class="text-muted info-disclaimer"></div>
-    </div>
-  </template>
-
-  <template id="tmpl-lint-item">
-    <div class="lint-item">
-      <div class="lint-severity"></div>
-      <div class="lint-type"></div>
-      <div class="text-dim lint-desc"></div>
-      <div class="lint-suggestion"></div>
-    </div>
-  </template>
-
-  <template id="tmpl-chat-msg-user">
-    <div class="chat-msg chat-user"></div>
-  </template>
-
-  <template id="tmpl-chat-msg-ai">
-    <div class="chat-msg chat-ai"></div>
   </template>
 
   <script src="/assets/app.js"></script>
@@ -203,7 +86,6 @@
   <script src="/story-elf.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="/write-api.js"></script>
-  <script src="/write-panels.js"></script>
   <script src="/write.js"></script>
 </body>
 </html>
