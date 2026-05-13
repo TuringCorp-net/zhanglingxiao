@@ -572,7 +572,7 @@ function initSplitDrag() {
       var delta = ((ev.clientX - startX) / cw) * 100;
       var np = Math.max(25, Math.min(65, startPct + delta));
       state.leftPct = np;
-      container.style.gridTemplateColumns = np + 'fr 1px ' + (100 - np) + 'fr';
+      container.style.gridTemplateColumns = np + 'fr 10px ' + (100 - np) + 'fr';
     }
     function up() {
       divider.classList.remove('active');
