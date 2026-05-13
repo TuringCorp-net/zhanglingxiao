@@ -379,12 +379,12 @@ ul, ol { list-style: none; }
   user-select: none; flex-shrink: 0;
 }
 .pipeline-step:hover {
-  border-color: var(--cyan); color: var(--text-on-accent); background: rgba(var(--cyan-rgb), 0.1);
+  background: rgba(var(--cyan-rgb), 0.08);
 }
 .pipeline-step.active {
-  background: var(--cyan); color: #000;
-  border-color: var(--cyan);
-  box-shadow: 0 0 10px rgba(var(--cyan-rgb), 0.3);
+  background: var(--accent); color: var(--text-on-accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.2);
 }
 .pipeline-step.active .pipeline-id { color: inherit; opacity: 0.7; }
 .pipeline-step .pipeline-label { font-size: 0.75rem; }

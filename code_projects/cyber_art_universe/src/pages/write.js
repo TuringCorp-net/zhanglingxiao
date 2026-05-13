@@ -128,7 +128,7 @@ async function loadWorkspaces() {
   if (works.length > 0) { sel.value = works[0].id; onWorkspaceChange(); }
 }
 
-function onWorkspaceChange() {
+async function onWorkspaceChange() {
   var id = qs('#workspace-selector').value;
   if (!id) {
     qs('#split-view').style.display = 'none';
@@ -139,7 +139,7 @@ function onWorkspaceChange() {
   saveState();
   qs('#split-view').style.display = 'grid';
   refreshPipelineGuide(id);
-  switchModule('original_concept');
+  await switchModule('original_concept');
   updateElfContext();
 }
 
