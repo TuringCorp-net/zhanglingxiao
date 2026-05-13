@@ -146,30 +146,28 @@ function onWorkspaceChange() {
 // ============================================================
 // Module Switching
 // ============================================================
-function switchModule(module) {
+async function switchModule(module) {
   state.currentModule = module;
   state.currentSectionId = null;
   state.currentSectionTitle = '';
   state.currentEntityId = null;
   state.currentFhId = null;
 
-  // highlight pipeline
   PIPELINE_STEPS.forEach(function (s) {
     var el = qs('.pipeline-step[data-module="' + s.module + '"]');
     if (el) el.classList.toggle('active', s.module === module);
   });
 
-  // clear right
   qs('#writing-editor').value = '';
 
   switch (module) {
-    case 'original_concept': loadM0(); break;
-    case 'worldbuilding': loadM1(); break;
-    case 'outline': loadM2(); break;
-    case 'characters': loadM3(); break;
-    case 'foreshadowing': loadM4(); break;
-    case 'chapters': loadM5(); break;
-    case 'writing': loadM6(); break;
+    case 'original_concept': await loadM0(); break;
+    case 'worldbuilding': await loadM1(); break;
+    case 'outline': await loadM2(); break;
+    case 'characters': await loadM3(); break;
+    case 'foreshadowing': await loadM4(); break;
+    case 'chapters': await loadM5(); break;
+    case 'writing': await loadM6(); break;
   }
   updateElfContext();
 }
