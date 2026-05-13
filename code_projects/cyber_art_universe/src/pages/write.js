@@ -12,13 +12,13 @@ var state = {
   currentEntityId: null,
   currentFhId: null,
   chapterFilter: 'all',
-  leftPct: 40,
+  leftPct: 50,
 };
 
 function loadState() {
   try {
     var saved = JSON.parse(localStorage.getItem('sf_desk_v2') || '{}');
-    Object.assign(state, { chapterFilter: 'all', leftPct: 40 }, saved);
+    Object.assign(state, { chapterFilter: 'all', leftPct: 50 }, saved);
   } catch (e) {}
 }
 function saveState() {
@@ -193,7 +193,7 @@ async function loadM0() {
 
   var data = await hGet('/api/write/original-concept/' + state.currentWorkId);
   qs('#writing-editor').value = (data && data.ok && data.data.content) ? data.data.content : '';
-  showEditorActions(true);
+  ;
 }
 
 // ============================================================
@@ -217,7 +217,7 @@ async function loadBibleModule(module, apiPath, noticeKey) {
     left.appendChild(errorHTML(t('label.load_failed')));
   }
   qs('#writing-editor').value = (data && data.ok && data.content) ? data.content : '';
-  showEditorActions(true);
+  ;
 }
 
 // ============================================================
@@ -225,7 +225,7 @@ async function loadBibleModule(module, apiPath, noticeKey) {
 // ============================================================
 async function loadM3() {
   qs('#writing-editor').value = '';
-  showEditorActions(false);
+
   await renderEntityCardList();
 }
 
@@ -266,8 +266,7 @@ async function openEntityCard(entityId, name) {
   state.currentEntityId = entityId;
   var data = await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
   qs('#writing-editor').value = (data && data.ok && data.data.content) ? data.data.content : '';
-  showEditorActions(true);
-  renderEntityCardList();
+renderEntityCardList();
   updateElfContext();
 }
 
@@ -276,7 +275,7 @@ async function openEntityCard(entityId, name) {
 // ============================================================
 async function loadM4() {
   qs('#writing-editor').value = '';
-  showEditorActions(false);
+
   await renderFhCardList();
 }
 
@@ -318,8 +317,7 @@ async function renderFhCardList() {
 function openFhCard(fhId, title, content) {
   state.currentFhId = fhId;
   qs('#writing-editor').value = content || '';
-  showEditorActions(true);
-  renderFhCardList();
+renderFhCardList();
 }
 
 // ============================================================
@@ -327,13 +325,13 @@ function openFhCard(fhId, title, content) {
 // ============================================================
 async function loadM5() {
   qs('#writing-editor').value = '';
-  showEditorActions(false);
+
   await loadChapterCardList();
 }
 
 async function loadM6() {
   qs('#writing-editor').value = '';
-  showEditorActions(false);
+
   await loadChapterCardList();
 }
 
@@ -403,8 +401,7 @@ async function openChapter(sectionId, title) {
     var d = await hGet('/api/content/' + state.currentWorkId + '/sections/' + sectionId + '?mode=full');
     qs('#writing-editor').value = (d && d.ok && d.data.body) ? d.data.body : '';
   }
-  showEditorActions(true);
-  updateElfContext();
+updateElfContext();
 }
 
 // 章节拖拽
@@ -435,49 +432,28 @@ function initChapterDrag() {
 // ============================================================
 // 编辑器操作
 // ============================================================
-function showEditorActions(show) {
-  qs('#editor-actions').style.display = show ? 'flex' : 'none';
+var _autoSaveTimer = null;
+function autoSave() {
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(function () { saveModuleContent(true); }, 2000);
 }
 
-async function saveModuleContent() {
+async function saveModuleContent(silent) {
   var wid = state.currentWorkId;
   var body = qs('#writing-editor').value;
   if (!wid) return;
-
   var mod = state.currentModule;
   if (mod === 'original_concept') {
-    var r = await hPut('/api/write/original-concept/' + wid, { content: body });
-    if (r && r.ok) flashSave();
-    else alert(t('prompt.save_failed') + (r && r.error && r.error.message || ''));
+    await hPut('/api/write/original-concept/' + wid, { content: body });
   } else if (mod === 'worldbuilding') {
-    var r = await hPut('/api/write/worldbuilding/' + wid, { content: body });
-    if (r && r.ok) flashSave();
-    else alert(t('prompt.save_failed'));
-  } else if (mod === 'outline') {
-    var r = await hPut('/api/write/outline/' + wid, { sections: [] }); // outline 通过 PUT content
-    flashSave();
-  } else if (mod === 'characters' && state.currentEntityId) {
-    var r = await hPut('/api/write/works/' + wid + '/entities/' + state.currentEntityId, { description: body });
-    if (r && r.ok) flashSave();
-    else alert(t('prompt.save_failed'));
+    await hPut('/api/write/worldbuilding/' + wid, { content: body });
   } else if (mod === 'writing' && state.currentSectionId) {
-    var r = await hPut('/api/write/works/' + wid + '/sections/' + state.currentSectionId, { title: state.currentSectionTitle, body: body });
-    if (r && r.ok) flashSave();
-    else alert(t('prompt.save_failed') + (r && r.error && r.error.message || ''));
-  } else if (mod === 'chapters' && state.currentSectionId) {
-    // intent card save — simplified
-    flashSave();
+    await hPut('/api/write/works/' + wid + '/sections/' + state.currentSectionId, { title: state.currentSectionTitle, body: body });
+  } else if (mod === 'characters' && state.currentEntityId) {
+    await hPut('/api/write/works/' + wid + '/entities/' + state.currentEntityId, { description: body });
   } else if (mod === 'foreshadowing') {
-    var r = await hPut('/api/write/foreshadowing/' + wid, { content: body });
-    if (r && r.ok) flashSave();
-  } else {
-    flashSave();
+    await hPut('/api/write/foreshadowing/' + wid, { content: body });
   }
-}
-
-function flashSave() {
-  var btn = qs('.editor-actions .btn-primary');
-  if (btn) { btn.textContent = t('writing.saved'); setTimeout(function () { btn.textContent = t('writing.save'); }, 1500); }
 }
 
 async function aiGenerateForModule() {
@@ -628,6 +604,7 @@ document.addEventListener('DOMContentLoaded', function () {
   loadState();
   initSplitDrag();
 
+  qs('#writing-editor').addEventListener('input', autoSave);
   document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveModuleContent(); }
   });

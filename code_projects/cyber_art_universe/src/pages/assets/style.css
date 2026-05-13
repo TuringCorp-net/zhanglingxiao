@@ -380,6 +380,7 @@ ul, ol { list-style: none; }
 }
 .pipeline-step:hover {
   background: rgba(var(--cyan-rgb), 0.08);
+  transform: scale(1.06);
 }
 .pipeline-step.active {
   background: var(--accent); color: var(--text-on-accent);
@@ -400,7 +401,7 @@ ul, ol { list-style: none; }
 /* — Split View（左右分栏写作区） — */
 .split-view {
   display: grid;
-  grid-template-columns: 40fr 10px 60fr;
+  grid-template-columns: 50fr 10px 50fr;
   height: calc(100vh - 95px);
   overflow: hidden;
 }
@@ -442,9 +443,6 @@ ul, ol { list-style: none; }
 .chapter-filter-btn.active { background: rgba(var(--cyan-rgb), 0.12); border-color: var(--cyan); color: var(--cyan); }
 
 /* — Editor — */
-.editor-header { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 1rem; border-bottom: 1px solid var(--border); min-height: 38px; flex-shrink: 0; }
-.editor-title { font-size: 0.88rem; font-weight: 600; }
-.editor-actions { display: flex; gap: 0.35rem; }
 
 /* — Bible Content Rendering — */
 .bible-content { font-size: 0.78rem; line-height: 1.5; }
@@ -737,7 +735,6 @@ ul, ol { list-style: none; }
   padding: 1.5rem; font-family: var(--font); font-size: 0.95rem;
   line-height: 1.9; resize: none; outline: none;
 }
-.writing-editor:focus { background: var(--bg-editor-focus); }
 .writing-preview {
   padding: 1.5rem; overflow-y: auto;
   font-size: 0.95rem; line-height: 1.85; color: var(--text);
