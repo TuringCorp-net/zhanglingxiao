@@ -158,6 +158,7 @@ async function switchModule(module) {
     if (el) el.classList.toggle('active', s.module === module);
   });
 
+  if (!state.currentWorkId) return;
   qs('#writing-editor').value = '';
 
   switch (module) {
