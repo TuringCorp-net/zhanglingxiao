@@ -371,16 +371,15 @@ ul, ol { list-style: none; }
 }
 .pipeline-step {
   display: inline-flex; align-items: center; gap: 0.3rem;
-  padding: 0.4rem 0.75rem; border-radius: 20px;
-  cursor: pointer; font-size: 0.78rem;
-  border: 1px solid var(--cyan);
-  background: transparent; color: var(--cyan);
-  transition: all 0.2s;
-  user-select: none; flex-shrink: 0;
+  padding: 0.35rem 0.85rem; border-radius: 20px;
+  cursor: pointer; font-size: 0.82rem;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--text-dim);
+  transition: all 0.15s;
+  user-select: none; flex-shrink: 0; white-space: nowrap;
 }
 .pipeline-step:hover {
-  background: rgba(var(--cyan-rgb), 0.08);
-  transform: scale(1.06);
+  border-color: var(--accent-light); color: var(--text);
 }
 .pipeline-step.active {
   background: var(--accent); color: var(--text-on-accent);
