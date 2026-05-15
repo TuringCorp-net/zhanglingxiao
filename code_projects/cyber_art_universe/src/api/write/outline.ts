@@ -3,7 +3,7 @@ import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
-import { writeOutline, workContentPath, sectionR2Key, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
+import { writeOutline, workContentPath, sectionR2Key, extractLang, readR2WithLangFallback, type Lang, LANG_LABELS } from '../../lib/work_content';
 
 // ============================================================
 // 长篇框架大纲 — 结构化模板（中英双语）
@@ -294,10 +294,8 @@ export async function readOutline(env: Env, request: Request, workId: string): P
     });
   }
 
-  // 章节存在，同时尝试读取 R2 outline.md（若有则附带长篇框架内容）
-  let outlineMd: string | null = null;
-  const r2Obj = await env.WORKS_BUCKET.get(workContentPath(workId, lang, 'outline.md'));
-  if (r2Obj) outlineMd = await r2Obj.text();
+  // 章节存在，同时尝试读取 R2 outline.md（含语言回退）
+  const { content: outlineMd } = await readR2WithLangFallback(env, workId, lang, 'outline.md');
 
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId,

@@ -3,7 +3,7 @@ import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
-import { writeSectionContent, readSectionMarkdown, workContentPath, extractLang } from '../../lib/work_content';
+import { writeSectionContent, readSectionMarkdown, workContentPath, extractLang, readR2JSONWithLangFallback } from '../../lib/work_content';
 
 // 事件日志（审计）
 async function logEvent(env: Env, eventType: string, workId: string, sectionId: string | null, summary: string): Promise<void> {
@@ -24,14 +24,13 @@ async function logEvent(env: Env, eventType: string, workId: string, sectionId: 
 // ============================================================
 export async function readIntent(env: Env, request: Request, workId: string, sectionId: string): Promise<Response> {
   const lang = extractLang(request);
-  const key = workContentPath(workId, lang, `intents/${sectionId}.json`);
-  const obj = await env.WORKS_BUCKET.get(key);
+  const { data: intent, actualLang } = await readR2JSONWithLangFallback(env, workId, lang, `intents/${sectionId}.json`);
 
-  if (!obj) {
+  if (!intent) {
     return new Response(JSON.stringify(jsonSuccess({
       work_id: workId,
       section_id: sectionId,
-      lang,
+      lang: actualLang,
       intent: null,
       is_empty: true,
       message: lang === 'en'
@@ -42,11 +41,10 @@ export async function readIntent(env: Env, request: Request, workId: string, sec
     });
   }
 
-  const intent = await obj.json();
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId,
     section_id: sectionId,
-    lang,
+    lang: actualLang,
     intent,
     is_empty: false,
   })), {

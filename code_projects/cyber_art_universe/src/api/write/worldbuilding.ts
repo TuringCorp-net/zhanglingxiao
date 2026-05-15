@@ -3,7 +3,7 @@ import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
-import { workContentPath, SUPPORTED_LANGS, DEFAULT_LANG, DEFAULT_BILINGUAL, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
+import { workContentPath, SUPPORTED_LANGS, DEFAULT_LANG, DEFAULT_BILINGUAL, extractLang, readR2WithLangFallback, type Lang, LANG_LABELS } from '../../lib/work_content';
 
 // ============================================================
 // 世界观设定圣经 — 结构化模板（中英双语）
@@ -245,10 +245,9 @@ ${template}
 
 export async function readWorldbuilding(env: Env, request: Request, workId: string): Promise<Response> {
   const lang = extractLang(request);
-  const key = workContentPath(workId, lang, 'world_bible.md');
-  const obj = await env.WORKS_BUCKET.get(key);
+  const { content, actualLang } = await readR2WithLangFallback(env, workId, lang, 'world_bible.md');
 
-  if (!obj) {
+  if (!content) {
     // 返回对应语言的结构化空模板
     const template = getBibleTemplate(lang);
     return new Response(JSON.stringify(jsonSuccess({
@@ -264,10 +263,9 @@ export async function readWorldbuilding(env: Env, request: Request, workId: stri
     });
   }
 
-  const content = await obj.text();
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId,
-    lang,
+    lang: actualLang,
     content,
     is_template: false,
   })), {

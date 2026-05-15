@@ -30,6 +30,49 @@ export function extractLang(request: Request): Lang {
   return DEFAULT_LANG;
 }
 
+/**
+ * 从 R2 读取文件内容，优先请求的语言，不存在时回退到默认语言。
+ * 返回 { content, actualLang } — actualLang 表示实际读取到的语言版本。
+ */
+export async function readR2WithLangFallback(
+  env: { WORKS_BUCKET: R2Bucket },
+  workId: string,
+  lang: Lang,
+  filename: string,
+): Promise<{ content: string | null; actualLang: Lang }> {
+  // 先尝试请求的语言
+  const key = workContentPath(workId, lang, filename);
+  const obj = await env.WORKS_BUCKET.get(key);
+  if (obj) {
+    return { content: await obj.text(), actualLang: lang };
+  }
+  // 回退到默认语言
+  if (lang !== DEFAULT_LANG) {
+    const fallbackKey = workContentPath(workId, DEFAULT_LANG, filename);
+    const fallbackObj = await env.WORKS_BUCKET.get(fallbackKey);
+    if (fallbackObj) {
+      return { content: await fallbackObj.text(), actualLang: DEFAULT_LANG };
+    }
+  }
+  return { content: null, actualLang: lang };
+}
+
+/**
+ * 从 R2 读取 JSON 文件，优先请求的语言，不存在时回退到默认语言。
+ */
+export async function readR2JSONWithLangFallback(
+  env: { WORKS_BUCKET: R2Bucket },
+  workId: string,
+  lang: Lang,
+  filename: string,
+): Promise<{ data: unknown | null; actualLang: Lang }> {
+  const { content, actualLang } = await readR2WithLangFallback(env, workId, lang, filename);
+  if (content) {
+    try { return { data: JSON.parse(content), actualLang }; } catch { /* fall through */ }
+  }
+  return { data: null, actualLang };
+}
+
 // 作品 Frontmatter 内容模型
 export type WorkFrontmatter = {
   summary: string | null;

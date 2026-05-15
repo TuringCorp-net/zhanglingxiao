@@ -4,7 +4,7 @@
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { workContentPath, extractLang } from '../../lib/work_content';
+import { workContentPath, extractLang, readR2WithLangFallback } from '../../lib/work_content';
 
 const M0_FILENAME = 'original_concept.md';
 
@@ -15,26 +15,13 @@ const M0_FILENAME = 'original_concept.md';
 
 export async function readOriginalConcept(env: Env, request: Request, workId: string): Promise<Response> {
   const lang = extractLang(request);
-  const key = workContentPath(workId, lang, M0_FILENAME);
-  const obj = await env.WORKS_BUCKET.get(key);
+  const { content, actualLang } = await readR2WithLangFallback(env, workId, lang, M0_FILENAME);
 
-  if (!obj) {
-    return new Response(JSON.stringify(jsonSuccess({
-      work_id: workId,
-      lang,
-      content: '',
-      is_empty: true,
-    })), {
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const content = await obj.text();
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId,
-    lang,
-    content,
-    is_empty: !content.trim(),
+    lang: actualLang,
+    content: content || '',
+    is_empty: !content || !content.trim(),
   })), {
     headers: { 'Content-Type': 'application/json' },
   });

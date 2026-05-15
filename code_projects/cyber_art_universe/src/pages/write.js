@@ -187,12 +187,15 @@ function updateElfContext() {
 // M0: 原始构想
 // ============================================================
 async function loadM0() {
+  console.log('[SF:M0] load start, workId=' + state.currentWorkId);
   var left = qs('#split-left');
   left.innerHTML = '';
   left.appendChild(qs('#tmpl-m0-hints').content.cloneNode(true));
 
   var data = await hGet('/api/write/original-concept/' + state.currentWorkId);
+  console.log('[SF:M0] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'hasData' : 'noData');
   var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
+  console.log('[SF:M0] content len=' + content.length + ', is_empty=' + (data && data.data && data.data.is_empty));
   qs('#writing-editor').value = content;
 }
 
@@ -205,12 +208,15 @@ async function loadM1() { loadBibleModule('worldbuilding', '/api/write/worldbuil
 // M2: 主线剧情（独立实现——API 返回 outline_md 而非 content）
 // ============================================================
 async function loadM2() {
+  console.log('[SF:M2] load start, workId=' + state.currentWorkId);
   var left = qs('#split-left');
   left.innerHTML = '';
   left.appendChild(loadingHTML());
   var data = await hGet('/api/write/outline/' + state.currentWorkId);
+  console.log('[SF:M2] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'keys=' + Object.keys(data.data).join(',') : 'noData');
   left.innerHTML = '';
   var outlineMd = (data && data.ok && data.data && data.data.outline_md) ? data.data.outline_md : '';
+  console.log('[SF:M2] outline_md len=' + outlineMd.length + ', sections=' + (data && data.data && data.data.sections ? data.data.sections.length : 0));
   if (outlineMd) {
     var div = document.createElement('div');
     div.className = 'bible-rendered';
@@ -218,18 +224,22 @@ async function loadM2() {
     left.appendChild(div);
     qs('#writing-editor').value = outlineMd;
   } else {
+    console.log('[SF:M2] FAILED: no outline_md');
     left.appendChild(errorHTML(t('label.load_failed')));
     qs('#writing-editor').value = '';
   }
 }
 
 async function loadBibleModule(module, apiPath) {
+  console.log('[SF:M1] loadBibleModule start, module=' + module + ' path=' + apiPath);
   var left = qs('#split-left');
   left.innerHTML = '';
   left.appendChild(loadingHTML());
   var data = await hGet(apiPath + state.currentWorkId);
+  console.log('[SF:M1] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'keys=' + Object.keys(data.data).join(',') : 'noData');
   left.innerHTML = '';
   var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
+  console.log('[SF:M1] content len=' + content.length + ', is_template=' + (data && data.data && data.data.is_template));
   if (content) {
     var div = document.createElement('div');
     div.className = 'bible-rendered';
@@ -237,6 +247,7 @@ async function loadBibleModule(module, apiPath) {
     left.appendChild(div);
     qs('#writing-editor').value = content;
   } else {
+    console.log('[SF:M1] FAILED: no content');
     left.appendChild(errorHTML(t('label.load_failed')));
     qs('#writing-editor').value = '';
   }
@@ -252,10 +263,12 @@ async function loadM3() {
 }
 
 async function renderEntityCardList() {
+  console.log('[SF:M3] renderEntityCardList start');
   var left = qs('#split-left');
   left.innerHTML = '';
   left.appendChild(loadingHTML());
   var data = await hGet('/api/content/' + state.currentWorkId + '/entities');
+  console.log('[SF:M3] API response:', data ? 'ok=' + data.ok : 'NULL', 'entities=' + (data && data.data ? data.data.length : 0));
   left.innerHTML = '';
   if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
@@ -280,10 +293,12 @@ async function renderEntityCardList() {
       root.addEventListener('click', function () { openEntityCard(e.id, e.name); });
       card.querySelector('.card-item-name').textContent = e.name;
       card.querySelector('.card-item-meta').textContent = (e.description || '').substring(0, 30);
-      frag.appendChild(card);
+      list.appendChild(card);
     });
+    frag.appendChild(list);
   });
   left.appendChild(frag);
+  console.log('[SF:M3] rendered ' + entities.length + ' entities in ' + Object.keys(byType).length + ' type groups');
 }
 
 async function openEntityCard(entityId, name) {
@@ -304,12 +319,15 @@ async function loadM4() {
 }
 
 async function renderFhCardList() {
+  console.log('[SF:M4] renderFhCardList start');
   var left = qs('#split-left');
   left.innerHTML = '';
   left.appendChild(loadingHTML());
   var data = await hGet('/api/write/foreshadowing/' + state.currentWorkId);
+  console.log('[SF:M4] API response:', data ? 'ok=' + data.ok : 'NULL', 'contentLen=' + (data && data.data && data.data.content ? data.data.content.length : 0), 'is_template=' + (data && data.data && data.data.is_template));
   left.innerHTML = '';
   if (!data || !data.ok || !data.data || !data.data.content || data.data.is_template) {
+    console.log('[SF:M4] EMPTY path: !data=' + !data + ' !ok=' + (!data || !data.ok) + ' !content=' + (!data || !data.data || !data.data.content) + ' is_template=' + (data && data.data && data.data.is_template));
     left.innerHTML = '<div class="left-panel-empty">' + t('template_notice.foreshadowing') + '</div>';
     return;
   }
@@ -322,15 +340,18 @@ async function renderFhCardList() {
   // 按 ### 标题分割
   var parts = body.split(/\n###\s+/);
   items = parts.filter(function (s) { return s.trim().length > 30; });
+  console.log('[SF:M4] parsed items from ##二: ' + items.length);
 
   // 兜底：如果按 ### 分割失败，尝试按 "伏笔 #" 分割
   if (items.length === 0) {
     parts = body.split(/\n###\s*伏笔\s*#\d+/).filter(function (s) { return s.trim().length > 30; });
     items = parts;
+    console.log('[SF:M4] fallback parse items: ' + items.length);
   }
 
   // 最终兜底：显示原始内容
   if (items.length === 0) {
+    console.log('[SF:M4] no items, rendering raw md');
     left.innerHTML = '<div class="bible-rendered" style="padding:0.5rem;font-size:0.75rem;">' + renderBibleContent(md) + '</div>';
     return;
   }
@@ -392,10 +413,12 @@ async function loadM6() {
 }
 
 async function loadChapterCardList() {
+  console.log('[SF:M5/M6] loadChapterCardList start, module=' + state.currentModule);
   var left = qs('#split-left');
   left.innerHTML = '';
   left.appendChild(loadingHTML());
   var data = await hGet('/api/write/outline/' + state.currentWorkId);
+  console.log('[SF:M5/M6] API response:', data ? 'ok=' + data.ok : 'NULL', 'sections=' + (data && data.data && data.data.sections ? data.data.sections.length : 0));
   left.innerHTML = '';
   if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
@@ -443,18 +466,19 @@ async function loadChapterCardList() {
 
   // 拖拽排序（仅 M6）
   if (state.currentModule === 'writing') initChapterDrag();
-
-  // 拖拽排序（仅 M6）
-  if (state.currentModule === 'writing') initChapterDrag();
 }
 
 async function openChapter(sectionId, title) {
+  console.log('[SF:openChapter] start, module=' + state.currentModule + ' sectionId=' + (sectionId||'').substring(0,8) + ' title=' + title);
   state.currentSectionId = sectionId;
   state.currentSectionTitle = title;
 
   if (state.currentModule === 'chapters') {
     // M5: 加载意图卡，格式化显示
-    var data = await hGet('/api/write/draft/intent/' + state.currentWorkId + '/' + sectionId);
+    var url = '/api/write/draft/intent/' + state.currentWorkId + '/' + sectionId;
+    console.log('[SF:openChapter:M5] fetching intent: ' + url);
+    var data = await hGet(url);
+    console.log('[SF:openChapter:M5] intent response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'hasIntent=' + !!data.data.intent : 'noData');
     if (data && data.ok && data.data.intent) {
       var i = data.data.intent;
       var lines = [];
@@ -476,13 +500,19 @@ async function openChapter(sectionId, title) {
       }
       if (i.visual_keywords) lines.push('**视觉关键词**：' + i.visual_keywords.join(' / '));
       if (i.camera_notes) lines.push('**镜头备注**：' + i.camera_notes);
-      qs('#writing-editor').value = lines.join('\n');
+      var result = lines.join('\n');
+      console.log('[SF:openChapter:M5] writing ' + result.length + ' chars to editor');
+      qs('#writing-editor').value = result;
     } else {
+      console.log('[SF:openChapter:M5] FAILED: no intent data');
       qs('#writing-editor').value = '';
     }
   } else {
     // M6: 章节正文
-    var d = await hGet('/api/content/' + state.currentWorkId + '/sections/' + sectionId + '?mode=full');
+    var url2 = '/api/content/' + state.currentWorkId + '/sections/' + sectionId + '?mode=full';
+    console.log('[SF:openChapter:M6] fetching section: ' + url2);
+    var d = await hGet(url2);
+    console.log('[SF:openChapter:M6] section response:', d ? 'ok=' + d.ok : 'NULL', 'bodyLen=' + (d && d.ok && d.data && d.data.body ? d.data.body.length : 0));
     qs('#writing-editor').value = (d && d.ok && d.data.body) ? d.data.body : '';
   }
 
