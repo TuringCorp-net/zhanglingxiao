@@ -12,7 +12,7 @@ import { submitReview, listReviews, getReview, likeReview } from './reviews';
 import { getEventFeed, listRankings, getRanking } from './events';
 import { listSubscriptions, createSubscription, deleteSubscription } from './subscriptions';
 import { searchContent, retrieveInWork } from './search';
-import { handleAIManifest, handleLLMsTxt, handleOpenAPI } from './discovery';
+import { handleAgentManifest, handleLLMsTxt, handleOpenAPI } from './discovery';
 import { handleMCP } from './mcp';
 import { handleWriteRoute } from './write/index';
 
@@ -35,7 +35,7 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
 
   // === 发现层入口（在 /api 之外）===
   if (request.method === 'GET') {
-    if (pathname === '/.well-known/ai-manifest.json') return handleAIManifest(env, request);
+    if (pathname === '/.well-known/agent-manifest.json' || pathname === '/.well-known/ai-manifest.json') return handleAgentManifest(env, request);
     if (pathname === '/llms.txt') return handleLLMsTxt(env, request);
     if (pathname === '/openapi.yaml') return handleOpenAPI(env, request);
   }
