@@ -42,16 +42,16 @@ export async function handleMCP(env: Env, request: Request): Promise<Response> {
 async function handleResourcesList(env: Env, request: Request): Promise<Response> {
   return new Response(JSON.stringify(jsonSuccess({
     resources: [
-      // Read 侧（novel://）
-      { uri: 'novel://catalog', name: '作品目录', description: '所有作品的目录列表' },
-      { uri: 'novel://work/{id}/outline', name: '作品大纲', description: '指定作品的大纲/目录' },
-      { uri: 'novel://work/{id}/section/{sid}', name: '章节内容', description: '指定章节的内容' },
-      { uri: 'novel://work/{id}/entities', name: '实体列表', description: '指定作品的实体列表' },
-      // Write 侧（sf://）— SF-050 MCP Resources
-      { uri: 'sf://workspace/{id}', name: '写作工作区', description: 'Story Forger 工作区（需认证）' },
-      { uri: 'sf://worldbuilding/{id}', name: '世界观设定', description: '作品的设定圣经' },
-      { uri: 'sf://foreshadowing/{id}', name: '伏笔账本', description: '作品的伏笔暗线规划与追踪' },
-      { uri: 'sf://original_concept/{id}', name: '原始构想', description: '作者的原始灵感与创作初心' },
+      // Read side (novel://)
+      { uri: 'novel://catalog', name: 'Work Catalog', description: 'Directory listing of all published works' },
+      { uri: 'novel://work/{id}/outline', name: 'Work Outline', description: 'Outline / table of contents for a specific work' },
+      { uri: 'novel://work/{id}/section/{sid}', name: 'Chapter Content', description: 'Full content of a specific chapter' },
+      { uri: 'novel://work/{id}/entities', name: 'Entity List', description: 'Entities (characters/locations/items) in a work' },
+      // Write side (sf://) — SF-050 MCP Resources
+      { uri: 'sf://workspace/{id}', name: 'Writing Workspace', description: 'Story Forger workspace overview (auth required)' },
+      { uri: 'sf://worldbuilding/{id}', name: 'Setting Bible', description: 'The structured worldbuilding setting bible' },
+      { uri: 'sf://foreshadowing/{id}', name: 'Foreshadowing Ledger', description: 'Planned foreshadowing hooks and their development paths' },
+      { uri: 'sf://original_concept/{id}', name: 'Original Concept', description: 'Author original inspiration and creative notes (Story Elf FORBIDDEN from modifying)' },
     ],
   })), {
     headers: { 'Content-Type': 'application/json' },
@@ -113,19 +113,19 @@ async function handleResourcesRead(env: Env, request: Request, params?: Record<s
 function handleToolsList(): Response {
   return new Response(JSON.stringify(jsonSuccess({
     tools: [
-      // Read 侧工具
-      { name: 'search_content', description: '语义搜索', inputSchema: { type: 'object', properties: { query: { type: 'string' } } } },
-      { name: 'get_outline', description: '获取大纲', inputSchema: { type: 'object', properties: { work_id: { type: 'string' } } } },
-      { name: 'get_section', description: '获取章节', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' } } } },
-      { name: 'retrieve_relevant_chunks', description: '检索相关段落', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, query: { type: 'string' } } } },
-      { name: 'subscribe_to_updates', description: '订阅更新', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, target_type: { type: 'string' }, target_id: { type: 'string' } } } },
-      { name: 'get_entity_graph', description: '获取实体关系图', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, entity_id: { type: 'string' } } } },
-      // Write 侧工具 — SF-051 MCP Tools
-      { name: 'generate_worldbuilding', description: 'AI 生成世界观设定', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, prompt: { type: 'string' } }, required: ['work_id'] } },
-      { name: 'generate_outline', description: 'AI 生成大纲', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, num_chapters: { type: 'number' } }, required: ['work_id'] } },
-      { name: 'generate_chapter', description: 'AI 生成章节正文', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' } }, required: ['work_id', 'section_id'] } },
-      { name: 'check_consistency', description: '检查章节一致性', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' } }, required: ['work_id', 'section_id'] } },
-      { name: 'polish_chapter', description: '润色章节', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' }, style_notes: { type: 'string' } }, required: ['work_id', 'section_id'] } },
+      // Read side tools
+      { name: 'search_content', description: 'Semantic search across all content', inputSchema: { type: 'object', properties: { query: { type: 'string' } } } },
+      { name: 'get_outline', description: 'Get work outline / table of contents', inputSchema: { type: 'object', properties: { work_id: { type: 'string' } } } },
+      { name: 'get_section', description: 'Get full chapter content', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' } } } },
+      { name: 'retrieve_relevant_chunks', description: 'Retrieve relevant passages within a work', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, query: { type: 'string' } } } },
+      { name: 'subscribe_to_updates', description: 'Subscribe to content updates', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, target_type: { type: 'string' }, target_id: { type: 'string' } } } },
+      { name: 'get_entity_graph', description: 'Get entity relationship graph', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, entity_id: { type: 'string' } } } },
+      // Write side tools — SF-051 MCP Tools
+      { name: 'generate_worldbuilding', description: 'AI generate structured setting bible', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, prompt: { type: 'string' } }, required: ['work_id'] } },
+      { name: 'generate_outline', description: 'AI generate chapter outline with sections', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, num_chapters: { type: 'number' } }, required: ['work_id'] } },
+      { name: 'generate_chapter', description: 'AI generate full chapter draft (Draft v0)', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' } }, required: ['work_id', 'section_id'] } },
+      { name: 'check_consistency', description: 'Check chapter against worldbuilding constraints', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' } }, required: ['work_id', 'section_id'] } },
+      { name: 'polish_chapter', description: 'AI polish chapter based on check results', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' }, style_notes: { type: 'string' } }, required: ['work_id', 'section_id'] } },
     ],
   })), {
     headers: { 'Content-Type': 'application/json' },
