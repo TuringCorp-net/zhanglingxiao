@@ -46,12 +46,13 @@ export async function readR2WithLangFallback(
   if (obj) {
     return { content: await obj.text(), actualLang: lang };
   }
-  // 回退到默认语言
-  if (lang !== DEFAULT_LANG) {
-    const fallbackKey = workContentPath(workId, DEFAULT_LANG, filename);
-    const fallbackObj = await env.WORKS_BUCKET.get(fallbackKey);
-    if (fallbackObj) {
-      return { content: await fallbackObj.text(), actualLang: DEFAULT_LANG };
+  // 遍历所有支持的语言作为回退（优先默认语言，再尝试其他）
+  const fallbackLangs = SUPPORTED_LANGS.filter(l => l !== lang);
+  for (const fbLang of fallbackLangs) {
+    const fbKey = workContentPath(workId, fbLang as Lang, filename);
+    const fbObj = await env.WORKS_BUCKET.get(fbKey);
+    if (fbObj) {
+      return { content: await fbObj.text(), actualLang: fbLang as Lang };
     }
   }
   return { content: null, actualLang: lang };
