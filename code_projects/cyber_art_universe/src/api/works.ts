@@ -18,12 +18,13 @@ import {
 } from '../lib/work_content';
 import { parsePagination } from '../lib/constants';
 
-// 验证 Bearer token（与 write 侧共享 USER_TOKEN secret）
+// 验证 Bearer token（与 write 侧共享 USER_TOKEN secret，支持逗号分隔多 token）
 function isReadAuthenticated(request: Request, env: Env): boolean {
   const authHeader = request.headers.get('Authorization');
   if (!authHeader || !env.USER_TOKEN) return false;
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
-  return token === env.USER_TOKEN;
+  const validTokens = env.USER_TOKEN.split(',').map(t => t.trim()).filter(Boolean);
+  return validTokens.includes(token);
 }
 
 // 检查作品是否允许公开访问。非 published 状态需要认证。

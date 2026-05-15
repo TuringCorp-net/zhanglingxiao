@@ -17,13 +17,14 @@ import { handleMCP } from './mcp';
 import { handleWriteRoute } from './write/index';
 
 // ============================================================
-// 用户认证（通过 Cloudflare Secret USER_TOKEN）
+// 用户认证（通过 Cloudflare Secret USER_TOKEN，逗号分隔支持多 token）
 // ============================================================
 function isAuthenticated(request: Request, env: Env): boolean {
   const authHeader = request.headers.get('Authorization');
   if (!authHeader || !env.USER_TOKEN) return false;
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
-  return token === env.USER_TOKEN;
+  const validTokens = env.USER_TOKEN.split(',').map(t => t.trim()).filter(Boolean);
+  return validTokens.includes(token);
 }
 
 // ============================================================
