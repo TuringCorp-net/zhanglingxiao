@@ -427,9 +427,9 @@ ul, ol { list-style: none; }
 
 /* — Card List — */
 .card-list { display: flex; flex-direction: column; gap: 2px; }
-.card-item { display: flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.5rem; font-size: 0.8rem; cursor: pointer; transition: background 0.1s; border-left: 2px solid transparent; border-radius: 3px; }
-.card-item:hover { background: var(--bg-hover); }
-.card-item.active { background: rgba(var(--accent-rgb), 0.08); border-left-color: var(--accent); }
+.card-item { display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.65rem; font-size: 0.8rem; cursor: pointer; transition: background 0.1s, border-color 0.1s; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 0.2rem; background: var(--bg-card); }
+.card-item:hover { background: var(--bg-hover); border-color: var(--accent-light); }
+.card-item.active { background: rgba(var(--accent-rgb), 0.1); border-color: var(--accent); box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.12); }
 .card-item-name { flex: 1; font-weight: 500; }
 .card-item-meta { font-size: 0.68rem; color: var(--text-muted); }
 .card-status { font-size: 0.7rem; flex-shrink: 0; }

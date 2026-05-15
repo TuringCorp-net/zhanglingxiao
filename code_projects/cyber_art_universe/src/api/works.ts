@@ -150,15 +150,8 @@ export async function getWorkOutline(env: Env, request: Request, id: string): Pr
     });
   }
 
-  // 先尝试从 R2 读取 outline.md
+  // 同时读取 R2 outline.md 和 D1 sections
   const outlineMd = await readOutline(env, id);
-  if (outlineMd) {
-    return new Response(JSON.stringify(jsonSuccess({ id, title: work.title, outline: outlineMd })), {
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // 回退：从 D1 sections 表聚合
   const sections = await env.DB.prepare(
     'SELECT id, title, order_index, section_summary, word_count FROM sections WHERE work_id = ? ORDER BY order_index'
   ).bind(id).all<Record<string, unknown>>();
@@ -166,6 +159,7 @@ export async function getWorkOutline(env: Env, request: Request, id: string): Pr
   return new Response(JSON.stringify(jsonSuccess({
     id: work.id,
     title: work.title,
+    outline_md: outlineMd || null,
     sections: (sections.results || []).map(s => ({
       ...s,
       entities_involved: parseJSON<string[]>(String(s.entities_involved || '[]'), []),

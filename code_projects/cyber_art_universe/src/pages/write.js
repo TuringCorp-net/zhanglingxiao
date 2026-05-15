@@ -208,15 +208,16 @@ async function loadBibleModule(module, apiPath, noticeKey) {
   left.appendChild(loadingHTML());
   var data = await hGet(apiPath + state.currentWorkId);
   left.innerHTML = '';
-  if (data && data.ok && data.content) {
+  var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
+  if (content) {
     var div = document.createElement('div');
     div.className = 'bible-rendered';
-    div.innerHTML = renderBibleContent(data.content);
+    div.innerHTML = renderBibleContent(content);
     left.appendChild(div);
   } else {
     left.appendChild(errorHTML(t('label.load_failed')));
   }
-  qs('#writing-editor').value = (data && data.ok && data.content) ? data.content : '';
+  qs('#writing-editor').value = content;
   ;
 }
 
@@ -289,15 +290,23 @@ async function renderFhCardList() {
     left.innerHTML = '<div class="left-panel-empty">' + t('template_notice.foreshadowing') + '</div>';
     return;
   }
-  // 解析伏笔列表（简易版：按 ## 分割）
+  // 解析伏笔列表（按 ### 伏笔 或 ### Hook 分割）
   var md = data.data.content;
-  var items = md.split(/\n### 伏笔 #\d+/).slice(1);
-  if (!items.length) { left.innerHTML = '<div class="left-panel-empty">暂无伏笔条目</div>'; return; }
+  var items = md.split(/\n###\s*(伏笔|Hook)\s*#\d+/).filter(function (s) { return s.trim().length > 20; });
+  // 如果上面没匹配到，尝试按 ## 二、后面的 ### 分割
+  if (items.length === 0) {
+    var sectionMatch = md.match(/## 二、伏笔条目\s*([\s\S]*)/);
+    if (sectionMatch) {
+      items = sectionMatch[1].split(/\n###\s+/).filter(function (s) { return s.trim().length > 20; });
+    }
+  }
+  if (!items.length) { left.innerHTML = '<div class="left-panel-empty">' + t('label.no_foreshadowing') + '</div>'; return; }
 
   var frag = document.createDocumentFragment();
-  items.forEach(function (item, idx) {
+  items.slice(0, 20).forEach(function (item, idx) {
     var lines = item.trim().split('\n');
-    var title = lines[0] ? lines[0].replace(/[：:]/g, '').trim() : ('#' + (idx + 1));
+    var rawTitle = lines[0] ? lines[0].replace(/^#+\s*/, '').replace(/[：:]\s*\{.*$/, '').replace(/[：:].*$/, '').trim() : ('#' + (idx + 1));
+    var title = rawTitle.length > 30 ? rawTitle.substring(0, 30) + '...' : rawTitle;
     var card = qs('#tmpl-fh-card-item').content.cloneNode(true);
     var root = card.querySelector('.card-item');
     root.dataset.fhId = 'fh_' + idx;
@@ -393,15 +402,44 @@ async function openChapter(sectionId, title) {
   state.currentSectionTitle = title;
 
   if (state.currentModule === 'chapters') {
-    // M5: 加载意图卡 JSON
+    // M5: 加载意图卡，格式化显示
     var data = await hGet('/api/write/draft/intent/' + state.currentWorkId + '/' + sectionId);
-    qs('#writing-editor').value = (data && data.ok && data.data.intent) ? JSON.stringify(data.data.intent, null, 2) : '';
+    if (data && data.ok && data.data.intent) {
+      var i = data.data.intent;
+      var lines = [];
+      lines.push('# 意图卡：' + (i.chapter_index ? '第' + i.chapter_index + '章' : title));
+      lines.push('');
+      lines.push('## 写作目标');
+      lines.push(i.goal || '');
+      if (i.emotional_goal) lines.push('\n**情绪目标**：' + i.emotional_goal);
+      if (i.pov_character) lines.push('**视角角色**：' + i.pov_character + (i.pov_strategy ? '（' + i.pov_strategy + '）' : ''));
+      if (i.scene_type) lines.push('**场景类型**：' + i.scene_type);
+      if (i.hooks && i.hooks.length) lines.push('**钩子**：' + i.hooks.join('；'));
+      if (i.foreshadowing_ids && i.foreshadowing_ids.length) lines.push('**关联伏笔**：' + i.foreshadowing_ids.join(', '));
+      if (i.style_notes) lines.push('**风格备注**：' + i.style_notes);
+      if (i.structure) {
+        lines.push('\n## 结构');
+        if (i.structure.opening_hook) lines.push('**开篇钩子**：' + i.structure.opening_hook);
+        if (i.structure.reversal_point) lines.push('**反转点**：' + i.structure.reversal_point);
+        if (i.structure.cliffhanger) lines.push('**章末卡点**：' + i.structure.cliffhanger);
+      }
+      if (i.visual_keywords) lines.push('**视觉关键词**：' + i.visual_keywords.join(' / '));
+      if (i.camera_notes) lines.push('**镜头备注**：' + i.camera_notes);
+      qs('#writing-editor').value = lines.join('\n');
+    } else {
+      qs('#writing-editor').value = '';
+    }
   } else {
     // M6: 章节正文
     var d = await hGet('/api/content/' + state.currentWorkId + '/sections/' + sectionId + '?mode=full');
     qs('#writing-editor').value = (d && d.ok && d.data.body) ? d.data.body : '';
   }
-updateElfContext();
+
+  // 刷新左侧列表以高亮当前选中
+  if (state.currentModule === 'chapters' || state.currentModule === 'writing') {
+    loadChapterCardList();
+  }
+  updateElfContext();
 }
 
 // 章节拖拽
