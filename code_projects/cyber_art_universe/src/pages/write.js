@@ -192,17 +192,38 @@ async function loadM0() {
   left.appendChild(qs('#tmpl-m0-hints').content.cloneNode(true));
 
   var data = await hGet('/api/write/original-concept/' + state.currentWorkId);
-  qs('#writing-editor').value = (data && data.ok && data.data.content) ? data.data.content : '';
-  ;
+  var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
+  qs('#writing-editor').value = content;
 }
 
 // ============================================================
-// M1: 世界观 / M2: 主线剧情
+// M1: 世界观
 // ============================================================
-async function loadM1() { loadBibleModule('worldbuilding', '/api/write/worldbuilding/', 'template_notice.worldbuilding'); }
-async function loadM2() { loadBibleModule('outline', '/api/write/outline/', 'template_notice.outline'); }
+async function loadM1() { loadBibleModule('worldbuilding', '/api/write/worldbuilding/'); }
 
-async function loadBibleModule(module, apiPath, noticeKey) {
+// ============================================================
+// M2: 主线剧情（独立实现——API 返回 outline_md 而非 content）
+// ============================================================
+async function loadM2() {
+  var left = qs('#split-left');
+  left.innerHTML = '';
+  left.appendChild(loadingHTML());
+  var data = await hGet('/api/write/outline/' + state.currentWorkId);
+  left.innerHTML = '';
+  var outlineMd = (data && data.ok && data.data && data.data.outline_md) ? data.data.outline_md : '';
+  if (outlineMd) {
+    var div = document.createElement('div');
+    div.className = 'bible-rendered';
+    div.innerHTML = renderBibleContent(outlineMd);
+    left.appendChild(div);
+    qs('#writing-editor').value = outlineMd;
+  } else {
+    left.appendChild(errorHTML(t('label.load_failed')));
+    qs('#writing-editor').value = '';
+  }
+}
+
+async function loadBibleModule(module, apiPath) {
   var left = qs('#split-left');
   left.innerHTML = '';
   left.appendChild(loadingHTML());
@@ -214,11 +235,11 @@ async function loadBibleModule(module, apiPath, noticeKey) {
     div.className = 'bible-rendered';
     div.innerHTML = renderBibleContent(content);
     left.appendChild(div);
+    qs('#writing-editor').value = content;
   } else {
     left.appendChild(errorHTML(t('label.load_failed')));
+    qs('#writing-editor').value = '';
   }
-  qs('#writing-editor').value = content;
-  ;
 }
 
 // ============================================================
@@ -246,9 +267,11 @@ async function renderEntityCardList() {
   var frag = document.createDocumentFragment();
   Object.keys(byType).forEach(function (type) {
     var title = document.createElement('div');
-    title.style.cssText = 'font-size:0.7rem;color:var(--text-muted);padding:0.5rem 0 0.2rem 0.5rem;';
+    title.style.cssText = 'font-size:0.7rem;color:var(--text-muted);padding:0.5rem 0 0.2rem 0.2rem;width:100%;';
     title.textContent = t('entity_type.' + type) || type;
     frag.appendChild(title);
+    var list = document.createElement('div');
+    list.className = 'card-list';
     byType[type].forEach(function (e) {
       var card = qs('#tmpl-entity-card-item').content.cloneNode(true);
       var root = card.querySelector('.card-item');
@@ -256,7 +279,7 @@ async function renderEntityCardList() {
       if (state.currentEntityId === e.id) root.classList.add('active');
       root.addEventListener('click', function () { openEntityCard(e.id, e.name); });
       card.querySelector('.card-item-name').textContent = e.name;
-      card.querySelector('.card-item-meta').textContent = e.first_appearance ? 'ch' + e.first_appearance : '';
+      card.querySelector('.card-item-meta').textContent = (e.description || '').substring(0, 30);
       frag.appendChild(card);
     });
   });
@@ -286,40 +309,64 @@ async function renderFhCardList() {
   left.appendChild(loadingHTML());
   var data = await hGet('/api/write/foreshadowing/' + state.currentWorkId);
   left.innerHTML = '';
-  if (!data || !data.ok || !data.data.content || data.data.is_template) {
+  if (!data || !data.ok || !data.data || !data.data.content || data.data.is_template) {
     left.innerHTML = '<div class="left-panel-empty">' + t('template_notice.foreshadowing') + '</div>';
     return;
   }
-  // 解析伏笔列表（按 ### 伏笔 或 ### Hook 分割）
   var md = data.data.content;
-  var items = md.split(/\n###\s*(伏笔|Hook)\s*#\d+/).filter(function (s) { return s.trim().length > 20; });
-  // 如果上面没匹配到，尝试按 ## 二、后面的 ### 分割
+
+  // 解析伏笔条目：先找 "## 二、" 后的内容，再按 ### 分割
+  var items = [];
+  var sectionMatch = md.match(/##\s*二[、.]\s*伏笔条目\s*([\s\S]*)/);
+  var body = sectionMatch ? sectionMatch[1] : md;
+  // 按 ### 标题分割
+  var parts = body.split(/\n###\s+/);
+  items = parts.filter(function (s) { return s.trim().length > 30; });
+
+  // 兜底：如果按 ### 分割失败，尝试按 "伏笔 #" 分割
   if (items.length === 0) {
-    var sectionMatch = md.match(/## 二、伏笔条目\s*([\s\S]*)/);
-    if (sectionMatch) {
-      items = sectionMatch[1].split(/\n###\s+/).filter(function (s) { return s.trim().length > 20; });
-    }
+    parts = body.split(/\n###\s*伏笔\s*#\d+/).filter(function (s) { return s.trim().length > 30; });
+    items = parts;
   }
-  if (!items.length) { left.innerHTML = '<div class="left-panel-empty">' + t('label.no_foreshadowing') + '</div>'; return; }
+
+  // 最终兜底：显示原始内容
+  if (items.length === 0) {
+    left.innerHTML = '<div class="bible-rendered" style="padding:0.5rem;font-size:0.75rem;">' + renderBibleContent(md) + '</div>';
+    return;
+  }
 
   var frag = document.createDocumentFragment();
-  items.slice(0, 20).forEach(function (item, idx) {
+  var list = document.createElement('div');
+  list.className = 'card-list';
+  items.forEach(function (item, idx) {
     var lines = item.trim().split('\n');
-    var rawTitle = lines[0] ? lines[0].replace(/^#+\s*/, '').replace(/[：:]\s*\{.*$/, '').replace(/[：:].*$/, '').trim() : ('#' + (idx + 1));
-    var title = rawTitle.length > 30 ? rawTitle.substring(0, 30) + '...' : rawTitle;
+    var rawLine = lines[0] || '';
+    // 提取标题（去掉 # 和 ： 后的内容）
+    var rawTitle = rawLine.replace(/^#+\s*/, '').replace(/[：:]\s*\{.*$/, '').replace(/[：:].*$/, '').trim();
+    if (!rawTitle || rawTitle.length < 2) rawTitle = '伏笔 #' + (idx + 1);
+    var title = rawTitle.length > 25 ? rawTitle.substring(0, 25) + '...' : rawTitle;
+    // 提取强度
+    var strength = '';
+    var sm = item.match(/强度[：:)\s]*([^\n]{1,15})/);
+    if (sm) strength = sm[1].replace(/[*#|]/g, '').trim().substring(0, 12);
+    // 提取预览（前30个非标题字符）
+    var preview = '';
+    if (lines.length > 1) {
+      preview = lines.slice(1).join(' ').replace(/[#*|>\-\[\]]/g, '').trim().substring(0, 40);
+    }
+
     var card = qs('#tmpl-fh-card-item').content.cloneNode(true);
     var root = card.querySelector('.card-item');
     root.dataset.fhId = 'fh_' + idx;
     if (state.currentFhId === 'fh_' + idx) root.classList.add('active');
     root.addEventListener('click', function () { openFhCard('fh_' + idx, title, item); });
-    // 提取强度
-    var strength = '';
-    var sm = item.match(/强度.*?[|：:]\s*(.+)/);
-    if (sm) strength = sm[1].trim().substring(0, 12);
     card.querySelector('.card-item-name').textContent = title;
     card.querySelector('.card-item-meta').textContent = strength;
-    frag.appendChild(card);
+    // 如果有 preview，设置 title 属性作为 tooltip
+    if (preview) root.title = preview;
+    list.appendChild(card);
   });
+  frag.appendChild(list);
   left.appendChild(frag);
 }
 
@@ -378,7 +425,8 @@ async function loadChapterCardList() {
 
   if (!filtered.length) { left.appendChild(document.createTextNode(t('label.no_match'))); return; }
 
-  var frag = document.createDocumentFragment();
+  var list = document.createElement('div');
+  list.className = 'card-list';
   filtered.forEach(function (s) {
     var stIcon = s.version === 0 ? (s.word_count > 0 ? '[draft]' : '[new]') : (s.word_count > 0 ? '[done]' : '[planned]');
     var card = qs('#tmpl-chapter-card-item').content.cloneNode(true);
@@ -388,10 +436,13 @@ async function loadChapterCardList() {
     root.addEventListener('click', function () { openChapter(s.id, s.title); });
     card.querySelector('.card-status').textContent = stIcon;
     card.querySelector('.card-item-name').textContent = s.title;
-    card.querySelector('.card-item-meta').textContent = (s.word_count || 0) + '';
-    frag.appendChild(card);
+    card.querySelector('.card-item-meta').textContent = (s.word_count || 0) + '字';
+    list.appendChild(card);
   });
-  left.appendChild(frag);
+  left.appendChild(list);
+
+  // 拖拽排序（仅 M6）
+  if (state.currentModule === 'writing') initChapterDrag();
 
   // 拖拽排序（仅 M6）
   if (state.currentModule === 'writing') initChapterDrag();
