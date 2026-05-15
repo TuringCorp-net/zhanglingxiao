@@ -11,6 +11,8 @@ import { readOutline } from './write/outline';
 import { generateDraft, checkConsistency, polishDraft } from './write/draft';
 import { generateWorldbuilding } from './write/worldbuilding';
 import { generateOutline } from './write/outline';
+import { readForeshadowing } from './write/foreshadowing';
+import { readOriginalConcept } from './write/original_concept';
 
 // MCP 请求/响应类型
 interface MCPRequest {
@@ -49,6 +51,7 @@ async function handleResourcesList(env: Env, request: Request): Promise<Response
       { uri: 'sf://workspace/{id}', name: '写作工作区', description: 'Story Forger 工作区（需认证）' },
       { uri: 'sf://worldbuilding/{id}', name: '世界观设定', description: '作品的设定圣经' },
       { uri: 'sf://foreshadowing/{id}', name: '伏笔账本', description: '作品的伏笔暗线规划与追踪' },
+      { uri: 'sf://original_concept/{id}', name: '原始构想', description: '作者的原始灵感与创作初心' },
     ],
   })), {
     headers: { 'Content-Type': 'application/json' },
@@ -58,35 +61,52 @@ async function handleResourcesList(env: Env, request: Request): Promise<Response
 // 读取资源
 async function handleResourcesRead(env: Env, request: Request, params?: Record<string, unknown>): Promise<Response> {
   const uri = params?.uri as string || '';
-  const parsed = parseNovelURI(uri);
 
-  if (!parsed) {
-    return mcpError(`Invalid URI: ${uri}`);
+  // 先尝试 novel:// URI
+  const novelParsed = parseNovelURI(uri);
+  if (novelParsed) {
+    switch (novelParsed.resource) {
+      case 'catalog': return listWorks(env, request);
+      case 'outline': {
+        if (!novelParsed.workId) return mcpError('work_id required');
+        return getWorkOutline(env, request, novelParsed.workId);
+      }
+      case 'section': {
+        if (!novelParsed.workId || !novelParsed.sectionId) return mcpError('work_id and section_id required');
+        return getSection(env, request, novelParsed.workId, novelParsed.sectionId);
+      }
+      case 'entities': {
+        if (!novelParsed.workId) return mcpError('work_id required');
+        return listEntities(env, request, novelParsed.workId);
+      }
+    }
   }
 
-  switch (parsed.resource) {
-    case 'catalog': {
-      const response = await listWorks(env, request);
-      return response;
+  // 再尝试 sf:// URI（Story Forger Write 侧资源）
+  const sfParsed = parseSfURI(uri);
+  if (sfParsed) {
+    switch (sfParsed.resource) {
+      case 'workspace': {
+        if (!sfParsed.workId) return mcpError('work_id required');
+        // workspace = 作品元数据 + 大纲
+        return getWorkOutline(env, request, sfParsed.workId);
+      }
+      case 'worldbuilding': {
+        if (!sfParsed.workId) return mcpError('work_id required');
+        return readWorldbuilding(env, request, sfParsed.workId);
+      }
+      case 'foreshadowing': {
+        if (!sfParsed.workId) return mcpError('work_id required');
+        return readForeshadowing(env, request, sfParsed.workId);
+      }
+      case 'original_concept': {
+        if (!sfParsed.workId) return mcpError('work_id required');
+        return readOriginalConcept(env, request, sfParsed.workId);
+      }
     }
-    case 'outline': {
-      if (!parsed.workId) return mcpError('work_id required');
-      const response = await getWorkOutline(env, request, parsed.workId);
-      return response;
-    }
-    case 'section': {
-      if (!parsed.workId || !parsed.sectionId) return mcpError('work_id and section_id required');
-      const response = await getSection(env, request, parsed.workId, parsed.sectionId);
-      return response;
-    }
-    case 'entities': {
-      if (!parsed.workId) return mcpError('work_id required');
-      const response = await listEntities(env, request, parsed.workId);
-      return response;
-    }
-    default:
-      return mcpError(`Unknown resource: ${parsed.resource}`);
   }
+
+  return mcpError(`Invalid URI: ${uri}`);
 }
 
 // 列出工具
@@ -224,4 +244,10 @@ function parseNovelURI(uri: string): { resource: string; workId?: string; sectio
   if (resource === 'entities') return { resource: 'entities', workId };
 
   return null;
+}
+
+function parseSfURI(uri: string): { resource: string; workId?: string } | null {
+  const match = uri.match(/^sf:\/\/(workspace|worldbuilding|foreshadowing|original_concept)\/([^/]+)$/);
+  if (!match) return null;
+  return { resource: match[1], workId: match[2] };
 }

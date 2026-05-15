@@ -316,6 +316,14 @@ export async function updateOutline(env: Env, request: Request, workId: string):
     });
   }
 
+  // 验证 work 存在
+  const work = await env.DB.prepare('SELECT id FROM works WHERE id = ?').bind(workId).first();
+  if (!work) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   const now = new Date().toISOString();
 
   for (const s of body.sections) {

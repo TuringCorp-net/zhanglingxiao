@@ -10,10 +10,11 @@ import {
 import { createEntity, updateEntity, deleteEntity, readCharacterCard } from './entities';
 import { generateWorldbuilding, readWorldbuilding, updateWorldbuilding, readConstraints } from './worldbuilding';
 import { generateOutline, readOutline, updateOutline } from './outline';
-import { createIntent, generateDraft, checkConsistency, polishDraft, outputDraft, rewriteSection } from './draft';
-import { generateForeshadowing, readForeshadowing } from './foreshadowing';
+import { createIntent, readIntent, generateDraft, checkConsistency, polishDraft, outputDraft, rewriteSection } from './draft';
+import { generateForeshadowing, readForeshadowing, updateForeshadowing } from './foreshadowing';
 import { extractHooks, generateTitles, repurposeSection } from './marketing';
 import { readOriginalConcept, updateOriginalConcept } from './original_concept';
+import { handleElfChat } from './elf_chat';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -95,6 +96,9 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // ================================================================
   if (resource === 'draft') {
     if (resourceId === 'intent' && !subResource && request.method === 'POST') return createIntent(env, request);
+    if (resourceId === 'intent' && subResource && subResourceId && !action) {
+      if (request.method === 'GET') return readIntent(env, request, subResource, subResourceId);
+    }
     if (resourceId === 'generate' && !subResource && request.method === 'POST') return generateDraft(env, request);
     if (resourceId === 'polish' && !subResource && request.method === 'POST') return polishDraft(env, request);
     if (resourceId === 'rewrite' && subResource && !subResourceId && !action && request.method === 'POST') return rewriteSection(env, request, subResource);
@@ -107,7 +111,17 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // ================================================================
   if (resource === 'foreshadowing') {
     if (resourceId === 'generate' && !subResource && request.method === 'POST') return generateForeshadowing(env, request);
-    if (resourceId && !subResource && !action && request.method === 'GET') return readForeshadowing(env, request, resourceId);
+    if (resourceId && !subResource && !action) {
+      if (request.method === 'GET') return readForeshadowing(env, request, resourceId);
+      if (request.method === 'PUT') return updateForeshadowing(env, request, resourceId);
+    }
+  }
+
+  // ================================================================
+  // Story Elf 对话 (SF-055 / SF-056)
+  // ================================================================
+  if (resource === 'elf' && resourceId === 'chat' && !subResource && !action) {
+    if (request.method === 'POST') return handleElfChat(env, request);
   }
 
   // ================================================================

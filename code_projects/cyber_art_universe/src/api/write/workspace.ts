@@ -275,15 +275,20 @@ export async function createSection(env: Env, request: Request, workId: string):
   const orderIndex = body.order_index ?? 0;
   const entitiesInvolved = Array.isArray(body.entities_involved) ? JSON.stringify(body.entities_involved) : '[]';
 
+  // 从请求提取语言参数，确保 r2_object_key 含正确语言前缀
+  const url = new URL(request.url);
+  const langParam = url.searchParams.get('lang');
+  const lang = (langParam && ['zh', 'en'].includes(langParam) ? langParam : 'zh') as 'zh' | 'en';
+
   await writeSectionContent(env, workId, id, {
     section_id: id,
     title: body.title,
     section_summary: body.section_summary || '',
     order_index: orderIndex,
     entities_involved: Array.isArray(body.entities_involved) ? body.entities_involved : [],
-  }, body.body || '');
+  }, body.body || '', lang);
 
-  const r2Key = sectionR2Key(workId, id);
+  const r2Key = sectionR2Key(workId, id, lang);
   await env.DB.prepare(`
     INSERT INTO sections (id, work_id, title, order_index, section_summary, r2_object_key, word_count, entities_involved, version, created_at, updated_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)

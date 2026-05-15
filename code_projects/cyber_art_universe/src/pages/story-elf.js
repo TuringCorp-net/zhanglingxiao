@@ -172,14 +172,41 @@
       if (inp) inp.value = '';
     },
 
-    // 默认 sendChat — Write 页面可覆盖
+    // 默认 sendChat — 用于 Read 侧伴读精灵。Write 页面会覆盖此函数。
     sendChat: function () {
       var msg = StoryElf.getInput();
       if (!msg) return;
-      StoryElf.toggle();
       StoryElf.addMessage(msg, 'user');
       StoryElf.clearInput();
-      StoryElf.addMessage('✔ 已收到。AI 伴读功能即将上线。', 'ai');
+      StoryElf.addMessage('...', 'ai');
+      var ctx = StoryElf.getContext() || {};
+      var token = localStorage.getItem('sf_user_token') || '';
+      var lang = localStorage.getItem('sf_lang') || 'zh';
+      fetch('/api/write/elf/chat?lang=' + lang, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({
+          work_id: ctx.work_id,
+          section_id: ctx.section_id || undefined,
+          page: ctx.page || 'read',
+          messages: [{ role: 'user', content: msg }],
+          context: { section_title: ctx.section_title },
+        }),
+      }).then(function (r) { return r.json(); }).then(function (data) {
+        var msgs = document.getElementById('elf-chat-messages');
+        var last = msgs && msgs.lastChild;
+        if (last && last.textContent === '...') last.remove();
+        if (data && data.ok) {
+          StoryElf.addMessage(data.data.reply, 'ai');
+        } else {
+          StoryElf.addMessage('（AI 暂时无法回应，请稍后重试）', 'ai');
+        }
+      }).catch(function () {
+        var msgs = document.getElementById('elf-chat-messages');
+        var last = msgs && msgs.lastChild;
+        if (last && last.textContent === '...') last.remove();
+        StoryElf.addMessage('（网络异常，请稍后重试）', 'ai');
+      });
     },
 
     // 设置操作按钮 — Write 页面调用

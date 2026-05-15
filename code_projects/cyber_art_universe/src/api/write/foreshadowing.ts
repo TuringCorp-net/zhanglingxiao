@@ -321,3 +321,34 @@ export async function readForeshadowing(env: Env, request: Request, workId: stri
     headers: { 'Content-Type': 'application/json' },
   });
 }
+
+// ============================================================
+// PUT /api/write/foreshadowing/{work_id}?lang=zh|en
+// 手动编辑伏笔账本
+// ============================================================
+
+export async function updateForeshadowing(env: Env, request: Request, workId: string): Promise<Response> {
+  const lang = extractLang(request);
+  const body = await request.json() as { content: string };
+  if (typeof body.content !== 'string') {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'content is required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 验证 work 存在
+  const work = await env.DB.prepare('SELECT id FROM works WHERE id = ?').bind(workId).first();
+  if (!work) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  await env.WORKS_BUCKET.put(workContentPath(workId, lang, 'foreshadowing.md'), body.content, {
+    httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+  });
+
+  return new Response(JSON.stringify(jsonSuccess({ work_id: workId, lang, saved: true })), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}

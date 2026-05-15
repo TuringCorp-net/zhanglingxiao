@@ -393,9 +393,9 @@ async function openChapter(sectionId, title) {
   state.currentSectionTitle = title;
 
   if (state.currentModule === 'chapters') {
-    // M5: 意图卡填空式 - 简化版直接加载 JSON 为文本
-    var data = await hGet('/api/write/draft/output/' + sectionId);
-    qs('#writing-editor').value = (data && data.ok) ? JSON.stringify(data.data, null, 2) : '';
+    // M5: 加载意图卡 JSON
+    var data = await hGet('/api/write/draft/intent/' + state.currentWorkId + '/' + sectionId);
+    qs('#writing-editor').value = (data && data.ok && data.data.intent) ? JSON.stringify(data.data.intent, null, 2) : '';
   } else {
     // M6: 章节正文
     var d = await hGet('/api/content/' + state.currentWorkId + '/sections/' + sectionId + '?mode=full');
@@ -560,18 +560,24 @@ StoryElf.sendChat = function () {
   StoryElf.addMessage(msg, 'user');
   StoryElf.clearInput();
   StoryElf.addMessage(t('label.ai_thinking'), 'ai');
-  hPost('/api/write/draft/polish', { work_id: state.currentWorkId, section_id: state.currentSectionId, style_notes: msg }).then(function (data) {
+  var ctx = StoryElf.getContext() || {};
+  hPost('/api/write/elf/chat', {
+    work_id: state.currentWorkId,
+    section_id: state.currentSectionId || undefined,
+    page: 'write',
+    messages: [{ role: 'user', content: msg }],
+    context: { module: state.currentModule, section_title: ctx.section_title || state.currentSectionTitle, panel: ctx.panel },
+  }).then(function (data) {
     var msgs = document.getElementById('elf-chat-messages');
     var last = msgs && msgs.lastChild;
     if (last) last.remove();
     if (data && data.ok) {
-      StoryElf.addMessage(t('label.updated_editor'), 'ai');
-      qs('#writing-editor').value = data.data.body || '';
+      StoryElf.addMessage(data.data.reply, 'ai');
     } else {
       var err = document.createElement('div');
       err.className = 'elf-chat-msg ai';
       err.style.color = 'var(--error)';
-      err.textContent = t('prompt.save_failed') + ((data && data.error && data.error.message) || '');
+      err.textContent = t('prompt.ai_unavailable');
       if (msgs) { msgs.appendChild(err); msgs.scrollTop = msgs.scrollHeight; }
     }
   });

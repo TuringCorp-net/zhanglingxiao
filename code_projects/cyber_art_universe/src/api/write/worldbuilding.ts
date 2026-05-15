@@ -288,6 +288,14 @@ export async function updateWorldbuilding(env: Env, request: Request, workId: st
     });
   }
 
+  // 验证 work 存在
+  const work = await env.DB.prepare('SELECT id FROM works WHERE id = ?').bind(workId).first();
+  if (!work) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   await env.WORKS_BUCKET.put(workContentPath(workId, lang, 'world_bible.md'), body.content, {
     httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
   });

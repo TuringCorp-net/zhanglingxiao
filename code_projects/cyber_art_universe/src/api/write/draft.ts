@@ -5,6 +5,55 @@ import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
 import { writeSectionContent, readSectionMarkdown, workContentPath, extractLang } from '../../lib/work_content';
 
+// 事件日志（审计）
+async function logEvent(env: Env, eventType: string, workId: string, sectionId: string | null, summary: string): Promise<void> {
+  try {
+    const id = crypto.randomUUID();
+    const now = new Date().toISOString();
+    await env.DB.prepare(
+      'INSERT INTO events (id, event_type, work_id, section_id, delta_summary, timestamp) VALUES (?, ?, ?, ?, ?, ?)'
+    ).bind(id, eventType, workId, sectionId, summary, now).run();
+  } catch (err) {
+    console.error('Event log failed:', eventType, workId, err);
+  }
+}
+
+// ============================================================
+// GET /api/write/draft/intent/{work_id}/{section_id}?lang=
+// 读取指定章节的意图卡
+// ============================================================
+export async function readIntent(env: Env, request: Request, workId: string, sectionId: string): Promise<Response> {
+  const lang = extractLang(request);
+  const key = workContentPath(workId, lang, `intents/${sectionId}.json`);
+  const obj = await env.WORKS_BUCKET.get(key);
+
+  if (!obj) {
+    return new Response(JSON.stringify(jsonSuccess({
+      work_id: workId,
+      section_id: sectionId,
+      lang,
+      intent: null,
+      is_empty: true,
+      message: lang === 'en'
+        ? 'Intent card not yet created for this chapter.'
+        : '本章尚未创建意图卡。',
+    })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const intent = await obj.json();
+  return new Response(JSON.stringify(jsonSuccess({
+    work_id: workId,
+    section_id: sectionId,
+    lang,
+    intent,
+    is_empty: false,
+  })), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 // POST /api/write/draft/intent
 export async function createIntent(env: Env, request: Request): Promise<Response> {
   const body = await request.json() as {
@@ -19,6 +68,14 @@ export async function createIntent(env: Env, request: Request): Promise<Response
   if (!body.work_id || !body.goal) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id and goal are required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 验证 work 存在
+  const work = await env.DB.prepare('SELECT id FROM works WHERE id = ?').bind(body.work_id).first();
+  if (!work) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
     });
   }
 
@@ -145,6 +202,8 @@ ${section.section_summary ? `【章节摘要】${section.section_summary}` : ''}
   await env.DB.prepare(
     'UPDATE sections SET word_count = ?, updated_at = ? WHERE id = ?'
   ).bind(wordCount, now, body.section_id).run();
+
+  await logEvent(env, 'draft.generated', body.work_id, body.section_id as string, `Draft v0 generated: ${section.title} (${wordCount} chars)`);
 
   return new Response(JSON.stringify(jsonSuccess({
     section_id: body.section_id,
@@ -277,6 +336,8 @@ ${content.body}
   const now = new Date().toISOString();
   await env.DB.prepare('UPDATE sections SET word_count = ?, version = 1, updated_at = ? WHERE id = ?')
     .bind(wordCount, now, body.section_id).run();
+
+  await logEvent(env, 'draft.polished', body.work_id, body.section_id, `Draft polished to v1: ${wordCount} chars`);
 
   return new Response(JSON.stringify(jsonSuccess({
     section_id: body.section_id,
@@ -424,6 +485,8 @@ ${existingContent?.body ? `## 当前版本（供参考，请改进）\n${existin
   await env.DB.prepare(
     'UPDATE sections SET word_count = ?, version = ?, updated_at = ? WHERE id = ?'
   ).bind(wordCount, newVersion, new Date().toISOString(), sectionId).run();
+
+  await logEvent(env, 'draft.rewritten', body.work_id, sectionId, `Chapter rewritten to v${newVersion}: ${section.title} (${wordCount} chars)`);
 
   return new Response(JSON.stringify(jsonSuccess({
     section_id: sectionId,
