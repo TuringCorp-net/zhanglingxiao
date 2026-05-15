@@ -294,6 +294,11 @@ export async function readOutline(env: Env, request: Request, workId: string): P
     });
   }
 
+  // 章节存在，同时尝试读取 R2 outline.md（若有则附带长篇框架内容）
+  let outlineMd: string | null = null;
+  const r2Obj = await env.WORKS_BUCKET.get(workContentPath(workId, lang, 'outline.md'));
+  if (r2Obj) outlineMd = await r2Obj.text();
+
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId,
     lang,
@@ -301,6 +306,7 @@ export async function readOutline(env: Env, request: Request, workId: string): P
       ...s,
       entities_involved: typeof s.entities_involved === 'string' ? JSON.parse(s.entities_involved) : [],
     })),
+    outline_md: outlineMd,
   })), {
     headers: { 'Content-Type': 'application/json' },
   });
@@ -309,7 +315,7 @@ export async function readOutline(env: Env, request: Request, workId: string): P
 // PUT /api/write/outline/{work_id}
 export async function updateOutline(env: Env, request: Request, workId: string): Promise<Response> {
   const lang = extractLang(request);
-  const body = await request.json() as { sections?: Array<{ id?: string; title: string; order_index: number; section_summary?: string }> };
+  const body = await request.json() as { sections?: Array<{ id?: string; title: string; order_index: number; section_summary?: string }>; outline_md?: string };
   if (!body.sections || !Array.isArray(body.sections)) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'sections array is required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
@@ -325,6 +331,11 @@ export async function updateOutline(env: Env, request: Request, workId: string):
   }
 
   const now = new Date().toISOString();
+
+  // 如果提供了 outline_md，同时写入 R2 长篇框架文件
+  if (typeof body.outline_md === 'string') {
+    await writeOutline(env, workId, body.outline_md, lang);
+  }
 
   for (const s of body.sections) {
     if (s.id) {

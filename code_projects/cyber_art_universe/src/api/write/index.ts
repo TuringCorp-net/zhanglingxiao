@@ -7,7 +7,7 @@ import {
   previewWork, publishWork, closeWork, reopenWork,
   createSection, updateSection, deleteSection,
 } from './workspace';
-import { createEntity, updateEntity, deleteEntity, readCharacterCard } from './entities';
+import { createEntity, updateEntity, deleteEntity, readCharacterCard, updateCharacterCard } from './entities';
 import { generateWorldbuilding, readWorldbuilding, updateWorldbuilding, readConstraints } from './worldbuilding';
 import { generateOutline, readOutline, updateOutline } from './outline';
 import { createIntent, readIntent, generateDraft, checkConsistency, polishDraft, outputDraft, rewriteSection } from './draft';
@@ -38,6 +38,7 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   }
   if (resource === 'works' && resourceId && subResource === 'entities' && subResourceId && action === 'card') {
     if (request.method === 'GET') return readCharacterCard(env, request, resourceId, subResourceId);
+    if (request.method === 'PUT') return updateCharacterCard(env, request, resourceId, subResourceId);
   }
   if (resource === 'works' && resourceId && subResource === 'entities' && subResourceId && !action) {
     if (request.method === 'PUT') return updateEntity(env, request, resourceId, subResourceId);

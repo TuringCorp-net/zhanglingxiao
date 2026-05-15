@@ -253,6 +253,42 @@ export async function readCharacterCard(env: Env, request: Request, workId: stri
   });
 }
 
+// ============================================================
+// PUT /api/write/works/{id}/entities/{eid}/card?lang=zh|en
+// 手动编辑人物卡 R2 内容
+// ============================================================
+
+export async function updateCharacterCard(env: Env, request: Request, workId: string, entityId: string): Promise<Response> {
+  const entity = await env.DB.prepare('SELECT id, name, type FROM entities WHERE id = ? AND work_id = ?').bind(entityId, workId).first<{ id: string; name: string; type: string }>();
+  if (!entity) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.ENTITY_NOT_FOUND, 'Entity not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const lang = extractLang(request);
+  const body = await request.json() as { content: string };
+  if (typeof body.content !== 'string') {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'content is required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const key = workContentPath(workId, lang, `characters/${entityId}.md`);
+  await env.WORKS_BUCKET.put(key, body.content, {
+    httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+  });
+
+  return new Response(JSON.stringify(jsonSuccess({
+    entity_id: entityId,
+    name: entity.name,
+    lang,
+    saved: true,
+  })), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 // PUT /api/write/works/{id}/entities/{eid}
 export async function updateEntity(env: Env, request: Request, workId: string, entityId: string): Promise<Response> {
   const existing = await env.DB.prepare('SELECT id FROM entities WHERE id = ? AND work_id = ?').bind(entityId, workId).first();
