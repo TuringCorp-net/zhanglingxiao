@@ -326,6 +326,7 @@ export async function updateSection(env: Env, request: Request, workId: string, 
   const fieldMap: Record<string, unknown> = {
     title: body.title, section_summary: body.section_summary,
     order_index: body.order_index,
+    word_count: body.body !== undefined ? body.body.length : undefined,
     entities_involved: Array.isArray(body.entities_involved) ? JSON.stringify(body.entities_involved) : body.entities_involved,
   };
 
