@@ -443,6 +443,136 @@ ul, ol { list-style: none; }
 
 /* — Editor — */
 
+/* — Slot Editor — */
+.slot-editor {
+  flex: 1; overflow-y: auto; padding: 0;
+}
+.slot-groups { padding-bottom: 0.5rem; }
+.slot-group {
+  margin: 0 1rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+.slot-group-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.4rem 0.75rem;
+  background: var(--bg-hover);
+  border-bottom: 1px solid var(--border);
+}
+.slot-group-title {
+  font-size: 0.82rem; font-weight: 600; color: var(--cyan);
+}
+.slot-group-actions { display: flex; gap: 0.25rem; }
+.slot-group-delete {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-muted); font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.slot-group-delete:hover { border-color: var(--error); color: var(--error); background: rgba(239,68,68,0.1); }
+.slot-group-add {
+  padding: 0.35rem 1rem; margin: 0 1rem 0.5rem;
+  border: 1px dashed var(--border); border-radius: var(--radius);
+  background: transparent; color: var(--text-muted);
+  font-size: 0.75rem; cursor: pointer; transition: all 0.15s;
+  display: block; width: calc(100% - 2rem); text-align: center;
+}
+.slot-group-add:hover {
+  border-color: var(--cyan); color: var(--cyan);
+  background: rgba(var(--cyan-rgb), 0.05);
+}
+.slot-group-body { padding: 0.5rem 0.75rem; }
+.slot-item { margin-bottom: 0.6rem; }
+.slot-item:last-child { margin-bottom: 0; }
+.slot-label {
+  font-size: 0.72rem; color: var(--text-dim);
+  margin-bottom: 0.2rem; line-height: 1.4;
+  display: flex; align-items: flex-start; gap: 0.25rem;
+}
+.slot-label-icon {
+  color: var(--accent-light); font-weight: 700;
+  flex-shrink: 0; font-size: 0.75rem;
+}
+.slot-textarea {
+  width: 100%; min-height: 2.5rem; resize: vertical;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.4rem 0.6rem; font-size: 0.82rem; line-height: 1.6;
+  font-family: var(--font); box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.slot-textarea:focus { border-color: var(--accent-light); outline: none; }
+.slot-textarea::placeholder {
+  color: var(--text-muted); font-style: italic; font-size: 0.78rem;
+}
+
+/* — Framework rendered blocks — */
+.slot-framework {
+  padding: 0 1rem;
+  font-size: 0.8rem; line-height: 1.5; color: var(--text-dim);
+}
+.slot-framework h1, .slot-framework h2, .slot-framework h3 {
+  color: var(--text); margin: 0.5rem 0 0.2rem;
+}
+.slot-framework h1 { font-size: 1rem; }
+.slot-framework h2 { font-size: 0.9rem; }
+.slot-framework h3 { font-size: 0.82rem; color: var(--cyan); }
+.slot-framework blockquote {
+  border-left: 2px solid var(--border); padding: 0.15rem 0.5rem;
+  margin: 0.2rem 0; color: var(--text-muted); font-size: 0.75rem;
+}
+.slot-framework p { margin: 0.2rem 0; }
+.slot-framework strong { color: var(--text); font-weight: 600; }
+.slot-framework hr {
+  border: none; border-top: 1px dashed var(--border);
+  margin: 0.6rem 0;
+}
+
+/* — Free Zone — */
+.slot-free-zone {
+  border-top: 2px solid var(--border);
+  padding: 0.5rem 1rem;
+}
+.slot-free-label {
+  font-size: 0.82rem; font-weight: 600; color: var(--accent-light);
+  margin-bottom: 0.3rem;
+}
+.slot-free-hint { font-weight: 400; font-size: 0.7rem; color: var(--text-muted); }
+.slot-free-zone textarea {
+  width: 100%; height: 200px; resize: vertical;
+  background: var(--bg-card); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.5rem 0.75rem; font-size: 0.82rem; line-height: 1.6;
+  font-family: var(--font); box-sizing: border-box;
+}
+.slot-free-zone textarea:focus { border-color: var(--cyan); outline: none; }
+
+/* — Form Editor (M5) — */
+.form-editor {
+  flex: 1; overflow-y: auto; padding: 1rem;
+}
+.form-field { margin-bottom: 0.75rem; }
+.form-field-label {
+  font-size: 0.75rem; font-weight: 600; color: var(--text-dim);
+  margin-bottom: 0.2rem;
+}
+.form-field-input, .form-field-textarea {
+  width: 100%; padding: 0.4rem 0.6rem;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  font-size: 0.82rem; font-family: var(--font);
+  box-sizing: border-box; transition: border-color 0.15s;
+}
+.form-field-input:focus, .form-field-textarea:focus { border-color: var(--accent-light); outline: none; }
+.form-field-textarea { min-height: 3rem; resize: vertical; line-height: 1.5; }
+.form-field-hint {
+  font-size: 0.65rem; color: var(--text-muted);
+  margin-top: 0.15rem; font-style: italic;
+}
+
 /* — Bible Content Rendering — */
 .bible-content { font-size: 0.78rem; line-height: 1.5; }
 .bible-h1 {

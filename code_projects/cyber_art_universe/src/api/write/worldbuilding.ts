@@ -17,60 +17,97 @@ const BIBLE_TEMPLATE_ZH = `# 世界观设定圣经
 ## 一、世界规则与边界
 
 ### 力量/技术体系
-<!-- 描述这个世界的力量来源、等级划分、使用规则与代价 -->
+<!-- hint:描述这个世界的力量来源、等级划分、使用规则与代价 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 社会组织与结构
-<!-- 国家、势力、阶层、家族等社会组织形态 -->
+<!-- hint:国家、势力、阶层、家族等社会组织形态 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 禁忌与代价
-<!-- 世界中不可触碰的禁忌、使用力量的代价 -->
+<!-- hint:世界中不可触碰的禁忌、使用力量的代价 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 二、核心主题与价值观
 
 ### 核心命题
-<!-- 作品要传达的核心思想或问题 -->
+<!-- hint:作品要传达的核心思想或问题 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 情感基调
-<!-- 整体的情感色彩：黑暗/希望/悲壮/轻松 等 -->
+<!-- hint:整体的情感色彩：黑暗/希望/悲壮/轻松 等 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 叙事立场
-<!-- 从谁的视角看世界？隐含的价值判断 -->
+<!-- hint:从谁的视角看世界？隐含的价值判断 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 三、角色体系
 
 ### 主角
-<!-- 姓名、身份、核心动机、能力边界、成长弧线 -->
+<!-- hint:姓名、身份、核心动机、能力边界、成长弧线 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 核心配角
-<!-- 与主角的关系、各自动机、在主线中的作用 -->
+<!-- hint:与主角的关系、各自动机、在主线中的作用 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 角色关系网
-<!-- 角色之间的关键关系（可后续由 M3 人物卡模块细化） -->
+<!-- hint:角色之间的关键关系（可后续由 M3 人物卡模块细化） -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 四、场景与资源
 
 ### 主要地点
-<!-- 关键场景的地理位置、特征、叙事功能 -->
+<!-- hint:关键场景的地理位置、特征、叙事功能 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 关键道具/技能
-<!-- 可被反复使用的叙事资源（MacGuffin、圣物、核心能力等） -->
+<!-- hint:可被反复使用的叙事资源（MacGuffin、圣物、核心能力等） -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 五、承诺清单
 
-<!-- 开篇对读者/观众许诺的爽点或价值，后续必须兑现 -->
-- [ ]
-- [ ]
+<!-- hint:开篇对读者/观众许诺的爽点或价值，后续必须兑现。每条承诺一句话概括。 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:承诺项 #1：写出第一个必须兑现的承诺 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:承诺项 #2：写出第二个必须兑现的承诺 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:承诺项 #3：写出第三个必须兑现的承诺 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 六、禁区与风格
 
 ### 内容禁区
-<!-- 绝对不能触碰的内容主题 -->
+<!-- hint:绝对不能触碰的内容主题 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 语言风格
-<!-- 叙事语言的风格定位：简洁/华丽/口语化/文学性 等 -->
+<!-- hint:叙事语言的风格定位：简洁/华丽/口语化/文学性 等 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 节奏偏好
-<!-- 快节奏/慢热/张弛有度 等 -->
+<!-- hint:快节奏/慢热/张弛有度 等 -->
+<!-- slot -->
+<!-- /slot -->
 `;
 
 const BIBLE_TEMPLATE_EN = `# Setting Bible
@@ -81,60 +118,97 @@ const BIBLE_TEMPLATE_EN = `# Setting Bible
 ## I. World Rules & Boundaries
 
 ### Power / Technology System
-<!-- Describe the source of power, hierarchy, usage rules, and costs in this world -->
+<!-- hint:Describe the source of power, hierarchy, usage rules, and costs in this world -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Social Organization & Structure
-<!-- Nations, factions, classes, clans, and other social structures -->
+<!-- hint:Nations, factions, classes, clans, and other social structures -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Taboos & Costs
-<!-- Untouchable taboos in this world, costs of using power -->
+<!-- hint:Untouchable taboos in this world, costs of using power -->
+<!-- slot -->
+<!-- /slot -->
 
 ## II. Core Themes & Values
 
 ### Central Thesis
-<!-- The core idea or question the work seeks to convey -->
+<!-- hint:The core idea or question the work seeks to convey -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Emotional Tone
-<!-- Overall emotional register: dark / hopeful / tragic / lighthearted, etc. -->
+<!-- hint:Overall emotional register: dark / hopeful / tragic / lighthearted, etc. -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Narrative Stance
-<!-- Whose perspective shapes the world? Implicit value judgments -->
+<!-- hint:Whose perspective shapes the world? Implicit value judgments -->
+<!-- slot -->
+<!-- /slot -->
 
 ## III. Character System
 
 ### Protagonist
-<!-- Name, identity, core motivation, ability boundaries, growth arc -->
+<!-- hint:Name, identity, core motivation, ability boundaries, growth arc -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Key Supporting Characters
-<!-- Relationship to protagonist, individual motivations, role in the main plot -->
+<!-- hint:Relationship to protagonist, individual motivations, role in the main plot -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Character Relationship Web
-<!-- Key relationships between characters (to be refined by M3 Character Cards) -->
+<!-- hint:Key relationships between characters (to be refined by M3 Character Cards) -->
+<!-- slot -->
+<!-- /slot -->
 
 ## IV. Settings & Resources
 
 ### Major Locations
-<!-- Geography, features, and narrative function of key settings -->
+<!-- hint:Geography, features, and narrative function of key settings -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Key Items / Artifacts
-<!-- Reusable narrative resources (MacGuffins, relics, core abilities, etc.) -->
+<!-- hint:Reusable narrative resources (MacGuffins, relics, core abilities, etc.) -->
+<!-- slot -->
+<!-- /slot -->
 
 ## V. Promise Checklist
 
-<!-- Promises made to readers/viewers that must be fulfilled later -->
-- [ ]
-- [ ]
+<!-- hint:Promises made to readers/viewers that must be fulfilled later. One sentence per promise. -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Promise #1: The first promise that must be delivered -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Promise #2: The second promise that must be delivered -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Promise #3: The third promise that must be delivered -->
+<!-- slot -->
+<!-- /slot -->
 
 ## VI. Boundaries & Style
 
 ### Content Red Lines
-<!-- Themes and content that must never be touched -->
+<!-- hint:Themes and content that must never be touched -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Language Style
-<!-- Prose style: concise / ornate / colloquial / literary, etc. -->
+<!-- hint:Prose style: concise / ornate / colloquial / literary, etc. -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Pacing Preference
-<!-- Fast-paced / slow-burn / balanced rhythm, etc. -->
+<!-- hint:Fast-paced / slow-burn / balanced rhythm, etc. -->
+<!-- slot -->
+<!-- /slot -->
 `;
 
 /** 根据语言获取对应模板 */
@@ -192,7 +266,7 @@ export async function generateWorldbuilding(env: Env, request: Request): Promise
 ${entityContext ? `已有角色/实体：\n${entityContext}` : ''}
 ${outlineContext ? `已有章节概要：\n${outlineContext}` : ''}
 
-请严格按照以下 Markdown 模板结构输出。每个 ## 标题保留不变，在 HTML 注释（<!-- -->）的位置替换为实际内容。如果某个章节暂时无法填充，保留标题结构和注释占位。
+请严格按照以下 Markdown 模板结构输出。模板使用三标记分离格式：the hint marker 为提示文字，the slot opening marker 为槽位开始，the slot closing marker 为槽位结束。请在这三个标记之后（即 the slot opening marker 和 the slot closing marker 之间）写入实际内容，保留所有标记不变。标题、引用等其他结构保持原样。如果某个章节暂时无法填充，保留三个标记不变，其间留空行。
 
 输出模板：
 
@@ -200,7 +274,7 @@ ${template}
 
 重要要求：
 1. 保持所有 ## 和 ### 标题不变
-2. 将每个 HTML 注释（<!-- ... -->）替换为 2-5 段实际内容
+2. 将内容写在 the slot opening marker 和 the slot closing marker 之间（the hint marker 保留在上方），每个槽位写 2-5 段实际内容
 3. 承诺清单（## 五）至少给出 3 条具体的承诺项
 4. 内容必须自洽，规则之间不能矛盾
 5. 用${langLabel}输出`;

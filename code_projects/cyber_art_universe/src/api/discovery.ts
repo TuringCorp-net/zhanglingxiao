@@ -409,19 +409,75 @@ All MCP requests use the \`type\` field in POST body:
 
 ---
 
+## Template Format (v2.3+)
+
+The Write UI uses a **slot-based editor** for M1-M4 modules. AI Agents writing content MUST follow this format to ensure the slot editor can parse the content correctly.
+
+### Three-Marker Format
+
+Each editable field uses three markers: hint, slot, and /slot:
+
+\`\`\`markdown
+<!-- label: hint or options -->
+\`\`\`
+
+The comment text becomes the slot label in the UI. Everything between a comment and the next slot marker (or next heading) is the editable content.
+
+### Framework vs. Content
+
+- **Framework** (headings, blockquotes, bold labels) = read-only, preserved exactly
+- **Slot comments** (HTML comment lines) = label above each editable textarea
+- **Content** (text between slot markers) = editable by the author
+- **Free zone** (after last \`---\`) = free-form markdown area
+
+### Repeatable Groups (M4)
+
+Groups separated by \`---\` within the template area represent repeatable entries (e.g., foreshadowing hooks). Each group renders as a card with title + slots. The UI provides \`[+]\` to clone and \`[x]\` to delete groups.
+
+### Fallback
+
+If the markdown has zero slot markers (e.g., AI-generated content that replaced comments with actual text), all content is placed in the free-form zone. The author can still edit everything.
+
+### Agent Writing Guide
+
+When generating or updating M1-M4 content:
+
+1. **Keep all slot markers** - Write content BETWEEN the opening and closing slot comment markers, keeping both
+2. **Do not remove or rename headings** - They are structural anchors
+3. **Use separator for file structure only** - The last separator divides template from free zone
+4. **For M4**: Add separators between foreshadowing entries to create repeatable groups
+
+Example slot usage (three-marker format):
+
+\`\`\`markdown
+### Power / Technology System
+<!-- hint:Describe the source of power, hierarchy, usage rules, and costs -->
+<!-- slot -->
+<!-- /slot -->
+The world power system is based on "mirror veins" that connect two parallel realities...
+
+### Social Structure
+<!-- hint:Nations, factions, classes, clans, and other social structures -->
+<!-- slot -->
+<!-- /slot -->
+The society is divided into three tiers: the Mirror Council (ruling elite)...
+\`\`\`
+
+
+
 ## IV. Common Agent Task Patterns
 
 ### Pattern 1: Write a Complete Novel
 
 \`\`\`
  1. POST /api/write/works → create work, get work_id
- 2. PUT  /api/write/original-concept/{work_id} → write M0
- 3. PUT  /api/write/worldbuilding/{work_id} → write M1 (or POST .../generate)
+ 2. PUT  /api/write/original-concept/{work_id} → write M0 (free text)
+ 3. PUT  /api/write/worldbuilding/{work_id} → write M1 (use slot format, keep HTML comment markers)
  4. POST /api/write/outline/generate → AI generate N chapters (creates D1 sections)
- 5. PUT  /api/write/outline/{work_id} → add outline_md framework
+ 5. PUT  /api/write/outline/{work_id} → add outline_md framework (use slot format)
  6. POST /api/write/works/{id}/entities → create characters one by one
- 7. PUT  /api/write/works/{id}/entities/{eid}/card → fill character cards
- 8. PUT  /api/write/foreshadowing/{work_id} → write M4 foreshadowing ledger
+ 7. PUT  /api/write/works/{id}/entities/{eid}/card → fill character cards (use slot format)
+ 8. PUT  /api/write/foreshadowing/{work_id} → write M4 foreshadowing ledger (use slot format)
  9. POST /api/write/draft/intent → create intent card for each chapter
 10. POST /api/write/draft/generate → generate draft for each chapter
 11. POST /api/write/draft/check/{work_id}/{sid} → check each chapter

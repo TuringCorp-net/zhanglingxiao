@@ -22,36 +22,69 @@ const FORESHADOWING_TEMPLATE_ZH = `# 伏笔账本
 
 ## 一、伏笔策略总览
 
-<!-- 用一段话描述整部作品的伏笔策略：密集还是稀疏？以什么类型的伏笔为主？-->
+<!-- hint:用一段话描述整部作品的伏笔策略：密集还是稀疏？以什么类型的伏笔为主？ -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 二、伏笔条目
 
-<!-- 每条伏笔一张卡片。可反复添加。写作前至少规划 3 条核心伏笔 -->
+<!-- hint:每条伏笔一张卡片。可反复添加。写作前至少规划 3 条核心伏笔 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 伏笔 #1：{伏笔名称}
 
 | 字段 | 内容 |
 |------|------|
-| **类型** | 身份伏笔 / 道具伏笔 / 对白伏笔 / 能力伏笔 / 事件伏笔 / 意象伏笔 |
-| **强度** | 🔴 核心（贯穿全书）/ 🟡 重要（跨多章）/ 🟢 彩蛋（轻量） |
-| **关联人物** | |
-| **关联章节范围** | 第 ? 章 ～ 第 ? 章 |
-| **依赖的 M1 规则** | <!-- 此伏笔依赖的世界规则，如："三、禁忌——不得直视神祇" --> |
+<!-- hint:伏笔类型：身份伏笔 / 道具伏笔 / 对白伏笔 / 能力伏笔 / 事件伏笔 / 意象伏笔 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:伏笔强度：🔴 核心（贯穿全书）/ 🟡 重要（跨多章）/ 🟢 彩蛋（轻量） -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:关联人物：此伏笔涉及的角色名 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:关联章节范围：第 ? 章 ～ 第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:依赖的 M1 规则：此伏笔依赖的世界规则，如"三、禁忌——不得直视神祇" -->
+<!-- slot -->
+<!-- /slot -->
 
-**埋种计划**：
-- 埋种章节：第 ? 章
-- 埋种方式：<!-- 用什么方式让读者接触到这个伏笔？一句对白？一个场景？一个道具？-->
+**埋种计划**
 
-**发展路径**：
-- 第 ? 章 — 强化暗示：<!-- 如何再次暗示或加强 -->
-- 第 ? 章 — 部分揭示：<!-- 读者开始意识到什么？-->
-- 第 ? 章 — 误导/反转（可选）：<!-- 是否有意误导读者？-->
+<!-- hint:埋种章节：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:埋种方式：用什么方式让读者接触到这个伏笔？一句对白？一个场景？一个道具？ -->
+<!-- slot -->
+<!-- /slot -->
 
-**回收计划**：
-- 回收章节：第 ? 章
-- 回收方式：<!-- 如何让读者恍然大悟、拍案叫绝？-->
+**发展路径**
 
-**状态**：🌱 已规划 / 🌿 已埋种 / 🌳 发展中 / 💡 部分揭示 / ✅ 已回收
+<!-- hint:强化暗示：第 ? 章，如何再次暗示或加强 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:部分揭示：第 ? 章，读者开始意识到什么？ -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:误导/反转（可选）：第 ? 章，是否有意误导读者？ -->
+<!-- slot -->
+<!-- /slot -->
+
+**回收计划**
+
+<!-- hint:回收章节：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:回收方式：如何让读者恍然大悟、拍案叫绝？ -->
+<!-- slot -->
+<!-- /slot -->
+
+<!-- hint:状态：🌱 已规划 / 🌿 已埋种 / 🌳 发展中 / 💡 部分揭示 / ✅ 已回收 -->
+<!-- slot -->
+<!-- /slot -->
 
 ---
 
@@ -59,51 +92,109 @@ const FORESHADOWING_TEMPLATE_ZH = `# 伏笔账本
 
 | 字段 | 内容 |
 |------|------|
-| **类型** | |
-| **强度** | |
-| **关联人物** | |
-| **关联章节范围** | |
+<!-- hint:伏笔类型：身份伏笔 / 道具伏笔 / 对白伏笔 / 能力伏笔 / 事件伏笔 / 意象伏笔 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:伏笔强度：🔴 核心 / 🟡 重要 / 🟢 彩蛋 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:关联人物：此伏笔涉及的角色名 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:关联章节范围：第 ? 章 ～ 第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:依赖的 M1 规则：此伏笔依赖的世界规则 -->
+<!-- slot -->
+<!-- /slot -->
 
-**埋种计划**：
-- 埋种章节：第 ? 章
-- 埋种方式：
+**埋种计划**
 
-**发展路径**：
-- 第 ? 章 — 强化暗示：
-- 第 ? 章 — 部分揭示：
-- 第 ? 章 — 误导/反转：
+<!-- hint:埋种章节：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:埋种方式：用什么方式让读者接触到这个伏笔？ -->
+<!-- slot -->
+<!-- /slot -->
 
-**回收计划**：
-- 回收章节：第 ? 章
-- 回收方式：
+**发展路径**
 
-**状态**：🌱 已规划
+<!-- hint:强化暗示：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:部分揭示：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:误导/反转（可选）：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+
+**回收计划**
+
+<!-- hint:回收章节：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:回收方式：如何让读者恍然大悟？ -->
+<!-- slot -->
+<!-- /slot -->
+
+<!-- hint:状态：🌱 已规划 / 🌿 已埋种 / 🌳 发展中 / 💡 部分揭示 / ✅ 已回收 -->
+<!-- slot -->
+<!-- /slot -->
 
 ---
 
 ### 伏笔 #3：{伏笔名称}
 
-| 字段 | 内容 |
-|------|------|
-| **类型** | |
-| **强度** | |
-| **关联人物** | |
-| **关联章节范围** | |
+<!-- hint:伏笔类型：身份伏笔 / 道具伏笔 / 对白伏笔 / 能力伏笔 / 事件伏笔 / 意象伏笔 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:伏笔强度：🔴 核心 / 🟡 重要 / 🟢 彩蛋 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:关联人物：此伏笔涉及的角色名 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:关联章节范围：第 ? 章 ～ 第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:依赖的 M1 规则：此伏笔依赖的世界规则 -->
+<!-- slot -->
+<!-- /slot -->
 
-**埋种计划**：
-- 埋种章节：第 ? 章
-- 埋种方式：
+**埋种计划**
 
-**发展路径**：
-- 第 ? 章 — 强化暗示：
-- 第 ? 章 — 部分揭示：
-- 第 ? 章 — 误导/反转：
+<!-- hint:埋种章节：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:埋种方式：用什么方式让读者接触到这个伏笔？ -->
+<!-- slot -->
+<!-- /slot -->
 
-**回收计划**：
-- 回收章节：第 ? 章
-- 回收方式：
+**发展路径**
 
-**状态**：🌱 已规划
+<!-- hint:强化暗示：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:部分揭示：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:误导/反转（可选）：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+
+**回收计划**
+
+<!-- hint:回收章节：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:回收方式：如何让读者恍然大悟？ -->
+<!-- slot -->
+<!-- /slot -->
+
+<!-- hint:状态：🌱 已规划 / 🌿 已埋种 / 🌳 发展中 / 💡 部分揭示 / ✅ 已回收 -->
+<!-- slot -->
+<!-- /slot -->
 `;
 
 const FORESHADOWING_TEMPLATE_EN = `# Foreshadowing Ledger
@@ -113,36 +204,69 @@ const FORESHADOWING_TEMPLATE_EN = `# Foreshadowing Ledger
 
 ## I. Foreshadowing Strategy Overview
 
-<!-- Describe your overall foreshadowing strategy in a paragraph: dense or sparse? What types dominate? -->
+<!-- hint:Describe your overall foreshadowing strategy in a paragraph: dense or sparse? What types dominate? -->
+<!-- slot -->
+<!-- /slot -->
 
 ## II. Foreshadowing Entries
 
-<!-- Each entry is a card. Add more as needed. Plan at least 3 core hooks before writing. -->
+<!-- hint:Each entry is a card. Add more as needed. Plan at least 3 core hooks before writing. -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Hook #1: {Hook Name}
 
 | Field | Content |
 |------|------|
-| **Type** | Identity / Prop / Dialogue / Ability / Event / Imagery |
-| **Intensity** | 🔴 Core (throughout) / 🟡 Major (multi-chapter) / 🟢 Minor (Easter egg) |
-| **Related Characters** | |
-| **Chapter Range** | ch? ~ ch? |
-| **Depends on M1 Rule** | <!-- World rule this hook depends on, e.g. "III. Taboos -- never gaze upon the deity" --> |
+<!-- hint:Hook Type: Identity / Prop / Dialogue / Ability / Event / Imagery -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Hook Intensity: 🔴 Core (throughout) / 🟡 Major (multi-chapter) / 🟢 Minor (Easter egg) -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Related Characters: Characters involved in this hook -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Chapter Range: ch? ~ ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Depends on M1 Rule: World rule this hook depends on, e.g. "III. Taboos — never gaze upon the deity" -->
+<!-- slot -->
+<!-- /slot -->
 
-**Planting Plan**:
-- Plant in chapter: ch?
-- Method: <!-- How will readers encounter this clue? A line of dialogue? A scene? An object? -->
+**Planting Plan**
 
-**Development Path**:
-- ch? — Reinforcement: <!-- How to reinforce the hint -->
-- ch? — Partial Reveal: <!-- What does the reader begin to suspect? -->
-- ch? — Misdirection (optional): <!-- Any intentional misdirection? -->
+<!-- hint:Plant in Chapter: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Method: How will readers encounter this clue? A line of dialogue? A scene? An object? -->
+<!-- slot -->
+<!-- /slot -->
 
-**Payoff Plan**:
-- Resolve in chapter: ch?
-- Method: <!-- How to make readers gasp "I should have seen it!"? -->
+**Development Path**
 
-**Status**: 🌱 Planned / 🌿 Planted / 🌳 Developing / 💡 Partially Revealed / ✅ Resolved
+<!-- hint:Reinforcement: ch?, how to reinforce the hint -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Partial Reveal: ch?, what does the reader begin to suspect? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Misdirection (optional): ch?, any intentional misdirection? -->
+<!-- slot -->
+<!-- /slot -->
+
+**Payoff Plan**
+
+<!-- hint:Resolve in Chapter: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Method: How to make readers gasp "I should have seen it!"? -->
+<!-- slot -->
+<!-- /slot -->
+
+<!-- hint:Status: 🌱 Planned / 🌿 Planted / 🌳 Developing / 💡 Partially Revealed / ✅ Resolved -->
+<!-- slot -->
+<!-- /slot -->
 
 ---
 
@@ -150,51 +274,109 @@ const FORESHADOWING_TEMPLATE_EN = `# Foreshadowing Ledger
 
 | Field | Content |
 |------|------|
-| **Type** | |
-| **Intensity** | |
-| **Related Characters** | |
-| **Chapter Range** | |
+<!-- hint:Hook Type: Identity / Prop / Dialogue / Ability / Event / Imagery -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Hook Intensity: 🔴 Core / 🟡 Major / 🟢 Minor -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Related Characters: Characters involved in this hook -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Chapter Range: ch? ~ ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Depends on M1 Rule: World rule this hook depends on -->
+<!-- slot -->
+<!-- /slot -->
 
-**Planting Plan**:
-- Plant in chapter: ch?
-- Method:
+**Planting Plan**
 
-**Development Path**:
-- ch? — Reinforcement:
-- ch? — Partial Reveal:
-- ch? — Misdirection:
+<!-- hint:Plant in Chapter: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Method: How will readers encounter this clue? -->
+<!-- slot -->
+<!-- /slot -->
 
-**Payoff Plan**:
-- Resolve in chapter: ch?
-- Method:
+**Development Path**
 
-**Status**: 🌱 Planned
+<!-- hint:Reinforcement: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Partial Reveal: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Misdirection (optional): ch? -->
+<!-- slot -->
+<!-- /slot -->
+
+**Payoff Plan**
+
+<!-- hint:Resolve in Chapter: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Method: How to make readers gasp? -->
+<!-- slot -->
+<!-- /slot -->
+
+<!-- hint:Status: 🌱 Planned / 🌿 Planted / 🌳 Developing / 💡 Partially Revealed / ✅ Resolved -->
+<!-- slot -->
+<!-- /slot -->
 
 ---
 
 ### Hook #3: {Hook Name}
 
-| Field | Content |
-|------|------|
-| **Type** | |
-| **Intensity** | |
-| **Related Characters** | |
-| **Chapter Range** | |
+<!-- hint:Hook Type: Identity / Prop / Dialogue / Ability / Event / Imagery -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Hook Intensity: 🔴 Core / 🟡 Major / 🟢 Minor -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Related Characters: Characters involved in this hook -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Chapter Range: ch? ~ ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Depends on M1 Rule: World rule this hook depends on -->
+<!-- slot -->
+<!-- /slot -->
 
-**Planting Plan**:
-- Plant in chapter: ch?
-- Method:
+**Planting Plan**
 
-**Development Path**:
-- ch? — Reinforcement:
-- ch? — Partial Reveal:
-- ch? — Misdirection:
+<!-- hint:Plant in Chapter: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Method: How will readers encounter this clue? -->
+<!-- slot -->
+<!-- /slot -->
 
-**Payoff Plan**:
-- Resolve in chapter: ch?
-- Method:
+**Development Path**
 
-**Status**: 🌱 Planned
+<!-- hint:Reinforcement: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Partial Reveal: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Misdirection (optional): ch? -->
+<!-- slot -->
+<!-- /slot -->
+
+**Payoff Plan**
+
+<!-- hint:Resolve in Chapter: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Method: How to make readers gasp? -->
+<!-- slot -->
+<!-- /slot -->
+
+<!-- hint:Status: 🌱 Planned / 🌿 Planted / 🌳 Developing / 💡 Partially Revealed / ✅ Resolved -->
+<!-- slot -->
+<!-- /slot -->
 `;
 
 function getForeshadowingTemplate(lang: Lang): string {
@@ -256,7 +438,7 @@ ${worldContext ? `【世界观设定】\n${worldContext}\n` : ''}
 ${outlineContext ? `【长篇框架】\n${outlineContext}\n` : ''}
 ${body.style_notes ? `作者备注：${body.style_notes}` : ''}
 
-请按照以下伏笔账本模板结构，在模板的 <!-- 注释 --> 位置和空白字段中填入规划内容。至少规划 3 条伏笔。
+请按照以下伏笔账本模板结构填入规划内容。模板使用三标记分离格式：每个槽位由 the hint marker（提示文字）+ the slot opening marker（槽位开始）+ the slot closing marker（槽位结束）组成。将内容写在 the slot opening marker 和 the slot closing marker 之间，保留所有标记不变。标题、加粗标签等其他结构保持原样。至少规划 3 条伏笔。
 用${langLabel}输出。
 
 输出模板：

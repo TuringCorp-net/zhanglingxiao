@@ -17,51 +17,118 @@ const OUTLINE_TEMPLATE_ZH = `# 长篇框架大纲
 ## 一、故事概览
 
 ### 一句话梗概
-<!-- 用一句话概括整个故事，类似电梯演讲 -->
+<!-- hint:用一句话概括整个故事，类似电梯演讲 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 故事类型
-<!-- 王道RPG / 悬疑推理 / 史诗奇幻 / 都市情感 / 科幻冒险 ... -->
+<!-- hint:王道RPG / 悬疑推理 / 史诗奇幻 / 都市情感 / 科幻冒险 ... -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 核心冲突
-<!-- 推动整个故事的核心矛盾是什么？谁 vs 谁，为什么？-->
+<!-- hint:推动整个故事的核心矛盾是什么？谁 vs 谁，为什么？ -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 二、主线阶段划分
 
 ### 第一幕：开端
-<!-- 阶段目标、登场人物、关键事件、幕末转折 -->
+<!-- hint:阶段目标、登场人物、关键事件、幕末转折 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 第二幕：发展
-<!-- 可拆为多个子阶段。阶段目标、冲突升级、关键事件、幕末转折 -->
+<!-- hint:可拆为多个子阶段。阶段目标、冲突升级、关键事件、幕末转折 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 第三幕：高潮与结局
-<!-- 阶段目标、最终对决、结局、情感回收 -->
+<!-- hint:阶段目标、最终对决、结局、情感回收 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 三、支线规划
 
-<!-- 每条支线简述：与主线的关系、独立价值、预计占用章节数 -->
-- [ ] 支线A：
-- [ ] 支线B：
+<!-- hint:每条支线简述：与主线的关系、独立价值、预计占用章节数 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:支线A：名称与简述 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:支线B：名称与简述 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 四、节奏规划
 
-| 阶段 | 章节范围 | 节奏 | 情绪曲线 |
-|------|---------|------|---------|
-| 开端 | ch1-ch? | 中速建立 | 好奇→投入 |
-| 发展 | ch?-ch? | 加速升级 | 紧张⇄释放交替 |
-| 高潮 | ch?-ch? | 全速冲刺 | 压抑→爆发 |
-| 结局 | ch?-end | 舒缓回收 | 满足→回味 |
+### 开端
+<!-- hint:章节范围：ch1-ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:节奏：中速建立 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:情绪曲线：好奇→投入 -->
+<!-- slot -->
+<!-- /slot -->
+
+### 发展
+<!-- hint:章节范围：ch?-ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:节奏：加速升级 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:情绪曲线：紧张⇄释放交替 -->
+<!-- slot -->
+<!-- /slot -->
+
+### 高潮
+<!-- hint:章节范围：ch?-ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:节奏：全速冲刺 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:情绪曲线：压抑→爆发 -->
+<!-- slot -->
+<!-- /slot -->
+
+### 结局
+<!-- hint:章节范围：ch?-end -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:节奏：舒缓回收 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:情绪曲线：满足→回味 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 五、关键转折点
 
-<!-- 列出所有不可逆的情节转折，标注预计所在章节 -->
-- [ ]
-- [ ]
+<!-- hint:列出所有不可逆的情节转折，标注预计所在章节 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:转折点 #1：简述与所在章节 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:转折点 #2：简述与所在章节 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 六、伏笔埋设总体规划
 
-<!-- 跨章节伏笔的整体布局（详细追踪由伏笔账本管理） -->
-- [ ]
-- [ ]
+<!-- hint:跨章节伏笔的整体布局（详细追踪由伏笔账本管理） -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:伏笔规划 #1：简述核心伏笔 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:伏笔规划 #2：简述核心伏笔 -->
+<!-- slot -->
+<!-- /slot -->
 `;
 
 const OUTLINE_TEMPLATE_EN = `# Story Framework Outline
@@ -72,51 +139,118 @@ const OUTLINE_TEMPLATE_EN = `# Story Framework Outline
 ## I. Story Overview
 
 ### One-Line Pitch
-<!-- Summarize the entire story in one sentence — an elevator pitch -->
+<!-- hint:Summarize the entire story in one sentence — an elevator pitch -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Story Type
-<!-- Hero's Journey / Mystery-Thriller / Epic Fantasy / Urban Drama / Sci-Fi Adventure ... -->
+<!-- hint:Hero's Journey / Mystery-Thriller / Epic Fantasy / Urban Drama / Sci-Fi Adventure ... -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Core Conflict
-<!-- What is the central conflict driving the entire story? Who vs. Whom, and why? -->
+<!-- hint:What is the central conflict driving the entire story? Who vs. Whom, and why? -->
+<!-- slot -->
+<!-- /slot -->
 
 ## II. Main Plot — Act Structure
 
 ### Act I: Setup
-<!-- Stage goals, introduced characters, key events, act-ending turn -->
+<!-- hint:Stage goals, introduced characters, key events, act-ending turn -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Act II: Development
-<!-- May split into sub-stages. Stage goals, escalating conflict, key events, act-ending turn -->
+<!-- hint:May split into sub-stages. Stage goals, escalating conflict, key events, act-ending turn -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Act III: Climax & Resolution
-<!-- Stage goals, final confrontation, resolution, emotional closure -->
+<!-- hint:Stage goals, final confrontation, resolution, emotional closure -->
+<!-- slot -->
+<!-- /slot -->
 
 ## III. Subplot Planning
 
-<!-- For each subplot: relationship to the main plot, standalone value, estimated chapter count -->
-- [ ] Subplot A:
-- [ ] Subplot B:
+<!-- hint:For each subplot: relationship to the main plot, standalone value, estimated chapter count -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Subplot A: Name and brief description -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Subplot B: Name and brief description -->
+<!-- slot -->
+<!-- /slot -->
 
 ## IV. Pacing Plan
 
-| Act | Chapter Range | Pace | Emotional Arc |
-|------|-------------|------|---------------|
-| Setup | ch1-ch? | Moderate build | Curiosity → Engagement |
-| Development | ch?-ch? | Escalating | Tension ⇄ Release |
-| Climax | ch?-ch? | Full sprint | Suppression → Eruption |
-| Resolution | ch?-end | Gentle unwind | Satisfaction → Resonance |
+### Setup
+<!-- hint:Chapter Range: ch1-ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Pace: Moderate build -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Emotional Arc: Curiosity → Engagement -->
+<!-- slot -->
+<!-- /slot -->
+
+### Development
+<!-- hint:Chapter Range: ch?-ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Pace: Escalating -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Emotional Arc: Tension ⇄ Release -->
+<!-- slot -->
+<!-- /slot -->
+
+### Climax
+<!-- hint:Chapter Range: ch?-ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Pace: Full sprint -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Emotional Arc: Suppression → Eruption -->
+<!-- slot -->
+<!-- /slot -->
+
+### Resolution
+<!-- hint:Chapter Range: ch?-end -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Pace: Gentle unwind -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Emotional Arc: Satisfaction → Resonance -->
+<!-- slot -->
+<!-- /slot -->
 
 ## V. Key Turning Points
 
-<!-- List all irreversible plot turns, with estimated chapter positions -->
-- [ ]
-- [ ]
+<!-- hint:List all irreversible plot turns, with estimated chapter positions -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Turning Point #1: Description and chapter -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Turning Point #2: Description and chapter -->
+<!-- slot -->
+<!-- /slot -->
 
 ## VI. Foreshadowing Master Plan
 
-<!-- Cross-chapter foreshadowing layout (detailed tracking managed by the Foreshadowing Ledger) -->
-- [ ]
-- [ ]
+<!-- hint:Cross-chapter foreshadowing layout (detailed tracking managed by the Foreshadowing Ledger) -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Foreshadowing Plan #1: Core hook description -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Foreshadowing Plan #2: Core hook description -->
+<!-- slot -->
+<!-- /slot -->
 `;
 
 function getOutlineTemplate(lang: Lang): string {
@@ -186,7 +320,7 @@ ${outlineTemplate}
       "estimated_words": 3000
     }
   ],
-  "framework_filled": "根据作品信息填充的长篇框架 Markdown 正文（请将上述框架模板中的 <!-- 注释 --> 替换为实际内容）"
+  "framework_filled": "根据作品信息填充的长篇框架 Markdown 正文（模板使用三标记分离格式：the hint marker + the slot opening marker + the slot closing marker，内容写在 slot 和 /slot 之间，保留所有标记）"
 }
 
 要求：

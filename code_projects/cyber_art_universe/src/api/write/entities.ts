@@ -16,71 +16,129 @@ const CHARACTER_CARD_TEMPLATE_ZH = (name: string) => `# 人物卡：${name}
 ## 一、基本信息
 
 - **姓名**：${name}
-- **身份/职业**：
-- **年龄**：
-- **外表特征**：
-- **在故事中的角色**：主角 / 核心配角 / 阶段人物 / 章节人物
+<!-- hint:身份/职业：角色的社会身份和职业 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:年龄：角色的年龄 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:外表特征：角色的外貌描述 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:在故事中的角色：主角 / 核心配角 / 阶段人物 / 章节人物 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 二、性格与动机
 
 ### 核心性格
-<!-- 3-5 个关键词描述性格特征 -->
+<!-- hint:3-5 个关键词描述性格特征 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 内在动机
-<!-- 这个角色真正想要的是什么？深层驱动力 -->
+<!-- hint:这个角色真正想要的是什么？深层驱动力 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 外在目标
-<!-- 这个角色表面上在追求什么？-->
+<!-- hint:这个角色表面上在追求什么？ -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 恐惧与弱点
-<!-- 角色的软肋、害怕什么、性格缺陷 -->
+<!-- hint:角色的软肋、害怕什么、性格缺陷 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 价值观与底线
-<!-- 角色不会逾越的原则 -->
+<!-- hint:角色不会逾越的原则 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 三、能力与限制
 
 ### 能力/技能
-<!-- 角色擅长什么，与世界观的力量体系如何关联 -->
+<!-- hint:角色擅长什么，与世界观的力量体系如何关联 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 能力边界
-<!-- 角色不能做什么（受 Setting Bible 世界规则约束）-->
+<!-- hint:角色不能做什么（受 Setting Bible 世界规则约束） -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 资源与人脉
-<!-- 角色可调用的外部资源 -->
+<!-- hint:角色可调用的外部资源 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 关联的 M1 世界规则
-<!-- 列出此角色受约束的世界规则，如："一、力量体系——魔法需要等价交换" -->
+<!-- hint:列出此角色受约束的世界规则，如："一、力量体系——魔法需要等价交换" -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 关联的 M4 伏笔
-<!-- 与此角色相关的伏笔 ID 列表，如：h_001, h_003 -->
+<!-- hint:与此角色相关的伏笔 ID 列表，如：h_001, h_003 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 四、关系网络
 
 ### 与主角的关系
+<!-- hint:描述此角色与主角之间的关系：是盟友？师徒？对手？ -->
+<!-- slot -->
+<!-- /slot -->
 ### 与其他核心人物的关系
+<!-- hint:与主角之外的关键人物的关系 -->
+<!-- slot -->
+<!-- /slot -->
 ### 敌对/竞争关系
+<!-- hint:此角色的对手、敌人或竞争者 -->
+<!-- slot -->
+<!-- /slot -->
 ### 情感关系
+<!-- hint:恋爱、亲情、友情等情感纽带 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 五、成长弧线
 
 - **弧线类型**：<!-- 成长(growth) / 堕落(fall) / 救赎(redemption) / 悲剧(tragic) / 觉醒(awakening) / 稳定(steady) -->
 
 ### 起点状态
-<!-- 角色在故事开始时的处境和心理状态 -->
+<!-- hint:角色在故事开始时的处境和心理状态 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 关键成长节点
-<!-- 角色在哪些情节节点发生重大变化 -->
+<!-- hint:角色在哪些情节节点发生重大变化 -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 终点状态（预期）
-<!-- 角色在故事结束时预计的状态 -->
+<!-- hint:角色在故事结束时预计的状态 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## 六、语言与行为特征
 
 ### 口头禅/说话风格
+<!-- hint:此角色的标志性语言风格、口头禅 -->
+<!-- slot -->
+<!-- /slot -->
 ### 习惯动作
+<!-- hint:此角色不自觉的身体语言、习惯性动作 -->
+<!-- slot -->
+<!-- /slot -->
 ### 外貌细节
+<!-- hint:区别于其他角色的外貌标志 -->
+<!-- slot -->
+<!-- /slot -->
 ### 特殊癖好
+<!-- hint:与众不同的嗜好或怪癖 -->
+<!-- slot -->
+<!-- /slot -->
 `;
 
 const CHARACTER_CARD_TEMPLATE_EN = (name: string) => `# Character Card: ${name}
@@ -91,71 +149,129 @@ const CHARACTER_CARD_TEMPLATE_EN = (name: string) => `# Character Card: ${name}
 ## I. Basic Information
 
 - **Name**: ${name}
-- **Identity / Occupation**:
-- **Age**:
-- **Appearance**:
-- **Role in Story**: Protagonist / Key Supporting / Stage Character / Chapter Character
+<!-- hint:Identity / Occupation: The character's social identity and profession -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Age: The character's age -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Appearance: Physical description of the character -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Role in Story: Protagonist / Key Supporting / Stage Character / Chapter Character -->
+<!-- slot -->
+<!-- /slot -->
 
 ## II. Personality & Motivation
 
 ### Core Personality
-<!-- 3-5 keywords describing personality traits -->
+<!-- hint:3-5 keywords describing personality traits -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Inner Motivation
-<!-- What does this character truly want? Deep driving force -->
+<!-- hint:What does this character truly want? Deep driving force -->
+<!-- slot -->
+<!-- /slot -->
 
 ### External Goal
-<!-- What is this character pursuing on the surface? -->
+<!-- hint:What is this character pursuing on the surface? -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Fears & Weaknesses
-<!-- Soft spots, what they fear, character flaws -->
+<!-- hint:Soft spots, what they fear, character flaws -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Values & Bottom Lines
-<!-- Principles they will not cross -->
+<!-- hint:Principles they will not cross -->
+<!-- slot -->
+<!-- /slot -->
 
 ## III. Abilities & Limitations
 
 ### Skills / Abilities
-<!-- What is the character good at? How does it relate to the world's power system? -->
+<!-- hint:What is the character good at? How does it relate to the world's power system? -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Ability Boundaries
-<!-- What can the character NOT do (constrained by the Setting Bible's world rules)? -->
+<!-- hint:What can the character NOT do (constrained by the Setting Bible's world rules)? -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Resources & Connections
-<!-- External resources the character can call upon -->
+<!-- hint:External resources the character can call upon -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Related M1 World Rules
-<!-- List the world rules that constrain this character, e.g. "I. Power System — magic requires equivalent exchange" -->
+<!-- hint:List the world rules that constrain this character, e.g. "I. Power System — magic requires equivalent exchange" -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Related M4 Foreshadowing
-<!-- Foreshadowing hook IDs related to this character, e.g. h_001, h_003 -->
+<!-- hint:Foreshadowing hook IDs related to this character, e.g. h_001, h_003 -->
+<!-- slot -->
+<!-- /slot -->
 
 ## IV. Relationship Network
 
 ### Relationship with Protagonist
+<!-- hint:Describe the relationship with the protagonist: ally, mentor, rival? -->
+<!-- slot -->
+<!-- /slot -->
 ### Relationships with Other Key Characters
+<!-- hint:Relationships with key characters other than the protagonist -->
+<!-- slot -->
+<!-- /slot -->
 ### Hostile / Competitive Relationships
+<!-- hint:This character's opponents, enemies, or competitors -->
+<!-- slot -->
+<!-- /slot -->
 ### Romantic / Emotional Relationships
+<!-- hint:Romantic, familial, friendship, and other emotional bonds -->
+<!-- slot -->
+<!-- /slot -->
 
 ## V. Growth Arc
 
 - **Arc Type**: <!-- growth / fall / redemption / tragic / awakening / steady -->
 
 ### Starting State
-<!-- The character's situation and mental state at the beginning of the story -->
+<!-- hint:The character's situation and mental state at the beginning of the story -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Key Growth Nodes
-<!-- At which plot nodes does the character undergo significant change? -->
+<!-- hint:At which plot nodes does the character undergo significant change? -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Ending State (Projected)
-<!-- The expected state of the character at the end of the story -->
+<!-- hint:The expected state of the character at the end of the story -->
+<!-- slot -->
+<!-- /slot -->
 
 ## VI. Speech & Behavioral Traits
 
 ### Catchphrases / Speaking Style
+<!-- hint:Signature speech patterns, catchphrases -->
+<!-- slot -->
+<!-- /slot -->
 ### Habitual Gestures
+<!-- hint:Unconscious body language, habitual movements -->
+<!-- slot -->
+<!-- /slot -->
 ### Appearance Details
+<!-- hint:Distinctive appearance markers that set this character apart -->
+<!-- slot -->
+<!-- /slot -->
 ### Quirks
+<!-- hint:Unique quirks or eccentricities -->
+<!-- slot -->
+<!-- /slot -->
 `;
 
 function getCharacterCardTemplate(name: string, lang: Lang): string {

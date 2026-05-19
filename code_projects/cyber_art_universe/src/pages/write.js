@@ -159,7 +159,7 @@ async function switchModule(module) {
   });
 
   if (!state.currentWorkId) return;
-  qs('#writing-editor').value = '';
+  showTextEditor('');
 
   switch (module) {
     case 'original_concept': await loadM0(); break;
@@ -184,6 +184,417 @@ function updateElfContext() {
 }
 
 // ============================================================
+// Slot Editor Engine
+// ============================================================
+var _slotData = null; // 缓存的 parse 结果，用于序列化
+
+function escSlot(s) {
+  return s.replace(/<!--/g, '<\\!--');
+}
+function unescSlot(s) {
+  return s.replace(/<\\!--/g, '<!--');
+}
+
+// 解析模板 markdown → { groups: [{title, segments}], freeContent }
+function parseSlotTemplate(md) {
+  if (!md) return { groups: [{ title: '', segments: [] }], freeContent: '' };
+
+  // 找最后一个 --- 作为自由编辑区分隔
+  var sepRe = /\n---\n/g;
+  var sepPositions = [];
+  var m;
+  while ((m = sepRe.exec(md)) !== null) {
+    sepPositions.push(m.index);
+  }
+
+  var templateArea = md;
+  var freeContent = '';
+
+  if (sepPositions.length > 0) {
+    var lastIdx = sepPositions[sepPositions.length - 1];
+    templateArea = md.substring(0, lastIdx);
+    freeContent = md.substring(lastIdx + 5).trim();
+  }
+
+  // 模板区按 --- 拆 group
+  var groupParts = templateArea.split(/\n---\n/);
+  var groups = [];
+  for (var g = 0; g < groupParts.length; g++) {
+    var gm = groupParts[g].trim();
+    if (!gm) continue;
+    var segments = parseSegments(gm);
+    var title = '';
+    var tm = gm.match(/^###\s+(.+)$/m);
+    if (tm) title = tm[1].trim();
+    groups.push({ title: title, segments: segments });
+  }
+
+  if (groups.length === 0) {
+    groups.push({ title: '', segments: [] });
+  }
+
+  return { groups: groups, freeContent: freeContent };
+}
+
+// 解析单个 markdown 块 → 框架/槽位段
+// 解析单个 markdown 块 → 框架/槽位段
+// 解析单个 markdown 块 → 框架/槽位段
+// 三标记分离格式：<!-- hint:text --> <!-- slot --> ... <!-- /slot -->
+function parseSegments(md) {
+  var segments = [];
+  var lines = md.split('\n');
+  var i = 0;
+  var pendingHint = ''; // 最近遇到的 hint，将用于下一个 slot
+
+  while (i < lines.length) {
+    var line = lines[i];
+
+    // <!-- hint:text --> — 记录提示文字
+    var hm = line.match(/^\s*<!--\s*hint:\s*(.+?)\s*-->\s*$/);
+    if (hm) {
+      pendingHint = hm[1].trim();
+      i++;
+      continue;
+    }
+
+    // <!-- slot --> — 槽位开始
+    if (/^\s*<!--\s*slot\s*-->\s*$/.test(line)) {
+      var content = '';
+      i++;
+      while (i < lines.length) {
+        var nl = lines[i];
+        if (/^\s*<!--\s*\/slot\s*-->\s*$/.test(nl)) { i++; break; }
+        content += (content ? '\n' : '') + nl;
+        i++;
+      }
+      segments.push({ type: 'slot', label: pendingHint, content: unescSlot(content.trim()) });
+      pendingHint = '';
+      continue;
+    }
+
+    // Framework
+    if (line.trim()) {
+      var fw = '';
+      while (i < lines.length) {
+        var fl = lines[i];
+        if (/^\s*<!--\s*(?:hint:|slot|\/slot)/.test(fl)) break;
+        fw += (fw ? '\n' : '') + fl;
+        i++;
+      }
+      if (fw.trim()) {
+        var html;
+        try {
+          html = marked.parse(fw.trim());
+        } catch (e) {
+          html = renderBibleContent(fw.trim());
+        }
+        segments.push({ type: 'framework', html: html, _md: fw.trim() });
+      }
+    } else {
+      i++;
+    }
+  }
+
+  return segments;
+}
+
+
+
+// 渲染槽位编辑器到 DOM
+function renderSlotEditor(data) {
+  _slotData = data;
+  var groupsEl = document.getElementById('slot-groups');
+  if (!groupsEl) return;
+  groupsEl.innerHTML = '';
+
+  // 检测是否有可编辑槽位
+  var hasSlots = false;
+  (data.groups || []).forEach(function (g) {
+    (g.segments || []).forEach(function (s) {
+      if (s.type === 'slot') hasSlots = true;
+    });
+  });
+
+  if (!hasSlots) {
+    // 无槽位：整个内容放入自由编辑区
+    groupsEl.innerHTML = '<div class="slot-framework" style="padding:0.75rem 1rem;color:var(--text-dim);font-size:0.78rem;font-style:italic;">此内容无结构化槽位（可能由AI生成或为自由文本），请在下方自由编辑区修改。</div>';
+    var freeArea = document.getElementById('slot-free-area');
+    if (freeArea) {
+      // 合并所有 framework 文本作为自由区内容
+      var raw = '';
+      (data.groups || []).forEach(function (g) {
+        (g.segments || []).forEach(function (s) {
+          if (s._md) raw += (raw ? '\n' : '') + s._md;
+        });
+      });
+      if (data.freeContent) raw += (raw ? '\n\n---\n\n' : '') + data.freeContent;
+      freeArea.value = raw || data.freeContent || '';
+    }
+    return;
+  }
+
+  (data.groups || []).forEach(function (group, gi) {
+    var gEl = document.createElement('div');
+    gEl.className = 'slot-group';
+
+    if (group.title) {
+      var hdr = document.createElement('div');
+      hdr.className = 'slot-group-header';
+      var ttl = document.createElement('span');
+      ttl.className = 'slot-group-title';
+      ttl.textContent = group.title;
+      hdr.appendChild(ttl);
+      var acts = document.createElement('div');
+      acts.className = 'slot-group-actions';
+      if (data.groups.length > 1) {
+        var delBtn = document.createElement('button');
+        delBtn.className = 'slot-group-delete';
+        delBtn.innerHTML = '&times;';
+        delBtn.title = '删除此条目';
+        delBtn.addEventListener('click', function () { removeSlotGroup(delBtn); });
+        acts.appendChild(delBtn);
+      }
+      hdr.appendChild(acts);
+      gEl.appendChild(hdr);
+    }
+
+    var body = document.createElement('div');
+    body.className = 'slot-group-body';
+
+    (group.segments || []).forEach(function (seg) {
+      if (seg.type === 'framework') {
+        var fwDiv = document.createElement('div');
+        fwDiv.className = 'slot-framework';
+        fwDiv.innerHTML = seg.html;
+        body.appendChild(fwDiv);
+      } else if (seg.type === 'slot') {
+        var item = document.createElement('div');
+        item.className = 'slot-item';
+        var lbl = document.createElement('div');
+        lbl.className = 'slot-label';
+        lbl.innerHTML = '<span class="slot-label-icon">&#9656;</span> ' + escHtml(seg.label);
+        item.appendChild(lbl);
+        var ta = document.createElement('textarea');
+        ta.className = 'slot-textarea';
+        ta.rows = Math.max(2, Math.min(6, (seg.content || '').split('\n').length));
+        ta.value = seg.content || '';
+        ta.placeholder = seg.label;
+        item.appendChild(ta);
+        body.appendChild(item);
+      }
+    });
+
+    gEl.appendChild(body);
+    groupsEl.appendChild(gEl);
+  });
+
+  // [+] 添加按钮
+  var addBtn = document.createElement('button');
+  addBtn.className = 'slot-group-add';
+  addBtn.textContent = '+ 添加条目';
+  addBtn.addEventListener('click', addSlotGroup);
+  groupsEl.appendChild(addBtn);
+
+  // 自由编辑区
+  var freeArea = document.getElementById('slot-free-area');
+  if (freeArea) {
+    freeArea.value = data.freeContent || '';
+  }
+}
+
+// 序列化槽位内容 → 完整 markdown
+function serializeSlotContent() {
+  if (!_slotData) return '';
+  var groupsEl = document.getElementById('slot-groups');
+  if (!groupsEl) return '';
+
+  // 无槽位：直接返回自由编辑区内容
+  var textareas = groupsEl.querySelectorAll('.slot-textarea');
+  if (textareas.length === 0) {
+    var freeArea = document.getElementById('slot-free-area');
+    return freeArea ? freeArea.value : '';
+  }
+
+  var result = '';
+  var taIdx = 0;
+
+  _slotData.groups.forEach(function (group, gi) {
+    if (gi > 0) result += '\n---\n\n';
+
+    group.segments.forEach(function (seg) {
+      if (seg.type === 'framework') {
+        result += (result ? '\n' : '') + (seg._md || '');
+      } else if (seg.type === 'slot') {
+        result += (result && !result.endsWith('\n') ? '\n' : '') + '<!-- hint:' + seg.label + ' -->\n<!-- slot -->\n';
+        var val = '';
+        if (taIdx < textareas.length) {
+          val = textareas[taIdx].value.trim();
+          taIdx++;
+        }
+        result += escSlot(val) + '\n<!-- /slot -->\n';
+      }
+    });
+    if (result && !result.endsWith('\n\n')) result += '\n';
+  });
+
+  var freeArea = document.getElementById('slot-free-area');
+  var freeContent = freeArea ? freeArea.value.trim() : '';
+  if (freeContent) {
+    result += '\n---\n\n' + freeContent + '\n';
+  }
+
+  return result.trim() + '\n';
+}
+
+// 添加/删除 group
+function addSlotGroup() {
+  if (!_slotData || !_slotData.groups || _slotData.groups.length === 0) return;
+  var lastGroup = _slotData.groups[_slotData.groups.length - 1];
+  var newNum = _slotData.groups.length + 1;
+  var newTitle = lastGroup.title ? lastGroup.title.replace(/#\d+/, '#' + newNum) : '';
+  var newSegments = lastGroup.segments.map(function (seg) {
+    if (seg.type === 'slot') return { type: 'slot', label: seg.label, content: '' };
+    return { type: 'framework', html: seg.html, _md: seg._md };
+  });
+  _slotData.groups.push({ title: newTitle, segments: newSegments });
+  renderSlotEditor(_slotData);
+}
+
+function removeSlotGroup(btn) {
+  var groupEl = btn.closest('.slot-group');
+  if (!groupEl || !_slotData) return;
+  var groupsEl = document.getElementById('slot-groups');
+  var allGroups = groupsEl.querySelectorAll('.slot-group');
+  var idx = Array.prototype.indexOf.call(allGroups, groupEl);
+  if (idx >= 0 && _slotData.groups.length > 1) {
+    _slotData.groups.splice(idx, 1);
+    renderSlotEditor(_slotData);
+  }
+}
+
+// 显示/切换编辑器类型
+function showSlotEditor(md) {
+  var te = qs('#writing-editor');
+  var se = qs('#slot-editor');
+  var fe = qs('#form-editor');
+  if (te) te.style.display = 'none';
+  if (fe) fe.style.display = 'none';
+  if (se) {
+    se.style.display = 'flex';
+    se.style.flexDirection = 'column';
+    se.style.overflowY = 'auto';
+    se.style.flex = '1';
+    renderSlotEditor(parseSlotTemplate(md));
+  }
+}
+
+function showTextEditor(val) {
+  var te = qs('#writing-editor');
+  var se = qs('#slot-editor');
+  var fe = qs('#form-editor');
+  if (se) se.style.display = 'none';
+  if (fe) fe.style.display = 'none';
+  if (te) {
+    te.style.display = 'block';
+    te.value = val || '';
+  }
+}
+
+function showFormEditor(intentData) {
+  var te = qs('#writing-editor');
+  var se = qs('#slot-editor');
+  var fe = qs('#form-editor');
+  if (te) te.style.display = 'none';
+  if (se) se.style.display = 'none';
+  if (!fe) return;
+  fe.style.display = 'block';
+
+  var fields = [
+    { key: 'goal', label: '写作目标', type: 'textarea', hint: '本章的核心写作目标是什么？' },
+    { key: 'emotional_goal', label: '情绪目标', type: 'input', hint: '希望读者产生什么情绪？' },
+    { key: 'pov_character', label: '视角角色', type: 'input', hint: '本章以谁的视角展开？' },
+    { key: 'pov_strategy', label: '视角策略', type: 'input', hint: '第一人称/第三人称限制/第三人称全知？' },
+    { key: 'scene_type', label: '场景类型', type: 'input', hint: '对话/动作/内心/描写/混合？' },
+    { key: 'opening_hook', label: '开篇钩子', type: 'textarea', hint: '如何抓住读者的注意力？' },
+    { key: 'reversal_point', label: '反转点', type: 'textarea', hint: '本章的转折或意外？' },
+    { key: 'cliffhanger', label: '章末卡点', type: 'textarea', hint: '如何让读者迫不及待翻下一章？' },
+    { key: 'hooks', label: '钩子', type: 'input', hint: '逗号分隔' },
+    { key: 'foreshadowing_ids', label: '关联伏笔', type: 'input', hint: '逗号分隔的伏笔 ID' },
+    { key: 'style_notes', label: '风格备注', type: 'textarea', hint: '本章的风格提示' },
+    { key: 'visual_keywords', label: '视觉关键词', type: 'input', hint: '逗号分隔' },
+    { key: 'camera_notes', label: '镜头备注', type: 'textarea', hint: '如果有镜头/分镜想法' },
+  ];
+
+  var container = document.getElementById('form-fields');
+  if (!container) return;
+  container.innerHTML = '';
+
+  fields.forEach(function (f) {
+    var div = document.createElement('div');
+    div.className = 'form-field';
+    var lbl = document.createElement('div');
+    lbl.className = 'form-field-label';
+    lbl.textContent = f.label;
+    div.appendChild(lbl);
+
+    var val = '';
+    if (f.key === 'opening_hook' || f.key === 'reversal_point' || f.key === 'cliffhanger') {
+      val = (intentData && intentData.structure && intentData.structure[f.key]) || '';
+    } else if (f.key === 'hooks' || f.key === 'foreshadowing_ids' || f.key === 'visual_keywords') {
+      var arr = (intentData && intentData[f.key]) || [];
+      val = Array.isArray(arr) ? arr.join(', ') : '';
+    } else {
+      val = (intentData && intentData[f.key]) || '';
+    }
+
+    if (f.type === 'textarea') {
+      var ta = document.createElement('textarea');
+      ta.className = 'form-field-textarea';
+      ta.dataset.fieldKey = f.key;
+      ta.value = val;
+      ta.rows = f.key === 'goal' ? 3 : 2;
+      ta.placeholder = f.hint || '';
+      div.appendChild(ta);
+    } else {
+      var inp = document.createElement('input');
+      inp.className = 'form-field-input';
+      inp.dataset.fieldKey = f.key;
+      inp.value = val;
+      inp.placeholder = f.hint || '';
+      div.appendChild(inp);
+    }
+    if (f.hint) {
+      var hint = document.createElement('div');
+      hint.className = 'form-field-hint';
+      hint.textContent = f.hint;
+      div.appendChild(hint);
+    }
+    container.appendChild(div);
+  });
+}
+
+function serializeFormContent() {
+  var container = document.getElementById('form-fields');
+  if (!container) return '{}';
+  var result = {};
+  container.querySelectorAll('[data-field-key]').forEach(function (el) {
+    var key = el.dataset.fieldKey;
+    var val = el.value.trim();
+    if (key === 'hooks' || key === 'foreshadowing_ids' || key === 'visual_keywords') {
+      result[key] = val ? val.split(/[,;，；]/).map(function (s) { return s.trim(); }).filter(Boolean) : [];
+    } else if (key === 'opening_hook' || key === 'reversal_point' || key === 'cliffhanger') {
+      if (!result.structure) result.structure = {};
+      result.structure[key] = val;
+    } else {
+      result[key] = val;
+    }
+  });
+  var chIdx = state.currentSectionTitle ? (state.currentSectionTitle.match(/(\d+)/) || [])[1] : null;
+  if (chIdx) result.chapter_index = parseInt(chIdx, 10);
+  return JSON.stringify(result, null, 2);
+}
+
+// ============================================================
 // M0: 原始构想
 // ============================================================
 async function loadM0() {
@@ -196,7 +607,7 @@ async function loadM0() {
   console.log('[SF:M0] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'hasData' : 'noData');
   var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
   console.log('[SF:M0] content len=' + content.length + ', is_empty=' + (data && data.data && data.data.is_empty));
-  qs('#writing-editor').value = content;
+  showTextEditor(content);
 }
 
 // ============================================================
@@ -222,11 +633,11 @@ async function loadM2() {
     div.className = 'bible-rendered';
     div.innerHTML = renderBibleContent(outlineMd);
     left.appendChild(div);
-    qs('#writing-editor').value = outlineMd;
+    showSlotEditor(outlineMd);
   } else {
     console.log('[SF:M2] FAILED: no outline_md');
     left.appendChild(errorHTML(t('label.load_failed')));
-    qs('#writing-editor').value = '';
+    showTextEditor('');
   }
 }
 
@@ -245,11 +656,11 @@ async function loadBibleModule(module, apiPath) {
     div.className = 'bible-rendered';
     div.innerHTML = renderBibleContent(content);
     left.appendChild(div);
-    qs('#writing-editor').value = content;
+    showSlotEditor(content);
   } else {
     console.log('[SF:M1] FAILED: no content');
     left.appendChild(errorHTML(t('label.load_failed')));
-    qs('#writing-editor').value = '';
+    showTextEditor('');
   }
 }
 
@@ -257,7 +668,7 @@ async function loadBibleModule(module, apiPath) {
 // M3: 人物卡
 // ============================================================
 async function loadM3() {
-  qs('#writing-editor').value = '';
+  showTextEditor('');
 
   await renderEntityCardList();
 }
@@ -304,7 +715,8 @@ async function renderEntityCardList() {
 async function openEntityCard(entityId, name) {
   state.currentEntityId = entityId;
   var data = await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
-  qs('#writing-editor').value = (data && data.ok && data.data.content) ? data.data.content : '';
+  var content = (data && data.ok && data.data.content) ? data.data.content : '';
+  showSlotEditor(content);
 renderEntityCardList();
   updateElfContext();
 }
@@ -313,7 +725,7 @@ renderEntityCardList();
 // M4: 伏笔账本
 // ============================================================
 async function loadM4() {
-  qs('#writing-editor').value = '';
+  showTextEditor('');
 
   await renderFhCardList();
 }
@@ -393,7 +805,7 @@ async function renderFhCardList() {
 
 function openFhCard(fhId, title, content) {
   state.currentFhId = fhId;
-  qs('#writing-editor').value = content || '';
+  showSlotEditor(content || '');
 renderFhCardList();
 }
 
@@ -401,13 +813,13 @@ renderFhCardList();
 // M5 / M6: 章节蓝图 / 逐章编写
 // ============================================================
 async function loadM5() {
-  qs('#writing-editor').value = '';
+  showTextEditor('');
 
   await loadChapterCardList();
 }
 
 async function loadM6() {
-  qs('#writing-editor').value = '';
+  showTextEditor('');
 
   await loadChapterCardList();
 }
@@ -480,40 +892,17 @@ async function openChapter(sectionId, title) {
     var data = await hGet(url);
     console.log('[SF:openChapter:M5] intent response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'hasIntent=' + !!data.data.intent : 'noData');
     if (data && data.ok && data.data.intent) {
-      var i = data.data.intent;
-      var lines = [];
-      lines.push('# 意图卡：' + (i.chapter_index ? '第' + i.chapter_index + '章' : title));
-      lines.push('');
-      lines.push('## 写作目标');
-      lines.push(i.goal || '');
-      if (i.emotional_goal) lines.push('\n**情绪目标**：' + i.emotional_goal);
-      if (i.pov_character) lines.push('**视角角色**：' + i.pov_character + (i.pov_strategy ? '（' + i.pov_strategy + '）' : ''));
-      if (i.scene_type) lines.push('**场景类型**：' + i.scene_type);
-      if (i.hooks && i.hooks.length) lines.push('**钩子**：' + i.hooks.join('；'));
-      if (i.foreshadowing_ids && i.foreshadowing_ids.length) lines.push('**关联伏笔**：' + i.foreshadowing_ids.join(', '));
-      if (i.style_notes) lines.push('**风格备注**：' + i.style_notes);
-      if (i.structure) {
-        lines.push('\n## 结构');
-        if (i.structure.opening_hook) lines.push('**开篇钩子**：' + i.structure.opening_hook);
-        if (i.structure.reversal_point) lines.push('**反转点**：' + i.structure.reversal_point);
-        if (i.structure.cliffhanger) lines.push('**章末卡点**：' + i.structure.cliffhanger);
-      }
-      if (i.visual_keywords) lines.push('**视觉关键词**：' + i.visual_keywords.join(' / '));
-      if (i.camera_notes) lines.push('**镜头备注**：' + i.camera_notes);
-      var result = lines.join('\n');
-      console.log('[SF:openChapter:M5] writing ' + result.length + ' chars to editor');
-      qs('#writing-editor').value = result;
+      showFormEditor(data.data.intent);
     } else {
-      console.log('[SF:openChapter:M5] FAILED: no intent data');
-      qs('#writing-editor').value = '';
+      showFormEditor({ goal: '', chapter_index: (title.match(/(\d+)/) || [])[1] });
     }
   } else {
-    // M6: 章节正文
+    // M6: 章节正文 — 自由编辑
     var url2 = '/api/content/' + state.currentWorkId + '/sections/' + sectionId + '?mode=full';
     console.log('[SF:openChapter:M6] fetching section: ' + url2);
     var d = await hGet(url2);
     console.log('[SF:openChapter:M6] section response:', d ? 'ok=' + d.ok : 'NULL', 'bodyLen=' + (d && d.ok && d.data && d.data.body ? d.data.body.length : 0));
-    qs('#writing-editor').value = (d && d.ok && d.data.body) ? d.data.body : '';
+    showTextEditor((d && d.ok && d.data.body) ? d.data.body : '');
   }
 
   // 刷新左侧列表以高亮当前选中
@@ -559,20 +948,36 @@ function autoSave() {
 
 async function saveModuleContent(silent) {
   var wid = state.currentWorkId;
-  var body = qs('#writing-editor').value;
   if (!wid) return;
   var mod = state.currentModule;
+
   if (mod === 'original_concept') {
+    var body = qs('#writing-editor').value;
     await hPut('/api/write/original-concept/' + wid, { content: body });
   } else if (mod === 'worldbuilding') {
-    await hPut('/api/write/worldbuilding/' + wid, { content: body });
+    await hPut('/api/write/worldbuilding/' + wid, { content: serializeSlotContent() });
+  } else if (mod === 'outline') {
+    await hPut('/api/write/outline/' + wid, { outline_md: serializeSlotContent() });
   } else if (mod === 'writing' && state.currentSectionId) {
+    var body = qs('#writing-editor').value;
     await hPut('/api/write/works/' + wid + '/sections/' + state.currentSectionId, { title: state.currentSectionTitle, body: body });
   } else if (mod === 'characters' && state.currentEntityId) {
-    await hPut('/api/write/works/' + wid + '/entities/' + state.currentEntityId, { description: body });
+    await hPut('/api/write/works/' + wid + '/entities/' + state.currentEntityId + '/card', { content: serializeSlotContent() });
   } else if (mod === 'foreshadowing') {
-    await hPut('/api/write/foreshadowing/' + wid, { content: body });
+    await hPut('/api/write/foreshadowing/' + wid, { content: serializeSlotContent() });
+  } else if (mod === 'chapters' && state.currentSectionId) {
+    // M5: 表单编辑 → 通过 POST intent 保存
+    try {
+      var intentObj = JSON.parse(serializeFormContent());
+      intentObj.work_id = wid;
+      intentObj.section_id = state.currentSectionId;
+      intentObj.chapter_index = intentObj.chapter_index || (state.currentSectionTitle.match(/(\d+)/) || [])[1];
+      await hPost('/api/write/draft/intent', intentObj);
+    } catch (e) {
+      console.error('[SF:save] M5 serialize failed:', e);
+    }
   }
+  refreshPipelineGuide(wid);
 }
 
 async function aiGenerateForModule() {
@@ -591,7 +996,7 @@ async function aiGenerateForModule() {
     loadM4();
   } else if ((state.currentModule === 'writing' || state.currentModule === 'chapters') && state.currentSectionId) {
     var data = await hPost('/api/write/draft/generate', { work_id: wid, section_id: state.currentSectionId });
-    if (data && data.ok) qs('#writing-editor').value = data.data.body || '';
+    if (data && data.ok) showTextEditor(data.data.body || '');
   }
   refreshPipelineGuide(wid);
 }
@@ -602,7 +1007,7 @@ async function aiPolishForModule() {
   if (state.currentModule === 'writing' && sid) {
     if (!confirm(t('prompt.ai_polish_confirm'))) return;
     var data = await hPost('/api/write/draft/polish', { work_id: wid, section_id: sid });
-    if (data && data.ok) qs('#writing-editor').value = data.data.body || '';
+    if (data && data.ok) showTextEditor(data.data.body || '');
   } else {
     // 对于非 M6 模块，polish = 用当前编辑器内容调用
     StoryElf.toggle();
@@ -730,6 +1135,9 @@ document.addEventListener('DOMContentLoaded', function () {
   initSplitDrag();
 
   qs('#writing-editor').addEventListener('input', autoSave);
+  qs('#slot-editor').addEventListener('input', function (e) {
+    if (e.target.tagName === 'TEXTAREA') autoSave();
+  });
   document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveModuleContent(); }
   });
