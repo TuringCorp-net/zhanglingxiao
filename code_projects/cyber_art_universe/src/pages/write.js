@@ -1,4 +1,4 @@
-// Story Forger — 写作桌主逻辑（v2.0：左右分栏 + Pipeline 唯一导航）
+// Story Forger — 写作桌主逻辑（v2.0：左右分栏 + Pipeline 唯一导航 + 槽位编辑器）
 // 依赖：write-api.js (HTTP 层)
 
 // ============================================================
@@ -184,6 +184,107 @@ function updateElfContext() {
 }
 
 // ============================================================
+// Rotating Hint Engine
+// ============================================================
+var _hintTimer = null;
+var _hintIndex = {};  // {module: current index} — 跨语言切换保持不变
+var _hintShown = {};  // {module: [shown indices]} — 避免短期重复
+var _hintCache = {};  // {module: hints[]}
+
+async function loadRotatingHint(module) {
+  var left = qs('#split-left');
+  // 移除旧提示
+  var old = left.querySelector('.rotating-hint');
+  if (old) old.remove();
+
+  // 添加占位
+  var el = qs('#tmpl-rotating-hint').content.cloneNode(true);
+  left.appendChild(el);
+
+  var textEl = left.querySelector('.hint-text');
+
+  var hints = [];
+  try {
+    var data = await hGet('/api/write/hints/' + module + '?work_id=' + (state.currentWorkId || '') + '&_t=' + Date.now());
+    if (data && data.ok) {
+      hints = data.data.all || [];
+    }
+  } catch (e) {}
+
+  if (hints.length === 0) return;
+
+  // 缓存
+  _hintCache[module] = hints;
+
+  // 选一条：如果已有记录（如切语言），用同一条；否则随机
+  if (_hintIndex[module] != null && _hintIndex[module] < hints.length) {
+    var pick = _hintIndex[module];
+  } else {
+    if (!_hintShown[module]) _hintShown[module] = [];
+    var shown = _hintShown[module];
+    var available = [];
+    for (var j = 0; j < hints.length; j++) {
+      if (shown.indexOf(j) < 0) available.push(j);
+    }
+    if (available.length === 0) {
+      _hintShown[module] = [];
+      available = hints.map(function (_, k) { return k; });
+    }
+    var pick = available[Math.floor(Math.random() * available.length)];
+  }
+  _hintIndex[module] = pick;
+  _hintShown[module].push(pick);
+
+  textEl.innerHTML = marked.parse(hints[pick]);
+
+  // 设置下一次轮换（60-120 分钟随机）
+  clearTimeout(_hintTimer);
+  _hintTimer = setTimeout(function () {
+    rotateHint(module);
+  }, 3600000); // 1 小时
+}
+
+function rotateHint(module) {
+  if (!_hintCache[module]) { loadRotatingHint(module); return; }
+
+  var hints = _hintCache[module];
+  var textEl = qs('#split-left .hint-text');
+  if (!textEl) return;
+
+  var shown = _hintShown[module] || [];
+  var available = [];
+  for (var i = 0; i < hints.length; i++) {
+    if (shown.indexOf(i) < 0) available.push(i);
+  }
+  if (available.length === 0) {
+    _hintShown[module] = [];
+    available = hints.map(function (_, k) { return k; });
+  }
+  var pick = available[Math.floor(Math.random() * available.length)];
+  _hintIndex[module] = pick;
+  _hintShown[module].push(pick);
+
+  // 动画：淡出再淡入
+  var container = textEl.closest('.rotating-hint');
+  if (container) {
+    container.style.opacity = '0';
+    container.style.transition = 'opacity 0.3s';
+    setTimeout(function () {
+      textEl.innerHTML = marked.parse(hints[pick]);
+      container.style.opacity = '1';
+    }, 350);
+  } else {
+    textEl.innerHTML = marked.parse(hints[pick]);
+  }
+
+  // 下次轮换
+  clearTimeout(_hintTimer);
+  _hintTimer = setTimeout(function () {
+    rotateHint(module);
+  }, 3600000); // 1 小时
+}
+
+// ============================================================
 // Slot Editor Engine
 // ============================================================
 var _slotData = null; // 缓存的 parse 结果，用于序列化
@@ -199,7 +300,6 @@ function unescSlot(s) {
 function parseSlotTemplate(md) {
   if (!md) return { groups: [{ title: '', segments: [] }], freeContent: '' };
 
-  // 找最后一个 --- 作为自由编辑区分隔
   var sepRe = /\n---\n/g;
   var sepPositions = [];
   var m;
@@ -216,13 +316,14 @@ function parseSlotTemplate(md) {
     freeContent = md.substring(lastIdx + 5).trim();
   }
 
-  // 模板区按 --- 拆 group
   var groupParts = templateArea.split(/\n---\n/);
   var groups = [];
   for (var g = 0; g < groupParts.length; g++) {
     var gm = groupParts[g].trim();
     if (!gm) continue;
+    console.log('[slot] parseGroup[' + g + '] gm len=' + gm.length);
     var segments = parseSegments(gm);
+    console.log('[slot] parseGroup[' + g + '] result=' + segments.length);
     var title = '';
     var tm = gm.match(/^###\s+(.+)$/m);
     if (tm) title = tm[1].trim();
@@ -236,20 +337,23 @@ function parseSlotTemplate(md) {
   return { groups: groups, freeContent: freeContent };
 }
 
-// 解析单个 markdown 块 → 框架/槽位段
-// 解析单个 markdown 块 → 框架/槽位段
-// 解析单个 markdown 块 → 框架/槽位段
 // 三标记分离格式：<!-- hint:text --> <!-- slot --> ... <!-- /slot -->
+// 解析前预归一化：多行 hint 压成单行，彻底消除死循环风险
 function parseSegments(md) {
+  // 预归一化：<!-- hint:...\n...\n...--> → <!-- hint:... -->
+  md = md.replace(/<!--\s*hint:([\s\S]*?)-->/g, function(_, body) {
+    return '<!-- hint:' + body.replace(/\n/g, ' ').trim() + ' -->';
+  });
+
   var segments = [];
   var lines = md.split('\n');
   var i = 0;
-  var pendingHint = ''; // 最近遇到的 hint，将用于下一个 slot
+  var pendingHint = '';
 
   while (i < lines.length) {
     var line = lines[i];
 
-    // <!-- hint:text --> — 记录提示文字
+    // <!-- hint:text --> — 单行（已归一化，必然有 -->）
     var hm = line.match(/^\s*<!--\s*hint:\s*(.+?)\s*-->\s*$/);
     if (hm) {
       pendingHint = hm[1].trim();
@@ -257,7 +361,7 @@ function parseSegments(md) {
       continue;
     }
 
-    // <!-- slot --> — 槽位开始
+    // <!-- slot -->
     if (/^\s*<!--\s*slot\s*-->\s*$/.test(line)) {
       var content = '';
       i++;
@@ -277,17 +381,14 @@ function parseSegments(md) {
       var fw = '';
       while (i < lines.length) {
         var fl = lines[i];
-        if (/^\s*<!--\s*(?:hint:|slot|\/slot)/.test(fl)) break;
+        if (/^\s*<!--\s*(?:hint:|slot\s*-->|\/slot\s*-->)/.test(fl)) break;
         fw += (fw ? '\n' : '') + fl;
         i++;
       }
       if (fw.trim()) {
         var html;
-        try {
-          html = marked.parse(fw.trim());
-        } catch (e) {
-          html = renderBibleContent(fw.trim());
-        }
+        try { html = marked.parse(fw.trim()); }
+        catch (e) { html = renderBibleContent(fw.trim()); }
         segments.push({ type: 'framework', html: html, _md: fw.trim() });
       }
     } else {
@@ -317,10 +418,8 @@ function renderSlotEditor(data) {
 
   if (!hasSlots) {
     // 无槽位：整个内容放入自由编辑区
-    groupsEl.innerHTML = '<div class="slot-framework" style="padding:0.75rem 1rem;color:var(--text-dim);font-size:0.78rem;font-style:italic;">此内容无结构化槽位（可能由AI生成或为自由文本），请在下方自由编辑区修改。</div>';
     var freeArea = document.getElementById('slot-free-area');
     if (freeArea) {
-      // 合并所有 framework 文本作为自由区内容
       var raw = '';
       (data.groups || []).forEach(function (g) {
         (g.segments || []).forEach(function (s) {
@@ -333,67 +432,77 @@ function renderSlotEditor(data) {
     return;
   }
 
-  (data.groups || []).forEach(function (group, gi) {
-    var gEl = document.createElement('div');
-    gEl.className = 'slot-group';
+  var multiGroup = data.groups.length > 1;
 
-    if (group.title) {
-      var hdr = document.createElement('div');
-      hdr.className = 'slot-group-header';
-      var ttl = document.createElement('span');
-      ttl.className = 'slot-group-title';
-      ttl.textContent = group.title;
-      hdr.appendChild(ttl);
-      var acts = document.createElement('div');
-      acts.className = 'slot-group-actions';
-      if (data.groups.length > 1) {
+  (data.groups || []).forEach(function (group, gi) {
+    if (multiGroup) {
+      // 多 group（M4）：卡片式
+      var gEl = document.createElement('div');
+      gEl.className = 'slot-group';
+
+      if (group.title) {
+        var hdr = document.createElement('div');
+        hdr.className = 'slot-group-header';
+        var ttl = document.createElement('span');
+        ttl.className = 'slot-group-title';
+        ttl.textContent = group.title;
+        hdr.appendChild(ttl);
+        var acts = document.createElement('div');
+        acts.className = 'slot-group-actions';
         var delBtn = document.createElement('button');
         delBtn.className = 'slot-group-delete';
         delBtn.innerHTML = '&times;';
         delBtn.title = '删除此条目';
         delBtn.addEventListener('click', function () { removeSlotGroup(delBtn); });
         acts.appendChild(delBtn);
+        hdr.appendChild(acts);
+        gEl.appendChild(hdr);
       }
-      hdr.appendChild(acts);
-      gEl.appendChild(hdr);
+
+      var body = document.createElement('div');
+      body.className = 'slot-group-body';
+
+      (group.segments || []).forEach(function (seg) {
+        appendSegment(body, seg);
+      });
+
+      gEl.appendChild(body);
+      groupsEl.appendChild(gEl);
+    } else {
+      // 单 group（M1/M2/M3）：平铺，无卡片包裹
+      (group.segments || []).forEach(function (seg) {
+        appendSegment(groupsEl, seg);
+      });
     }
-
-    var body = document.createElement('div');
-    body.className = 'slot-group-body';
-
-    (group.segments || []).forEach(function (seg) {
-      if (seg.type === 'framework') {
-        var fwDiv = document.createElement('div');
-        fwDiv.className = 'slot-framework';
-        fwDiv.innerHTML = seg.html;
-        body.appendChild(fwDiv);
-      } else if (seg.type === 'slot') {
-        var item = document.createElement('div');
-        item.className = 'slot-item';
-        var lbl = document.createElement('div');
-        lbl.className = 'slot-label';
-        lbl.innerHTML = '<span class="slot-label-icon">&#9656;</span> ' + escHtml(seg.label);
-        item.appendChild(lbl);
-        var ta = document.createElement('textarea');
-        ta.className = 'slot-textarea';
-        ta.rows = Math.max(2, Math.min(6, (seg.content || '').split('\n').length));
-        ta.value = seg.content || '';
-        ta.placeholder = seg.label;
-        item.appendChild(ta);
-        body.appendChild(item);
-      }
-    });
-
-    gEl.appendChild(body);
-    groupsEl.appendChild(gEl);
   });
 
-  // [+] 添加按钮
-  var addBtn = document.createElement('button');
-  addBtn.className = 'slot-group-add';
-  addBtn.textContent = '+ 添加条目';
-  addBtn.addEventListener('click', addSlotGroup);
-  groupsEl.appendChild(addBtn);
+  // [+] 仅多 group 时显示
+  if (multiGroup) {
+    var addBtn = document.createElement('button');
+    addBtn.className = 'slot-group-add';
+    addBtn.textContent = '+ 添加条目';
+    addBtn.addEventListener('click', addSlotGroup);
+    groupsEl.appendChild(addBtn);
+  }
+
+  function appendSegment(parent, seg) {
+    if (seg.type === 'framework') {
+      var fwDiv = document.createElement('div');
+      fwDiv.className = 'slot-framework';
+      fwDiv.innerHTML = seg.html;
+      parent.appendChild(fwDiv);
+    } else if (seg.type === 'slot') {
+      var item = document.createElement('div');
+      item.className = 'slot-item';
+      var ta = document.createElement('textarea');
+      ta.className = 'slot-textarea';
+      ta.rows = Math.max(2, Math.min(6, (seg.content || '').split('\n').length));
+      ta.value = seg.content || '';
+      ta.placeholder = seg.label;
+      item.appendChild(ta);
+      parent.appendChild(item);
+    }
+  }
 
   // 自由编辑区
   var freeArea = document.getElementById('slot-free-area');
@@ -484,7 +593,11 @@ function showSlotEditor(md) {
     se.style.flexDirection = 'column';
     se.style.overflowY = 'auto';
     se.style.flex = '1';
-    renderSlotEditor(parseSlotTemplate(md));
+    console.log('[slot] showSlotEditor start, md len=' + (md||'').length);
+    var parsed = parseSlotTemplate(md);
+    console.log('[slot] parseSlotTemplate done, groups=' + (parsed.groups||[]).length);
+    renderSlotEditor(parsed);
+    console.log('[slot] renderSlotEditor done');
   }
 }
 
@@ -601,7 +714,7 @@ async function loadM0() {
   console.log('[SF:M0] load start, workId=' + state.currentWorkId);
   var left = qs('#split-left');
   left.innerHTML = '';
-  left.appendChild(qs('#tmpl-m0-hints').content.cloneNode(true));
+  loadRotatingHint('m0');
 
   var data = await hGet('/api/write/original-concept/' + state.currentWorkId);
   console.log('[SF:M0] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'hasData' : 'noData');
@@ -628,15 +741,13 @@ async function loadM2() {
   left.innerHTML = '';
   var outlineMd = (data && data.ok && data.data && data.data.outline_md) ? data.data.outline_md : '';
   console.log('[SF:M2] outline_md len=' + outlineMd.length + ', sections=' + (data && data.data && data.data.sections ? data.data.sections.length : 0));
+  // 左面板：轮换提示
+  loadRotatingHint('m2');
+
   if (outlineMd) {
-    var div = document.createElement('div');
-    div.className = 'bible-rendered';
-    div.innerHTML = renderBibleContent(outlineMd);
-    left.appendChild(div);
     showSlotEditor(outlineMd);
   } else {
     console.log('[SF:M2] FAILED: no outline_md');
-    left.appendChild(errorHTML(t('label.load_failed')));
     showTextEditor('');
   }
 }
@@ -651,15 +762,13 @@ async function loadBibleModule(module, apiPath) {
   left.innerHTML = '';
   var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
   console.log('[SF:M1] content len=' + content.length + ', is_template=' + (data && data.data && data.data.is_template));
+  // 左面板：轮换提示
+  loadRotatingHint('m1');
+
   if (content) {
-    var div = document.createElement('div');
-    div.className = 'bible-rendered';
-    div.innerHTML = renderBibleContent(content);
-    left.appendChild(div);
     showSlotEditor(content);
   } else {
     console.log('[SF:M1] FAILED: no content');
-    left.appendChild(errorHTML(t('label.load_failed')));
     showTextEditor('');
   }
 }

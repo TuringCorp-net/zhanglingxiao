@@ -423,6 +423,30 @@ ul, ol { list-style: none; }
 /* — Left Panel — */
 .m0-hints { font-size: 0.82rem; line-height: 1.7; color: var(--text-dim); display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center; padding: 2rem; }
 .hint-item { margin-bottom: 0.5rem; }
+
+/* — Rotating Hint — */
+.rotating-hint {
+  display: flex; flex-direction: column; justify-content: center;
+  height: 100%; padding: 2rem 1.5rem; text-align: center;
+  animation: hint-fade-in 0.6s ease;
+}
+@keyframes hint-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hint-text {
+  font-size: 0.9rem; line-height: 1.7; color: var(--text);
+  text-align: left; max-width: 480px; margin: 0 auto;
+}
+.hint-text p { margin: 0 0 0.5rem; }
+.hint-text ul, .hint-text ol { padding-left: 1.2rem; margin: 0.3rem 0; }
+.hint-text li { margin: 0.15rem 0; }
+.hint-text strong { color: var(--accent-light); }
+.hint-text em { color: var(--cyan); }
+.hint-text code {
+  font-family: var(--mono); font-size: 0.85em;
+  background: rgba(var(--accent-rgb), 0.1); padding: 0.05em 0.3em; border-radius: 3px;
+}
 .bible-rendered { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); }
 
 /* — Card List — */
@@ -447,18 +471,20 @@ ul, ol { list-style: none; }
 .slot-editor {
   flex: 1; overflow-y: auto; padding: 0;
 }
-.slot-groups { padding-bottom: 0.5rem; }
+.slot-groups { padding: 0.5rem 0; }
+
+/* 多 group 卡片（仅 M4 伏笔条目等） */
 .slot-group {
   margin: 0 1rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--bg-card);
+  background: var(--bg);
   overflow: hidden;
 }
 .slot-group-header {
   display: flex; justify-content: space-between; align-items: center;
   padding: 0.4rem 0.75rem;
-  background: var(--bg-hover);
+  background: rgba(var(--accent-rgb), 0.06);
   border-bottom: 1px solid var(--border);
 }
 .slot-group-title {
@@ -485,26 +511,27 @@ ul, ol { list-style: none; }
   background: rgba(var(--cyan-rgb), 0.05);
 }
 .slot-group-body { padding: 0.5rem 0.75rem; }
-.slot-item { margin-bottom: 0.6rem; }
+
+/* 单 group 槽位（M1/M2/M3）— 无卡片包裹 */
+.slot-item {
+  margin: 0 1rem 0.6rem;
+}
 .slot-item:last-child { margin-bottom: 0; }
-.slot-label {
-  font-size: 0.72rem; color: var(--text-dim);
-  margin-bottom: 0.2rem; line-height: 1.4;
-  display: flex; align-items: flex-start; gap: 0.25rem;
-}
-.slot-label-icon {
-  color: var(--accent-light); font-weight: 700;
-  flex-shrink: 0; font-size: 0.75rem;
-}
+
 .slot-textarea {
   width: 100%; min-height: 2.5rem; resize: vertical;
-  background: var(--bg); color: var(--text);
-  border: 1px solid var(--border); border-radius: 6px;
+  background: transparent; color: var(--text);
+  border: 1px solid transparent; border-radius: 6px;
   padding: 0.4rem 0.6rem; font-size: 0.82rem; line-height: 1.6;
   font-family: var(--font); box-sizing: border-box;
-  transition: border-color 0.15s;
+  transition: background 0.2s, border-color 0.2s;
 }
-.slot-textarea:focus { border-color: var(--accent-light); outline: none; }
+.slot-textarea:hover {
+  border-color: var(--border);
+}
+.slot-textarea:focus {
+  background: #050508; border-color: var(--accent-light); outline: none;
+}
 .slot-textarea::placeholder {
   color: var(--text-muted); font-style: italic; font-size: 0.78rem;
 }
@@ -514,12 +541,24 @@ ul, ol { list-style: none; }
   padding: 0 1rem;
   font-size: 0.8rem; line-height: 1.5; color: var(--text-dim);
 }
-.slot-framework h1, .slot-framework h2, .slot-framework h3 {
-  color: var(--text); margin: 0.5rem 0 0.2rem;
+.slot-framework h1 {
+  font-size: 0.95rem; color: var(--text);
+  margin: 0.5rem 0 0.3rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(var(--accent-rgb), 0.06);
+  border-radius: 4px;
 }
-.slot-framework h1 { font-size: 1rem; }
-.slot-framework h2 { font-size: 0.9rem; }
-.slot-framework h3 { font-size: 0.82rem; color: var(--cyan); }
+.slot-framework h2 {
+  font-size: 0.85rem; color: var(--text);
+  margin: 0.4rem 0 0.2rem;
+  padding: 0.2rem 0.75rem;
+  background: rgba(var(--accent-rgb), 0.03);
+  border-radius: 4px;
+}
+.slot-framework h3 {
+  font-size: 0.8rem; color: var(--cyan);
+  margin: 0.3rem 0 0.15rem;
+}
 .slot-framework blockquote {
   border-left: 2px solid var(--border); padding: 0.15rem 0.5rem;
   margin: 0.2rem 0; color: var(--text-muted); font-size: 0.75rem;
@@ -543,12 +582,16 @@ ul, ol { list-style: none; }
 .slot-free-hint { font-weight: 400; font-size: 0.7rem; color: var(--text-muted); }
 .slot-free-zone textarea {
   width: 100%; height: 200px; resize: vertical;
-  background: var(--bg-card); color: var(--text);
-  border: 1px solid var(--border); border-radius: 6px;
+  background: transparent; color: var(--text);
+  border: 1px solid transparent; border-radius: 6px;
   padding: 0.5rem 0.75rem; font-size: 0.82rem; line-height: 1.6;
   font-family: var(--font); box-sizing: border-box;
+  transition: background 0.2s, border-color 0.2s;
 }
-.slot-free-zone textarea:focus { border-color: var(--cyan); outline: none; }
+.slot-free-zone textarea:hover { border-color: var(--border); }
+.slot-free-zone textarea:focus {
+  background: #050508; border-color: var(--cyan); outline: none;
+}
 
 /* — Form Editor (M5) — */
 .form-editor {

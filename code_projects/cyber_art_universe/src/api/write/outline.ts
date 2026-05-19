@@ -33,100 +33,58 @@ const OUTLINE_TEMPLATE_ZH = `# 长篇框架大纲
 
 ## 二、主线阶段划分
 
-### 第一幕：开端
-<!-- hint:阶段目标、登场人物、关键事件、幕末转折 -->
-<!-- slot -->
-<!-- /slot -->
+<!-- hint:描述你的故事主线结构。可以参考三幕式（开端建立冲突 → 发展升级张力 → 高潮爆发回收 → 结局沉淀余韵），也可以自由安排你的结构。
 
-### 第二幕：发展
-<!-- hint:可拆为多个子阶段。阶段目标、冲突升级、关键事件、幕末转折 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 第三幕：高潮与结局
-<!-- hint:阶段目标、最终对决、结局、情感回收 -->
+包含：各阶段的章节范围、核心事件、阶段目标、关键转折。 -->
 <!-- slot -->
 <!-- /slot -->
 
 ## 三、支线规划
 
-<!-- hint:每条支线简述：与主线的关系、独立价值、预计占用章节数 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:支线A：名称与简述 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:支线B：名称与简述 -->
+<!-- hint:列出你的支线。每条简述：与主线关系、独立价值、预计章节数。
+
+支线不是填充物——每条支线都应揭示主线无法单独呈现的真相。
+
+例如：
+- 支线A（爱情线）：ch3-8，揭示主角的情感弱点
+- 支线B（复仇线）：ch2-12，与主线反派形成呼应 -->
 <!-- slot -->
 <!-- /slot -->
 
 ## 四、节奏规划
 
-### 开端
-<!-- hint:章节范围：ch1-ch? -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:节奏：中速建立 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:情绪曲线：好奇→投入 -->
-<!-- slot -->
-<!-- /slot -->
+<!-- hint:规划各阶段的节奏和情绪曲线。可以参考以下表格格式，也可以自由描述：
 
-### 发展
-<!-- hint:章节范围：ch?-ch? -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:节奏：加速升级 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:情绪曲线：紧张⇄释放交替 -->
-<!-- slot -->
-<!-- /slot -->
+| 阶段 | 章节范围 | 节奏 | 情绪曲线 |
+|------|---------|------|---------|
+| 开端 | (如 ch1-3) | (如 中速建立) | (如 好奇→投入) |
+| 发展 | ... | ... | ... |
+| 高潮 | ... | ... | ... |
+| 结局 | ... | ... | ... |
 
-### 高潮
-<!-- hint:章节范围：ch?-ch? -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:节奏：全速冲刺 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:情绪曲线：压抑→爆发 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 结局
-<!-- hint:章节范围：ch?-end -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:节奏：舒缓回收 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:情绪曲线：满足→回味 -->
+节奏比字数更重要——让高潮和低谷自然交替，给读者喘息的空间。 -->
 <!-- slot -->
 <!-- /slot -->
 
 ## 五、关键转折点
 
-<!-- hint:列出所有不可逆的情节转折，标注预计所在章节 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:转折点 #1：简述与所在章节 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:转折点 #2：简述与所在章节 -->
+<!-- hint:列出所有不可逆的情节转折，标注预计所在章节。每一个转折点都应该让读者从此用不同的眼光看待这个故事。
+
+例如：
+- 转折 #1 (ch3)：主角发现养父才是杀死生父的真凶
+- 转折 #2 (ch7)：盟友叛变，主角失去所有后援 -->
 <!-- slot -->
 <!-- /slot -->
 
 ## 六、伏笔埋设总体规划
 
-<!-- hint:跨章节伏笔的整体布局（详细追踪由伏笔账本管理） -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:伏笔规划 #1：简述核心伏笔 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:伏笔规划 #2：简述核心伏笔 -->
+<!-- hint:规划跨章节的伏笔布局。标注每条伏笔的类型、埋设章节、回收章节。
+
+详细追踪由 M4 伏笔账本管理，此处只需总体规划。
+
+例如：
+- 伏笔 #1：主角的身世之谜（身份伏笔），ch1埋 → ch8揭示 → ch10回收
+- 伏笔 #2：神秘戒指的来历（道具伏笔），ch2埋 → ch6部分揭示 → ch12回收 -->
 <!-- slot -->
 <!-- /slot -->
 `;
@@ -155,100 +113,58 @@ const OUTLINE_TEMPLATE_EN = `# Story Framework Outline
 
 ## II. Main Plot — Act Structure
 
-### Act I: Setup
-<!-- hint:Stage goals, introduced characters, key events, act-ending turn -->
-<!-- slot -->
-<!-- /slot -->
+<!-- hint:Describe your main storyline structure. You can use the classic three-act framework (Setup → Development → Climax → Resolution) or organize it your own way.
 
-### Act II: Development
-<!-- hint:May split into sub-stages. Stage goals, escalating conflict, key events, act-ending turn -->
-<!-- slot -->
-<!-- /slot -->
-
-### Act III: Climax & Resolution
-<!-- hint:Stage goals, final confrontation, resolution, emotional closure -->
+Include: chapter ranges for each phase, core events, phase goals, key turning points. -->
 <!-- slot -->
 <!-- /slot -->
 
 ## III. Subplot Planning
 
-<!-- hint:For each subplot: relationship to the main plot, standalone value, estimated chapter count -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Subplot A: Name and brief description -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Subplot B: Name and brief description -->
+<!-- hint:List your subplots. For each: relationship to the main plot, standalone value, estimated chapter count.
+
+Subplots aren't filler — each one should reveal a truth the main plot cannot show alone.
+
+Example:
+- Subplot A (Romance): ch3-8, reveals the protagonist's emotional vulnerability
+- Subplot B (Revenge): ch2-12, mirrors the main antagonist -->
 <!-- slot -->
 <!-- /slot -->
 
 ## IV. Pacing Plan
 
-### Setup
-<!-- hint:Chapter Range: ch1-ch? -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Pace: Moderate build -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Emotional Arc: Curiosity → Engagement -->
-<!-- slot -->
-<!-- /slot -->
+<!-- hint:Plan the pacing and emotional arc for each phase. You can use the table format below or describe freely:
 
-### Development
-<!-- hint:Chapter Range: ch?-ch? -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Pace: Escalating -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Emotional Arc: Tension ⇄ Release -->
-<!-- slot -->
-<!-- /slot -->
+| Phase | Chapter Range | Pace | Emotional Arc |
+|-------|-------------|------|---------------|
+| Setup | (e.g. ch1-3) | (e.g. Moderate build) | (e.g. Curiosity → Engagement) |
+| Development | ... | ... | ... |
+| Climax | ... | ... | ... |
+| Resolution | ... | ... | ... |
 
-### Climax
-<!-- hint:Chapter Range: ch?-ch? -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Pace: Full sprint -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Emotional Arc: Suppression → Eruption -->
-<!-- slot -->
-<!-- /slot -->
-
-### Resolution
-<!-- hint:Chapter Range: ch?-end -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Pace: Gentle unwind -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Emotional Arc: Satisfaction → Resonance -->
+Pacing matters more than word count — let peaks and valleys alternate naturally. -->
 <!-- slot -->
 <!-- /slot -->
 
 ## V. Key Turning Points
 
-<!-- hint:List all irreversible plot turns, with estimated chapter positions -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Turning Point #1: Description and chapter -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Turning Point #2: Description and chapter -->
+<!-- hint:List all irreversible plot turns with estimated chapter positions. Each turning point should make readers see the story through different eyes.
+
+Example:
+- Turn #1 (ch3): Protagonist discovers their mentor was the true villain all along
+- Turn #2 (ch7): Ally betrays the protagonist, leaving them without support -->
 <!-- slot -->
 <!-- /slot -->
 
 ## VI. Foreshadowing Master Plan
 
-<!-- hint:Cross-chapter foreshadowing layout (detailed tracking managed by the Foreshadowing Ledger) -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Foreshadowing Plan #1: Core hook description -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Foreshadowing Plan #2: Core hook description -->
+<!-- hint:Plan cross-chapter foreshadowing. Note each hook's type, planting chapter, and payoff chapter.
+
+Detailed tracking is managed by M4 Foreshadowing Ledger — this is just the master plan.
+
+Example:
+- Hook #1: The protagonist's true origin (identity), ch1 planted → ch8 revealed → ch10 resolved
+- Hook #2: The mysterious ring (object), ch2 planted → ch6 partial reveal → ch12 resolved -->
 <!-- slot -->
 <!-- /slot -->
 `;

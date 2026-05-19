@@ -67,12 +67,13 @@ function switchLang(lang) {
   });
   if (typeof state !== 'undefined' && state.currentWorkId) {
     refreshPipelineGuide(state.currentWorkId);
-    for (const [name, isOpen] of Object.entries(state.leftSectionStates)) {
-      if (isOpen) {
-        const body = qs(`.binder-section[data-section="${name}"] .binder-section-body`);
-        if (body) body.dataset.loaded = 'false';
-      }
+    // refresh rotating hint for current module
+    if (typeof loadRotatingHint === 'function') {
+      var m = state.currentModule;
+      if (m === 'original_concept') loadRotatingHint('m0');
+      else if (m === 'worldbuilding') loadRotatingHint('m1');
+      else if (m === 'outline') loadRotatingHint('m2');
     }
-    initWritingDesk(state.currentWorkId, state.currentSectionId, state.currentSectionTitle);
+    if (typeof switchModule === 'function') switchModule(state.currentModule);
   }
 }

@@ -79,16 +79,11 @@ const BIBLE_TEMPLATE_ZH = `# 世界观设定圣经
 
 ## 五、承诺清单
 
-<!-- hint:开篇对读者/观众许诺的爽点或价值，后续必须兑现。每条承诺一句话概括。 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:承诺项 #1：写出第一个必须兑现的承诺 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:承诺项 #2：写出第二个必须兑现的承诺 -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:承诺项 #3：写出第三个必须兑现的承诺 -->
+<!-- hint:列出你对读者的承诺——可以是一条，也可以是多条。每条一句话概括。例如：
+1) 主角终将复仇
+2) 隐藏身份会被揭穿
+3) 两个敌对势力终有一战
+承诺是你与读者之间的契约——一旦写下，后续必须兑现。 -->
 <!-- slot -->
 <!-- /slot -->
 
@@ -180,16 +175,11 @@ const BIBLE_TEMPLATE_EN = `# Setting Bible
 
 ## V. Promise Checklist
 
-<!-- hint:Promises made to readers/viewers that must be fulfilled later. One sentence per promise. -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Promise #1: The first promise that must be delivered -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Promise #2: The second promise that must be delivered -->
-<!-- slot -->
-<!-- /slot -->
-<!-- hint:Promise #3: The third promise that must be delivered -->
+<!-- hint:List your promises to the reader — one or many. One sentence per promise. For example:
+1) The protagonist will ultimately take revenge
+2) The hidden identity will be exposed
+3) Two enemy factions will clash
+Promises are a contract with your readers — once written, they must be fulfilled. -->
 <!-- slot -->
 <!-- /slot -->
 

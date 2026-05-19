@@ -15,6 +15,7 @@ import { generateForeshadowing, readForeshadowing, updateForeshadowing } from '.
 import { extractHooks, generateTitles, repurposeSection } from './marketing';
 import { readOriginalConcept, updateOriginalConcept } from './original_concept';
 import { handleElfChat } from './elf_chat';
+import { readHints } from './hints';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -116,6 +117,13 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
       if (request.method === 'GET') return readForeshadowing(env, request, resourceId);
       if (request.method === 'PUT') return updateForeshadowing(env, request, resourceId);
     }
+  }
+
+  // ================================================================
+  // 智能提示 (SF-067) — 静态 + Story Elf 动态
+  // ================================================================
+  if (resource === 'hints' && resourceId && !subResource && !action) {
+    if (request.method === 'GET') return readHints(env, request, resourceId);
   }
 
   // ================================================================
