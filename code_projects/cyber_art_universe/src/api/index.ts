@@ -17,14 +17,25 @@ import { handleMCP } from './mcp';
 import { handleWriteRoute } from './write/index';
 
 // ============================================================
-// 用户认证（通过 Cloudflare Secret USER_TOKEN，逗号分隔支持多 token）
+// 用户认证
+//   ADMIN_TOKEN — 后台固定 token，永久有效（Claude / 自动化任务）
+//   USER_TOKEN   — 用户 token，当前逗号分隔硬编码，未来替换为实时登录
 // ============================================================
 function isAuthenticated(request: Request, env: Env): boolean {
   const authHeader = request.headers.get('Authorization');
-  if (!authHeader || !env.USER_TOKEN) return false;
+  if (!authHeader) return false;
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
-  const validTokens = env.USER_TOKEN.split(',').map(t => t.trim()).filter(Boolean);
-  return validTokens.includes(token);
+
+  // Admin token：固定值，独立校验，不随 USER_TOKEN 变化
+  if (env.ADMIN_TOKEN && token === env.ADMIN_TOKEN.trim()) return true;
+
+  // User token：当前逗号分隔的硬编码列表（未来由实时登录系统替换）
+  if (env.USER_TOKEN) {
+    const validTokens = env.USER_TOKEN.split(',').map(t => t.trim()).filter(Boolean);
+    if (validTokens.includes(token)) return true;
+  }
+
+  return false;
 }
 
 // ============================================================

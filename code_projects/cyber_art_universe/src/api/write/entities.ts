@@ -15,17 +15,29 @@ const CHARACTER_CARD_TEMPLATE_ZH = (name: string) => `# 人物卡：${name}
 
 ## 一、基本信息
 
-- **姓名**：${name}
-<!-- hint:身份/职业：角色的社会身份和职业 -->
+### 姓名
+<!-- hint:角色的姓名 -->
+<!-- slot -->
+${name}
+<!-- /slot -->
+
+### 身份/职业
+<!-- hint:角色的社会身份和职业 -->
 <!-- slot -->
 <!-- /slot -->
-<!-- hint:年龄：角色的年龄 -->
+
+### 年龄
+<!-- hint:角色的年龄 -->
 <!-- slot -->
 <!-- /slot -->
-<!-- hint:外表特征：角色的外貌描述 -->
+
+### 外表特征
+<!-- hint:角色的外貌描述 -->
 <!-- slot -->
 <!-- /slot -->
-<!-- hint:在故事中的角色：主角 / 核心配角 / 阶段人物 / 章节人物 -->
+
+### 在故事中的角色
+<!-- hint:主角 / 核心配角 / 阶段人物 / 章节人物 -->
 <!-- slot -->
 <!-- /slot -->
 
@@ -104,7 +116,10 @@ const CHARACTER_CARD_TEMPLATE_ZH = (name: string) => `# 人物卡：${name}
 
 ## 五、成长弧线
 
-- **弧线类型**：<!-- 成长(growth) / 堕落(fall) / 救赎(redemption) / 悲剧(tragic) / 觉醒(awakening) / 稳定(steady) -->
+### 弧线类型
+<!-- hint:成长(growth) / 堕落(fall) / 救赎(redemption) / 悲剧(tragic) / 觉醒(awakening) / 稳定(steady) -->
+<!-- slot -->
+<!-- /slot -->
 
 ### 起点状态
 <!-- hint:角色在故事开始时的处境和心理状态 -->
@@ -139,6 +154,10 @@ const CHARACTER_CARD_TEMPLATE_ZH = (name: string) => `# 人物卡：${name}
 <!-- hint:与众不同的嗜好或怪癖 -->
 <!-- slot -->
 <!-- /slot -->
+
+---
+
+> 以下为自由编辑区，可按需添加模板框架之外的内容。
 `;
 
 const CHARACTER_CARD_TEMPLATE_EN = (name: string) => `# Character Card: ${name}
@@ -148,17 +167,29 @@ const CHARACTER_CARD_TEMPLATE_EN = (name: string) => `# Character Card: ${name}
 
 ## I. Basic Information
 
-- **Name**: ${name}
-<!-- hint:Identity / Occupation: The character's social identity and profession -->
+### Name
+<!-- hint:The character's full name -->
+<!-- slot -->
+${name}
+<!-- /slot -->
+
+### Identity / Occupation
+<!-- hint:The character's social identity and profession -->
 <!-- slot -->
 <!-- /slot -->
-<!-- hint:Age: The character's age -->
+
+### Age
+<!-- hint:The character's age -->
 <!-- slot -->
 <!-- /slot -->
-<!-- hint:Appearance: Physical description of the character -->
+
+### Appearance
+<!-- hint:Physical description of the character -->
 <!-- slot -->
 <!-- /slot -->
-<!-- hint:Role in Story: Protagonist / Key Supporting / Stage Character / Chapter Character -->
+
+### Role in Story
+<!-- hint:Protagonist / Key Supporting / Stage Character / Chapter Character -->
 <!-- slot -->
 <!-- /slot -->
 
@@ -237,7 +268,10 @@ const CHARACTER_CARD_TEMPLATE_EN = (name: string) => `# Character Card: ${name}
 
 ## V. Growth Arc
 
-- **Arc Type**: <!-- growth / fall / redemption / tragic / awakening / steady -->
+### Arc Type
+<!-- hint:growth / fall / redemption / tragic / awakening / steady -->
+<!-- slot -->
+<!-- /slot -->
 
 ### Starting State
 <!-- hint:The character's situation and mental state at the beginning of the story -->
@@ -272,6 +306,10 @@ const CHARACTER_CARD_TEMPLATE_EN = (name: string) => `# Character Card: ${name}
 <!-- hint:Unique quirks or eccentricities -->
 <!-- slot -->
 <!-- /slot -->
+
+---
+
+> Free editing zone — add any content beyond the template framework here.
 `;
 
 function getCharacterCardTemplate(name: string, lang: Lang): string {
