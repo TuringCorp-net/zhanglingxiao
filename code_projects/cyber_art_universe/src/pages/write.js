@@ -825,7 +825,7 @@ async function renderEntityCardList() {
   left.innerHTML = '';
   if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
-  var entities = data.data || [];
+  var entities = (data.data || []).filter(function (e) { return e.type !== 'foreshadowing'; });
   if (!entities.length) { left.innerHTML = '<div class="left-panel-empty">' + t('label.no_characters') + '</div>'; return; }
 
   var byType = {};
