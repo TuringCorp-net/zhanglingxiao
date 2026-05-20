@@ -646,24 +646,42 @@ function showFormEditor(intentData) {
   fe.style.display = 'block';
 
   var fields = [
-    { key: 'goal', label: '写作目标', type: 'textarea', hint: '本章的核心写作目标是什么？' },
-    { key: 'emotional_goal', label: '情绪目标', type: 'input', hint: '希望读者产生什么情绪？' },
+    // goal — 嵌套对象，拆为 3 个子字段
+    { key: 'goal.advance_conflict', label: '推进冲突', type: 'textarea', hint: '推进哪条剧情线（对应 M2 长篇框架中的阶段/转折点）' },
+    { key: 'goal.reveal_info', label: '揭示信息', type: 'textarea', hint: '本章要交代什么信息给读者' },
+    { key: 'goal.create_suspense', label: '制造悬念', type: 'textarea', hint: '本章要制造什么悬念' },
+    { key: 'emotional_goal', label: '情绪目标', type: 'input', hint: '希望读者产生什么情绪？（恐惧/温暖/悲伤/兴奋/好奇/愤怒/释然）' },
     { key: 'pov_character', label: '视角角色', type: 'input', hint: '本章以谁的视角展开？' },
-    { key: 'pov_strategy', label: '视角策略', type: 'input', hint: '第一人称/第三人称限制/第三人称全知？' },
-    { key: 'scene_type', label: '场景类型', type: 'input', hint: '对话/动作/内心/描写/混合？' },
-    { key: 'opening_hook', label: '开篇钩子', type: 'textarea', hint: '如何抓住读者的注意力？' },
-    { key: 'reversal_point', label: '反转点', type: 'textarea', hint: '本章的转折或意外？' },
-    { key: 'cliffhanger', label: '章末卡点', type: 'textarea', hint: '如何让读者迫不及待翻下一章？' },
-    { key: 'hooks', label: '钩子', type: 'input', hint: '逗号分隔' },
-    { key: 'foreshadowing_ids', label: '关联伏笔', type: 'input', hint: '逗号分隔的伏笔 ID' },
-    { key: 'style_notes', label: '风格备注', type: 'textarea', hint: '本章的风格提示' },
-    { key: 'visual_keywords', label: '视觉关键词', type: 'input', hint: '逗号分隔' },
-    { key: 'camera_notes', label: '镜头备注', type: 'textarea', hint: '如果有镜头/分镜想法' },
+    { key: 'pov_strategy', label: '视角策略', type: 'input', hint: '固定单一/多线交替/不可靠叙述者/全知' },
+    { key: 'scene_type', label: '场景类型', type: 'input', hint: 'Wonder/一切尽失/终场/认知冲击（通用可选）' },
+    // structure — 嵌套对象
+    { key: 'structure.opening_hook', label: '开篇钩子', type: 'textarea', hint: '用什么抓住读者' },
+    { key: 'structure.reversal_point', label: '反转点', type: 'textarea', hint: '本章的意外/转折' },
+    { key: 'structure.cliffhanger', label: '章末卡点', type: 'textarea', hint: '用什么让读者想继续读下一章' },
+    // foreshadowing_triggered
+    { key: 'foreshadowing_triggered', label: '伏笔触发', type: 'input', hint: '格式: hook_id:action, hook_id:action（action=plant/hint/reveal/resolve）' },
+    { key: 'promise_checklist_refs', label: '承诺兑现', type: 'input', hint: '对应 M1 承诺清单的条目，逗号分隔' },
+    { key: 'characters_involved', label: '出场人物', type: 'input', hint: '逗号分隔的角色名或 ID' },
+    { key: 'estimated_words', label: '预估字数', type: 'input', hint: '本章预估字数（数字）' },
+    { key: 'style_notes', label: '风格备注', type: 'textarea', hint: '本章的特殊风格要求' },
+    { key: 'visual_keywords', label: '视觉关键词', type: 'input', hint: '视觉关键词，逗号分隔（剧本/视觉叙事用）' },
+    { key: 'camera_notes', label: '镜头备注', type: 'textarea', hint: '镜头/分镜想法（剧本用）' },
   ];
 
   var container = document.getElementById('form-fields');
   if (!container) return;
   container.innerHTML = '';
+
+  // 辅助: 从嵌套对象读取值 (如 intentData.goal.advance_conflict)
+  function getNested(obj, path) {
+    var parts = path.split('.');
+    var cur = obj;
+    for (var i = 0; i < parts.length; i++) {
+      if (cur == null) return '';
+      cur = cur[parts[i]];
+    }
+    return cur || '';
+  }
 
   fields.forEach(function (f) {
     var div = document.createElement('div');
@@ -674,11 +692,14 @@ function showFormEditor(intentData) {
     div.appendChild(lbl);
 
     var val = '';
-    if (f.key === 'opening_hook' || f.key === 'reversal_point' || f.key === 'cliffhanger') {
-      val = (intentData && intentData.structure && intentData.structure[f.key]) || '';
-    } else if (f.key === 'hooks' || f.key === 'foreshadowing_ids' || f.key === 'visual_keywords') {
-      var arr = (intentData && intentData[f.key]) || [];
-      val = Array.isArray(arr) ? arr.join(', ') : '';
+    if (f.key === 'foreshadowing_triggered') {
+      var arr = (intentData && intentData.foreshadowing_triggered) || [];
+      val = Array.isArray(arr) ? arr.map(function (x) { return x.hook_id + ':' + x.action; }).join(', ') : '';
+    } else if (f.key === 'visual_keywords' || f.key === 'promise_checklist_refs' || f.key === 'characters_involved') {
+      var a2 = (intentData && intentData[f.key]) || [];
+      val = Array.isArray(a2) ? a2.join(', ') : '';
+    } else if (f.key.includes('.')) {
+      val = getNested(intentData, f.key);
     } else {
       val = (intentData && intentData[f.key]) || '';
     }
@@ -688,7 +709,7 @@ function showFormEditor(intentData) {
       ta.className = 'form-field-textarea';
       ta.dataset.fieldKey = f.key;
       ta.value = val;
-      ta.rows = f.key === 'goal' ? 3 : 2;
+      ta.rows = 2;
       ta.placeholder = f.hint || '';
       div.appendChild(ta);
     } else {
@@ -716,11 +737,26 @@ function serializeFormContent() {
   container.querySelectorAll('[data-field-key]').forEach(function (el) {
     var key = el.dataset.fieldKey;
     var val = el.value.trim();
-    if (key === 'hooks' || key === 'foreshadowing_ids' || key === 'visual_keywords') {
+
+    // 嵌套路径 (如 goal.advance_conflict)
+    if (key.includes('.')) {
+      var parts = key.split('.');
+      if (!result[parts[0]]) result[parts[0]] = {};
+      result[parts[0]][parts[1]] = val;
+    } else if (key === 'foreshadowing_triggered') {
+      // "hook_id:action, hook_id:action" → [{hook_id, action}]
+      if (val) {
+        result[key] = val.split(/[,;，；]/).map(function (s) {
+          var pair = s.trim().split(':');
+          return { hook_id: (pair[0] || '').trim(), action: (pair[1] || 'plant').trim() };
+        }).filter(function (x) { return x.hook_id; });
+      } else {
+        result[key] = [];
+      }
+    } else if (key === 'visual_keywords' || key === 'promise_checklist_refs' || key === 'characters_involved') {
       result[key] = val ? val.split(/[,;，；]/).map(function (s) { return s.trim(); }).filter(Boolean) : [];
-    } else if (key === 'opening_hook' || key === 'reversal_point' || key === 'cliffhanger') {
-      if (!result.structure) result.structure = {};
-      result.structure[key] = val;
+    } else if (key === 'estimated_words') {
+      result[key] = val ? parseInt(val, 10) || null : null;
     } else {
       result[key] = val;
     }

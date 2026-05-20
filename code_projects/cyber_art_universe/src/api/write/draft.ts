@@ -56,15 +56,21 @@ export async function readIntent(env: Env, request: Request, workId: string, sec
 export async function createIntent(env: Env, request: Request): Promise<Response> {
   const body = await request.json() as {
     work_id: string; section_id?: string; chapter_index?: number;
-    goal: string; emotional_goal?: string;
+    goal?: { advance_conflict?: string; reveal_info?: string; create_suspense?: string };
+    emotional_goal?: string;
     pov_character?: string; pov_strategy?: string;
+    structure?: { opening_hook?: string; reversal_point?: string; cliffhanger?: string };
+    foreshadowing_triggered?: { hook_id: string; action: string }[];
+    promise_checklist_refs?: string[];
+    characters_involved?: string[];
+    estimated_words?: number;
     visual_keywords?: string[]; camera_notes?: string;
     gameplay_goal?: string; player_learning_goal?: string;
     branching?: string; scene_type?: string;
-    hooks?: string[]; foreshadowing_ids?: string[]; style_notes?: string;
+    style_notes?: string;
   };
-  if (!body.work_id || !body.goal) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id and goal are required')), {
+  if (!body.work_id) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id is required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
@@ -81,18 +87,21 @@ export async function createIntent(env: Env, request: Request): Promise<Response
     work_id: body.work_id,
     section_id: body.section_id || null,
     chapter_index: body.chapter_index || null,
-    goal: body.goal,
+    goal: body.goal || {},
     emotional_goal: body.emotional_goal || null,
     pov_character: body.pov_character || null,
     pov_strategy: body.pov_strategy || null,
+    structure: body.structure || {},
+    foreshadowing_triggered: body.foreshadowing_triggered || [],
+    promise_checklist_refs: body.promise_checklist_refs || [],
+    characters_involved: body.characters_involved || [],
+    estimated_words: body.estimated_words || null,
     visual_keywords: body.visual_keywords || null,
     camera_notes: body.camera_notes || null,
     gameplay_goal: body.gameplay_goal || null,
     player_learning_goal: body.player_learning_goal || null,
     branching: body.branching || null,
     scene_type: body.scene_type || null,
-    hooks: body.hooks || [],
-    foreshadowing_ids: body.foreshadowing_ids || [],
     style_notes: body.style_notes || null,
     created_at: new Date().toISOString(),
   };
