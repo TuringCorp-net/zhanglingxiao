@@ -317,6 +317,142 @@ function getCharacterCardTemplate(name: string, lang: Lang): string {
 }
 
 // ============================================================
+// 伏笔卡 — 单条模板（中英双语）
+// ============================================================
+
+const FORESHADOWING_CARD_TEMPLATE_ZH = (name: string) => `### ${name}
+
+### 伏笔类型
+<!-- hint:身份伏笔 / 道具伏笔 / 对白伏笔 / 能力伏笔 / 事件伏笔 / 意象伏笔 -->
+<!-- slot -->
+<!-- /slot -->
+
+### 伏笔强度
+<!-- hint:🔴 核心（贯穿全书）/ 🟡 重要（跨多章）/ 🟢 彩蛋（轻量） -->
+<!-- slot -->
+<!-- /slot -->
+
+### 关联人物
+<!-- hint:此伏笔涉及的角色名 -->
+<!-- slot -->
+<!-- /slot -->
+
+### 关联章节范围
+<!-- hint:第 ? 章 ～ 第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+
+### 依赖的 M1 规则
+<!-- hint:此伏笔依赖的世界规则 -->
+<!-- slot -->
+<!-- /slot -->
+
+### 埋种计划
+<!-- hint:埋种章节：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:埋种方式：用什么方式让读者接触到这个伏笔？ -->
+<!-- slot -->
+<!-- /slot -->
+
+### 发展路径
+<!-- hint:强化暗示：第 ? 章，如何再次暗示或加强 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:部分揭示：第 ? 章，读者开始意识到什么？ -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:误导/反转（可选）：第 ? 章，是否有意误导读者？ -->
+<!-- slot -->
+<!-- /slot -->
+
+### 回收计划
+<!-- hint:回收章节：第 ? 章 -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:回收方式：如何让读者恍然大悟、拍案叫绝？ -->
+<!-- slot -->
+<!-- /slot -->
+
+### 状态
+<!-- hint:🌱 已规划 / 🌿 已埋种 / 🌳 发展中 / 💡 部分揭示 / ✅ 已回收 -->
+<!-- slot -->
+<!-- /slot -->
+
+---
+
+> 以下为自由编辑区，可按需添加模板框架之外的内容。
+`;
+
+const FORESHADOWING_CARD_TEMPLATE_EN = (name: string) => `### ${name}
+
+### Hook Type
+<!-- hint:Identity / Prop / Dialogue / Ability / Event / Imagery -->
+<!-- slot -->
+<!-- /slot -->
+
+### Hook Intensity
+<!-- hint:🔴 Core (throughout) / 🟡 Major (multi-chapter) / 🟢 Minor (Easter egg) -->
+<!-- slot -->
+<!-- /slot -->
+
+### Related Characters
+<!-- hint:Characters involved in this hook -->
+<!-- slot -->
+<!-- /slot -->
+
+### Chapter Range
+<!-- hint:ch? ~ ch? -->
+<!-- slot -->
+<!-- /slot -->
+
+### Depends on M1 Rule
+<!-- hint:World rule this hook depends on -->
+<!-- slot -->
+<!-- /slot -->
+
+### Planting Plan
+<!-- hint:Plant in Chapter: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Method: How will readers encounter this clue? -->
+<!-- slot -->
+<!-- /slot -->
+
+### Development Path
+<!-- hint:Reinforcement: ch?, how to reinforce -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Partial Reveal: ch?, what begins to surface? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Misdirection (optional): ch? -->
+<!-- slot -->
+<!-- /slot -->
+
+### Payoff Plan
+<!-- hint:Resolve in Chapter: ch? -->
+<!-- slot -->
+<!-- /slot -->
+<!-- hint:Method: How to make readers gasp? -->
+<!-- slot -->
+<!-- /slot -->
+
+### Status
+<!-- hint:🌱 Planned / 🌿 Planted / 🌳 Developing / 💡 Partially Revealed / ✅ Resolved -->
+<!-- slot -->
+<!-- /slot -->
+
+---
+
+> Free editing zone — add any content beyond the template framework here.
+`;
+
+function getForeshadowingCardTemplate(name: string, lang: Lang): string {
+  return lang === 'en' ? FORESHADOWING_CARD_TEMPLATE_EN(name) : FORESHADOWING_CARD_TEMPLATE_ZH(name);
+}
+
+// ============================================================
 // CRUD 端点
 // ============================================================
 
@@ -345,9 +481,9 @@ export async function createEntity(env: Env, request: Request, workId: string): 
     VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, ?)
   `).bind(id, workId, body.name, body.type, body.description || null, body.first_appearance || null, relatedEntities, now, now).run();
 
-  // 如果是角色类型，自动写入人物卡 R2 模板
+  // 根据类型自动写入对应的 R2 模板
+  const lang = extractLang(request);
   if (body.type === 'character') {
-    const lang = extractLang(request);
     const card = getCharacterCardTemplate(body.name, lang);
     try {
       await env.WORKS_BUCKET.put(workContentPath(workId, lang, `characters/${id}.md`), card, {
@@ -355,6 +491,15 @@ export async function createEntity(env: Env, request: Request, workId: string): 
       });
     } catch (err) {
       console.error('R2 write failed for character card:', workId, id, err);
+    }
+  } else if (body.type === 'foreshadowing') {
+    const card = getForeshadowingCardTemplate(body.name, lang);
+    try {
+      await env.WORKS_BUCKET.put(workContentPath(workId, lang, `foreshadowing/${id}.md`), card, {
+        httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+      });
+    } catch (err) {
+      console.error('R2 write failed for foreshadowing card:', workId, id, err);
     }
   }
 
@@ -364,7 +509,8 @@ export async function createEntity(env: Env, request: Request, workId: string): 
 }
 
 // GET /api/write/works/{id}/entities/{eid}/card?lang=zh|en
-export async function readCharacterCard(env: Env, request: Request, workId: string, entityId: string): Promise<Response> {
+// 通用：人物卡 / 伏笔卡 均通过此端点读写
+export async function readEntityCard(env: Env, request: Request, workId: string, entityId: string): Promise<Response> {
   const entity = await env.DB.prepare('SELECT id, name, type FROM entities WHERE id = ? AND work_id = ?').bind(entityId, workId).first<{ id: string; name: string; type: string }>();
   if (!entity) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.ENTITY_NOT_FOUND, 'Entity not found')), {
@@ -373,12 +519,15 @@ export async function readCharacterCard(env: Env, request: Request, workId: stri
   }
 
   const lang = extractLang(request);
-  const key = workContentPath(workId, lang, `characters/${entityId}.md`);
+  const folder = entity.type === 'foreshadowing' ? 'foreshadowing' : 'characters';
+  const key = workContentPath(workId, lang, `${folder}/${entityId}.md`);
   const obj = await env.WORKS_BUCKET.get(key);
 
   if (!obj) {
     // 返回模板
-    const template = getCharacterCardTemplate(entity.name, lang);
+    const template = entity.type === 'foreshadowing'
+      ? getForeshadowingCardTemplate(entity.name, lang)
+      : getCharacterCardTemplate(entity.name, lang);
     return new Response(JSON.stringify(jsonSuccess({
       entity_id: entityId,
       name: entity.name,
@@ -386,9 +535,6 @@ export async function readCharacterCard(env: Env, request: Request, workId: stri
       lang,
       content: template,
       is_template: true,
-      message: lang === 'en'
-        ? 'Character card template. Fill in or use AI to generate.'
-        : '人物卡模板。请按章节填写或使用 AI 生成。',
     })), {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -409,10 +555,10 @@ export async function readCharacterCard(env: Env, request: Request, workId: stri
 
 // ============================================================
 // PUT /api/write/works/{id}/entities/{eid}/card?lang=zh|en
-// 手动编辑人物卡 R2 内容
+// 通用：人物卡 / 伏笔卡 手动编辑
 // ============================================================
 
-export async function updateCharacterCard(env: Env, request: Request, workId: string, entityId: string): Promise<Response> {
+export async function updateEntityCard(env: Env, request: Request, workId: string, entityId: string): Promise<Response> {
   const entity = await env.DB.prepare('SELECT id, name, type FROM entities WHERE id = ? AND work_id = ?').bind(entityId, workId).first<{ id: string; name: string; type: string }>();
   if (!entity) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.ENTITY_NOT_FOUND, 'Entity not found')), {
@@ -428,7 +574,8 @@ export async function updateCharacterCard(env: Env, request: Request, workId: st
     });
   }
 
-  const key = workContentPath(workId, lang, `characters/${entityId}.md`);
+  const folder = entity.type === 'foreshadowing' ? 'foreshadowing' : 'characters';
+  const key = workContentPath(workId, lang, `${folder}/${entityId}.md`);
   await env.WORKS_BUCKET.put(key, body.content, {
     httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
   });

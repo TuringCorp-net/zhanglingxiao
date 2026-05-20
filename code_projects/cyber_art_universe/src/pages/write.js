@@ -864,10 +864,19 @@ renderEntityCardList();
 }
 
 // ============================================================
-// M4: 伏笔账本
+// M4: 伏笔账本 — 与 M3 统一：左侧 entity 列表，右侧单文件编辑
 // ============================================================
 async function loadM4() {
   showTextEditor('');
+
+  // 加载策略总览（foreshadowing.md）到右侧
+  var data = await hGet('/api/write/foreshadowing/' + state.currentWorkId);
+  var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
+  if (content) {
+    showSlotEditor(content);
+  } else {
+    showTextEditor('');
+  }
 
   await renderFhCardList();
 }
@@ -876,82 +885,60 @@ async function renderFhCardList() {
   console.log('[SF:M4] renderFhCardList start');
   var left = qs('#split-left');
   left.innerHTML = '';
-  // 优先从缓存读取
-  var cached = cacheGet('foreshadowing');
-  if (!cached) left.appendChild(loadingHTML());
-  var data = cached || await hGet('/api/write/foreshadowing/' + state.currentWorkId);
-  if (data && !cached) cacheSet('foreshadowing', data);
-  console.log('[SF:M4] API response:', data ? 'ok=' + data.ok : 'NULL', 'contentLen=' + (data && data.data && data.data.content ? data.data.content.length : 0), 'is_template=' + (data && data.data && data.data.is_template));
+  left.appendChild(loadingHTML());
+  var data = await hGet('/api/content/' + state.currentWorkId + '/entities');
   left.innerHTML = '';
-  if (!data || !data.ok || !data.data || !data.data.content || data.data.is_template) {
-    console.log('[SF:M4] EMPTY path: !data=' + !data + ' !ok=' + (!data || !data.ok) + ' !content=' + (!data || !data.data || !data.data.content) + ' is_template=' + (data && data.data && data.data.is_template));
-    left.innerHTML = '<div class="left-panel-empty">' + t('template_notice.foreshadowing') + '</div>';
-    return;
-  }
-  var md = data.data.content;
+  if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
-  // 解析伏笔条目：先找 "## 二、" 后的内容，再按 ### 分割
-  var items = [];
-  var sectionMatch = md.match(/##\s*二[、.]\s*伏笔条目\s*([\s\S]*)/);
-  var body = sectionMatch ? sectionMatch[1] : md;
-  // 按 ### 标题分割
-  var parts = body.split(/\n###\s+/);
-  items = parts.filter(function (s) { return s.trim().length > 30; });
-  console.log('[SF:M4] parsed items from ##二: ' + items.length);
+  var entities = (data.data || []).filter(function (e) { return e.type === 'foreshadowing'; });
 
-  // 兜底：如果按 ### 分割失败，尝试按 "伏笔 #" 分割
-  if (items.length === 0) {
-    parts = body.split(/\n###\s*伏笔\s*#\d+/).filter(function (s) { return s.trim().length > 30; });
-    items = parts;
-    console.log('[SF:M4] fallback parse items: ' + items.length);
-  }
-
-  // 最终兜底：显示原始内容
-  if (items.length === 0) {
-    console.log('[SF:M4] no items, rendering raw md');
-    left.innerHTML = '<div class="bible-rendered" style="padding:0.5rem;font-size:0.75rem;">' + renderBibleContent(md) + '</div>';
-    return;
-  }
-
+  // 策略总览入口（始终在顶部）
   var frag = document.createDocumentFragment();
+  var overviewCard = document.createElement('div');
+  overviewCard.style.cssText = 'padding:0.35rem 0.75rem;margin-bottom:0.4rem;font-size:0.78rem;cursor:pointer;border-radius:6px;border:1px solid var(--border);color:var(--cyan);';
+  overviewCard.textContent = '📋 ' + (t('label.fh_strategy') || '伏笔策略总览');
+  overviewCard.addEventListener('click', async function () {
+    state.currentFhId = null;
+    var d = await hGet('/api/write/foreshadowing/' + state.currentWorkId);
+    var c = (d && d.ok && d.data && d.data.content) ? d.data.content : '';
+    showSlotEditor(c);
+    renderFhCardList();
+  });
+  frag.appendChild(overviewCard);
+
+  if (!entities.length) {
+    var empty = document.createElement('div');
+    empty.className = 'left-panel-empty';
+    empty.style.cssText = 'padding:1rem;';
+    empty.textContent = t('label.no_foreshadowing') || '暂无伏笔条目';
+    frag.appendChild(empty);
+  }
+
+  // 伏笔条目卡片（与 M3 人物卡同款）
   var list = document.createElement('div');
   list.className = 'card-list';
-  items.forEach(function (item, idx) {
-    var lines = item.trim().split('\n');
-    var rawLine = lines[0] || '';
-    // 提取标题（去掉 # 和 ： 后的内容）
-    var rawTitle = rawLine.replace(/^#+\s*/, '').replace(/[：:]\s*\{.*$/, '').replace(/[：:].*$/, '').trim();
-    if (!rawTitle || rawTitle.length < 2) rawTitle = '伏笔 #' + (idx + 1);
-    var title = rawTitle.length > 25 ? rawTitle.substring(0, 25) + '...' : rawTitle;
-    // 提取强度
-    var strength = '';
-    var sm = item.match(/强度[：:)\s]*([^\n]{1,15})/);
-    if (sm) strength = sm[1].replace(/[*#|]/g, '').trim().substring(0, 12);
-    // 提取预览（前30个非标题字符）
-    var preview = '';
-    if (lines.length > 1) {
-      preview = lines.slice(1).join(' ').replace(/[#*|>\-\[\]]/g, '').trim().substring(0, 40);
-    }
-
-    var card = qs('#tmpl-fh-card-item').content.cloneNode(true);
+  entities.forEach(function (e) {
+    var card = qs('#tmpl-entity-card-item').content.cloneNode(true);
     var root = card.querySelector('.card-item');
-    root.dataset.fhId = 'fh_' + idx;
-    if (state.currentFhId === 'fh_' + idx) root.classList.add('active');
-    root.addEventListener('click', function () { openFhCard('fh_' + idx, title, item); });
-    card.querySelector('.card-item-name').textContent = title;
-    card.querySelector('.card-item-meta').textContent = strength;
-    // 如果有 preview，设置 title 属性作为 tooltip
-    if (preview) root.title = preview;
+    root.dataset.entityId = e.id;
+    if (state.currentFhId === e.id) root.classList.add('active');
+    root.addEventListener('click', function () { openFhCard(e.id, e.name); });
+    card.querySelector('.card-item-name').textContent = e.name;
+    card.querySelector('.card-item-meta').textContent = (e.description || '').substring(0, 30);
     list.appendChild(card);
   });
   frag.appendChild(list);
   left.appendChild(frag);
+  console.log('[SF:M4] rendered ' + entities.length + ' foreshadowing entities');
 }
 
-function openFhCard(fhId, title, content) {
-  state.currentFhId = fhId;
-  showSlotEditor(content || '');
-renderFhCardList();
+async function openFhCard(entityId, name) {
+  state.currentFhId = entityId;
+  var data = await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
+  var content = (data && data.ok && data.data.content) ? data.data.content : '';
+  showSlotEditor(content);
+  renderFhCardList();
+  updateElfContext();
 }
 
 // ============================================================
@@ -1111,7 +1098,11 @@ async function saveModuleContent(silent) {
     await hPut('/api/write/works/' + wid + '/sections/' + state.currentSectionId, { title: state.currentSectionTitle, body: body });
   } else if (mod === 'characters' && state.currentEntityId) {
     await hPut('/api/write/works/' + wid + '/entities/' + state.currentEntityId + '/card', { content: serializeSlotContent() });
-  } else if (mod === 'foreshadowing') {
+  } else if (mod === 'foreshadowing' && state.currentFhId) {
+    // 单条伏笔卡 → entities card API
+    await hPut('/api/write/works/' + wid + '/entities/' + state.currentFhId + '/card', { content: serializeSlotContent() });
+  } else if (mod === 'foreshadowing' && !state.currentFhId) {
+    // 策略总览 → foreshadowing.md
     await hPut('/api/write/foreshadowing/' + wid, { content: serializeSlotContent() });
   } else if (mod === 'chapters' && state.currentSectionId) {
     // M5: 表单编辑 → 通过 POST intent 保存
@@ -1286,6 +1277,8 @@ document.addEventListener('DOMContentLoaded', function () {
   loadState();
   initSplitDrag();
 
+  // slot editor / writing editor / form editor 输入时自动保存
+  // textarea 高度自适应由 CSS field-sizing: content 处理，无需 JS
   qs('#writing-editor').addEventListener('input', autoSave);
   qs('#slot-editor').addEventListener('input', function (e) {
     if (e.target.tagName === 'TEXTAREA') autoSave();

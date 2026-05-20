@@ -43,11 +43,15 @@
   --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   --w-main: 800px;
   --w-wide: 1100px;
+
+  /* 告诉浏览器这是暗色主题，原生控件自动适配 */
+  color-scheme: dark;
+  accent-color: var(--accent);
 }
 
 /* — Reset — */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; -webkit-font-smoothing: antialiased; overflow-y: scroll; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scrollbar-gutter: stable; }
 body {
   font-family: var(--font);
   background: var(--bg);
@@ -519,7 +523,9 @@ ul, ol { list-style: none; }
 .slot-item:last-child { margin-bottom: 0; }
 
 .slot-textarea {
-  width: 100%; min-height: 2.5rem; resize: vertical;
+  width: 100%; field-sizing: content;
+  min-height: 2.5rem; max-height: 8rem;
+  overflow-y: auto;
   background: transparent; color: var(--text);
   border: 1px solid transparent; border-radius: 6px;
   padding: 0.4rem 0.6rem; font-size: 0.82rem; line-height: 1.6;
@@ -581,7 +587,9 @@ ul, ol { list-style: none; }
 }
 .slot-free-hint { font-weight: 400; font-size: 0.7rem; color: var(--text-muted); }
 .slot-free-zone textarea {
-  width: 100%; height: 200px; resize: vertical;
+  width: 100%; field-sizing: content;
+  min-height: 6rem; max-height: 18rem;
+  overflow-y: auto;
   background: transparent; color: var(--text);
   border: 1px solid transparent; border-radius: 6px;
   padding: 0.5rem 0.75rem; font-size: 0.82rem; line-height: 1.6;
@@ -610,7 +618,7 @@ ul, ol { list-style: none; }
   box-sizing: border-box; transition: border-color 0.15s;
 }
 .form-field-input:focus, .form-field-textarea:focus { border-color: var(--accent-light); outline: none; }
-.form-field-textarea { min-height: 3rem; resize: vertical; line-height: 1.5; }
+.form-field-textarea { field-sizing: content; min-height: 3rem; max-height: 9rem; overflow-y: auto; line-height: 1.5; }
 .form-field-hint {
   font-size: 0.65rem; color: var(--text-muted);
   margin-top: 0.15rem; font-style: italic;
