@@ -50,7 +50,7 @@
     + '    <div class="elf-chat-messages" id="elf-chat-messages"></div>'
     + '    <div class="elf-chat-input-row">'
     + '      <input id="elf-chat-input" placeholder="Ask Story Elf..." onkeydown="if(event.key===\'Enter\')StoryElf.sendChat()">'
-    + '      <button class="btn btn-primary btn-sm" id="elf-send-btn" style="padding:0.3rem 0.6rem;font-size:0.7rem">发送</button>'
+    + '      <button class="btn btn-primary btn-sm" id="elf-send-btn" style="padding:0.3rem 0.6rem;font-size:0.7rem">' + t('elf.send', 'Send') + '</button>'
     + '    </div>'
     + '  </div>'
     + '  <div class="elf-body" id="elf-body">'
@@ -199,13 +199,13 @@
         if (data && data.ok) {
           StoryElf.addMessage(data.data.reply, 'ai');
         } else {
-          StoryElf.addMessage('（AI 暂时无法回应，请稍后重试）', 'ai');
+          StoryElf.addMessage(t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later'), 'ai');
         }
       }).catch(function () {
         var msgs = document.getElementById('elf-chat-messages');
         var last = msgs && msgs.lastChild;
         if (last && last.textContent === '...') last.remove();
-        StoryElf.addMessage('（网络异常，请稍后重试）', 'ai');
+        StoryElf.addMessage(t('elf.network_error', 'Network error, please try again later'), 'ai');
       });
     },
 
@@ -228,7 +228,7 @@
     setPage: function (type) {
       var input = document.getElementById('elf-chat-input');
       if (input) input.placeholder = type === 'write'
-        ? '让 AI 帮你修改这段...'
+        ? t('elf.write_placeholder', 'Ask AI to polish this...')
         : '和 Story Elf 聊聊这部作品...';
     },
 

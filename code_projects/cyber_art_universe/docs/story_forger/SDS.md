@@ -17,6 +17,7 @@
 |------|------|------|
 | v1.2.0 | 2026-05-08 | 9 项延期需求全部实现：伏笔账本、冲突地图、章节重写、营销辅助、MCP Write 工具。31/31 全部完成 |
 | v1.7.0 | 2026-05-09 | 冲突地图删除 + 伏笔 Markdown 模板 + 软木板合并入写作桌统一界面 |
+| v2.0.0 | 2026-05-20 | M0 原始构想模块 + Story Elf 浮动伴侣 + 多语言 ?lang= 架构 + 三标记槽位编辑器 + M3/M4 统一 entity 存储 + ADMIN_TOKEN 独立 Secret + CSS 清理（textareatarea field-sizing） |
 
 ---
 
@@ -24,7 +25,7 @@
 
 - **部署位置**：CAU Worker `cyber_art_api` 的子路由（`/api/write/*`）
 - **部署域名**：`CAU.turingcorp.net`（与 Read 侧共用）
-- **代码目录**：`src/api/write/`（5 个模块）+ `src/lib/ai.ts`（共享 AI 层）
+- **代码目录**：`src/api/write/`（9 个模块：workspace / entities / worldbuilding / outline / foreshadowing / draft / marketing / original_concept / elf_chat）+ `src/lib/ai.ts`（共享 AI 层）
 - **前端**：`src/pages/write.html` + `write.js`（统一写作桌 UI）
 - **D1/R2**：与 CAU Read 侧共享，无新增迁移
 

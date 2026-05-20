@@ -12,7 +12,7 @@ export interface Work {
   creation_attribution: string; // original / fanfiction / ai-assisted
   audience: string; // JSON 数组：male_lead / female_lead / no_cp / BL / GL / LGBTQ+
   tags: string; // JSON 数组
-  status: string; // ongoing / completed / draft
+  status: string; // draft / published / closed
   summary: string;
   r2_object_key: string;
   version: number;

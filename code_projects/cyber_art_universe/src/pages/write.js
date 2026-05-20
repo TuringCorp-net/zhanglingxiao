@@ -886,7 +886,9 @@ async function renderFhCardList() {
   var left = qs('#split-left');
   left.innerHTML = '';
   left.appendChild(loadingHTML());
-  var data = await hGet('/api/content/' + state.currentWorkId + '/entities');
+  var cached = cacheGet('entities');
+  var data = cached || await hGet('/api/content/' + state.currentWorkId + '/entities');
+  if (!cached && data) cacheSet('entities', data);
   left.innerHTML = '';
   if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 

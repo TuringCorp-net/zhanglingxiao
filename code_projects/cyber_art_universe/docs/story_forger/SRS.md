@@ -126,7 +126,7 @@ Story Forger 与 CAU 共用 `works.status` 字段。状态流转定义了作品�
 | SF-004 | 删除作品 — 仅限 draft 或 closed 状态 | `DELETE /api/write/works/{id}` | ✅ 已实现 |
 | SF-005 | 预览作品 — 按 published 态的渲染效果预览 draft 作品 | `GET /api/write/works/{id}/preview` 返回完整作品渲染数据 | ✅ 已实现 |
 
-### 模块零：原始构想（M0）
+### M0：原始构想
 
 > **设计原则**：M0 是创作者自己的原始构想与灵感记录空间，位于整个 AI 辅助流水线之前。与 M1-M6 不同，M0 不提供任何模板，不强制任何格式。这是属于创作者自己的私人创意空间。
 
@@ -143,7 +143,7 @@ Story Forger 与 CAU 共用 `works.status` 字段。状态流转定义了作品�
 | SF-006 | 原始构想读写 — 作者可自由记录创意灵感，无模板、无格式约束。存储为 Markdown 文件，同步到 R2 | `GET /api/write/original-concept/{work_id}` 返回原始构想内容（首次为空）；`PUT /api/write/original-concept/{work_id}` 保存内容到 R2 `works/{id}/{lang}/original_concept.md` | ✅ 已实现 |
 | SF-007 | Story Elf 禁止修改原始构想 — Story Elf 不得以任何方式修改 M0 内容。外部 AI/Agent 视为作者，可正常读写 | 系统设计明确记录此规则。前端面板标注"仅作者可编辑 · Story Elf 不可修改" | ✅ 已实现 |
 
-### 模块二：世界观/设定引擎
+### M1：世界观/设定引擎
 
 | ID | 需求 | 验收标准 | 状态 |
 |----|------|---------|------|
@@ -158,7 +158,7 @@ Story Forger 与 CAU 共用 `works.status` 字段。状态流转定义了作品�
 | SF-018 | 人物卡模板 — M3 创建角色时自动写入 R2 人物卡文件（6 章框架：基本信息→性格动机→能力限制（含 M1/M4 交叉引用）→关系网络→成长弧线（含 arc_type）→语言行为）。`GET .../{eid}/card` 返回人物卡，无内容时返回模板 | 创建 character 类型实体时自动生成模板。人物树点击角色→在写作区展示人物卡。中英双语模板。v1.8.0：新增 arc_type（弧线类型）、关联的 M1 世界规则、关联的 M4 伏笔 | ✅ 已实现 |
 | SF-019 | 多语言版本同步控制 — AI 生成默认双语并行（zh+en 同时产出，天然同步）。人类（或 AI Agent）手动编辑某一语言版本后，系统标记另一语言版本为"可能过期"（`stale_since`），在 UI 提示作者手动触发重新翻译。绝不静默自动翻译 | R2 metadata 记录 `stale_since` 时间戳。前端语言切换器旁显示过期提示 + "重新翻译"按钮。翻译动作由作者（人类或 AI Agent）显式触发，Story Elf 不静默修改 | ⏳ 待实现 |
 
-### 模块三：目录与长篇框架引擎
+### M2：目录与长篇框架引擎
 
 | ID | 需求 | 验收标准 | 状态 |
 |----|------|---------|------|
@@ -169,7 +169,7 @@ Story Forger 与 CAU 共用 `works.status` 字段。状态流转定义了作品�
 | SF-024 | ~~冲突地图~~ | **已删除**。冲突的本质已融入 M2 长篇框架（核心冲突、阶段划分、转折点），不需要独立模块 | ❌ 已移除 |
 | SF-025 | 章节拖拽重排 — 支持软木板视图下拖拽调整章节顺序，批量更新 order_index | **已合并入 SF-022**。frontend 拖拽 → `PUT /api/write/outline/{work_id}`（含完整 order_index）→ 重排即保存。不另建专用端点 | ✅ 由 SF-022 覆盖 |
 
-### 模块四：章节生产流水线
+### M5 + M6：章节生产流水线（含意图卡 M5 + 章节编写 M6）
 
 这是 Story Forger 的核心引擎。每章生产走固定流程：
 
@@ -245,17 +245,19 @@ Story Forger 尽量复用 CAU 的已有表结构。以下为需要新增的部�
 ### R2 路径扩展
 
 ```
-works/{work_id}/
-├── original_concept.md     # 原始构想（M0，Story Elf 禁止修改，外部 AI/Agent 视为作者可读写）
-├── world_bible.md          # 设定圣经（SF 写入，CAU 可读）
-├── story_bible.md          # 项目圣经（风格/口吻/禁区）
-├── outline.md              # 大纲（已有）
-├── foreshadowing.md        # 伏笔账本（SF 新增）
-├── chapters/               # 章节正文（已有）
-├── summaries/              # 章节摘要（已有）
-├── characters/             # 角色卡（已有）
-├── events/                 # 事件卡（已有）
-└── outlines/               # 分幕大纲（已有）
+works/{work_id}/{lang}/          # 多语言前缀（如 zh/ en/）
+├── original_concept.md          # 原始构想（M0）
+├── world_bible.md               # 设定圣经（M1）
+├── outline.md                   # 长篇框架（M2）
+├── foreshadowing.md             # 伏笔策略总览（M4）
+├── foreshadowing/{id}.md        # 伏笔条目卡（M4，独立实体）
+├── characters/{id}.md           # 人物卡（M3，独立实体）
+├── intents/{section_id}.json    # 章节意图卡（M5）
+├── chapters/{section_id}.md     # 章节正文（M6）
+├── summaries/{section_id}.md    # 章节摘要（M6）
+├── marketing/{sid}_extract.json # 营销提取（M6 辅助）
+├── constraints.json             # 约束缓存（M1）
+└── checks/{sid}.json            # 校验缓存（M6）
 ```
 
 > **设计原则**：Story Forger 产出和 CAU 消费的是**同一份 R2 文件**。作者写完章节 → 写入 R2 → 发布后 CAU 直接读取同一路径。
@@ -292,7 +294,6 @@ works/{work_id}/
 | GET | `/api/write/outline/{work_id}` | 大纲 | SF-021 |
 | PUT | `/api/write/outline/{work_id}` | 大纲 | SF-022 |
 | POST | `/api/write/outline/{work_id}/foreshadowing` | 大纲 | SF-023 |
-| POST | `/api/write/outline/{work_id}/conflicts` | 大纲 | SF-024 |
 | POST | `/api/write/draft/intent` | 写作 | SF-030 |
 | POST | `/api/write/draft/generate` | 写作 | SF-031 |
 | POST | `/api/write/draft/check/{work_id}/{section_id}` | 写作 | SF-032 |

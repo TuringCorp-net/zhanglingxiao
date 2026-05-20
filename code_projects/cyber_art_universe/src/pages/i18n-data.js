@@ -186,6 +186,13 @@ var I18N = {
     publish_confirm:     { zh: '发布后作品将在 CAU 公开可见，确认发布？', en: 'After publishing, the work will be publicly visible on CAU. Confirm?' },
   },
 
+  elf: {
+    send:              { zh: '发送', en: 'Send' },
+    ai_unavailable:    { zh: '（AI 暂时无法回应，请稍后重试）', en: '(AI is temporarily unavailable, please try again later)' },
+    network_error:     { zh: '（网络异常，请稍后重试）', en: '(Network error, please try again later)' },
+    write_placeholder: { zh: '让 AI 帮你修改这段...', en: 'Ask AI to polish this...' },
+  },
+
   footer: {
     powered: { zh: 'Story Forger · Powered by', en: 'Story Forger · Powered by' },
     terms:   { zh: '使用条款', en: 'Terms of Use' },
