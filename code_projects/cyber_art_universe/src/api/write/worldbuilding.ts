@@ -51,7 +51,7 @@ const BIBLE_TEMPLATE: TemplateDef = {
     {
       heading: { zh: '五、承诺清单', en: 'V. Promise Checklist' },
       slots: [
-        { id: 'promise_checklist', level: 1, label: { zh: '', en: '' }, hint: {
+        { id: 'promise_checklist', level: 2, label: { zh: '', en: '' }, hint: {
           zh: '列出你对读者的承诺——可以是一条，也可以是多条。每条一句话概括。例如：\n1) 主角终将复仇\n2) 隐藏身份会被揭穿\n3) 两个敌对势力终有一战\n承诺是你与读者之间的契约——一旦写下，后续必须兑现。',
           en: 'List your promises to the reader — one or many. One sentence per promise. For example:\n1) The protagonist will ultimately take revenge\n2) The hidden identity will be exposed\n3) Two enemy factions will clash\nPromises are a contract with your readers — once written, they must be fulfilled.',
         } },

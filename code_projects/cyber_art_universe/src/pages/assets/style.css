@@ -536,7 +536,8 @@ ul, ol { list-style: none; }
   margin: 0 1rem 0.6rem;
 }
 .slot-item:last-child { margin-bottom: 0; }
-/* 模板 level 分级：L2 槽位在 L1 模式下隐藏 */
+/* 模板 level 分级：section / slot 按 level 隐藏，父 section 隐藏 → 子自动不显示 */
+.slot-section.slot-hidden,
 .slot-item.slot-hidden { display: none; }
 
 .slot-textarea {

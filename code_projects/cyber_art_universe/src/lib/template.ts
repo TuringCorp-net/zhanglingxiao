@@ -61,6 +61,10 @@ export function renderTemplate(
 
   for (const section of tmpl.sections) {
     lines.push('');
+
+    // ## 标题的 level = section 内所有 slot 的 MIN level
+    const sectionLevel = Math.min(...section.slots.map(s => s.level));
+    lines.push(`<!-- L${sectionLevel} -->`);
     lines.push(`## ${section.heading[lang]}`);
 
     let prevLabel = '';
@@ -71,11 +75,14 @@ export function renderTemplate(
 
       const label = slot.label[lang];
       if (label && label !== prevLabel) {
+        lines.push(`<!-- L${slot.level} -->`);
         lines.push(`### ${label}`);
         prevLabel = label;
       }
 
-      lines.push(`<!-- hint:L${slot.level}:${slot.hint[lang]} -->`);
+      // 每个槽位前都放 level 标记（处理无 ### 的 section、或同 ### 下多个槽位 level 不同的情况）
+      lines.push(`<!-- L${slot.level} -->`);
+      lines.push(`<!-- hint:${slot.hint[lang]} -->`);
       lines.push('<!-- slot -->');
       const pre = opts?.prefills?.[slot.id];
       if (pre) lines.push(pre);
@@ -119,11 +126,13 @@ export function renderCard(
 
     const label = slot.label[lang];
     if (label && label !== prevLabel) {
+      lines.push(`<!-- L${slot.level} -->`);
       lines.push(`### ${label}`);
       prevLabel = label;
     }
 
-    lines.push(`<!-- hint:L${slot.level}:${slot.hint[lang]} -->`);
+    lines.push(`<!-- L${slot.level} -->`);
+    lines.push(`<!-- hint:${slot.hint[lang]} -->`);
     lines.push('<!-- slot -->');
     const pre = prefills?.[slot.id];
     if (pre) lines.push(pre);
