@@ -342,6 +342,37 @@ export async function updateSection(env: Env, request: Request, workId: string, 
   });
 }
 
+// ============================================================
+// 作品级配置（R2: works/{id}/config.json，语言无关）
+// ============================================================
+
+// GET /api/write/works/{id}/config
+export async function getWorkConfig(env: Env, workId: string): Promise<Response> {
+  const key = `works/${workId}/config.json`;
+  const obj = await env.WORKS_BUCKET.get(key);
+  const config = obj ? JSON.parse(await obj.text()) : { template_level: 1 };
+  return new Response(JSON.stringify(jsonSuccess(config)), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+// PUT /api/write/works/{id}/config
+export async function updateWorkConfig(env: Env, request: Request, workId: string): Promise<Response> {
+  const body = await request.json() as { template_level?: number };
+  if (typeof body.template_level !== 'number' || body.template_level < 1 || body.template_level > 2) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'template_level must be 1 or 2')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+  const key = `works/${workId}/config.json`;
+  await env.WORKS_BUCKET.put(key, JSON.stringify({ template_level: body.template_level }), {
+    httpMetadata: { contentType: 'application/json' },
+  });
+  return new Response(JSON.stringify(jsonSuccess({ template_level: body.template_level })), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 // DELETE /api/write/works/{id}/sections/{sid}
 export async function deleteSection(env: Env, _request: Request, workId: string, sectionId: string): Promise<Response> {
   const existing = await env.DB.prepare('SELECT id FROM sections WHERE id = ? AND work_id = ?').bind(sectionId, workId).first();

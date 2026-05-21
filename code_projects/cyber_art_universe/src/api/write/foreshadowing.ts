@@ -10,47 +10,34 @@ import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
 import { workContentPath, extractLang, readR2WithLangFallback, type Lang, LANG_LABELS } from '../../lib/work_content';
+import { renderTemplate, type TemplateDef } from '../../lib/template';
 
 // ============================================================
-// 伏笔账本 — 结构化模板（中英双语）
+// 伏笔账本 — 结构化模板定义（单一来源，双语）
 // ============================================================
 
-const FORESHADOWING_TEMPLATE_ZH = `# 伏笔账本
+const FORESHADOWING_TEMPLATE: TemplateDef = {
+  title: { zh: '伏笔账本', en: 'Foreshadowing Ledger' },
+  intro: {
+    zh: '伏笔是横跨多个章节的暗线。好的伏笔让读者在回收时恍然大悟。\n> 本文档帮助你在写作前主动规划伏笔网络，而非事后扫描。\n> 每条伏笔条目通过左侧面板独立管理（新增 / 删除），点击条目在右侧编辑。',
+    en: 'Foreshadowing is the art of planting clues across chapters. Great foreshadowing makes readers gasp in hindsight.\n> This document helps you proactively plan your foreshadowing network before writing — not scan chapters after the fact.\n> Each hook entry is managed independently via the left panel (add / delete). Click an entry to edit in the right panel.',
+  },
+  sections: [
+    {
+      heading: { zh: '一、伏笔策略总览', en: 'I. Foreshadowing Strategy Overview' },
+      slots: [
+        { id: 'fh_strategy', level: 1, label: { zh: '', en: '' }, hint: { zh: '用一段话描述整部作品的伏笔策略：密集还是稀疏？以什么类型的伏笔为主？', en: 'Describe your overall foreshadowing strategy in a paragraph: dense or sparse? What types dominate?' } },
+      ],
+    },
+  ],
+  outro: {
+    zh: '以下为自由编辑区，可按需添加模板框架之外的内容。',
+    en: 'Free editing zone — add any content beyond the template framework here.',
+  },
+};
 
-> 伏笔是横跨多个章节的暗线。好的伏笔让读者在回收时恍然大悟。
-> 本文档帮助你在写作前主动规划伏笔网络，而非事后扫描。
-> 每条伏笔条目通过左侧面板独立管理（新增 / 删除），点击条目在右侧编辑。
-
-## 一、伏笔策略总览
-
-<!-- hint:用一段话描述整部作品的伏笔策略：密集还是稀疏？以什么类型的伏笔为主？ -->
-<!-- slot -->
-<!-- /slot -->
-
----
-
-> 以下为自由编辑区，可按需添加模板框架之外的内容。
-`;
-
-const FORESHADOWING_TEMPLATE_EN = `# Foreshadowing Ledger
-
-> Foreshadowing is the art of planting clues across chapters. Great foreshadowing makes readers gasp in hindsight.
-> This document helps you proactively plan your foreshadowing network before writing — not scan chapters after the fact.
-> Each hook entry is managed independently via the left panel (add / delete). Click an entry to edit in the right panel.
-
-## I. Foreshadowing Strategy Overview
-
-<!-- hint:Describe your overall foreshadowing strategy in a paragraph: dense or sparse? What types dominate? -->
-<!-- slot -->
-<!-- /slot -->
-
----
-
-> Free editing zone — add any content beyond the template framework here.
-`;
-
-function getForeshadowingTemplate(lang: Lang): string {
-  return lang === 'en' ? FORESHADOWING_TEMPLATE_EN : FORESHADOWING_TEMPLATE_ZH;
+function getForeshadowingTemplate(lang: Lang, level?: number): string {
+  return renderTemplate(FORESHADOWING_TEMPLATE, lang, level ?? 2);
 }
 
 // ============================================================

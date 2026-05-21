@@ -388,6 +388,25 @@ ul, ol { list-style: none; }
 .pipeline-step.active {
   background: var(--accent); color: var(--text-on-accent);
   border-color: var(--accent);
+}
+/* 模板 Level 指示器（pipeline bar 右侧） */
+.level-indicator {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 2px solid var(--border); background: transparent;
+  color: var(--text-dim); font-size: 0.78rem; font-weight: 600;
+  cursor: pointer; user-select: none; flex-shrink: 0;
+  margin-left: 0.5rem;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.level-indicator:hover {
+  border-color: var(--accent-light); color: var(--text);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.3);
+}
+.level-indicator.level-unlocked {
+  border-color: var(--accent-light); color: var(--accent-light);
+  background: rgba(var(--accent-rgb), 0.08);
+}
   box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.2);
 }
 .pipeline-step.active .pipeline-id { color: inherit; opacity: 0.7; }
@@ -517,6 +536,8 @@ ul, ol { list-style: none; }
   margin: 0 1rem 0.6rem;
 }
 .slot-item:last-child { margin-bottom: 0; }
+/* 模板 level 分级：L2 槽位在 L1 模式下隐藏 */
+.slot-item.slot-hidden { display: none; }
 
 .slot-textarea {
   width: 100%; field-sizing: content;

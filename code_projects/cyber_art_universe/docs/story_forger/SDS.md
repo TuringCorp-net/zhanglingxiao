@@ -17,7 +17,8 @@
 |------|------|------|
 | v1.2.0 | 2026-05-08 | 9 项延期需求全部实现：伏笔账本、冲突地图、章节重写、营销辅助、MCP Write 工具。31/31 全部完成 |
 | v1.7.0 | 2026-05-09 | 冲突地图删除 + 伏笔 Markdown 模板 + 软木板合并入写作桌统一界面 |
-| v2.0.0 | 2026-05-20 | M0 原始构想模块 + Story Elf 浮动伴侣 + 多语言 ?lang= 架构 + 三标记槽位编辑器 + M3/M4 统一 entity 存储 + ADMIN_TOKEN 独立 Secret + CSS 清理（textareatarea field-sizing） |
+| v2.0.0 | 2026-05-20 | M0 原始构想模块 + Story Elf 浮动伴侣 + 多语言 ?lang= 架构 + 三标记槽位编辑器 + M3/M4 统一 entity 存储 + ADMIN_TOKEN 独立 Secret + CSS 清理（textarea field-sizing） |
+| v2.4.0 | 2026-05-21 | 模板分级系统（L0/L1/L2）+ 双语模板统一化（SlotDefinition）+ M3/M4 模板拆分（character_card.ts / foreshadowing_card.ts）+ 删 entities.ts + Level 前端可见性控制 + 作品级 config API |
 
 ---
 
@@ -25,7 +26,7 @@
 
 - **部署位置**：CAU Worker `cyber_art_api` 的子路由（`/api/write/*`）
 - **部署域名**：`CAU.turingcorp.net`（与 Read 侧共用）
-- **代码目录**：`src/api/write/`（9 个模块：workspace / entities / worldbuilding / outline / foreshadowing / draft / marketing / original_concept / elf_chat）+ `src/lib/ai.ts`（共享 AI 层）
+- **代码目录**：`src/api/write/`（12 个模块：workspace / character_card / foreshadowing_card / worldbuilding / outline / foreshadowing / draft / marketing / original_concept / elf_chat / hints / index）+ `src/lib/ai.ts`（共享 AI 层）+ `src/lib/template.ts`（模板定义与渲染）
 - **前端**：`src/pages/write.html` + `write.js`（统一写作桌 UI）
 - **D1/R2**：与 CAU Read 侧共享，无新增迁移
 
@@ -33,37 +34,39 @@
 
 ## 二、源代码模块清单
 
-### 2.1 共享 AI 层（`src/lib/`）
+### 2.1 共享层（`src/lib/`）
 
 | 文件 | 行数 | 用途 | 来源 |
 |------|------|------|------|
-| `ai.ts` | 70 | `generateWithAI(env, prompt, opts?)` — provider-agnostic AI 调用。支持 model/maxTokens/temperature 可配置 | Findora `ai_content.ts` 模式提取 |
+| `ai.ts` | 70 | `generateWithAI(env, prompt, opts?)` — provider-agnostic AI 调用 | Findora `ai_content.ts` 模式提取 |
+| `template.ts` | 143 | `SlotDef`/`TemplateDef` 类型 + `renderTemplate()`/`renderCard()` — 双语模板统一渲染 | 新增，v2.4.0 |
 
 ### 2.2 Write API 模块（`src/api/write/`）
 
 | 文件 | 行数 | 用途 | SRS 覆盖 |
 |------|------|------|---------|
-| `index.ts` | 80 | Write 侧路由分发（动态 segment 匹配） | — |
-| `workspace.ts` | 210 | 工作区 CRUD + 4 个状态转换端点（publish/close/reopen/preview） | SF-001~005 |
-| `worldbuilding.ts` | 155 | AI 生成/读取/更新世界观设定 Bible + 约束提取 | SF-010~012 |
-| `outline.ts` | 135 | AI 生成大纲（写入 D1 sections + R2 outline.md）+ 读取/手动编辑 | SF-020~022 |
+| `index.ts` | 95 | Write 侧路由分发（动态 segment 匹配，entity 按 type 分发） | — |
+| `workspace.ts` | 240 | 工作区 CRUD + 4 状态转换 + config 存取 | SF-001~005 |
+| `character_card.ts` | 195 | M3 人物卡模板定义 + CRUD（create/read/update card） | SF-014 |
+| `foreshadowing_card.ts` | 135 | M4 伏笔卡模板定义 + CRUD（create/read/update card） | SF-023 |
+| `worldbuilding.ts` | 135 | AI 生成/读取/更新世界观设定 Bible + 约束提取 | SF-010~012 |
+| `outline.ts` | 120 | AI 生成大纲（写入 D1 sections + R2 outline.md）+ 读取/手动编辑 | SF-020~022 |
+| `foreshadowing.ts` | 120 | M4 伏笔策略总览 AI 生成/读取/更新 | SF-023 |
 | `draft.ts` | 230 | 章节流水线：Intent Card → Draft v0 → Consistency Check → Polish → Output | SF-030~034 |
+| `hints.ts` | 100 | 智能提示系统（静态 + 动态） | SF-067 |
+| `elf_chat.ts` | 100 | Story Elf AI 对话 | SF-055~056 |
+| `original_concept.ts` | 55 | M0 原始构想读写 | SF-019 |
+| `marketing.ts` | 150 | 营销提取辅助 | SF-040~042 |
 
 ### 2.3 前端（`src/pages/`）
 
 | 文件 | 行数 | 用途 |
 |------|------|------|
-| `write.html` | 100 | 写作桌 HTML — 工作区选择、三栏布局 |
-| `write.js` | 165 | 写作桌交互 — 面板管理、章节树拖拽/筛选、AI 生成/保存 |
-
-### 2.4 已有文件的修改
-
-| 文件 | 变更 | 说明 |
-|------|------|------|
-| `src/api/index.ts` | +15 行 | 新增 `segments[0] === 'write'` 路由 dispatch |
-| `src/lib/errors.ts` | +4 行 | 新增 `WORK_NOT_PUBLISHABLE`、`WORK_STATUS_CONFLICT` |
-| `src/pages/index.html` | 状态参数修正 | `status=active` → `status=published` |
-| `src/pages/browse.html` | 状态参数修正 | `status=active` → `status=published` |
+| `write.html` | 100 | 写作桌 HTML — 工作区选择、Pipeline 导航、左右分栏 |
+| `write.js` | 550 | 写作桌交互 — Pipeline、模块切换、槽位编辑器、Level 可见性控制 |
+| `write-api.js` | 120 | HTTP 通信层（hGet/hPost/hPut + 语言切换） |
+| `story-elf.js` | 240 | Story Elf 浮动伴侣组件 |
+| `i18n-data.js` | 238 | 全站双语数据 |
 
 ---
 
@@ -139,7 +142,10 @@
 | tools/call | 5 个 Write Tools | `mcp.ts` | SF-051 | ✅ |
 | — | 与 REST 共用处理函数 | `mcp.ts` | SF-052 | ✅ |
 
-**Write 侧端点总数**：29 个（+9 工作区 +4 世界观 +1 伏笔 +3 大纲 +6 流水线 +3 营销 +3 状态转换）
+| GET | `/api/write/works/{id}/config` | `workspace.ts` | 作品配置读取 | ✅ |
+| PUT | `/api/write/works/{id}/config` | `workspace.ts` | 作品配置更新（如 template_level） | ✅ |
+
+**Write 侧端点总数**：31 个（+9 工作区 +2 config +4 世界观 +3 伏笔 +3 大纲 +6 流水线 +3 营销 +3 状态转换 -2 entity 合并）
 
 ---
 
@@ -187,11 +193,11 @@
 
 | 分类 | 文件数 | 总行数 |
 |------|--------|--------|
-| 共享 AI 层 | 1 | ~70 |
-| Write API 模块 | 8 | ~1,420 |
-| 前端 | 3 | ~1,110 |
+| 共享层 | 2 | ~210 |
+| Write API 模块 | 12 | ~1,500 |
+| 前端 | 5 | ~1,250 |
 | 基础修改 | 6 | +~40 |
-| **总计** | **18** | **~2,640** |
+| **总计** | **25** | **~3,000** |
 
 ---
 

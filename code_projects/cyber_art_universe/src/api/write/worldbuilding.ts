@@ -4,206 +4,77 @@ import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
 import { workContentPath, SUPPORTED_LANGS, DEFAULT_LANG, DEFAULT_BILINGUAL, extractLang, readR2WithLangFallback, type Lang, LANG_LABELS } from '../../lib/work_content';
+import { renderTemplate, type TemplateDef } from '../../lib/template';
 
 // ============================================================
-// 世界观设定圣经 — 结构化模板（中英双语）
+// 世界观设定圣经 — 结构化模板定义（单一来源，双语）
 // ============================================================
 
-const BIBLE_TEMPLATE_ZH = `# 世界观设定圣经
+const BIBLE_TEMPLATE: TemplateDef = {
+  title: { zh: '世界观设定圣经', en: 'Setting Bible' },
+  intro: {
+    zh: '本文件是作品的最高约束文档。所有人物、情节、章节内容必须服从此圣经的规则。\n> 各章节标题为设定框架，内容由作者与 AI 共同填充。可版本化、可回滚。',
+    en: 'This document is the supreme constraint for the work. All characters, plots, and chapter content must obey the rules herein.\n> Section headings form the structural framework; content is filled collaboratively by the author and AI. Version-controlled and rollback-capable.',
+  },
+  sections: [
+    {
+      heading: { zh: '一、世界规则与边界', en: 'I. World Rules & Boundaries' },
+      slots: [
+        { id: 'power_system',    level: 1, label: { zh: '力量/技术体系', en: 'Power / Technology System' }, hint: { zh: '描述这个世界的力量来源、等级划分、使用规则与代价', en: 'Describe the source of power, hierarchy, usage rules, and costs in this world' } },
+        { id: 'social_structure', level: 2, label: { zh: '社会组织与结构', en: 'Social Organization & Structure' }, hint: { zh: '国家、势力、阶层、家族等社会组织形态', en: 'Nations, factions, classes, clans, and other social structures' } },
+        { id: 'taboos_costs',     level: 2, label: { zh: '禁忌与代价', en: 'Taboos & Costs' }, hint: { zh: '世界中不可触碰的禁忌、使用力量的代价', en: 'Untouchable taboos in this world, costs of using power' } },
+      ],
+    },
+    {
+      heading: { zh: '二、核心主题与价值观', en: 'II. Core Themes & Values' },
+      slots: [
+        { id: 'central_thesis',   level: 1, label: { zh: '核心命题', en: 'Central Thesis' }, hint: { zh: '作品要传达的核心思想或问题', en: 'The core idea or question the work seeks to convey' } },
+        { id: 'emotional_tone',   level: 2, label: { zh: '情感基调', en: 'Emotional Tone' }, hint: { zh: '整体的情感色彩：黑暗/希望/悲壮/轻松 等', en: 'Overall emotional register: dark / hopeful / tragic / lighthearted, etc.' } },
+        { id: 'narrative_stance', level: 2, label: { zh: '叙事立场', en: 'Narrative Stance' }, hint: { zh: '从谁的视角看世界？隐含的价值判断', en: 'Whose perspective shapes the world? Implicit value judgments' } },
+      ],
+    },
+    {
+      heading: { zh: '三、角色体系', en: 'III. Character System' },
+      slots: [
+        { id: 'protagonist',             level: 1, label: { zh: '主角', en: 'Protagonist' }, hint: { zh: '姓名、身份、核心动机、能力边界、成长弧线', en: 'Name, identity, core motivation, ability boundaries, growth arc' } },
+        { id: 'supporting_characters',  level: 2, label: { zh: '核心配角', en: 'Key Supporting Characters' }, hint: { zh: '与主角的关系、各自动机、在主线中的作用', en: 'Relationship to protagonist, individual motivations, role in the main plot' } },
+        { id: 'relationship_web',       level: 2, label: { zh: '角色关系网', en: 'Character Relationship Web' }, hint: { zh: '角色之间的关键关系（可后续由 M3 人物卡模块细化）', en: 'Key relationships between characters (to be refined by M3 Character Cards)' } },
+      ],
+    },
+    {
+      heading: { zh: '四、场景与资源', en: 'IV. Settings & Resources' },
+      slots: [
+        { id: 'major_locations', level: 2, label: { zh: '主要地点', en: 'Major Locations' }, hint: { zh: '关键场景的地理位置、特征、叙事功能', en: 'Geography, features, and narrative function of key settings' } },
+        { id: 'key_items',       level: 2, label: { zh: '关键道具/技能', en: 'Key Items / Artifacts' }, hint: { zh: '可被反复使用的叙事资源（MacGuffin、圣物、核心能力等）', en: 'Reusable narrative resources (MacGuffins, relics, core abilities, etc.)' } },
+      ],
+    },
+    {
+      heading: { zh: '五、承诺清单', en: 'V. Promise Checklist' },
+      slots: [
+        { id: 'promise_checklist', level: 1, label: { zh: '', en: '' }, hint: {
+          zh: '列出你对读者的承诺——可以是一条，也可以是多条。每条一句话概括。例如：\n1) 主角终将复仇\n2) 隐藏身份会被揭穿\n3) 两个敌对势力终有一战\n承诺是你与读者之间的契约——一旦写下，后续必须兑现。',
+          en: 'List your promises to the reader — one or many. One sentence per promise. For example:\n1) The protagonist will ultimately take revenge\n2) The hidden identity will be exposed\n3) Two enemy factions will clash\nPromises are a contract with your readers — once written, they must be fulfilled.',
+        } },
+      ],
+    },
+    {
+      heading: { zh: '六、禁区与风格', en: 'VI. Boundaries & Style' },
+      slots: [
+        { id: 'content_red_lines', level: 1, label: { zh: '内容禁区', en: 'Content Red Lines' }, hint: { zh: '绝对不能触碰的内容主题', en: 'Themes and content that must never be touched' } },
+        { id: 'language_style',    level: 2, label: { zh: '语言风格', en: 'Language Style' }, hint: { zh: '叙事语言的风格定位：简洁/华丽/口语化/文学性 等', en: 'Prose style: concise / ornate / colloquial / literary, etc.' } },
+        { id: 'pacing_preference', level: 2, label: { zh: '节奏偏好', en: 'Pacing Preference' }, hint: { zh: '快节奏/慢热/张弛有度 等', en: 'Fast-paced / slow-burn / balanced rhythm, etc.' } },
+      ],
+    },
+  ],
+  outro: {
+    zh: '以下为自由编辑区，可按需添加模板框架之外的内容。',
+    en: 'Free editing zone — add any content beyond the template framework here.',
+  },
+};
 
-> 本文件是作品的最高约束文档。所有人物、情节、章节内容必须服从此圣经的规则。
-> 各章节标题为设定框架，内容由作者与 AI 共同填充。可版本化、可回滚。
-
-## 一、世界规则与边界
-
-### 力量/技术体系
-<!-- hint:描述这个世界的力量来源、等级划分、使用规则与代价 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 社会组织与结构
-<!-- hint:国家、势力、阶层、家族等社会组织形态 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 禁忌与代价
-<!-- hint:世界中不可触碰的禁忌、使用力量的代价 -->
-<!-- slot -->
-<!-- /slot -->
-
-## 二、核心主题与价值观
-
-### 核心命题
-<!-- hint:作品要传达的核心思想或问题 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 情感基调
-<!-- hint:整体的情感色彩：黑暗/希望/悲壮/轻松 等 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 叙事立场
-<!-- hint:从谁的视角看世界？隐含的价值判断 -->
-<!-- slot -->
-<!-- /slot -->
-
-## 三、角色体系
-
-### 主角
-<!-- hint:姓名、身份、核心动机、能力边界、成长弧线 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 核心配角
-<!-- hint:与主角的关系、各自动机、在主线中的作用 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 角色关系网
-<!-- hint:角色之间的关键关系（可后续由 M3 人物卡模块细化） -->
-<!-- slot -->
-<!-- /slot -->
-
-## 四、场景与资源
-
-### 主要地点
-<!-- hint:关键场景的地理位置、特征、叙事功能 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 关键道具/技能
-<!-- hint:可被反复使用的叙事资源（MacGuffin、圣物、核心能力等） -->
-<!-- slot -->
-<!-- /slot -->
-
-## 五、承诺清单
-
-<!-- hint:列出你对读者的承诺——可以是一条，也可以是多条。每条一句话概括。例如：
-1) 主角终将复仇
-2) 隐藏身份会被揭穿
-3) 两个敌对势力终有一战
-承诺是你与读者之间的契约——一旦写下，后续必须兑现。 -->
-<!-- slot -->
-<!-- /slot -->
-
-## 六、禁区与风格
-
-### 内容禁区
-<!-- hint:绝对不能触碰的内容主题 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 语言风格
-<!-- hint:叙事语言的风格定位：简洁/华丽/口语化/文学性 等 -->
-<!-- slot -->
-<!-- /slot -->
-
-### 节奏偏好
-<!-- hint:快节奏/慢热/张弛有度 等 -->
-<!-- slot -->
-<!-- /slot -->
-`;
-
-const BIBLE_TEMPLATE_EN = `# Setting Bible
-
-> This document is the supreme constraint for the work. All characters, plots, and chapter content must obey the rules herein.
-> Section headings form the structural framework; content is filled collaboratively by the author and AI. Version-controlled and rollback-capable.
-
-## I. World Rules & Boundaries
-
-### Power / Technology System
-<!-- hint:Describe the source of power, hierarchy, usage rules, and costs in this world -->
-<!-- slot -->
-<!-- /slot -->
-
-### Social Organization & Structure
-<!-- hint:Nations, factions, classes, clans, and other social structures -->
-<!-- slot -->
-<!-- /slot -->
-
-### Taboos & Costs
-<!-- hint:Untouchable taboos in this world, costs of using power -->
-<!-- slot -->
-<!-- /slot -->
-
-## II. Core Themes & Values
-
-### Central Thesis
-<!-- hint:The core idea or question the work seeks to convey -->
-<!-- slot -->
-<!-- /slot -->
-
-### Emotional Tone
-<!-- hint:Overall emotional register: dark / hopeful / tragic / lighthearted, etc. -->
-<!-- slot -->
-<!-- /slot -->
-
-### Narrative Stance
-<!-- hint:Whose perspective shapes the world? Implicit value judgments -->
-<!-- slot -->
-<!-- /slot -->
-
-## III. Character System
-
-### Protagonist
-<!-- hint:Name, identity, core motivation, ability boundaries, growth arc -->
-<!-- slot -->
-<!-- /slot -->
-
-### Key Supporting Characters
-<!-- hint:Relationship to protagonist, individual motivations, role in the main plot -->
-<!-- slot -->
-<!-- /slot -->
-
-### Character Relationship Web
-<!-- hint:Key relationships between characters (to be refined by M3 Character Cards) -->
-<!-- slot -->
-<!-- /slot -->
-
-## IV. Settings & Resources
-
-### Major Locations
-<!-- hint:Geography, features, and narrative function of key settings -->
-<!-- slot -->
-<!-- /slot -->
-
-### Key Items / Artifacts
-<!-- hint:Reusable narrative resources (MacGuffins, relics, core abilities, etc.) -->
-<!-- slot -->
-<!-- /slot -->
-
-## V. Promise Checklist
-
-<!-- hint:List your promises to the reader — one or many. One sentence per promise. For example:
-1) The protagonist will ultimately take revenge
-2) The hidden identity will be exposed
-3) Two enemy factions will clash
-Promises are a contract with your readers — once written, they must be fulfilled. -->
-<!-- slot -->
-<!-- /slot -->
-
-## VI. Boundaries & Style
-
-### Content Red Lines
-<!-- hint:Themes and content that must never be touched -->
-<!-- slot -->
-<!-- /slot -->
-
-### Language Style
-<!-- hint:Prose style: concise / ornate / colloquial / literary, etc. -->
-<!-- slot -->
-<!-- /slot -->
-
-### Pacing Preference
-<!-- hint:Fast-paced / slow-burn / balanced rhythm, etc. -->
-<!-- slot -->
-<!-- /slot -->
-`;
-
-/** 根据语言获取对应模板 */
-function getBibleTemplate(lang: Lang): string {
-  return lang === 'en' ? BIBLE_TEMPLATE_EN : BIBLE_TEMPLATE_ZH;
+/** 根据语言和 level 获取模板 markdown */
+function getBibleTemplate(lang: Lang, level?: number): string {
+  return renderTemplate(BIBLE_TEMPLATE, lang, level ?? 2);
 }
 
 // ============================================================

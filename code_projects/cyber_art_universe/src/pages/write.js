@@ -146,6 +146,7 @@ async function onWorkspaceChange() {
   qs('#split-view').style.display = 'grid';
   cacheClear(); // 切换作品，清空模块缓存
   refreshPipelineGuide(id);
+  loadWorkConfig(); // 加载模板 level 配置
   await switchModule('original_concept');
   updateElfContext();
 }
@@ -308,6 +309,82 @@ function rotateHint(module) {
 }
 
 // ============================================================
+// Template Level 可见性控制
+// ============================================================
+var _currentLevel = 1; // 当前作品模板 level（默认 L1）
+
+/** 根据当前 level 显示/隐藏槽位 */
+function applySlotLevel() {
+  var items = document.querySelectorAll('#slot-groups .slot-item');
+  items.forEach(function(item) {
+    var sl = parseInt((item.dataset.level || 'L2').replace('L', '')) || 2;
+    if (sl > _currentLevel) {
+      item.classList.add('slot-hidden');
+    } else {
+      item.classList.remove('slot-hidden');
+    }
+  });
+}
+
+/** 从服务端加载作品 config */
+async function loadWorkConfig() {
+  var wid = state.currentWorkId;
+  if (!wid) return;
+  try {
+    var data = await hGet('/api/write/works/' + wid + '/config');
+    if (data && data.ok && data.data && data.data.template_level) {
+      _currentLevel = data.data.template_level;
+    }
+  } catch (e) {
+    // 默认 L1
+  }
+  renderLevelIndicator();
+  applySlotLevel();
+}
+
+/** 渲染 Level 指示器到 pipeline bar */
+function renderLevelIndicator() {
+  var el = document.getElementById('level-indicator');
+  if (!el) {
+    var stepsEl = document.getElementById('pipeline-steps');
+    if (!stepsEl) return;
+    el = document.createElement('span');
+    el.id = 'level-indicator';
+    el.className = 'level-indicator';
+    el.title = '点击切换模板等级';
+    el.addEventListener('click', function () {
+      var next = _currentLevel >= 2 ? 1 : _currentLevel + 1;
+      setSlotLevel(next);
+    });
+    stepsEl.parentNode.insertBefore(el, stepsEl.nextSibling);
+  }
+  updateLevelIndicator();
+}
+
+function updateLevelIndicator() {
+  var el = document.getElementById('level-indicator');
+  if (!el) return;
+  el.textContent = 'L' + _currentLevel;
+  el.title = _currentLevel >= 2 ? '当前：完整模板 (L2)。点击回到基础模板 (L1)' : '当前：基础模板 (L1)。点击解锁完整模板 (L2)';
+  if (_currentLevel >= 2) {
+    el.classList.add('level-unlocked');
+  } else {
+    el.classList.remove('level-unlocked');
+  }
+}
+
+/** 设置 level 并持久化 */
+function setSlotLevel(newLevel) {
+  _currentLevel = newLevel;
+  applySlotLevel();
+  var wid = state.currentWorkId;
+  if (wid) {
+    hPut('/api/write/works/' + wid + '/config', { template_level: newLevel }).catch(function() {});
+  }
+  updateLevelIndicator();
+}
+
+// ============================================================
 // Slot Editor Engine
 // ============================================================
 var _slotData = null; // 缓存的 parse 结果，用于序列化
@@ -360,7 +437,8 @@ function parseSlotTemplate(md) {
   return { groups: groups, freeContent: freeContent };
 }
 
-// 三标记分离格式：<!-- hint:text --> <!-- slot --> ... <!-- /slot -->
+// 三标记分离格式：<!-- hint:L1:text --> <!-- slot --> ... <!-- /slot -->
+// 支持 level 前缀（L1/L2），兼容无 level 的旧格式
 // 解析前预归一化：多行 hint 压成单行，彻底消除死循环风险
 function parseSegments(md) {
   // 预归一化：<!-- hint:...\n...\n...--> → <!-- hint:... -->
@@ -372,14 +450,16 @@ function parseSegments(md) {
   var lines = md.split('\n');
   var i = 0;
   var pendingHint = '';
+  var pendingLevel = 'L2'; // 默认 L2：兼容无 level 的旧模板
 
   while (i < lines.length) {
     var line = lines[i];
 
-    // <!-- hint:text --> — 单行（已归一化，必然有 -->）
-    var hm = line.match(/^\s*<!--\s*hint:\s*(.+?)\s*-->\s*$/);
+    // <!-- hint:L1:text --> 或 <!-- hint:text -->（旧格式兼容）
+    var hm = line.match(/^\s*<!--\s*hint:(?:L([12]):)?\s*(.+?)\s*-->\s*$/);
     if (hm) {
-      pendingHint = hm[1].trim();
+      pendingLevel = hm[1] ? 'L' + hm[1] : 'L2';
+      pendingHint = hm[2].trim();
       i++;
       continue;
     }
@@ -394,8 +474,9 @@ function parseSegments(md) {
         content += (content ? '\n' : '') + nl;
         i++;
       }
-      segments.push({ type: 'slot', label: pendingHint, content: unescSlot(content.trim()) });
+      segments.push({ type: 'slot', label: pendingHint, level: pendingLevel, content: unescSlot(content.trim()) });
       pendingHint = '';
+      pendingLevel = 'L2';
       continue;
     }
 
@@ -517,11 +598,13 @@ function renderSlotEditor(data) {
     } else if (seg.type === 'slot') {
       var item = document.createElement('div');
       item.className = 'slot-item';
+      item.dataset.level = seg.level || 'L2';
       var ta = document.createElement('textarea');
       ta.className = 'slot-textarea';
       ta.rows = Math.max(2, Math.min(6, (seg.content || '').split('\n').length));
       ta.value = seg.content || '';
-      ta.placeholder = seg.label;
+      // hint 不再设为 placeholder，而是存为 data 属性供 Story Elf 对话泡使用
+      if (seg.label) ta.dataset.hint = seg.label;
       item.appendChild(ta);
       parent.appendChild(item);
     }
@@ -532,6 +615,9 @@ function renderSlotEditor(data) {
   if (freeArea) {
     freeArea.value = data.freeContent || '';
   }
+
+  // 渲染完成后应用 level 可见性
+  applySlotLevel();
 }
 
 // 序列化槽位内容 → 完整 markdown
@@ -557,7 +643,8 @@ function serializeSlotContent() {
       if (seg.type === 'framework') {
         result += (result ? '\n' : '') + (seg._md || '');
       } else if (seg.type === 'slot') {
-        result += (result && !result.endsWith('\n') ? '\n' : '') + '<!-- hint:' + seg.label + ' -->\n<!-- slot -->\n';
+        var lv = seg.level || 'L2';
+        result += (result && !result.endsWith('\n') ? '\n' : '') + '<!-- hint:' + lv + ':' + seg.label + ' -->\n<!-- slot -->\n';
         var val = '';
         if (taIdx < textareas.length) {
           val = textareas[taIdx].value.trim();
@@ -585,7 +672,7 @@ function addSlotGroup() {
   var newNum = _slotData.groups.length + 1;
   var newTitle = lastGroup.title ? lastGroup.title.replace(/#\d+/, '#' + newNum) : '';
   var newSegments = lastGroup.segments.map(function (seg) {
-    if (seg.type === 'slot') return { type: 'slot', label: seg.label, content: '' };
+    if (seg.type === 'slot') return { type: 'slot', label: seg.label, level: seg.level || 'L2', content: '' };
     return { type: 'framework', html: seg.html, _md: seg._md };
   });
   _slotData.groups.push({ title: newTitle, segments: newSegments });

@@ -6,8 +6,10 @@ import {
   listMyWorks, createDraftWork, getMyWork, updateMyWork, deleteMyWork,
   previewWork, publishWork, closeWork, reopenWork,
   createSection, updateSection, deleteSection,
+  getWorkConfig, updateWorkConfig,
 } from './workspace';
-import { createEntity, updateEntity, deleteEntity, readEntityCard, updateEntityCard } from './entities';
+import { createCharacter, readCharacterCard, updateCharacterCard, updateEntity, deleteEntity } from './character_card';
+import { createForeshadowing, readForeshadowingCard, updateForeshadowingCard } from './foreshadowing_card';
 import { generateWorldbuilding, readWorldbuilding, updateWorldbuilding, readConstraints } from './worldbuilding';
 import { generateOutline, readOutline, updateOutline } from './outline';
 import { createIntent, readIntent, generateDraft, checkConsistency, polishDraft, outputDraft, rewriteSection } from './draft';
@@ -34,12 +36,26 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
     if (request.method === 'PUT') return updateSection(env, request, resourceId, subResourceId);
     if (request.method === 'DELETE') return deleteSection(env, request, resourceId, subResourceId);
   }
+  // 实体 CRUD — 按 type 分发到 M3 人物卡 或 M4 伏笔卡
   if (resource === 'works' && resourceId && subResource === 'entities' && !subResourceId && !action) {
-    if (request.method === 'POST') return createEntity(env, request, resourceId);
+    if (request.method === 'POST') {
+      const body = await request.clone().json() as { type?: string };
+      if (body.type === 'foreshadowing') return createForeshadowing(env, request, resourceId);
+      return createCharacter(env, request, resourceId);
+    }
   }
   if (resource === 'works' && resourceId && subResource === 'entities' && subResourceId && action === 'card') {
-    if (request.method === 'GET') return readEntityCard(env, request, resourceId, subResourceId);
-    if (request.method === 'PUT') return updateEntityCard(env, request, resourceId, subResourceId);
+    if (request.method === 'GET' || request.method === 'PUT') {
+      const entity = await env.DB.prepare('SELECT type FROM entities WHERE id = ? AND work_id = ?').bind(subResourceId, resourceId).first<{ type: string }>();
+      if (!entity) return new Response(JSON.stringify(jsonError(ErrorCodes.ENTITY_NOT_FOUND, 'Entity not found')), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      if (entity.type === 'foreshadowing') {
+        if (request.method === 'GET') return readForeshadowingCard(env, request, resourceId, subResourceId);
+        if (request.method === 'PUT') return updateForeshadowingCard(env, request, resourceId, subResourceId);
+      } else {
+        if (request.method === 'GET') return readCharacterCard(env, request, resourceId, subResourceId);
+        if (request.method === 'PUT') return updateCharacterCard(env, request, resourceId, subResourceId);
+      }
+    }
   }
   if (resource === 'works' && resourceId && subResource === 'entities' && subResourceId && !action) {
     if (request.method === 'PUT') return updateEntity(env, request, resourceId, subResourceId);
@@ -61,6 +77,10 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   }
   if (resource === 'works' && resourceId && subResource === 'reopen' && !action) {
     if (request.method === 'PATCH') return reopenWork(env, request, resourceId);
+  }
+  if (resource === 'works' && resourceId && subResource === 'config' && !action) {
+    if (request.method === 'GET') return getWorkConfig(env, resourceId);
+    if (request.method === 'PUT') return updateWorkConfig(env, request, resourceId);
   }
 
   if (resource === 'worldbuilding') {
