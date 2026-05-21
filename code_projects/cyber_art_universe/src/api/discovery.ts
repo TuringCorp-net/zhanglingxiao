@@ -34,7 +34,7 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         events: 'Global event feed',
       },
       write: {
-        workspace: 'Work CRUD + publish/unpublish + preview',
+        workspace: 'Work CRUD + publish/unpublish + preview + config',
         m0_original_concept: 'Original Concept — freeform inspiration notes',
         m1_worldbuilding: 'Setting Bible — structured template + AI generation',
         m2_outline: 'Story Framework Outline — chapter management + plot template',
@@ -42,6 +42,7 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         m4_foreshadowing: 'Foreshadowing Ledger — plan/edit/track',
         m5_intent: 'Chapter Intent Cards — per-chapter writing blueprint',
         m6_draft: 'Chapter Production Pipeline — generate/check/polish/rewrite/output',
+        template_level: 'L1/L2 progressive template level system with per-work config',
         marketing: 'Marketing — hook extraction/title generation/content repurposing',
         elf_chat: 'Story Elf AI Chat — reading companion + writing assistant',
       },
@@ -73,6 +74,7 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         publish: 'PATCH /api/write/works/{id}/publish',
         close: 'PATCH /api/write/works/{id}/close',
         reopen: 'PATCH /api/write/works/{id}/reopen',
+        config: 'GET/PUT /api/write/works/{id}/config',
         sections_create: 'POST /api/write/works/{id}/sections',
         sections_update: 'PUT /api/write/works/{id}/sections/{sid}',
         sections_delete: 'DELETE /api/write/works/{id}/sections/{sid}',
@@ -256,6 +258,12 @@ Generation endpoints (\`POST .../generate\`) default to bilingual output (zh+en)
 
 **PATCH /api/write/works/{id}/reopen** — Republish (closed→published)
 
+**GET /api/write/works/{id}/config** — Read work-level config
+- Returns: \`{template_level: 1|2}\` — L1 = basic template (default), L2 = full template
+
+**PUT /api/write/works/{id}/config** — Update work-level config
+- Body: \`{template_level: 1|2}\`
+
 ### Section Management
 
 **POST /api/write/works/{id}/sections** — Create section
@@ -409,59 +417,52 @@ All MCP requests use the \`type\` field in POST body:
 
 ---
 
-## Template Format (v2.3+)
+## Template Format (v2.4+)
 
-The Write UI uses a **slot-based editor** for M1-M4 modules. AI Agents writing content MUST follow this format to ensure the slot editor can parse the content correctly.
+The Write UI uses a **tree-structured section editor** for M1-M4 modules. Each \`##\` section and \`###\` subsection has its own level (\`L1\` = basic, always visible; \`L2\` = advanced, hidden by default).
 
-### Three-Marker Format
+### Level + Slot Markers
 
-Each editable field uses three markers: hint, slot, and /slot:
+Each section heading is preceded by a level marker, and each editable field uses three markers:
 
 \`\`\`markdown
-<!-- label: hint or options -->
+<!-- L1 -->
+### Power / Technology System
+<!-- hint:Describe the source of power, hierarchy, usage rules, and costs -->
+<!-- slot -->
+<!-- /slot -->
+The world power system is based on...
 \`\`\`
 
-The comment text becomes the slot label in the UI. Everything between a comment and the next slot marker (or next heading) is the editable content.
+- **Level marker** (\`<!-- L{n} -->\`): Sets the level for the following heading and its slots. \`L1\` = basic tier (visible to all users), \`L2\` = advanced tier (requires unlock).
+- **Hint marker** (\`<!-- hint:text -->\`): Guidance text shown to the author via the Story Elf companion.
+- **Slot markers** (\`<!-- slot -->...<!-- /slot -->\`): Delimit editable content.
+
+### Section Tree
+
+- \`##\` heading = top-level section (level = MIN of all child slot levels)
+- \`###\` heading = subsection (level from its preceding \`<!-- L{n} -->\`)
+- \`#\` title area (before first \`##\`) = always visible (level 0)
 
 ### Framework vs. Content
 
-- **Framework** (headings, blockquotes, bold labels) = read-only, preserved exactly
-- **Slot comments** (HTML comment lines) = label above each editable textarea
-- **Content** (text between slot markers) = editable by the author
+- **Framework** (headings, blockquotes) = read-only, preserved exactly
+- **Level markers** = control visibility, invisible in rendered output
+- **Slot content** (between \`<!-- slot -->...<!-- /slot -->\`) = editable by the author
 - **Free zone** (after last \`---\`) = free-form markdown area
 
 ### Repeatable Groups (M4)
 
-Groups separated by \`---\` within the template area represent repeatable entries (e.g., foreshadowing hooks). Each group renders as a card with title + slots. The UI provides \`[+]\` to clone and \`[x]\` to delete groups.
-
-### Fallback
-
-If the markdown has zero slot markers (e.g., AI-generated content that replaced comments with actual text), all content is placed in the free-form zone. The author can still edit everything.
+Groups separated by \`---\` represent repeatable entries (foreshadowing hooks). Each group renders as a card with title + slots. The UI provides \`[+]\` to clone and \`[x]\` to delete groups.
 
 ### Agent Writing Guide
 
 When generating or updating M1-M4 content:
 
-1. **Keep all slot markers** - Write content BETWEEN the opening and closing slot comment markers, keeping both
-2. **Do not remove or rename headings** - They are structural anchors
-3. **Use separator for file structure only** - The last separator divides template from free zone
-4. **For M4**: Add separators between foreshadowing entries to create repeatable groups
-
-Example slot usage (three-marker format):
-
-\`\`\`markdown
-### Power / Technology System
-<!-- hint:Describe the source of power, hierarchy, usage rules, and costs -->
-<!-- slot -->
-<!-- /slot -->
-The world power system is based on "mirror veins" that connect two parallel realities...
-
-### Social Structure
-<!-- hint:Nations, factions, classes, clans, and other social structures -->
-<!-- slot -->
-<!-- /slot -->
-The society is divided into three tiers: the Mirror Council (ruling elite)...
-\`\`\`
+1. **Preserve all markers**: Keep \`<!-- L{n} -->\`, \`<!-- hint:text -->\`, \`<!-- slot -->\`, \`<!-- /slot -->\` exactly as-is
+2. **Write content between slot markers**: Place your generated text between \`<!-- slot -->\` and \`<!-- /slot -->\`
+3. **Do not remove or rename headings**: They are structural anchors
+4. **Level markers go before headings**: Each \`##\` and \`###\` heading needs a \`<!-- L{n} -->\` marker before it
 
 
 
@@ -889,6 +890,16 @@ paths:
     patch:
       tags: [Write - Workspace]
       summary: Republish work
+      security: [{ BearerAuth: [] }]
+
+  /api/write/works/{id}/config:
+    get:
+      tags: [Write - Workspace]
+      summary: Read work config (template_level)
+      security: [{ BearerAuth: [] }]
+    put:
+      tags: [Write - Workspace]
+      summary: Update work config
       security: [{ BearerAuth: [] }]
 
   /api/write/works/{id}/sections:

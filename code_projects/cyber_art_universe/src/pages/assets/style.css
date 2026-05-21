@@ -550,7 +550,16 @@ ul, ol { list-style: none; }
   padding: 0.4rem 0.6rem; font-size: 0.82rem; line-height: 1.6;
   font-family: var(--font); box-sizing: border-box;
   transition: background 0.2s, border-color 0.2s;
+  /* 滚动条默认隐藏，hover/focus 时显示 */
+  scrollbar-width: thin; scrollbar-color: transparent transparent;
 }
+.slot-textarea:hover,
+.slot-textarea:focus { scrollbar-color: var(--text-muted) transparent; }
+/* Webkit 滚动条 */
+.slot-textarea::-webkit-scrollbar { width: 4px; }
+.slot-textarea::-webkit-scrollbar-thumb { background: transparent; border-radius: 2px; }
+.slot-textarea:hover::-webkit-scrollbar-thumb,
+.slot-textarea:focus::-webkit-scrollbar-thumb { background: var(--text-muted); }
 .slot-textarea:hover {
   border-color: var(--border);
 }
@@ -613,6 +622,14 @@ ul, ol { list-style: none; }
   border: 1px solid transparent; border-radius: 6px;
   padding: 0.5rem 0.75rem; font-size: 0.82rem; line-height: 1.6;
   font-family: var(--font); box-sizing: border-box;
+  scrollbar-width: thin; scrollbar-color: transparent transparent;
+}
+.slot-free-zone textarea:hover,
+.slot-free-zone textarea:focus { scrollbar-color: var(--text-muted) transparent; }
+.slot-free-zone textarea::-webkit-scrollbar { width: 4px; }
+.slot-free-zone textarea::-webkit-scrollbar-thumb { background: transparent; border-radius: 2px; }
+.slot-free-zone textarea:hover::-webkit-scrollbar-thumb,
+.slot-free-zone textarea:focus::-webkit-scrollbar-thumb { background: var(--text-muted); }
   transition: background 0.2s, border-color 0.2s;
 }
 .slot-free-zone textarea:hover { border-color: var(--border); }
@@ -626,7 +643,15 @@ ul, ol { list-style: none; }
   border: none; padding: 1.5rem; font-family: var(--font); font-size: 0.95rem;
   line-height: 1.9; resize: none; outline: none;
   box-sizing: border-box; min-height: 20rem;
+  overflow-y: auto;
+  scrollbar-width: thin; scrollbar-color: transparent transparent;
 }
+.writing-editor:hover,
+.writing-editor:focus { scrollbar-color: var(--text-muted) transparent; }
+.writing-editor::-webkit-scrollbar { width: 4px; }
+.writing-editor::-webkit-scrollbar-thumb { background: transparent; border-radius: 2px; }
+.writing-editor:hover::-webkit-scrollbar-thumb,
+.writing-editor:focus::-webkit-scrollbar-thumb { background: var(--text-muted); }
 
 /* — Form Editor (M5) — */
 .form-editor {

@@ -1446,27 +1446,32 @@ function initSplitDrag() {
   }
 }
 
+var _panelMode = 'three'; // 'two' | 'three'
+
 function applyGridColumns() {
   var container = qs('#split-view');
   if (!container) return;
-  var right = 100 - state.leftPct - state.midPct;
-  container.style.gridTemplateColumns = state.leftPct + '% 8px ' + state.midPct + '% 8px ' + Math.max(15, right) + '%';
+  if (_panelMode === 'two') {
+    container.style.gridTemplateColumns = state.leftPct + '% 8px ' + (100 - state.leftPct) + '% 0px 0%';
+  } else {
+    var right = 100 - state.leftPct - state.midPct;
+    container.style.gridTemplateColumns = state.leftPct + '% 8px ' + state.midPct + '% 8px ' + Math.max(15, right) + '%';
+  }
 }
 
-/** M0 两栏模式：隐藏右栏和第二条分隔线 */
+/** M0/M6 两栏模式 */
 function setTwoPanelMode() {
+  _panelMode = 'two';
   var d2 = qs('#split-divider-2');
   var right = qs('.split-right');
   if (d2) d2.style.display = 'none';
   if (right) right.style.display = 'none';
-  var container = qs('#split-view');
-  if (container) {
-    container.style.gridTemplateColumns = state.leftPct + '% 8px ' + (100 - state.leftPct) + '% 0px 0%';
-  }
+  applyGridColumns();
 }
 
-/** M1-M4 三栏模式 */
+/** M1-M5 三栏模式 */
 function setThreePanelMode() {
+  _panelMode = 'three';
   var d2 = qs('#split-divider-2');
   var right = qs('.split-right');
   if (d2) d2.style.display = '';

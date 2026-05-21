@@ -49,6 +49,7 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
   if (request.method === 'GET') {
     if (pathname === '/.well-known/agent-manifest.json' || pathname === '/.well-known/ai-manifest.json') return handleAgentManifest(env, request);
     if (pathname === '/llms.txt') return handleLLMsTxt(env, request);
+    if (pathname === '/llm.txt') return new Response(null, { status: 301, headers: { Location: '/llms.txt' } });
     if (pathname === '/openapi.yaml') return handleOpenAPI(env, request);
   }
 
