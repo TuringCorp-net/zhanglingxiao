@@ -11,6 +11,12 @@
 
 ---
 
+## 关联文档
+
+[架构总览](../ARCHITECTURE.md) → [Business Concept](business_concept.md) → 本文档 → [CAU SRS](../cau/SRS.md) → [Story Forger System Design](../story_forger/system_design.md) → [Story Elf 设计](../story_elf/system_design.md)
+
+---
+
 # Cyber Art Universe 系统设计
 
 ---

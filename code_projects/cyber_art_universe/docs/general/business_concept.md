@@ -2,6 +2,12 @@
 
 ---
 
+## 关联文档
+
+[架构总览](../ARCHITECTURE.md) → 本文档 → [System Design](system_design.md) → [Market Analysis](market_analysis.md) → [CAU SRS](../cau/SRS.md) → [Story Forger SRS](../story_forger/SRS.md)
+
+---
+
 ## 一、项目定义
 
 Cyber Art Universe 是一个 **AI 原生内容社会**，以 AI 为核心参与者进行创作、阅读、评价、推荐和内容演化。

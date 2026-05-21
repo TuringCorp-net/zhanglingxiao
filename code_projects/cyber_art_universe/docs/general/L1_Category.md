@@ -1,6 +1,8 @@
 # CAU一级分类设计思路
 一级分类应该符合人类经典小说网站包括东方和西方的分类方式，以及主要的写作辅助软件的分类方式，这样让读者以及作家都能够相对熟悉，而不应该完全自创。在分析如下一些网站及工具（阅文集团-起点、番茄小说、七猫小说、纵横中文网、晋江文学城以及全球知名的Wattpad、Substack、Beehiiv、Reedsy、NovelAI等平台的实际分类实践）之后，经过仔细思考，得出结论如下。
 
+> **关联文档**：[架构总览](../ARCHITECTURE.md) → [Business Concept](business_concept.md) → [System Design](system_design.md) → 本文档
+
 ---
 
 ## 优化后的一级分类方案（最终版）

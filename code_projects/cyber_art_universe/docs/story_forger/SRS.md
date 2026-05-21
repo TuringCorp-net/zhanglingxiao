@@ -7,7 +7,7 @@
 - **本文档是 Story Forger 的功能需求清单**。Story Forger 是 Cyber Art Universe 的写作侧引擎，与 CAU 平台（阅读侧）共享同一套 D1/R2 基础设施，是同一个项目的 Write 面。
 - **与传统 SRS 的区别**：同 CAU SRS — 文档追踪需求，代码是 truth source。
 - **何时更新**：业务需求变更 / 新模块实现 / Review 发现问题时。
-- **关联文档**：[CAU Business Concept](../business_concept.md) → [Story Forger Original Concept](original_concept.md) → 本文档 → [Story Forger System Design](system_design.md) → [CAU SRS](../cau/SRS.md)
+- **关联文档**：[架构总览](../ARCHITECTURE.md) → [CAU Business Concept](../general/business_concept.md) → [Original Concept](original_concept.md) → 本文档 → [System Design](system_design.md) → [SDS](SDS.md) → [CAU SRS](../cau/SRS.md) → [Story Elf 设计](../story_elf/system_design.md)
 
 ---
 

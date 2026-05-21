@@ -1,5 +1,7 @@
 # Cyber Art Universe — 前端设计文档
 
+> **关联文档**：[架构总览](../ARCHITECTURE.md) → [CAU SRS](SRS.md) → [CAU SDS](SDS.md) → 本文档 → [Story Forger 前端设计](../story_forger/frontend_design.md) → [Story Elf 前端设计](../story_elf/frontend_design.md)
+
 ## 一、设计哲学
 
 三个关键词：**简约、沉浸、赛博**

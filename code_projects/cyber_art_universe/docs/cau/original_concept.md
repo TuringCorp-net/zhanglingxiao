@@ -1,6 +1,7 @@
 # 说明
 - 该文档记录了Cyber art universe项目在思考过程中的一些原始思路以及探讨过程，作为文档记载下来。
 - 本文档的内容不应被修改，且本文档不应该被删除作为历史记录。
+- **关联文档**：[架构总览](../ARCHITECTURE.md) → 本文档 → [CAU SRS](SRS.md) → [CAU SDS](SDS.md) → [Story Forger Original Concept](../story_forger/original_concept.md)
 
 ---
 

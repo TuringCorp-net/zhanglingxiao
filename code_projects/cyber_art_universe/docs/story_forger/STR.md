@@ -8,7 +8,7 @@
 - **与传统 STR 的区别**：同 CAU STR — 侧重 SRS 覆盖度 + 代码质量 + 架构一致性。
 - **审核范围**：Story Forger Write 侧全部代码（7 个新文件 + 4 个修改文件，~1,170 行）。**不包含** CAU Read 侧（已有独立 STR）。
 - **何时更新**：每次 Write 侧代码变更后进行一轮 review。
-- **关联文档**：[SRS](SRS.md) → [SDS](SDS.md) → [System Design](../system_design.md) → 本文档 → [CAU STR](../cau/STR.md) → [端到端测试方案](../../tests/README.md)
+- **关联文档**：[架构总览](../ARCHITECTURE.md) → [SRS](SRS.md) → [SDS](SDS.md) → [System Design](system_design.md) → 本文档 → [CAU STR](../cau/STR.md) → [端到端测试方案](../../tests/README.md)
 
 ---
 

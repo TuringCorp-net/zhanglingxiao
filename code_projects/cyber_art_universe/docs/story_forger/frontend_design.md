@@ -7,7 +7,7 @@
 - **本文档描述 Story Forger 的人类用户界面设计**。Story Forger 是 Cyber Art Universe 的 Write 面，与 Read 面（CAU 平台）共享同一套 D1/R2 基础设施，但前端独立设计。
 - **与传统 UI 设计文档的区别**：本文档不是静态像素稿，而是交互模型 + 布局逻辑 + 关键设计决策的记录。具体实现允许细节偏差，但核心交互范式不可偏离。
 - **何时更新**：交互模型变更、新增关键功能面板、布局结构调整时。
-- **关联文档**：[Story Forger SRS](SRS.md) → 本文档 → [CAU Frontend Design](../cau/frontend_design.md)
+- **关联文档**：[架构总览](../ARCHITECTURE.md) → [SRS](SRS.md) → [System Design](system_design.md) → 本文档 → [CAU Frontend Design](../cau/frontend_design.md) → [Story Elf 前端设计](../story_elf/frontend_design.md)
 
 ---
 

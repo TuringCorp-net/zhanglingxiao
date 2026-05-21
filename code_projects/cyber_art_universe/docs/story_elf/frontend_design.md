@@ -1,6 +1,7 @@
 # Story Elf 前端设计
 
 > 版本: v0.1.0 | 状态: 草案 | 最后更新: 2026-05-21
+> **关联文档**：[架构总览](../ARCHITECTURE.md) → [Story Elf 系统设计](system_design.md) → 本文档 → [Story Forger 前端设计](../story_forger/frontend_design.md) → [CAU 前端设计](../cau/frontend_design.md)
 
 ---
 

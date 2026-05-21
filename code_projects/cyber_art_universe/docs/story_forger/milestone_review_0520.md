@@ -1,6 +1,7 @@
 # Story Forger — Milestone Review Report 0520
 
 > 本文档是 M0-M5 阶段改造完成后的全面 review 报告，涵盖文档一致性、代码与文档对照、数据完整性、前端实现四个维度。
+> **关联文档**：[架构总览](../ARCHITECTURE.md) → [SRS](SRS.md) → [SDS](SDS.md) → [STR](STR.md) → 本文档
 
 ## 一、Review 范围
 

@@ -7,7 +7,7 @@
 - **本文档由代码驱动更新**：描述 Story Forger Write 侧代码中**实际实现**了什么。
 - **与传统 SDS 的区别**：同 CAU SDS — 代码是 truth source，本文档是结构化解释层。与 system_design.md 的分工：system_design 描述"应该怎么做"，SDS 描述"实际做了什么"。
 - **何时更新**：新增/删除模块或端点时、D1 表变更时。
-- **关联文档**：[CAU Business Concept](../business_concept.md) → [Story Forger SRS](SRS.md) → [CAU System Design](../system_design.md) → 本文档 → [Story Forger STR](STR.md)
+- **关联文档**：[架构总览](../ARCHITECTURE.md) → [Business Concept](../general/business_concept.md) → [SRS](SRS.md) → [System Design](system_design.md) → 本文档 → [STR](STR.md) → [CAU SDS](../cau/SDS.md)
 
 ---
 

@@ -10,7 +10,7 @@
   - business_concept 或 system_design 新增/变更需求时 → 新增/修改对应条目
   - 新功能实现后 → 更新状态为 `done`
   - 每次 review（STR 输出）后 → 根据 review 结果更新状态
-- **关联文档**：[Business Concept](../business_concept.md) → [System Design](../system_design.md) → [SDS](SDS.md) → [STR](STR.md) → [Story Forger SRS](../story_forger/SRS.md) → [Market Analysis](../market_analysis.md) → [L1 Category](../L1_Category.md)
+- **关联文档**：[架构总览](../ARCHITECTURE.md) → [Business Concept](../general/business_concept.md) → [System Design](../general/system_design.md) → [SDS](SDS.md) → [STR](STR.md) → [Story Forger SRS](../story_forger/SRS.md) → [Story Elf 设计](../story_elf/system_design.md) → [Market Analysis](../general/market_analysis.md)
 
 ---
 
