@@ -12,19 +12,21 @@ var state = {
   currentEntityId: null,
   currentFhId: null,
   chapterFilter: 'all',
-  leftPct: 50,
+  leftPct: 33,   // 左栏百分比
+  midPct: 34,    // 中栏百分比，右栏 = 100 - left - mid
 };
 
 function loadState() {
   try {
-    var saved = JSON.parse(localStorage.getItem('sf_desk_v2') || '{}');
-    Object.assign(state, { chapterFilter: 'all', leftPct: 50 }, saved);
+    var saved = JSON.parse(localStorage.getItem('sf_desk_v3') || '{}');
+    Object.assign(state, { chapterFilter: 'all', leftPct: 33, midPct: 34 }, saved);
   } catch (e) {}
 }
 function saveState() {
   try {
-    localStorage.setItem('sf_desk_v2', JSON.stringify({
+    localStorage.setItem('sf_desk_v3', JSON.stringify({
       leftPct: state.leftPct,
+      midPct: state.midPct,
       chapterFilter: state.chapterFilter,
     }));
   } catch (e) {}
@@ -144,6 +146,7 @@ async function onWorkspaceChange() {
   state.currentWorkId = id;
   saveState();
   qs('#split-view').style.display = 'grid';
+  applyGridColumns(); // 初始三栏布局
   cacheClear(); // 切换作品，清空模块缓存
   refreshPipelineGuide(id);
   loadWorkConfig(); // 加载模板 level 配置
@@ -745,23 +748,23 @@ function removeSlotGroup(btn) {
   }
 }
 
-// 显示/切换编辑器类型
+// 显示/切换编辑器类型（三栏：左=参考 / 中=自由编辑 / 右=模板）
 function showSlotEditor(md) {
+  setThreePanelMode();
   var te = qs('#writing-editor');
   var se = qs('#slot-editor');
   var fe = qs('#form-editor');
+  var fz = qs('#slot-free-zone');
   if (te) te.style.display = 'none';
   if (fe) fe.style.display = 'none';
+  if (fz) fz.style.display = ''; // 用 CSS 的 flex，不清空
   if (se) {
     se.style.display = 'flex';
     se.style.flexDirection = 'column';
     se.style.overflowY = 'auto';
     se.style.flex = '1';
-    console.log('[slot] showSlotEditor start, md len=' + (md||'').length);
     var parsed = parseSlotTemplate(md);
-    console.log('[slot] parseSlotTemplate done, groups=' + (parsed.groups||[]).length);
     renderSlotEditor(parsed);
-    console.log('[slot] renderSlotEditor done');
   }
 }
 
@@ -769,8 +772,10 @@ function showTextEditor(val) {
   var te = qs('#writing-editor');
   var se = qs('#slot-editor');
   var fe = qs('#form-editor');
+  var fz = qs('#slot-free-zone');
   if (se) se.style.display = 'none';
   if (fe) fe.style.display = 'none';
+  if (fz) fz.style.display = 'none';
   if (te) {
     te.style.display = 'block';
     te.value = val || '';
@@ -778,11 +783,14 @@ function showTextEditor(val) {
 }
 
 function showFormEditor(intentData) {
+  setThreePanelMode();
   var te = qs('#writing-editor');
   var se = qs('#slot-editor');
   var fe = qs('#form-editor');
+  var fz = qs('#slot-free-zone');
   if (te) te.style.display = 'none';
   if (se) se.style.display = 'none';
+  if (fz) fz.style.display = 'none';
   if (!fe) return;
   fe.style.display = 'block';
 
@@ -921,6 +929,7 @@ async function loadM0() {
   console.log('[SF:M0] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'hasData' : 'noData');
   var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
   console.log('[SF:M0] content len=' + content.length + ', is_empty=' + (data && data.data && data.data.is_empty));
+  setTwoPanelMode();
   showTextEditor(content);
 }
 
@@ -987,6 +996,9 @@ async function loadM3() {
   showTextEditor('');
 
   await renderEntityCardList();
+  // 默认选中第一个角色
+  var first = qs('#split-left .card-item[data-entity-id]');
+  if (first) first.click();
 }
 
 async function renderEntityCardList() {
@@ -1056,6 +1068,9 @@ async function loadM4() {
   }
 
   await renderFhCardList();
+  // 默认选中第一个伏笔条目
+  var first = qs('#split-left .card-item[data-entity-id]');
+  if (first) first.click();
 }
 
 async function renderFhCardList() {
@@ -1127,12 +1142,19 @@ async function loadM5() {
   showTextEditor('');
 
   await loadChapterCardList();
+  // 默认选中第一章
+  var first = qs('#split-left .chapter-card[data-section-id]');
+  if (first) first.click();
 }
 
 async function loadM6() {
+  setTwoPanelMode();
   showTextEditor('');
 
   await loadChapterCardList();
+  // 默认选中第一章
+  var first = qs('#split-left .chapter-card[data-section-id]');
+  if (first) first.click();
 }
 
 async function loadChapterCardList() {
@@ -1365,30 +1387,91 @@ function renderBibleContent(md) {
 // Split Divider Drag
 // ============================================================
 function initSplitDrag() {
-  var divider = qs('#split-divider');
-  if (!divider) return;
-  divider.addEventListener('mousedown', function (e) {
-    e.preventDefault();
-    divider.classList.add('active');
-    var startX = e.clientX;
-    var startPct = state.leftPct;
-    function mv(ev) {
-      var container = qs('#split-view');
-      var cw = container.offsetWidth;
-      var delta = ((ev.clientX - startX) / cw) * 100;
-      var np = Math.max(25, Math.min(65, startPct + delta));
-      state.leftPct = np;
-      container.style.gridTemplateColumns = np + 'fr 10px ' + (100 - np) + 'fr';
-    }
-    function up() {
-      divider.classList.remove('active');
-      document.removeEventListener('mousemove', mv);
-      document.removeEventListener('mouseup', up);
-      saveState();
-    }
-    document.addEventListener('mousemove', mv);
-    document.addEventListener('mouseup', up);
-  });
+  var container = qs('#split-view');
+  if (!container) return;
+
+  // 分隔线 #1（左 | 中）：右栏不动，左和中分配剩余空间
+  var d1 = qs('#split-divider-1');
+  if (d1) {
+    d1.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      d1.classList.add('active');
+      var startX = e.clientX;
+      var startLeft = state.leftPct;
+      var fixedRight = 100 - state.leftPct - state.midPct; // 右栏不动
+      function mv(ev) {
+        var cw = container.offsetWidth;
+        var delta = ((ev.clientX - startX) / cw) * 100;
+        var newLeft = Math.max(15, Math.min(100 - fixedRight - 15, startLeft + delta));
+        state.leftPct = newLeft;
+        state.midPct = 100 - fixedRight - newLeft;
+        applyGridColumns();
+      }
+      function up() {
+        d1.classList.remove('active');
+        document.removeEventListener('mousemove', mv);
+        document.removeEventListener('mouseup', up);
+        saveState();
+      }
+      document.addEventListener('mousemove', mv);
+      document.addEventListener('mouseup', up);
+    });
+  }
+
+  // 分隔线 #2（中 | 右）：左栏不动，中和右分配剩余空间
+  var d2 = qs('#split-divider-2');
+  if (d2) {
+    d2.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      d2.classList.add('active');
+      var startX = e.clientX;
+      var startMid = state.midPct;
+      var fixedLeft = state.leftPct; // 左栏不动
+      function mv(ev) {
+        var cw = container.offsetWidth;
+        var delta = ((ev.clientX - startX) / cw) * 100;
+        var newMid = Math.max(15, Math.min(100 - fixedLeft - 15, startMid + delta));
+        state.midPct = newMid;
+        applyGridColumns();
+      }
+      function up() {
+        d2.classList.remove('active');
+        document.removeEventListener('mousemove', mv);
+        document.removeEventListener('mouseup', up);
+        saveState();
+      }
+      document.addEventListener('mousemove', mv);
+      document.addEventListener('mouseup', up);
+    });
+  }
+}
+
+function applyGridColumns() {
+  var container = qs('#split-view');
+  if (!container) return;
+  var right = 100 - state.leftPct - state.midPct;
+  container.style.gridTemplateColumns = state.leftPct + '% 8px ' + state.midPct + '% 8px ' + Math.max(15, right) + '%';
+}
+
+/** M0 两栏模式：隐藏右栏和第二条分隔线 */
+function setTwoPanelMode() {
+  var d2 = qs('#split-divider-2');
+  var right = qs('.split-right');
+  if (d2) d2.style.display = 'none';
+  if (right) right.style.display = 'none';
+  var container = qs('#split-view');
+  if (container) {
+    container.style.gridTemplateColumns = state.leftPct + '% 8px ' + (100 - state.leftPct) + '% 0px 0%';
+  }
+}
+
+/** M1-M4 三栏模式 */
+function setThreePanelMode() {
+  var d2 = qs('#split-divider-2');
+  var right = qs('.split-right');
+  if (d2) d2.style.display = '';
+  if (right) right.style.display = '';
+  applyGridColumns();
 }
 
 // ============================================================

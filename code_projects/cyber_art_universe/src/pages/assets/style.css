@@ -423,11 +423,12 @@ ul, ol { list-style: none; }
 /* — Split View（左右分栏写作区） — */
 .split-view {
   display: grid;
-  grid-template-columns: 50fr 10px 50fr;
+  grid-template-columns: 1fr 8px 1fr 8px 1fr;
   height: calc(100vh - 95px);
   overflow: hidden;
 }
 .split-left { overflow-y: auto; padding: 1rem 1.5rem; background: var(--bg); }
+.split-mid  { overflow-y: auto; display: flex; flex-direction: column; background: var(--bg); }
 .split-divider {
   position: relative; cursor: col-resize;
   margin: 120px 0;
@@ -543,7 +544,7 @@ ul, ol { list-style: none; }
 .slot-textarea {
   width: 100%; field-sizing: content;
   min-height: 2.5rem; max-height: 8rem;
-  overflow-y: auto;
+  overflow-y: auto; resize: none;
   background: transparent; color: var(--text);
   border: 1px solid transparent; border-radius: 6px;
   padding: 0.4rem 0.6rem; font-size: 0.82rem; line-height: 1.6;
@@ -594,10 +595,10 @@ ul, ol { list-style: none; }
   margin: 0.6rem 0;
 }
 
-/* — Free Zone — */
+/* — Free Zone（中栏独立面板） — */
 .slot-free-zone {
-  border-top: 2px solid var(--border);
   padding: 0.5rem 1rem;
+  flex: 1; display: flex; flex-direction: column;
 }
 .slot-free-label {
   font-size: 0.82rem; font-weight: 600; color: var(--accent-light);
@@ -605,8 +606,8 @@ ul, ol { list-style: none; }
 }
 .slot-free-hint { font-weight: 400; font-size: 0.7rem; color: var(--text-muted); }
 .slot-free-zone textarea {
-  width: 100%; field-sizing: content;
-  min-height: 6rem; max-height: 18rem;
+  width: 100%; flex: 1; resize: none;
+  min-height: 6rem;
   overflow-y: auto;
   background: transparent; color: var(--text);
   border: 1px solid transparent; border-radius: 6px;
@@ -621,10 +622,10 @@ ul, ol { list-style: none; }
 
 /* — Writing Editor (M0 / M6 自由文本) — */
 .writing-editor {
-  width: 100%; height: 100%; background: var(--bg); color: var(--text);
+  width: 100%; flex: 1; background: var(--bg); color: var(--text);
   border: none; padding: 1.5rem; font-family: var(--font); font-size: 0.95rem;
   line-height: 1.9; resize: none; outline: none;
-  box-sizing: border-box;
+  box-sizing: border-box; min-height: 20rem;
 }
 
 /* — Form Editor (M5) — */
@@ -644,7 +645,7 @@ ul, ol { list-style: none; }
   box-sizing: border-box; transition: border-color 0.15s;
 }
 .form-field-input:focus, .form-field-textarea:focus { border-color: var(--accent-light); outline: none; }
-.form-field-textarea { field-sizing: content; min-height: 3rem; max-height: 9rem; overflow-y: auto; line-height: 1.5; }
+.form-field-textarea { field-sizing: content; min-height: 3rem; max-height: 9rem; overflow-y: auto; resize: none; line-height: 1.5; }
 .form-field-hint {
   font-size: 0.65rem; color: var(--text-muted);
   margin-top: 0.15rem; font-style: italic;
