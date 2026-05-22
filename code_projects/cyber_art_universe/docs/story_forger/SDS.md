@@ -26,7 +26,7 @@
 
 - **部署位置**：CAU Worker `cyber_art_api` 的子路由（`/api/write/*`）
 - **部署域名**：`CAU.turingcorp.net`（与 Read 侧共用）
-- **代码目录**：`src/api/write/`（12 个模块：workspace / character_card / foreshadowing_card / worldbuilding / outline / foreshadowing / draft / marketing / original_concept / elf_chat / hints / index）+ `src/lib/ai.ts`（共享 AI 层）+ `src/lib/template.ts`（模板定义与渲染）
+- **代码目录**：`src/api/write/`（12 个模块：workspace / character_card / foreshadowing_card / worldbuilding / outline / foreshadowing / draft / marketing / original_concept / elf_chat / hints / index）+ `src/lib/ai.ts`（AI Gateway 客户端，Layer 1）+ `src/lib/template.ts`（模板定义与渲染）
 - **前端**：`src/pages/write.html` + `write.js`（统一写作桌 UI）
 - **D1/R2**：与 CAU Read 侧共享，无新增迁移
 
@@ -38,7 +38,7 @@
 
 | 文件 | 行数 | 用途 | 来源 |
 |------|------|------|------|
-| `ai.ts` | 70 | `generateWithAI(env, prompt, opts?)` — provider-agnostic AI 调用 | Findora `ai_content.ts` 模式提取 |
+| `ai.ts` | 210 | AI Gateway 客户端（Layer 1）。`callAI(env, messages, opts)` — Cloudflare AI Gateway 统一入口（BYOK），支持多模型、多轮消息、重试、超时、JSON 模式。`generateWithAI()` 保留作为兼容包装 | 重写自 Findora `ai_content.ts`，v2.4.0 → AI Gateway 迁移 |
 | `template.ts` | 143 | `SlotDef`/`TemplateDef` 类型 + `renderTemplate()`/`renderCard()` — 双语模板统一渲染 | 新增，v2.4.0 |
 
 ### 2.2 Write API 模块（`src/api/write/`）
@@ -65,7 +65,7 @@
 | `write.html` | 100 | 写作桌 HTML — 工作区选择、Pipeline 导航、左右分栏 |
 | `write.js` | 550 | 写作桌交互 — Pipeline、模块切换、槽位编辑器、Level 可见性控制 |
 | `write-api.js` | 120 | HTTP 通信层（hGet/hPost/hPut + 语言切换） |
-| `story-elf.js` | 240 | Story Elf 浮动伴侣组件 |
+| `story-elf.js` | 377 | Story Elf 浮动伴侣组件 — 可拖拽、聊天窗口（左侧）、Hint 对话泡（上方，打字机效果 + markdown 渐进渲染）|
 | `i18n-data.js` | 238 | 全站双语数据 |
 
 ---
@@ -193,7 +193,7 @@
 
 | 分类 | 文件数 | 总行数 |
 |------|--------|--------|
-| 共享层 | 2 | ~210 |
+| 共享层 | 2 | ~350 |
 | Write API 模块 | 12 | ~1,500 |
 | 前端 | 5 | ~1,250 |
 | 基础修改 | 6 | +~40 |
@@ -206,7 +206,7 @@
 | 差异项 | system_design 描述 | 实际实现 | 原因 |
 |--------|-------------------|----------|------|
 | Write API 路径 | 未明确 | `/api/write/` 前缀，自包含路由 | 保持 Read/Write 代码隔离 |
-| AI 模块位置 | 未明确 | `src/lib/ai.ts` 共享模块 | 所有 Write 模块复用 |
+| AI 模块位置 | `src/lib/ai.ts`（70行，直连 OpenAI/Anthropic） | `src/lib/ai.ts`（210行，Cloudflare AI Gateway 统一入口） | AI Gateway BYOK 模式，真实 key 不接触 Worker |
 | constraints 提取 | 设计为独立 API | 生成时自动提取并缓存 R2 | 减少一次 AI 调用 |
 | 状态转换 | 设计为 PUT 通用更新 | 独立 PATCH 端点 enforce 状态机 | publish/close/reopen 语义明确 |
 | 前端范围 | 写作桌+软木板双模式 | 统一写作桌界面，软木板合并 | 2026-05-09 合并双模式 |

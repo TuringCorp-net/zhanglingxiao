@@ -403,6 +403,7 @@ function setSlotLevel(newLevel) {
 // ============================================================
 var _slotData = null;
 var _textareaList = []; // 序列化时遍历的 textarea 列表（按渲染顺序）
+var _slotRenderIdx = 0;  // 槽位渲染计数器，用于生成 data-slot-id
 
 function escSlot(s) {
   return s.replace(/<!--/g, '<\\!--');
@@ -535,6 +536,7 @@ function parseSectionTree(md) {
 function renderSlotEditor(data) {
   _slotData = data;
   _textareaList = [];
+  _slotRenderIdx = 0;
   var groupsEl = document.getElementById('slot-groups');
   if (!groupsEl) return;
   groupsEl.innerHTML = '';
@@ -653,6 +655,8 @@ function renderNode(parent, node) {
     ta.rows = Math.max(2, Math.min(6, (node.content || '').split('\n').length));
     ta.value = node.content || '';
     if (node.label) ta.dataset.hint = node.label;
+    _slotRenderIdx++;
+    ta.dataset.slotId = 'slot-' + _slotRenderIdx;
     item.appendChild(ta);
     parent.appendChild(item);
     _textareaList.push(ta);
@@ -1553,6 +1557,29 @@ document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveModuleContent(); }
   });
+
+  // Story Elf Hint 对话泡：槽位聚焦 → 打字机呈现 hint；blur → 淡出
+  var slotEditor = qs('#slot-editor');
+  var _hintBlurTimer = null;
+  if (slotEditor) {
+    slotEditor.addEventListener('focusin', function (e) {
+      var ta = e.target;
+      if (ta.tagName === 'TEXTAREA' && ta.dataset.hint) {
+        // 清除前一个槽位的 blur 延迟定时器，防止它杀死新的打字机
+        if (_hintBlurTimer) { clearTimeout(_hintBlurTimer); _hintBlurTimer = null; }
+        StoryElf.showHintBubble(ta.dataset.hint, { slotId: ta.dataset.slotId || '' });
+      }
+    });
+    slotEditor.addEventListener('focusout', function (e) {
+      if (e.target.tagName === 'TEXTAREA') {
+        // 小延迟，允许用户点击气泡内的链接
+        _hintBlurTimer = setTimeout(function () {
+          _hintBlurTimer = null;
+          StoryElf.hideHintBubble();
+        }, 150);
+      }
+    });
+  }
 
   if (typeof userToken !== 'undefined' && userToken) loadWorkspaces();
 });

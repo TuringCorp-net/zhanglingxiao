@@ -119,6 +119,7 @@ export interface Env {
   ASSETS: Fetcher;
   USER_TOKEN?: string;   // 用户 token（逗号分隔，未来替换为实时登录校验）
   ADMIN_TOKEN?: string;  // 后台管理 token（固定值，Claude / 自动化任务使用）
-  AI_PROVIDER?: string;
-  AI_API_KEY?: string;
+  AI_PROVIDER?: string;  // @deprecated 迁移到 CF_AIG_TOKEN + AI Gateway
+  AI_API_KEY?: string;    // @deprecated 迁移到 CF_AIG_TOKEN + AI Gateway
+  CF_AIG_TOKEN?: string;  // Cloudflare AI Gateway 认证 token
 }

@@ -24,6 +24,7 @@
 | v2.1.0 | 2026-05-13 | 写作桌重构：去左活页夹，Pipeline 成为唯一导航入口。左右分栏（左 = 结构化参考，右 = 编辑区），虚线分隔可拖拽调宽 |
 | v2.2.0 | 2026-05-15 | API 全面复盘。新增 §10.7 多语言版本同步控制原则（永不静默翻译，stale 标记 + 作者手动触发）|
 | v2.3.0 | 2026-05-19 | 槽位编辑器：新增 §10.8 槽位编辑器架构（三态编辑器 + 模板格式规范 + 重复结构设计）。M1-M4 模板表格全面转为纵向槽位。M5 新增表单编辑器。标记格式：`<!-- hint:提示 -->` + `<!-- slot -->` + `<!-- /slot -->` 三标记分离格式 |
+| v2.4.0 | 2026-05-22 | 模板数据流全生命周期：新增 §10.9 模板数据流（TemplateDef 单一来源 → 渲染 → 解析 → 编辑 → 序列化 → R2 持久化完整循环）。Hint 对话泡数据流说明。 |
 
 ---
 
@@ -1232,6 +1233,201 @@ PUT  /api/write/worldbuilding/{work_id}?lang=en  → 更新英文版
 - `<!--` 在用户输入中自动转义为 `<\!--`，防止用户内容中的 HTML 注释干扰解析
 - 加载时反向取消转义
 - 模板框架部分始终只读，不可能被作者误改
+
+---
+
+## 十点九、模板数据流全生命周期
+
+### 设计意图
+
+模板系统的核心设计原则是**单一事实来源（Single Source of Truth）**：
+
+> hint 文字、框架结构、槽位定义、level 分级 —— 所有这些信息**只在 TS 源码中的 `TemplateDef` / `SlotDef` 常量里维护一处**。R2 中保存的 markdown 文件、前端 textarea 的 `data-hint` 属性、Story Elf 对话泡中显示的文字，全部由这一处自动生成或自动解析而来。
+
+**修改模板的正确方式**：修改对应模块的 `TemplateDef` / `SlotDef` 常量 → 新作品和首次加载的模块自动使用新模板。
+
+### 完整数据流
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  ① 模板定义（唯一的维护点）                                       │
+│                                                                   │
+│  TemplateDef / SlotDef[]  在 TS 源码中                           │
+│  ├─ worldbuilding.ts        BIBLE_TEMPLATE                       │
+│  ├─ outline.ts              OUTLINE_TEMPLATE                     │
+│  ├─ character_card.ts       CHARACTER_TEMPLATE                   │
+│  ├─ foreshadowing.ts        FORESHADOWING_TEMPLATE               │
+│  └─ foreshadowing_card.ts   FORESHADOWING_CARD_SLOTS             │
+│                                                                   │
+│  interface SlotDef {                                             │
+│    id: string;              // 唯一标识                           │
+│    level: 1 | 2;            // L1 默认可见，L2 需解锁             │
+│    label: Record<Lang, string>;  // 槽位标签（中英双语）          │
+│    hint: Record<Lang, string>;   // 提示文字（中英双语）← 对话泡来源│
+│  }                                                               │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           │ renderTemplate(tmpl, lang, userLevel)
+                           │ 或 renderCard(name, slots, lang, userLevel)
+                           │ 位置: src/lib/template.ts
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  ② 自动生成 Markdown                                              │
+│                                                                   │
+│  # 文档标题                                                       │
+│  > 引导文字（intro）                                               │
+│                                                                   │
+│  <!-- L1 -->                    ← level 标记（前端过滤用）         │
+│  ## 章节标题（SectionDef.heading）                                │
+│                                                                   │
+│  <!-- L1 -->                                                      │
+│  ### 槽位标签（SlotDef.label）                                    │
+│                                                                   │
+│  <!-- L1 -->                                                      │
+│  <!-- hint:这是会在对话泡中显示的提示 -->  ← 来自 SlotDef.hint    │
+│  <!-- slot -->                                                    │
+│  <!-- /slot -->                                                   │
+│                                                                   │
+│  ---                                                              │
+│  > 自由编辑区引导（outro）                                         │
+│                                                                   │
+│  生成规则：                                                        │
+│  - 框架文字（#/##/###/blockquote）由模板定义渲染，不含用户内容     │
+│  - hint 标记嵌入 SlotDef.hint[lang] 的值                          │
+│  - level 标记嵌入 SlotDef.level 的值                              │
+│  - 中英双语在同一个 TemplateDef 中维护，切换语言无需切换模板常量   │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+          ┌────────────────┼────────────────┐
+          ▼                                 ▼
+  ③ 首次访问（R2 无文件）            ④ 后续加载（R2 已有文件）
+  API 调用 renderTemplate()          API 直接返回 R2 中的 md 原文
+  返回生成的 md                      文件保留了模板标记 + 用户内容
+          │                                 │
+          └────────────┬────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  ⑤ 前端解析  parseSlotTemplate(md)                                │
+│     位置: src/pages/write.js                                      │
+│                                                                   │
+│  输入：原始 markdown 字符串（来自 API）                           │
+│  输出：{ groups: [{title, tree}], freeContent }                   │
+│                                                                   │
+│  解析过程：                                                        │
+│  - `---` 分隔符 → 模板区 + 自由编辑区                             │
+│  - `##` / `###` 标题 → section 节点（framework，只读渲染）        │
+│  - `<!-- hint:xxx -->` + `<!-- slot -->` + `<!-- /slot -->`       │
+│    → slot 节点，hint 文本存入 node.label                           │
+│  - `<!-- L{n} -->` → 提取 level 信息                              │
+│  - 其他文本 → framework._md（原样保留，只读渲染）                  │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  ⑥ 前端渲染  renderSlotEditor(data)                                │
+│     位置: src/pages/write.js                                      │
+│                                                                   │
+│  对每个节点：                                                      │
+│  ┌─ section 节点                                                  │
+│  │   ├─ heading/framework → marked.parse() → 只读 HTML           │
+│  │   └─ children → 递归渲染                                      │
+│  │                                                                │
+│  └─ slot 节点                                                     │
+│      └─ <textarea                                                │
+│           class="slot-textarea"                                   │
+│           data-hint="提示文字"     ← 来自 node.label              │
+│           data-slot-id="slot-N"    ← 渲染序号，用于去重           │
+│           data-level="L{n}"        ← level 标记                   │
+│         >原内容</textarea>                                        │
+│                                                                   │
+│  关键：hint 不再作为 placeholder 渲染，而是存入 data-hint 属性    │
+│  自由编辑区内容 → #slot-free-area textarea                         │
+│                                                                   │
+│  Level 过滤：applySlotLevel() 根据 _currentLevel 隐藏/显示槽位     │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+          ┌────────────────┼────────────────┐
+          ▼                                 ▼
+  ⑦ 用户聚焦槽位                        ⑧ 用户编辑内容
+  focusin 事件冒泡到                    input 事件 → autoSave()
+  #slot-editor                          2 秒防抖后
+          │                             saveModuleContent()
+          ▼                                    │
+  StoryElf.showHintBubble(                     ▼
+    ta.dataset.hint,                  serializeSlotContent()
+    { slotId: ta.dataset.slotId })           │
+          │                                    ▼
+          ▼                             重建 markdown：
+  ┌──────────────────┐                  遍历 _slotData 树
+  │  Story Elf       │                  ├─ section → 原样输出 heading + framework._md
+  │  对话泡          │                  ├─ slot → <!-- hint:label --> + <!-- slot -->
+  │  (青色文字)      │                  │          + escSlot(textarea.value)
+  │  打字机逐字渲染  │                  │          + <!-- /slot -->
+  │  marked 渐进解析 │                  └─ 末尾 + --- + 自由区内容
+  │  40ms/字         │                         │
+  │  标点智能停顿    │                          ▼
+  └──────────────────┘                  hPut() → PUT /api/write/{module}/{work_id}
+                                                 │
+                                                 ▼
+                                        ┌──────────────────┐
+                                        │  R2 持久化        │
+                                        │  完整 markdown    │
+                                        │  (模板标记 +      │
+                                        │   用户内容)       │
+                                        │  下次加载 → 回到④ │
+                                        └──────────────────┘
+```
+
+### 关键设计决策
+
+| 决策 | 说明 |
+|------|------|
+| **hint 不存 R2 JSON，嵌入 markdown 注释** | 单一文件自描述，无需额外配置文件。解析时从 `<!-- hint:... -->` 提取 |
+| **保存时保留模板标记** | `serializeSlotContent()` 原样输出 `<!-- hint -->` + `<!-- slot -->` + `<!-- /slot -->`，确保下次加载能正确解析 |
+| **模板更新不覆盖已有作品** | 已保存到 R2 的文件保留当时的模板结构。只有新作品或手动重置时使用新模板定义 |
+| **中英双语在同一个 SlotDef 中** | `hint: { zh: '...', en: '...' }` — 加语言只需加字段，无需复制整套模板 |
+| **对话泡数据与 placeholder 解耦** | hint 不再设为 textarea placeholder（输入即消失），而是独立在对话泡中以打字机呈现，输入内容后 hint 依然可见 |
+| **对话泡与聊天窗口是两套独立系统** | 左侧 `#elf-dialog` 预留给用户↔AI 对话交互；上方 `#elf-hint-bubble` 用于展示槽位 hint。两套系统同时存在、互不干扰 |
+
+### R2 文件内容示意（以世界观为例）
+
+```markdown
+# 世界观设定圣经
+
+> 本文件是作品的最高约束文档...
+
+<!-- L1 -->
+## 一、世界规则与边界
+
+<!-- L1 -->
+### 力量/技术体系
+
+<!-- L1 -->
+<!-- hint:描述这个世界的力量来源、等级、使用规则与代价 -->
+<!-- slot -->
+这个世界存在三种基本力量：元素之力（火水土风）、生命之力（治愈与生长）、
+虚空之力（毁灭与转化）。力量的获取需要通过"启明仪式"与对应的元素精灵签订契约...
+<!-- /slot -->
+
+<!-- L1 -->
+### 禁忌与代价
+
+<!-- L1 -->
+<!-- hint:世界中不可触碰的禁忌、使用力量的代价 -->
+<!-- slot -->
+使用虚空之力会逐渐侵蚀使用者的生命力。每使用一次，寿命减少一年...
+<!-- /slot -->
+
+---
+
+> 以下为自由编辑区，可按需添加模板框架之外的内容。
+```
+
+**观察**：
+- 文件同时包含模板结构（`<!-- hint -->`、`<!-- slot -->`）和用户内容（slot 之间的文字）
+- 框架文字（`#`、`##`、`###`、`>`）也是模板的一部分，在编辑器中被渲染为只读 HTML
+- 保存和加载走同一个文件，不需要双向同步
+- 如果以后要改 hint 文字，修改 `SlotDef.hint` 即可；但已有作品的 R2 文件中嵌入的是旧 hint，需要手动重置或等作者下次编辑时自然更新
 
 ---
 

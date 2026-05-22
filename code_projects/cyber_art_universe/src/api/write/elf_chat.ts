@@ -4,7 +4,7 @@
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { generateWithAI } from '../../lib/ai';
+import { callAI, type Message } from '../../lib/ai';
 import { workContentPath, readSectionMarkdown, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
 
 interface ChatMessage {
@@ -100,31 +100,28 @@ ${contextBlock}
 
 请用${langLabel}回复。保持简洁（一般不超过 200 字）。`;
 
-  // 构建消息历史
-  const messages: Array<{ role: string; content: string }> = [
+  // 构建消息 —— 三角色分离：
+  //   system  → 角色指令 + 作品上下文（固定前缀，可被 DeepSeek 硬盘缓存命中）
+  //   user    → 用户的提问
+  //   assistant → Story Elf 的历史回复（多轮对话时前端传入）
+  const messages: Message[] = [
     { role: 'system', content: systemPrompt },
-    ...body.messages.map(m => ({ role: m.role, content: m.content })),
+    ...body.messages.map(m => ({ role: m.role as 'user' | 'assistant', content: m.content })),
   ];
 
-  // 组装 prompt（generateWithAI 目前只支持单条 prompt，用对话格式组装）
-  const conversationPrompt = messages.map(m =>
-    m.role === 'system' ? `【系统指令】\n${m.content}` :
-    m.role === 'user' ? `【用户】\n${m.content}` :
-    `【Story Elf】\n${m.content}`
-  ).join('\n\n') + '\n\n【Story Elf】\n';
-
-  const reply = await generateWithAI(env, conversationPrompt, { maxTokens: 800 });
-  if (!reply) {
+  try {
+    const result = await callAI(env, messages);
+    return new Response(JSON.stringify(jsonSuccess({
+      work_id: body.work_id,
+      lang,
+      reply: result.content.trim(),
+    })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (err) {
+    console.error('[elf_chat] AI call failed:', (err as Error).message);
     return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, 'AI service unavailable')), {
       status: 503, headers: { 'Content-Type': 'application/json' },
     });
   }
-
-  return new Response(JSON.stringify(jsonSuccess({
-    work_id: body.work_id,
-    lang,
-    reply: reply.trim(),
-  })), {
-    headers: { 'Content-Type': 'application/json' },
-  });
 }

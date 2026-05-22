@@ -1,7 +1,7 @@
 # Story Elf 系统设计
 
-> 版本: v0.1.0 | 状态: 草案 | 最后更新: 2026-05-21
-> **关联文档**：[架构总览](../ARCHITECTURE.md) → [Story Forger System Design](../story_forger/system_design.md) → 本文档 → [Story Elf 前端设计](frontend_design.md) → [模板分级探讨](original_concept_smart_guide_story_elf.md)
+> 版本: v0.2.0 | 状态: 草案 | 最后更新: 2026-05-22
+> **关联文档**：[架构总览](../ARCHITECTURE.md) → [SRS](SRS.md) → 本文档 → [Story Elf 前端设计](frontend_design.md) → [AI Gateway 指南](cloudflare_ai_gateway_guide.md) → [模板分级探讨](original_concept_smart_guide_story_elf.md)
 
 ---
 
@@ -287,3 +287,222 @@ src/
 - [ ] Level 升级的触发条件：手动为主 or 自动检测？具体检测规则？
 - [ ] Story Elf 在 CAU 阅读侧的陪伴功能具体形态
 - [ ] 多语言模板的结构化定义从哪些模块开始迁移
+
+---
+
+## 9. AI 大模型调用架构
+
+### 9.1 设计目标
+
+Story Elf 的 AI 能力基于两层架构：
+
+- **Layer 1（AI Gateway 客户端）**：通过 Cloudflare AI Gateway 统一调用大模型，隐藏真实 API key，支持多模型切换。
+- **Layer 2（Agent 层）**：在裸大模型之上叠加工作流编排、上下文组装、系统指令和用户记忆，使 Story Elf 成为一个有"人格"的创作伙伴。
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Layer 2: Agent 层                          │
+│                    lib/agent/                                 │
+│                                                               │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐   │
+│  │ instructions │  │   context    │  │     memory       │   │
+│  │ System Prompt│  │ 上下文组装    │  │ 对话历史/偏好     │   │
+│  │ 按角色/模块   │  │ R2 + DB 拉取 │  │ 持久化存储        │   │
+│  └──────────────┘  └──────────────┘  └──────────────────┘   │
+│                                                               │
+│  调用方：elf_chat.ts（Story Elf 对话）                         │
+│         hints.ts（动态提示生成）                               │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+┌──────────────────────────▼──────────────────────────────────┐
+│                 Layer 1: AI Gateway 客户端                    │
+│                    lib/ai.ts                                  │
+│                                                               │
+│  callAI(env, messages, options) → { content, usage }         │
+│                                                               │
+│  - Cloudflare AI Gateway 统一入口（BYOK）                     │
+│  - 默认模型 deepseek-v4-flash（1M 上下文窗口）                │
+│  - 支持 system/user/assistant 多轮消息格式                    │
+│  - 内置指数退避重试 + AbortController 超时                    │
+│  - JSON 结构化输出支持                                        │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ cf-aig-authorization: Bearer $CF_AIG_TOKEN
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│              Cloudflare AI Gateway (BYOK)                     │
+│  gateway.ai.cloudflare.com/v1/{account}/{gateway}/...        │
+│                                                               │
+│  deepseek-v4-flash (默认)  |  gpt-4o  |  claude  |  ...      │
+│  真实 API key 在 CF Dashboard 配置，Worker 不接触             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 9.2 文件结构
+
+```
+src/lib/
+├── ai.ts              → AI Gateway 客户端（Layer 1）
+├── agent/
+│   ├── types.ts       → Agent 类型定义
+│   ├── context.ts     → 上下文组装器（从 R2/DB 拉取作品上下文）
+│   ├── instructions.ts→ System prompt 模板（按角色/模块）
+│   └── memory.ts      → 对话记忆存取
+└── (现有文件不动)
+```
+
+### 9.3 Layer 1：AI Gateway 客户端（lib/ai.ts）
+
+**唯一对外接口**：
+
+```typescript
+interface Message {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
+
+interface AICallOptions {
+  model?: string;           // 默认 'deepseek-v4-flash'
+  maxTokens?: number;       // 默认 1024
+  temperature?: number;     // 默认 0.7
+  timeout?: number;         // 默认 30000ms
+  retries?: number;         // 默认 2（共 3 次尝试）
+  responseFormat?: 'text' | 'json';
+}
+
+interface AICallResult {
+  content: string;
+  model: string;
+  usage?: { input: number; output: number };
+}
+
+function callAI(env: Env, messages: Message[], options?: AICallOptions): Promise<AICallResult>
+```
+
+**关键设计决策**：
+
+| 决策 | 选择 | 理由 |
+|------|------|------|
+| 认证方式 | `cf-aig-authorization` header + `CF_AIG_TOKEN` Secret | AI Gateway 统一认证，Worker 不接触真实模型 API key |
+| 默认模型 | deepseek-v4-flash | 1M 上下文窗口，成本低，适合长篇创作场景 |
+| 端点格式 | `/v1/{account}/{gateway}/{provider}/chat/completions` | OpenAI 兼容格式，多 provider 通用 |
+| 重试策略 | 指数退避（500ms → 1000ms → 2000ms） | 处理网关临时故障和模型限流 |
+| 超时 | AbortController 30s 默认 | 避免 Worker 长时间挂起 |
+
+#### 9.3.1 消息三角色分离
+
+对 LLM 的每次调用传递三种角色的消息，各自有明确的语义：
+
+| 角色 | 语义 | 用途 | 缓存行为 |
+|------|------|------|---------|
+| `system` | **指令/宪法** — 模型的最高行为准则 | 角色定义、作品上下文、回复格式要求 | 固定前缀，多次请求共享，**可被硬盘缓存命中** |
+| `user` | **提问/输入** — 用户的具体请求 | 用户的消息、多轮对话中新的提问 | 每轮不同，不可缓存 |
+| `assistant` | **模型回复** — 历史对话中的模型输出 | 多轮对话的历史回复（前端传回） | 对话历史的一部分 |
+
+**消息顺序规范**：
+
+```
+[system]  ← 始终在最前面（固定前缀，最大化缓存命中）
+[user]    ← 第一轮提问
+[assistant] ← 模型第一轮回复
+[user]    ← 第二轮提问
+[assistant] ← 模型第二轮回复
+...       ← 交替延续
+```
+
+**反模式（禁止）**：将所有消息拼成一段文本，塞入单条 user message：
+
+```
+❌ [{ role: "user", content: "【系统指令】...\n【用户】...\n【Story Elf】..." }]
+```
+
+这会导致三个问题：
+1. **语义混淆**：模型分不清指令和对话，system prompt 的约束力被稀释
+2. **缓存失效**：DeepSeek 缓存基于完整前缀匹配。system prompt 被包在 user message 里，且 user message 每轮变化 → 每次都是全新的前缀 → 缓存命中率为 0
+3. **多轮对话结构破坏**：模型看不到 alternating user/assistant 结构，无法正确理解对话历史
+
+#### 9.3.2 DeepSeek 上下文硬盘缓存
+
+DeepSeek 默认对所有请求启用硬盘缓存。缓存机制：
+
+| 机制 | 说明 |
+|------|------|
+| **落盘条件** | 请求结束位置（输入结束 + 输出结束）自动落盘；公共前缀检测落盘；固定 token 间隔落盘 |
+| **命中条件** | 后续请求的 messages 数组**完整匹配**已落盘的缓存前缀单元 |
+| **缓存时效** | 几小时到几天，不使用自动清空 |
+
+**我们的优化策略**：
+
+```
+请求 1：
+  [system: Story Elf 角色指令 + 作品《星港沉默》的上下文]  ← 固定
+  [user: 帮我分析一下主角的性格]                              ← 变化
+
+请求 2：
+  [system: Story Elf 角色指令 + 作品《星港沉默》的上下文]  ← 与请求 1 完全相同 → 缓存命中！
+  [assistant: 主角性格分析结果...]                             ← 请求 1 的回复
+  [user: 那他的成长弧线是怎样的？]                              ← 新提问
+
+请求 3：
+  [system: Story Elf 角色指令 + 作品《星港沉默》的上下文]  ← 与请求 1/2 完全相同 → 缓存命中！
+  [assistant: ...]
+  [user: ...]
+  ...
+```
+
+因为 `system` 消息在同一作品 + 同一角色的多次对话中保持不变，它作为 messages 数组的**固定前缀**，会在第一次请求后落盘。之后所有请求都会命中这个缓存，大幅降低延迟和 token 成本。
+
+**关键约束**：
+- system 消息必须始终放在 `messages[0]` 位置
+- 同一作品 + 同一语言的 system prompt 内容必须完全相同，不能有动态可变部分（如时间戳）
+- 对话历史（user/assistant）追加在 system 后面，不影响前缀缓存命中
+
+#### 9.3.3 调用方消息构建规范
+
+| 调用场景 | 消息结构 | 说明 |
+|---------|---------|------|
+| **Story Elf 对话**（elf_chat.ts） | `[system, ...user/assistant历史]` | system 包含角色 + 作品上下文。后续前端传回对话历史（user/assistant 交替） |
+| **工具类生成**（draft / outline 等）* | `[{role:'user', content: taskPrompt}]` | 一次性任务指令。未来迁移到 `[system, user]` 以分离指令和任务 |
+| **动态提示生成**（hints.ts） | `[system, user]` | system 定义输出格式，user 描述模块和需求 |
+
+> *工具类端点当前使用 `generateWithAI()` 兼容包装，单一 user message。此用法对一次性任务可接受，但未来应迁移到 `[system, user]` 以分离系统指令和任务描述，同时受益于缓存。
+
+### 9.4 Layer 2：Agent 层（lib/agent/）
+
+**四模块职责**：
+
+| 模块 | 文件 | 职责 | 输入 | 输出 |
+|------|------|------|------|------|
+| 上下文组装 | `context.ts` | 从 R2/DB 拉取作品的完整上下文 | `workId`, `lang` | `AgentContext` |
+| 系统指令 | `instructions.ts` | 按角色和场景提供 system prompt | `role`, `module?` | `string` |
+| 记忆管理 | `memory.ts` | 对话历史的存取、截断 | `workId`, `newMessage?` | `Message[]` |
+| 类型定义 | `types.ts` | 共享类型 | — | `AgentContext` 等 |
+
+**调用关系**：
+
+```
+elf_chat.ts（Story Elf 对话）
+  ├─ agent/context.ts      → 拉取作品上下文
+  ├─ agent/instructions.ts → 获取 system prompt
+  ├─ agent/memory.ts       → 读取/追加对话历史
+  └─ lib/ai.ts :: callAI() → 调用大模型
+
+draft.ts / outline.ts / worldbuilding.ts / ...（工具类生成）
+  └─ lib/ai.ts :: callAI() → 直接调用 AI Gateway
+```
+
+区分原则：Story Elf 对话需要 Agent 层完整能力（上下文感知 + 角色人格 + 对话记忆）；工具类生成是一次性任务指令，直接用 Layer 1。
+
+### 9.5 实施阶段
+
+| 阶段 | 内容 | 产出 |
+|------|------|------|
+| **Phase 1** | AI Gateway 客户端 | `lib/ai.ts` 重写：Cloudflare AI Gateway 统一入口 + 消息格式 + 重试 + 超时 |
+| **Phase 2** | 上下文组装 | `lib/agent/`：context.ts + instructions.ts + types.ts；elf_chat.ts 迁移 |
+| **Phase 3** | 工作流编排 | M0-M6 各模块的 Story Elf 行为定义：主动提示、level 建议、内容提取 |
+| **Phase 4** | 记忆系统 | `lib/agent/memory.ts`：对话历史持久化 + 用户偏好 + 跨会话记忆 |
+
+### 9.6 与 Story Forger 的边界
+
+- **Story Forger 的 `POST .../generate` 端点**使用 Layer 1（AI Gateway 客户端）直接调用，不需要 Agent 层。
+- **Story Elf 的 `/api/write/elf/chat`** 使用 Layer 1 + Layer 2 完整链路。
+- 两层共享同一个 AI Gateway 客户端（`lib/ai.ts`），Agent 层是可选的上层封装。

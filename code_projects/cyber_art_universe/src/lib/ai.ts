@@ -1,76 +1,279 @@
-// AI Provider 共享模块 — 从 Findora 提取的 provider-agnostic 模式
+// AI Gateway 客户端 — Cloudflare AI Gateway 统一入口（Layer 1）
+//
+// 两层架构：
+//   Layer 1（本文件）：通过 AI Gateway 调用大模型，隐藏真实 API key
+//   Layer 2（lib/agent/）：Agent 层 —— 上下文组装 + 系统指令 + 记忆 + 工作流
+//
+// 调用方：
+//   - Agent 对话（elf_chat.ts）→ Layer 1 + Layer 2 完整链路
+//   - 工具类生成（draft / outline / worldbuilding 等）→ 直接用 Layer 1
+
 import { Env } from '../db/schema';
 
-interface AIConfig {
-  provider: 'openai' | 'anthropic';
-  apiKey: string;
+// ============================================================
+// 类型定义
+// ============================================================
+
+/** 标准消息格式 */
+export interface Message {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
 }
 
+/** callAI 调用选项 */
+export interface AICallOptions {
+  model?: string;          // 默认 'deepseek-v4-flash'
+  maxTokens?: number;      // 默认 1024
+  temperature?: number;    // 默认 0.7
+  timeout?: number;        // 默认 30000ms
+  retries?: number;        // 默认 2（共 3 次尝试）
+  responseFormat?: 'text' | 'json';
+}
+
+/** callAI 返回结果 */
+export interface AICallResult {
+  content: string;
+  model: string;
+  usage?: { input: number; output: number };
+}
+
+/** AI 错误 */
+export class AIError extends Error {
+  code: 'TIMEOUT' | 'RATE_LIMITED' | 'AUTH_FAILED' | 'MODEL_UNAVAILABLE' | 'INVALID_RESPONSE' | 'UNKNOWN';
+  statusCode?: number;
+
+  constructor(code: AIError['code'], message: string, statusCode?: number) {
+    super(message);
+    this.name = 'AIError';
+    this.code = code;
+    this.statusCode = statusCode;
+  }
+}
+
+// ============================================================
+// 配置
+// ============================================================
+
+const ACCOUNT_ID = '21303cf88c8c1cc2c97d78eabda103a2';
+const GATEWAY_NAME = 'turingcorp';
+
+/** 模型 → AI Gateway provider 映射 */
+const MODEL_PROVIDER: Record<string, string> = {
+  'deepseek-v4-flash': 'deepseek',
+  'deepseek-v4-pro': 'deepseek',
+  'gpt-4o': 'openai',
+  'gpt-4o-mini': 'openai',
+};
+
+const DEFAULT_MODEL = 'deepseek-v4-flash';
+const DEFAULT_TIMEOUT = 30000;
+const DEFAULT_RETRIES = 2;
+
+// ============================================================
+// Gateway URL 构建
+// ============================================================
+
+function buildGatewayURL(model: string): string {
+  const provider = MODEL_PROVIDER[model] || 'deepseek';
+  return `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/${GATEWAY_NAME}/${provider}/chat/completions`;
+}
+
+// ============================================================
+// 核心函数：callAI
+// ============================================================
+
+/**
+ * 通过 Cloudflare AI Gateway 调用大模型。
+ *
+ * @param env   Worker Env（需包含 CF_AIG_TOKEN Secret）
+ * @param messages  标准消息数组，支持 system / user / assistant
+ * @param options   可选：model, maxTokens, temperature, timeout, retries, responseFormat
+ * @returns AICallResult { content, model, usage? }
+ * @throws AIError  超时、限流、认证失败等
+ */
+export async function callAI(
+  env: Env,
+  messages: Message[],
+  options: AICallOptions = {},
+): Promise<AICallResult> {
+  const token = env.CF_AIG_TOKEN;
+  if (!token) {
+    throw new AIError('AUTH_FAILED', 'CF_AIG_TOKEN not configured');
+  }
+
+  const model = options.model || DEFAULT_MODEL;
+  const url = buildGatewayURL(model);
+  const maxRetries = options.retries ?? DEFAULT_RETRIES;
+  const timeoutMs = options.timeout ?? DEFAULT_TIMEOUT;
+
+  // —— 构建请求体 ——
+  let systemPrompt = '';
+  const chatMessages: { role: string; content: string }[] = [];
+
+  for (const msg of messages) {
+    if (msg.role === 'system') {
+      systemPrompt += (systemPrompt ? '\n\n' : '') + msg.content;
+    } else {
+      chatMessages.push({ role: msg.role, content: msg.content });
+    }
+  }
+
+  // 构建请求体 —— 只传 model + messages
+  // max_tokens / temperature 不设默认值，由模型自行决定
+  const body: Record<string, unknown> = {
+    model,
+    messages: systemPrompt
+      ? [{ role: 'system', content: systemPrompt }, ...chatMessages]
+      : chatMessages,
+  };
+  if (options.maxTokens !== undefined) body.max_tokens = options.maxTokens;
+  if (options.temperature !== undefined) body.temperature = options.temperature;
+
+  // JSON 模式：追加指令，引导模型输出合法 JSON
+  if (options.responseFormat === 'json') {
+    body.messages = [
+      ...(body.messages as { role: string; content: string }[]),
+      { role: 'system', content: 'You must respond with valid JSON only. No markdown fences, no explanatory text.' },
+    ];
+  }
+
+  // —— 发起请求（带重试 + 超时） ——
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'cf-aig-authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      // 429 / 5xx → 重试
+      if ((response.status === 429 || response.status >= 500) && attempt < maxRetries) {
+        const delay = Math.pow(2, attempt) * 500; // 500 / 1000 / 2000 ms
+        await new Promise(r => setTimeout(r, delay));
+        continue;
+      }
+
+      // 4xx（非 429） → 不重试
+      if (response.status === 401 || response.status === 403) {
+        throw new AIError('AUTH_FAILED', `AI Gateway auth failed: ${response.status}`, response.status);
+      }
+      if (response.status === 429) {
+        throw new AIError('RATE_LIMITED', 'Rate limited by AI Gateway', response.status);
+      }
+      if (!response.ok) {
+        throw new AIError('MODEL_UNAVAILABLE', `Model returned ${response.status}`, response.status);
+      }
+
+      // 解析响应
+      const result = await response.json() as {
+        choices?: { message?: { content?: string } }[];
+        model?: string;
+        usage?: { prompt_tokens?: number; completion_tokens?: number };
+      };
+
+      const content = result?.choices?.[0]?.message?.content?.trim();
+      if (!content) {
+        throw new AIError('INVALID_RESPONSE', 'Empty response from model');
+      }
+
+      // JSON 模式：尝试提取 JSON（去掉可能的 markdown fence）
+      if (options.responseFormat === 'json') {
+        let jsonStr = content;
+        const fenceMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
+        if (fenceMatch) jsonStr = fenceMatch[1].trim();
+        try {
+          JSON.parse(jsonStr); // 验证可解析，但不改变 content
+        } catch {
+          // 非严格 JSON 也返回原始内容，调用方自行处理
+        }
+      }
+
+      return {
+        content,
+        model: result.model || model,
+        usage: result.usage ? {
+          input: result.usage.prompt_tokens || 0,
+          output: result.usage.completion_tokens || 0,
+        } : undefined,
+      };
+
+    } catch (err) {
+      clearTimeout(timeoutId);
+      lastError = err as Error;
+
+      // AbortController 超时（Workers 环境中 AbortError 是普通 Error，非 DOMException）
+      if (err instanceof Error && err.name === 'AbortError') {
+        if (attempt < maxRetries) {
+          await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 500));
+          continue;
+        }
+        throw new AIError('TIMEOUT', `AI call timed out after ${timeoutMs}ms`);
+      }
+
+      // AIError 直接抛出（不重试）
+      if (err instanceof AIError) throw err;
+
+      // 网络错误 → 重试
+      if (attempt < maxRetries) {
+        await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 500));
+        continue;
+      }
+    }
+  }
+
+  throw new AIError('UNKNOWN', `AI call failed after ${maxRetries + 1} attempts: ${lastError?.message}`);
+}
+
+// ============================================================
+// 兼容层：generateWithAI（旧接口，供现有调用方过渡使用）
+// ============================================================
+
+/** @deprecated 使用 callAI(env, messages, options) 替代 */
 export interface AIOptions {
   model?: string;
   maxTokens?: number;
   temperature?: number;
 }
 
-function getAIConfig(env: Env): AIConfig | null {
-  const provider = env.AI_PROVIDER;
-  const apiKey = env.AI_API_KEY;
-  if (!provider || !apiKey) return null;
-  if (provider !== 'openai' && provider !== 'anthropic') return null;
-  return { provider, apiKey };
-}
-
-async function callOpenAI(apiKey: string, prompt: string, opts: AIOptions = {}): Promise<string | null> {
-  try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: opts.model || 'gpt-4o',
-        messages: [{ role: 'user', content: prompt }],
-        max_tokens: opts.maxTokens || 1024,
-        temperature: opts.temperature ?? 0.7,
-      }),
-    });
-    if (!response.ok) { console.error('OpenAI API error:', response.status); return null; }
-    const result = await response.json() as { choices?: { message?: { content?: string } }[] };
-    return result?.choices?.[0]?.message?.content?.trim() || null;
-  } catch (err) { console.error('OpenAI call failed:', err); return null; }
-}
-
-async function callAnthropic(apiKey: string, prompt: string, opts: AIOptions = {}): Promise<string | null> {
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'x-api-key': apiKey, 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({
-        model: opts.model || 'claude-sonnet-4-20250514',
-        max_tokens: opts.maxTokens || 1024,
-        messages: [{ role: 'user', content: prompt }],
-      }),
-    });
-    if (!response.ok) { console.error('Anthropic API error:', response.status); return null; }
-    const result = await response.json() as { content?: { text?: string }[] };
-    return result?.content?.[0]?.text?.trim() || null;
-  } catch (err) { console.error('Anthropic call failed:', err); return null; }
-}
-
 /**
- * 统一的 AI 调用入口。根据 env.AI_PROVIDER 自动选择 OpenAI / Anthropic。
- * @param env Worker Env
- * @param prompt 完整的提示词
- * @param opts 可选：model, maxTokens, temperature
+ * @deprecated 使用 callAI(env, messages, options) 替代。
+ *             此兼容包装将单一 prompt 转为单条 user message 调用 callAI。
+ *             各调用方应逐步迁移到 callAI，以支持 system prompt 和多轮对话。
  */
-export async function generateWithAI(env: Env, prompt: string, opts: AIOptions = {}): Promise<string | null> {
-  const config = getAIConfig(env);
-  if (!config) return null;
-  if (config.provider === 'openai') return callOpenAI(config.apiKey, prompt, opts);
-  return callAnthropic(config.apiKey, prompt, opts);
+export async function generateWithAI(
+  env: Env,
+  prompt: string,
+  opts: AIOptions = {},
+): Promise<string | null> {
+  try {
+    const result = await callAI(env, [{ role: 'user', content: prompt }], {
+      model: opts.model,
+      maxTokens: opts.maxTokens,
+      temperature: opts.temperature,
+    });
+    return result.content;
+  } catch (err) {
+    console.error('[generateWithAI] failed:', (err as Error).message);
+    return null;
+  }
 }
 
-/**
- * 检查 AI 服务是否可用
- */
+// ============================================================
+// 工具函数
+// ============================================================
+
+/** 检查 AI 服务是否可用 */
 export function isAIAvailable(env: Env): boolean {
-  return getAIConfig(env) !== null;
+  return !!env.CF_AIG_TOKEN;
 }

@@ -21,6 +21,7 @@
 | v1.2.0 | 2026-05-08 | 9 项延期需求全部实现：伏笔、冲突、重写、营销、MCP Write。31/31 全部完成 |
 | v1.7.0 | 2026-05-09 | 冲突地图删除 + 伏笔 Markdown 模板 + 双模式合并为统一写作桌 |
 | v2.0.0 | 2026-05-20 | Milestone Review 0520：M3/M4 统一 entity 架构、三标记槽位格式全模块覆盖、CSS 现代化清理、Story Elf 双语支持、文档一致性修正 |
+| v2.1.0 | 2026-05-22 | AI Gateway Phase 1 审核：`lib/ai.ts` 重写为 Cloudflare AI Gateway 客户端（BYOK），实测验证通过 |
 
 ---
 
@@ -268,12 +269,28 @@
 
 ### 注意事项
 
-- AI 端点依赖 `AI_PROVIDER` + `AI_API_KEY` Cloudflare secrets 配置（待用户提供 key）
+- **AI 调用**：已从直连 OpenAI/Anthropic 迁移到 Cloudflare AI Gateway（BYOK）。`CF_AIG_TOKEN` Secret 已配置并实测验证通过。旧 `AI_PROVIDER`/`AI_API_KEY` Secret 已标记 deprecated
 - 伏笔/营销端点 503 返回友好提示（AI 不可用时）
 - MCP Write 工具和 Read 工具共用同一条 `/api/mcp` 端点，通过 `params.name` 区分
 
+### AI Gateway Phase 1 验证（2026-05-22）
+
+**验证范围**：`lib/ai.ts` 重写 → Cloudflare AI Gateway → deepseek-v4-flash
+
+| 验证项 | 结果 |
+|--------|------|
+| `CF_AIG_TOKEN` Secret 配置 | ✅ Cloudflare 后台确认 |
+| AI Gateway 连通性 | ✅ `elf/chat` 端点返回正确中文回复 |
+| 默认模型 deepseek-v4-flash | ✅ 回复风格符合 system prompt（温暖、灵动、不剧透） |
+| 消息格式（system/user/assistant） | ✅ system prompt 被正确注入并生效 |
+| 重试 + 超时机制 | ✅ 代码逻辑审核通过（运行时验证需故障注入） |
+| `generateWithAI` 兼容包装 | ✅ 8 个现有调用方无需改动，编译通过 |
+| Cloudflare 后台日志 | ✅ 可见 AI Gateway 调用记录 |
+
+**结论**：AI 底层调用链路完全通畅。此层（`lib/ai.ts` + `CF_AIG_TOKEN` + AI Gateway URL 格式）应视为稳定基础设施，后续开发不应修改此层的核心逻辑。
+
 ### 下一迭代优先事项
 
-- 配置 AI 密钥使所有生成端点可用
+- Phase 2：Agent 层（上下文组装 + system prompt 管理）
 - P2 项目：乐观拖拽、Chat 专用端点、移动端适配
 - 端到端测试数据创建（用户测试小说）

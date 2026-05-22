@@ -31,6 +31,20 @@
 .elf-chat-msg{padding:0.5rem 0.65rem;border-radius:10px;font-size:0.78rem;line-height:1.5;max-width:90%;}\
 .elf-chat-msg.user{align-self:flex-end;background:rgba(124,58,237,0.2);color:var(--text);}\
 .elf-chat-msg.ai{align-self:flex-start;background:var(--bg-hover);color:var(--text-dim);}\
+/* Hint 对话泡 —— 独立于左侧聊天窗口的右侧/上方提示气泡 */\
+.elf-hint-bubble{position:absolute;bottom:160px;left:50%;transform:translateX(-50%);width:300px;max-height:250px;overflow-y:auto;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:0.65rem 0.75rem;box-shadow:0 4px 24px rgba(0,0,0,0.5);z-index:201;display:flex;flex-direction:column;animation:elf-hint-in 0.2s ease;}\
+.elf-hint-bubble.hint-fade-out{animation:elf-hint-out 0.15s ease forwards;}\
+@keyframes elf-hint-in{from{opacity:0;transform:translateX(-50%) translateY(4px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}\
+@keyframes elf-hint-out{from{opacity:1;transform:translateX(-50%) translateY(0);}to{opacity:0;transform:translateX(-50%) translateY(4px);}}\
+.elf-hint-content{font-size:0.78rem;line-height:1.6;color:var(--cyan);}\
+.elf-hint-content p{margin:0 0 0.3rem;}\
+.elf-hint-content p:last-child{margin-bottom:0;}\
+.elf-hint-content strong{color:var(--text);}\
+.elf-hint-content code{background:var(--bg-hover);padding:0.1rem 0.3rem;border-radius:3px;font-size:0.72rem;}\
+.elf-hint-content a{color:var(--cyan);}\
+.elf-hint-content em{color:var(--text-muted);}\
+.elf-hint-close{position:absolute;top:4px;right:8px;width:20px;height:20px;border-radius:50%;border:none;background:transparent;color:var(--text-muted);font-size:0.9rem;cursor:pointer;line-height:1;padding:0;}\
+.elf-hint-close:hover{color:var(--text);background:var(--bg-hover);}\
 ';
 
   var style = document.createElement('style');
@@ -52,6 +66,10 @@
     + '      <input id="elf-chat-input" placeholder="Ask Story Elf..." onkeydown="if(event.key===\'Enter\')StoryElf.sendChat()">'
     + '      <button class="btn btn-primary btn-sm" id="elf-send-btn" style="padding:0.3rem 0.6rem;font-size:0.7rem">' + t('elf.send', 'Send') + '</button>'
     + '    </div>'
+    + '  </div>'
+    + '  <div class="elf-hint-bubble" id="elf-hint-bubble" style="display:none">'
+    + '    <button class="elf-hint-close" id="elf-hint-close">&times;</button>'
+    + '    <div class="elf-hint-content" id="elf-hint-content"></div>'
     + '  </div>'
     + '  <div class="elf-body" id="elf-body">'
     + '    <div class="elf-avatar" title="Story Elf">'
@@ -106,6 +124,11 @@
       document.getElementById('elf-dialog').style.display = 'none';
     });
 
+    var hintCloseBtn = document.getElementById('elf-hint-close');
+    if (hintCloseBtn) hintCloseBtn.addEventListener('click', function () {
+      _hideHintBubble();
+    });
+
     var sendBtn = document.getElementById('elf-send-btn');
     if (sendBtn) sendBtn.addEventListener('click', function () { StoryElf.sendChat(); });
   }
@@ -136,6 +159,101 @@
     if (drag.moved) { savePosition(); }
     else { StoryElf.toggle(); }
     drag.moved = false;
+  }
+
+  // ============================================================
+  // Hint 对话泡 —— 打字机效果引擎（独立于左侧聊天窗口）
+  // ============================================================
+  var _hintState = {
+    timer: null,
+    cancelled: false,
+    activeSlotId: null,
+    visible: false,
+    _hideTimer: null, // 延迟隐藏定时器，处理快速切换槽位竞态
+  };
+
+  function _stopHintTypewriter() {
+    _hintState.cancelled = true;
+    if (_hintState.timer) {
+      clearTimeout(_hintState.timer);
+      _hintState.timer = null;
+    }
+  }
+
+  // 打字机引擎：逐字累积原始 markdown → 渐进渲染
+  // 不能先渲染 HTML 再逐字输出——用户会看到 <stro 等标签碎片
+  // 20-80 字的 hint 每字 parse 一次耗时微秒级，无性能问题
+  function _startHintTypewriter(el, rawMd) {
+    _stopHintTypewriter();
+    _hintState.cancelled = false;
+    el.innerHTML = '';
+    var i = 0;
+    var speed = 40; // ms/字
+
+    function tick() {
+      if (_hintState.cancelled) return;
+      if (i < rawMd.length) {
+        i++;
+        var partial = rawMd.substring(0, i);
+        try {
+          el.innerHTML = marked.parse(partial);
+        } catch(e) {
+          el.textContent = partial;
+        }
+        var ch = rawMd[i - 1];
+        var delay = speed;
+        // 标点停顿——模拟自然停顿
+        if ('。！？.!?'.indexOf(ch) >= 0) delay += 200;
+        else if ('，、；：,.;:'.indexOf(ch) >= 0) delay += 100;
+        _hintState.timer = setTimeout(tick, delay);
+      } else {
+        _hintState.timer = null;
+      }
+    }
+    tick();
+  }
+
+  function _showHintBubble(rawMd, opts) {
+    opts = opts || {};
+
+    // 无 hint 文本则不弹出
+    if (!rawMd || !rawMd.trim()) return;
+
+    // 取消待执行的隐藏定时器（处理快速切换槽位的竞态）
+    if (_hintState._hideTimer) {
+      clearTimeout(_hintState._hideTimer);
+      _hintState._hideTimer = null;
+    }
+
+    _stopHintTypewriter();
+
+    var bubble = document.getElementById('elf-hint-bubble');
+    var content = document.getElementById('elf-hint-content');
+    if (!bubble || !content) return;
+
+    // 移除淡出动画残留
+    bubble.classList.remove('hint-fade-out');
+    bubble.style.display = 'block';
+    _hintState.visible = true;
+    _hintState.activeSlotId = (opts && opts.slotId) || '';
+
+    _startHintTypewriter(content, rawMd.trim());
+  }
+
+  function _hideHintBubble() {
+    _stopHintTypewriter();
+    var bubble = document.getElementById('elf-hint-bubble');
+    if (!bubble || bubble.style.display === 'none') return;
+
+    bubble.classList.add('hint-fade-out');
+    _hintState._hideTimer = setTimeout(function () {
+      if (!bubble) return;
+      bubble.style.display = 'none';
+      bubble.classList.remove('hint-fade-out');
+      _hintState.visible = false;
+      _hintState.activeSlotId = null;
+      _hintState._hideTimer = null;
+    }, 150);
   }
 
   // ============================================================
@@ -236,5 +354,16 @@
     _ctx: null,
     setContext: function (ctx) { StoryElf._ctx = ctx; },
     getContext: function () { return StoryElf._ctx; },
+
+    // Hint 对话泡 API（独立于左侧聊天窗口）
+    // 显示 hint 对话泡，以打字机效果逐字呈现 markdown 提示
+    // 每次聚焦都会重新展示（允许回顾之前看过的 hint）
+    showHintBubble: function (rawMd, opts) { _showHintBubble(rawMd, opts); },
+
+    // 隐藏 hint 对话泡（带淡出动画）
+    hideHintBubble: function () { _hideHintBubble(); },
+
+    // 设置当前活跃槽位
+    setActiveSlot: function (slotId) { _hintState.activeSlotId = slotId; },
   };
 })();
