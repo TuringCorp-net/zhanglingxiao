@@ -31,8 +31,8 @@ const FORESHADOWING_TEMPLATE: TemplateDef = {
     },
   ],
   outro: {
-    zh: '以下为自由编辑区，可按需添加模板框架之外的内容。',
-    en: 'Free editing zone — add any content beyond the template framework here.',
+    zh: 'M4 自由编辑区',
+    en: 'M4 Free editing zone',
   },
 };
 

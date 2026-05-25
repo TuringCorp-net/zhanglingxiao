@@ -1,6 +1,6 @@
 # Story Elf 系统设计
 
-> 版本: v0.2.0 | 状态: 草案 | 最后更新: 2026-05-22
+> 版本: v0.3.1 | 状态: 草案 | 最后更新: 2026-05-25
 > **关联文档**：[架构总览](../ARCHITECTURE.md) → [SRS](SRS.md) → 本文档 → [Story Elf 前端设计](frontend_design.md) → [AI Gateway 指南](cloudflare_ai_gateway_guide.md) → [模板分级探讨](original_concept_smart_guide_story_elf.md)
 
 ---
@@ -466,6 +466,39 @@ DeepSeek 默认对所有请求启用硬盘缓存。缓存机制：
 
 > *工具类端点当前使用 `generateWithAI()` 兼容包装，单一 user message。此用法对一次性任务可接受，但未来应迁移到 `[system, user]` 以分离系统指令和任务描述，同时受益于缓存。
 
+#### 9.3.4 缓存稳定性规则
+
+为了最大化 DeepSeek 硬盘缓存命中率，system message 必须遵循**严格确定性**原则。参考 deepseek-reasonix 的 `ImmutablePrefix` 设计模式。
+
+**核心规则**：
+
+| 规则 | 说明 | 反例 |
+|------|------|------|
+| **禁止时间戳** | system prompt 绝不包含 `new Date()`、`Date.now()` 等 | `现在时间是 {{current_time}}` |
+| **禁止随机值** | 绝不包含 UUID、随机 ID | `会话 ID: {{random_uuid}}` |
+| **禁止动态上下文** | 模块名、章节标题等随用户操作变化的字段**不放在 system 层** | `当前模块: {{module}}` |
+| **只放 session 级不变量** | 作品基本信息、世界观、大纲、角色——这些在同一次写作会话中不变 | `作品：《{{work_title}}》` |
+
+**三层消息模型**（借鉴 deepseek-reasonix）：
+
+```
+┌─ system message（ImmutablePrefix）─────────────────────┐
+│  M0-M5 写作上下文包 + 角色 persona                       │
+│  同作品 + 同语言 = 完全固定 → 100% 缓存命中               │
+├─ user/assistant messages（AppendOnlyLog）───────────────┤
+│  对话历史 + 动态前缀（如 "[当前模块: 世界观]"）             │
+│  只追加不修改 → 前缀部分缓存命中，尾部新增部分 miss         │
+└────────────────────────────────────────────────────────┘
+```
+
+**实施方式**：
+
+- 动态变量（`module`、`section_title`）从 `system.md` 模板中移除
+- 在 `elf_chat.ts` 构建消息时，将它们注入**第一条 user message 的前缀**（而非 system message）
+- 例如：`[当前模块: 世界观]\n\n帮我分析一下主角的性格`
+
+**效果**：同一作品的多次对话，无论用户在哪个模块间跳转，system message 的字节前缀完全一致 → 缓存命中率接近 100%。
+
 ### 9.4 Layer 2：Agent 层（lib/agent/）
 
 **四模块职责**：
@@ -506,3 +539,48 @@ draft.ts / outline.ts / worldbuilding.ts / ...（工具类生成）
 - **Story Forger 的 `POST .../generate` 端点**使用 Layer 1（AI Gateway 客户端）直接调用，不需要 Agent 层。
 - **Story Elf 的 `/api/write/elf/chat`** 使用 Layer 1 + Layer 2 完整链路。
 - 两层共享同一个 AI Gateway 客户端（`lib/ai.ts`），Agent 层是可选的上层封装。
+
+---
+
+## 10. 系统遥测
+
+### 设计意图
+
+AI 调用产生大量运行时指标（token 使用量、缓存命中率、用户活跃度），这些数据是系统健康度监控的基础。遥测模块以最小侵入的方式采集这些指标，同时写入结构化日志（供实时查看）和 D1（供长期统计）。
+
+### 架构
+
+```
+elf_chat.ts
+  └─ callAI() 返回 → { content, usage: { input, output, cacheHit, cacheMiss } }
+  └─ recordAIUsage(env, record)  →  lib/telemetry.ts
+       ├─ console.log({_type:'ai_usage', ...})  → Cloudflare Logs（实时）
+       └─ D1 INSERT ai_usage_log                 → D1（长期统计/仪表盘）
+```
+
+### 数据模型
+
+```sql
+ai_usage_log (
+  id, work_id, user_token, page, model,
+  tokens_in, tokens_out, cache_hit, cache_miss, created_at
+)
+```
+
+`user_token` 从 Authorization header 提取前 8 位，实现脱敏的用户级统计。后续可映射到真实 user_id。
+
+### 使用场景
+
+| 场景 | 数据来源 | 实现方式 |
+|------|---------|---------|
+| 实时调试 | `console.log` → Cloudflare Logs | 按 `_type=ai_usage` 过滤 |
+| 单作品用量 | D1 `WHERE work_id=?` | SQL 聚合 |
+| 用户活跃度 | D1 `GROUP BY user_token` | 日均 token/调用次数 |
+| 缓存效率 | D1 `cache_hit/(cache_hit+cache_miss)` | 按时间/模型/作品维度 |
+| 异常告警（未来） | D1 定时查询 | token 突增 / 缓存命中率骤降 → 通知 |
+
+### 设计原则
+
+- **不透传给用户**。usage 数据是系统内部指标，不暴露在 API 响应中
+- **不阻塞主请求**。D1 写入 <5ms，当前同步写入即可。未来高并发时改为 `ctx.waitUntil`
+- **渐进扩展**。当前只采集 AI 用量，后续可扩展 R2 延迟、DB 查询耗时等指标

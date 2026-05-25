@@ -38,8 +38,17 @@
 
 | 文件 | 行数 | 用途 | 来源 |
 |------|------|------|------|
-| `ai.ts` | 210 | AI Gateway 客户端（Layer 1）。`callAI(env, messages, opts)` — Cloudflare AI Gateway 统一入口（BYOK），支持多模型、多轮消息、重试、超时、JSON 模式。`generateWithAI()` 保留作为兼容包装 | 重写自 Findora `ai_content.ts`，v2.4.0 → AI Gateway 迁移 |
+| `ai.ts` | 5 | L0 Re-export 兼容层 | v2.5.0 重构 |
+| `l0/aiGateway.ts` | 250 | L0：AI Gateway 客户端。`callAI()` — Cloudflare AI Gateway BYOK 统一入口。支持多模型、三角色消息、重试、超时、JSON 模式、AIError | v2.5.0 从 ai.ts 迁移 |
+| `l1/types.ts` | 57 | L1：ScenarioConfig / DomainDef / AgentVars 类型定义 | v2.5.0 |
+| `l1/render.ts` | 90 | L1：轻量 Mustache 模板引擎。`{{ var.path \| filter }}` 变量替换 + 管道过滤器 | 从 turingcorp-workflow/decider 移植 |
+| `l1/context-package.ts` | 185 | L1：M0-M5 写作上下文包组装。`getOrBuildContextPackage()` — 并发拉取 + R2 缓存 | v2.5.0 |
+| `l1/context.ts` | 25 | L1：上下文变量组装。`assembleContext()` — 合并元信息+上下文包+动态参数 | v2.5.0 |
+| `l1/instructions.ts` | 17 | L1：System prompt 构建。`buildSystemPrompt()` — 加载 .md 模板 → render → 完整 system prompt | v2.5.0 |
+| `l1/scenarios.ts` | 64 | L1：场景注册中心。场景配置 + .md prompt import + 注册表 | v2.5.0 |
+| `l1/prompts/` | 2 文件 | L1：人类维护的 prompt 模板。`reader_companion/system.md` + `writer_companion/system.md` | v2.5.0 |
 | `template.ts` | 143 | `SlotDef`/`TemplateDef` 类型 + `renderTemplate()`/`renderCard()` — 双语模板统一渲染 | 新增，v2.4.0 |
+| `telemetry.ts` | 55 | 系统遥测：`recordAIUsage()` — AI 调用用量写入 D1 + console.log。`extractUserToken()` — 用户标识提取 | 新增，v2.5.0 |
 
 ### 2.2 Write API 模块（`src/api/write/`）
 
@@ -193,10 +202,12 @@
 
 | 分类 | 文件数 | 总行数 |
 |------|--------|--------|
-| 共享层 | 2 | ~350 |
-| Write API 模块 | 12 | ~1,500 |
+| L0 (AI Gateway) | 1 | ~250 |
+| 遥测（telemetry.ts） | 1 | ~55 |
+| L1 (Agent 层) | 8 | ~520 |
+| 共享层（template.ts + ai.ts 兼容层） | 2 | ~148 |
+| Write API 模块 | 12 | ~1,480 |
 | 前端 | 5 | ~1,250 |
-| 基础修改 | 6 | +~40 |
 | **总计** | **25** | **~3,000** |
 
 ---

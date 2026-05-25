@@ -17,6 +17,8 @@
 |------|------|------|
 | v0.1.0 | 2026-05-22 | 初始版本：覆盖 Hint 对话泡、AI 两层架构、四阶段实施路径 |
 | v0.2.0 | 2026-05-22 | Phase 1 完成：AI Gateway 客户端（SE-020~027）实测验证通过 |
+| v0.3.0 | 2026-05-25 | Phase 2 完成：上下文包组装（SE-030~032）+ 系统指令（SE-040, SE-042）。L0/L1 分层架构落地 |
+| v0.3.1 | 2026-05-25 | 系统遥测模块：AI 调用用量统计（SE-080~081），D1 ai_usage_log 表 |
 
 ---
 
@@ -86,17 +88,17 @@ Story Elf 不是"写作工具"，也不是"内容展示"，而是 **"理解和�
 
 | ID | 需求 | 验收标准 | 状态 |
 |----|------|---------|------|
-| SE-030 | 作品上下文拉取 — 根据 workId 和 lang 从 R2/DB 拉取完整上下文 | `assembleAgentContext(env, workId, lang)` → `AgentContext { worldBible, entities, outline, currentChapter, ... }` | ⏳ Phase 2 |
-| SE-031 | 上下文截断策略 — 各上下文源有独立的字符截断上限，防止超出模型上下文窗口 | world_bible ≤3000字，outline ≤2000字，entities ≤20条，current_chapter ≤4000字。截断位置优先保留开头（设定）和结尾（最近内容） | ⏳ Phase 2 |
-| SE-032 | 上下文缓存 — 同一 workId + lang 的上下文在单次请求内复用 | `env.ctx` 或模块级缓存，避免同一请求中多次拉取相同上下文 | ⏳ Phase 2 |
+| SE-030 | 作品上下文拉取 — 根据 workId 和 lang 从 R2/DB 拉取完整上下文 | `getOrBuildContextPackage(env, workId, lang)` → M0-M5 结构化 MD，R2 缓存。`assembleContext()` 组装为 AgentVars | ✅ 已实现 |
+| SE-031 | 上下文截断策略 — 各上下文源有独立的字符截断上限，防止超出模型上下文窗口 | 当前阶段 M0-M5 全量纳入（实测最多占 1M 窗口 ~16%）。超大规模时可关闭 M5 意图卡（`includeM5: false`） | ✅ 已实现 |
+| SE-032 | 上下文缓存 — 同一 workId + lang 的上下文在单次请求内复用 | 上下文包写入 R2 `elf_context_package.md`，后续请求直接读取（单次 R2 GET，延迟 <20ms） | ✅ 已实现 |
 
 #### 4.2 系统指令
 
 | ID | 需求 | 验收标准 | 状态 |
 |----|------|---------|------|
-| SE-040 | 角色化 System Prompt — Write 侧为"辅助创作的 AI 伴侣"，Read 侧为"陪伴阅读的 AI 伴侣" | `getSystemPrompt(role, module?)` → 返回对应 system prompt 文本。Write 侧：鼓励、建设性、尊重作者决定。Read 侧：灵动、温暖、不剧透 | ⏳ Phase 2 |
+| SE-040 | 角色化 System Prompt — Write 侧为"辅助创作的 AI 伴侣"，Read 侧为"陪伴阅读的 AI 伴侣" | `l1/prompts/{scenario}/system.md` 人类维护的模板，`buildSystemPrompt()` 渲染。Write 侧：鼓励、建设性、尊重作者决定。Read 侧：灵动、温暖、不剧透 | ✅ 已实现 |
 | SE-041 | 模块感知指令 — 根据当前模块（M0-M6）调整 system prompt 的侧重点 | M0 时强调"无模板，自由灵感"；M5 时强调"意图卡驱动，本章具体约束" | ⏳ Phase 3 |
-| SE-042 | 可扩展指令模板 — 新增角色或模块时只需添加配置，不改核心逻辑 | 指令以结构化对象存储，按 `role` + `module` 组合键查找 | ⏳ Phase 2 |
+| SE-042 | 可扩展指令模板 — 新增场景时只需添加配置 + prompt，不改核心逻辑 | `scenarios.ts` 注册场景，`prompts/{scenario}/system.md` 独立维护。新增场景只需 3 步：创建 .md → import → 注册 | ✅ 已实现 |
 
 #### 4.3 工作流编排
 
@@ -121,6 +123,15 @@ Story Elf 不是"写作工具"，也不是"内容展示"，而是 **"理解和�
 |----|------|---------|------|
 | SE-070 | Read 侧 AI 对话 — 读者在阅读页面向 Story Elf 提问 | 复用 SE-020~027（AI Gateway 客户端）+ SE-040（伴读 system prompt）。上下文自动包含当前章节内容 | ⏳ Phase 4+ |
 
+### 模块六：系统遥测
+
+> AI 调用用量统计，用于系统健康度监控、成本分析、异常告警。数据同时写入 console.log 和 D1。
+
+| ID | 需求 | 验收标准 | 状态 |
+|----|------|---------|------|
+| SE-080 | AI 用量记录 — 每次大模型调用后记录 token 使用量和缓存命中率 | `lib/telemetry.ts` 的 `recordAIUsage()`：写入 D1 `ai_usage_log` 表 + `console.log` 结构化日志 | ✅ 已实现 |
+| SE-081 | 用户级用量统计 — 区分用户统计 token 使用量和频次 | `user_token` 字段从 Authorization header 提取（脱敏前 8 位）。后续可映射到真实 user_id | ✅ 已实现 |
+
 ---
 
 ## 三、API 端点
@@ -143,7 +154,7 @@ Story Elf 不是"写作工具"，也不是"内容展示"，而是 **"理解和�
 |------|------------|------|
 | **已完成** | SE-001~003, SE-010~015 | ✅ |
 | **Phase 1** | SE-020~027（AI Gateway 客户端） | ✅ 已完成（2026-05-22 实测验证通过） |
-| **Phase 2** | SE-030~032, SE-040, SE-042（上下文 + 指令） | ⏳ 当前 |
+| **Phase 2** | SE-030~032, SE-040, SE-042（上下文 + 指令） | ✅ 已完成（2026-05-25） |
 | **Phase 3** | SE-041, SE-050~053（工作流编排） | ⏳ 待开始 |
 | **Phase 4** | SE-060~062（记忆系统） | ⏳ 待开始 |
 | **远期** | SE-070（Read 侧伴读） | ⏳ 未排期 |

@@ -93,7 +93,7 @@ export function renderTemplate(
   lines.push('');
   lines.push('---');
   lines.push('');
-  lines.push(`> ${tmpl.outro[lang]}`);
+  if (tmpl.outro[lang]) lines.push(tmpl.outro[lang]);
 
   return lines.join('\n') + '\n';
 }
@@ -142,10 +142,11 @@ export function renderCard(
   lines.push('');
   lines.push('---');
   lines.push('');
+  // outro 由调用方传入（如 "M3 自由编辑区"），渲染为纯文本标签
   const outro = lang === 'zh'
-    ? '以下为自由编辑区，可按需添加模板框架之外的内容。'
-    : 'Free editing zone — add any content beyond the template framework here.';
-  lines.push(`> ${outro}`);
+    ? '自由编辑区'
+    : 'Free editing zone';
+  lines.push(outro);
 
   return lines.join('\n') + '\n';
 }

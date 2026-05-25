@@ -1,11 +1,18 @@
 // Story Elf — AI 对话 API
 // Read 侧（伴读精灵）和 Write 侧（写作精灵）共享此端点。
-// 基于用户消息 + 上下文（当前作品/章节/模块），返回 AI 回复。
+// 上下文组装和 system prompt 由 L1 模块完成。
+
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { callAI, type Message } from '../../lib/ai';
-import { workContentPath, readSectionMarkdown, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
+import { callAI, AIError, type Message } from '../../lib/ai';
+import { recordAIUsage, extractUserToken } from '../../lib/telemetry';
+import { extractLang } from '../../lib/work_content';
+import { getScenario } from '../../lib/l1/scenarios';
+import { assembleContext } from '../../lib/l1/context';
+import { buildSystemPrompt } from '../../lib/l1/instructions';
+import { getOrBuildContextPackage } from '../../lib/l1/context-package';
+import type { WorkMeta, ContextOpts } from '../../lib/l1/types';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -24,7 +31,6 @@ interface ElfChatRequest {
   };
 }
 
-// POST /api/write/elf/chat?lang=zh|en
 export async function handleElfChat(env: Env, request: Request): Promise<Response> {
   const body = await request.json() as ElfChatRequest;
   if (!body.work_id || !body.messages?.length || !body.page) {
@@ -33,7 +39,10 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
     });
   }
 
-  const work = await env.DB.prepare('SELECT id, title, category, summary FROM works WHERE id = ?').bind(body.work_id).first<Record<string, unknown>>();
+  // 查询作品基本信息
+  const work = await env.DB.prepare(
+    'SELECT id, title, category, summary FROM works WHERE id = ?'
+  ).bind(body.work_id).first<Record<string, unknown>>();
   if (!work) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
       status: 404, headers: { 'Content-Type': 'application/json' },
@@ -41,76 +50,79 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
   }
 
   const lang = extractLang(request);
-  const langLabel = LANG_LABELS[lang];
+  const workMeta: WorkMeta = {
+    title: String(work.title || ''),
+    category: String(work.category || ''),
+    summary: String(work.summary || ''),
+  };
+  const opts: ContextOpts = {
+    module: body.context?.module,
+    sectionId: body.section_id,
+    sectionTitle: body.context?.section_title,
+  };
 
-  // 收集上下文
-  let contextBlock = '';
-
-  // 世界观概要
-  const wb = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'world_bible.md'));
-  if (wb) {
-    contextBlock += `\n【世界观设定】\n${(await wb.text()).substring(0, 1500)}\n`;
+  // L1: 获取/构建写作上下文包（M0-M5，R2 缓存） → 组装 vars → 渲染 system prompt
+  const scenarioId = body.page === 'write' ? 'writer_companion' : 'reader_companion';
+  const scenario = getScenario(scenarioId);
+  if (!scenario) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, `Unknown scenario: ${scenarioId}`)), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
+    });
   }
 
-  // 人物列表
-  const entities = await env.DB.prepare('SELECT name, type, description FROM entities WHERE work_id = ? LIMIT 20').bind(body.work_id).all<Record<string, unknown>>();
-  if (entities.results?.length) {
-    contextBlock += `\n【角色列表】\n${entities.results.map(e => `- ${e.name}（${e.type}）：${String(e.description || '').substring(0, 80)}`).join('\n')}\n`;
-  }
+  // 上下文包：首次调用构建并缓存到 R2，后续会话直接复用（同作品+同语言 = 完全固定 → 缓存命中）
+  const contextPkg = await getOrBuildContextPackage(env, body.work_id, lang);
+  const vars = assembleContext(workMeta, lang, contextPkg, opts);
+  const systemPrompt = buildSystemPrompt(scenario.promptFile, vars);
 
-  // 大纲
-  const outline = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'outline.md'));
-  if (outline) {
-    contextBlock += `\n【剧情大纲】\n${(await outline.text()).substring(0, 1000)}\n`;
-  }
+  // 构建消息：system（frozen，缓存命中） + user/assistant 对话历史
+  // 动态上下文（模块/章节）放在 user message 前缀，避免破坏 system prompt 的缓存稳定性
+  const conversationMessages: Message[] = body.messages.map(m => ({
+    role: m.role as 'user' | 'assistant',
+    content: m.content,
+  }));
 
-  // 当前章节正文（如果有）
-  if (body.section_id) {
-    const content = await readSectionMarkdown(env, body.work_id, body.section_id, lang);
-    if (content?.body) {
-      contextBlock += `\n【当前章节正文】\n${content.body.substring(0, 3000)}\n`;
+  // 在第一条 user message 前注入当前模块/章节信息（如果有）
+  if (opts.module || opts.sectionTitle) {
+    const prefixParts: string[] = [];
+    if (opts.module) prefixParts.push(`[当前模块: ${opts.module}]`);
+    if (opts.sectionTitle) prefixParts.push(`[当前章节: ${opts.sectionTitle}]`);
+    const prefix = prefixParts.join(' ') + '\n\n';
+
+    const firstUserIdx = conversationMessages.findIndex(m => m.role === 'user');
+    if (firstUserIdx >= 0) {
+      conversationMessages[firstUserIdx] = {
+        role: 'user',
+        content: prefix + conversationMessages[firstUserIdx].content,
+      };
+    } else {
+      // 没有 user 消息（罕见），创建一条
+      conversationMessages.unshift({ role: 'user', content: prefix });
     }
   }
 
-  // 构建角色提示
-  const roles: Record<string, string> = {
-    read: `你是 Story Elf（故事精灵），一位陪伴读者阅读小说的 AI 伴侣。你灵动、温暖、有见地。
-- 帮助读者理解情节、分析角色动机、发现伏笔线索
-- 在合适的时机分享有趣的背景知识或解读
-- 回答读者关于作品的任何问题
-- 语气：亲切、热情，像一位和你一起读书的朋友。不要剧透未读内容。`,
-    write: `你是 Story Elf（故事精灵），一位辅助作者创作的 AI 伴侣。你灵动、有魔法、机智。
-- 帮助作者构思情节、发展角色、设计伏笔
-- 在作者卡住时提供灵感建议
-- 回答关于世界观一致性和结构的问题
-- 语气：鼓励、建设性，尊重作者的最终决定权。你是帮手，不是替代者。`,
-  };
-
-  const systemPrompt = `${roles[body.page] || roles.read}
-
-## 当前作品信息
-- 作品：《${work.title}》
-- 分类：${work.category || '未指定'}
-- 简介：${work.summary || '暂无'}
-${body.context?.module ? `- 当前模块：${body.context.module}` : ''}
-${body.context?.section_title ? `- 当前章节：${body.context.section_title}` : ''}
-${body.context?.panel ? `- 当前面板：${body.context.panel}` : ''}
-
-${contextBlock}
-
-请用${langLabel}回复。保持简洁（一般不超过 200 字）。`;
-
-  // 构建消息 —— 三角色分离：
-  //   system  → 角色指令 + 作品上下文（固定前缀，可被 DeepSeek 硬盘缓存命中）
-  //   user    → 用户的提问
-  //   assistant → Story Elf 的历史回复（多轮对话时前端传入）
   const messages: Message[] = [
     { role: 'system', content: systemPrompt },
-    ...body.messages.map(m => ({ role: m.role as 'user' | 'assistant', content: m.content })),
+    ...conversationMessages,
   ];
 
   try {
     const result = await callAI(env, messages);
+
+    // 遥测：记录用量
+    if (result.usage) {
+      await recordAIUsage(env, {
+        work_id: body.work_id,
+        user_token: extractUserToken(request),
+        page: body.page,
+        model: result.model,
+        tokens_in: result.usage.input,
+        tokens_out: result.usage.output,
+        cache_hit: result.usage.cacheHit || 0,
+        cache_miss: result.usage.cacheMiss || 0,
+      });
+    }
+
     return new Response(JSON.stringify(jsonSuccess({
       work_id: body.work_id,
       lang,
@@ -120,6 +132,12 @@ ${contextBlock}
     });
   } catch (err) {
     console.error('[elf_chat] AI call failed:', (err as Error).message);
+    if (err instanceof AIError) {
+      const status = err.code === 'TIMEOUT' ? 504 : err.code === 'RATE_LIMITED' ? 429 : 503;
+      return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, err.message)), {
+        status, headers: { 'Content-Type': 'application/json' },
+      });
+    }
     return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, 'AI service unavailable')), {
       status: 503, headers: { 'Content-Type': 'application/json' },
     });

@@ -22,6 +22,8 @@
 | v1.7.0 | 2026-05-09 | 冲突地图删除 + 伏笔 Markdown 模板 + 双模式合并为统一写作桌 |
 | v2.0.0 | 2026-05-20 | Milestone Review 0520：M3/M4 统一 entity 架构、三标记槽位格式全模块覆盖、CSS 现代化清理、Story Elf 双语支持、文档一致性修正 |
 | v2.1.0 | 2026-05-22 | AI Gateway Phase 1 审核：`lib/ai.ts` 重写为 Cloudflare AI Gateway 客户端（BYOK），实测验证通过 |
+| v2.2.0 | 2026-05-25 | Agent 层 Phase 2 审核：L0/L1 分层架构、写作上下文包、系统指令模板、并发安全、缓存稳定性 |
+| v2.2.1 | 2026-05-25 | 系统遥测：`lib/telemetry.ts` + D1 `ai_usage_log` 表。AI 用量统计、缓存命中率、用户级区分。审核通过 |
 
 ---
 
@@ -287,10 +289,40 @@
 | `generateWithAI` 兼容包装 | ✅ 8 个现有调用方无需改动，编译通过 |
 | Cloudflare 后台日志 | ✅ 可见 AI Gateway 调用记录 |
 
-**结论**：AI 底层调用链路完全通畅。此层（`lib/ai.ts` + `CF_AIG_TOKEN` + AI Gateway URL 格式）应视为稳定基础设施，后续开发不应修改此层的核心逻辑。
+**结论**：AI 底层调用链路完全通畅。此层应视为稳定基础设施，后续开发不应修改此层的核心逻辑。
+
+### Agent 层 Phase 2 审核（2026-05-25）
+
+**审核范围**：L0/L1 层 8 个文件（`l0/aiGateway.ts`、`l1/*.ts`）+ `elf_chat.ts`
+
+| 验证项 | 结果 |
+|--------|------|
+| L0/L1 分层架构 | ✅ L0（AI Gateway）纯基础设施，L1（Agent 层）业务组装，边界清晰 |
+| 写作上下文包（M0-M5） | ✅ `getOrBuildContextPackage()` 并发拉取 + R2 缓存 |
+| 系统指令模板 | ✅ `prompts/{scenario}/system.md` 人类维护，`buildSystemPrompt()` 变量注入 |
+| 并发安全 | ✅ M0-M5 六路并发 `Promise.all`，M3/M4/M5 内部 R2 读取并发 |
+| R2 错误隔离 | ✅ `readR2()` try-catch 单点失败不影响整体 |
+| SQL 安全 | ✅ 全部参数化查询 |
+| 缓存稳定性 | ✅ system prompt 冻结（无时间戳/动态变量），动态字段移至 user message 前缀 |
+| 消息三角色分离 | ✅ system/user/assistant 正确分离，DeepSeek 缓存优化 |
+
+**发现并修复的问题**（审核中修复）：
+
+| 严重度 | 问题 | 修复 |
+|--------|------|------|
+| 🔴 Critical | JSON fence 提取后未返回 `jsonStr` | 改为返回 `finalContent` |
+| 🔴 Critical | M5 意图卡逐章串行 R2 查询 | 改为 `Promise.all` 并发 |
+| 🟡 High | `readR2` 无错误隔离 | 添加 try-catch |
+| 🟡 High | `elf_chat` AIError code 丢失 | 映射 TIMEOUT→504, RATE_LIMITED→429 |
+| 🟢 Low | `horizontals` 预留字段 | 删除 |
+| 🟢 Low | 未知 model 静默 fallback | 改为抛 AIError |
+| 🟢 Low | 冗余 null 检查 | `raw == null` 替代 `raw == null \|\| raw === undefined` |
+
+**已知风险（接受）**：
+- R2 缓存无版本号：当 M0-M5 源文件变更时需主动调用 `invalidateContextPackage()`。当前缓存由源文件写入端点负责失效，尚未集成 hooks。风险低——源文件极少变更，且即使短期陈旧，模型推理质量影响很小
 
 ### 下一迭代优先事项
 
-- Phase 2：Agent 层（上下文组装 + system prompt 管理）
+- Phase 3：工作流编排（主动提示、level 建议、内容提取）
 - P2 项目：乐观拖拽、Chat 专用端点、移动端适配
 - 端到端测试数据创建（用户测试小说）
