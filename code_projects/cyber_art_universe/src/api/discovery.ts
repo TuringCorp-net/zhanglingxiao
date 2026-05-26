@@ -417,52 +417,101 @@ All MCP requests use the \`type\` field in POST body:
 
 ---
 
-## Template Format (v2.4+)
+## Template Format (v2.5+)
 
-The Write UI uses a **tree-structured section editor** for M1-M4 modules. Each \`##\` section and \`###\` subsection has its own level (\`L1\` = basic, always visible; \`L2\` = advanced, hidden by default).
+Starting from v2.5, M1-M4 modules use **JSON slot data** instead of Markdown with HTML comment markers. The Write UI renders editing forms directly from JSON structure.
 
-### Level + Slot Markers
+### API Request/Response Format
 
-Each section heading is preceded by a level marker, and each editable field uses three markers:
-
-\`\`\`markdown
-<!-- L1 -->
-### Power / Technology System
-<!-- hint:Describe the source of power, hierarchy, usage rules, and costs -->
-<!-- slot -->
-<!-- /slot -->
-The world power system is based on...
+**GET** endpoints return:
+\`\`\`json
+{
+  "ok": true,
+  "data": {
+    "template": {
+      "title": "世界观设定圣经",
+      "intro": "本文件是作品的最高约束文档...",
+      "sections": [
+        {
+          "heading": "一、世界规则与边界",
+          "level": 1,
+          "slots": [
+            {
+              "id": "power_system",
+              "level": 1,
+              "label": "力量/技术体系",
+              "hint": "描述这个世界的力量来源、等级划分、使用规则与代价",
+              "content": "在这个世界中，力量来源于..."
+            }
+          ]
+        }
+      ],
+      "outro": "M1 自由编辑区"
+    },
+    "rendered_md": "# 世界观设定圣经\\n\\n> ...",
+    "is_template": false
+  }
+}
 \`\`\`
 
-- **Level marker** (\`<!-- L{n} -->\`): Sets the level for the following heading and its slots. \`L1\` = basic tier (visible to all users), \`L2\` = advanced tier (requires unlock).
-- **Hint marker** (\`<!-- hint:text -->\`): Guidance text shown to the author via the Story Elf companion.
-- **Slot markers** (\`<!-- slot -->...<!-- /slot -->\`): Delimit editable content.
+- **template**: JSON structure with sections and slots, used by the UI to render the editing form
+- **rendered_md**: Clean Markdown (no markers), useful for reading context and preview
+- **is_template**: \`true\` when the module has not been filled yet
 
-### Section Tree
+**PUT** endpoints accept:
+\`\`\`json
+{
+  "slots": {
+    "power_system": "内容...",
+    "social_structure": "内容..."
+  },
+  "free_content": "自由编辑区内容（可选）"
+}
+\`\`\`
 
-- \`##\` heading = top-level section (level = MIN of all child slot levels)
-- \`###\` heading = subsection (level from its preceding \`<!-- L{n} -->\`)
-- \`#\` title area (before first \`##\`) = always visible (level 0)
+**POST generate** endpoints return:
+\`\`\`json
+{
+  "ok": true,
+  "data": {
+    "template": { "sections": [...], ... },
+    "rendered_md": "# ..."
+  }
+}
+\`\`\`
 
-### Framework vs. Content
+### Slot Level System
+- \`L1\` = basic tier (visible to all users), level value \`1\`
+- \`L2\` = advanced tier (hidden by default), level value \`2\`
+- Each slot has a \`level\` field. The frontend filters by \`data-level\` attribute.
 
-- **Framework** (headings, blockquotes) = read-only, preserved exactly
-- **Level markers** = control visibility, invisible in rendered output
-- **Slot content** (between \`<!-- slot -->...<!-- /slot -->\`) = editable by the author
-- **Free zone** (after last \`---\`) = free-form markdown area
-
-### Repeatable Groups (M4)
-
-Groups separated by \`---\` represent repeatable entries (foreshadowing hooks). Each group renders as a card with title + slots. The UI provides \`[+]\` to clone and \`[x]\` to delete groups.
+### Repeatable Groups (M4 Foreshadowing Cards)
+Multiple foreshadowing cards are represented as a \`groups\` array in the template structure:
+\`\`\`json
+{
+  "groups": [
+    { "name": "伏笔 #1: 主角身世之谜", "slots": [...] },
+    { "name": "伏笔 #2: 神秘戒指", "slots": [...] }
+  ]
+}
+\`\`\`
 
 ### Agent Writing Guide
 
-When generating or updating M1-M4 content:
+When generating M1-M4 content via POST generate endpoints:
+1. The prompt includes a \`template_json\` field describing all slots (id, label, hint)
+2. Output a JSON object with \`{"slots": {"slot_id": "content", ...}}\`
+3. Each slot value is a Markdown string (2-5 paragraphs for most slots)
+4. The server assembles clean Markdown from your JSON output automatically
+5. Do NOT include HTML comment markers, level markers, or slot markers in your output
 
-1. **Preserve all markers**: Keep \`<!-- L{n} -->\`, \`<!-- hint:text -->\`, \`<!-- slot -->\`, \`<!-- /slot -->\` exactly as-is
-2. **Write content between slot markers**: Place your generated text between \`<!-- slot -->\` and \`<!-- /slot -->\`
-3. **Do not remove or rename headings**: They are structural anchors
-4. **Level markers go before headings**: Each \`##\` and \`###\` heading needs a \`<!-- L{n} -->\` marker before it
+When updating M1-M4 content via PUT endpoints:
+1. Send \`{"slots": {"slot_id": "content", ...}, "free_content": "..."}\` JSON body
+2. The server renders and stores clean Markdown automatically
+
+For M6 draft generation/polish/rewrite:
+- Output \`{"slots": {"content": "完整的章节正文（Markdown 格式）"}}\` JSON
+- The single slot \`content\` contains the full chapter body
 
 
 
@@ -473,18 +522,20 @@ When generating or updating M1-M4 content:
 \`\`\`
  1. POST /api/write/works → create work, get work_id
  2. PUT  /api/write/original-concept/{work_id} → write M0 (free text)
- 3. PUT  /api/write/worldbuilding/{work_id} → write M1 (use slot format, keep HTML comment markers)
- 4. POST /api/write/outline/generate → AI generate N chapters (creates D1 sections)
- 5. PUT  /api/write/outline/{work_id} → add outline_md framework (use slot format)
- 6. POST /api/write/works/{id}/entities → create characters one by one
- 7. PUT  /api/write/works/{id}/entities/{eid}/card → fill character cards (use slot format)
- 8. PUT  /api/write/foreshadowing/{work_id} → write M4 foreshadowing ledger (use slot format)
- 9. POST /api/write/draft/intent → create intent card for each chapter
-10. POST /api/write/draft/generate → generate draft for each chapter
-11. POST /api/write/draft/check/{work_id}/{sid} → check each chapter
-12. POST /api/write/draft/polish → polish each chapter
-13. PATCH /api/write/works/{id}/publish → publish
+ 3. POST /api/write/worldbuilding/generate → AI generate M1 (returns JSON template + rendered_md)
+ 4. PUT  /api/write/worldbuilding/{work_id} → edit M1 (body: {slots, free_content})
+ 5. POST /api/write/outline/generate → AI generate N chapters (creates D1 sections + framework)
+ 6. PUT  /api/write/outline/{work_id} → edit M2 framework ({outline_slots, sections, free_content})
+ 7. POST /api/write/works/{id}/entities → create characters/伏笔 one by one
+ 8. PUT  /api/write/works/{id}/entities/{eid}/card → edit M3/M4 cards ({slots, free_content})
+ 9. PUT  /api/write/foreshadowing/{work_id} → edit M4 strategy ({slots, free_content})
+10. POST /api/write/draft/intent → create intent card for each chapter
+11. POST /api/write/draft/generate → generate draft for each chapter
+12. POST /api/write/draft/check/{work_id}/{sid} → check each chapter
+13. POST /api/write/draft/polish → polish each chapter
+14. PATCH /api/write/works/{id}/publish → publish
 \`\`\`
+
 
 ### Pattern 2: Read & Analyze a Work
 

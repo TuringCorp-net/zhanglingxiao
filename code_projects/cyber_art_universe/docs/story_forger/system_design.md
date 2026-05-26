@@ -25,6 +25,7 @@
 | v2.2.0 | 2026-05-15 | API 全面复盘。新增 §10.7 多语言版本同步控制原则（永不静默翻译，stale 标记 + 作者手动触发）|
 | v2.3.0 | 2026-05-19 | 槽位编辑器：新增 §10.8 槽位编辑器架构（三态编辑器 + 模板格式规范 + 重复结构设计）。M1-M4 模板表格全面转为纵向槽位。M5 新增表单编辑器。标记格式：`<!-- hint:提示 -->` + `<!-- slot -->` + `<!-- /slot -->` 三标记分离格式 |
 | v2.4.0 | 2026-05-22 | 模板数据流全生命周期：新增 §10.9 模板数据流（TemplateDef 单一来源 → 渲染 → 解析 → 编辑 → 序列化 → R2 持久化完整循环）。Hint 对话泡数据流说明。 |
+| v2.5.0 | 2026-05-26 | 模板系统 JSON 化：LLM 输出统一为 `{"slots":{...}}` JSON 格式，Markdown 由 `renderTemplate()` 服务端组装。R2 双文件存储（`.json` 结构化数据 + `.md` clean Markdown）。前端直接消费 JSON 结构，不再依赖 `parseSlotTemplate` Markdown 解析。删除 `stripTemplateMarkers`。更新 §10.9 模板数据流。 |
 
 ---
 
@@ -1033,11 +1034,16 @@ Story Forger 的流水线本身就是一个结构化的创作步骤。将此流�
 │                     R2 存储层（多语言路径）                  │
 │                                                              │
 │  works/{id}/{lang}/original_concept.md  ← M0 产出（仅作者）  │
-│  works/{id}/{lang}/world_bible.md       ← M1 产出            │
-│  works/{id}/{lang}/outline.md           ← M2 产出            │
-│  works/{id}/{lang}/foreshadowing.md     ← M4 策略总览         │
-│  works/{id}/{lang}/foreshadowing/*.md   ← M4 伏笔条目         │
-│  works/{id}/{lang}/characters/*.md      ← M3 人物卡           │
+│  works/{id}/{lang}/world_bible.md       ← M1 产出（clean MD） │
+│  works/{id}/{lang}/world_bible.json     ← M1 产出（JSON）    │
+│  works/{id}/{lang}/outline.md           ← M2 产出（clean MD） │
+│  works/{id}/{lang}/outline.json         ← M2 产出（JSON）    │
+│  works/{id}/{lang}/foreshadowing.md     ← M4 策略总览（MD）   │
+│  works/{id}/{lang}/foreshadowing.json   ← M4 策略总览（JSON） │
+│  works/{id}/{lang}/foreshadowing/*.md   ← M4 伏笔条目（MD）   │
+│  works/{id}/{lang}/foreshadowing/*.json ← M4 伏笔条目（JSON） │
+│  works/{id}/{lang}/characters/*.md      ← M3 人物卡（MD）     │
+│  works/{id}/{lang}/characters/*.json    ← M3 人物卡（JSON）   │
 │  works/{id}/{lang}/chapters/ch_*.md     ← M6 产出            │
 │  works/{id}/{lang}/summaries/ch_*.md    ← M6 产出            │
 │  works/{id}/{lang}/intents/*.json       ← M5 产出            │
@@ -1165,32 +1171,29 @@ PUT  /api/write/worldbuilding/{work_id}?lang=en  → 更新英文版
 
 **设计目标**：在"保护模板结构"和"给作者创作自由"之间找到平衡点。
 
-### 模板格式规范（v2.3+）
+### 模板格式规范
 
-所有 M1-M4 模板遵循统一的成对槽位格式：
+v2.5 中，模板结构由 `TemplateDef` / `SlotDef` TypeScript 常量定义，不再以 Markdown 注释形式写入 R2 文件。R2 中的 `.md` 文件为 clean Markdown（无任何 `<!-- -->` 标记）。
 
+**模板定义示例**（TypeScript 源码，唯一维护点）：
+
+```typescript
+interface SlotDef {
+  id: string;                    // 槽位唯一标识
+  level: 1 | 2;                  // L1 默认可见，L2 需解锁
+  label: Record<Lang, string>;   // 槽位标签
+  hint: Record<Lang, string>;    // 提示文字（Story Elf 对话泡来源）
+}
+
+interface TemplateDef {
+  sections: SectionDef[];        // 章节结构（标题层级、归属槽位）
+  slots: SlotDef[];              // 所有槽位定义
+  intro: Record<Lang, string>;   // 文档引导文字
+  outro: Record<Lang, string>;   // 自由编辑区引导文字
+}
 ```
-# 文档标题
 
-> 引用说明文字（框架，不可编辑）
-
-## 一、大节标题
-
-### 小节标题
-<!-- hint:填写内容的提示 -->
-<!-- slot -->
-<!-- /slot -->
-```
-
-**三标记槽位格式**：`<!-- hint:提示文字 -->` 声明提示（显示为 textarea placeholder），`<!-- slot -->` 标志槽位开始，`<!-- /slot -->` 标志槽位结束。提示文字在用户写入内容后自然消失。两个标记之间的内容为用户填写的文本。标记以外的所有内容（标题/引用/加粗/分隔线）均为只读框架，由 `marked` 渲染为 HTML。
-
-**三标记的核心优势**：hint 和 slot 语义分离——hint 仅作提示（placeholder），不影响槽位内容的结构化解析。`<!-- /slot -->` 是明确的闭合标记，无论槽位之间有多少标题、引用或其他结构，都不会被误解析。
-
-**自由编辑区**：模板末尾的 `---` 分隔线以下为自由编辑区。作者可在此自由编写 markdown，不受模板约束。
-
-**表格转纵向槽位**：原模板中的 Markdown 表格（如 M2 节奏规划、M4 伏笔属性表）全部转为 `<!-- 字段名：选项/提示 -->` 纵向槽位。编辑体验由表格横向填写变为逐行纵向填写。
-
-**重复结构**：多条目模块（M3 人物 / M4 伏笔）中，每条条目为独立的 D1 实体 + R2 文件，通过 entity CRUD API 新增/删除。单文件内 `---` 仅用于分隔模板区与自由编辑区，不再承载多条目逻辑。
+**历史说明**（v2.3~v2.4）：旧版系统使用 `<!-- hint:... -->` + `<!-- slot -->` + `<!-- /slot -->` 三标记格式将模板结构嵌入 R2 Markdown 文件。v2.5 改为 JSON 双文件存储后，这些标记不再出现在 R2 文件中，仅前端和后端通过 `TemplateDef` 维护。
 
 ### 三态编辑器
 
@@ -1202,37 +1205,40 @@ PUT  /api/write/worldbuilding/{work_id}?lang=en  → 更新英文版
 | 表单编辑 | M5 | 纵向表单（label + input/textarea） | JSON 意图卡字段拆为13个表单字段。数组字段逗号分隔编辑 |
 | 自由编辑 | M0 / M6 | 单 textarea | M0 无模板、M6 章节正文无模板，保持纯文本写作 |
 
-### 槽位引擎数据流
+### 槽位引擎数据流（v2.5 JSON 化）
 
 ```
-加载：R2 markdown → parseSlotTemplate() → { groups: [{title, segments}], freeContent }
+加载：GET API → { template: { slots: {...} }, rendered_md }
        ↓
-       segments = [framework|slot, ...]
-       framework → marked.parse() → 只读 HTML
-       slot → label div + textarea (value = existing content)
+       template.slots = { slotId: { label, hint, level, value }, ... }
+       template.sections = [ { heading, slotIds, level } ]
        ↓
-       renderSlotEditor() → DOM
+       遍历 sections → 渲染 heading 框架（只读 HTML）
+         遍历 section.slotIds → 渲染 slot textarea
+            label → label div
+            hint → data-hint 属性（供 Story Elf 对话泡使用）
+            value → textarea 内容
+            level → data-level 属性（供 L1/L2 过滤）
+       ↓
+       renderSlotEditor(template) → DOM
 
-保存：DOM textarea values → serializeSlotContent()
+保存：DOM textarea values → 收集 slots 对象
        ↓
-       遍历 _slotData（缓存的 parse 结果）
-       framework → 原样输出 _md
-       slot → '<!-- hint:' + label + ' -->\n<!-- slot -->\n' + escSlot(textarea.value) + '\n<!-- /slot -->'
+       { slots: { slotId: textarea.value, ... }, freeContent: "..." }
        ↓
-       + '\n---\n' + 自由区内容
+       PUT /api/write/{module}/{work_id}（JSON body）
        ↓
-       PUT R2（完整 markdown 覆盖）
+       服务端：写入 .json → renderTemplate(prefills, cleanOutput:true) → 写入 .md
 ```
 
 ### 降级策略
 
-当内容的 `<!-- -->` 槽位标记为 0（如 AI 生成后内容已将注释替换为实际文字），槽位编辑器降级为"无槽位模式"：提示文字 + 全内容放入自由编辑区。作者可在自由编辑区修改或选择重置为模板。
+当 `.json` 文件不存在或为空时（如首次访问、旧数据迁移前），API 返回模板默认 JSON（slots 全为空字符串），前端正常渲染空槽位编辑器。作者可手动填写或触发 AI 生成。
 
 ### 内容安全
 
-- `<!--` 在用户输入中自动转义为 `<\!--`，防止用户内容中的 HTML 注释干扰解析
-- 加载时反向取消转义
-- 模板框架部分始终只读，不可能被作者误改
+- 用户输入存储在 JSON 中，不存在 HTML 注释干扰问题（v2.4 中 `<!--` 转义逻辑随 Markdown 解析方案一并移除）
+- 模板框架部分由前端根据 `TemplateDef` 渲染，始终只读，不可能被作者误改
 
 ---
 
@@ -1242,11 +1248,87 @@ PUT  /api/write/worldbuilding/{work_id}?lang=en  → 更新英文版
 
 模板系统的核心设计原则是**单一事实来源（Single Source of Truth）**：
 
-> hint 文字、框架结构、槽位定义、level 分级 —— 所有这些信息**只在 TS 源码中的 `TemplateDef` / `SlotDef` 常量里维护一处**。R2 中保存的 markdown 文件、前端 textarea 的 `data-hint` 属性、Story Elf 对话泡中显示的文字，全部由这一处自动生成或自动解析而来。
+> hint 文字、框架结构、槽位定义、level 分级 —— 所有这些信息**只在 TS 源码中的 `TemplateDef` / `SlotDef` 常量里维护一处**。R2 中保存的 `.json` 结构化文件（用于前端直接消费）和 `.md` clean Markdown 文件（用于人类阅读/AI 参考），全部由这一处自动生成而来。
 
 **修改模板的正确方式**：修改对应模块的 `TemplateDef` / `SlotDef` 常量 → 新作品和首次加载的模块自动使用新模板。
 
-### 完整数据流
+### v2.5 JSON 化数据流（AI 生成路径）
+
+v2.5 的核心变化：LLM 输出从嵌入 `<!-- slot -->` 标记的 Markdown 改为结构化 JSON，Markdown 由服务端代码组装。
+
+```
+TemplateDef / SlotDef[]
+       │
+       │ renderTemplateAsJson(tmpl, lang)
+       │ 输出：{ schema: { slotId: { label, hint, level } }, instructions }
+       ▼
+┌─────────────────────────────────────────────┐
+│  LLM Prompt（发送给 AI）                      │
+│  - JSON schema 描述所有槽位                    │
+│  - instructions 指导 AI 如何填充               │
+│  - 要求输出格式：{"slots":{"slotId":"内容",...}}│
+└────────────────────┬────────────────────────┘
+                     │ AI 调用（callAI / generateWithAI）
+                     ▼
+┌─────────────────────────────────────────────┐
+│  LLM 输出（原始 JSON）                        │
+│  {"slots": {"world_power_system": "...",     │
+│             "world_taboos": "...", ...}}     │
+└────────────────────┬────────────────────────┘
+                     │ extractTemplateJson(raw, tmpl)
+                     │ 校验 + 补全缺失 slotId
+                     ▼
+┌─────────────────────────────────────────────┐
+│  renderTemplate(tmpl, lang, prefills,        │
+│                 cleanOutput: true)           │
+│                                               │
+│  cleanOutput: true → 不含 <!-- slot -->       │
+│  等标记，只输出纯 Markdown                     │
+└────────────────────┬────────────────────────┘
+                     │
+        ┌────────────┴────────────┐
+        ▼                         ▼
+┌───────────────┐    ┌───────────────────────┐
+│  R2 .json     │    │  R2 .md               │
+│  结构化数据    │    │  clean Markdown       │
+│  供前端消费    │    │  供人类阅读 / AI 参考  │
+└───────┬───────┘    └───────────┬───────────┘
+        │                        │
+        └────────┬───────────────┘
+                 │ API GET 返回
+                 ▼
+┌─────────────────────────────────────────────┐
+│  API Response                                │
+│  {                                           │
+│    template: { slots: {...}, ... },  // JSON │
+│    rendered_md: "# 世界观...\n..."   // MD    │
+│  }                                           │
+└────────────────────┬────────────────────────┘
+                     │ 前端
+                     ▼
+┌─────────────────────────────────────────────┐
+│  前端直接消费 JSON 结构                       │
+│  - 遍历 template.slots 渲染槽位编辑器         │
+│  - hint 来自 SlotDef.hint，label 来自         │
+│    SlotDef.label                             │
+│  - 不再需要 parseSlotTemplate() Markdown 解析  │
+│  - 保存时：收集 textarea 值 → PUT JSON 到 R2  │
+│    服务端重新 renderTemplate() 更新 .md       │
+└─────────────────────────────────────────────┘
+```
+
+**与 v2.4 Markdown 解析方案的关键区别**：
+
+| 方面 | v2.4（Markdown 解析） | v2.5（JSON 直接消费） |
+|------|----------------------|----------------------|
+| LLM 输出格式 | Markdown 含 `<!-- slot -->` 标记 | 纯 JSON `{"slots":{...}}` |
+| R2 存储 | 单文件 `.md`（含标记，自描述） | 双文件 `.json` + `.md`（clean） |
+| 前端解析 | `parseSlotTemplate(md)` 正则提取 | 直接读 JSON 对象 |
+| Markdown 标记 | 保留在 R2 文件中 | 仅 `.md` 不含标记（cleanOutput） |
+| 模板标记清理 | `stripTemplateMarkers()` | 删除（不再需要） |
+| 服务端职责 | 只存原始 Markdown | 组装 Markdown + 管理 JSON |
+
+### 完整数据流（含前端编辑循环）
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -1382,52 +1464,74 @@ PUT  /api/write/worldbuilding/{work_id}?lang=en  → 更新英文版
 
 | 决策 | 说明 |
 |------|------|
-| **hint 不存 R2 JSON，嵌入 markdown 注释** | 单一文件自描述，无需额外配置文件。解析时从 `<!-- hint:... -->` 提取 |
-| **保存时保留模板标记** | `serializeSlotContent()` 原样输出 `<!-- hint -->` + `<!-- slot -->` + `<!-- /slot -->`，确保下次加载能正确解析 |
-| **模板更新不覆盖已有作品** | 已保存到 R2 的文件保留当时的模板结构。只有新作品或手动重置时使用新模板定义 |
+| **LLM 输出 JSON，服务端组装 Markdown** | LLM 输出结构化 `{"slots":{...}}` JSON，Markdown 由服务端 `renderTemplate()` 按 `TemplateDef` 组装。避免了 LLM 输出格式不稳定导致的解析失败 |
+| **R2 双文件存储** | `.json` 文件存结构化槽位数据（前端直接消费），`.md` 文件存 clean Markdown（不含 `<!-- slot -->` 等标记，供人类阅读和 AI 参考）。两者始终同步 |
+| **前端直接消费 JSON** | `GET` 返回 `{template, rendered_md}`，前端遍历 `template.slots` 直接渲染槽位编辑器，不再需要 `parseSlotTemplate()` 解析 Markdown |
+| **保存时写 JSON，服务端重渲染 MD** | 前端 `PUT` 发送 `{slots:{...}, freeContent:"..."}` JSON → 服务端写入 `.json` → 调用 `renderTemplate(prefills, cleanOutput:true)` 重新生成 `.md` |
+| **删除 stripTemplateMarkers** | clean Markdown 不含任何 `<!-- -->` 标记，不再需要后处理清理 |
+| **模板更新不覆盖已有作品** | 已保存到 R2 的 `.json` 文件保留当时的数据。只有新作品或手动重置时使用新模板定义 |
 | **中英双语在同一个 SlotDef 中** | `hint: { zh: '...', en: '...' }` — 加语言只需加字段，无需复制整套模板 |
-| **对话泡数据与 placeholder 解耦** | hint 不再设为 textarea placeholder（输入即消失），而是独立在对话泡中以打字机呈现，输入内容后 hint 依然可见 |
+| **对话泡数据与 placeholder 解耦** | hint 不再设为 textarea placeholder（输入即消失），而是独立在对话泡中以打字机呈现，输入内容后 hint 依然可见。hint 数据来源从前端 `data-hint` 属性（v2.4 从 Markdown 注释解析）改为直接从模板 JSON 的 `SlotDef.hint` 字段读取 |
 | **对话泡与聊天窗口是两套独立系统** | 左侧 `#elf-dialog` 预留给用户↔AI 对话交互；上方 `#elf-hint-bubble` 用于展示槽位 hint。两套系统同时存在、互不干扰 |
 
-### R2 文件内容示意（以世界观为例）
+### R2 文件内容示意（以世界观为例，v2.5 双文件）
+
+**`.json` 文件**（`world_bible.json`，供前端直接消费）：
+
+```json
+{
+  "slots": {
+    "world_power_system": "这个世界存在三种基本力量：元素之力（火水土风）、生命之力（治愈与生长）、虚空之力（毁灭与转化）。力量的获取需要通过"启明仪式"与对应的元素精灵签订契约...",
+    "world_social_structure": "",
+    "world_taboos": "使用虚空之力会逐渐侵蚀使用者的生命力。每使用一次，寿命减少一年...",
+    "world_core_theme": "",
+    "world_emotional_tone": ""
+  },
+  "freeContent": ""
+}
+```
+
+**`.md` 文件**（`world_bible.md`，clean Markdown，供人类阅读和 AI 参考）：
 
 ```markdown
 # 世界观设定圣经
 
-> 本文件是作品的最高约束文档...
+> 本文件是作品的最高约束文档。所有人物、情节、章节内容必须服从此圣经的规则。
 
-<!-- L1 -->
 ## 一、世界规则与边界
 
-<!-- L1 -->
 ### 力量/技术体系
 
-<!-- L1 -->
-<!-- hint:描述这个世界的力量来源、等级、使用规则与代价 -->
-<!-- slot -->
 这个世界存在三种基本力量：元素之力（火水土风）、生命之力（治愈与生长）、
 虚空之力（毁灭与转化）。力量的获取需要通过"启明仪式"与对应的元素精灵签订契约...
-<!-- /slot -->
 
-<!-- L1 -->
+### 社会组织与结构
+
+
+
 ### 禁忌与代价
 
-<!-- L1 -->
-<!-- hint:世界中不可触碰的禁忌、使用力量的代价 -->
-<!-- slot -->
 使用虚空之力会逐渐侵蚀使用者的生命力。每使用一次，寿命减少一年...
-<!-- /slot -->
+
+## 二、核心主题与价值观
+
+### 核心命题
+
+
+
+### 情感基调
+
+
 
 ---
-
-> 以下为自由编辑区，可按需添加模板框架之外的内容。
 ```
 
 **观察**：
-- 文件同时包含模板结构（`<!-- hint -->`、`<!-- slot -->`）和用户内容（slot 之间的文字）
-- 框架文字（`#`、`##`、`###`、`>`）也是模板的一部分，在编辑器中被渲染为只读 HTML
-- 保存和加载走同一个文件，不需要双向同步
-- 如果以后要改 hint 文字，修改 `SlotDef.hint` 即可；但已有作品的 R2 文件中嵌入的是旧 hint，需要手动重置或等作者下次编辑时自然更新
+- `.json` 文件是**结构化数据**：`slots` 对象以 `slotId` 为 key，值为用户/AI 填写的内容。前端直接 `JSON.parse` 后遍历渲染
+- `.md` 文件是**clean Markdown**：不含任何 `<!-- slot -->`、`<!-- hint -->`、`<!-- L1 -->` 等标记。框架文字（标题、引用）由 `renderTemplate()` 按 `TemplateDef` 输出，槽位内容嵌入对应位置
+- 两个文件由同一个 `TemplateDef` 保证结构一致。修改模板定义后，服务端重新 `renderTemplate()` 即可同步两个文件
+- hint 文字不再写入任何 R2 文件——前端直接从模板 JSON（API 返回的 `template` 字段）的 `SlotDef.hint` 读取
+- 保存流程：前端 PUT JSON → 服务端写入 `.json` → 服务端调用 `renderTemplate(prefills, cleanOutput:true)` → 写入 `.md`
 
 ---
 

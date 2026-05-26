@@ -19,6 +19,7 @@
 | v0.2.0 | 2026-05-22 | Phase 1 完成：AI Gateway 客户端（SE-020~027）实测验证通过 |
 | v0.3.0 | 2026-05-25 | Phase 2 完成：上下文包组装（SE-030~032）+ 系统指令（SE-040, SE-042）。L0/L1 分层架构落地 |
 | v0.3.1 | 2026-05-25 | 系统遥测模块：AI 调用用量统计（SE-080~081），D1 ai_usage_log 表 |
+| v0.4.0 | 2026-05-26 | 前端槽位编辑系统切换为 JSON 消费：不再从 Markdown `<!-- hint -->` / `<!-- slot -->` 标记解析，改为直接消费 API 返回的 `template.slots` JSON 结构。Hint 对话泡数据来源从 `data-hint`（由 `parseSlotTemplate` 从 Markdown 解析）改为模板 JSON 的 `SlotDef.hint` 字段。Hint bubble 功能和打字机效果保持不变。 |
 
 ---
 
@@ -62,7 +63,7 @@ Story Elf 不是"写作工具"，也不是"内容展示"，而是 **"理解和�
 |----|------|---------|------|
 | SE-010 | Hint 对话泡 UI — 独立于左侧聊天窗口的气泡，定位在 Story Elf 上方 | 气泡跟随 Story Elf 位置，300px 宽，半透明深色背景，圆角卡片。与左侧 `#elf-dialog` 同时存在互不干扰 | ✅ 已实现 |
 | SE-011 | 打字机效果 — 逐字显示 hint（markdown 渲染），~40ms/字，标点智能停顿 | 句号/问号/感叹号 +200ms，逗号/分号 +100ms。`requestAnimationFrame` 级别流畅度 | ✅ 已实现 |
-| SE-012 | 槽位聚焦触发 — 用户点击/聚焦槽位 textarea 时显示 hint | `focusin` 事件冒泡到 `#slot-editor`，读取 `data-hint` 属性。无 hint 的槽位不弹出 | ✅ 已实现 |
+| SE-012 | 槽位聚焦触发 — 用户点击/聚焦槽位 textarea 时显示 hint | `focusin` 事件冒泡到 `#slot-editor`，读取 `data-hint` 属性（v2.5+ 由前端从模板 JSON 的 `SlotDef.hint` 写入，不再从 Markdown `<!-- hint -->` 标记解析）。无 hint 的槽位不弹出 | ✅ 已实现 |
 | SE-013 | 切换槽位 — 中断当前打字机，立即开始新 hint | 切换 textarea 时旧动画取消，新 hint 从头开始逐字渲染 | ✅ 已实现 |
 | SE-014 | Markdown 渐进渲染 — hint 文本支持轻量 Markdown（粗体/斜体/代码/链接） | `marked.parse()` 逐字累积渲染。不支持图片、表格、代码块 | ✅ 已实现 |
 | SE-015 | 手动关闭 — 关闭按钮，关闭后可再次聚焦重新展示 | 点击 × 关闭气泡，不阻止后续聚焦 | ✅ 已实现 |

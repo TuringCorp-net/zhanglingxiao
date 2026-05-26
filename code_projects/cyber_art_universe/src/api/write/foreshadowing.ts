@@ -1,4 +1,4 @@
-// Story Forger — 伏笔账本（SF-023）（多语言 + 规划导向 + 结构化模板）
+// Story Forger — 伏笔账本（SF-023）（多语言 + 规划导向 + JSON 槽位数据）
 //
 // 设计原则（区别于"AI 扫描已有章节提取伏笔"的反向做法）：
 //   伏笔是作者主动设计的暗线。AI 的角色是：
@@ -8,9 +8,11 @@
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { generateWithAI } from '../../lib/ai';
-import { workContentPath, extractLang, readR2WithLangFallback, type Lang, LANG_LABELS } from '../../lib/work_content';
-import { renderTemplate, type TemplateDef } from '../../lib/template';
+import { callAI } from '../../lib/ai';
+import { renderTemplate as renderText } from '../../lib/l1/render';
+import foreshadowingGenMd from '../../lib/l1/prompts/tools/foreshadowing_gen.md';
+import { workContentPath, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
+import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/template';
 
 // ============================================================
 // 伏笔账本 — 结构化模板定义（单一来源，双语）
@@ -36,13 +38,12 @@ const FORESHADOWING_TEMPLATE: TemplateDef = {
   },
 };
 
-function getForeshadowingTemplate(lang: Lang, level?: number): string {
-  return renderTemplate(FORESHADOWING_TEMPLATE, lang, level ?? 2);
-}
+/** R2 路径 */
+function fhJsonPath(workId: string, lang: Lang) { return workContentPath(workId, lang, 'foreshadowing.json'); }
+function fhMdPath(workId: string, lang: Lang) { return workContentPath(workId, lang, 'foreshadowing.md'); }
 
 // ============================================================
 // POST /api/write/foreshadowing/generate?lang=zh|en
-// 规划导向：AI 基于大纲和世界观帮助作者设计伏笔网络
 // ============================================================
 
 export async function generateForeshadowing(env: Env, request: Request): Promise<Response> {
@@ -63,7 +64,7 @@ export async function generateForeshadowing(env: Env, request: Request): Promise
     });
   }
 
-  // 收集规划上下文（不是扫描已有章节，而是基于框架做规划）
+  // 收集规划上下文
   let worldContext = '';
   const wb = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'world_bible.md'));
   if (wb) worldContext = (await wb.text()).substring(0, 2000);
@@ -72,55 +73,58 @@ export async function generateForeshadowing(env: Env, request: Request): Promise
   const outline = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'outline.md'));
   if (outline) outlineContext = (await outline.text()).substring(0, 2000);
 
-  // 已有章节标题（作为规划参考，不扫描内容）
   const sections = await env.DB.prepare(
     'SELECT title, order_index FROM sections WHERE work_id = ? ORDER BY order_index'
   ).bind(body.work_id).all<{ title: string; order_index: number }>();
   const chapterTitles = (sections.results || []).map(s => `第${s.order_index + 1}章「${s.title}」`).join('、');
 
-  const template = getForeshadowingTemplate(lang);
+  const templateJson = renderTemplateAsJson(FORESHADOWING_TEMPLATE, lang, 2);
 
-  const prompt = `你是一位资深故事架构师。请帮助作者为作品《${work.title}》设计伏笔网络。
+  const prompt = renderText(foreshadowingGenMd, {
+    work_title: work.title,
+    world_context_section: worldContext ? `## 世界观参考\n${worldContext}` : '',
+    outline_context_section: outlineContext ? `## 大纲参考\n${outlineContext}` : '',
+    section_titles_section: chapterTitles ? `## 章节标题\n${chapterTitles}` : '(尚未规划章节)',
+    template_json: templateJson,
+    lang_label: langLabel,
+  });
 
-## 伏笔规划原则
-- 伏笔是主动设计的暗线，不是写完再找的线索
-- 好的伏笔有多阶段发展：埋种→强化→部分揭示→（可选误导）→回收
-- 伏笔类型包括：身份伏笔（角色真实身份）、道具伏笔（契诃夫之枪）、对白伏笔（某句话后来获得全新含义）、能力伏笔（隐藏力量）、事件伏笔（看似无关的事件后来串联）、意象伏笔（反复出现的符号）
+  const aiResult = await callAI(env, [{ role: 'user', content: prompt }], {
+    maxTokens: 4096,
+    responseFormat: 'json',
+  });
 
-## 作品信息
-题材：${work.category || '未指定'}
-${chapterTitles ? `章节结构：${chapterTitles}` : '(尚未规划章节)'}
-
-${worldContext ? `【世界观设定】\n${worldContext}\n` : ''}
-${outlineContext ? `【长篇框架】\n${outlineContext}\n` : ''}
-${body.style_notes ? `作者备注：${body.style_notes}` : ''}
-
-请按照以下伏笔账本模板结构填入规划内容。模板使用三标记分离格式：每个槽位由 the hint marker（提示文字）+ the slot opening marker（槽位开始）+ the slot closing marker（槽位结束）组成。将内容写在 the slot opening marker 和 the slot closing marker 之间，保留所有标记不变。标题、加粗标签等其他结构保持原样。至少规划 3 条伏笔。
-用${langLabel}输出。
-
-输出模板：
-${template}`;
-
-  const result = await generateWithAI(env, prompt, { maxTokens: 4096 });
-  if (!result) {
+  if (!aiResult?.content) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, 'AI service unavailable')), {
       status: 503, headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  // 写入 R2（存储 Markdown 格式的伏笔账本，而非 JSON）
-  try {
-    await env.WORKS_BUCKET.put(workContentPath(body.work_id, lang, 'foreshadowing.md'), result, {
-      httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+  const parsed = extractTemplateJson(aiResult.content);
+  if (!parsed) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.EXTERNAL_SERVICE_ERROR, 'AI returned invalid JSON')), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
     });
-  } catch (err) {
-    console.error('R2 write failed for foreshadowing.md:', body.work_id, lang, err);
   }
+
+  const slotData: R2SlotData = { slots: parsed.slots };
+  const renderedMd = renderTemplate(FORESHADOWING_TEMPLATE, lang, 2, { prefills: parsed.slots, cleanOutput: true });
+
+  // 写 R2 双文件
+  await env.WORKS_BUCKET.put(fhJsonPath(body.work_id, lang), JSON.stringify(slotData, null, 2), {
+    httpMetadata: { contentType: 'application/json' },
+  });
+  await env.WORKS_BUCKET.put(fhMdPath(body.work_id, lang), renderedMd, {
+    httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+  });
+
+  const template = buildTemplateJson(FORESHADOWING_TEMPLATE, lang, 2, slotData);
 
   return new Response(JSON.stringify(jsonSuccess({
     work_id: body.work_id,
     lang,
-    content: result,
+    template,
+    rendered_md: renderedMd,
   })), {
     headers: { 'Content-Type': 'application/json' },
   });
@@ -128,18 +132,29 @@ ${template}`;
 
 // ============================================================
 // GET /api/write/foreshadowing/{work_id}?lang=zh|en
-// 返回伏笔账本内容（Markdown），无内容时返回结构化模板
 // ============================================================
 
 export async function readForeshadowing(env: Env, request: Request, workId: string): Promise<Response> {
   const lang = extractLang(request);
-  const { content, actualLang } = await readR2WithLangFallback(env, workId, lang, 'foreshadowing.md');
-  if (!content) {
-    const template = getForeshadowingTemplate(lang);
+
+  let slotData: R2SlotData | null = null;
+  const jsonObj = await env.WORKS_BUCKET.get(fhJsonPath(workId, lang));
+  if (jsonObj) {
+    try { slotData = JSON.parse(await jsonObj.text()) as R2SlotData; } catch { /* ignore */ }
+  }
+
+  let renderedMd = '';
+  const mdObj = await env.WORKS_BUCKET.get(fhMdPath(workId, lang));
+  if (mdObj) renderedMd = await mdObj.text();
+
+  if (!slotData && !renderedMd) {
+    const emptyMd = renderTemplate(FORESHADOWING_TEMPLATE, lang, 2);
+    const template = buildTemplateJson(FORESHADOWING_TEMPLATE, lang, 2, null);
     return new Response(JSON.stringify(jsonSuccess({
       work_id: workId,
       lang,
-      content: template,
+      template,
+      rendered_md: emptyMd,
       is_template: true,
       message: lang === 'en'
         ? 'Foreshadowing ledger not yet created. Below is the planning template.'
@@ -149,10 +164,13 @@ export async function readForeshadowing(env: Env, request: Request, workId: stri
     });
   }
 
+  const template = buildTemplateJson(FORESHADOWING_TEMPLATE, lang, 2, slotData);
+
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId,
-    lang: actualLang,
-    content,
+    lang,
+    template,
+    rendered_md: renderedMd,
     is_template: false,
   })), {
     headers: { 'Content-Type': 'application/json' },
@@ -161,14 +179,13 @@ export async function readForeshadowing(env: Env, request: Request, workId: stri
 
 // ============================================================
 // PUT /api/write/foreshadowing/{work_id}?lang=zh|en
-// 手动编辑伏笔账本
 // ============================================================
 
 export async function updateForeshadowing(env: Env, request: Request, workId: string): Promise<Response> {
   const lang = extractLang(request);
-  const body = await request.json() as { content: string };
-  if (typeof body.content !== 'string') {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'content is required')), {
+  const body = await request.json() as { slots?: Record<string, string>; free_content?: string };
+  if (typeof body.slots !== 'object' || !body.slots) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'slots object is required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
@@ -181,11 +198,28 @@ export async function updateForeshadowing(env: Env, request: Request, workId: st
     });
   }
 
-  await env.WORKS_BUCKET.put(workContentPath(workId, lang, 'foreshadowing.md'), body.content, {
+  const slotData: R2SlotData = { slots: body.slots };
+  if (body.free_content) slotData.free_content = body.free_content;
+
+  let renderedMd = renderTemplate(FORESHADOWING_TEMPLATE, lang, 2, { prefills: body.slots, cleanOutput: true });
+  if (body.free_content) {
+    renderedMd = renderedMd.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + body.free_content.trim() + '\n');
+  }
+
+  await env.WORKS_BUCKET.put(fhJsonPath(workId, lang), JSON.stringify(slotData, null, 2), {
+    httpMetadata: { contentType: 'application/json' },
+  });
+  await env.WORKS_BUCKET.put(fhMdPath(workId, lang), renderedMd, {
     httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
   });
 
-  return new Response(JSON.stringify(jsonSuccess({ work_id: workId, lang, saved: true })), {
+  const template = buildTemplateJson(FORESHADOWING_TEMPLATE, lang, 2, slotData);
+
+  return new Response(JSON.stringify(jsonSuccess({
+    work_id: workId, lang, saved: true,
+    template,
+    rendered_md: renderedMd,
+  })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }

@@ -1,10 +1,12 @@
-// 大纲引擎 — SF-020~022（多语言支持 + 长篇框架模板）
+// 大纲引擎 — SF-020~022（多语言支持 + 长篇框架模板 + JSON 槽位数据）
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { generateWithAI } from '../../lib/ai';
-import { writeOutline, workContentPath, sectionR2Key, extractLang, readR2WithLangFallback, type Lang, LANG_LABELS } from '../../lib/work_content';
-import { renderTemplate, type TemplateDef } from '../../lib/template';
+import { callAI } from '../../lib/ai';
+import { renderTemplate as renderText } from '../../lib/l1/render';
+import outlineGenMd from '../../lib/l1/prompts/tools/outline_gen.md';
+import { writeOutline, workContentPath, sectionR2Key, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
+import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/template';
 
 // ============================================================
 // 长篇框架大纲 — 结构化模板定义（单一来源，双语）
@@ -77,9 +79,8 @@ const OUTLINE_TEMPLATE: TemplateDef = {
   },
 };
 
-function getOutlineTemplate(lang: Lang, level?: number): string {
-  return renderTemplate(OUTLINE_TEMPLATE, lang, level ?? 2);
-}
+/** R2 路径 */
+function outlineJsonPath(workId: string, lang: Lang) { return workContentPath(workId, lang, 'outline.json'); }
 
 // POST /api/write/outline/generate
 export async function generateOutline(env: Env, request: Request): Promise<Response> {
@@ -120,51 +121,32 @@ export async function generateOutline(env: Env, request: Request): Promise<Respo
   const entityNames = (entities.results || []).map(e => e.name).join('、');
 
   const numChapters = body.num_chapters || 5;
-  const outlineTemplate = getOutlineTemplate(lang);
+  const templateJson = renderTemplateAsJson(OUTLINE_TEMPLATE, lang, 2);
   const langLabel = LANG_LABELS[lang];
 
-  const prompt = `你是一位专业的小说大纲设计师。请为作品《${work.title}》（题材：${work.category || '未指定'}）生成一份 ${numChapters} 章的大纲。
+  const prompt = renderText(outlineGenMd, {
+    work_title: work.title,
+    category: work.category || '未指定',
+    num_chapters: String(numChapters),
+    world_context: worldContext ? `世界观设定参考：\n${worldContext.substring(0, 2000)}\n` : '',
+    entity_names: entityNames ? `已有角色：${entityNames}` : '',
+    template_json: templateJson,
+    lang_label: langLabel,
+  });
 
-${worldContext ? `世界观设定参考：\n${worldContext.substring(0, 2000)}\n` : ''}
-${entityNames ? `已有角色：${entityNames}` : ''}
+  const aiResult = await callAI(env, [{ role: 'user', content: prompt }], {
+    maxTokens: 2048,
+    responseFormat: 'json',
+  });
 
-请先理解以下长篇框架模板的结构，然后生成章节列表。框架模板（参考其结构，但不需要输出框架本身）：
-
-${outlineTemplate}
-
-请按以下 JSON 格式输出章节列表（只输出 JSON，不要其他内容）：
-{
-  "sections": [
-    {
-      "title": "章节标题",
-      "section_summary": "本章一句话摘要（30字以内）",
-      "act": "第一幕/第二幕/第三幕",
-      "key_entities": ["涉及的角色名"],
-      "hooks": "本章的悬念/钩子",
-      "estimated_words": 3000
-    }
-  ],
-  "framework_filled": "根据作品信息填充的长篇框架 Markdown 正文（模板使用三标记分离格式：the hint marker + the slot opening marker + the slot closing marker，内容写在 slot 和 /slot 之间，保留所有标记）"
-}
-
-要求：
-- 每章有清晰的起承转合，章节之间有递进关系
-- 所有章节分配到三幕结构中
-- framework_filled 字段包含完整的框架填充内容（用于写入 outline.md）
-- 用${langLabel}输出`;
-
-  const result = await generateWithAI(env, prompt, { maxTokens: 2048 });
-  if (!result) {
+  if (!aiResult?.content) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, 'AI service unavailable')), {
       status: 503, headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  let parsed: { sections?: Array<Record<string, unknown>>; framework_filled?: string } = {};
-  try {
-    const jsonMatch = result.match(/\{[\s\S]*\}/);
-    if (jsonMatch) parsed = JSON.parse(jsonMatch[0]);
-  } catch {
+  const parsed = extractTemplateJson(aiResult.content) as { sections?: Array<Record<string, unknown>>; framework_slots?: Record<string, string> } | null;
+  if (!parsed) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.EXTERNAL_SERVICE_ERROR, 'AI returned invalid JSON')), {
       status: 500, headers: { 'Content-Type': 'application/json' },
     });
@@ -177,9 +159,15 @@ ${outlineTemplate}
     });
   }
 
-  // 写入 R2 outline.md（AI 填充的长篇框架，或自动生成的基本大纲）
-  const outlineMd = parsed.framework_filled
-    || `# 《${work.title}》大纲\n\n${sections.map((s, i) => `## 第${i + 1}章：${s.title}\n${s.section_summary || ''}\n`).join('\n')}`;
+  // 渲染框架 Markdown
+  const frameworkSlots = parsed.framework_slots || {};
+  const outlineMd = renderTemplate(OUTLINE_TEMPLATE, lang, 2, { prefills: frameworkSlots, cleanOutput: true });
+
+  // 写 R2 双文件
+  const slotData: R2SlotData = { slots: frameworkSlots };
+  await env.WORKS_BUCKET.put(outlineJsonPath(body.work_id, lang), JSON.stringify(slotData, null, 2), {
+    httpMetadata: { contentType: 'application/json' },
+  });
   await writeOutline(env, body.work_id, outlineMd, lang);
 
   // 写入 D1 sections 表
@@ -208,7 +196,14 @@ ${outlineTemplate}
     });
   }
 
-  return new Response(JSON.stringify(jsonSuccess({ work_id: body.work_id, lang, sections: createdSections })), {
+  const template = buildTemplateJson(OUTLINE_TEMPLATE, lang, 2, slotData);
+
+  return new Response(JSON.stringify(jsonSuccess({
+    work_id: body.work_id, lang,
+    sections: createdSections,
+    template,
+    rendered_md: outlineMd,
+  })), {
     status: 201, headers: { 'Content-Type': 'application/json' },
   });
 }
@@ -220,40 +215,42 @@ export async function readOutline(env: Env, request: Request, workId: string): P
     'SELECT id, title, order_index, section_summary, word_count, entities_involved, version FROM sections WHERE work_id = ? ORDER BY order_index'
   ).bind(workId).all<Record<string, unknown>>();
 
-  // 如果没有任何章节，检查 R2 是否有长篇框架内容
-  if ((sections.results || []).length === 0) {
-    const r2Obj = await env.WORKS_BUCKET.get(workContentPath(workId, lang, 'outline.md'));
-    if (!r2Obj) {
-      // 返回结构化空模板
-      const template = getOutlineTemplate(lang);
-      return new Response(JSON.stringify(jsonSuccess({
-        work_id: workId,
-        lang,
-        sections: [],
-        outline_md: template,
-        is_template: true,
-        message: lang === 'en'
-          ? 'Story framework not yet created. Below is the template. Please fill in or use AI generation.'
-          : '长篇框架尚未创建，以下为设定模板。请按章节标题逐步填写，或使用 AI 生成。',
-      })), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-    // R2 有内容但还没有生成章节（大纲已写但未拆分）
-    const outlineMd = await r2Obj.text();
+  // 读 outline JSON 和 MD
+  let slotData: R2SlotData | null = null;
+  const jsonObj = await env.WORKS_BUCKET.get(outlineJsonPath(workId, lang));
+  if (jsonObj) {
+    try { slotData = JSON.parse(await jsonObj.text()) as R2SlotData; } catch { /* ignore */ }
+  }
+
+  let outlineMd = '';
+  const mdObj = await env.WORKS_BUCKET.get(workContentPath(workId, lang, 'outline.md'));
+  if (mdObj) outlineMd = await mdObj.text();
+
+  // 如果没有任何章节且没有 JSON 数据，返回空模板
+  if ((sections.results || []).length === 0 && !slotData && !outlineMd) {
+    const emptyMd = renderTemplate(OUTLINE_TEMPLATE, lang, 2);
+    const template = buildTemplateJson(OUTLINE_TEMPLATE, lang, 2, null);
     return new Response(JSON.stringify(jsonSuccess({
       work_id: workId,
       lang,
       sections: [],
-      outline_md: outlineMd,
-      is_template: false,
+      template,
+      rendered_md: emptyMd,
+      is_template: true,
+      message: lang === 'en'
+        ? 'Story framework not yet created. Below is the template. Please fill in or use AI generation.'
+        : '长篇框架尚未创建，以下为设定模板。请按章节标题逐步填写，或使用 AI 生成。',
     })), {
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  // 章节存在，同时尝试读取 R2 outline.md（含语言回退）
-  const { content: outlineMd } = await readR2WithLangFallback(env, workId, lang, 'outline.md');
+  // 如果没有 MD 但有 JSON，重新渲染
+  if (!outlineMd && slotData) {
+    outlineMd = renderTemplate(OUTLINE_TEMPLATE, lang, 2, { prefills: slotData.slots, cleanOutput: true });
+  }
+
+  const template = buildTemplateJson(OUTLINE_TEMPLATE, lang, 2, slotData);
 
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId,
@@ -262,7 +259,8 @@ export async function readOutline(env: Env, request: Request, workId: string): P
       ...s,
       entities_involved: typeof s.entities_involved === 'string' ? JSON.parse(s.entities_involved) : [],
     })),
-    outline_md: outlineMd,
+    template,
+    rendered_md: outlineMd,
   })), {
     headers: { 'Content-Type': 'application/json' },
   });
@@ -271,7 +269,11 @@ export async function readOutline(env: Env, request: Request, workId: string): P
 // PUT /api/write/outline/{work_id}
 export async function updateOutline(env: Env, request: Request, workId: string): Promise<Response> {
   const lang = extractLang(request);
-  const body = await request.json() as { sections?: Array<{ id?: string; title: string; order_index: number; section_summary?: string }>; outline_md?: string };
+  const body = await request.json() as {
+    sections?: Array<{ id?: string; title: string; order_index: number; section_summary?: string }>;
+    outline_slots?: Record<string, string>;
+    free_content?: string;
+  };
   if (!body.sections || !Array.isArray(body.sections)) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'sections array is required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
@@ -288,11 +290,23 @@ export async function updateOutline(env: Env, request: Request, workId: string):
 
   const now = new Date().toISOString();
 
-  // 如果提供了 outline_md，同时写入 R2 长篇框架文件
-  if (typeof body.outline_md === 'string') {
-    await writeOutline(env, workId, body.outline_md, lang);
+  // 如果提供了 outline_slots，写 R2 双文件
+  if (body.outline_slots && typeof body.outline_slots === 'object') {
+    const slotData: R2SlotData = { slots: body.outline_slots };
+    if (body.free_content) slotData.free_content = body.free_content;
+
+    let outlineMd = renderTemplate(OUTLINE_TEMPLATE, lang, 2, { prefills: body.outline_slots, cleanOutput: true });
+    if (body.free_content) {
+      outlineMd = outlineMd.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + body.free_content.trim() + '\n');
+    }
+
+    await env.WORKS_BUCKET.put(outlineJsonPath(workId, lang), JSON.stringify(slotData, null, 2), {
+      httpMetadata: { contentType: 'application/json' },
+    });
+    await writeOutline(env, workId, outlineMd, lang);
   }
 
+  // 更新 sections
   for (const s of body.sections) {
     if (s.id) {
       await env.DB.prepare(

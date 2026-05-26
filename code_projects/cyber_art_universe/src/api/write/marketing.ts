@@ -3,6 +3,10 @@ import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
+import { renderTemplate as renderText } from '../../lib/l1/render';
+import marketingExtractMd from '../../lib/l1/prompts/tools/marketing_extract.md';
+import marketingTitlesMd from '../../lib/l1/prompts/tools/marketing_titles.md';
+import marketingRepurposeMd from '../../lib/l1/prompts/tools/marketing_repurpose.md';
 import { workContentPath, sectionR2Key, extractLang } from '../../lib/work_content';
 
 // POST /api/write/marketing/extract/{section_id} — SF-040 爆点提炼
@@ -28,24 +32,10 @@ export async function extractHooks(env: Env, request: Request, sectionId: string
   const r2Obj = await env.WORKS_BUCKET.get(sectionR2Key(body.work_id, sectionId, lang));
   const chapterBody = r2Obj ? (await r2Obj.text()).substring(0, 4000) : '(无正文)';
 
-  const prompt = `你是一位资深内容营销编辑。请从以下章节中提取可作为营销素材的内容。
-
-要求提取：
-1. **金句**（golden_lines）：有感染力、易传播的单句（1-3 句）
-2. **冲突点**（conflict_points）：情节高潮或转折（1-3 个）
-3. **钩子**（hooks）：引发好奇心的悬念或问题（1-3 个）
-
-## 章节：${section.title}
-## 正文
-${chapterBody}
-
-请严格按以下 JSON 格式输出，不要包含任何其他文本：
-{
-  "golden_lines": ["金句1", "金句2"],
-  "conflict_points": ["冲突点描述1"],
-  "hooks": ["钩子描述1"],
-  "suggested_hashtags": ["标签1", "标签2"]
-}`;
+  const prompt = renderText(marketingExtractMd, {
+    chapter_content: `## 章节：${section.title}\n## 正文\n${chapterBody}`,
+    section_summary: section.section_summary || '',
+  });
 
   const result = await generateWithAI(env, prompt, { maxTokens: 1024 });
   if (!result) {
@@ -95,29 +85,13 @@ export async function generateTitles(env: Env, request: Request, workId: string)
     });
   }
 
-  const prompt = `你是一位资深图书营销编辑。请为以下作品生成 ${numVariants} 个标题和简介版本。
-
-要求：
-- 不同版本面向不同读者群（如：年轻女性、男性向、文艺读者、大众通俗等）
-- 每个版本包含：标题、副标题、一句话钩子
-
-## 作品信息
-原标题：${work.title}
-类别：${work.category || '未分类'}
-原简介：${work.summary || '无'}
-${body.style_notes ? `作者备注：${body.style_notes}` : ''}
-
-请严格按以下 JSON 格式输出，不要包含任何其他文本：
-{
-  "titles": [
-    {
-      "version": "版本名称（如 青春向 / 硬核向 / 文艺向）",
-      "title": "新标题",
-      "subtitle": "副标题或标语",
-      "hook": "一句话钩子（30字内）"
-    }
-  ]
-}`;
+  const prompt = renderText(marketingTitlesMd, {
+    num_variants: String(numVariants),
+    work_title: work.title,
+    category: work.category || '未分类',
+    summary: work.summary || '无',
+    style_notes: body.style_notes ? `作者备注：${body.style_notes}` : '',
+  });
 
   const result = await generateWithAI(env, prompt, { maxTokens: 1536 });
   if (!result) {
@@ -188,14 +162,11 @@ export async function repurposeSection(env: Env, request: Request, sectionId: st
 
   const formatInstruction = formatPrompts[format] || formatPrompts.short_video;
 
-  const prompt = `${formatInstruction}
-
-## 章节：${section.title}
-## 正文
-${chapterBody}
-${body.style_notes ? `风格要求：${body.style_notes}` : ''}
-
-请输出改写后的文本（纯文本，不需要 JSON 包装）。`;
+  const prompt = renderText(marketingRepurposeMd, {
+    format_instruction: formatInstruction,
+    chapter_content: `## 章节：${section.title}\n## 正文\n${chapterBody}`,
+    style_notes: body.style_notes ? `风格要求：${body.style_notes}` : '',
+  });
 
   const result = await generateWithAI(env, prompt, { maxTokens: 1024 });
   if (!result) {

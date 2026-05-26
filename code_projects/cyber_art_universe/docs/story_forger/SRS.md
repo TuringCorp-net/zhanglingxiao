@@ -31,6 +31,7 @@
 | v2.3.2 | 2026-05-19 | 智能提示系统 SF-067：R2 静态提示池（中英双语配对）+ Story Elf 动态提示（内部生成）。前端每次显示一条，60-120 分钟随机轮换，语言切换自适应 |
 | v2.4.0 | 2026-05-21 | 模板分级渐进引导系统 SF-068~069：每个槽位带 L1/L2 level 属性，前端按用户 level 过滤可见性。双语模板定义统一化（SlotDef 单一来源）。Story Elf 作为第三大独立模块。M3/M4 模板拆分（character_card.ts / foreshadowing_card.ts），删除 entities.ts |
 | v2.4.1 | 2026-05-22 | Hint 对话泡系统 SF-072：槽位聚焦时 Story Elf 以打字机效果逐字呈现 hint markdown。与左侧聊天窗口独立并行。 |
+| v2.5.0 | 2026-05-26 | 模板系统 JSON 化：所有 LLM 输出统一为 `{"slots":{...}}` JSON 格式，Markdown 由服务端代码组装。R2 双文件存储（`.json` + `.md`）。前端从 `parseSlotTemplate` Markdown 解析切换为直接消费 JSON 结构。删除 `stripTemplateMarkers`。 |
 
 ---
 
@@ -214,7 +215,7 @@ Intent Card → Draft v0 → Consistency Check → Polish → Draft v1 (中稿)
 | SF-054 | Context-Aware 上下文感知 — 页面自动将当前阅读/写作位置传给 Elf。用户无需复制粘贴 | `StoryElf.setContext({ page, work_id, section_id, ... })` 在页面关键节点调用。Elf 对话时可读取上下文 | ✅ 已实现 |
 | SF-055 | Write 侧写作精灵 — 一致性检查、建议、对话式润色 | 右下角浮动按钮「检」「议」+ 对话框。Elf 知道当前章节/面板上下文 | ✅ 已实现 |
 | SF-056 | Read 侧伴读精灵 — 浮动形象 + 对话框，未来支持根据阅读位置提供分析、推荐 | Story Elf 在所有 Read 页面出现。上下文感知已接入（work_id/section_id），AI 后端待实现 | ✅ 组件已部署，AI 功能待实现 |
-| SF-072 | Hint 对话泡 — 槽位聚焦时，Story Elf 以打字机效果逐字呈现槽位 hint（markdown 渲染）。与左侧聊天窗口（#elf-dialog，预留给用户↔AI 对话）是两套独立系统 | hint 数据来自 `data-hint` 属性（由 parseSlotTemplate 从 `<!-- hint:... -->` 标记解析）。打字机 ~40ms/字 + 标点智能停顿。markdown 渐进渲染。切换槽位时中断当前动画立即开始新的。每次聚焦都重新展示（无缓存拦截） | ✅ 已实现 |
+| SF-072 | Hint 对话泡 — 槽位聚焦时，Story Elf 以打字机效果逐字呈现槽位 hint（markdown 渲染）。与左侧聊天窗口（#elf-dialog，预留给用户↔AI 对话）是两套独立系统 | hint 数据来自模板 JSON 的 `SlotDef.hint` 字段（前端直接消费 JSON 结构，不再从 `<!-- hint:... -->` Markdown 标记解析）。打字机 ~40ms/字 + 标点智能停顿。markdown 渐进渲染。切换槽位时中断当前动画立即开始新的。每次聚焦都重新展示（无缓存拦截） | ✅ 已实现 |
 
 ### 模块八：双模式 UI（前端）
 
@@ -250,11 +251,16 @@ Story Forger 尽量复用 CAU 的已有表结构。以下为需要新增的部�
 ```
 works/{work_id}/{lang}/          # 多语言前缀（如 zh/ en/）
 ├── original_concept.md          # 原始构想（M0）
-├── world_bible.md               # 设定圣经（M1）
-├── outline.md                   # 长篇框架（M2）
-├── foreshadowing.md             # 伏笔策略总览（M4）
-├── foreshadowing/{id}.md        # 伏笔条目卡（M4，独立实体）
-├── characters/{id}.md           # 人物卡（M3，独立实体）
+├── world_bible.md               # 设定圣经（M1）— 服务端渲染的 clean Markdown
+├── world_bible.json             # 设定圣经（M1）— LLM 输出的结构化 JSON
+├── outline.md                   # 长篇框架（M2）— clean Markdown
+├── outline.json                 # 长篇框架（M2）— 结构化 JSON
+├── foreshadowing.md             # 伏笔策略总览（M4）— clean Markdown
+├── foreshadowing.json           # 伏笔策略总览（M4）— 结构化 JSON
+├── foreshadowing/{id}.md        # 伏笔条目卡（M4，独立实体）— clean Markdown
+├── foreshadowing/{id}.json      # 伏笔条目卡（M4，独立实体）— 结构化 JSON
+├── characters/{id}.md           # 人物卡（M3，独立实体）— clean Markdown
+├── characters/{id}.json         # 人物卡（M3，独立实体）— 结构化 JSON
 ├── intents/{section_id}.json    # 章节意图卡（M5）
 ├── chapters/{section_id}.md     # 章节正文（M6）
 ├── summaries/{section_id}.md    # 章节摘要（M6）
@@ -330,7 +336,7 @@ works/{work_id}/{lang}/          # 多语言前缀（如 zh/ en/）
 | ❌ 已移除 | 1 |
 | 🔴 阻塞 | 0 |
 
-**总计**：51 项需求（48 已实现 + 2 待实现 + 1 已移除）。待实现：SF-056（Read 侧 AI 伴读后端）、SF-063（写作引导流程）。已移除：SF-024（冲突地图）。v2.4.0 新增：SF-068~071（模板分级 + 双语统一 + Story Elf 独立 + M3/M4 拆分）。v2.4.1 新增：SF-072（Hint 对话泡）。
+**总计**：51 项需求（48 已实现 + 2 待实现 + 1 已移除）。待实现：SF-056（Read 侧 AI 伴读后端）、SF-063（写作引导流程）。已移除：SF-024（冲突地图）。v2.4.0 新增：SF-068~071（模板分级 + 双语统一 + Story Elf 独立 + M3/M4 拆分）。v2.4.1 新增：SF-072（Hint 对话泡）。v2.5.0 更新：模板系统 JSON 化，R2 双文件存储，前端直接消费 JSON 结构。
 
 ### 实现清单
 

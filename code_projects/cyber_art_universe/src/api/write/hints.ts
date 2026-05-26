@@ -7,6 +7,8 @@ import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
+import { renderTemplate as renderText } from '../../lib/l1/render';
+import hintsDynamicMd from '../../lib/l1/prompts/tools/hints_dynamic.md';
 import { extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
 
 const HINT_MODULES = ['m0', 'm1', 'm2'] as const;
@@ -86,19 +88,12 @@ export async function appendDynamicHint(
     m1: '世界观设定 / Setting Bible',
     m2: '长篇大纲 / Story Outline' }[module];
 
-  const prompt = `你是 Story Elf——一位陪伴作者创作的 AI 助手。请为作者的《${workTitle}》（题材：${workCategory || '未指定'}）的「${modLabel}」板块生成一条个性化的创作提示。
-
-要求：
-- 简短（1-2 句话，不超过80个汉字或英文不超过120个字符）
-- 具体——针对当前作品的内容给出建议，而不是泛泛而谈
-- 温暖、鼓励的语气，像一个有经验的写作伙伴
-
-${contextSnippet ? `当前内容供参考：\n${contextSnippet}\n` : ''}
-
-请输出一个 JSON 对象，包含中文和英文两个版本：
-{"zh": "（中文提示）", "en": "（English hint）"}
-
-只输出 JSON，不要其他内容。`;
+  const prompt = renderText(hintsDynamicMd, {
+    work_title: workTitle || '未命名作品',
+    category: workCategory || '未指定',
+    module_label: modLabel,
+    context_snippet: contextSnippet ? `当前内容供参考：\n${contextSnippet}` : '',
+  });
 
   const result = await generateWithAI(env, prompt, { maxTokens: 300 });
   if (!result || !result.trim()) return null;

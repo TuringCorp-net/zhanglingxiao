@@ -1,10 +1,12 @@
-// 世界观引擎 — SF-010~016（多语言支持）
+// 世界观引擎 — SF-010~016（多语言支持 + JSON 槽位数据）
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { generateWithAI } from '../../lib/ai';
-import { workContentPath, SUPPORTED_LANGS, DEFAULT_LANG, DEFAULT_BILINGUAL, extractLang, readR2WithLangFallback, type Lang, LANG_LABELS } from '../../lib/work_content';
-import { renderTemplate, type TemplateDef } from '../../lib/template';
+import { callAI } from '../../lib/ai';
+import { renderTemplate as renderText } from '../../lib/l1/render';
+import worldbuildingGenMd from '../../lib/l1/prompts/tools/worldbuilding_gen.md';
+import { workContentPath, SUPPORTED_LANGS, DEFAULT_BILINGUAL, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
+import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/template';
 
 // ============================================================
 // 世界观设定圣经 — 结构化模板定义（单一来源，双语）
@@ -72,14 +74,42 @@ const BIBLE_TEMPLATE: TemplateDef = {
   },
 };
 
-/** 根据语言和 level 获取模板 markdown */
-function getBibleTemplate(lang: Lang, level?: number): string {
-  return renderTemplate(BIBLE_TEMPLATE, lang, level ?? 2);
+/** R2 路径 */
+function bibleJsonPath(workId: string, lang: Lang) { return workContentPath(workId, lang, 'world_bible.json'); }
+function bibleMdPath(workId: string, lang: Lang) { return workContentPath(workId, lang, 'world_bible.md'); }
+
+/** 写 R2 双文件 */
+async function writeBible(env: Env, workId: string, lang: Lang, slotData: R2SlotData, renderedMd: string) {
+  const json = JSON.stringify(slotData, null, 2);
+  await env.WORKS_BUCKET.put(bibleJsonPath(workId, lang), json, { httpMetadata: { contentType: 'application/json' } });
+  await env.WORKS_BUCKET.put(bibleMdPath(workId, lang), renderedMd, { httpMetadata: { contentType: 'text/markdown; charset=utf-8' } });
+}
+
+/** 从 slot 数据提取约束规则 */
+function extractConstraintsFromSlots(slots: Record<string, string>): { section: string; rule: string }[] {
+  const constraints: { section: string; rule: string }[] = [];
+  // 从 promise_checklist 中提取承诺作为约束
+  const promises = slots.promise_checklist || '';
+  const lines = promises.split('\n');
+  for (const line of lines) {
+    const match = line.match(/^\d+[).]\s*(.+)/);
+    if (match && match[1].trim().length > 3) {
+      constraints.push({ section: '五、承诺清单', rule: match[1].trim() });
+    }
+  }
+  // 从 content_red_lines 提取禁区
+  const redLines = slots.content_red_lines || '';
+  for (const line of redLines.split('\n')) {
+    const match = line.match(/^[-*]\s+(.+)/);
+    if (match && match[1].trim().length > 3 && match[1].trim().length < 200) {
+      constraints.push({ section: '六、禁区与风格', rule: match[1].trim() });
+    }
+  }
+  return constraints;
 }
 
 // ============================================================
 // POST /api/write/worldbuilding/generate
-// 支持 ?lang=zh&bilingual=true&langs=zh,en
 // ============================================================
 
 export async function generateWorldbuilding(env: Env, request: Request): Promise<Response> {
@@ -97,8 +127,7 @@ export async function generateWorldbuilding(env: Env, request: Request): Promise
     });
   }
 
-  // 确定生成语言：bilingual=true 时用 langs（默认中英），否则用请求参数或默认中文
-  const bilingual = body.bilingual ?? true; // 默认双语生成
+  const bilingual = body.bilingual ?? true;
   const targetLangs: Lang[] = bilingual
     ? (body.langs?.filter(l => SUPPORTED_LANGS.includes(l as Lang)) as Lang[] || DEFAULT_BILINGUAL)
     : [extractLang(request)];
@@ -110,58 +139,49 @@ export async function generateWorldbuilding(env: Env, request: Request): Promise
   const entityContext = (entities.results || []).map(e => `- ${e.name}(${e.type}): ${e.description || '暂无描述'}`).join('\n');
   const outlineContext = (sections.results || []).map(s => `- ${s.title}: ${s.section_summary || ''}`).join('\n');
 
-  // 并行生成所有目标语言
   const results: Record<string, { content: string; constraints: { section: string; rule: string }[] }> = {};
 
   await Promise.all(targetLangs.map(async (lang) => {
-    const template = getBibleTemplate(lang);
+    const templateJson = renderTemplateAsJson(BIBLE_TEMPLATE, lang, 2);
     const langLabel = LANG_LABELS[lang];
 
-    const prompt = `你是一位专业的小说世界观设计师。请根据以下信息，为作品《${work.title}》填充一份结构化的世界观设定圣经（Setting Bible）。
+    const prompt = renderText(worldbuildingGenMd, {
+      work_title: work.title,
+      category: work.category || '未指定',
+      summary: work.summary || '未提供',
+      author_prompt: body.prompt || '无',
+      style_notes: body.style_notes || '专业、详细',
+      entity_context: entityContext ? `已有角色/实体：\n${entityContext}` : '',
+      outline_context: outlineContext ? `已有章节概要：\n${outlineContext}` : '',
+      template_json: templateJson,
+      lang_label: langLabel,
+    });
 
-作品题材：${work.category || '未指定'}
-作品简介：${work.summary || '未提供'}
-作者补充：${body.prompt || '无'}
-风格要求：${body.style_notes || '专业、详细'}
+    const aiResult = await callAI(env, [{ role: 'user', content: prompt }], {
+      maxTokens: 4096,
+      responseFormat: 'json',
+    });
 
-${entityContext ? `已有角色/实体：\n${entityContext}` : ''}
-${outlineContext ? `已有章节概要：\n${outlineContext}` : ''}
+    if (!aiResult?.content) return;
 
-请严格按照以下 Markdown 模板结构输出。模板使用三标记分离格式：the hint marker 为提示文字，the slot opening marker 为槽位开始，the slot closing marker 为槽位结束。请在这三个标记之后（即 the slot opening marker 和 the slot closing marker 之间）写入实际内容，保留所有标记不变。标题、引用等其他结构保持原样。如果某个章节暂时无法填充，保留三个标记不变，其间留空行。
-
-输出模板：
-
-${template}
-
-重要要求：
-1. 保持所有 ## 和 ### 标题不变
-2. 将内容写在 the slot opening marker 和 the slot closing marker 之间（the hint marker 保留在上方），每个槽位写 2-5 段实际内容
-3. 承诺清单（## 五）至少给出 3 条具体的承诺项
-4. 内容必须自洽，规则之间不能矛盾
-5. 用${langLabel}输出`;
-
-    const result = await generateWithAI(env, prompt, { maxTokens: 4096 });
-    if (result) {
-      // 写入 R2（按语言路径）
-      try {
-        await env.WORKS_BUCKET.put(workContentPath(body.work_id, lang, 'world_bible.md'), result, {
-          httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
-        });
-      } catch (err) {
-        console.error(`R2 write failed for world_bible.md (${lang}):`, body.work_id, err);
-      }
-
-      const constraints = extractConstraints(result);
-      try {
-        await env.WORKS_BUCKET.put(workContentPath(body.work_id, lang, 'constraints.json'), JSON.stringify(constraints, null, 2), {
-          httpMetadata: { contentType: 'application/json' },
-        });
-      } catch (err) {
-        console.error(`R2 write failed for constraints.json (${lang}):`, body.work_id, err);
-      }
-
-      results[lang] = { content: result, constraints };
+    const parsed = extractTemplateJson(aiResult.content);
+    if (!parsed) {
+      console.error('[worldbuilding] JSON parse failed for', lang, 'raw:', aiResult.content.substring(0, 200));
+      return;
     }
+
+    const slotData: R2SlotData = { slots: parsed.slots };
+    const renderedMd = renderTemplate(BIBLE_TEMPLATE, lang, 2, { prefills: parsed.slots, cleanOutput: true });
+
+    await writeBible(env, body.work_id, lang, slotData, renderedMd);
+
+    const constraints = extractConstraintsFromSlots(parsed.slots);
+    const constraintsJson = JSON.stringify(constraints, null, 2);
+    await env.WORKS_BUCKET.put(workContentPath(body.work_id, lang, 'constraints.json'), constraintsJson, {
+      httpMetadata: { contentType: 'application/json' },
+    });
+
+    results[lang] = { content: renderedMd, constraints };
   }));
 
   return new Response(JSON.stringify(jsonSuccess({
@@ -180,15 +200,28 @@ ${template}
 
 export async function readWorldbuilding(env: Env, request: Request, workId: string): Promise<Response> {
   const lang = extractLang(request);
-  const { content, actualLang } = await readR2WithLangFallback(env, workId, lang, 'world_bible.md');
 
-  if (!content) {
-    // 返回对应语言的结构化空模板
-    const template = getBibleTemplate(lang);
+  // 读 JSON 数据
+  let slotData: R2SlotData | null = null;
+  const jsonObj = await env.WORKS_BUCKET.get(bibleJsonPath(workId, lang));
+  if (jsonObj) {
+    try { slotData = JSON.parse(await jsonObj.text()) as R2SlotData; } catch { /* ignore */ }
+  }
+
+  // 读 Markdown 视图
+  let renderedMd = '';
+  const mdObj = await env.WORKS_BUCKET.get(bibleMdPath(workId, lang));
+  if (mdObj) renderedMd = await mdObj.text();
+
+  // 若没有 JSON 数据，返回空模板
+  if (!slotData && !renderedMd) {
+    const emptyMd = renderTemplate(BIBLE_TEMPLATE, lang, 2);
+    const template = buildTemplateJson(BIBLE_TEMPLATE, lang, 2, null);
     return new Response(JSON.stringify(jsonSuccess({
       work_id: workId,
       lang,
-      content: template,
+      template,
+      rendered_md: emptyMd,
       is_template: true,
       message: lang === 'en'
         ? 'Setting Bible not yet filled. Below is the framework. Please fill in section by section, or use AI generation.'
@@ -198,10 +231,13 @@ export async function readWorldbuilding(env: Env, request: Request, workId: stri
     });
   }
 
+  const template = buildTemplateJson(BIBLE_TEMPLATE, lang, 2, slotData);
+
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId,
-    lang: actualLang,
-    content,
+    lang,
+    template,
+    rendered_md: renderedMd,
     is_template: false,
   })), {
     headers: { 'Content-Type': 'application/json' },
@@ -214,9 +250,9 @@ export async function readWorldbuilding(env: Env, request: Request, workId: stri
 
 export async function updateWorldbuilding(env: Env, request: Request, workId: string): Promise<Response> {
   const lang = extractLang(request);
-  const body = await request.json() as { content: string };
-  if (!body.content) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'content is required')), {
+  const body = await request.json() as { slots?: Record<string, string>; free_content?: string };
+  if (!body.slots || typeof body.slots !== 'object') {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'slots object is required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
@@ -229,16 +265,30 @@ export async function updateWorldbuilding(env: Env, request: Request, workId: st
     });
   }
 
-  await env.WORKS_BUCKET.put(workContentPath(workId, lang, 'world_bible.md'), body.content, {
-    httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
-  });
+  const slotData: R2SlotData = { slots: body.slots };
+  if (body.free_content) slotData.free_content = body.free_content;
 
-  const constraints = extractConstraints(body.content);
+  let renderedMd = renderTemplate(BIBLE_TEMPLATE, lang, 2, { prefills: body.slots, cleanOutput: true });
+  // 拼接自由编辑区
+  if (body.free_content) {
+    renderedMd = renderedMd.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + body.free_content.trim() + '\n');
+  }
+
+  await writeBible(env, workId, lang, slotData, renderedMd);
+
+  const constraints = extractConstraintsFromSlots(body.slots);
   await env.WORKS_BUCKET.put(workContentPath(workId, lang, 'constraints.json'), JSON.stringify(constraints, null, 2), {
     httpMetadata: { contentType: 'application/json' },
   });
 
-  return new Response(JSON.stringify(jsonSuccess({ work_id: workId, lang, updated: true, constraints })), {
+  const template = buildTemplateJson(BIBLE_TEMPLATE, lang, 2, slotData);
+
+  return new Response(JSON.stringify(jsonSuccess({
+    work_id: workId, lang, updated: true,
+    template,
+    rendered_md: renderedMd,
+    constraints,
+  })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }
@@ -247,8 +297,8 @@ export async function updateWorldbuilding(env: Env, request: Request, workId: st
 // GET /api/write/worldbuilding/{work_id}/constraints?lang=zh|en
 // ============================================================
 
-export async function readConstraints(env: Env, request: Request, workId: string): Promise<Response> {
-  const lang = extractLang(request);
+export async function readConstraints(env: Env, _request: Request, workId: string): Promise<Response> {
+  const lang = extractLang(_request);
   const key = workContentPath(workId, lang, 'constraints.json');
   const obj = await env.WORKS_BUCKET.get(key);
   if (!obj) {
@@ -267,29 +317,4 @@ export async function readConstraints(env: Env, request: Request, workId: string
   return new Response(data, {
     headers: { 'Content-Type': 'application/json' },
   });
-}
-
-// ============================================================
-// 约束提取
-// ============================================================
-
-function extractConstraints(md: string): { section: string; rule: string }[] {
-  const constraints: { section: string; rule: string }[] = [];
-  const lines = md.split('\n');
-  let currentSection = '';
-
-  for (const line of lines) {
-    if (line.startsWith('## ')) {
-      currentSection = line.replace('## ', '').trim();
-    }
-    const match = line.match(/^[-*]\s+(.+)/);
-    if (match && currentSection) {
-      const rule = match[1].trim();
-      if (rule.length > 5 && rule.length < 200) {
-        constraints.push({ section: currentSection, rule });
-      }
-    }
-  }
-
-  return constraints;
 }

@@ -1,9 +1,9 @@
-// Story Forger — M3 人物卡：模板定义 + CRUD
+// Story Forger — M3 人物卡：模板定义 + CRUD + JSON 槽位数据
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { workContentPath, extractLang, type Lang } from '../../lib/work_content';
-import { renderTemplate, type TemplateDef } from '../../lib/template';
+import { renderTemplate, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/template';
 
 // ============================================================
 // 人物卡 — 结构化模板定义（单一来源，双语）
@@ -80,8 +80,13 @@ export const CHARACTER_TEMPLATE: TemplateDef = {
   },
 };
 
-export function getCharacterCardTemplate(name: string, lang: Lang, level?: number): string {
-  return renderTemplate(CHARACTER_TEMPLATE, lang, level ?? 2, { name, prefills: { name } });
+/** R2 路径 */
+function charJsonPath(workId: string, lang: Lang, entityId: string) { return workContentPath(workId, lang, `characters/${entityId}.json`); }
+function charMdPath(workId: string, lang: Lang, entityId: string) { return workContentPath(workId, lang, `characters/${entityId}.md`); }
+
+/** 生成初始 slot 数据（name 预填入） */
+function emptyCharSlotData(name: string): R2SlotData {
+  return { slots: { name } };
 }
 
 // ============================================================
@@ -114,16 +119,23 @@ export async function createCharacter(env: Env, request: Request, workId: string
   `).bind(id, workId, body.name, body.description || null, body.first_appearance || null, relatedEntities, now, now).run();
 
   const lang = extractLang(request);
-  const card = getCharacterCardTemplate(body.name, lang);
+  const slotData = emptyCharSlotData(body.name);
+  const cleanCard = renderTemplate(CHARACTER_TEMPLATE, lang, 2, { name: body.name, prefills: slotData.slots, cleanOutput: true });
+
   try {
-    await env.WORKS_BUCKET.put(workContentPath(workId, lang, `characters/${id}.md`), card, {
+    await env.WORKS_BUCKET.put(charJsonPath(workId, lang, id), JSON.stringify(slotData, null, 2), {
+      httpMetadata: { contentType: 'application/json' },
+    });
+    await env.WORKS_BUCKET.put(charMdPath(workId, lang, id), cleanCard, {
       httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
     });
   } catch (err) {
     console.error('R2 write failed for character card:', workId, id, err);
   }
 
-  return new Response(JSON.stringify(jsonSuccess({ id, type: 'character' })), {
+  const template = buildTemplateJson(CHARACTER_TEMPLATE, lang, 2, slotData);
+
+  return new Response(JSON.stringify(jsonSuccess({ id, type: 'character', template })), {
     status: 201, headers: { 'Content-Type': 'application/json' },
   });
 }
@@ -138,21 +150,38 @@ export async function readCharacterCard(env: Env, request: Request, workId: stri
   }
 
   const lang = extractLang(request);
-  const key = workContentPath(workId, lang, `characters/${entityId}.md`);
-  const obj = await env.WORKS_BUCKET.get(key);
 
-  if (!obj) {
-    const template = getCharacterCardTemplate(entity.name, lang);
+  // 读 JSON 数据
+  let slotData: R2SlotData | null = null;
+  const jsonObj = await env.WORKS_BUCKET.get(charJsonPath(workId, lang, entityId));
+  if (jsonObj) {
+    try { slotData = JSON.parse(await jsonObj.text()) as R2SlotData; } catch { /* ignore */ }
+  }
+
+  // 读 Markdown
+  let renderedMd = '';
+  const mdObj = await env.WORKS_BUCKET.get(charMdPath(workId, lang, entityId));
+  if (mdObj) renderedMd = await mdObj.text();
+
+  if (!slotData && !renderedMd) {
+    const emptySlotData = emptyCharSlotData(entity.name);
+    const emptyMd = renderTemplate(CHARACTER_TEMPLATE, lang, 2, { name: entity.name, prefills: emptySlotData.slots, cleanOutput: true });
+    const template = buildTemplateJson(CHARACTER_TEMPLATE, lang, 2, emptySlotData);
     return new Response(JSON.stringify(jsonSuccess({
       entity_id: entityId, name: entity.name, type: 'character', lang,
-      content: template, is_template: true,
+      template,
+      rendered_md: emptyMd,
+      is_template: true,
     })), { headers: { 'Content-Type': 'application/json' } });
   }
 
-  const content = await obj.text();
+  const template = buildTemplateJson(CHARACTER_TEMPLATE, lang, 2, slotData);
+
   return new Response(JSON.stringify(jsonSuccess({
     entity_id: entityId, name: entity.name, type: 'character', lang,
-    content, is_template: false,
+    template,
+    rendered_md: renderedMd,
+    is_template: false,
   })), { headers: { 'Content-Type': 'application/json' } });
 }
 
@@ -166,18 +195,47 @@ export async function updateCharacterCard(env: Env, request: Request, workId: st
   }
 
   const lang = extractLang(request);
-  const body = await request.json() as { content: string };
-  if (typeof body.content !== 'string') {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'content is required')), {
+  const body = await request.json() as { slots?: Record<string, string>; free_content?: string };
+
+  // 兼容旧的 content 字段（Markdown 字符串）
+  if (!body.slots && typeof (body as { content?: string }).content === 'string') {
+    // 旧格式：只更新 MD，不更新 JSON
+    await env.WORKS_BUCKET.put(charMdPath(workId, lang, entityId), (body as { content: string }).content, {
+      httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+    });
+    return new Response(JSON.stringify(jsonSuccess({ entity_id: entityId, name: entity.name, lang, saved: true })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  if (!body.slots || typeof body.slots !== 'object') {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'slots object is required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  await env.WORKS_BUCKET.put(workContentPath(workId, lang, `characters/${entityId}.md`), body.content, {
+  const slotData: R2SlotData = { slots: body.slots };
+  if (body.free_content) slotData.free_content = body.free_content;
+
+  let cleanCard = renderTemplate(CHARACTER_TEMPLATE, lang, 2, { name: entity.name, prefills: body.slots, cleanOutput: true });
+  if (body.free_content) {
+    cleanCard = cleanCard.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + body.free_content.trim() + '\n');
+  }
+
+  await env.WORKS_BUCKET.put(charJsonPath(workId, lang, entityId), JSON.stringify(slotData, null, 2), {
+    httpMetadata: { contentType: 'application/json' },
+  });
+  await env.WORKS_BUCKET.put(charMdPath(workId, lang, entityId), cleanCard, {
     httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
   });
 
-  return new Response(JSON.stringify(jsonSuccess({ entity_id: entityId, name: entity.name, lang, saved: true })), {
+  const template = buildTemplateJson(CHARACTER_TEMPLATE, lang, 2, slotData);
+
+  return new Response(JSON.stringify(jsonSuccess({
+    entity_id: entityId, name: entity.name, lang, saved: true,
+    template,
+    rendered_md: cleanCard,
+  })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }

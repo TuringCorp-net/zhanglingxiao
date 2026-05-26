@@ -1,6 +1,6 @@
 # Story Elf 系统设计
 
-> 版本: v0.3.1 | 状态: 草案 | 最后更新: 2026-05-25
+> 版本: v0.4.0 | 状态: 草案 | 最后更新: 2026-05-26
 > **关联文档**：[架构总览](../ARCHITECTURE.md) → [SRS](SRS.md) → 本文档 → [Story Elf 前端设计](frontend_design.md) → [AI Gateway 指南](cloudflare_ai_gateway_guide.md) → [模板分级探讨](original_concept_smart_guide_story_elf.md)
 
 ---
@@ -48,25 +48,29 @@ Story Forger 的模板系统（M0-M6）虽然强大完整，但对新手作者�
 
 ### 2.3 Level 的存储方式
 
-Level 信息嵌入模板 markdown 的 hint 标记中，无需独立配置文件：
+Level 信息定义在 `SlotDef` TypeScript 常量中，是模板 JSON 结构的一部分：
 
-```markdown
-<!-- hint:L1:zh:你的主角最想要什么？ -->
-<!-- hint:L1:en:What does your protagonist want most? -->
-<!-- slot -->
-<!-- /slot -->
+```typescript
+interface SlotDef {
+  id: string;                    // 槽位唯一标识
+  level: 1 | 2;                  // L1 核心 / L2 完整
+  label: Record<Lang, string>;   // 槽位标签
+  hint: Record<Lang, string>;    // 提示文字
+}
 ```
 
-解析时提取 `L1`，渲染时根据 `currentUserLevel` 过滤：
+API 返回 `{ template: { slots: { slotId: { level, label, hint, value } } } }`，前端渲染时根据 `currentUserLevel` 过滤：
 
 ```
 if (slotLevel > currentUserLevel) → 跳过渲染
 ```
 
 **选择理由**：
-- 单一事实来源：改模板即改 level，不会不同步
+- 单一事实来源：`SlotDef.level` 是唯一维护点，改模板即改 level，不会不同步
 - 无额外依赖：不需要 manifest 文件、编译步骤
-- 性能足够：全量模板几十个槽位，正则解析耗时可忽略
+- 前端直接消费 JSON：不再从 Markdown 注释中正则提取 level 信息
+
+**历史说明**（v0.3.x）：旧版系统将 level 嵌入 Markdown `<!-- hint:L1:zh:... -->` 标记中，前端通过 `parseSlotTemplate` 正则解析提取。v0.4.0 改为 JSON 直接消费后，level 字段随 `SlotDef` 自然携带。
 
 ### 2.4 可见性规则
 
@@ -96,31 +100,66 @@ if (slotLevel > currentUserLevel) → 跳过渲染
 - 模板定义在 TS 代码中为两套独立常量（`_ZH` / `_EN`）
 - 当前支持 zh、en 两种语言
 
-### 3.2 改进方案
+### 3.2 改进方案（已实现）
 
-**R2 存储路径保持不变**：`works/{work_id}/{lang}/...` 的分语言目录结构是合理的——同一作品的中文版和英文版确实是两份独立内容。
+**R2 存储路径**：`works/{work_id}/{lang}/...` 的分语言目录结构保持不变。增加 `.json` 文件作为结构化数据存储，与 `.md` clean Markdown 文件配对。
 
-**模板定义统一化**：将模板定义从"两套独立常量"改为"一套结构化定义"，每个槽位自带多语言 label 和 hint：
+**模板定义统一化**（v2.4 实现，v2.5 扩展）：模板定义为一套结构化 `SlotDef[]` / `TemplateDef` 常量，每个槽位自带多语言 label 和 hint。v2.5 中模板 JSON 直接通过 API 返回给前端消费：
 
 ```typescript
-interface SlotDefinition {
+interface SlotDef {
   id: string;                    // 槽位唯一标识
   level: 1 | 2;                  // 所属分级
-  labels: { zh: string; en: string };
-  hints: { zh: string; en: string };
+  label: Record<Lang, string>;   // 多语言标签
+  hint: Record<Lang, string>;    // 多语言提示（Story Elf 对话泡数据来源）
 }
 ```
 
-未来添加新语言（如 ja、ko）时，只需在 labels/hints 对象中增加对应翻译字段，无需复制整套模板。
+**API 响应格式**（v2.5 新增）：
 
-### 3.3 模板渲染流程
+```typescript
+// GET /api/write/{module}/{work_id}?lang=zh
+{
+  template: {
+    sections: [{ heading: "一、世界规则与边界", slotIds: ["world_power_system", "world_taboos"] }],
+    slots: {
+      "world_power_system": { level: 1, label: "力量/技术体系", hint: "描述这个世界的力量来源...", value: "..." },
+      "world_taboos": { level: 1, label: "禁忌与代价", hint: "世界中不可触碰的禁忌...", value: "" }
+    }
+  },
+  rendered_md: "# 世界观设定圣经\n\n> 本文件是作品的最高约束文档..."
+}
+```
+
+未来添加新语言（如 ja、ko）时，只需在 `label`/`hint` 对象中增加对应翻译字段，无需复制整套模板。
+
+### 3.3 模板渲染与数据流（v2.5 JSON 化）
+
+**服务端渲染**（`renderTemplate` / `renderTemplateAsJson`）：
 
 ```
-SlotDefinition[] 
-  → 按当前 lang 提取对应语言的 label/hint
-    → 按当前 userLevel 过滤
-      → 渲染为 markdown 模板写入 R2
+TemplateDef / SlotDef[]
+  ├─ renderTemplateAsJson(tmpl, lang) → JSON schema 发送给 LLM
+  │    LLM 输出 {"slots":{...}} JSON
+  │    → extractTemplateJson() 校验
+  │    → renderTemplate(tmpl, lang, prefills, cleanOutput:true) → clean .md
+  │    → R2 双文件存储（.json + .md）
+  │
+  └─ GET API → renderTemplate(tmpl, lang, prefills) 
+       → 返回 { template: { sections, slots }, rendered_md }
 ```
+
+**前端消费**：
+
+```
+API Response { template, rendered_md }
+  → 按当前 userLevel 过滤 template.slots（跳过 level > currentUserLevel 的槽位）
+  → 遍历 template.sections 渲染框架（heading + slot textareas）
+  → 每个 slot textarea 携带 data-hint（来自 SlotDef.hint）、data-level
+  → 保存时收集 slots 值 → PUT JSON → 服务端重渲染 .md
+```
+
+与 v2.4 的关键区别：前端不再通过正则解析 Markdown 提取槽位信息，而是直接遍历 JSON 的 `sections` / `slots` 结构渲染 UI。
 
 ---
 
@@ -147,9 +186,9 @@ SlotDefinition[]
 ```
 自由编辑区内容（Markdown）
   → POST /api/elf/extract
-    → LLM 分析自由文本 + 当前模块完整模板（含所有 level 的槽位定义）
-      → 返回 SlotSuggestion[]
-        → 直接写入对应槽位
+    → LLM 分析自由文本 + 当前模块完整模板定义（TemplateDef，含所有 level 的 SlotDef）
+      → 返回 { slots: { slotId: "AI 提取的内容", ... } } JSON
+        → 写入对应槽位（更新 R2 .json → 服务端重渲染 .md）
 ```
 
 ### 4.3 交互约束
@@ -252,11 +291,13 @@ src/
 2. 将现有 M1-M4 的模板常量从"纯 markdown 字符串"改为 `SlotDefinition[]` + 渲染函数
 3. 渲染函数输入 `(slots, lang, userLevel)` → 输出过滤后的 markdown
 
-### 6.2 第二阶段：槽位解析 + 前端过滤
+### 6.2 第二阶段：槽位解析 + 前端过滤（v2.4 实现，v2.5 改为 JSON）
 
-1. `parseSlotTemplate()` 升级：从 hint 标记中提取 level 信息
-2. `renderSlotEditor()` 升级：增加 `userLevel` 参数，跳过高于 userLevel 的槽位
-3. 前端增加 level 显示和切换入口
+v2.4 中通过 `parseSlotTemplate()` 从 Markdown `<!-- -->` 标记提取槽位信息。v2.5 改为直接消费 API 返回的 JSON 结构：
+
+1. API 返回 `template.slots` 携带每个槽位的 `level`、`label`、`hint`
+2. `renderSlotEditor()` 接收 `template` JSON，跳过 `level > currentUserLevel` 的槽位
+3. 前端 level 显示和切换入口保持不变
 
 ### 6.3 第三阶段：Story Elf 引导
 
@@ -270,10 +311,10 @@ src/
 
 | 决策 | 选择 | 理由 |
 |------|------|------|
-| Level 存储 | 嵌入 hint 标记 | 单一事实来源，无同步问题 |
+| Level 存储 | SlotDef.level 字段（JSON 直接携带） | 单一事实来源，前端直接读取 JSON，无需 Markdown 正则解析。v2.4 旧方案为嵌入 `<!-- hint:L1:... -->` 注释 |
 | 初始层级数 | 3 级 (L0/L1/L2) | 够用，跑顺再考虑细分 |
 | 多语言存储 | 保持 R2 分目录 | 不同语言是独立内容，分目录合理 |
-| 模板定义 | 统一结构化 | 加语言只需加翻译字段 |
+| 模板定义 | 统一结构化 SlotDef[] | 加语言只需加翻译字段。v2.5 通过 API 返回 JSON 给前端直接消费 |
 | 用户 Level | 每作品独立 | 不同作品有不同复杂度需求 |
 | 默认 Level | L1 | 展示核心引导价值，L0 太"空" |
 | Level 过滤位置 | 前端渲染层 | AI 和后端始终访问完整模板 |

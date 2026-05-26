@@ -1,9 +1,9 @@
-// Story Forger — M4 伏笔卡：模板定义 + CRUD
+// Story Forger — M4 伏笔卡：模板定义 + CRUD + JSON 槽位数据
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { workContentPath, extractLang, type Lang } from '../../lib/work_content';
-import { renderCard, type SlotDef } from '../../lib/template';
+import { renderCard, buildCardJson, type SlotDef, type R2SlotData } from '../../lib/template';
 
 // ============================================================
 // 伏笔卡 — 结构化槽位定义（单一来源，双语）
@@ -25,9 +25,9 @@ export const FORESHADOWING_CARD_SLOTS: SlotDef[] = [
   { id: 'fh_status',         level: 2, label: { zh: '状态', en: 'Status' }, hint: { zh: '🌱 已规划 / 🌿 已埋种 / 🌳 发展中 / 💡 部分揭示 / ✅ 已回收', en: '🌱 Planned / 🌿 Planted / 🌳 Developing / 💡 Partially Revealed / ✅ Resolved' } },
 ];
 
-export function getForeshadowingCardTemplate(name: string, lang: Lang, level?: number): string {
-  return renderCard(name, FORESHADOWING_CARD_SLOTS, lang, level ?? 2);
-}
+/** R2 路径 */
+function fhCardJsonPath(workId: string, lang: Lang, entityId: string) { return workContentPath(workId, lang, `foreshadowing/${entityId}.json`); }
+function fhCardMdPath(workId: string, lang: Lang, entityId: string) { return workContentPath(workId, lang, `foreshadowing/${entityId}.md`); }
 
 // ============================================================
 // 伏笔卡 CRUD
@@ -59,16 +59,23 @@ export async function createForeshadowing(env: Env, request: Request, workId: st
   `).bind(id, workId, body.name, body.description || null, body.first_appearance || null, relatedEntities, now, now).run();
 
   const lang = extractLang(request);
-  const card = getForeshadowingCardTemplate(body.name, lang);
+  const emptySlotData: R2SlotData = { slots: {} };
+  const cleanCard = renderCard(body.name, FORESHADOWING_CARD_SLOTS, lang, 2, {}, true);
+
   try {
-    await env.WORKS_BUCKET.put(workContentPath(workId, lang, `foreshadowing/${id}.md`), card, {
+    await env.WORKS_BUCKET.put(fhCardJsonPath(workId, lang, id), JSON.stringify(emptySlotData, null, 2), {
+      httpMetadata: { contentType: 'application/json' },
+    });
+    await env.WORKS_BUCKET.put(fhCardMdPath(workId, lang, id), cleanCard, {
       httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
     });
   } catch (err) {
     console.error('R2 write failed for foreshadowing card:', workId, id, err);
   }
 
-  return new Response(JSON.stringify(jsonSuccess({ id, type: 'foreshadowing' })), {
+  const cardJson = buildCardJson(body.name, FORESHADOWING_CARD_SLOTS, lang, 2, emptySlotData);
+
+  return new Response(JSON.stringify(jsonSuccess({ id, type: 'foreshadowing', template: cardJson })), {
     status: 201, headers: { 'Content-Type': 'application/json' },
   });
 }
@@ -83,21 +90,35 @@ export async function readForeshadowingCard(env: Env, request: Request, workId: 
   }
 
   const lang = extractLang(request);
-  const key = workContentPath(workId, lang, `foreshadowing/${entityId}.md`);
-  const obj = await env.WORKS_BUCKET.get(key);
 
-  if (!obj) {
-    const template = getForeshadowingCardTemplate(entity.name, lang);
+  let slotData: R2SlotData | null = null;
+  const jsonObj = await env.WORKS_BUCKET.get(fhCardJsonPath(workId, lang, entityId));
+  if (jsonObj) {
+    try { slotData = JSON.parse(await jsonObj.text()) as R2SlotData; } catch { /* ignore */ }
+  }
+
+  let renderedMd = '';
+  const mdObj = await env.WORKS_BUCKET.get(fhCardMdPath(workId, lang, entityId));
+  if (mdObj) renderedMd = await mdObj.text();
+
+  if (!slotData && !renderedMd) {
+    const emptyCard = renderCard(entity.name, FORESHADOWING_CARD_SLOTS, lang, 2);
+    const cardJson = buildCardJson(entity.name, FORESHADOWING_CARD_SLOTS, lang, 2, null);
     return new Response(JSON.stringify(jsonSuccess({
       entity_id: entityId, name: entity.name, type: 'foreshadowing', lang,
-      content: template, is_template: true,
+      template: cardJson,
+      rendered_md: emptyCard,
+      is_template: true,
     })), { headers: { 'Content-Type': 'application/json' } });
   }
 
-  const content = await obj.text();
+  const cardJson = buildCardJson(entity.name, FORESHADOWING_CARD_SLOTS, lang, 2, slotData);
+
   return new Response(JSON.stringify(jsonSuccess({
     entity_id: entityId, name: entity.name, type: 'foreshadowing', lang,
-    content, is_template: false,
+    template: cardJson,
+    rendered_md: renderedMd,
+    is_template: false,
   })), { headers: { 'Content-Type': 'application/json' } });
 }
 
@@ -111,18 +132,46 @@ export async function updateForeshadowingCard(env: Env, request: Request, workId
   }
 
   const lang = extractLang(request);
-  const body = await request.json() as { content: string };
-  if (typeof body.content !== 'string') {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'content is required')), {
+  const body = await request.json() as { slots?: Record<string, string>; free_content?: string };
+
+  // 兼容旧的 content 字段
+  if (!body.slots && typeof (body as { content?: string }).content === 'string') {
+    await env.WORKS_BUCKET.put(fhCardMdPath(workId, lang, entityId), (body as { content: string }).content, {
+      httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+    });
+    return new Response(JSON.stringify(jsonSuccess({ entity_id: entityId, name: entity.name, lang, saved: true })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  if (!body.slots || typeof body.slots !== 'object') {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'slots object is required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  await env.WORKS_BUCKET.put(workContentPath(workId, lang, `foreshadowing/${entityId}.md`), body.content, {
+  const slotData: R2SlotData = { slots: body.slots };
+  if (body.free_content) slotData.free_content = body.free_content;
+
+  let cleanCard = renderCard(entity.name, FORESHADOWING_CARD_SLOTS, lang, 2, body.slots, true);
+  if (body.free_content) {
+    cleanCard = cleanCard.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + body.free_content.trim() + '\n');
+  }
+
+  await env.WORKS_BUCKET.put(fhCardJsonPath(workId, lang, entityId), JSON.stringify(slotData, null, 2), {
+    httpMetadata: { contentType: 'application/json' },
+  });
+  await env.WORKS_BUCKET.put(fhCardMdPath(workId, lang, entityId), cleanCard, {
     httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
   });
 
-  return new Response(JSON.stringify(jsonSuccess({ entity_id: entityId, name: entity.name, lang, saved: true })), {
+  const cardJson = buildCardJson(entity.name, FORESHADOWING_CARD_SLOTS, lang, 2, slotData);
+
+  return new Response(JSON.stringify(jsonSuccess({
+    entity_id: entityId, name: entity.name, lang, saved: true,
+    template: cardJson,
+    rendered_md: cleanCard,
+  })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }

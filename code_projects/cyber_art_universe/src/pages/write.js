@@ -399,361 +399,161 @@ function setSlotLevel(newLevel) {
 }
 
 // ============================================================
-// Slot Editor Engine — 树形 section 模型
+// Slot Editor Engine — JSON 直接消费
 // ============================================================
-var _slotData = null;
-var _textareaList = []; // 序列化时遍历的 textarea 列表（按渲染顺序）
-var _slotRenderIdx = 0;  // 槽位渲染计数器，用于生成 data-slot-id
+var _templateData = null;   // 当前 template JSON
+var _slotGroupList = null;  // 多 group 模式下的 groups 数组
+var _textareaList = [];     // 序列化时遍历的 textarea 列表（按渲染顺序）
 
-function escSlot(s) {
-  return s.replace(/<!--/g, '<\\!--');
-}
-function unescSlot(s) {
-  return s.replace(/<\\!--/g, '<!--');
-}
-
-// 解析模板 markdown → { groups: [{title, tree}], freeContent }
-function parseSlotTemplate(md) {
-  if (!md) return { groups: [{ title: '', tree: emptyTree() }], freeContent: '' };
-
-  var sepRe = /\n---\n/g;
-  var sepPositions = [];
-  var m;
-  while ((m = sepRe.exec(md)) !== null) sepPositions.push(m.index);
-
-  var templateArea = md;
-  var freeContent = '';
-  if (sepPositions.length > 0) {
-    var lastIdx = sepPositions[sepPositions.length - 1];
-    templateArea = md.substring(0, lastIdx);
-    freeContent = md.substring(lastIdx + 5).trim();
-  }
-
-  var groupParts = templateArea.split(/\n---\n/);
-  var groups = [];
-  for (var g = 0; g < groupParts.length; g++) {
-    var gm = groupParts[g].trim();
-    if (!gm) continue;
-    var title = '';
-    var tm = gm.match(/^###\s+(.+)$/m);
-    if (tm) title = tm[1].trim();
-    groups.push({ title: title, tree: parseSectionTree(gm) });
-  }
-
-  if (groups.length === 0) {
-    groups.push({ title: '', tree: emptyTree() });
-  }
-
-  return { groups: groups, freeContent: freeContent };
-}
-
-function emptyTree() {
-  return { type: 'section', level: 0, heading: '', headingMd: '', framework: [], children: [] };
-}
-
-// 树形解析：## → 二级 section，### → 三级 section，hint+slot → 叶子
-// section 嵌套关系由 heading 级别天然决定，无需游标推断
-function parseSectionTree(md) {
-  // 预归一化多行 hint
-  md = md.replace(/<!--\s*hint:([\s\S]*?)-->/g, function(_, body) {
-    return '<!-- hint:' + body.replace(/\n/g, ' ').trim() + ' -->';
-  });
-
-  var root = emptyTree(); // level 0：标题、intro 等始终可见
-  var curSection = root;   // 当前 ## section
-  var curSub = null;        // 当前 ### subsection
-  var curLevel = 0;
-  var pendingFw = [];
-
-  function flushFw() {
-    if (pendingFw.length === 0) return;
-    var md = pendingFw.join('\n').trim();
-    pendingFw = [];
-    if (!md) return;
-    var html;
-    try { html = marked.parse(md); } catch(e) { html = md; }
-    var target = curSub || curSection;
-    target.framework.push({ html: html, _md: md });
-  }
-
-  var lines = md.split('\n');
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i];
-    var t = line.trim();
-
-    // <!-- L{n} --> — 设后续 section/slot 的 level
-    var lm = t.match(/^<!--\s*L([12])\s*-->$/);
-    if (lm) { curLevel = parseInt(lm[1]); continue; }
-
-    // <!-- hint:text --> + <!-- slot -->...<!-- /slot -->
-    var hm = t.match(/^<!--\s*hint:\s*(.+?)\s*-->$/);
-    if (hm) {
-      var hintLabel = hm[1].trim();
-      i++;
-      if (i < lines.length && /^\s*<!--\s*slot\s*-->\s*$/.test(lines[i].trim())) {
-        i++;
-        var content = '';
-        while (i < lines.length) {
-          if (/^\s*<!--\s*\/slot\s*-->\s*$/.test(lines[i].trim())) break;
-          content += (content ? '\n' : '') + lines[i];
-          i++;
-        }
-        flushFw();
-        var target = curSub || curSection;
-        target.children.push({ type: 'slot', level: curLevel, label: hintLabel, content: unescSlot(content.trim()) });
-      }
-      continue;
-    }
-
-    // ## heading → 新二级 section
-    var h2m = t.match(/^##\s+(.+)$/);
-    if (h2m) {
-      flushFw();
-      curSub = null;
-      curSection = { type: 'section', level: curLevel, heading: h2m[1].trim(), headingMd: t, framework: [], children: [] };
-      root.children.push(curSection);
-      continue;
-    }
-
-    // ### heading → 新三级 subsection
-    var h3m = t.match(/^###\s+(.+)$/);
-    if (h3m) {
-      flushFw();
-      curSub = { type: 'section', level: curLevel, heading: h3m[1].trim(), headingMd: t, framework: [], children: [] };
-      curSection.children.push(curSub);
-      continue;
-    }
-
-    // Framework 文本
-    pendingFw.push(line);
-  }
-
-  flushFw();
-  return root;
-}
-
-// 递归渲染 section 树 → DOM
+// 渲染 slot 编辑器（JSON 直接消费，无需 Markdown 解析）
 function renderSlotEditor(data) {
-  _slotData = data;
+  _templateData = data;
   _textareaList = [];
-  _slotRenderIdx = 0;
+  _slotGroupList = null;
   var groupsEl = document.getElementById('slot-groups');
   if (!groupsEl) return;
   groupsEl.innerHTML = '';
 
-  // 检测是否有 slot
-  var hasSlots = false;
-  (data.groups || []).forEach(function(g) {
-    if (hasAnySlot(g.tree)) hasSlots = true;
-  });
+  var useGroups = !!(data.groups && data.groups.length > 0);
 
-  if (!hasSlots) {
-    var freeArea = document.getElementById('slot-free-area');
-    if (freeArea) {
-      var raw = treeToRawMd(data.groups);
-      if (data.freeContent) raw += (raw ? '\n\n---\n\n' : '') + data.freeContent;
-      freeArea.value = raw || data.freeContent || '';
-    }
-    return;
-  }
-
-  var multiGroup = data.groups.length > 1;
-
-  (data.groups || []).forEach(function(group, gi) {
-    if (multiGroup) {
+  if (useGroups) {
+    // 多 group 模式（卡片列表，如 M3 人物卡 / M4 伏笔卡）
+    _slotGroupList = data.groups;
+    data.groups.forEach(function(group) {
       var gEl = document.createElement('div');
       gEl.className = 'slot-group';
-      if (group.title) {
-        var hdr = document.createElement('div');
-        hdr.className = 'slot-group-header';
-        var ttl = document.createElement('span');
-        ttl.className = 'slot-group-title';
-        ttl.textContent = group.title;
-        hdr.appendChild(ttl);
-        var acts = document.createElement('div');
-        acts.className = 'slot-group-actions';
-        var delBtn = document.createElement('button');
-        delBtn.className = 'slot-group-delete';
-        delBtn.innerHTML = '&times;';
-        delBtn.title = '删除此条目';
-        delBtn.addEventListener('click', function () { removeSlotGroup(delBtn); });
-        acts.appendChild(delBtn);
-        hdr.appendChild(acts);
-        gEl.appendChild(hdr);
-      }
+      // Header
+      var hdr = document.createElement('div');
+      hdr.className = 'slot-group-header';
+      var ttl = document.createElement('span');
+      ttl.className = 'slot-group-title';
+      ttl.textContent = group.name || '';
+      hdr.appendChild(ttl);
+      var acts = document.createElement('div');
+      acts.className = 'slot-group-actions';
+      var delBtn = document.createElement('button');
+      delBtn.className = 'slot-group-delete';
+      delBtn.innerHTML = '&times;';
+      delBtn.title = '删除此条目';
+      delBtn.addEventListener('click', function () { removeSlotGroup(delBtn); });
+      acts.appendChild(delBtn);
+      hdr.appendChild(acts);
+      gEl.appendChild(hdr);
+      // Body — 渲染 slots
       var body = document.createElement('div');
       body.className = 'slot-group-body';
-      renderNode(body, group.tree);
+      (group.slots || []).forEach(function(slot) {
+        renderSlotItem(body, slot);
+      });
       gEl.appendChild(body);
       groupsEl.appendChild(gEl);
-    } else {
-      renderNode(groupsEl, data.groups[0].tree);
-    }
-  });
-
-  if (multiGroup) {
+    });
+    // 添加条目按钮
     var addBtn = document.createElement('button');
     addBtn.className = 'slot-group-add';
     addBtn.textContent = '+ 添加条目';
     addBtn.addEventListener('click', addSlotGroup);
     groupsEl.appendChild(addBtn);
+  } else {
+    // 单 sections 模式（如 M1 世界观 / M2 大纲）
+    var sections = data.sections || [];
+    sections.forEach(function(section) {
+      var secDiv = document.createElement('div');
+      secDiv.className = 'slot-section';
+      secDiv.dataset.level = section.level || 0;
+      // Section heading（Markdown → HTML）
+      if (section.heading) {
+        var hDiv = document.createElement('div');
+        hDiv.className = 'slot-framework';
+        try { hDiv.innerHTML = marked.parse(section.heading); } catch(e) { hDiv.textContent = section.heading; }
+        secDiv.appendChild(hDiv);
+      }
+      // Slots
+      (section.slots || []).forEach(function(slot) {
+        renderSlotItem(secDiv, slot);
+      });
+      groupsEl.appendChild(secDiv);
+    });
+    // Outro
+    if (data.outro) {
+      var outroDiv = document.createElement('div');
+      outroDiv.className = 'slot-framework';
+      outroDiv.style.cssText = 'margin-top:1rem;';
+      try { outroDiv.innerHTML = marked.parse(data.outro); } catch(e) { outroDiv.textContent = data.outro; }
+      groupsEl.appendChild(outroDiv);
+    }
   }
 
   var freeArea = document.getElementById('slot-free-area');
-  if (freeArea) freeArea.value = data.freeContent || '';
+  if (freeArea) freeArea.value = data.free_content || '';
 
   applySlotLevel();
 }
 
-function hasAnySlot(node) {
-  if (node.type === 'slot') return true;
-  if (node.children) return node.children.some(hasAnySlot);
-  return false;
+// 渲染单个 slot → div.slot-item > div.slot-label + textarea.slot-textarea
+function renderSlotItem(parent, slot) {
+  var item = document.createElement('div');
+  item.className = 'slot-item';
+  item.dataset.level = 'L' + (slot.level || 1);
+  // Label
+  if (slot.label || slot.hint) {
+    var lbl = document.createElement('div');
+    lbl.className = 'slot-label';
+    lbl.textContent = slot.label || slot.hint || '';
+    item.appendChild(lbl);
+  }
+  // Textarea
+  var ta = document.createElement('textarea');
+  ta.className = 'slot-textarea';
+  ta.rows = Math.max(2, Math.min(6, (slot.content || '').split('\n').length));
+  ta.value = slot.content || '';
+  ta.dataset.slotId = slot.id || '';
+  if (slot.hint) ta.dataset.hint = slot.hint;
+  item.appendChild(ta);
+  parent.appendChild(item);
+  _textareaList.push(ta);
 }
 
-function treeToRawMd(groups) {
-  var raw = '';
-  groups.forEach(function(g) {
-    (g.tree.framework || []).forEach(function(fw) {
-      raw += (raw ? '\n' : '') + fw._md;
-    });
+// 序列化 slot 内容 → { slots: { id: value, ... }, free_content: "..." }
+function serializeSlots() {
+  var slots = {};
+  _textareaList.forEach(function(ta) {
+    var id = ta.dataset.slotId;
+    if (id) slots[id] = ta.value;
   });
-  return raw;
-}
-
-/** 递归渲染单个 section/slot 节点 */
-function renderNode(parent, node) {
-  if (node.type === 'section') {
-    var div = document.createElement('div');
-    div.className = 'slot-section';
-    div.dataset.level = node.level;
-    // heading（## 或 ### 标题）
-    if (node.headingMd) {
-      var hDiv = document.createElement('div');
-      hDiv.className = 'slot-framework';
-      try { hDiv.innerHTML = marked.parse(node.headingMd); } catch(e) { hDiv.textContent = node.headingMd; }
-      div.appendChild(hDiv);
-    }
-    // framework
-    (node.framework || []).forEach(function(fw) {
-      var fwDiv = document.createElement('div');
-      fwDiv.className = 'slot-framework';
-      fwDiv.innerHTML = fw.html;
-      div.appendChild(fwDiv);
-    });
-    // children
-    (node.children || []).forEach(function(child) {
-      renderNode(div, child);
-    });
-    parent.appendChild(div);
-  } else if (node.type === 'slot') {
-    var item = document.createElement('div');
-    item.className = 'slot-item';
-    item.dataset.level = 'L' + node.level;
-    var ta = document.createElement('textarea');
-    ta.className = 'slot-textarea';
-    ta.rows = Math.max(2, Math.min(6, (node.content || '').split('\n').length));
-    ta.value = node.content || '';
-    if (node.label) ta.dataset.hint = node.label;
-    _slotRenderIdx++;
-    ta.dataset.slotId = 'slot-' + _slotRenderIdx;
-    item.appendChild(ta);
-    parent.appendChild(item);
-    _textareaList.push(ta);
-  }
-}
-
-// 递归序列化 section 树 → markdown
-function serializeSlotContent() {
-  if (!_slotData) return '';
-  var groupsEl = document.getElementById('slot-groups');
-  if (!groupsEl) return '';
-
-  if (_textareaList.length === 0) {
-    var freeArea = document.getElementById('slot-free-area');
-    return freeArea ? freeArea.value : '';
-  }
-
-  var result = '';
-  var taIdx = 0;
-
-  _slotData.groups.forEach(function(group, gi) {
-    if (gi > 0) result += '\n---\n\n';
-    result += serializeNode(group.tree);
-    if (result && !result.endsWith('\n\n')) result += '\n';
-  });
-
-  // 内部函数：递归序列化，把 textarea 内容填入 slot
-  function serializeNode(node) {
-    var r = '';
-    if (node.type === 'section') {
-      if (node.headingMd) {
-        r += '<!-- L' + node.level + ' -->\n' + node.headingMd + '\n';
-      }
-      (node.framework || []).forEach(function(fw) {
-        r += (r && !r.endsWith('\n\n') ? '\n' : '') + fw._md + '\n';
-      });
-      (node.children || []).forEach(function(child) {
-        r += serializeNode(child);
-      });
-    } else if (node.type === 'slot') {
-      r += (r && !r.endsWith('\n') ? '\n' : '') + '<!-- hint:' + node.label + ' -->\n<!-- slot -->\n';
-      var val = '';
-      if (taIdx < _textareaList.length) {
-        val = _textareaList[taIdx].value.trim();
-        taIdx++;
-      }
-      r += escSlot(val) + '\n<!-- /slot -->\n';
-    }
-    return r;
-  }
-
   var freeArea = document.getElementById('slot-free-area');
   var freeContent = freeArea ? freeArea.value.trim() : '';
-  if (freeContent) {
-    result += '\n---\n\n' + freeContent + '\n';
-  }
-
-  return result.trim() + '\n';
+  return { slots: slots, free_content: freeContent };
 }
 
-// 添加/删除 group（M4 多 group）
+// 添加/删除 group（多 group 模式：M3/M4 卡片列表）
 function addSlotGroup() {
-  if (!_slotData || !_slotData.groups || _slotData.groups.length === 0) return;
-  var lastGroup = _slotData.groups[_slotData.groups.length - 1];
-  var newNum = _slotData.groups.length + 1;
-  var newTitle = lastGroup.title ? lastGroup.title.replace(/#\d+/, '#' + newNum) : '';
-  var newTree = cloneTree(lastGroup.tree);
-  _slotData.groups.push({ title: newTitle, tree: newTree });
-  renderSlotEditor(_slotData);
-}
-
-function cloneTree(node) {
-  if (node.type === 'section') {
-    return {
-      type: 'section', level: node.level, heading: node.heading, headingMd: node.headingMd,
-      framework: (node.framework || []).map(function(fw) { return { html: fw.html, _md: fw._md }; }),
-      children: (node.children || []).map(cloneTree),
-    };
-  } else {
-    return { type: 'slot', level: node.level, label: node.label, content: '' };
-  }
+  if (!_slotGroupList || _slotGroupList.length === 0) return;
+  var lastGroup = _slotGroupList[_slotGroupList.length - 1];
+  // 克隆最后一个 group 的 slots 结构（清空 content）
+  var newSlots = (lastGroup.slots || []).map(function(slot) {
+    return { id: slot.id, level: slot.level, label: slot.label, hint: slot.hint, content: '' };
+  });
+  var newName = '#' + (_slotGroupList.length + 1);
+  _slotGroupList.push({ name: newName, slots: newSlots });
+  // 重新渲染
+  renderSlotEditor({ groups: _slotGroupList, free_content: _templateData && _templateData.free_content || '' });
 }
 
 function removeSlotGroup(btn) {
   var groupEl = btn.closest('.slot-group');
-  if (!groupEl || !_slotData) return;
+  if (!groupEl || !_slotGroupList) return;
   var groupsEl = document.getElementById('slot-groups');
   var allGroups = groupsEl.querySelectorAll('.slot-group');
   var idx = Array.prototype.indexOf.call(allGroups, groupEl);
-  if (idx >= 0 && _slotData.groups.length > 1) {
-    _slotData.groups.splice(idx, 1);
-    renderSlotEditor(_slotData);
+  if (idx >= 0 && _slotGroupList.length > 1) {
+    _slotGroupList.splice(idx, 1);
+    renderSlotEditor({ groups: _slotGroupList, free_content: _templateData && _templateData.free_content || '' });
   }
 }
 
 // 显示/切换编辑器类型（三栏：左=参考 / 中=自由编辑 / 右=模板）
-function showSlotEditor(md) {
+function showSlotEditor(templateData) {
   setThreePanelMode();
   var te = qs('#writing-editor');
   var se = qs('#slot-editor');
@@ -767,8 +567,7 @@ function showSlotEditor(md) {
     se.style.flexDirection = 'column';
     se.style.overflowY = 'auto';
     se.style.flex = '1';
-    var parsed = parseSlotTemplate(md);
-    renderSlotEditor(parsed);
+    renderSlotEditor(templateData);
   }
 }
 
@@ -961,10 +760,11 @@ async function loadM2() {
   // 左面板：轮换提示
   loadRotatingHint('m2');
 
-  if (outlineMd) {
-    showSlotEditor(outlineMd);
+  var template = (data && data.data && data.data.template) ? data.data.template : null;
+  if (template) {
+    showSlotEditor(template);
   } else {
-    console.log('[SF:M2] FAILED: no outline_md');
+    console.log('[SF:M2] FAILED: no template');
     showTextEditor('');
   }
 }
@@ -985,10 +785,11 @@ async function loadBibleModule(module, apiPath) {
   // 左面板：轮换提示
   loadRotatingHint('m1');
 
-  if (content) {
-    showSlotEditor(content);
+  var template = (data && data.data && data.data.template) ? data.data.template : null;
+  if (template) {
+    showSlotEditor(template);
   } else {
-    console.log('[SF:M1] FAILED: no content');
+    console.log('[SF:M1] FAILED: no template');
     showTextEditor('');
   }
 }
@@ -1050,8 +851,8 @@ async function renderEntityCardList() {
 async function openEntityCard(entityId, name) {
   state.currentEntityId = entityId;
   var data = await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
-  var content = (data && data.ok && data.data.content) ? data.data.content : '';
-  showSlotEditor(content);
+  var template = (data && data.ok && data.data && data.data.template) ? data.data.template : null;
+  if (template) showSlotEditor(template);
 renderEntityCardList();
   updateElfContext();
 }
@@ -1064,9 +865,9 @@ async function loadM4() {
 
   // 加载策略总览（foreshadowing.md）到右侧
   var data = await hGet('/api/write/foreshadowing/' + state.currentWorkId);
-  var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
-  if (content) {
-    showSlotEditor(content);
+  var template = (data && data.ok && data.data && data.data.template) ? data.data.template : null;
+  if (template) {
+    showSlotEditor(template);
   } else {
     showTextEditor('');
   }
@@ -1098,8 +899,8 @@ async function renderFhCardList() {
   overviewCard.addEventListener('click', async function () {
     state.currentFhId = null;
     var d = await hGet('/api/write/foreshadowing/' + state.currentWorkId);
-    var c = (d && d.ok && d.data && d.data.content) ? d.data.content : '';
-    showSlotEditor(c);
+    var tpl = (d && d.ok && d.data && d.data.template) ? d.data.template : null;
+    if (tpl) showSlotEditor(tpl);
     renderFhCardList();
   });
   frag.appendChild(overviewCard);
@@ -1133,8 +934,8 @@ async function renderFhCardList() {
 async function openFhCard(entityId, name) {
   state.currentFhId = entityId;
   var data = await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
-  var content = (data && data.ok && data.data.content) ? data.data.content : '';
-  showSlotEditor(content);
+  var template = (data && data.ok && data.data && data.data.template) ? data.data.template : null;
+  if (template) showSlotEditor(template);
   renderFhCardList();
   updateElfContext();
 }
@@ -1295,20 +1096,25 @@ async function saveModuleContent(silent) {
     var body = qs('#writing-editor').value;
     await hPut('/api/write/original-concept/' + wid, { content: body });
   } else if (mod === 'worldbuilding') {
-    await hPut('/api/write/worldbuilding/' + wid, { content: serializeSlotContent() });
+    var wbData = serializeSlots();
+    await hPut('/api/write/worldbuilding/' + wid, { slots: wbData.slots, free_content: wbData.free_content });
   } else if (mod === 'outline') {
-    await hPut('/api/write/outline/' + wid, { outline_md: serializeSlotContent() });
+    var olData = serializeSlots();
+    await hPut('/api/write/outline/' + wid, { outline_slots: olData.slots, sections: _templateData && _templateData.sections || [], free_content: olData.free_content });
   } else if (mod === 'writing' && state.currentSectionId) {
     var body = qs('#writing-editor').value;
     await hPut('/api/write/works/' + wid + '/sections/' + state.currentSectionId, { title: state.currentSectionTitle, body: body });
   } else if (mod === 'characters' && state.currentEntityId) {
-    await hPut('/api/write/works/' + wid + '/entities/' + state.currentEntityId + '/card', { content: serializeSlotContent() });
+    var chData = serializeSlots();
+    await hPut('/api/write/works/' + wid + '/entities/' + state.currentEntityId + '/card', { slots: chData.slots, free_content: chData.free_content });
   } else if (mod === 'foreshadowing' && state.currentFhId) {
     // 单条伏笔卡 → entities card API
-    await hPut('/api/write/works/' + wid + '/entities/' + state.currentFhId + '/card', { content: serializeSlotContent() });
+    var fhData = serializeSlots();
+    await hPut('/api/write/works/' + wid + '/entities/' + state.currentFhId + '/card', { slots: fhData.slots, free_content: fhData.free_content });
   } else if (mod === 'foreshadowing' && !state.currentFhId) {
     // 策略总览 → foreshadowing.md
-    await hPut('/api/write/foreshadowing/' + wid, { content: serializeSlotContent() });
+    var fhData = serializeSlots();
+    await hPut('/api/write/foreshadowing/' + wid, { slots: fhData.slots, free_content: fhData.free_content });
   } else if (mod === 'chapters' && state.currentSectionId) {
     // M5: 表单编辑 → 通过 POST intent 保存
     try {

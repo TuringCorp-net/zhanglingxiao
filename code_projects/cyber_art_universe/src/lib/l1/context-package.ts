@@ -78,11 +78,11 @@ async function buildContextPackage(
   lang: Lang,
   opts: { includeM5: boolean },
 ): Promise<string> {
-  // 并发拉取：M0-M2 单文件，M3-M4 多文件（内部 stripTemplateMarkers）
+  // 并发拉取：M0-M2 单文件，M3-M4 多文件（R2 存储 clean Markdown，无需清洗）
   const [m0, m1, m2, m3, m4, m5] = await Promise.all([
-    readR2(env, workId, lang, 'original_concept.md').then(r => r ? stripTemplateMarkers(r) : ''),
-    readR2(env, workId, lang, 'world_bible.md').then(r => r ? stripTemplateMarkers(r) : ''),
-    readR2(env, workId, lang, 'outline.md').then(r => r ? stripTemplateMarkers(r) : ''),
+    readR2(env, workId, lang, 'original_concept.md'),
+    readR2(env, workId, lang, 'world_bible.md'),
+    readR2(env, workId, lang, 'outline.md'),
     buildM3Characters(env, workId, lang),
     buildM4Foreshadowing(env, workId, lang),
     opts.includeM5 ? buildM5Intents(env, workId, lang) : Promise.resolve(''),
@@ -121,24 +121,6 @@ async function readR2(env: Env, workId: string, lang: Lang, filename: string): P
   }
 }
 
-/**
- * 清洗模板标记，保留有意义的内容。
- * 这些标记是前端槽位编辑器用的格式控制符号，对 AI 无价值且浪费 token。
- *
- * 清洗规则：
- *   <!-- L1 --> / <!-- L2 -->  → 删除（frontend level 可见性标记）
- *   <!-- hint:xxx -->          → xxx   （保留提示文字，它是上下文的一部分）
- *   <!-- slot --> / <!-- /slot --> → 删除（空槽位分隔符）
- *   <!-- 其他注释 -->            → 删除
- */
-function stripTemplateMarkers(md: string): string {
-  return md
-    .replace(/<!--\s*hint:\s*[\s\S]*?\s*-->/g, '')  // hint 标记
-    .replace(/<!--\s*L[12]\s*-->/g, '')               // level 标记
-    .replace(/<!--\s*\/?slot\s*-->/g, '')              // slot 分隔符
-    .replace(/\n{3,}/g, '\n\n');                       // 压缩空行
-}
-
 async function buildM3Characters(env: Env, workId: string, lang: Lang): Promise<string> {
   const entities = await env.DB.prepare(
     "SELECT id, name, type FROM entities WHERE work_id = ? AND type != 'foreshadowing'"
@@ -146,11 +128,10 @@ async function buildM3Characters(env: Env, workId: string, lang: Lang): Promise<
 
   if (!entities.results?.length) return '';
 
-  // 并发拉取所有人物卡
+  // 并发拉取所有人物卡（R2 存储 clean Markdown，直接使用）
   const cards = (await Promise.all(
     entities.results.map(async e => {
-      const raw = await readR2(env, workId, lang, `characters/${e.id}.md`);
-      return raw ? stripTemplateMarkers(raw) : '';
+      return readR2(env, workId, lang, `characters/${e.id}.md`);
     })
   )).filter(Boolean);
 
@@ -167,14 +148,13 @@ async function buildM4Foreshadowing(env: Env, workId: string, lang: Lang): Promi
   ]);
 
   const parts: string[] = [];
-  if (strategyRaw) parts.push(stripTemplateMarkers(strategyRaw));
+  if (strategyRaw) parts.push(strategyRaw);
 
-  // 并发拉取所有伏笔卡
+  // 并发拉取所有伏笔卡（R2 存储 clean Markdown，直接使用）
   if (fhEntities.results?.length) {
     const cards = (await Promise.all(
       fhEntities.results.map(async e => {
-        const raw = await readR2(env, workId, lang, `foreshadowing/${e.id}.md`);
-        return raw ? stripTemplateMarkers(raw) : '';
+        return readR2(env, workId, lang, `foreshadowing/${e.id}.md`);
       })
     )).filter(Boolean);
     parts.push(...cards);
