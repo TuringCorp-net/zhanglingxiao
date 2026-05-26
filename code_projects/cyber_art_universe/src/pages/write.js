@@ -759,8 +759,8 @@ async function loadM2() {
   if (data && !cached) cacheSet('outline', data);
   console.log('[SF:M2] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'keys=' + Object.keys(data.data).join(',') : 'noData');
   left.innerHTML = '';
-  var outlineMd = (data && data.ok && data.data && data.data.outline_md) ? data.data.outline_md : '';
-  console.log('[SF:M2] outline_md len=' + outlineMd.length + ', sections=' + (data && data.data && data.data.sections ? data.data.sections.length : 0));
+  var outlineMd = (data && data.ok && data.data && data.data.rendered_md) ? data.data.rendered_md : '';
+  console.log('[SF:M2] rendered_md len=' + outlineMd.length + ', sections=' + (data && data.data && data.data.sections ? data.data.sections.length : 0));
   // 左面板：轮换提示
   loadRotatingHint('m2');
 
