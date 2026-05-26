@@ -1102,11 +1102,26 @@ function initChapterDrag() {
 // ============================================================
 var _autoSaveTimer = null;
 var _pendingPayload = null;  // 失焦时捕获的待发送数据
+var _lastSaved = '';         // 上次保存的 payload 指纹（用于去重）
 
-// 输入时防抖保存（打字过程中也保存，防止意外丢失）
+// 输入时防抖保存（5 秒无输入后触发。有变更才写，避免无效 R2 写入）
 function autoSave() {
   clearTimeout(_autoSaveTimer);
-  _autoSaveTimer = setTimeout(function () { doSave(true); }, 2000);
+  _autoSaveTimer = setTimeout(function () {
+    var p = capturePayload();
+    if (!p) return;
+    var fp = fingerprint(p);
+    if (fp !== _lastSaved) {
+      _lastSaved = fp;
+      _pendingPayload = p;
+      flushPendingPayload();
+    }
+  }, 5000);
+}
+
+// 生成 payload 指纹（JSON 序列化，用于变更检测）
+function fingerprint(p) {
+  return JSON.stringify(p);
 }
 
 // 失焦时同步捕获数据，异步发送（不阻塞 click 导航）
@@ -1156,6 +1171,7 @@ function flushPendingPayload() {
   if (!_pendingPayload) return;
   var p = _pendingPayload;
   _pendingPayload = null;
+  _lastSaved = fingerprint(p);
   sendPayload(p);
 }
 
@@ -1190,11 +1206,11 @@ async function saveModuleContent(silent) {
   clearTimeout(_autoSaveTimer);
   _pendingPayload = null;
   var p = capturePayload();
-  if (p) await sendPayload(p);
+  if (p) {
+    _lastSaved = fingerprint(p);
+    await sendPayload(p);
+  }
 }
-
-// 输入防抖 + 定时保存也用 doSave
-function doSave(silent) { saveModuleContent(silent); }
 
 async function aiGenerateForModule() {
   var wid = state.currentWorkId;
