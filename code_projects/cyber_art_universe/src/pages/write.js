@@ -574,6 +574,8 @@ function showSlotEditor(templateData) {
 }
 
 function showTextEditor(val) {
+  _textareaList = [];  // 清空槽位引用，防止残留数据污染其他模块保存
+  _templateData = null;
   var te = qs('#writing-editor');
   var se = qs('#slot-editor');
   var fe = qs('#form-editor');

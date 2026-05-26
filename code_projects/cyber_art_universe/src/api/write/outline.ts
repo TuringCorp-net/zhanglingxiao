@@ -306,23 +306,30 @@ export async function updateOutline(env: Env, request: Request, workId: string):
     await writeOutline(env, workId, outlineMd, lang);
   }
 
-  // 更新 sections
-  for (const s of body.sections) {
-    if (s.id) {
-      await env.DB.prepare(
-        'UPDATE sections SET title = ?, order_index = ?, section_summary = ?, updated_at = ? WHERE id = ? AND work_id = ?'
-      ).bind(s.title, s.order_index, s.section_summary || null, now, s.id, workId).run();
-    } else {
-      const sectionId = crypto.randomUUID();
-      const r2Key = sectionR2Key(workId, sectionId, lang);
-      await env.DB.prepare(`
-        INSERT INTO sections (id, work_id, title, order_index, section_summary, r2_object_key, word_count, entities_involved, version, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, 0, '[]', 1, ?, ?)
-      `).bind(sectionId, workId, s.title, s.order_index, s.section_summary || null, r2Key, now, now).run();
+  // 更新 sections（仅在传入有效章节数据时）
+  if (body.sections && Array.isArray(body.sections) && body.sections.length > 0 && body.sections[0].id) {
+    for (const s of body.sections) {
+      if (s.id) {
+        await env.DB.prepare(
+          'UPDATE sections SET title = ?, order_index = ?, section_summary = ?, updated_at = ? WHERE id = ? AND work_id = ?'
+        ).bind(s.title, s.order_index, s.section_summary || null, now, s.id, workId).run();
+      }
     }
   }
 
-  return new Response(JSON.stringify(jsonSuccess({ work_id: workId, lang, updated: body.sections.length })), {
+  // 读取最新的 JSON 和 MD 构造完整响应（与 GET 一致）
+  let slotData: R2SlotData | null = null;
+  const jsonObj = await env.WORKS_BUCKET.get(outlineJsonPath(workId, lang));
+  if (jsonObj) {
+    try { slotData = JSON.parse(await jsonObj.text()) as R2SlotData; } catch { /* ignore */ }
+  }
+  const template = buildTemplateJson(OUTLINE_TEMPLATE, lang, 2, slotData);
+
+  let outlineMd = '';
+  const mdObj = await env.WORKS_BUCKET.get(workContentPath(workId, lang, 'outline.md'));
+  if (mdObj) outlineMd = await mdObj.text();
+
+  return new Response(JSON.stringify(jsonSuccess({ work_id: workId, lang, updated: true, template, rendered_md: outlineMd })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }
