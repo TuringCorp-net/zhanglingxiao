@@ -1115,7 +1115,6 @@ function autoSave() {
     if (!p) return;
     var fp = fingerprint(p);
     if (fp !== _lastSaved) {
-      _lastSaved = fp;
       _pendingPayload = p;
       flushPendingPayload();
     }
@@ -1179,7 +1178,6 @@ function flushPendingPayload() {
   var p = _pendingPayload;
   _pendingPayload = null;
   console.log('[flushPayload] sending mod=' + p.mod + ' slots=' + Object.keys(p.slots||{}).length + ' free_content=' + (p.free_content||'').length + ' chars');
-  _lastSaved = fingerprint(p);
   sendPayload(p);
 }
 
@@ -1187,26 +1185,33 @@ async function sendPayload(p) {
   var wid = p.wid, mod = p.mod;
 
   try {
+    var resp = null;
     if (mod === 'original_concept') {
-      await hPut('/api/write/original-concept/' + wid, { content: p.body });
-      cacheClear(['original_concept']);
+      resp = await hPut('/api/write/original-concept/' + wid, { content: p.body });
+      if (resp && resp.ok) cacheSet('original_concept', resp);
+      else cacheClear(['original_concept']);
     } else if (mod === 'worldbuilding') {
-      await hPut('/api/write/worldbuilding/' + wid, { slots: p.slots, free_content: p.free_content });
-      cacheClear(['worldbuilding']);
+      resp = await hPut('/api/write/worldbuilding/' + wid, { slots: p.slots, free_content: p.free_content });
+      if (resp && resp.ok) cacheSet('worldbuilding', resp);
+      else cacheClear(['worldbuilding']);
     } else if (mod === 'outline') {
-      await hPut('/api/write/outline/' + wid, { outline_slots: p.slots, sections: p.sections, free_content: p.free_content });
-      cacheClear(['outline']);
+      resp = await hPut('/api/write/outline/' + wid, { outline_slots: p.slots, sections: p.sections, free_content: p.free_content });
+      if (resp && resp.ok) cacheSet('outline', resp);
+      else cacheClear(['outline']);
     } else if (mod === 'writing' && p.sectionId) {
       await hPut('/api/write/works/' + wid + '/sections/' + p.sectionId, { title: p.sectionTitle, body: p.body });
     } else if (mod === 'characters' && p.entityId) {
-      await hPut('/api/write/works/' + wid + '/entities/' + p.entityId + '/card', { slots: p.slots, free_content: p.free_content });
-      cacheClear(['entities']);
+      resp = await hPut('/api/write/works/' + wid + '/entities/' + p.entityId + '/card', { slots: p.slots, free_content: p.free_content });
+      if (resp && resp.ok) cacheSet('entities', resp);
+      else cacheClear(['entities']);
     } else if (mod === 'foreshadowing' && p.fhId) {
-      await hPut('/api/write/works/' + wid + '/entities/' + p.fhId + '/card', { slots: p.slots, free_content: p.free_content });
-      cacheClear(['entities', 'foreshadowing']);
+      resp = await hPut('/api/write/works/' + wid + '/entities/' + p.fhId + '/card', { slots: p.slots, free_content: p.free_content });
+      if (resp && resp.ok) { cacheSet('entities', resp); cacheClear(['foreshadowing']); }
+      else cacheClear(['entities', 'foreshadowing']);
     } else if (mod === 'foreshadowing' && !p.fhId) {
-      await hPut('/api/write/foreshadowing/' + wid, { slots: p.slots, free_content: p.free_content });
-      cacheClear(['foreshadowing']);
+      resp = await hPut('/api/write/foreshadowing/' + wid, { slots: p.slots, free_content: p.free_content });
+      if (resp && resp.ok) cacheSet('foreshadowing', resp);
+      else cacheClear(['foreshadowing']);
     } else if (mod === 'chapters' && p.sectionId) {
       p.intentObj.work_id = wid;
       p.intentObj.section_id = p.sectionId;
@@ -1214,7 +1219,8 @@ async function sendPayload(p) {
       if (Array.isArray(p.intentObj.chapter_index)) p.intentObj.chapter_index = p.intentObj.chapter_index[1];
       await hPost('/api/write/draft/intent', p.intentObj);
     }
-    console.log('[sendPayload] OK mod=' + mod);
+    console.log('[sendPayload] OK mod=' + mod + (resp ? ' (cache updated)' : ''));
+    _lastSaved = fingerprint(p);  // 保存成功后才更新指纹
   } catch (e) {
     console.error('[sendPayload] FAILED mod=' + mod, e);
   }
@@ -1226,8 +1232,8 @@ async function saveModuleContent(silent) {
   _pendingPayload = null;
   var p = capturePayload();
   if (p) {
-    _lastSaved = fingerprint(p);
     await sendPayload(p);
+    // fingerprint 在 sendPayload 成功后内部更新
   }
 }
 
