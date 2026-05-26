@@ -32,7 +32,7 @@
 | v2.4.0 | 2026-05-21 | 模板分级渐进引导系统 SF-068~069：每个槽位带 L1/L2 level 属性，前端按用户 level 过滤可见性。双语模板定义统一化（SlotDef 单一来源）。Story Elf 作为第三大独立模块。M3/M4 模板拆分（character_card.ts / foreshadowing_card.ts），删除 entities.ts |
 | v2.4.1 | 2026-05-22 | Hint 对话泡系统 SF-072：槽位聚焦时 Story Elf 以打字机效果逐字呈现 hint markdown。与左侧聊天窗口独立并行。 |
 | v2.5.0 | 2026-05-26 | 模板系统 JSON 化：所有 LLM 输出统一为 `{"slots":{...}}` JSON 格式，Markdown 由服务端代码组装。R2 双文件存储（`.json` + `.md`）。前端从 `parseSlotTemplate` Markdown 解析切换为直接消费 JSON 结构。删除 `stripTemplateMarkers`。 |
-| v2.5.1 | 2026-05-26 | M5 意图卡新增自由编辑区（中栏），与 M1-M4 体验一致。槽位编辑器样式修复（h2 色块 + h3 青色）。伏笔卡 `{name, slots}` 格式兼容 sections 渲染。自由编辑区 Story Elf hint 支持。 |
+| v2.5.1 | 2026-05-26 | 前端缓存架构重构：每模块/卡片独立 cache key（m0~m5），永不交叉污染。M5 自由编辑区 + 样式修复 + 伏笔卡渲染兼容。失焦即存 + 变更去重 + PUT 响应更新缓存。 |
 
 ---
 
@@ -328,6 +328,56 @@ works/{work_id}/{lang}/          # 多语言前缀（如 zh/ en/）
 
 ---
 
+## 五、前端缓存架构（v2.5.1）
+
+### 5.1 设计原则
+
+每个模块和每张卡片拥有独立缓存 key，**永不交叉污染**。缓存为内存级（`_moduleCache` 对象），页面刷新后自动清空。
+
+### 5.2 缓存 Key 分配
+
+| 模块 | 缓存 Key | 缓存内容 | 设置时机 |
+|------|---------|---------|---------|
+| M0 | `m0_concept` | 原始构想 GET 响应 | 加载时 / pipeline 刷新时 |
+| M1 | `m1_worldbuilding` | 世界观 GET/PUT 响应（含 `template` + `rendered_md`） | 加载时 / 保存成功后 / pipeline 刷新时 |
+| M2 | `m2_outline` | 长篇框架 GET/PUT 响应 | 加载时 / 保存成功后 / pipeline 刷新时 |
+| M3 卡片列表 | `m3_characters` | 实体列表 GET 响应（D1 `entities` 表，`[...]` 数组） | 加载时 / pipeline 刷新时 |
+| M3 单张角色卡 | `m3_card_{eid}` | 卡片 GET/PUT 响应（含 `template` + `rendered_md`） | 打开卡片时 / 保存成功后 |
+| M4 卡片列表 | `m4_cards` | 实体列表 GET 响应（伏笔类型过滤） | 加载时 |
+| M4 策略总览 | `m4_strategy` | 伏笔策略 GET/PUT 响应 | 加载时 / 保存成功后 / pipeline 刷新时 |
+| M4 单张伏笔卡 | `m4_card_{eid}` | 卡片 GET/PUT 响应（含 `template` + `rendered_md`） | 打开卡片时 / 保存成功后 |
+| M5 章节列表 | `m5_chapters` | 大纲 GET 响应（含 `sections` 数组） | 加载时 |
+| M5 单章意图卡 | `m5_intent_{sid}` | 意图卡 GET/POST 响应 | 打开章节时 / 保存成功后 |
+
+### 5.3 缓存更新策略
+
+| 场景 | 行为 |
+|------|------|
+| **模块首次加载** | `cacheGet` miss → `hGet` 请求 → `cacheSet` 写入 |
+| **模块再次加载** | `cacheGet` 命中 → 直接使用，不发请求 |
+| **保存成功** | `cacheSet` 用 PUT/POST 响应更新缓存（省一次 GET） |
+| **保存失败** | `cacheClear` 清除对应缓存（下次加载强制 GET） |
+| **AI 生成** | `cacheClear` 清除对应模块缓存（内容完全重建） |
+| **切换作品** | `cacheClear()` 无参调用，清空全部缓存 |
+
+### 5.4 卡片级缓存（M3/M4/M5）
+
+M3/M4/M5 的卡片/意图与 M1/M2 本质相同——每张卡片是一个独立的编辑单元，有自己的 `template` + `rendered_md`。
+
+- **M3**：6 张角色卡 → 6 个 `m3_card_{eid}` 缓存 + 1 个 `m3_characters` 列表缓存
+- **M4**：3 张伏笔卡 → 3 个 `m4_card_{eid}` 缓存 + 1 个 `m4_cards` 列表缓存 + 1 个 `m4_strategy` 策略缓存
+- **M5**：10 章意图 → 10 个 `m5_intent_{sid}` 缓存 + 1 个 `m5_chapters` 章节列表缓存
+
+卡片列表缓存和卡片内容缓存**完全独立**——保存卡片内容只更新内容缓存，不影响列表缓存（实体名称/类型不变）。
+
+### 5.5 注意事项
+
+- M5 意图卡的 GET 和 POST 响应格式略有差异（GET 嵌套 `data.intent`，POST 展开在 `data` 顶层），`openChapter` 做了兼容处理
+- M3/M4 卡片列表缓存储存的是 D1 `entities` 表快照（数组），卡片内容缓存储存的是 R2 模板数据（对象），两者格式不同，不可混用
+- Pipeline 刷新时批量设置 M0-M4 缓存，使用 `Promise.all` 并发请求
+
+---
+
 ## 六、状态统计
 
 | 状态 | 数量 |
@@ -337,7 +387,7 @@ works/{work_id}/{lang}/          # 多语言前缀（如 zh/ en/）
 | ❌ 已移除 | 1 |
 | 🔴 阻塞 | 0 |
 
-**总计**：51 项需求（48 已实现 + 2 待实现 + 1 已移除）。待实现：SF-056（Read 侧 AI 伴读后端）、SF-063（写作引导流程）。已移除：SF-024（冲突地图）。v2.4.0 新增：SF-068~071（模板分级 + 双语统一 + Story Elf 独立 + M3/M4 拆分）。v2.4.1 新增：SF-072（Hint 对话泡）。v2.5.0 更新：模板系统 JSON 化，R2 双文件存储，前端直接消费 JSON 结构。v2.5.1：M5 自由编辑区 + 样式修复。
+**总计**：51 项需求（48 已实现 + 2 待实现 + 1 已移除）。待实现：SF-056（Read 侧 AI 伴读后端）、SF-063（写作引导流程）。已移除：SF-024（冲突地图）。v2.4.0 新增：SF-068~071（模板分级 + 双语统一 + Story Elf 独立 + M3/M4 拆分）。v2.4.1 新增：SF-072（Hint 对话泡）。v2.5.0 更新：模板系统 JSON 化，R2 双文件存储，前端直接消费 JSON 结构。v2.5.1：前端缓存架构重构（每模块独立 key），M5 自由编辑区，样式修复，失焦即存。
 
 ### 实现清单
 
