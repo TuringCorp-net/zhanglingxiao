@@ -165,6 +165,7 @@ async function onWorkspaceChange() {
 // Module Switching
 // ============================================================
 async function switchModule(module) {
+  console.log('[switchModule] to ' + module + ' from ' + state.currentModule);
   state.currentModule = module;
   state.currentSectionId = null;
   state.currentSectionTitle = '';
@@ -781,13 +782,15 @@ async function loadBibleModule(module, apiPath) {
   if (data && !cached) cacheSet('worldbuilding', data);
   console.log('[SF:M1] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'keys=' + Object.keys(data.data).join(',') : 'noData');
   left.innerHTML = '';
-  var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
-  console.log('[SF:M1] content len=' + content.length + ', is_template=' + (data && data.data && data.data.is_template));
+  var rdMd = (data && data.ok && data.data && data.data.rendered_md) ? data.data.rendered_md : '';
+  console.log('[SF:M1] rendered_md=' + rdMd.length + ' chars, is_template=' + (data && data.data && data.data.is_template));
   // 左面板：轮换提示
   loadRotatingHint('m1');
 
   var template = (data && data.data && data.data.template) ? data.data.template : null;
   if (template) {
+    var fc = template.free_content || '';
+    console.log('[SF:M1] template loaded, free_content=' + fc.length + ' chars');
     showSlotEditor(template);
   } else {
     console.log('[SF:M1] FAILED: no template');
@@ -1127,9 +1130,13 @@ function fingerprint(p) {
 // 失焦时同步捕获数据，异步发送（不阻塞 click 导航）
 function saveOnBlur() {
   clearTimeout(_autoSaveTimer);
+  console.log('[saveOnBlur] fired, mod=' + state.currentModule + ' fhId=' + (state.currentFhId||''));
   _pendingPayload = capturePayload();
   if (_pendingPayload) {
+    console.log('[saveOnBlur] payload captured, slots=' + Object.keys(_pendingPayload.slots||{}).length + ' free_content=' + (_pendingPayload.free_content||'').length + ' chars');
     setTimeout(function () { flushPendingPayload(); }, 0);
+  } else {
+    console.log('[saveOnBlur] no payload (wid=' + state.currentWorkId + ' mod=' + state.currentModule + ')');
   }
 }
 
@@ -1171,6 +1178,7 @@ function flushPendingPayload() {
   if (!_pendingPayload) return;
   var p = _pendingPayload;
   _pendingPayload = null;
+  console.log('[flushPayload] sending mod=' + p.mod + ' slots=' + Object.keys(p.slots||{}).length + ' free_content=' + (p.free_content||'').length + ' chars');
   _lastSaved = fingerprint(p);
   sendPayload(p);
 }
@@ -1178,26 +1186,37 @@ function flushPendingPayload() {
 async function sendPayload(p) {
   var wid = p.wid, mod = p.mod;
 
-  if (mod === 'original_concept') {
-    await hPut('/api/write/original-concept/' + wid, { content: p.body });
-  } else if (mod === 'worldbuilding') {
-    await hPut('/api/write/worldbuilding/' + wid, { slots: p.slots, free_content: p.free_content });
-  } else if (mod === 'outline') {
-    await hPut('/api/write/outline/' + wid, { outline_slots: p.slots, sections: p.sections, free_content: p.free_content });
-  } else if (mod === 'writing' && p.sectionId) {
-    await hPut('/api/write/works/' + wid + '/sections/' + p.sectionId, { title: p.sectionTitle, body: p.body });
-  } else if (mod === 'characters' && p.entityId) {
-    await hPut('/api/write/works/' + wid + '/entities/' + p.entityId + '/card', { slots: p.slots, free_content: p.free_content });
-  } else if (mod === 'foreshadowing' && p.fhId) {
-    await hPut('/api/write/works/' + wid + '/entities/' + p.fhId + '/card', { slots: p.slots, free_content: p.free_content });
-  } else if (mod === 'foreshadowing' && !p.fhId) {
-    await hPut('/api/write/foreshadowing/' + wid, { slots: p.slots, free_content: p.free_content });
-  } else if (mod === 'chapters' && p.sectionId) {
-    p.intentObj.work_id = wid;
-    p.intentObj.section_id = p.sectionId;
-    p.intentObj.chapter_index = p.intentObj.chapter_index || (p.sectionTitle || '').match(/(\d+)/);
-    if (Array.isArray(p.intentObj.chapter_index)) p.intentObj.chapter_index = p.intentObj.chapter_index[1];
-    await hPost('/api/write/draft/intent', p.intentObj);
+  try {
+    if (mod === 'original_concept') {
+      await hPut('/api/write/original-concept/' + wid, { content: p.body });
+      cacheClear(['original_concept']);
+    } else if (mod === 'worldbuilding') {
+      await hPut('/api/write/worldbuilding/' + wid, { slots: p.slots, free_content: p.free_content });
+      cacheClear(['worldbuilding']);
+    } else if (mod === 'outline') {
+      await hPut('/api/write/outline/' + wid, { outline_slots: p.slots, sections: p.sections, free_content: p.free_content });
+      cacheClear(['outline']);
+    } else if (mod === 'writing' && p.sectionId) {
+      await hPut('/api/write/works/' + wid + '/sections/' + p.sectionId, { title: p.sectionTitle, body: p.body });
+    } else if (mod === 'characters' && p.entityId) {
+      await hPut('/api/write/works/' + wid + '/entities/' + p.entityId + '/card', { slots: p.slots, free_content: p.free_content });
+      cacheClear(['entities']);
+    } else if (mod === 'foreshadowing' && p.fhId) {
+      await hPut('/api/write/works/' + wid + '/entities/' + p.fhId + '/card', { slots: p.slots, free_content: p.free_content });
+      cacheClear(['entities', 'foreshadowing']);
+    } else if (mod === 'foreshadowing' && !p.fhId) {
+      await hPut('/api/write/foreshadowing/' + wid, { slots: p.slots, free_content: p.free_content });
+      cacheClear(['foreshadowing']);
+    } else if (mod === 'chapters' && p.sectionId) {
+      p.intentObj.work_id = wid;
+      p.intentObj.section_id = p.sectionId;
+      p.intentObj.chapter_index = p.intentObj.chapter_index || (p.sectionTitle || '').match(/(\d+)/);
+      if (Array.isArray(p.intentObj.chapter_index)) p.intentObj.chapter_index = p.intentObj.chapter_index[1];
+      await hPost('/api/write/draft/intent', p.intentObj);
+    }
+    console.log('[sendPayload] OK mod=' + mod);
+  } catch (e) {
+    console.error('[sendPayload] FAILED mod=' + mod, e);
   }
 }
 
@@ -1449,16 +1468,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // 失焦立即保存（切换模块/卡片/章节/点击别处 → textarea 失焦 → 触发保存）
   qs('#writing-editor').addEventListener('focusout', function (e) {
-    if (e.target.tagName === 'TEXTAREA') saveOnBlur();
+    if (e.target.tagName === 'TEXTAREA') { console.log('[focusout] writing-editor'); saveOnBlur(); }
   });
   qs('#slot-editor').addEventListener('focusout', function (e) {
-    if (e.target.tagName === 'TEXTAREA') saveOnBlur();
+    if (e.target.tagName === 'TEXTAREA') { console.log('[focusout] slot-editor'); saveOnBlur(); }
   });
   qs('#slot-free-area').addEventListener('focusout', function (e) {
-    if (e.target.tagName === 'TEXTAREA') saveOnBlur();
+    if (e.target.tagName === 'TEXTAREA') { console.log('[focusout] slot-free-area'); saveOnBlur(); }
   });
   qs('#form-editor').addEventListener('focusout', function (e) {
-    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') saveOnBlur();
+    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') { console.log('[focusout] form-editor'); saveOnBlur(); }
   });
 
   document.addEventListener('keydown', function (e) {
