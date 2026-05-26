@@ -370,6 +370,7 @@ export function buildTemplateJson(
     intro: tmpl.intro[lang],
     sections,
     outro: tmpl.outro[lang],
+    free_content: slotData?.free_content || '',
   };
 }
 
@@ -393,5 +394,5 @@ export function buildCardJson(
       content: slotData?.slots?.[s.id] || '',
     }));
 
-  return { name, slots: visibleSlots };
+  return { name, slots: visibleSlots, free_content: slotData?.free_content || '' };
 }

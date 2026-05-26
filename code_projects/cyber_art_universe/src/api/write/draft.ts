@@ -107,6 +107,7 @@ export async function createIntent(env: Env, request: Request): Promise<Response
     branching: body.branching || null,
     scene_type: body.scene_type || null,
     style_notes: body.style_notes || null,
+    free_content: (body as { free_content?: string }).free_content || null,
     created_at: new Date().toISOString(),
   };
 
