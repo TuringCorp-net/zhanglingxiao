@@ -96,12 +96,12 @@ async function refreshPipelineGuide(workId) {
     hGet('/api/write/foreshadowing/' + workId),
   ]);
 
-  // 缓存结果，后续切模块直接复用，避免重复请求
-  cacheSet('original_concept', results[0]);
-  cacheSet('worldbuilding', results[1]);
-  cacheSet('outline', results[2]);
-  cacheSet('entities', results[3]);
-  cacheSet('foreshadowing', results[4]);
+  // 每模块独立缓存，后续切模块直接复用
+  cacheSet('m0_concept', results[0]);
+  cacheSet('m1_worldbuilding', results[1]);
+  cacheSet('m2_outline', results[2]);
+  cacheSet('m3_characters', results[3]);
+  cacheSet('m4_strategy', results[4]);
 
   updatePipelineStatuses({
     M0: checkOC(results[0]),
@@ -730,8 +730,8 @@ async function loadM0() {
   left.innerHTML = '';
   loadRotatingHint('m0');
 
-  var data = cacheGet('original_concept') || await hGet('/api/write/original-concept/' + state.currentWorkId);
-  if (data) cacheSet('original_concept', data);
+  var data = cacheGet('m0_concept') || await hGet('/api/write/original-concept/' + state.currentWorkId);
+  if (data) cacheSet('m0_concept', data);
   console.log('[SF:M0] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'hasData' : 'noData');
   var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
   console.log('[SF:M0] content len=' + content.length + ', is_empty=' + (data && data.data && data.data.is_empty));
@@ -750,10 +750,10 @@ async function loadM1() { loadBibleModule('worldbuilding', '/api/write/worldbuil
 async function loadM2() {
   var left = qs('#split-left');
   left.innerHTML = '';
-  var cached = cacheGet('outline');
+  var cached = cacheGet('m2_outline');
   if (!cached) left.appendChild(loadingHTML());
   var data = cached || await hGet('/api/write/outline/' + state.currentWorkId);
-  if (data && !cached) cacheSet('outline', data);
+  if (data && !cached) cacheSet('m2_outline', data);
   left.innerHTML = '';
   loadRotatingHint('m2');
 
@@ -768,10 +768,10 @@ async function loadM2() {
 async function loadBibleModule(module, apiPath) {
   var left = qs('#split-left');
   left.innerHTML = '';
-  var cached = cacheGet('worldbuilding');
+  var cached = cacheGet('m1_worldbuilding');
   if (!cached) left.appendChild(loadingHTML());
   var data = cached || await hGet(apiPath + state.currentWorkId);
-  if (data && !cached) cacheSet('worldbuilding', data);
+  if (data && !cached) cacheSet('m1_worldbuilding', data);
   left.innerHTML = '';
   loadRotatingHint('m1');
 
@@ -799,12 +799,11 @@ async function renderEntityCardList() {
   console.log('[SF:M3] renderEntityCardList start');
   var left = qs('#split-left');
   left.innerHTML = '';
-  // 优先从缓存读取（跳过被污染的缓存：PUT 响应格式是对象，GET 响应是数组）
-  var cached = cacheGet('entities');
-  if (cached && cached.data && !Array.isArray(cached.data)) { cacheClear(['entities']); cached = null; }
+  // 优先从缓存读取
+  var cached = cacheGet('m3_characters');
   if (!cached) left.appendChild(loadingHTML());
   var data = cached || await hGet('/api/content/' + state.currentWorkId + '/entities');
-  if (data && !cached) cacheSet('entities', data);
+  if (data && !cached) cacheSet('m3_characters', data);
   left.innerHTML = '';
   if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
@@ -872,10 +871,9 @@ async function renderFhCardList() {
   var left = qs('#split-left');
   left.innerHTML = '';
   left.appendChild(loadingHTML());
-  var cached = cacheGet('entities');
-  if (cached && cached.data && !Array.isArray(cached.data)) { cacheClear(['entities']); cached = null; }
+  var cached = cacheGet('m4_cards');
   var data = cached || await hGet('/api/content/' + state.currentWorkId + '/entities');
-  if (!cached && data) cacheSet('entities', data);
+  if (!cached && data) cacheSet('m4_cards', data);
   left.innerHTML = '';
   if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
@@ -970,10 +968,10 @@ async function loadChapterCardList() {
   var left = qs('#split-left');
   left.innerHTML = '';
   // 优先从缓存读取
-  var cached = cacheGet('outline');
+  var cached = cacheGet('m5_chapters');
   if (!cached) left.appendChild(loadingHTML());
   var data = cached || await hGet('/api/write/outline/' + state.currentWorkId);
-  if (data && !cached) cacheSet('outline', data);
+  if (data && !cached) cacheSet('m5_chapters', data);
   console.log('[SF:M5/M6] API response:', data ? 'ok=' + data.ok : 'NULL', 'sections=' + (data && data.data && data.data.sections ? data.data.sections.length : 0));
   left.innerHTML = '';
   if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
@@ -1081,7 +1079,7 @@ function initChapterDrag() {
       if (fi < 0 || ti < 0) return;
       var mv = secs.splice(fi, 1)[0]; secs.splice(ti, 0, mv);
       var r = await hPut('/api/write/outline/' + state.currentWorkId, { sections: secs.map(function (x, i) { return { id: x.id, title: x.title, order_index: i }; }) });
-      if (r && r.ok) loadChapterCardList();
+      if (r && r.ok) { cacheClear(['m5_chapters']); loadChapterCardList(); }
     });
   });
 }
@@ -1169,28 +1167,30 @@ async function sendPayload(p) {
     var resp = null;
     if (mod === 'original_concept') {
       resp = await hPut('/api/write/original-concept/' + wid, { content: p.body });
-      if (resp && resp.ok) cacheSet('original_concept', resp);
-      else cacheClear(['original_concept']);
+      if (resp && resp.ok) cacheSet('m0_concept', resp);
+      else cacheClear(['m0_concept']);
     } else if (mod === 'worldbuilding') {
       resp = await hPut('/api/write/worldbuilding/' + wid, { slots: p.slots, free_content: p.free_content });
-      if (resp && resp.ok) cacheSet('worldbuilding', resp);
-      else cacheClear(['worldbuilding']);
+      if (resp && resp.ok) cacheSet('m1_worldbuilding', resp);
+      else cacheClear(['m1_worldbuilding']);
     } else if (mod === 'outline') {
       resp = await hPut('/api/write/outline/' + wid, { outline_slots: p.slots, sections: p.sections, free_content: p.free_content });
-      if (resp && resp.ok) cacheSet('outline', resp);
-      else cacheClear(['outline']);
+      if (resp && resp.ok) cacheSet('m2_outline', resp);
+      else cacheClear(['m2_outline']);
     } else if (mod === 'writing' && p.sectionId) {
       await hPut('/api/write/works/' + wid + '/sections/' + p.sectionId, { title: p.sectionTitle, body: p.body });
     } else if (mod === 'characters' && p.entityId) {
       resp = await hPut('/api/write/works/' + wid + '/entities/' + p.entityId + '/card', { slots: p.slots, free_content: p.free_content });
-      // 不清缓存：entity list 结构不同，cacheSet 会污染
+      // 卡片 PUT 响应 {template,rendered_md} 与列表 GET 响应 [...数组] 结构不同，不能缓存
+      // 清缓存强制下次切模块时重新 GET 列表
+      if (!(resp && resp.ok)) cacheClear(['m3_characters']);
     } else if (mod === 'foreshadowing' && p.fhId) {
       resp = await hPut('/api/write/works/' + wid + '/entities/' + p.fhId + '/card', { slots: p.slots, free_content: p.free_content });
-      // 不清缓存：entity list 结构不同，cacheSet 会污染
+      if (!(resp && resp.ok)) cacheClear(['m4_cards']);
     } else if (mod === 'foreshadowing' && !p.fhId) {
       resp = await hPut('/api/write/foreshadowing/' + wid, { slots: p.slots, free_content: p.free_content });
-      if (resp && resp.ok) cacheSet('foreshadowing', resp);
-      else cacheClear(['foreshadowing']);
+      if (resp && resp.ok) cacheSet('m4_strategy', resp);
+      else cacheClear(['m4_strategy']);
     } else if (mod === 'chapters' && p.sectionId) {
       p.intentObj.work_id = wid;
       p.intentObj.section_id = p.sectionId;
@@ -1227,15 +1227,15 @@ async function aiGenerateForModule() {
   if (!confirm(t('prompt.ai_chapter_confirm'))) return; // TODO: per-module confirm messages
 
   if (state.currentModule === 'worldbuilding') {
-    cacheClear(['worldbuilding']);
+    cacheClear(['m1_worldbuilding']);
     await hPost('/api/write/worldbuilding/generate', { work_id: wid, bilingual: typeof bilingual !== 'undefined' ? bilingual : true });
     loadM1();
   } else if (state.currentModule === 'outline') {
-    cacheClear(['outline']);
+    cacheClear(['m2_outline']);
     await hPost('/api/write/outline/generate?overwrite=true', { work_id: wid, num_chapters: 5 });
     loadM2();
   } else if (state.currentModule === 'foreshadowing') {
-    cacheClear(['foreshadowing']);
+    cacheClear(['m4_strategy', 'm4_cards']);
     await hPost('/api/write/foreshadowing/generate', { work_id: wid });
     loadM4();
   } else if ((state.currentModule === 'writing' || state.currentModule === 'chapters') && state.currentSectionId) {
@@ -1262,7 +1262,7 @@ async function aiPolishForModule() {
 
 async function generateOutline(workId) {
   if (!confirm(t('prompt.outline_confirm'))) return;
-  cacheClear(['outline']);
+  cacheClear(['m5_chapters']);
   await hPost('/api/write/outline/generate?overwrite=true', { work_id: workId, num_chapters: 5 });
   loadM6();
   refreshPipelineGuide(workId);
