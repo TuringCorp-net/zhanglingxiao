@@ -941,7 +941,7 @@ async function openFhCard(entityId, name) {
   if (template) {
     // 卡片格式 { name, slots: [...] } → sections 格式
     if (template.slots && !template.sections) {
-      template = { sections: [{ heading: template.name || name, level: 1, slots: template.slots }] };
+      template = { sections: [{ heading: template.name || name, level: 1, slots: template.slots }], free_content: template.free_content || '' };
     }
     showSlotEditor(template);
   }
@@ -1151,7 +1151,6 @@ async function saveModuleContent(silent) {
       console.error('[SF:save] M5 serialize failed:', e);
     }
   }
-  refreshPipelineGuide(wid);
 }
 
 async function aiGenerateForModule() {
