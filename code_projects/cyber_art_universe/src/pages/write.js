@@ -1157,7 +1157,7 @@ function capturePayload() {
     var data = serializeSlots();
     p.slots = data.slots;
     p.free_content = data.free_content;
-    if (mod === 'outline') p.sections = _templateData && _templateData.sections || [];
+    if (mod === 'outline') p.sections = [];  // 框架保存不涉及章节列表
     if (mod === 'characters') p.entityId = state.currentEntityId;
     if (mod === 'foreshadowing') p.fhId = state.currentFhId || '';
   } else if (mod === 'chapters') {
