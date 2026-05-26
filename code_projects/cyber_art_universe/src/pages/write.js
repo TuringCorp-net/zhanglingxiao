@@ -1181,12 +1181,9 @@ async function sendPayload(p) {
       await hPut('/api/write/works/' + wid + '/sections/' + p.sectionId, { title: p.sectionTitle, body: p.body });
     } else if (mod === 'characters' && p.entityId) {
       resp = await hPut('/api/write/works/' + wid + '/entities/' + p.entityId + '/card', { slots: p.slots, free_content: p.free_content });
-      // 卡片 PUT 响应 {template,rendered_md} 与列表 GET 响应 [...数组] 结构不同，不能缓存
-      // 清缓存强制下次切模块时重新 GET 列表
-      if (!(resp && resp.ok)) cacheClear(['m3_characters']);
+      // 卡片内容保存不影响 D1 实体列表（名字/类型不变），缓存无需更新
     } else if (mod === 'foreshadowing' && p.fhId) {
       resp = await hPut('/api/write/works/' + wid + '/entities/' + p.fhId + '/card', { slots: p.slots, free_content: p.free_content });
-      if (!(resp && resp.ok)) cacheClear(['m4_cards']);
     } else if (mod === 'foreshadowing' && !p.fhId) {
       resp = await hPut('/api/write/foreshadowing/' + wid, { slots: p.slots, free_content: p.free_content });
       if (resp && resp.ok) cacheSet('m4_strategy', resp);
