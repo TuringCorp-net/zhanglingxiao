@@ -1036,11 +1036,12 @@ async function openChapter(sectionId, title) {
     var cached = cacheGet('m5_intent_' + sectionId);
     var data = cached || await hGet('/api/write/draft/intent/' + state.currentWorkId + '/' + sectionId);
     if (data && !cached) cacheSet('m5_intent_' + sectionId, data);
-    if (data && data.ok && data.data.intent) {
-      showFormEditor(data.data.intent);
-      // 恢复自由编辑区内容（按章节独立）
+    // GET 响应: data.data.intent = {...}, POST 响应: data.data 本身就是 intent
+    var intentData = (data && data.data && data.data.intent) ? data.data.intent : (data && data.data);
+    if (intentData && intentData.goal !== undefined) {
+      showFormEditor(intentData);
       var freeArea = qs('#slot-free-area');
-      if (freeArea) freeArea.value = data.data.intent.free_content || '';
+      if (freeArea) freeArea.value = intentData.free_content || '';
     } else {
       showFormEditor({ goal: '', chapter_index: (title.match(/(\d+)/) || [])[1] });
       var freeArea = qs('#slot-free-area');
