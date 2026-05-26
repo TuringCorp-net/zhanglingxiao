@@ -1101,63 +1101,100 @@ function initChapterDrag() {
 // 保存逻辑：失焦即存 + 输入时防抖保存（双重保障）
 // ============================================================
 var _autoSaveTimer = null;
+var _pendingPayload = null;  // 失焦时捕获的待发送数据
 
 // 输入时防抖保存（打字过程中也保存，防止意外丢失）
 function autoSave() {
   clearTimeout(_autoSaveTimer);
-  _autoSaveTimer = setTimeout(function () { saveModuleContent(true); }, 2000);
+  _autoSaveTimer = setTimeout(function () { doSave(true); }, 2000);
 }
 
-// 失焦立即保存（切换模块/卡片/章节时，textarea 失去焦点触发）
+// 失焦时同步捕获数据，异步发送（不阻塞 click 导航）
 function saveOnBlur() {
-  clearTimeout(_autoSaveTimer);  // 取消防抖，立即保存
-  saveModuleContent(true);
-}
-
-async function saveModuleContent(silent) {
-  var wid = state.currentWorkId;
-  if (!wid) return;
-  var mod = state.currentModule;
-
-  if (mod === 'original_concept') {
-    var body = qs('#writing-editor').value;
-    await hPut('/api/write/original-concept/' + wid, { content: body });
-  } else if (mod === 'worldbuilding') {
-    var wbData = serializeSlots();
-    await hPut('/api/write/worldbuilding/' + wid, { slots: wbData.slots, free_content: wbData.free_content });
-  } else if (mod === 'outline') {
-    var olData = serializeSlots();
-    await hPut('/api/write/outline/' + wid, { outline_slots: olData.slots, sections: _templateData && _templateData.sections || [], free_content: olData.free_content });
-  } else if (mod === 'writing' && state.currentSectionId) {
-    var body = qs('#writing-editor').value;
-    await hPut('/api/write/works/' + wid + '/sections/' + state.currentSectionId, { title: state.currentSectionTitle, body: body });
-  } else if (mod === 'characters' && state.currentEntityId) {
-    var chData = serializeSlots();
-    await hPut('/api/write/works/' + wid + '/entities/' + state.currentEntityId + '/card', { slots: chData.slots, free_content: chData.free_content });
-  } else if (mod === 'foreshadowing' && state.currentFhId) {
-    // 单条伏笔卡 → entities card API
-    var fhData = serializeSlots();
-    await hPut('/api/write/works/' + wid + '/entities/' + state.currentFhId + '/card', { slots: fhData.slots, free_content: fhData.free_content });
-  } else if (mod === 'foreshadowing' && !state.currentFhId) {
-    // 策略总览 → foreshadowing.md
-    var fhData = serializeSlots();
-    await hPut('/api/write/foreshadowing/' + wid, { slots: fhData.slots, free_content: fhData.free_content });
-  } else if (mod === 'chapters' && state.currentSectionId) {
-    // M5: 表单编辑 + 自由编辑区 → 通过 POST intent 保存
-    try {
-      var intentObj = JSON.parse(serializeFormContent());
-      intentObj.work_id = wid;
-      intentObj.section_id = state.currentSectionId;
-      intentObj.chapter_index = intentObj.chapter_index || (state.currentSectionTitle.match(/(\d+)/) || [])[1];
-      // 自由编辑区内容
-      var freeArea = qs('#slot-free-area');
-      if (freeArea) intentObj.free_content = freeArea.value;
-      await hPost('/api/write/draft/intent', intentObj);
-    } catch (e) {
-      console.error('[SF:save] M5 serialize failed:', e);
-    }
+  clearTimeout(_autoSaveTimer);
+  _pendingPayload = capturePayload();
+  if (_pendingPayload) {
+    setTimeout(function () { flushPendingPayload(); }, 0);
   }
 }
+
+// 同步捕获当前编辑区数据（不依赖异步，在状态切换前完成）
+function capturePayload() {
+  var wid = state.currentWorkId;
+  var mod = state.currentModule;
+  if (!wid || !mod) return null;
+
+  var p = { wid: wid, mod: mod };
+
+  if (mod === 'original_concept') {
+    p.body = qs('#writing-editor').value;
+  } else if (mod === 'writing') {
+    p.body = qs('#writing-editor').value;
+    p.sectionId = state.currentSectionId;
+    p.sectionTitle = state.currentSectionTitle;
+  } else if (mod === 'worldbuilding' || mod === 'outline' || mod === 'characters' || mod === 'foreshadowing') {
+    var data = serializeSlots();
+    p.slots = data.slots;
+    p.free_content = data.free_content;
+    if (mod === 'outline') p.sections = _templateData && _templateData.sections || [];
+    if (mod === 'characters') p.entityId = state.currentEntityId;
+    if (mod === 'foreshadowing') p.fhId = state.currentFhId || '';
+  } else if (mod === 'chapters') {
+    p.sectionId = state.currentSectionId;
+    p.sectionTitle = state.currentSectionTitle;
+    try {
+      p.intentObj = JSON.parse(serializeFormContent());
+    } catch (e) { p.intentObj = {}; }
+    var freeArea = qs('#slot-free-area');
+    if (freeArea) p.intentObj.free_content = freeArea.value;
+  }
+  return p;
+}
+
+// 异步发送捕获的数据
+function flushPendingPayload() {
+  if (!_pendingPayload) return;
+  var p = _pendingPayload;
+  _pendingPayload = null;
+  sendPayload(p);
+}
+
+async function sendPayload(p) {
+  var wid = p.wid, mod = p.mod;
+
+  if (mod === 'original_concept') {
+    await hPut('/api/write/original-concept/' + wid, { content: p.body });
+  } else if (mod === 'worldbuilding') {
+    await hPut('/api/write/worldbuilding/' + wid, { slots: p.slots, free_content: p.free_content });
+  } else if (mod === 'outline') {
+    await hPut('/api/write/outline/' + wid, { outline_slots: p.slots, sections: p.sections, free_content: p.free_content });
+  } else if (mod === 'writing' && p.sectionId) {
+    await hPut('/api/write/works/' + wid + '/sections/' + p.sectionId, { title: p.sectionTitle, body: p.body });
+  } else if (mod === 'characters' && p.entityId) {
+    await hPut('/api/write/works/' + wid + '/entities/' + p.entityId + '/card', { slots: p.slots, free_content: p.free_content });
+  } else if (mod === 'foreshadowing' && p.fhId) {
+    await hPut('/api/write/works/' + wid + '/entities/' + p.fhId + '/card', { slots: p.slots, free_content: p.free_content });
+  } else if (mod === 'foreshadowing' && !p.fhId) {
+    await hPut('/api/write/foreshadowing/' + wid, { slots: p.slots, free_content: p.free_content });
+  } else if (mod === 'chapters' && p.sectionId) {
+    p.intentObj.work_id = wid;
+    p.intentObj.section_id = p.sectionId;
+    p.intentObj.chapter_index = p.intentObj.chapter_index || (p.sectionTitle || '').match(/(\d+)/);
+    if (Array.isArray(p.intentObj.chapter_index)) p.intentObj.chapter_index = p.intentObj.chapter_index[1];
+    await hPost('/api/write/draft/intent', p.intentObj);
+  }
+}
+
+// Ctrl+S / 手动保存时同步执行
+async function saveModuleContent(silent) {
+  clearTimeout(_autoSaveTimer);
+  _pendingPayload = null;
+  var p = capturePayload();
+  if (p) await sendPayload(p);
+}
+
+// 输入防抖 + 定时保存也用 doSave
+function doSave(silent) { saveModuleContent(silent); }
 
 async function aiGenerateForModule() {
   var wid = state.currentWorkId;
