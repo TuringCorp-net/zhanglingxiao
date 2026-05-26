@@ -461,11 +461,11 @@ function renderSlotEditor(data) {
       var secDiv = document.createElement('div');
       secDiv.className = 'slot-section';
       secDiv.dataset.level = section.level || 0;
-      // Section heading（Markdown → HTML）
+      // Section heading（Markdown → HTML，加 ## 前缀确保渲染为 h2 获得色块背景样式）
       if (section.heading) {
         var hDiv = document.createElement('div');
         hDiv.className = 'slot-framework';
-        try { hDiv.innerHTML = marked.parse(section.heading); } catch(e) { hDiv.textContent = section.heading; }
+        try { hDiv.innerHTML = marked.parse('## ' + section.heading); } catch(e) { hDiv.textContent = section.heading; }
         secDiv.appendChild(hDiv);
       }
       // Slots
@@ -474,14 +474,6 @@ function renderSlotEditor(data) {
       });
       groupsEl.appendChild(secDiv);
     });
-    // Outro
-    if (data.outro) {
-      var outroDiv = document.createElement('div');
-      outroDiv.className = 'slot-framework';
-      outroDiv.style.cssText = 'margin-top:1rem;';
-      try { outroDiv.innerHTML = marked.parse(data.outro); } catch(e) { outroDiv.textContent = data.outro; }
-      groupsEl.appendChild(outroDiv);
-    }
   }
 
   var freeArea = document.getElementById('slot-free-area');
@@ -490,18 +482,20 @@ function renderSlotEditor(data) {
   applySlotLevel();
 }
 
-// 渲染单个 slot → div.slot-item > div.slot-label + textarea.slot-textarea
+// 渲染单个 slot：有 label → 用 ### 渲染（h3 青色），hint 存入 data-hint 供 Story Elf 使用
 function renderSlotItem(parent, slot) {
   var item = document.createElement('div');
   item.className = 'slot-item';
   item.dataset.level = 'L' + (slot.level || 1);
-  // Label
-  if (slot.label || slot.hint) {
-    var lbl = document.createElement('div');
-    lbl.className = 'slot-label';
-    lbl.textContent = slot.label || slot.hint || '';
-    item.appendChild(lbl);
+
+  // 有 label 则渲染为 ### heading（h3 青色样式）
+  if (slot.label) {
+    var lblDiv = document.createElement('div');
+    lblDiv.className = 'slot-framework';
+    try { lblDiv.innerHTML = marked.parse('### ' + slot.label); } catch(e) { lblDiv.textContent = slot.label; }
+    item.appendChild(lblDiv);
   }
+
   // Textarea
   var ta = document.createElement('textarea');
   ta.className = 'slot-textarea';
@@ -593,7 +587,7 @@ function showFormEditor(intentData) {
   var fz = qs('#slot-free-zone');
   if (te) te.style.display = 'none';
   if (se) se.style.display = 'none';
-  if (fz) fz.style.display = 'none';
+  if (fz) { fz.style.display = ''; }
   if (!fe) return;
   fe.style.display = 'block';
 
@@ -935,7 +929,13 @@ async function openFhCard(entityId, name) {
   state.currentFhId = entityId;
   var data = await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
   var template = (data && data.ok && data.data && data.data.template) ? data.data.template : null;
-  if (template) showSlotEditor(template);
+  if (template) {
+    // 卡片格式 { name, slots: [...] } → sections 格式
+    if (template.slots && !template.sections) {
+      template = { sections: [{ heading: template.name || name, level: 1, slots: template.slots }] };
+    }
+    showSlotEditor(template);
+  }
   renderFhCardList();
   updateElfContext();
 }
@@ -944,7 +944,14 @@ async function openFhCard(entityId, name) {
 // M5 / M6: 章节蓝图 / 逐章编写
 // ============================================================
 async function loadM5() {
-  showTextEditor('');
+  setThreePanelMode();
+  // 显示自由编辑区（中栏），隐藏右侧槽位编辑器（M5 用表单编辑器）
+  var te = qs('#writing-editor');
+  var se = qs('#slot-editor');
+  var fz = qs('#slot-free-zone');
+  if (te) te.style.display = 'none';
+  if (se) se.style.display = 'none';
+  if (fz) fz.style.display = '';
 
   await loadChapterCardList();
   // 默认选中第一章
@@ -1034,8 +1041,13 @@ async function openChapter(sectionId, title) {
     console.log('[SF:openChapter:M5] intent response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'hasIntent=' + !!data.data.intent : 'noData');
     if (data && data.ok && data.data.intent) {
       showFormEditor(data.data.intent);
+      // 恢复自由编辑区内容（按章节独立）
+      var freeArea = qs('#slot-free-area');
+      if (freeArea) freeArea.value = data.data.intent.free_content || '';
     } else {
       showFormEditor({ goal: '', chapter_index: (title.match(/(\d+)/) || [])[1] });
+      var freeArea = qs('#slot-free-area');
+      if (freeArea) freeArea.value = '';
     }
   } else {
     // M6: 章节正文 — 自由编辑
@@ -1116,12 +1128,15 @@ async function saveModuleContent(silent) {
     var fhData = serializeSlots();
     await hPut('/api/write/foreshadowing/' + wid, { slots: fhData.slots, free_content: fhData.free_content });
   } else if (mod === 'chapters' && state.currentSectionId) {
-    // M5: 表单编辑 → 通过 POST intent 保存
+    // M5: 表单编辑 + 自由编辑区 → 通过 POST intent 保存
     try {
       var intentObj = JSON.parse(serializeFormContent());
       intentObj.work_id = wid;
       intentObj.section_id = state.currentSectionId;
       intentObj.chapter_index = intentObj.chapter_index || (state.currentSectionTitle.match(/(\d+)/) || [])[1];
+      // 自由编辑区内容
+      var freeArea = qs('#slot-free-area');
+      if (freeArea) intentObj.free_content = freeArea.value;
       await hPost('/api/write/draft/intent', intentObj);
     } catch (e) {
       console.error('[SF:save] M5 serialize failed:', e);
@@ -1354,12 +1369,13 @@ document.addEventListener('DOMContentLoaded', function () {
   loadState();
   initSplitDrag();
 
-  // slot editor / writing editor / form editor 输入时自动保存
+  // slot editor / writing editor / form editor / 自由编辑区 输入时自动保存
   // textarea 高度自适应由 CSS field-sizing: content 处理，无需 JS
   qs('#writing-editor').addEventListener('input', autoSave);
   qs('#slot-editor').addEventListener('input', function (e) {
     if (e.target.tagName === 'TEXTAREA') autoSave();
   });
+  qs('#slot-free-area').addEventListener('input', autoSave);
   document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveModuleContent(); }
   });
@@ -1371,14 +1387,32 @@ document.addEventListener('DOMContentLoaded', function () {
     slotEditor.addEventListener('focusin', function (e) {
       var ta = e.target;
       if (ta.tagName === 'TEXTAREA' && ta.dataset.hint) {
-        // 清除前一个槽位的 blur 延迟定时器，防止它杀死新的打字机
         if (_hintBlurTimer) { clearTimeout(_hintBlurTimer); _hintBlurTimer = null; }
         StoryElf.showHintBubble(ta.dataset.hint, { slotId: ta.dataset.slotId || '' });
       }
     });
     slotEditor.addEventListener('focusout', function (e) {
       if (e.target.tagName === 'TEXTAREA') {
-        // 小延迟，允许用户点击气泡内的链接
+        _hintBlurTimer = setTimeout(function () {
+          _hintBlurTimer = null;
+          StoryElf.hideHintBubble();
+        }, 150);
+      }
+    });
+  }
+
+  // 自由编辑区 hint（与槽位 hint 同样的机制）
+  var freeArea = qs('#slot-free-area');
+  if (freeArea) {
+    freeArea.addEventListener('focusin', function (e) {
+      var ta = e.target;
+      if (ta.tagName === 'TEXTAREA' && ta.dataset.hint) {
+        if (_hintBlurTimer) { clearTimeout(_hintBlurTimer); _hintBlurTimer = null; }
+        StoryElf.showHintBubble(ta.dataset.hint, { slotId: 'free-zone' });
+      }
+    });
+    freeArea.addEventListener('focusout', function (e) {
+      if (e.target.tagName === 'TEXTAREA') {
         _hintBlurTimer = setTimeout(function () {
           _hintBlurTimer = null;
           StoryElf.hideHintBubble();

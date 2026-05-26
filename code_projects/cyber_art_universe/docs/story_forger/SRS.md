@@ -32,6 +32,7 @@
 | v2.4.0 | 2026-05-21 | 模板分级渐进引导系统 SF-068~069：每个槽位带 L1/L2 level 属性，前端按用户 level 过滤可见性。双语模板定义统一化（SlotDef 单一来源）。Story Elf 作为第三大独立模块。M3/M4 模板拆分（character_card.ts / foreshadowing_card.ts），删除 entities.ts |
 | v2.4.1 | 2026-05-22 | Hint 对话泡系统 SF-072：槽位聚焦时 Story Elf 以打字机效果逐字呈现 hint markdown。与左侧聊天窗口独立并行。 |
 | v2.5.0 | 2026-05-26 | 模板系统 JSON 化：所有 LLM 输出统一为 `{"slots":{...}}` JSON 格式，Markdown 由服务端代码组装。R2 双文件存储（`.json` + `.md`）。前端从 `parseSlotTemplate` Markdown 解析切换为直接消费 JSON 结构。删除 `stripTemplateMarkers`。 |
+| v2.5.1 | 2026-05-26 | M5 意图卡新增自由编辑区（中栏），与 M1-M4 体验一致。槽位编辑器样式修复（h2 色块 + h3 青色）。伏笔卡 `{name, slots}` 格式兼容 sections 渲染。自由编辑区 Story Elf hint 支持。 |
 
 ---
 
@@ -227,9 +228,9 @@ Intent Card → Draft v0 → Consistency Check → Polish → Draft v1 (中稿)
 | SF-061 | 写作桌界面 — Pipeline 导航 + 左右分栏（左=结构化参考，右=编辑区）+ 浮动 Story Elf | Pipeline 胶囊点击切换 M0-M6 模块。左栏按模块呈现对应参考内容。右栏统一编辑器。虚线分隔可拖拽调宽（25%~65%）| ✅ 已实现 |
 | SF-062 | 左右分栏系统 — 分隔线拖拽调整比例，位置持久化 localStorage | 虚线分隔（上下留空），默认 40:60 | ✅ 已实现 |
 | SF-063 | 写作引导流程 — 页面顶部始终显示 M1→M6 流水线引导条，显示模块状态，点击跳转 | 引导条在工具栏下方始终可见。每一步根据 R2 资产判定状态 | ⏳ 待实现 |
-| SF-064 | 槽位编辑器引擎 — 模板框架只读渲染（标题/引用块/加粗），`<!-- -->` 占位符转为可编辑 textarea，`---` 分隔线以下为自由编辑区 | 解析模板 markdown → framework（只读渲染）+ slot（label + textarea）+ 自由区（大 textarea）。保存时合并三者为完整 markdown 覆盖 R2。加载时反向解析回填槽位。无槽位内容（AI 生成后）降级为全自由区 | ✅ 已实现 |
+| SF-064 | 槽位编辑器引擎（v2.5 JSON 化）— 模板框架只读渲染（标题 h2 色块/h3 青色），直接消费 API 返回的 `template.slots` JSON 渲染 textarea，中栏为独立自由编辑区 | 前端从 API `template` JSON 遍历 sections/slots 渲染 DOM。section heading 用 `marked.parse('## ')` 渲染为 h2 + 色块背景；slot label 用 `### ` 渲染为 h3 + 青色。自由编辑区为中栏独立面板，内容存储为 `free_content` 字段。不再依赖 Markdown 正则解析 | ✅ 已实现 |
 | SF-065 | 重复结构支持 — 模板中由 `---` 分隔的同类条目（如 M4 伏笔），每组独立渲染为带标题的卡片，提供 [+] 追加 / [×] 删除按钮 | M4 伏笔 #1/#2/#3 各为独立 group。点击 [+] 克隆最后一组结构（空内容）。点击 [×] 从数据与 DOM 中移除该组 | ✅ 已实现 |
-| SF-066 | M5 意图卡表单编辑器 — JSON 结构意图卡转为纵向表单输入，字段含 label + input/textarea + hint，数组字段（hooks/foreshadowing_ids/visual_keywords）逗号分隔编辑 | 13 个字段：写作目标/情绪目标/视角角色/视角策略/场景类型/开篇钩子/反转点/章末卡点/钩子/关联伏笔/风格备注/视觉关键词/镜头备注。保存时序列化为 JSON 通过 POST intent 写入 R2 | ✅ 已实现 |
+| SF-066 | M5 意图卡表单编辑器 — JSON 结构意图卡转为纵向表单输入（右栏），同时提供独立自由编辑区（中栏），自由区内容按章节独立存储 | 13 个表单字段 + 自由编辑区 textarea。自由区内容存入 intent JSON 的 `free_content` 字段。切换章节时恢复对应自由区内容。聚焦自由区时 Story Elf 弹出 hint。自动保存覆盖表单 + 自由区 | ✅ 已实现 |
 
 ---
 
@@ -336,7 +337,7 @@ works/{work_id}/{lang}/          # 多语言前缀（如 zh/ en/）
 | ❌ 已移除 | 1 |
 | 🔴 阻塞 | 0 |
 
-**总计**：51 项需求（48 已实现 + 2 待实现 + 1 已移除）。待实现：SF-056（Read 侧 AI 伴读后端）、SF-063（写作引导流程）。已移除：SF-024（冲突地图）。v2.4.0 新增：SF-068~071（模板分级 + 双语统一 + Story Elf 独立 + M3/M4 拆分）。v2.4.1 新增：SF-072（Hint 对话泡）。v2.5.0 更新：模板系统 JSON 化，R2 双文件存储，前端直接消费 JSON 结构。
+**总计**：51 项需求（48 已实现 + 2 待实现 + 1 已移除）。待实现：SF-056（Read 侧 AI 伴读后端）、SF-063（写作引导流程）。已移除：SF-024（冲突地图）。v2.4.0 新增：SF-068~071（模板分级 + 双语统一 + Story Elf 独立 + M3/M4 拆分）。v2.4.1 新增：SF-072（Hint 对话泡）。v2.5.0 更新：模板系统 JSON 化，R2 双文件存储，前端直接消费 JSON 结构。v2.5.1：M5 自由编辑区 + 样式修复。
 
 ### 实现清单
 
