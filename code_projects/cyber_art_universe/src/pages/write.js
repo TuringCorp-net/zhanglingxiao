@@ -112,13 +112,20 @@ async function refreshPipelineGuide(workId) {
     M5: checkBP(results[2]),
     M6: checkCC(results[2]),
   });
+
+  // 重新高亮当前模块（renderPipelineSkeleton 会清掉 active class）
+  var curMod = state.currentModule;
+  if (curMod) {
+    var stepEl = qs('.pipeline-step[data-module="' + curMod + '"]');
+    if (stepEl) stepEl.classList.add('active');
+  }
 }
 
 function checkOC(d) { if (!d || !d.ok || d.data.is_empty) return 'empty'; return (d.data.content || '').trim().length > 50 ? 'done' : 'in_progress'; }
-function checkWB(d) { if (!d || !d.ok || !d.data.content || d.data.is_template) return 'empty'; return d.data.content.replace(/#.*\n|>.*\n|<!--.*-->|\s/g, '').length > 200 ? 'done' : 'in_progress'; }
+function checkWB(d) { if (!d || !d.ok || !d.data.rendered_md || d.data.is_template) return 'empty'; return d.data.rendered_md.replace(/#.*\n|>.*\n|\s/g, '').length > 200 ? 'done' : 'in_progress'; }
 function checkOL(d) { if (!d || !d.ok) return 'empty'; return (d.data.sections || []).length > 0 ? 'done' : 'empty'; }
 function checkEN(d) { if (!d || !d.ok) return 'empty'; var c = (d.data || []).filter(function (e) { return e.type === 'character' || !e.type; }); return c.length === 0 ? 'empty' : c.length >= 3 ? 'done' : 'in_progress'; }
-function checkFH(d) { if (!d || !d.ok || d.data.is_template) return 'empty'; return d.data.content ? 'done' : 'empty'; }
+function checkFH(d) { if (!d || !d.ok || d.data.is_template) return 'empty'; return d.data.rendered_md ? 'done' : 'empty'; }
 function checkBP(d) { if (!d || !d.ok) return 'empty'; var s = d.data.sections || []; if (!s.length) return 'empty'; return s.filter(function (x) { return x.section_summary; }).length > 0 ? 'done' : 'in_progress'; }
 function checkCC(d) { if (!d || !d.ok) return 'empty'; var s = d.data.sections || []; if (!s.length) return 'empty'; return s.filter(function (x) { return x.word_count > 0; }).length > 0 ? 'done' : 'in_progress'; }
 
@@ -158,6 +165,8 @@ async function onWorkspaceChange() {
 // Module Switching
 // ============================================================
 async function switchModule(module) {
+  // 切模块前立即 flush 待保存内容（不等 autoSave 的 2 秒防抖）
+  if (_autoSaveTimer) { clearTimeout(_autoSaveTimer); _autoSaveTimer = null; await saveModuleContent(true); }
   state.currentModule = module;
   state.currentSectionId = null;
   state.currentSectionTitle = '';
