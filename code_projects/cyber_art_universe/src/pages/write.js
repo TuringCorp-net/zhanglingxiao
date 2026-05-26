@@ -165,7 +165,6 @@ async function onWorkspaceChange() {
 // Module Switching
 // ============================================================
 async function switchModule(module) {
-  console.log('[switchModule] to ' + module + ' from ' + state.currentModule);
   state.currentModule = module;
   state.currentSectionId = null;
   state.currentSectionTitle = '';
@@ -749,53 +748,37 @@ async function loadM1() { loadBibleModule('worldbuilding', '/api/write/worldbuil
 // M2: 主线剧情（独立实现——API 返回 outline_md 而非 content）
 // ============================================================
 async function loadM2() {
-  console.log('[SF:M2] load start, workId=' + state.currentWorkId);
   var left = qs('#split-left');
   left.innerHTML = '';
-  // 优先从缓存读取
   var cached = cacheGet('outline');
   if (!cached) left.appendChild(loadingHTML());
   var data = cached || await hGet('/api/write/outline/' + state.currentWorkId);
   if (data && !cached) cacheSet('outline', data);
-  console.log('[SF:M2] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'keys=' + Object.keys(data.data).join(',') : 'noData');
   left.innerHTML = '';
-  var outlineMd = (data && data.ok && data.data && data.data.rendered_md) ? data.data.rendered_md : '';
-  console.log('[SF:M2] rendered_md len=' + outlineMd.length + ', sections=' + (data && data.data && data.data.sections ? data.data.sections.length : 0));
-  // 左面板：轮换提示
   loadRotatingHint('m2');
 
   var template = (data && data.data && data.data.template) ? data.data.template : null;
   if (template) {
     showSlotEditor(template);
   } else {
-    console.log('[SF:M2] FAILED: no template');
     showTextEditor('');
   }
 }
 
 async function loadBibleModule(module, apiPath) {
-  console.log('[SF:M1] loadBibleModule start, module=' + module + ' path=' + apiPath);
   var left = qs('#split-left');
   left.innerHTML = '';
-  // 优先从缓存读取，命中则无需 loading
   var cached = cacheGet('worldbuilding');
   if (!cached) left.appendChild(loadingHTML());
   var data = cached || await hGet(apiPath + state.currentWorkId);
   if (data && !cached) cacheSet('worldbuilding', data);
-  console.log('[SF:M1] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'keys=' + Object.keys(data.data).join(',') : 'noData');
   left.innerHTML = '';
-  var rdMd = (data && data.ok && data.data && data.data.rendered_md) ? data.data.rendered_md : '';
-  console.log('[SF:M1] rendered_md=' + rdMd.length + ' chars, is_template=' + (data && data.data && data.data.is_template));
-  // 左面板：轮换提示
   loadRotatingHint('m1');
 
   var template = (data && data.data && data.data.template) ? data.data.template : null;
   if (template) {
-    var fc = template.free_content || '';
-    console.log('[SF:M1] template loaded, free_content=' + fc.length + ' chars');
     showSlotEditor(template);
   } else {
-    console.log('[SF:M1] FAILED: no template');
     showTextEditor('');
   }
 }
@@ -1131,13 +1114,9 @@ function fingerprint(p) {
 // 失焦时同步捕获数据，异步发送（不阻塞 click 导航）
 function saveOnBlur() {
   clearTimeout(_autoSaveTimer);
-  console.log('[saveOnBlur] fired, mod=' + state.currentModule + ' fhId=' + (state.currentFhId||''));
   _pendingPayload = capturePayload();
   if (_pendingPayload) {
-    console.log('[saveOnBlur] payload captured, slots=' + Object.keys(_pendingPayload.slots||{}).length + ' free_content=' + (_pendingPayload.free_content||'').length + ' chars');
     setTimeout(function () { flushPendingPayload(); }, 0);
-  } else {
-    console.log('[saveOnBlur] no payload (wid=' + state.currentWorkId + ' mod=' + state.currentModule + ')');
   }
 }
 
@@ -1179,7 +1158,6 @@ function flushPendingPayload() {
   if (!_pendingPayload) return;
   var p = _pendingPayload;
   _pendingPayload = null;
-  console.log('[flushPayload] sending mod=' + p.mod + ' slots=' + Object.keys(p.slots||{}).length + ' free_content=' + (p.free_content||'').length + ' chars');
   sendPayload(p);
 }
 
@@ -1222,14 +1200,10 @@ async function sendPayload(p) {
       await hPost('/api/write/draft/intent', p.intentObj);
     }
     if (resp && resp.ok) {
-      console.log('[sendPayload] OK mod=' + mod + ' (cache updated)');
-      _lastSaved = fingerprint(p);  // 保存成功后才更新指纹
-    } else if (resp) {
-      console.error('[sendPayload] FAILED mod=' + mod + ' HTTP ' + (resp.status || '?'));
-      _lastSaved = '';  // 重置指纹，允许下次重试
+      _lastSaved = fingerprint(p);
     } else {
-      console.error('[sendPayload] FAILED mod=' + mod + ' (network error)');
-      _lastSaved = '';  // 重置指纹，允许下次重试
+      console.error('[sendPayload] FAILED mod=' + mod + (resp ? ' HTTP ' + resp.status : ' network'));
+      _lastSaved = '';
     }
   } catch (e) {
     console.error('[sendPayload] FAILED mod=' + mod, e);
@@ -1485,16 +1459,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // 失焦立即保存（切换模块/卡片/章节/点击别处 → textarea 失焦 → 触发保存）
   qs('#writing-editor').addEventListener('focusout', function (e) {
-    if (e.target.tagName === 'TEXTAREA') { console.log('[focusout] writing-editor'); saveOnBlur(); }
+    if (e.target.tagName === 'TEXTAREA') saveOnBlur();
   });
   qs('#slot-editor').addEventListener('focusout', function (e) {
-    if (e.target.tagName === 'TEXTAREA') { console.log('[focusout] slot-editor'); saveOnBlur(); }
+    if (e.target.tagName === 'TEXTAREA') saveOnBlur();
   });
   qs('#slot-free-area').addEventListener('focusout', function (e) {
-    if (e.target.tagName === 'TEXTAREA') { console.log('[focusout] slot-free-area'); saveOnBlur(); }
+    if (e.target.tagName === 'TEXTAREA') saveOnBlur();
   });
   qs('#form-editor').addEventListener('focusout', function (e) {
-    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') { console.log('[focusout] form-editor'); saveOnBlur(); }
+    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') saveOnBlur();
   });
 
   document.addEventListener('keydown', function (e) {
