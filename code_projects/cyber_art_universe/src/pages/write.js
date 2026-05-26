@@ -838,10 +838,12 @@ async function renderEntityCardList() {
 
 async function openEntityCard(entityId, name) {
   state.currentEntityId = entityId;
-  var data = await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
+  var cached = cacheGet('m3_card_' + entityId);
+  var data = cached || await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
+  if (data && !cached) cacheSet('m3_card_' + entityId, data);
   var template = (data && data.ok && data.data && data.data.template) ? data.data.template : null;
   if (template) showSlotEditor(template);
-renderEntityCardList();
+  renderEntityCardList();
   updateElfContext();
 }
 
@@ -921,7 +923,9 @@ async function renderFhCardList() {
 
 async function openFhCard(entityId, name) {
   state.currentFhId = entityId;
-  var data = await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
+  var cached = cacheGet('m4_card_' + entityId);
+  var data = cached || await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
+  if (data && !cached) cacheSet('m4_card_' + entityId, data);
   var template = (data && data.ok && data.data && data.data.template) ? data.data.template : null;
   if (template) {
     // 卡片格式 { name, slots: [...] } → sections 格式
@@ -1028,11 +1032,10 @@ async function openChapter(sectionId, title) {
   state.currentSectionTitle = title;
 
   if (state.currentModule === 'chapters') {
-    // M5: 加载意图卡，格式化显示
-    var url = '/api/write/draft/intent/' + state.currentWorkId + '/' + sectionId;
-    console.log('[SF:openChapter:M5] fetching intent: ' + url);
-    var data = await hGet(url);
-    console.log('[SF:openChapter:M5] intent response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'hasIntent=' + !!data.data.intent : 'noData');
+    // M5: 加载意图卡（优先缓存）
+    var cached = cacheGet('m5_intent_' + sectionId);
+    var data = cached || await hGet('/api/write/draft/intent/' + state.currentWorkId + '/' + sectionId);
+    if (data && !cached) cacheSet('m5_intent_' + sectionId, data);
     if (data && data.ok && data.data.intent) {
       showFormEditor(data.data.intent);
       // 恢复自由编辑区内容（按章节独立）
@@ -1181,9 +1184,12 @@ async function sendPayload(p) {
       await hPut('/api/write/works/' + wid + '/sections/' + p.sectionId, { title: p.sectionTitle, body: p.body });
     } else if (mod === 'characters' && p.entityId) {
       resp = await hPut('/api/write/works/' + wid + '/entities/' + p.entityId + '/card', { slots: p.slots, free_content: p.free_content });
-      // 卡片内容保存不影响 D1 实体列表（名字/类型不变），缓存无需更新
+      if (resp && resp.ok) cacheSet('m3_card_' + p.entityId, resp);
+      else cacheClear(['m3_card_' + p.entityId]);
     } else if (mod === 'foreshadowing' && p.fhId) {
       resp = await hPut('/api/write/works/' + wid + '/entities/' + p.fhId + '/card', { slots: p.slots, free_content: p.free_content });
+      if (resp && resp.ok) cacheSet('m4_card_' + p.fhId, resp);
+      else cacheClear(['m4_card_' + p.fhId]);
     } else if (mod === 'foreshadowing' && !p.fhId) {
       resp = await hPut('/api/write/foreshadowing/' + wid, { slots: p.slots, free_content: p.free_content });
       if (resp && resp.ok) cacheSet('m4_strategy', resp);
@@ -1193,7 +1199,9 @@ async function sendPayload(p) {
       p.intentObj.section_id = p.sectionId;
       p.intentObj.chapter_index = p.intentObj.chapter_index || (p.sectionTitle || '').match(/(\d+)/);
       if (Array.isArray(p.intentObj.chapter_index)) p.intentObj.chapter_index = p.intentObj.chapter_index[1];
-      await hPost('/api/write/draft/intent', p.intentObj);
+      resp = await hPost('/api/write/draft/intent', p.intentObj);
+      if (resp && resp.ok) cacheSet('m5_intent_' + p.sectionId, resp);
+      else cacheClear(['m5_intent_' + p.sectionId]);
     }
     if (resp && resp.ok) {
       _lastSaved = fingerprint(p);
