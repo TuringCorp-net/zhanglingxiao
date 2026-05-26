@@ -32,8 +32,8 @@ async function fetchWithRetry(url, options, maxRetries, delayMs) {
 function hGet(path) {
   const sep = path.includes('?') ? '&' : '?';
   return fetchWithRetry(`${path}${sep}${langParam()}`, { headers: { 'Authorization': `Bearer ${userToken}` } })
-    .then(r => r.json())
-    .catch(err => { console.error('hGet error:', path, err); return null; });
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .catch(err => { console.error('hGet error:', path, err.message || err); return null; });
 }
 
 function hPost(path, body) {
@@ -42,8 +42,8 @@ function hPost(path, body) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${userToken}` },
     body: JSON.stringify(body),
-  }).then(r => r.json())
-    .catch(err => { console.error('hPost error:', path, err); return null; });
+  }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .catch(err => { console.error('hPost error:', path, err.message || err); return null; });
 }
 
 function hPut(path, body) {
@@ -52,8 +52,8 @@ function hPut(path, body) {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${userToken}` },
     body: JSON.stringify(body),
-  }).then(r => r.json())
-    .catch(err => { console.error('hPut error:', path, err); return null; });
+  }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .catch(err => { console.error('hPut error:', path, err.message || err); return null; });
 }
 
 function hPatch(path, body) {

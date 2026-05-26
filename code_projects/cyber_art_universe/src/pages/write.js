@@ -1219,10 +1219,19 @@ async function sendPayload(p) {
       if (Array.isArray(p.intentObj.chapter_index)) p.intentObj.chapter_index = p.intentObj.chapter_index[1];
       await hPost('/api/write/draft/intent', p.intentObj);
     }
-    console.log('[sendPayload] OK mod=' + mod + (resp ? ' (cache updated)' : ''));
-    _lastSaved = fingerprint(p);  // 保存成功后才更新指纹
+    if (resp && resp.ok) {
+      console.log('[sendPayload] OK mod=' + mod + ' (cache updated)');
+      _lastSaved = fingerprint(p);  // 保存成功后才更新指纹
+    } else if (resp) {
+      console.error('[sendPayload] FAILED mod=' + mod + ' HTTP ' + (resp.status || '?'));
+      _lastSaved = '';  // 重置指纹，允许下次重试
+    } else {
+      console.error('[sendPayload] FAILED mod=' + mod + ' (network error)');
+      _lastSaved = '';  // 重置指纹，允许下次重试
+    }
   } catch (e) {
     console.error('[sendPayload] FAILED mod=' + mod, e);
+    _lastSaved = '';
   }
 }
 
