@@ -165,8 +165,6 @@ async function onWorkspaceChange() {
 // Module Switching
 // ============================================================
 async function switchModule(module) {
-  // 切模块前立即 flush 待保存内容（不等 autoSave 的 2 秒防抖）
-  if (_autoSaveTimer) { clearTimeout(_autoSaveTimer); _autoSaveTimer = null; await saveModuleContent(true); }
   state.currentModule = module;
   state.currentSectionId = null;
   state.currentSectionTitle = '';
@@ -1100,12 +1098,20 @@ function initChapterDrag() {
 }
 
 // ============================================================
-// 编辑器操作
+// 保存逻辑：失焦即存 + 输入时防抖保存（双重保障）
 // ============================================================
 var _autoSaveTimer = null;
+
+// 输入时防抖保存（打字过程中也保存，防止意外丢失）
 function autoSave() {
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(function () { saveModuleContent(true); }, 2000);
+}
+
+// 失焦立即保存（切换模块/卡片/章节时，textarea 失去焦点触发）
+function saveOnBlur() {
+  clearTimeout(_autoSaveTimer);  // 取消防抖，立即保存
+  saveModuleContent(true);
 }
 
 async function saveModuleContent(silent) {
@@ -1377,13 +1383,31 @@ document.addEventListener('DOMContentLoaded', function () {
   loadState();
   initSplitDrag();
 
-  // slot editor / writing editor / form editor / 自由编辑区 输入时自动保存
-  // textarea 高度自适应由 CSS field-sizing: content 处理，无需 JS
+  // === 保存策略：失焦即存（主）+ 输入防抖（辅）+ Ctrl+S ===
+  // 输入时防抖保存（打字中途也存，防止浏览器崩溃丢失）
   qs('#writing-editor').addEventListener('input', autoSave);
   qs('#slot-editor').addEventListener('input', function (e) {
     if (e.target.tagName === 'TEXTAREA') autoSave();
   });
   qs('#slot-free-area').addEventListener('input', autoSave);
+  qs('#form-editor').addEventListener('input', function (e) {
+    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') autoSave();
+  });
+
+  // 失焦立即保存（切换模块/卡片/章节/点击别处 → textarea 失焦 → 触发保存）
+  qs('#writing-editor').addEventListener('focusout', function (e) {
+    if (e.target.tagName === 'TEXTAREA') saveOnBlur();
+  });
+  qs('#slot-editor').addEventListener('focusout', function (e) {
+    if (e.target.tagName === 'TEXTAREA') saveOnBlur();
+  });
+  qs('#slot-free-area').addEventListener('focusout', function (e) {
+    if (e.target.tagName === 'TEXTAREA') saveOnBlur();
+  });
+  qs('#form-editor').addEventListener('focusout', function (e) {
+    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') saveOnBlur();
+  });
+
   document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveModuleContent(); }
   });
