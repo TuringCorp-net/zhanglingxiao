@@ -1,45 +1,13 @@
 // L1: 共享类型定义
-// Scenario 配置、领域数据源定义、上下文变量类型
-
-// ============================================================
-// 领域数据源定义（纵向上下文）
-// ============================================================
-
-/** 数据源类型 */
-export type SourceType = 'r2' | 'db';
-
-/** 纵向领域定义：一条待组装的上下文数据源 */
-export interface DomainDef {
-  /** 变量名，如 world_bible、characters、outline */
-  key: string;
-  /** 数据源类型 */
-  source: SourceType;
-  /** R2 文件路径（source=r2 时），支持 {sectionId} 动态占位符 */
-  r2Path?: string;
-  /** DB 查询的表名（source=db 时） */
-  dbTable?: string;
-  /** DB 查询的额外 WHERE 条件 */
-  dbWhere?: string;
-  /** DB 查询字段映射 */
-  dbFields?: string[];
-  /** 字符串截断上限（字符数），0 = 不截断 */
-  maxChars?: number;
-  /** DB 列表上限（条数） */
-  maxItems?: number;
-}
 
 // ============================================================
 // 场景配置
 // ============================================================
 
-/** 场景配置：定义一次 Agent 调用需要哪些上下文 + 什么 prompt */
+/** 场景配置：定义一个对话场景的 id 和对应的 prompt 模板 */
 export interface ScenarioConfig {
-  /** 场景唯一标识 */
   id: string;
-  /** prompt 模板文件名（不含路径，如 'reader_companion'） */
   promptFile: string;
-  /** 纵向领域列表（从 R2/DB 拉取的内容） */
-  verticals: DomainDef[];
 }
 
 // ============================================================
@@ -62,7 +30,6 @@ export interface ContextOpts {
 
 /** assembleContext 返回的变量池 —— 供模板引擎注入 */
 export interface AgentVars {
-  // 作品元信息
   work_title: string;
   category: string;
   summary: string;
