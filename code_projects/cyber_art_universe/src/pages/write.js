@@ -799,12 +799,12 @@ async function renderEntityCardList() {
   console.log('[SF:M3] renderEntityCardList start');
   var left = qs('#split-left');
   left.innerHTML = '';
-  // 优先从缓存读取
+  // 优先从缓存读取（跳过被污染的缓存：PUT 响应格式是对象，GET 响应是数组）
   var cached = cacheGet('entities');
+  if (cached && cached.data && !Array.isArray(cached.data)) { cacheClear(['entities']); cached = null; }
   if (!cached) left.appendChild(loadingHTML());
   var data = cached || await hGet('/api/content/' + state.currentWorkId + '/entities');
   if (data && !cached) cacheSet('entities', data);
-  console.log('[SF:M3] API response:', data ? 'ok=' + data.ok : 'NULL', 'entities=' + (data && data.data ? data.data.length : 0));
   left.innerHTML = '';
   if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
@@ -873,6 +873,7 @@ async function renderFhCardList() {
   left.innerHTML = '';
   left.appendChild(loadingHTML());
   var cached = cacheGet('entities');
+  if (cached && cached.data && !Array.isArray(cached.data)) { cacheClear(['entities']); cached = null; }
   var data = cached || await hGet('/api/content/' + state.currentWorkId + '/entities');
   if (!cached && data) cacheSet('entities', data);
   left.innerHTML = '';
@@ -1182,12 +1183,10 @@ async function sendPayload(p) {
       await hPut('/api/write/works/' + wid + '/sections/' + p.sectionId, { title: p.sectionTitle, body: p.body });
     } else if (mod === 'characters' && p.entityId) {
       resp = await hPut('/api/write/works/' + wid + '/entities/' + p.entityId + '/card', { slots: p.slots, free_content: p.free_content });
-      if (resp && resp.ok) cacheSet('entities', resp);
-      else cacheClear(['entities']);
+      // 不清缓存：entity list 结构不同，cacheSet 会污染
     } else if (mod === 'foreshadowing' && p.fhId) {
       resp = await hPut('/api/write/works/' + wid + '/entities/' + p.fhId + '/card', { slots: p.slots, free_content: p.free_content });
-      if (resp && resp.ok) { cacheSet('entities', resp); cacheClear(['foreshadowing']); }
-      else cacheClear(['entities', 'foreshadowing']);
+      // 不清缓存：entity list 结构不同，cacheSet 会污染
     } else if (mod === 'foreshadowing' && !p.fhId) {
       resp = await hPut('/api/write/foreshadowing/' + wid, { slots: p.slots, free_content: p.free_content });
       if (resp && resp.ok) cacheSet('foreshadowing', resp);
