@@ -53,6 +53,7 @@ export interface TemplateJson {
   intro: string;
   sections: SectionJson[];
   outro: string;
+  free_content?: string;
 }
 
 export interface SectionJson {
@@ -383,7 +384,7 @@ export function buildCardJson(
   lang: Lang,
   userLevel: number,
   slotData?: R2SlotData | null,
-): { name: string; slots: SlotJson[] } {
+): { name: string; slots: SlotJson[]; free_content?: string } {
   const visibleSlots: SlotJson[] = slots
     .filter(s => s.level <= userLevel)
     .map(s => ({

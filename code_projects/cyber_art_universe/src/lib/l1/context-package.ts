@@ -122,16 +122,18 @@ async function readR2(env: Env, workId: string, lang: Lang, filename: string): P
 }
 
 async function buildM3Characters(env: Env, workId: string, lang: Lang): Promise<string> {
-  const entities = await env.DB.prepare(
-    "SELECT id, name, type FROM entities WHERE work_id = ? AND type != 'foreshadowing'"
-  ).bind(workId).all<{ id: string; name: string; type: string }>();
+  // V3: 从 modules 表读取角色卡列表
+  const mods = await env.DB.prepare(
+    "SELECT id, name, r2_md_key FROM modules WHERE work_id = ? AND type = 'm3_card' ORDER BY order_index ASC"
+  ).bind(workId).all<{ id: string; name: string; r2_md_key: string | null }>();
 
-  if (!entities.results?.length) return '';
+  if (!mods.results?.length) return '';
 
   // 并发拉取所有人物卡（R2 存储 clean Markdown，直接使用）
   const cards = (await Promise.all(
-    entities.results.map(async e => {
-      return readR2(env, workId, lang, `characters/${e.id}.md`);
+    mods.results.map(async m => {
+      if (!m.r2_md_key) return '';
+      return readR2(env, workId, lang, m.r2_md_key);
     })
   )).filter(Boolean);
 
@@ -139,22 +141,23 @@ async function buildM3Characters(env: Env, workId: string, lang: Lang): Promise<
 }
 
 async function buildM4Foreshadowing(env: Env, workId: string, lang: Lang): Promise<string> {
-  // 策略总览 + 伏笔列表（并发）
-  const [strategyRaw, fhEntities] = await Promise.all([
+  // V3: 从 modules 表读取伏笔策略 + 伏笔卡列表
+  const [strategyRaw, fhMods] = await Promise.all([
     readR2(env, workId, lang, 'foreshadowing.md'),
     env.DB.prepare(
-      "SELECT id, name FROM entities WHERE work_id = ? AND type = 'foreshadowing'"
-    ).bind(workId).all<{ id: string; name: string }>(),
+      "SELECT id, name, r2_md_key FROM modules WHERE work_id = ? AND type = 'm4_card' ORDER BY order_index ASC"
+    ).bind(workId).all<{ id: string; name: string; r2_md_key: string | null }>(),
   ]);
 
   const parts: string[] = [];
   if (strategyRaw) parts.push(strategyRaw);
 
   // 并发拉取所有伏笔卡（R2 存储 clean Markdown，直接使用）
-  if (fhEntities.results?.length) {
+  if (fhMods.results?.length) {
     const cards = (await Promise.all(
-      fhEntities.results.map(async e => {
-        return readR2(env, workId, lang, `foreshadowing/${e.id}.md`);
+      fhMods.results.map(async m => {
+        if (!m.r2_md_key) return '';
+        return readR2(env, workId, lang, m.r2_md_key);
       })
     )).filter(Boolean);
     parts.push(...cards);
@@ -164,42 +167,46 @@ async function buildM4Foreshadowing(env: Env, workId: string, lang: Lang): Promi
 }
 
 async function buildM5Intents(env: Env, workId: string, lang: Lang): Promise<string> {
-  // 从大纲获取章节列表
-  const outlineMd = await readR2(env, workId, lang, 'outline.md');
-  if (!outlineMd) return '';
+  // V3: 从 modules 表获取意图卡列表
+  const intentMods = await env.DB.prepare(
+    "SELECT id, name, r2_json_key FROM modules WHERE work_id = ? AND type = 'm5_intent' ORDER BY order_index ASC"
+  ).bind(workId).all<{ id: string; name: string; r2_json_key: string | null }>();
 
-  // 解析 section 引用（大纲中的章节列表从 DB sections 表获取）
-  const sections = await env.DB.prepare(
-    'SELECT id, title, section_summary, word_count, version FROM sections WHERE work_id = ? ORDER BY order_index ASC'
-  ).bind(workId).all<{
-    id: string; title: string; section_summary: string | null;
-    word_count: number; version: number;
-  }>();
-
-  if (!sections.results?.length) return '';
+  if (!intentMods.results?.length) return '';
 
   // 并发拉取所有意图卡 JSON
-  const intentFutures = sections.results.map(async (s) => {
+  const intentFutures = intentMods.results.map(async (m) => {
     let intentSummary = '';
     try {
-      const intentObj = await env.WORKS_BUCKET.get(
-        workContentPath(workId, lang, `intents/${s.id}.json`)
-      );
-      if (intentObj) {
-        const intent = await intentObj.json() as Record<string, unknown>;
-        const goal = intent.goal as Record<string, string> | undefined;
-        const parts: string[] = [];
-        if (intent.emotional_goal) parts.push(`情绪: ${intent.emotional_goal}`);
-        if (intent.pov_character) parts.push(`视角: ${intent.pov_character}`);
-        if (goal?.advance_conflict) parts.push(`推进: ${goal.advance_conflict}`);
-        if (goal?.reveal_info) parts.push(`揭示: ${goal.reveal_info}`);
-        if (intent.estimated_words) parts.push(`预估: ${intent.estimated_words}字`);
-        if (parts.length > 0) intentSummary = ' | ' + parts.join(' | ');
+      if (m.r2_json_key) {
+        const intentObj = await env.WORKS_BUCKET.get(
+          workContentPath(workId, lang, m.r2_json_key)
+        );
+        if (intentObj) {
+          const intent = await intentObj.json() as Record<string, unknown>;
+          const goal = intent.goal as Record<string, string> | undefined;
+          const parts: string[] = [];
+          if (intent.emotional_goal) parts.push(`情绪: ${intent.emotional_goal}`);
+          if (intent.pov_character) parts.push(`视角: ${intent.pov_character}`);
+          if (goal?.advance_conflict) parts.push(`推进: ${goal.advance_conflict}`);
+          if (goal?.reveal_info) parts.push(`揭示: ${goal.reveal_info}`);
+          if (intent.estimated_words) parts.push(`预估: ${intent.estimated_words}字`);
+          if (parts.length > 0) intentSummary = ' | ' + parts.join(' | ');
+        }
       }
     } catch { /* 单条意图卡读取失败，跳过 */ }
-    const statusIcon = s.word_count > 0 ? '✅' : (s.version > 0 ? '📝' : '🌱');
-    const summary = s.section_summary || '（暂无摘要）';
-    return `${statusIcon} **${s.title}** (v${s.version}, ${s.word_count || 0}字)${intentSummary}\n  ${summary}`;
+    // section_id = module_id 去掉 'm5_intent_' 前缀
+    const sectionId = m.id.replace('m5_intent_', '');
+    // 从 sections 表获取章节标题和摘要（降级）
+    const sec = await env.DB.prepare(
+      'SELECT title, section_summary, word_count, version FROM sections WHERE id = ?'
+    ).bind(sectionId).first<{ title: string; section_summary: string | null; word_count: number; version: number }>();
+    const title = sec?.title || m.name;
+    const wordCount = sec?.word_count || 0;
+    const version = sec?.version || 0;
+    const statusIcon = wordCount > 0 ? '✅' : (version > 0 ? '📝' : '🌱');
+    const summary = sec?.section_summary || '（暂无摘要）';
+    return `${statusIcon} **${title}** (v${version}, ${wordCount}字)${intentSummary}\n  ${summary}`;
   });
 
   const results = await Promise.all(intentFutures);

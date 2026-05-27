@@ -12,7 +12,7 @@ import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplat
 // 世界观设定圣经 — 结构化模板定义（单一来源，双语）
 // ============================================================
 
-const BIBLE_TEMPLATE: TemplateDef = {
+export const BIBLE_TEMPLATE: TemplateDef = {
   title: { zh: '世界观设定圣经', en: 'Setting Bible' },
   intro: {
     zh: '本文件是作品的最高约束文档。所有人物、情节、章节内容必须服从此圣经的规则。\n> 各章节标题为设定框架，内容由作者与 AI 共同填充。可版本化、可回滚。',

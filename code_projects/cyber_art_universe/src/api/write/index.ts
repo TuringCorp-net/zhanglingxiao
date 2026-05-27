@@ -18,6 +18,7 @@ import { extractHooks, generateTitles, repurposeSection } from './marketing';
 import { readOriginalConcept, updateOriginalConcept } from './original_concept';
 import { handleElfChat } from './elf_chat';
 import { readHints } from './hints';
+import { getModule, updateModule, listModules, generateModule } from './module';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -81,6 +82,20 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   if (resource === 'works' && resourceId && subResource === 'config' && !action) {
     if (request.method === 'GET') return getWorkConfig(env, resourceId);
     if (request.method === 'PUT') return updateWorkConfig(env, request, resourceId);
+  }
+
+  // ================================================================
+  // V3 统一 Module API
+  // ================================================================
+  if (resource === 'modules' && !resourceId && !subResource) {
+    if (request.method === 'GET') return listModules(env, request);
+  }
+  if (resource === 'module' && resourceId && !subResource && !subResourceId) {
+    if (request.method === 'GET') return getModule(env, request, resourceId);
+    if (request.method === 'PUT') return updateModule(env, request, resourceId);
+  }
+  if (resource === 'module' && resourceId && subResource === 'generate' && !subResourceId) {
+    if (request.method === 'POST') return generateModule(env, request, resourceId);
   }
 
   if (resource === 'worldbuilding') {

@@ -96,6 +96,23 @@ export interface Subscription {
 }
 
 // ============================================================
+// 模块（Module）— v3.0 统一数据架构
+// M0-M6 所有模块实例统一存储于此表
+// ============================================================
+export interface Module {
+  id: string;           // module_id: 'm1_worldbuilding', 'm3_card_{uuid}', etc.
+  work_id: string;
+  type: string;         // 'm0'|'m1'|'m2'|'m3_card'|'m4_strategy'|'m4_card'|'m5_intent'|'m6_chapter'
+  name: string;
+  order_index: number;
+  status: string;       // 'empty'|'in_progress'|'done'
+  r2_json_key: string;  // R2 .json 路径
+  r2_md_key: string;    // R2 .md 路径
+  created_at: string;
+  updated_at: string;
+}
+
+// ============================================================
 // 事件（Event）
 // ============================================================
 export interface Event {

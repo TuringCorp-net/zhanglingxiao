@@ -26,6 +26,7 @@
 | v2.3.0 | 2026-05-19 | 槽位编辑器：新增 §10.8 槽位编辑器架构（三态编辑器 + 模板格式规范 + 重复结构设计）。M1-M4 模板表格全面转为纵向槽位。M5 新增表单编辑器。标记格式：`<!-- hint:提示 -->` + `<!-- slot -->` + `<!-- /slot -->` 三标记分离格式 |
 | v2.4.0 | 2026-05-22 | 模板数据流全生命周期：新增 §10.9 模板数据流（TemplateDef 单一来源 → 渲染 → 解析 → 编辑 → 序列化 → R2 持久化完整循环）。Hint 对话泡数据流说明。 |
 | v2.5.0 | 2026-05-26 | 模板系统 JSON 化：LLM 输出统一为 `{"slots":{...}}` JSON 格式，Markdown 由 `renderTemplate()` 服务端组装。R2 双文件存储（`.json` 结构化数据 + `.md` clean Markdown）。前端直接消费 JSON 结构，不再依赖 `parseSlotTemplate` Markdown 解析。删除 `stripTemplateMarkers`。更新 §10.9 模板数据流。 |
+| v3.0.0 | 2026-05-27 | **统一数据架构**：系统收敛为 Module / ModuleList 两种结构。新增 `modules` D1 表统一管理 M0-M8 所有实例。API 收敛为 `/api/write/module/{id}` + `/api/write/modules` + `/api/write/module/{id}/generate` 三个端点。M0/M6 改为单槽位模板，全模块统一使用槽位编辑器（消除 text/slot 分支）。前端数据层收敛为 `loadModule`/`saveModule`/`loadModuleList`。M5 意图卡表单编辑器替换为 INTENT_TEMPLATE 槽位编辑器。Story Elf 上下文包改用 modules 表查询。缓存 key 统一为 module_id。 |
 
 ---
 
@@ -1553,11 +1554,11 @@ TemplateDef / SlotDef[]
 
 | 系统模块 | 对应 SRS ID | 说明 |
 |---------|------------|------|
-| M0 原始构想 | SF-006~007 | 自由记录灵感，无模板。Story Elf 禁止修改，外部 AI/Agent 视为作者可读写。编辑：自由编辑 |
+| M0 原始构想 | SF-006~007 | 单槽位模板（content slot），Story Elf 禁止修改，外部 AI/Agent 视为作者可读写。编辑：槽位编辑 |
 | M1 世界观引擎 | SF-010~014 | 生成/读取/更新设定圣经、约束清单、实体管理。编辑：槽位编辑 |
 | M2 主线剧情引擎 | SF-020~022 | 生成/读取/编辑大纲。节奏规划表格已转为纵向槽位。编辑：槽位编辑 |
-| M3 人物卡系统 | SF-014 | 角色/实体 CRUD（复用 CAU entities）。基本信息/关系网络/行为特征等字段已补全 `<!-- -->` 槽位。编辑：槽位编辑 |
-| M4 伏笔账本引擎 | SF-023 | 策略总览（foreshadowing.md）+ 伏笔条目 D1 entities + foreshadowing/{id}.md。与 M3 统一架构。编辑：槽位编辑 |
-| M5 章节意图卡 | SF-030 | Intent Card JSON 生成与存储。编辑：表单编辑（13字段纵向表单） |
-| M6 章节生产流水线 | SF-031~035 | Draft v0 → 校验 → 润色 → Draft v1 → 重写。编辑：自由编辑 |
-| 前端 UI | SF-060~066 | SF-061~062 写作桌界面；SF-063 引导流程；SF-064~066 槽位编辑器 |
+| M3 人物卡系统 | SF-014 | 角色/实体 CRUD。基本信息/关系网络/行为特征等字段。编辑：槽位编辑 |
+| M4 伏笔账本引擎 | SF-023 | 策略总览 + 伏笔条目（卡片模式）。编辑：槽位编辑 |
+| M5 章节意图卡 | SF-030 | INTENT_TEMPLATE 14 slot 槽位编辑器（v3.0 替代表单编辑器）。编辑：槽位编辑 |
+| M6 章节生产流水线 | SF-031~035 | Draft v0 → 校验 → 润色 → Draft v1 → 重写。单槽位模板（content slot）。编辑：槽位编辑 |
+| 前端 UI | SF-060~066 | SF-061~062 写作桌界面；SF-063 引导流程；SF-064~066 槽位编辑器（v3.0 全模块统一为槽位编辑器） |

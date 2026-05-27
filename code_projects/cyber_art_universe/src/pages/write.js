@@ -218,6 +218,53 @@ function cacheClear(keys) {
 }
 
 // ============================================================
+// V3 统一数据层 — module_id → API 映射
+// ============================================================
+function getModuleId() {
+  var wid = state.currentWorkId;
+  var mod = state.currentModule;
+  if (!wid || !mod) return null;
+  switch (mod) {
+    case 'original_concept': return 'm0_' + wid;
+    case 'worldbuilding':    return 'm1_' + wid;
+    case 'outline':          return 'm2_' + wid;
+    case 'characters':       return state.currentEntityId ? 'm3_card_' + state.currentEntityId : null;
+    case 'foreshadowing':    return state.currentFhId ? 'm4_card_' + state.currentFhId : 'm4_strategy_' + wid;
+    case 'chapters':         return state.currentSectionId ? 'm5_intent_' + state.currentSectionId : null;
+    case 'writing':          return state.currentSectionId ? 'm6_chapter_' + state.currentSectionId : null;
+    default: return null;
+  }
+}
+
+// 加载单个 Module（缓存优先）
+async function loadModule(moduleId) {
+  var cached = cacheGet(moduleId);
+  if (cached) return cached;
+  var data = await hGet('/api/write/module/' + moduleId);
+  if (data && data.ok) { cacheSet(moduleId, data); return data; }
+  return null;
+}
+
+// 保存 Module
+async function saveModule(moduleId, slots, freeContent) {
+  var body = { slots: slots || {}, free_content: freeContent || '' };
+  var resp = await hPut('/api/write/module/' + moduleId, body);
+  if (resp && resp.ok) { cacheSet(moduleId, resp); }
+  else { cacheClear([moduleId]); }
+  return resp;
+}
+
+// 加载 ModuleList
+async function loadModuleList(workId, type) {
+  var cacheKey = 'list_' + type;
+  var cached = cacheGet(cacheKey);
+  if (cached) return cached;
+  var data = await hGet('/api/write/modules?work_id=' + workId + '&type=' + type);
+  if (data && data.ok) { cacheSet(cacheKey, data); return data; }
+  return null;
+}
+
+// ============================================================
 // Rotating Hint Engine
 // ============================================================
 var _hintTimer = null;
@@ -730,13 +777,16 @@ async function loadM0() {
   left.innerHTML = '';
   loadRotatingHint('m0');
 
-  var data = cacheGet('m0_concept') || await hGet('/api/write/original-concept/' + state.currentWorkId);
-  if (data) cacheSet('m0_concept', data);
-  console.log('[SF:M0] API response:', data ? 'ok=' + data.ok : 'NULL', data && data.data ? 'hasData' : 'noData');
-  var content = (data && data.ok && data.data && data.data.content) ? data.data.content : '';
-  console.log('[SF:M0] content len=' + content.length + ', is_empty=' + (data && data.data && data.data.is_empty));
-  setTwoPanelMode();
-  showTextEditor(content);
+  var moduleId = 'm0_' + state.currentWorkId;
+  var data = await loadModule(moduleId);
+  console.log('[SF:M0] API response:', data ? 'ok=' + data.ok : 'NULL');
+  if (data && data.data && data.data.template) {
+    setThreePanelMode();
+    showSlotEditor(data.data.template);
+  } else {
+    setTwoPanelMode();
+    showTextEditor('');
+  }
 }
 
 // ============================================================
@@ -958,11 +1008,10 @@ async function loadM5() {
 }
 
 async function loadM6() {
-  setTwoPanelMode();
-  showTextEditor('');
+  setThreePanelMode();
+  showTextEditor(''); // 占位，openChapter 会切换为槽位编辑器
 
   await loadChapterCardList();
-  // 默认选中第一章
   var first = qs('#split-left .chapter-card[data-section-id]');
   if (first) first.click();
 }
@@ -1032,28 +1081,32 @@ async function openChapter(sectionId, title) {
   state.currentSectionTitle = title;
 
   if (state.currentModule === 'chapters') {
-    // M5: 加载意图卡（优先缓存）
-    var cached = cacheGet('m5_intent_' + sectionId);
-    var data = cached || await hGet('/api/write/draft/intent/' + state.currentWorkId + '/' + sectionId);
-    if (data && !cached) cacheSet('m5_intent_' + sectionId, data);
-    // GET 响应: data.data.intent = {...}, POST 响应: data.data 本身就是 intent
-    var intentData = (data && data.data && data.data.intent) ? data.data.intent : (data && data.data);
-    if (intentData && intentData.goal !== undefined) {
-      showFormEditor(intentData);
+    // M5: 意图卡 — V3 统一 API + 槽位编辑器
+    var moduleId = 'm5_intent_' + sectionId;
+    var data = await loadModule(moduleId);
+    if (data && data.data && data.data.template) {
+      showSlotEditor(data.data.template);
+      // 填充自由编辑区
       var freeArea = qs('#slot-free-area');
-      if (freeArea) freeArea.value = intentData.free_content || '';
+      if (freeArea && data.data.free_content) freeArea.value = data.data.free_content;
     } else {
-      showFormEditor({ goal: '', chapter_index: (title.match(/(\d+)/) || [])[1] });
-      var freeArea = qs('#slot-free-area');
-      if (freeArea) freeArea.value = '';
+      // 降级：空意图卡用表单编辑器（模板为空时）
+      showFormEditor({ goal: {}, chapter_index: (title.match(/(\d+)/) || [])[1] });
+      var freeArea2 = qs('#slot-free-area');
+      if (freeArea2) freeArea2.value = '';
     }
   } else {
-    // M6: 章节正文 — 自由编辑
-    var url2 = '/api/content/' + state.currentWorkId + '/sections/' + sectionId + '?mode=full';
-    console.log('[SF:openChapter:M6] fetching section: ' + url2);
-    var d = await hGet(url2);
-    console.log('[SF:openChapter:M6] section response:', d ? 'ok=' + d.ok : 'NULL', 'bodyLen=' + (d && d.ok && d.data && d.data.body ? d.data.body.length : 0));
-    showTextEditor((d && d.ok && d.data.body) ? d.data.body : '');
+    // M6: 章节正文 — V3 统一 API + 槽位编辑器
+    var moduleId6 = 'm6_chapter_' + sectionId;
+    var data6 = await loadModule(moduleId6);
+    console.log('[SF:openChapter:M6] module response:', data6 ? 'ok=' + data6.ok : 'NULL');
+    if (data6 && data6.data && data6.data.template) {
+      showSlotEditor(data6.data.template);
+      var freeArea6 = qs('#slot-free-area');
+      if (freeArea6 && data6.data.free_content) freeArea6.value = data6.data.free_content;
+    } else {
+      showTextEditor('');
+    }
   }
 
   // 刷新左侧列表以高亮当前选中
@@ -1123,37 +1176,14 @@ function saveOnBlur() {
   }
 }
 
-// 同步捕获当前编辑区数据（不依赖异步，在状态切换前完成）
+// 同步捕获当前编辑区数据（V3 统一：module_id 驱动）
 function capturePayload() {
-  var wid = state.currentWorkId;
-  var mod = state.currentModule;
-  if (!wid || !mod) return null;
+  var moduleId = getModuleId();
+  if (!moduleId) return null;
 
-  var p = { wid: wid, mod: mod };
-
-  if (mod === 'original_concept') {
-    p.body = qs('#writing-editor').value;
-  } else if (mod === 'writing') {
-    p.body = qs('#writing-editor').value;
-    p.sectionId = state.currentSectionId;
-    p.sectionTitle = state.currentSectionTitle;
-  } else if (mod === 'worldbuilding' || mod === 'outline' || mod === 'characters' || mod === 'foreshadowing') {
-    var data = serializeSlots();
-    p.slots = data.slots;
-    p.free_content = data.free_content;
-    if (mod === 'outline') p.sections = [];  // 框架保存不涉及章节列表
-    if (mod === 'characters') p.entityId = state.currentEntityId;
-    if (mod === 'foreshadowing') p.fhId = state.currentFhId || '';
-  } else if (mod === 'chapters') {
-    p.sectionId = state.currentSectionId;
-    p.sectionTitle = state.currentSectionTitle;
-    try {
-      p.intentObj = JSON.parse(serializeFormContent());
-    } catch (e) { p.intentObj = {}; }
-    var freeArea = qs('#slot-free-area');
-    if (freeArea) p.intentObj.free_content = freeArea.value;
-  }
-  return p;
+  // V3 统一：所有模块使用槽位编辑器 → serializeSlots()
+  var data = serializeSlots();
+  return { moduleId: moduleId, mod: state.currentModule, slots: data.slots, free_content: data.free_content };
 }
 
 // 异步发送捕获的数据
@@ -1164,54 +1194,18 @@ function flushPendingPayload() {
   sendPayload(p);
 }
 
+// V3 统一保存：module_id → PUT /api/write/module/{id}
 async function sendPayload(p) {
-  var wid = p.wid, mod = p.mod;
-
   try {
-    var resp = null;
-    if (mod === 'original_concept') {
-      resp = await hPut('/api/write/original-concept/' + wid, { content: p.body });
-      if (resp && resp.ok) cacheSet('m0_concept', resp);
-      else cacheClear(['m0_concept']);
-    } else if (mod === 'worldbuilding') {
-      resp = await hPut('/api/write/worldbuilding/' + wid, { slots: p.slots, free_content: p.free_content });
-      if (resp && resp.ok) cacheSet('m1_worldbuilding', resp);
-      else cacheClear(['m1_worldbuilding']);
-    } else if (mod === 'outline') {
-      resp = await hPut('/api/write/outline/' + wid, { outline_slots: p.slots, sections: p.sections, free_content: p.free_content });
-      if (resp && resp.ok) cacheSet('m2_outline', resp);
-      else cacheClear(['m2_outline']);
-    } else if (mod === 'writing' && p.sectionId) {
-      await hPut('/api/write/works/' + wid + '/sections/' + p.sectionId, { title: p.sectionTitle, body: p.body });
-    } else if (mod === 'characters' && p.entityId) {
-      resp = await hPut('/api/write/works/' + wid + '/entities/' + p.entityId + '/card', { slots: p.slots, free_content: p.free_content });
-      if (resp && resp.ok) cacheSet('m3_card_' + p.entityId, resp);
-      else cacheClear(['m3_card_' + p.entityId]);
-    } else if (mod === 'foreshadowing' && p.fhId) {
-      resp = await hPut('/api/write/works/' + wid + '/entities/' + p.fhId + '/card', { slots: p.slots, free_content: p.free_content });
-      if (resp && resp.ok) cacheSet('m4_card_' + p.fhId, resp);
-      else cacheClear(['m4_card_' + p.fhId]);
-    } else if (mod === 'foreshadowing' && !p.fhId) {
-      resp = await hPut('/api/write/foreshadowing/' + wid, { slots: p.slots, free_content: p.free_content });
-      if (resp && resp.ok) cacheSet('m4_strategy', resp);
-      else cacheClear(['m4_strategy']);
-    } else if (mod === 'chapters' && p.sectionId) {
-      p.intentObj.work_id = wid;
-      p.intentObj.section_id = p.sectionId;
-      p.intentObj.chapter_index = p.intentObj.chapter_index || (p.sectionTitle || '').match(/(\d+)/);
-      if (Array.isArray(p.intentObj.chapter_index)) p.intentObj.chapter_index = p.intentObj.chapter_index[1];
-      resp = await hPost('/api/write/draft/intent', p.intentObj);
-      if (resp && resp.ok) cacheSet('m5_intent_' + p.sectionId, resp);
-      else cacheClear(['m5_intent_' + p.sectionId]);
-    }
+    var resp = await saveModule(p.moduleId, p.slots, p.free_content);
     if (resp && resp.ok) {
       _lastSaved = fingerprint(p);
     } else {
-      console.error('[sendPayload] FAILED mod=' + mod + (resp ? ' HTTP ' + resp.status : ' network'));
+      console.error('[sendPayload] FAILED mod=' + p.mod + (resp ? ' HTTP ' + (resp.status || '') : ' network'));
       _lastSaved = '';
     }
   } catch (e) {
-    console.error('[sendPayload] FAILED mod=' + mod, e);
+    console.error('[sendPayload] FAILED mod=' + p.mod, e);
     _lastSaved = '';
   }
 }

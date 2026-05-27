@@ -33,6 +33,7 @@
 | v2.4.1 | 2026-05-22 | Hint 对话泡系统 SF-072：槽位聚焦时 Story Elf 以打字机效果逐字呈现 hint markdown。与左侧聊天窗口独立并行。 |
 | v2.5.0 | 2026-05-26 | 模板系统 JSON 化：所有 LLM 输出统一为 `{"slots":{...}}` JSON 格式，Markdown 由服务端代码组装。R2 双文件存储（`.json` + `.md`）。前端从 `parseSlotTemplate` Markdown 解析切换为直接消费 JSON 结构。删除 `stripTemplateMarkers`。 |
 | v2.5.1 | 2026-05-26 | 前端缓存架构重构：每模块/卡片独立 cache key（m0~m5），永不交叉污染。M5 自由编辑区 + 样式修复 + 伏笔卡渲染兼容。失焦即存 + 变更去重 + PUT 响应更新缓存。 |
+| v3.0.0 | 2026-05-27 | **统一数据架构重构**：M0-M8 全部统一为 Module/ModuleList 两种结构。新增 `modules` D1 表统一管理所有模块实例。API 收敛为 3 个端点（`/api/write/module/{id}`、`/api/write/modules`、`/api/write/module/{id}/generate`）。M0/M6 改为单槽位模板，所有模块统一使用槽位编辑器，消除 text/slot 编辑器分支。前端 `capturePayload`/`sendPayload` 从 6 路 if/else 收敛为统一 API 调用。Story Elf 上下文包改用 modules 表读取。 |
 
 ---
 
@@ -44,7 +45,7 @@ Story Forger 不是一个独立的应用，而是 CAU 的 **Write 面**。它与
 
 | 共享资源 | 说明 |
 |---------|------|
-| D1 数据库 | 同一套 `works`/`sections`/`entities`/`reviews` 表 |
+| D1 数据库 | 同一套 `works`/`modules`/`sections`/`entities`/`reviews` 表。`modules` 表为 v3.0 新增，统一管理 M0-M8 所有模块实例 |
 | R2 存储 | 同一套 `works/{id}/` 路径结构 |
 | 用户体系 | 未来的用户认证同时服务于读写两侧 |
 | 域名 | `CAU.turingcorp.net`，`/write.html` 为写作入口 |

@@ -18,7 +18,7 @@ import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplat
 // 伏笔账本 — 结构化模板定义（单一来源，双语）
 // ============================================================
 
-const FORESHADOWING_TEMPLATE: TemplateDef = {
+export const FORESHADOWING_TEMPLATE: TemplateDef = {
   title: { zh: '伏笔账本', en: 'Foreshadowing Ledger' },
   intro: {
     zh: '伏笔是横跨多个章节的暗线。好的伏笔让读者在回收时恍然大悟。\n> 本文档帮助你在写作前主动规划伏笔网络，而非事后扫描。\n> 每条伏笔条目通过左侧面板独立管理（新增 / 删除），点击条目在右侧编辑。',

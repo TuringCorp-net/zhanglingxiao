@@ -174,8 +174,10 @@ Story Elf 是唯一同时服务于 CAU 和 Story Forger 的模块：
 | 修改内容 | 需检查的关联模块 |
 |---------|----------------|
 | `works` 表结构 | CAU + Story Forger |
+| `modules` 表结构（v3.0 新增，统一管理 M0-M8） | Story Forger + Story Elf |
 | `entities` 表结构 | CAU + Story Forger + Story Elf |
 | 模板结构（SlotDef） | Story Forger + Story Elf |
 | API 路径 | Story Forger + Story Elf + 前端 |
+| 统一 Module API（`/api/write/module/{id}` 等，v3.0） | Story Forger + Story Elf + 前端 |
 | R2 路径结构 | 全部三个模块 |
 | `story-elf.js` 组件 | CAU + Story Forger（跨页面） |

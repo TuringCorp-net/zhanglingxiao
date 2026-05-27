@@ -12,7 +12,7 @@ import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplat
 // 长篇框架大纲 — 结构化模板定义（单一来源，双语）
 // ============================================================
 
-const OUTLINE_TEMPLATE: TemplateDef = {
+export const OUTLINE_TEMPLATE: TemplateDef = {
   title: { zh: '长篇框架大纲', en: 'Story Framework Outline' },
   intro: {
     zh: '本文件描述作品的整体叙事结构。包含主线/支线阶段划分、阶段目标、高潮点与转折点。\n> 这是作品的"骨架"，所有章节编写必须在此框架内展开。可迭代优化，但始终不违背 Setting Bible 的约束。',
