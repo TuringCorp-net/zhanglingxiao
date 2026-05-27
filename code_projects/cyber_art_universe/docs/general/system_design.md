@@ -8,6 +8,7 @@
 - **v1.1.0** (2026-05-04)：补充 AI 参与者体系与信号体系设计（经人类授权修改）
 - **v1.2.0** (2026-05-06)：基于 L1_Category 方案，works 表新增 category/creation_attribution/audience 字段；区分内部 type 与对外 category
 - **v1.3.0** (2026-05-07)：统一 status 为 draft/published/closed；Story Forger 集成进入统一项目结构（src/api/write/）
+- **v2.0.0** (2026-05-27)：V3.5 收敛完成后定稿 L0/L1/L2 垂直三层架构 + CAU/Story Forger/Story Elf/MCP 水平四模块矩阵
 
 ---
 
@@ -27,7 +28,7 @@ Cyber Art Universe 是一个 **AI 原生内容网站**，以 AI 生成内容为�
 
 技术定位：
 
-> **Markdown 语义资源树 + 内容网关 + 轻量渲染壳**
+> **L0 AI 调用 → L1 内容操作总线 → L2 工作流/呈现，挂载 CAU / Story Forger / Story Elf / MCP 四个水平模块**
 
 与 Findora 的关系：
 - Findora：电商商品内容 → Product + Tag
@@ -47,11 +48,54 @@ Cyber Art Universe 是一个 **AI 原生内容网站**，以 AI 生成内容为�
 
 ---
 
-## 三、底层架构设计
+## 三、核心架构：L0/L1/L2 垂直分层 × 水平业务模块
 
-本项目坚持"AI Agent 原生友好"的设计原则，所有对外数据接口都考虑 AI 的使用场景。
+### 3.1 设计原则
 
-### 3.1 内容存储架构
+系统采用**垂直三层 × 水平四模块**的矩阵式架构。垂直方向按职责分层，水平方向按业务场景分模块。
+垂直三层是所有水平模块的共享基础设施，水平模块只关注自己的业务逻辑。
+
+```
+                       CAU (Read)       Story Forger      Story Elf         MCP (Agent)
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║  L2  工作流/呈现   目录/章节/实体     generate→check      analyze→suggest   工具调用  ║
+║                    阅读/渲染          →polish→draft      一致性校验        resources ║
+║                    "只读不写"         "先A后B条件分支"     "先读后推"        "读写均可" ║
+╠══════════════════════════════════════════════════════════════════════════════════════╣
+║  L1  内容操作总线   work-content.ts   template.ts         context-package.ts        ║
+║                    version.ts         diff.ts                                       ║
+║                    "同一套数据存取和变换，四个 L2 模块共用"                             ║
+╠══════════════════════════════════════════════════════════════════════════════════════╣
+║  L0  AI 调用       callAI() — Cloudflare AI Gateway BYOK                            ║
+║                    "模型怎么调、结果怎么解析——对上层完全透明"                           ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+**各层职责边界**：
+
+| 层 | 职责 | 不做什么 |
+|----|------|---------|
+| **L0** AI 调用 | 模型调用、重试、超时、JSON 模式解析 | 不知道"世界观""槽位""章节"等业务概念 |
+| **L1** 内容操作 | R2/D1 读写、模板定义与渲染、槽位组装、上下文包、版本历史、diff 对比 | 不调 AI 模型、不编排流程 |
+| **L2** 工作流/呈现 | 工作流编排（generate→check→polish）、前端内容呈现、MCP 工具暴露 | 不直接读写 R2、不直接调模型 |
+
+**四个水平模块**：
+
+| 模块 | L2 职责 | 数据流向 | 复杂度 |
+|------|---------|---------|--------|
+| **CAU** (Read) | 作品目录、章节阅读、实体浏览 | 纯消费 L1 读取接口 | 最轻 |
+| **Story Forger** | 创作流水线（generate→check→polish） | 读写 L1，人+AI 协作 | 中等 |
+| **Story Elf** | Context-aware 辅助 AI（分析→建议→校验） | 读 L1 上下文包，建议写回 slots | 中等 |
+| **MCP** | Agent 工具暴露（REST 与 MCP 共用 handler） | 读写 L1，与人类同权 | 轻量 |
+
+**关键设计决策**：
+
+- **L1 是内容操作总线**：CAU 读小说、Agent 读章节、Story Elf 读上下文包，走的是**完全相同的 L1 读取路径**。区别仅在于 L2 拿到数据后怎么用——CAU 渲染成 HTML，Agent 拿 Markdown 原文，Story Elf 注入 system prompt
+- **L2 不直接碰存储**：所有 R2/D1 操作封装在 L1 函数中。L2 调用 `saveModule()` 而不是 `env.WORKS_BUCKET.put()`
+- **L0 对业务透明**：`callAI()` 不知道调用者的身份——Story Forger 的 generate 和 Story Elf 的 analyze 用同一个 L0 入口
+- **CAU 和 Agent 共享内容源**：同一篇小说的同一章，人类在前端看到的 HTML 和 Agent 通过 MCP 拿到的 Markdown，来自同一个 R2 文件
+
+### 3.2 内容存储架构
 
 ```
 D1（结构化元数据）
@@ -85,7 +129,7 @@ R2（Markdown 资源）
         └── timeline.md（时间线）
 ```
 
-### 3.2 D1 表结构设计
+### 3.3 D1 表结构设计
 
 #### works 表（作品主表）
 
@@ -398,11 +442,18 @@ bucket_name = "cyber-art-works"
 
 ## 十、核心设计原则
 
-1. **内容优先**：Markdown 资源是本体，API 是暴露层
-2. **多分辨率访问**：同一内容支持 Catalog → Metadata → Outline → Section → Chunk 多级读取
-3. **增量更新**：支持增量读取，不强迫 Agent 全量重读
-4. **事件驱动**：通过事件订阅实现 push 机制
-5. **检索与推理分离**：站点负责 retrieval，Agent 负责 reasoning
+### 架构原则
+
+1. **L0/L1/L2 垂直分层，水平模块挂载**：L0 管 AI 调用、L1 管内容操作、L2 管工作流/呈现。CAU / Story Forger / Story Elf / MCP 是四个水平模块，共享同一套 L0+L1 基础设施
+2. **L1 是内容操作总线**：所有 R2/D1 读写、模板渲染、上下文组装、版本管理封装在 L1。L2 不直接碰存储，L0 不感知业务
+3. **人类和 Agent 共享同一内容源**：同一篇章节，人类前端读到的 HTML 和 Agent MCP 拿到的 Markdown 来自同一个 R2 文件、同一套 L1 读取函数
+
+### 内容原则
+
+4. **多分辨率访问**：同一内容支持 Catalog → Metadata → Outline → Section → Chunk 多级读取
+5. **增量更新**：支持增量读取，不强迫 Agent 全量重读
+6. **事件驱动**：通过事件订阅实现 push 机制
+7. **检索与推理分离**：站点负责 retrieval，Agent 负责 reasoning
 
 ---
 
