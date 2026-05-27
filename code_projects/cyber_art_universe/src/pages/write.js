@@ -780,13 +780,10 @@ async function loadM0() {
   var moduleId = 'm0_' + state.currentWorkId;
   var data = await loadModule(moduleId);
   console.log('[SF:M0] API response:', data ? 'ok=' + data.ok : 'NULL');
-  if (data && data.data && data.data.template) {
-    setThreePanelMode();
-    showSlotEditor(data.data.template);
-  } else {
-    setTwoPanelMode();
-    showTextEditor('');
-  }
+  // M0 单槽位 → 两栏 + 纯文本编辑
+  var content = (data && data.data && data.data.slots && data.data.slots.content) ? data.data.slots.content : '';
+  setTwoPanelMode();
+  showTextEditor(content);
 }
 
 // ============================================================
@@ -1008,8 +1005,8 @@ async function loadM5() {
 }
 
 async function loadM6() {
-  setThreePanelMode();
-  showTextEditor(''); // 占位，openChapter 会切换为槽位编辑器
+  setTwoPanelMode();
+  showTextEditor(''); // 占位，openChapter 会填入内容
 
   await loadChapterCardList();
   var first = qs('#split-left .chapter-card[data-section-id]');
@@ -1096,17 +1093,13 @@ async function openChapter(sectionId, title) {
       if (freeArea2) freeArea2.value = '';
     }
   } else {
-    // M6: 章节正文 — V3 统一 API + 槽位编辑器
+    // M6: 章节正文 — 单槽位，两栏 + 纯文本编辑
     var moduleId6 = 'm6_chapter_' + sectionId;
     var data6 = await loadModule(moduleId6);
     console.log('[SF:openChapter:M6] module response:', data6 ? 'ok=' + data6.ok : 'NULL');
-    if (data6 && data6.data && data6.data.template) {
-      showSlotEditor(data6.data.template);
-      var freeArea6 = qs('#slot-free-area');
-      if (freeArea6 && data6.data.free_content) freeArea6.value = data6.data.free_content;
-    } else {
-      showTextEditor('');
-    }
+    var chapterContent = (data6 && data6.data && data6.data.slots && data6.data.slots.content) ? data6.data.slots.content : '';
+    setTwoPanelMode();
+    showTextEditor(chapterContent);
   }
 
   // 刷新左侧列表以高亮当前选中
