@@ -18,7 +18,7 @@ import { extractHooks, generateTitles, repurposeSection } from './marketing';
 import { readOriginalConcept, updateOriginalConcept } from './original_concept';
 import { handleElfChat } from './elf_chat';
 import { readHints } from './hints';
-import { getModule, updateModule, listModules, generateModule, migrateM5Intents } from './module';
+import { getModule, updateModule, listModules, generateModule } from './module';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -96,11 +96,6 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   }
   if (resource === 'module' && resourceId && subResource === 'generate' && !subResourceId) {
     if (request.method === 'POST') return generateModule(env, request, resourceId);
-  }
-
-  // M5 Intent 数据迁移（旧嵌套 JSON → {slots:{...}}）
-  if (resource === 'admin' && resourceId === 'migrate-intents' && !subResource) {
-    if (request.method === 'POST') return migrateM5Intents(env, request);
   }
 
   if (resource === 'worldbuilding') {
