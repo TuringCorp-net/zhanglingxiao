@@ -1187,6 +1187,7 @@ function saveOnBlur() {
 // 同步捕获当前编辑区数据（V3 统一：module_id 驱动）
 function capturePayload() {
   var moduleId = getModuleId();
+  if (!moduleId) return null;
 
   var data = serializeSlots();
   return { moduleId: moduleId, mod: state.currentModule, slots: data.slots, free_content: data.free_content };
