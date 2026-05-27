@@ -88,19 +88,13 @@ async function refreshPipelineGuide(workId) {
   guide.style.display = 'block';
   renderPipelineSkeleton(el, workId);
 
-  // V3: 一次性获取所有模块列表 → 用于 pipeline 状态指示器
+  // V3: 获取模块列表 → 用于 pipeline 状态指示器（不预加载模块内容，按需加载）
   var allMods = await loadModuleList(workId);
   var byType = {};
   (allMods && allMods.data && allMods.data.modules || []).forEach(function (m) {
     byType[m.type] = byType[m.type] || [];
     byType[m.type].push(m);
   });
-
-  // 预热单例模块缓存（await 确保完成后才响应用户交互，避免竞态覆盖保存数据）
-  var singletons = ['m0', 'm1', 'm2', 'm4_strategy'];
-  await Promise.all(singletons.map(function (t) {
-    return loadModule(t + '_' + workId);
-  }));
 
   // 根据 modules 表 status 字段更新 pipeline 状态
   function statusOf(type) {
