@@ -6,7 +6,7 @@ import { callAI } from '../../lib/ai';
 import { renderTemplate as renderText } from '../../lib/l1/render';
 import worldbuildingGenMd from '../../lib/l1/prompts/tools/worldbuilding_gen.md';
 import { workContentPath, SUPPORTED_LANGS, DEFAULT_BILINGUAL, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
-import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/template';
+import { renderTemplate, renderTemplateAsJson, extractTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/template';
 
 // ============================================================
 // 世界观设定圣经 — 结构化模板定义（单一来源，双语）
@@ -199,49 +199,9 @@ export async function generateWorldbuilding(env: Env, request: Request): Promise
 // ============================================================
 
 export async function readWorldbuilding(env: Env, request: Request, workId: string): Promise<Response> {
-  const lang = extractLang(request);
-
-  // 读 JSON 数据
-  let slotData: R2SlotData | null = null;
-  const jsonObj = await env.WORKS_BUCKET.get(bibleJsonPath(workId, lang));
-  if (jsonObj) {
-    try { slotData = JSON.parse(await jsonObj.text()) as R2SlotData; } catch { /* ignore */ }
-  }
-
-  // 读 Markdown 视图
-  let renderedMd = '';
-  const mdObj = await env.WORKS_BUCKET.get(bibleMdPath(workId, lang));
-  if (mdObj) renderedMd = await mdObj.text();
-
-  // 若没有 JSON 数据，返回空模板
-  if (!slotData && !renderedMd) {
-    const emptyMd = renderTemplate(BIBLE_TEMPLATE, lang, 2);
-    const template = buildTemplateJson(BIBLE_TEMPLATE, lang, 2, null);
-    return new Response(JSON.stringify(jsonSuccess({
-      work_id: workId,
-      lang,
-      template,
-      rendered_md: emptyMd,
-      is_template: true,
-      message: lang === 'en'
-        ? 'Setting Bible not yet filled. Below is the framework. Please fill in section by section, or use AI generation.'
-        : '世界观尚未填充，以下为设定框架。请按章节标题逐步填写，或使用 AI 生成。',
-    })), {
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const template = buildTemplateJson(BIBLE_TEMPLATE, lang, 2, slotData);
-
-  return new Response(JSON.stringify(jsonSuccess({
-    work_id: workId,
-    lang,
-    template,
-    rendered_md: renderedMd,
-    is_template: false,
-  })), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  // V3: 委托到统一 Module API
+  const { getModule } = await import('./module');
+  return getModule(env, request, `m1_${workId}`);
 }
 
 // ============================================================
@@ -249,48 +209,9 @@ export async function readWorldbuilding(env: Env, request: Request, workId: stri
 // ============================================================
 
 export async function updateWorldbuilding(env: Env, request: Request, workId: string): Promise<Response> {
-  const lang = extractLang(request);
-  const body = await request.json() as { slots?: Record<string, string>; free_content?: string };
-  if (!body.slots || typeof body.slots !== 'object') {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'slots object is required')), {
-      status: 400, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // 验证 work 存在
-  const work = await env.DB.prepare('SELECT id FROM works WHERE id = ?').bind(workId).first();
-  if (!work) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
-      status: 404, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const slotData: R2SlotData = { slots: body.slots };
-  if (body.free_content) slotData.free_content = body.free_content;
-
-  let renderedMd = renderTemplate(BIBLE_TEMPLATE, lang, 2, { prefills: body.slots, cleanOutput: true });
-  // 拼接自由编辑区
-  if (body.free_content) {
-    renderedMd = renderedMd.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + body.free_content.trim() + '\n');
-  }
-
-  await writeBible(env, workId, lang, slotData, renderedMd);
-
-  const constraints = extractConstraintsFromSlots(body.slots);
-  await env.WORKS_BUCKET.put(workContentPath(workId, lang, 'constraints.json'), JSON.stringify(constraints, null, 2), {
-    httpMetadata: { contentType: 'application/json' },
-  });
-
-  const template = buildTemplateJson(BIBLE_TEMPLATE, lang, 2, slotData);
-
-  return new Response(JSON.stringify(jsonSuccess({
-    work_id: workId, lang, updated: true,
-    template,
-    rendered_md: renderedMd,
-    constraints,
-  })), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  // V3: 委托到统一 Module API（三文件物理隔离：.json + .free.md + .md）
+  const { updateModule } = await import('./module');
+  return updateModule(env, request, `m1_${workId}`);
 }
 
 // ============================================================

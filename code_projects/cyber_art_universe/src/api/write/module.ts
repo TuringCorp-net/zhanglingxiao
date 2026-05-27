@@ -177,66 +177,6 @@ async function readR2Text(env: Env, key: string): Promise<string> {
 }
 
 // ============================================================
-// M5 intent ↔ slots 转换（不涉及 free_content）
-// ============================================================
-function intentToSlots(intent: Record<string, unknown>): Record<string, string> {
-  const slots: Record<string, string> = {};
-  const goal = intent.goal as Record<string, string> | undefined;
-  if (goal) {
-    if (goal.advance_conflict) slots.goal_advance_conflict = goal.advance_conflict;
-    if (goal.reveal_info) slots.goal_reveal_info = goal.reveal_info;
-    if (goal.create_suspense) slots.goal_create_suspense = goal.create_suspense;
-  }
-  const structure = intent.structure as Record<string, string> | undefined;
-  if (structure) {
-    if (structure.opening_hook) slots.structure_opening = structure.opening_hook;
-    if (structure.reversal_point) slots.structure_reversal = structure.reversal_point;
-    if (structure.cliffhanger) slots.structure_cliffhanger = structure.cliffhanger;
-  }
-  if (intent.emotional_goal) slots.emotional_goal = String(intent.emotional_goal);
-  if (intent.pov_character) slots.pov_character = String(intent.pov_character);
-  if (intent.pov_strategy) slots.pov_strategy = String(intent.pov_strategy);
-  if (intent.scene_type) slots.scene_type = String(intent.scene_type);
-  if (intent.style_notes) slots.style_notes = String(intent.style_notes);
-  if (intent.estimated_words) slots.estimated_words = String(intent.estimated_words);
-  const fh = intent.foreshadowing_triggered as Array<{ hook_id: string; action: string }> | undefined;
-  if (fh?.length) slots.foreshadowing_triggered = fh.map(x => `${x.hook_id}:${x.action}`).join(', ');
-  const chars = intent.characters_involved as string[] | undefined;
-  if (chars?.length) slots.characters_involved = chars.join(', ');
-  return slots;
-}
-
-function slotsToIntent(slots: Record<string, string>): Record<string, unknown> {
-  const intent: Record<string, unknown> = {};
-  const goal: Record<string, string> = {};
-  if (slots.goal_advance_conflict) goal.advance_conflict = slots.goal_advance_conflict;
-  if (slots.goal_reveal_info) goal.reveal_info = slots.goal_reveal_info;
-  if (slots.goal_create_suspense) goal.create_suspense = slots.goal_create_suspense;
-  if (Object.keys(goal).length > 0) intent.goal = goal;
-  const structure: Record<string, string> = {};
-  if (slots.structure_opening) structure.opening_hook = slots.structure_opening;
-  if (slots.structure_reversal) structure.reversal_point = slots.structure_reversal;
-  if (slots.structure_cliffhanger) structure.cliffhanger = slots.structure_cliffhanger;
-  if (Object.keys(structure).length > 0) intent.structure = structure;
-  if (slots.emotional_goal) intent.emotional_goal = slots.emotional_goal;
-  if (slots.pov_character) intent.pov_character = slots.pov_character;
-  if (slots.pov_strategy) intent.pov_strategy = slots.pov_strategy;
-  if (slots.scene_type) intent.scene_type = slots.scene_type;
-  if (slots.style_notes) intent.style_notes = slots.style_notes;
-  if (slots.estimated_words) intent.estimated_words = parseInt(String(slots.estimated_words), 10) || null;
-  const fhRaw = slots.foreshadowing_triggered;
-  if (fhRaw) {
-    intent.foreshadowing_triggered = fhRaw.split(/[,;，；]/).map(s => {
-      const pair = s.trim().split(':');
-      return { hook_id: (pair[0] || '').trim(), action: (pair[1] || 'plant').trim() };
-    }).filter(x => x.hook_id);
-  }
-  const charsRaw = slots.characters_involved;
-  if (charsRaw) intent.characters_involved = charsRaw.split(/[,;，；]/).map(s => s.trim()).filter(Boolean);
-  return intent;
-}
-
-// ============================================================
 // GET /api/write/module/{module_id}
 // ============================================================
 export async function getModule(env: Env, request: Request, moduleId: string): Promise<Response> {
@@ -274,35 +214,6 @@ export async function getModule(env: Env, request: Request, moduleId: string): P
     readR2Text(env, mdKey),
     readR2Text(env, freeKey),
   ]);
-
-  // M5 intent 特殊处理：嵌套 JSON → 平铺 slots
-  if (mod.type === 'm5_intent') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rawObj: any = slotData;
-    let resolved: R2SlotData;
-    if (rawObj && rawObj.slots) {
-      resolved = rawObj as R2SlotData;
-    } else if (rawObj) {
-      // 旧格式兼容：嵌套 intent JSON
-      resolved = { slots: intentToSlots(rawObj as Record<string, unknown>) };
-    } else {
-      resolved = { slots: {} };
-    }
-    const template = buildTemplateJson(INTENT_TEMPLATE, lang, 2, resolved);
-    const renderedMd = renderTemplate(INTENT_TEMPLATE, lang, 2, {
-      prefills: resolved.slots, cleanOutput: true,
-    });
-    return new Response(JSON.stringify(jsonSuccess({
-      module_id: mod.id, work_id: mod.work_id, type: mod.type,
-      name: mod.name, order_index: mod.order_index, status: mod.status,
-      editor_type: 'slot',
-      template,
-      slots: resolved.slots,
-      free_content: freeContent,
-      rendered_md: renderedMd,
-      is_template: !rawObj && !freeContent,
-    })), { headers: { 'Content-Type': 'application/json' } });
-  }
 
   // 卡片模式（M4_card）
   if (cfg.isCard && cfg.cardSlots) {
@@ -417,33 +328,6 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
 
   // ---- 写 slots → .json（独立文件，永远不碰 .free.md） ----
   const slots = hasSlots ? body.slots! : {};
-
-  // M5 intent 特殊处理：平铺 slots → 嵌套 JSON
-  if (mod.type === 'm5_intent') {
-    if (hasSlots) {
-      const intentObj = slotsToIntent(slots);
-      intentObj.work_id = mod.work_id;
-      intentObj.section_id = mod.id.replace('m5_intent_', '');
-      await env.WORKS_BUCKET.put(jsonKey, JSON.stringify(intentObj, null, 2), {
-        httpMetadata: { contentType: 'application/json' },
-      });
-    }
-    await touchModule(env, moduleId);
-
-    const slotData: R2SlotData = { slots };
-    const renderedMd = renderTemplate(INTENT_TEMPLATE, lang, 2, {
-      prefills: slots, cleanOutput: true,
-    });
-    const template = buildTemplateJson(INTENT_TEMPLATE, lang, 2, slotData);
-
-    return new Response(JSON.stringify(jsonSuccess({
-      module_id: moduleId, lang, saved: true,
-      template,
-      slots,
-      free_content: currentFreeContent,
-      rendered_md: renderedMd,
-    })), { headers: { 'Content-Type': 'application/json' } });
-  }
 
   // ---- 写 slots .json ----
   if (hasSlots && jsonKey) {

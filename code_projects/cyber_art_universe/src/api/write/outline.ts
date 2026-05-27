@@ -210,126 +210,14 @@ export async function generateOutline(env: Env, request: Request): Promise<Respo
 
 // GET /api/write/outline/{work_id}?lang=zh|en
 export async function readOutline(env: Env, request: Request, workId: string): Promise<Response> {
-  const lang = extractLang(request);
-  const sections = await env.DB.prepare(
-    'SELECT id, title, order_index, section_summary, word_count, entities_involved, version FROM sections WHERE work_id = ? ORDER BY order_index'
-  ).bind(workId).all<Record<string, unknown>>();
-
-  // 读 outline JSON 和 MD
-  let slotData: R2SlotData | null = null;
-  const jsonObj = await env.WORKS_BUCKET.get(outlineJsonPath(workId, lang));
-  if (jsonObj) {
-    try { slotData = JSON.parse(await jsonObj.text()) as R2SlotData; } catch { /* ignore */ }
-  }
-
-  let outlineMd = '';
-  const mdObj = await env.WORKS_BUCKET.get(workContentPath(workId, lang, 'outline.md'));
-  if (mdObj) outlineMd = await mdObj.text();
-
-  // 如果没有任何章节且没有 JSON 数据，返回空模板
-  if ((sections.results || []).length === 0 && !slotData && !outlineMd) {
-    const emptyMd = renderTemplate(OUTLINE_TEMPLATE, lang, 2);
-    const template = buildTemplateJson(OUTLINE_TEMPLATE, lang, 2, null);
-    return new Response(JSON.stringify(jsonSuccess({
-      work_id: workId,
-      lang,
-      sections: [],
-      template,
-      rendered_md: emptyMd,
-      is_template: true,
-      message: lang === 'en'
-        ? 'Story framework not yet created. Below is the template. Please fill in or use AI generation.'
-        : '长篇框架尚未创建，以下为设定模板。请按章节标题逐步填写，或使用 AI 生成。',
-    })), {
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // 如果没有 MD 但有 JSON，重新渲染
-  if (!outlineMd && slotData) {
-    outlineMd = renderTemplate(OUTLINE_TEMPLATE, lang, 2, { prefills: slotData.slots, cleanOutput: true });
-  }
-
-  const template = buildTemplateJson(OUTLINE_TEMPLATE, lang, 2, slotData);
-
-  return new Response(JSON.stringify(jsonSuccess({
-    work_id: workId,
-    lang,
-    sections: (sections.results || []).map(s => ({
-      ...s,
-      entities_involved: typeof s.entities_involved === 'string' ? JSON.parse(s.entities_involved) : [],
-    })),
-    template,
-    rendered_md: outlineMd,
-  })), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  // V3: 委托到统一 Module API
+  const { getModule } = await import('./module');
+  return getModule(env, request, `m2_${workId}`);
 }
 
 // PUT /api/write/outline/{work_id}
 export async function updateOutline(env: Env, request: Request, workId: string): Promise<Response> {
-  const lang = extractLang(request);
-  const body = await request.json() as {
-    sections?: Array<{ id?: string; title: string; order_index: number; section_summary?: string }>;
-    outline_slots?: Record<string, string>;
-    free_content?: string;
-  };
-  if (!body.sections || !Array.isArray(body.sections)) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'sections array is required')), {
-      status: 400, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // 验证 work 存在
-  const work = await env.DB.prepare('SELECT id FROM works WHERE id = ?').bind(workId).first();
-  if (!work) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
-      status: 404, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const now = new Date().toISOString();
-
-  // 如果提供了 outline_slots，写 R2 双文件
-  if (body.outline_slots && typeof body.outline_slots === 'object') {
-    const slotData: R2SlotData = { slots: body.outline_slots };
-    if (body.free_content) slotData.free_content = body.free_content;
-
-    let outlineMd = renderTemplate(OUTLINE_TEMPLATE, lang, 2, { prefills: body.outline_slots, cleanOutput: true });
-    if (body.free_content) {
-      outlineMd = outlineMd.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + body.free_content.trim() + '\n');
-    }
-
-    await env.WORKS_BUCKET.put(outlineJsonPath(workId, lang), JSON.stringify(slotData, null, 2), {
-      httpMetadata: { contentType: 'application/json' },
-    });
-    await writeOutline(env, workId, outlineMd, lang);
-  }
-
-  // 更新 sections（仅在传入有效章节数据时）
-  if (body.sections && Array.isArray(body.sections) && body.sections.length > 0 && body.sections[0].id) {
-    for (const s of body.sections) {
-      if (s.id) {
-        await env.DB.prepare(
-          'UPDATE sections SET title = ?, order_index = ?, section_summary = ?, updated_at = ? WHERE id = ? AND work_id = ?'
-        ).bind(s.title, s.order_index, s.section_summary || null, now, s.id, workId).run();
-      }
-    }
-  }
-
-  // 读取最新的 JSON 和 MD 构造完整响应（与 GET 一致）
-  let slotData: R2SlotData | null = null;
-  const jsonObj = await env.WORKS_BUCKET.get(outlineJsonPath(workId, lang));
-  if (jsonObj) {
-    try { slotData = JSON.parse(await jsonObj.text()) as R2SlotData; } catch { /* ignore */ }
-  }
-  const template = buildTemplateJson(OUTLINE_TEMPLATE, lang, 2, slotData);
-
-  let outlineMd = '';
-  const mdObj = await env.WORKS_BUCKET.get(workContentPath(workId, lang, 'outline.md'));
-  if (mdObj) outlineMd = await mdObj.text();
-
-  return new Response(JSON.stringify(jsonSuccess({ work_id: workId, lang, updated: true, template, rendered_md: outlineMd })), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  // V3: 委托到统一 Module API（三文件物理隔离：.json + .free.md + .md）
+  const { updateModule } = await import('./module');
+  return updateModule(env, request, `m2_${workId}`);
 }

@@ -370,12 +370,13 @@ export function buildTemplateJson(
     intro: tmpl.intro[lang],
     sections,
     outro: tmpl.outro[lang],
-    free_content: slotData?.free_content || '',
+    free_content: '',
   };
 }
 
 /**
  * 将卡片槽位与数据组装为前端 JSON 结构。
+ * 注意：free_content 来自独立 .free.md 文件，不由 slotData 传入。
  */
 export function buildCardJson(
   name: string,
@@ -394,5 +395,5 @@ export function buildCardJson(
       content: slotData?.slots?.[s.id] || '',
     }));
 
-  return { name, slots: visibleSlots, free_content: slotData?.free_content || '' };
+  return { name, slots: visibleSlots, free_content: '' };
 }

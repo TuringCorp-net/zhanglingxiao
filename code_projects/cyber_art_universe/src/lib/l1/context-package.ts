@@ -174,7 +174,7 @@ async function buildM5Intents(env: Env, workId: string, lang: Lang): Promise<str
 
   if (!intentMods.results?.length) return '';
 
-  // 并发拉取所有意图卡 JSON
+  // 并发拉取所有意图卡 JSON（统一 {slots: {...}} 格式）
   const intentFutures = intentMods.results.map(async (m) => {
     let intentSummary = '';
     try {
@@ -183,30 +183,22 @@ async function buildM5Intents(env: Env, workId: string, lang: Lang): Promise<str
           workContentPath(workId, lang, m.r2_json_key)
         );
         if (intentObj) {
-          const intent = await intentObj.json() as Record<string, unknown>;
-          const goal = intent.goal as Record<string, string> | undefined;
+          const raw = await intentObj.json() as Record<string, unknown>;
+          const slots = (raw.slots || raw) as Record<string, string>;
           const parts: string[] = [];
-          if (intent.emotional_goal) parts.push(`情绪: ${intent.emotional_goal}`);
-          if (intent.pov_character) parts.push(`视角: ${intent.pov_character}`);
-          if (goal?.advance_conflict) parts.push(`推进: ${goal.advance_conflict}`);
-          if (goal?.reveal_info) parts.push(`揭示: ${goal.reveal_info}`);
-          if (intent.estimated_words) parts.push(`预估: ${intent.estimated_words}字`);
+          if (slots.emotional_goal) parts.push(`情绪: ${slots.emotional_goal}`);
+          if (slots.pov_character) parts.push(`视角: ${slots.pov_character}`);
+          if (slots.goal_advance_conflict) parts.push(`推进: ${slots.goal_advance_conflict}`);
+          if (slots.goal_reveal_info) parts.push(`揭示: ${slots.goal_reveal_info}`);
+          if (slots.estimated_words) parts.push(`预估: ${slots.estimated_words}字`);
           if (parts.length > 0) intentSummary = ' | ' + parts.join(' | ');
         }
       }
     } catch { /* 单条意图卡读取失败，跳过 */ }
-    // section_id = module_id 去掉 'm5_intent_' 前缀
-    const sectionId = m.id.replace('m5_intent_', '');
-    // 从 sections 表获取章节标题和摘要（降级）
-    const sec = await env.DB.prepare(
-      'SELECT title, section_summary, word_count, version FROM sections WHERE id = ?'
-    ).bind(sectionId).first<{ title: string; section_summary: string | null; word_count: number; version: number }>();
-    const title = sec?.title || m.name;
-    const wordCount = sec?.word_count || 0;
-    const version = sec?.version || 0;
-    const statusIcon = wordCount > 0 ? '✅' : (version > 0 ? '📝' : '🌱');
-    const summary = sec?.section_summary || '（暂无摘要）';
-    return `${statusIcon} **${title}** (v${version}, ${wordCount}字)${intentSummary}\n  ${summary}`;
+    // 从模块名获取标题
+    const title = m.name.replace(' · 意图卡', '');
+    const statusIcon = intentSummary ? '📝' : '🌱';
+    return `${statusIcon} **${title}**${intentSummary}`;
   });
 
   const results = await Promise.all(intentFutures);

@@ -135,46 +135,9 @@ export async function generateForeshadowing(env: Env, request: Request): Promise
 // ============================================================
 
 export async function readForeshadowing(env: Env, request: Request, workId: string): Promise<Response> {
-  const lang = extractLang(request);
-
-  let slotData: R2SlotData | null = null;
-  const jsonObj = await env.WORKS_BUCKET.get(fhJsonPath(workId, lang));
-  if (jsonObj) {
-    try { slotData = JSON.parse(await jsonObj.text()) as R2SlotData; } catch { /* ignore */ }
-  }
-
-  let renderedMd = '';
-  const mdObj = await env.WORKS_BUCKET.get(fhMdPath(workId, lang));
-  if (mdObj) renderedMd = await mdObj.text();
-
-  if (!slotData && !renderedMd) {
-    const emptyMd = renderTemplate(FORESHADOWING_TEMPLATE, lang, 2);
-    const template = buildTemplateJson(FORESHADOWING_TEMPLATE, lang, 2, null);
-    return new Response(JSON.stringify(jsonSuccess({
-      work_id: workId,
-      lang,
-      template,
-      rendered_md: emptyMd,
-      is_template: true,
-      message: lang === 'en'
-        ? 'Foreshadowing ledger not yet created. Below is the planning template.'
-        : '伏笔账本尚未创建，以下为规划模板。',
-    })), {
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const template = buildTemplateJson(FORESHADOWING_TEMPLATE, lang, 2, slotData);
-
-  return new Response(JSON.stringify(jsonSuccess({
-    work_id: workId,
-    lang,
-    template,
-    rendered_md: renderedMd,
-    is_template: false,
-  })), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  // V3: 委托到统一 Module API
+  const { getModule } = await import('./module');
+  return getModule(env, request, `m4_strategy_${workId}`);
 }
 
 // ============================================================
@@ -182,44 +145,7 @@ export async function readForeshadowing(env: Env, request: Request, workId: stri
 // ============================================================
 
 export async function updateForeshadowing(env: Env, request: Request, workId: string): Promise<Response> {
-  const lang = extractLang(request);
-  const body = await request.json() as { slots?: Record<string, string>; free_content?: string };
-  if (typeof body.slots !== 'object' || !body.slots) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'slots object is required')), {
-      status: 400, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // 验证 work 存在
-  const work = await env.DB.prepare('SELECT id FROM works WHERE id = ?').bind(workId).first();
-  if (!work) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
-      status: 404, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const slotData: R2SlotData = { slots: body.slots };
-  if (body.free_content) slotData.free_content = body.free_content;
-
-  let renderedMd = renderTemplate(FORESHADOWING_TEMPLATE, lang, 2, { prefills: body.slots, cleanOutput: true });
-  if (body.free_content) {
-    renderedMd = renderedMd.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + body.free_content.trim() + '\n');
-  }
-
-  await env.WORKS_BUCKET.put(fhJsonPath(workId, lang), JSON.stringify(slotData, null, 2), {
-    httpMetadata: { contentType: 'application/json' },
-  });
-  await env.WORKS_BUCKET.put(fhMdPath(workId, lang), renderedMd, {
-    httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
-  });
-
-  const template = buildTemplateJson(FORESHADOWING_TEMPLATE, lang, 2, slotData);
-
-  return new Response(JSON.stringify(jsonSuccess({
-    work_id: workId, lang, saved: true,
-    template,
-    rendered_md: renderedMd,
-  })), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  // V3: 委托到统一 Module API（三文件物理隔离：.json + .free.md + .md）
+  const { updateModule } = await import('./module');
+  return updateModule(env, request, `m4_strategy_${workId}`);
 }

@@ -151,16 +151,22 @@ export async function updateForeshadowingCard(env: Env, request: Request, workId
   }
 
   const slotData: R2SlotData = { slots: body.slots };
-  if (body.free_content) slotData.free_content = body.free_content;
 
   let cleanCard = renderCard(entity.name, FORESHADOWING_CARD_SLOTS, lang, 2, body.slots, true);
   if (body.free_content) {
     cleanCard = cleanCard.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + body.free_content.trim() + '\n');
   }
 
+  // V3 三文件模型：slots → .json，free_content → .free.md，渲染 → .md
   await env.WORKS_BUCKET.put(fhCardJsonPath(workId, lang, entityId), JSON.stringify(slotData, null, 2), {
     httpMetadata: { contentType: 'application/json' },
   });
+  if (body.free_content) {
+    const freeKey = workContentPath(workId, lang, `foreshadowing/${entityId}.free.md`);
+    await env.WORKS_BUCKET.put(freeKey, body.free_content, {
+      httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
+    });
+  }
   await env.WORKS_BUCKET.put(fhCardMdPath(workId, lang, entityId), cleanCard, {
     httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
   });
