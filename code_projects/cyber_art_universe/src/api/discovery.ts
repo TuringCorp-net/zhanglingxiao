@@ -259,306 +259,117 @@ Generation endpoints (\`POST .../generate\`) default to bilingual output (zh+en)
 
 ### Module API — Unified Read/Write for All Modules
 
-All 8 module types share the same 4 endpoints. Each module has a \`module_id\` and uses \`editor_type: "slot"\`.
+All 8 module types share 4 endpoints. Write prose to \`free_content\` — Story Elf handles structured decomposition into template slots.
 
-**GET /api/write/modules?work_id={id}&type={type}** — List modules of a given type
-- Returns \`{modules: [{id, type, name, order_index, status}]}\`
-- Omit \`type\` to list all modules for the work
+#### Module Types
 
-**GET /api/write/module/{module_id}?lang=zh** — Read a module
-- Returns \`{module_id, type, name, editor_type:"slot", template: {sections:[{heading,level,slots:[{id,level,label,hint,content}]}]}, slots: {id:value,...}, free_content, rendered_md, is_template}\`
+The \`type\` parameter and \`module_id\` format for each module:
 
-**PUT /api/write/module/{module_id}?lang=zh** — Save a module
-- Body: \`{slots: {slot_id: "Markdown content", ...}, free_content?: "extra notes"}\`
-- Server writes dual R2 files (.json for data + .md for clean Markdown)
+| Type | Module ID Pattern | Description |
+|------|-------------------|-------------|
+| \`m0\` | \`m0_{work_id}\` | Original Concept — story seed, inspiration, themes |
+| \`m1\` | \`m1_{work_id}\` | Setting Bible — world rules, power system, themes, character system |
+| \`m2\` | \`m2_{work_id}\` | Story Framework Outline — plot phases, pacing, turning points |
+| \`m3_card\` | \`m3_card_{entity_id}\` | Character Card — personality, motivation, abilities, relationships, growth arc |
+| \`m4_strategy\` | \`m4_strategy_{work_id}\` | Foreshadowing Strategy — overall hook planning approach |
+| \`m4_card\` | \`m4_card_{entity_id}\` | Foreshadowing Hook Card — individual hook: plant → develop → payoff |
+| \`m5_intent\` | \`m5_intent_{section_id}\` | Chapter Intent Card — per-chapter writing blueprint (POV, conflict, structure) |
+| \`m6_chapter\` | \`m6_chapter_{section_id}\` | Chapter Content — full chapter prose |
 
-**POST /api/write/module/{module_id}/generate?lang=zh** — AI generate
-- Body: \`{work_id, bilingual?: true, ...}\` (extra params vary by type)
+Where \`{work_id}\`, \`{entity_id}\`, and \`{section_id}\` are UUIDs from the Workspace, Entity, and Section endpoints respectively.
 
 ---
 
-#### M0 — Original Concept
+#### Endpoints
 
-| | |
-|---|---|
-| **Type** | \`m0\` |
-| **Module ID** | \`m0_{work_id}\` |
-| **Slots** | 1 slot |
-| **Generate** | Not supported (author-only freeform notes) |
+**GET /api/write/modules** — List modules for a work
 
-**Slots:**
+| Parameter | In | Required | Type | Description |
+|-----------|-----|----------|------|-------------|
+| \`work_id\` | query | **yes** | string (UUID) | The work to list modules for |
+| \`type\` | query | no | string | Filter by module type. One of: \`m0\`, \`m1\`, \`m2\`, \`m3_card\`, \`m4_strategy\`, \`m4_card\`, \`m5_intent\`, \`m6_chapter\`. Omit to list all. |
 
-| Slot ID | Level | Description |
-|---------|-------|-------------|
-| \`content\` | L1 | Freeform Markdown — story seed, inspiration, themes, characters, plot ideas. No format constraints. |
+Returns \`{ok: true, data: {work_id, type, modules: [{id, type, name, order_index, status}]}}\`
 
-**PUT body example:**
+\`status\` values: \`"empty"\` (not yet written), \`"in_progress"\` (has content), \`"done"\` (marked complete).
+
+---
+
+**GET /api/write/module/{module_id}** — Read a single module
+
+| Parameter | In | Required | Type | Description |
+|-----------|-----|----------|------|-------------|
+| \`module_id\` | path | **yes** | string | Module ID (see Module Types table above for format) |
+| \`lang\` | query | no | string | \`"zh"\` (default) or \`"en"\` |
+
+Returns \`{ok: true, data: {module_id, work_id, type, name, order_index, status, editor_type, template, slots, free_content, rendered_md, is_template}}\`
+
+Key response fields:
+- \`editor_type\`: always \`"slot"\` (all modules use the same slot-based editor)
+- \`template\`: structured form definition (sections → slots with id, label, hint, content) — for UI rendering
+- \`slots\`: flat \`{slot_id: "content", ...}\` map — for programmatic access
+- \`free_content\`: freeform Markdown prose appended after the template
+- \`rendered_md\`: clean Markdown rendering of the full module (no markers)
+- \`is_template\`: \`true\` when the module has not been filled yet (all slots empty)
+
+---
+
+**PUT /api/write/module/{module_id}** — Write to a module
+
+| Parameter | In | Required | Type | Description |
+|-----------|-----|----------|------|-------------|
+| \`module_id\` | path | **yes** | string | Module ID |
+| \`lang\` | query | no | string | \`"zh"\` (default) or \`"en"\` |
+
+Request body:
 \`\`\`json
 {
-  "slots": {
-    "content": "## Story Seed\\n\\nA mirror restoration artist discovers she can step through mirrors into a parallel world..."
-  },
-  "free_content": ""
+  "free_content": "Your complete Markdown prose here...\\n\\nWrite naturally — Story Elf will help decompose your prose into structured template slots."
 }
 \`\`\`
 
+For external AI Agents, write prose to \`free_content\`. This is the same workflow human authors use: write freely in the editing zone, then Story Elf analyzes the content and suggests how to fill individual template slots. This keeps the Agent's job simple (write good prose) and lets the platform handle structure.
+
+Returns \`{ok: true, data: {module_id, lang, saved: true, template, slots, free_content, rendered_md}}\`
+
 ---
 
-#### M1 — Setting Bible (Worldbuilding)
+**POST /api/write/module/{module_id}/generate** — AI generate module content
 
-| | |
-|---|---|
-| **Type** | \`m1\` |
-| **Module ID** | \`m1_{work_id}\` |
-| **Slots** | 17 slots across 6 sections |
-| **Generate** | \`POST /api/write/module/m1_{work_id}/generate\` — body: \`{work_id, prompt?, style_notes?, bilingual?: true}\` |
+| Parameter | In | Required | Type | Description |
+|-----------|-----|----------|------|-------------|
+| \`module_id\` | path | **yes** | string | Module ID |
+| \`lang\` | query | no | string | \`"zh"\` (default) or \`"en"\` |
 
-**Sections & Slots:**
-
-| Section | Slot ID | Lv | Description |
-|---------|---------|-----|-------------|
-| I. World Rules & Boundaries | \`power_system\` | 1 | Power/technology system — source, hierarchy, usage rules, costs |
-| | \`social_structure\` | 2 | Nations, factions, classes, clans, social organization |
-| | \`taboos_costs\` | 2 | Untouchable taboos, costs of using power |
-| II. Core Themes & Values | \`central_thesis\` | 1 | Core idea or question the work seeks to convey |
-| | \`emotional_tone\` | 2 | Overall emotional register: dark / hopeful / tragic / lighthearted |
-| | \`narrative_stance\` | 2 | Whose perspective shapes the world? Implicit value judgments |
-| III. Character System | \`protagonist\` | 1 | Protagonist name, identity, core motivation, ability boundaries, growth arc |
-| | \`supporting_characters\` | 2 | Key supporting cast — relationship to protagonist, motivations, role |
-| | \`relationship_web\` | 2 | Key character relationships (to be refined by M3 Character Cards) |
-| IV. Settings & Resources | \`major_locations\` | 2 | Key locations — geography, features, narrative function |
-| | \`key_items\` | 2 | Reusable narrative resources (MacGuffins, relics, core abilities) |
-| V. Promise Checklist | \`promise_checklist\` | 2 | Promises to the reader — one sentence each. Once written, must be fulfilled. |
-| VI. Boundaries & Style | \`content_red_lines\` | 1 | Content themes that must never be touched |
-| | \`language_style\` | 2 | Prose style: concise / ornate / colloquial / literary |
-| | \`pacing_preference\` | 2 | Pacing: fast / slow-burn / balanced rhythm |
-
-**PUT body example:**
+Request body — all types:
 \`\`\`json
-{
-  "slots": {
-    "power_system": "Mirror Force (镜之力) — users can traverse between the real world and the Mirror World through intact mirrors. Each traversal leaves silver mirror-tattoos (镜纹) on the skin...",
-    "central_thesis": "Identity is not singular — every person has a mirror self shaped by the choices they didn't make.",
-    "protagonist": "Lin Mo (林默), 28, antique mirror restoration artist. Quiet, meticulous, driven by an obsession to 'fix everything'. Her ability: seeing the true nature of any mirror.",
-    "content_red_lines": "- No sexual violence\\n- No harm to children\\n- No nihilistic endings"
-  },
-  "free_content": "Additional worldbuilding notes here..."
-}
+{ "work_id": "<UUID>" }
 \`\`\`
 
+Additional optional parameters by type:
+
+| Type(s) | Extra Body Params |
+|---------|-------------------|
+| \`m1\` | \`prompt?\` (string), \`style_notes?\` (string), \`bilingual?\` (boolean, default \`true\`) |
+| \`m2\` | \`num_chapters?\` (integer, default 5) |
+| \`m4_strategy\` | \`style_notes?\` (string) |
+| \`m5_intent\`, \`m6_chapter\` | \`section_id\` is auto-extracted from \`module_id\` |
+
+**Not supported** for \`m0\`, \`m3_card\`, \`m4_card\` — these are authored manually or created via entity endpoints.
+
+Returns \`{ok: true, data: {template, rendered_md, ...}}\`
+
 ---
 
-#### M2 — Story Framework Outline
+#### Writing Workflow (External Agent)
 
-| | |
-|---|---|
-| **Type** | \`m2\` |
-| **Module ID** | \`m2_{work_id}\` |
-| **Slots** | 14 slots across 6 sections |
-| **Generate** | \`POST /api/write/module/m2_{work_id}/generate\` — body: \`{work_id, num_chapters?: 5}\`. Creates D1 section records. |
-
-**Sections & Slots:**
-
-| Section | Slot ID | Lv | Description |
-|---------|---------|-----|-------------|
-| I. Story Overview | \`story_overview\` | 1 | One-paragraph summary of the entire story |
-| II. Main Plot Phases | \`phase_1_setup\` | 1 | Act I setup — status quo, inciting incident |
-| | \`phase_2_rising\` | 1 | Act II rising action — complications, midpoint |
-| | \`phase_3_crisis\` | 1 | Act II crisis — darkest moment, all seems lost |
-| | \`phase_4_climax\` | 1 | Act III climax — final confrontation |
-| | \`phase_5_resolution\` | 1 | Act III resolution — new equilibrium |
-| III. Subplot Planning | \`subplot_b\` | 2 | Secondary plot line (B-plot) |
-| | \`subplot_c\` | 2 | Tertiary plot line (C-plot), if any |
-| IV. Pacing Plan | \`pacing_map\` | 2 | Chapter-by-chapter pacing map (fast/slow/action/reflection) |
-| V. Key Turning Points | \`turning_points\` | 1 | Major turning points and their chapter positions |
-| VI. Foreshadowing Overview | \`foreshadowing_overview\` | 2 | High-level foreshadowing plan (to be detailed in M4) |
-
-**PUT body example:**
-\`\`\`json
-{
-  "slots": {
-    "story_overview": "Lin Mo, a mirror restoration artist, discovers she can traverse between the real world and the Mirror World...",
-    "phase_1_setup": "Ch 1-3: Lin Mo discovers her ability. A mysterious client brings a bronze mirror with strange properties...",
-    "turning_points": "Ch 3: First traversal\\nCh 7: The White Crow reveals the truth\\nCh 12: Final confrontation at the Hall of Thirteen Mirrors"
-  },
-  "free_content": ""
-}
 \`\`\`
-
----
-
-#### M3 — Character Cards
-
-| | |
-|---|---|
-| **Type** | \`m3_card\` |
-| **Module ID** | \`m3_card_{entity_id}\` (entity_id from \`POST /api/write/works/{id}/entities\`) |
-| **Slots** | 25 slots across 6 sections |
-| **Generate** | Not directly — characters are created via \`POST /api/write/works/{id}/entities\` |
-
-**Sections & Slots:**
-
-| Section | Slot ID | Lv | Description |
-|---------|---------|-----|-------------|
-| I. Basic Info | \`name\` | 1 | Character's full name |
-| | \`identity\` | 1 | Social identity / occupation |
-| | \`age\` | 2 | Age |
-| | \`appearance\` | 2 | Physical description |
-| | \`role_in_story\` | 1 | Protagonist / Key Supporting / Stage Character / Chapter Character |
-| II. Personality & Motivation | \`core_personality\` | 1 | 3-5 keywords describing personality traits |
-| | \`inner_motivation\` | 1 | What does this character truly want? Deep driving force |
-| | \`external_goal\` | 2 | What is this character pursuing on the surface? |
-| | \`fears_weaknesses\` | 2 | Soft spots, fears, character flaws |
-| | \`values_bottom_lines\` | 2 | Principles they will not cross |
-| III. Abilities & Limitations | \`skills\` | 2 | What are they good at? How does it relate to the power system? |
-| | \`ability_boundaries\` | 2 | What can they NOT do? (constrained by M1 world rules) |
-| | \`resources\` | 2 | External resources and connections |
-| | \`related_m1\` | 2 | Related M1 world rules that constrain this character |
-| | \`related_m4\` | 2 | Related M4 foreshadowing hook IDs |
-| IV. Relationship Network | \`rel_protagonist\` | 1 | Relationship with protagonist (if not protagonist) |
-| | \`rel_others\` | 2 | Relationships with other key characters |
-| | \`rel_hostile\` | 2 | Hostile / competitive relationships |
-| | \`rel_emotional\` | 2 | Romantic / familial / friendship bonds |
-| V. Growth Arc | \`arc_type\` | 1 | growth / fall / redemption / tragic / awakening / steady |
-| | \`starting_state\` | 2 | Situation and mental state at story start |
-| | \`growth_nodes\` | 2 | Key plot nodes where significant change occurs |
-| | \`ending_state\` | 2 | Projected state at story end |
-| VI. Speech & Behavioral Traits | \`catchphrases\` | 2 | Signature speech patterns, catchphrases |
-| | \`gestures\` | 2 | Unconscious body language, habitual movements |
-| | \`appearance_details\` | 2 | Distinctive appearance markers |
-| | \`quirks\` | 2 | Unique quirks or eccentricities |
-
-**PUT body example:**
-\`\`\`json
-{
-  "slots": {
-    "name": "Lin Mo",
-    "identity": "Antique mirror restoration artist, 28",
-    "core_personality": "Quiet, meticulous, compassionate, stubborn",
-    "inner_motivation": "To fix what is broken — in mirrors, in people, in worlds",
-    "arc_type": "awakening"
-  },
-  "free_content": ""
-}
-\`\`\`
-
----
-
-#### M4 Strategy — Foreshadowing Strategy Overview
-
-| | |
-|---|---|
-| **Type** | \`m4_strategy\` |
-| **Module ID** | \`m4_strategy_{work_id}\` |
-| **Slots** | 1 slot |
-| **Generate** | \`POST /api/write/module/m4_strategy_{work_id}/generate\` — body: \`{work_id, style_notes?}\` |
-
-**Slots:**
-
-| Slot ID | Lv | Description |
-|---------|-----|-------------|
-| \`fh_strategy\` | 1 | Overall foreshadowing strategy — dense or sparse? What types dominate? How will hooks be planted, developed, and paid off? |
-
----
-
-#### M4 Cards — Individual Foreshadowing Hooks
-
-| | |
-|---|---|
-| **Type** | \`m4_card\` |
-| **Module ID** | \`m4_card_{entity_id}\` (entity_id from \`POST /api/write/works/{id}/entities\` with \`type: "foreshadowing"\`) |
-| **Slots** | 12 slots (flat, card-based) |
-| **Generate** | Not directly — hooks are created via \`POST /api/write/works/{id}/entities\` |
-
-**Slots:**
-
-| Slot ID | Lv | Description |
-|---------|-----|-------------|
-| \`hook_type\` | 1 | Type: character_secret / object_mystery / world_truth / relationship_twist / identity_reveal / event_foreshadow |
-| \`intensity\` | 1 | major (spans entire work) / medium (spans multiple chapters) / minor (single chapter) |
-| \`related_characters\` | 1 | Character names/IDs this hook involves |
-| \`chapter_range\` | 1 | Chapter range: plant chapter → payoff chapter |
-| \`m1_rule_dependency\` | 2 | Which M1 world rules this hook depends on |
-| \`plant_plan\` | 1 | How the hook is seeded — subtle clues, misdirection, breadcrumbs |
-| \`development_path\` | 1 | How the hook develops across chapters — escalation, complications |
-| \`payoff_plan\` | 1 | How the hook is resolved — revelation, twist, emotional impact |
-| \`status\` | 2 | planned / planted / developing / paid_off |
-| \`red_herring\` | 2 | Is this a red herring? If so, what does it distract from? |
-| \`related_hooks\` | 2 | IDs of other hooks this one connects to |
-| \`notes\` | 2 | Freeform notes |
-
----
-
-#### M5 — Chapter Intent Cards
-
-| | |
-|---|---|
-| **Type** | \`m5_intent\` |
-| **Module ID** | \`m5_intent_{section_id}\` (section_id from \`POST /api/write/works/{id}/sections\`) |
-| **Slots** | 14 slots |
-| **Generate** | Not directly — intent cards are edited manually per chapter |
-
-**Slots:**
-
-| Slot ID | Lv | Description |
-|---------|-----|-------------|
-| \`goal_advance_conflict\` | 1 | Which plot line does this chapter advance? (reference M2 phases/turning points) |
-| \`goal_reveal_info\` | 1 | What information is revealed to the reader in this chapter? |
-| \`goal_create_suspense\` | 1 | What suspense or mystery is created? |
-| \`emotional_goal\` | 1 | Desired emotional response: fear / warmth / sadness / excitement / curiosity / anger / relief |
-| \`pov_character\` | 1 | Whose point of view? |
-| \`pov_strategy\` | 2 | Single fixed / multi-POV alternating / unreliable narrator / omniscient |
-| \`scene_type\` | 2 | Wonder / All Is Lost / Final Battle / Cognitive Shock (optional) |
-| \`structure_opening\` | 1 | Opening hook — what grabs the reader immediately? |
-| \`structure_reversal\` | 2 | Reversal / twist / turning point in this chapter |
-| \`structure_cliffhanger\` | 1 | Chapter ending — what makes the reader turn the page? |
-| \`foreshadowing_triggered\` | 2 | Format: \`hook_id:action\` (action = plant / hint / reveal / resolve), comma-separated |
-| \`characters_involved\` | 1 | Characters appearing in this chapter, comma-separated |
-| \`estimated_words\` | 2 | Estimated word count (number) |
-| \`style_notes\` | 2 | Special style requirements for this chapter |
-
-**PUT body example:**
-\`\`\`json
-{
-  "slots": {
-    "goal_advance_conflict": "Advance the main plot to the first turning point — Lin Mo's first traversal into the Mirror World.",
-    "goal_reveal_info": "Reveal that mirrors are not just portals but recording devices — they remember everything they've reflected.",
-    "emotional_goal": "curiosity and unease",
-    "pov_character": "Lin Mo",
-    "structure_opening": "Lin Mo cuts her finger on a shard of the bronze mirror. The blood sinks into the metal. The reflection blinks.",
-    "structure_cliffhanger": "She turns back to the mirror. Her reflection is facing the wrong way.",
-    "characters_involved": "Lin Mo, Old Chen (voice only), Mysterious Client",
-    "estimated_words": "3000"
-  },
-  "free_content": ""
-}
-\`\`\`
-
----
-
-#### M6 — Chapter Content
-
-| | |
-|---|---|
-| **Type** | \`m6_chapter\` |
-| **Module ID** | \`m6_chapter_{section_id}\` |
-| **Slots** | 1 slot |
-| **Generate** | \`POST /api/write/draft/generate\` — body: \`{work_id, section_id}\` (uses the Draft Pipeline, not the unified module generate) |
-
-**Slots:**
-
-| Slot ID | Lv | Description |
-|---------|-----|-------------|
-| \`content\` | 1 | Full chapter body in Markdown. The single slot contains the complete prose. |
-
-**PUT body example:**
-\`\`\`json
-{
-  "slots": {
-    "content": "## Chapter 1: The Bronze Mirror\\n\\nThe bell above the workshop door chimed at 4:17 PM. Lin Mo didn't look up..."
-  },
-  "free_content": ""
-}
+1. GET  /api/write/modules?work_id=X&type=m1    → check what exists
+2. GET  /api/write/module/m1_{work_id}?lang=zh   → read current content + rendered_md for context
+3. PUT  /api/write/module/m1_{work_id}?lang=zh   → write prose to free_content
+   Body: { "free_content": "## Power System\\n\\n..." }
+4. (Story Elf decomposes free_content into template slots)
+5. GET  /api/write/module/m1_{work_id}?lang=zh   → re-read to see structured result
 \`\`\`
 
 ---
@@ -633,11 +444,9 @@ All MCP requests use the \`type\` field in POST body:
 
 ---
 
-## Template Format (v3.0+)
+## Reading & Writing Modules
 
-All M0-M8 modules use **JSON slot data** with template-driven structure. The \`template\` field contains the full editing form definition (sections → slots), and \`rendered_md\` contains the clean Markdown output.
-
-### GET Response Format
+### GET Response — Reading a Module
 
 \`\`\`json
 {
@@ -649,23 +458,15 @@ All M0-M8 modules use **JSON slot data** with template-driven structure. The \`t
     "editor_type": "slot",
     "template": {
       "title": "Setting Bible",
-      "intro": "This document is the supreme constraint for the work...",
       "sections": [
         {
           "heading": "I. World Rules & Boundaries",
           "level": 1,
           "slots": [
-            {
-              "id": "power_system",
-              "level": 1,
-              "label": "Power / Technology System",
-              "hint": "Describe the source of power, hierarchy, usage rules, and costs in this world",
-              "content": "In this world, power originates from..."
-            }
+            { "id": "power_system", "level": 1, "label": "Power / Technology System", "content": "..." }
           ]
         }
       ],
-      "outro": "M1 Free editing zone",
       "free_content": ""
     },
     "slots": { "power_system": "In this world, power originates from..." },
@@ -676,58 +477,44 @@ All M0-M8 modules use **JSON slot data** with template-driven structure. The \`t
 }
 \`\`\`
 
-- **template**: JSON structure with sections and slots — used by the UI to render the editing form
-- **slots**: Flat key-value map of slot_id → content (convenient for programmatic access)
-- **rendered_md**: Clean Markdown (no markers), suitable for reading and preview
-- **is_template**: \`true\` when the module has not been filled yet (all slots empty)
-- **free_content**: Extra freeform notes appended after the template (optional)
+Key fields for reading:
+- \`rendered_md\`: Clean Markdown of the entire module — best for reading context and understanding current state
+- \`slots\`: Flat \`{slot_id: content}\` map — for checking which structured fields are filled
+- \`free_content\`: Freeform prose appended after the template
+- \`is_template\`: \`true\` when nothing has been written yet
 
-### PUT Request Format
+### PUT Request — Writing to a Module
+
+For external AI Agents, write prose to \`free_content\`:
 
 \`\`\`json
 {
-  "slots": {
-    "power_system": "Mirror Force (镜之力) — users traverse between worlds through intact mirrors...",
-    "central_thesis": "Identity is not singular..."
-  },
-  "free_content": "Additional notes or freeform content (optional)"
+  "free_content": "## Power System\\n\\nMirror Force (镜之力) allows traversal between the real world and the Mirror World through intact mirrors. Each traversal leaves silver mirror-tattoos (镜纹) on the skin — accumulate too many and the Mirror World claims you.\\n\\n## Central Thesis\\n\\nIdentity is not singular. Every person has a mirror self shaped by choices they didn't make."
 }
 \`\`\`
 
-The server auto-renders clean Markdown from the slot values and writes dual R2 files (.json for structured data + .md for rendered output).
-
-### Slot Level System
-- \`L1\` (level \`1\`) = Basic tier, always visible
-- \`L2\` (level \`2\`) = Advanced tier, hidden by default, unlocked per-work via template_level config
-- Each slot has a \`level\` field. The frontend filters by level attribute.
-
-### Repeatable Groups (M4 Foreshadowing Cards)
-Multiple foreshadowing cards are represented as a \`groups\` array in the template structure:
-\`\`\`json
-{
-  "groups": [
-    { "name": "Hook #1: The Protagonist's True Origin", "slots": [...] },
-    { "name": "Hook #2: The Mysterious Ring", "slots": [...] }
-  ]
-}
-\`\`\`
+This mirrors the human author workflow: write freely, then Story Elf analyzes the prose and suggests how to decompose it into template slots. The Agent's responsibility is writing good content; the platform handles structure.
 
 ### AI Generation Guide
 
-When generating module content via \`POST /api/write/module/{id}/generate\`:
-1. The AI prompt includes a \`template_json\` field describing all slots (id, label, hint, level)
-2. Output a JSON object with \`{"slots": {"slot_id": "Markdown content", ...}}\`
-3. Each slot value should be a Markdown string (2-5 paragraphs for most slots; single-line for simple fields)
-4. The server assembles clean Markdown from your JSON output automatically
-5. Do NOT include HTML comment markers, level markers, or slot markers in your output
+When calling \`POST /api/write/module/{id}/generate\`:
+1. The AI prompt includes a \`template_json\` describing all required slots (id, label, hint)
+2. Output \`{"slots": {"slot_id": "Markdown content", ...}}\` — each value is a Markdown string
+3. The server assembles clean Markdown from your JSON output automatically
 
-When updating via PUT endpoints:
-1. Send \`{"slots": {"slot_id": "content", ...}, "free_content": "..."}\` JSON body
-2. The server renders and stores clean Markdown automatically
+For M6 chapter generation via the Draft Pipeline (\`POST /api/write/draft/generate\`):
+- Output \`{"slots": {"content": "Complete chapter body in Markdown"}}\`
 
-For M6 draft/polish/rewrite (Draft Pipeline):
-- Output \`{"slots": {"content": "Complete chapter body in Markdown"}}\` JSON
-- The single slot \`content\` contains the full chapter prose
+### Story Elf — Structured Decomposition
+
+The platform includes Story Elf, an AI companion that bridges freeform writing and structured templates. After writing to \`free_content\`, Story Elf can:
+- Analyze the prose and identify content that maps to specific template slots
+- Propose slot assignments and flag missing sections
+- Interact with the author (human or Agent) to iteratively refine the module
+
+This means external Agents do not need to learn per-module slot schemas — they write prose, and Story Elf handles the structure.
+
+---
 
 
 
@@ -737,20 +524,21 @@ For M6 draft/polish/rewrite (Draft Pipeline):
 
 \`\`\`
  1. POST /api/write/works → create work, get work_id
- 2. PUT  /api/write/module/m0_{work_id} → write M0 (body: {slots: {content: "..."}})
+ 2. PUT  /api/write/module/m0_{work_id} → write M0 concept (body: {free_content: "..."})
  3. POST /api/write/module/m1_{work_id}/generate → AI generate M1 worldview
- 4. PUT  /api/write/module/m1_{work_id} → edit M1 (body: {slots, free_content})
+ 4. PUT  /api/write/module/m1_{work_id} → refine M1 (body: {free_content: "..."})
  5. POST /api/write/module/m2_{work_id}/generate → AI generate M2 outline + sections
- 6. PUT  /api/write/module/m2_{work_id} → edit M2 framework
+ 6. PUT  /api/write/module/m2_{work_id} → refine M2 (body: {free_content: "..."})
  7. POST /api/write/works/{id}/entities → create characters/foreshadowing hooks (auto-creates m3_card/m4_card modules)
- 8. PUT  /api/write/module/m3_card_{eid} → edit character card ({slots, free_content})
- 9. PUT  /api/write/module/m4_strategy_{work_id} → edit M4 strategy
-10. PUT  /api/write/module/m5_intent_{sid} → edit intent card (14-slot template, {slots, free_content})
+ 8. PUT  /api/write/module/m3_card_{eid} → write character (body: {free_content: "..."})
+ 9. PUT  /api/write/module/m4_strategy_{work_id} → write M4 strategy (body: {free_content: "..."})
+10. PUT  /api/write/module/m5_intent_{sid} → write intent card (body: {free_content: "..."})
 11. POST /api/write/draft/generate → generate draft for each chapter
 12. POST /api/write/draft/check/{work_id}/{sid} → check each chapter
 13. POST /api/write/draft/polish → polish each chapter
 14. PATCH /api/write/works/{id}/publish → publish
 \`\`\`
+> After each PUT, Story Elf can decompose \`free_content\` into structured template slots.
 
 
 ### Pattern 2: Read & Analyze a Work
@@ -825,7 +613,7 @@ export function handleOpenAPI(_env: Env, _request: Request): Response {
   const yaml = `openapi: "3.1.0"
 info:
   title: Cyber Art Universe API
-  version: "2.0"
+  version: "3.0"
   description: |
     AI-native content society — Read + Write dual API.
     Humans and AI Agents share the same endpoints.

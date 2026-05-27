@@ -56,8 +56,10 @@ Story Forger 的每项功能同时服务于两类消费者：
 
 | 消费者 | 接口 | 场景 |
 |--------|------|------|
-| **人类创作者** | Web UI（`/write.html` 及子页面） | 在浏览器中使用写作工作台 |
-| **AI Agent**（外部） | REST API + MCP Tools | 外部 AI 调用写作工具，按框架逐步产出长篇小说 |
+| **人类创作者** | Web UI（`/write.html` 及子页面） | 自由编辑区写初稿 → Story Elf 分析 → 建议拆分到槽位 → 作者确认 |
+| **AI Agent**（外部） | REST API + MCP Tools | 自由编辑区写初稿 → Story Elf 分析 → 建议拆分到槽位 → Agent 确认 |
+
+> 两类消费者共享**同一流程、同一 API、同一质量门禁**。外部 Agent 无需学习模块内部模板结构（slot ID、section 划分），只需向 `free_content` 写入 Markdown 文章，Story Elf 负责结构化拆解。这与人类作者在前端的操作完全一致。
 
 两类消费者使用**完全相同的 API**，区别仅在前端或调用方式。
 
@@ -231,7 +233,7 @@ Intent Card → Draft v0 → Consistency Check → Polish → Draft v1 (中稿)
 | SF-063 | 写作引导流程 — 页面顶部始终显示 M1→M6 流水线引导条，显示模块状态，点击跳转 | 引导条在工具栏下方始终可见。每一步根据 R2 资产判定状态 | ⏳ 待实现 |
 | SF-064 | 槽位编辑器引擎（v2.5 JSON 化）— 模板框架只读渲染（标题 h2 色块/h3 青色），直接消费 API 返回的 `template.slots` JSON 渲染 textarea，中栏为独立自由编辑区 | 前端从 API `template` JSON 遍历 sections/slots 渲染 DOM。section heading 用 `marked.parse('## ')` 渲染为 h2 + 色块背景；slot label 用 `### ` 渲染为 h3 + 青色。自由编辑区为中栏独立面板，内容存储为 `free_content` 字段。不再依赖 Markdown 正则解析 | ✅ 已实现 |
 | SF-065 | 重复结构支持 — 模板中由 `---` 分隔的同类条目（如 M4 伏笔），每组独立渲染为带标题的卡片，提供 [+] 追加 / [×] 删除按钮 | M4 伏笔 #1/#2/#3 各为独立 group。点击 [+] 克隆最后一组结构（空内容）。点击 [×] 从数据与 DOM 中移除该组 | ✅ 已实现 |
-| SF-066 | M5 意图卡表单编辑器 — JSON 结构意图卡转为纵向表单输入（右栏），同时提供独立自由编辑区（中栏），自由区内容按章节独立存储 | 13 个表单字段 + 自由编辑区 textarea。自由区内容存入 intent JSON 的 `free_content` 字段。切换章节时恢复对应自由区内容。聚焦自由区时 Story Elf 弹出 hint。自动保存覆盖表单 + 自由区 | ✅ 已实现 |
+| SF-066 | M5 意图卡槽位编辑器（v3.0 替代表单编辑器）— INTENT_TEMPLATE 14 slot 统一槽位编辑 | 14 个槽位 + 自由编辑区。v3.0 起由表单编辑器切换为与 M1-M4 一致的槽位编辑器，消除 text/slot/form 三种编辑器分支。外部 Agent 通过 `free_content` 写入，Story Elf 拆解到槽位 | ✅ 已实现 |
 
 ---
 

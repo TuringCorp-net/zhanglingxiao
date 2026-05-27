@@ -413,14 +413,15 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     })), { headers: { 'Content-Type': 'application/json' } });
   }
 
-  // 槽位编辑器 / 卡片模式：slots 必填
-  if (!body.slots || typeof body.slots !== 'object') {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'slots object is required')), {
+  // 槽位编辑器 / 卡片模式
+  const slots = (body.slots && typeof body.slots === 'object') ? body.slots : {};
+  if (Object.keys(slots).length === 0 && !body.free_content) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'slots or free_content is required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const slotData: R2SlotData = { slots: body.slots };
+  const slotData: R2SlotData = { slots };
   if (body.free_content) slotData.free_content = body.free_content;
 
   const jsonKey = r2Path(mod.work_id, lang, cfg.jsonKeyFromModule(mod));
@@ -436,13 +437,13 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   // 渲染并写入 R2 MD
   let renderedMd = '';
   if (cfg.isCard && cfg.cardSlots && mdKey) {
-    renderedMd = renderCardOnly(mod.name, cfg.cardSlots, lang, 2, body.slots, body.free_content);
+    renderedMd = renderCardOnly(mod.name, cfg.cardSlots, lang, 2, slots, body.free_content);
     await env.WORKS_BUCKET.put(mdKey, renderedMd, {
       httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
     });
   } else if (cfg.tmpl && mdKey) {
     const name = (mod.type === 'm3_card') ? mod.name : undefined;
-    renderedMd = renderTemplate(cfg.tmpl, lang, 2, { name, prefills: body.slots, cleanOutput: true });
+    renderedMd = renderTemplate(cfg.tmpl, lang, 2, { name, prefills: slots, cleanOutput: true });
     if (body.free_content) {
       renderedMd = renderedMd.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + body.free_content.trim() + '\n');
     }
