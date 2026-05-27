@@ -7,6 +7,7 @@
 #   2. GET  /api/write/module/{id}      — 读取端点（响应格式校验）
 #   3. PUT  /api/write/module/{id}      — free_content 写入
 #   4. GET  /api/write/module/{id}      — 写入后验证（闭环）
+#   5. PUT  /api/write/module/{id}      — 清理：恢复原始数据
 #
 # 覆盖模块：M0, M1, M2, M3_card(x1), M4_strategy, M4_card(x1), M5_intent(x1)
 #
@@ -116,6 +117,9 @@ TEST_MODULES=(
   "M5_intent|${M5_FIRST}"
 )
 
+# 记录原始内容，用于 cleanup
+declare -A BEFORE_MAP
+
 for entry in "${TEST_MODULES[@]}"; do
   LABEL="${entry%%|*}"
   MID="${entry##*|}"
@@ -123,6 +127,7 @@ for entry in "${TEST_MODULES[@]}"; do
 
   # GET before
   BEFORE=$(api_get "/api/write/module/$MID?lang=zh" | python3 -c "import json,sys; print(json.load(sys.stdin)['data'].get('free_content',''))" 2>/dev/null)
+  BEFORE_MAP["$MID"]="$BEFORE"
 
   # PUT: 追加标记
   NEW_FC="${BEFORE}"$'\n\n'"${TEST_MARKER}"
@@ -135,6 +140,26 @@ for entry in "${TEST_MODULES[@]}"; do
 
   check "$PUT_OK" "True"  "$LABEL PUT ok"
   check "$HAS_MARKER" "1"  "$LABEL marker persisted"
+done
+
+# ---- Step 5: Cleanup — 恢复原始数据 ----
+echo ""
+echo "--- Step 5: Cleanup — restore original free_content ---"
+for entry in "${TEST_MODULES[@]}"; do
+  LABEL="${entry%%|*}"
+  MID="${entry##*|}"
+  [ -z "$MID" ] || [ "$MID" = "null" ] && continue
+
+  ORIGINAL="${BEFORE_MAP[$MID]}"
+  CLEAN_RESP=$(api_put "/api/write/module/$MID?lang=zh" "$(python3 -c "import json; print(json.dumps({'free_content': '''${ORIGINAL}'''}))")")
+  CLEAN_OK=$(echo "$CLEAN_RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('ok',False))" 2>/dev/null)
+
+  # 验证 marker 已删除
+  VERIFY=$(api_get "/api/write/module/$MID?lang=zh" | python3 -c "import json,sys; print(json.load(sys.stdin)['data'].get('free_content',''))" 2>/dev/null)
+  NO_MARKER=$(echo "$VERIFY" | grep -Fc "$TEST_MARKER" || true)
+
+  check "$CLEAN_OK" "True"  "$LABEL cleanup PUT ok"
+  check "$NO_MARKER" "0"    "$LABEL marker removed"
 done
 
 echo ""
