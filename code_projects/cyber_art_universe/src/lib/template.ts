@@ -76,10 +76,9 @@ export interface TemplateJsonResult {
   slots: Record<string, string>;
 }
 
-/** R2 .json 存储格式 */
+/** R2 .json 存储格式 — 仅 slots，free_content 存储于独立 .free.md 文件 */
 export interface R2SlotData {
   slots: Record<string, string>;
-  free_content?: string;
 }
 
 // ============================================================

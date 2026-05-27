@@ -1467,31 +1467,36 @@ TemplateDef / SlotDef[]
 | 决策 | 说明 |
 |------|------|
 | **LLM 输出 JSON，服务端组装 Markdown** | LLM 输出结构化 `{"slots":{...}}` JSON，Markdown 由服务端 `renderTemplate()` 按 `TemplateDef` 组装。避免了 LLM 输出格式不稳定导致的解析失败 |
-| **R2 双文件存储** | `.json` 文件存结构化槽位数据（前端直接消费），`.md` 文件存 clean Markdown（不含 `<!-- slot -->` 等标记，供人类阅读和 AI 参考）。两者始终同步 |
-| **前端直接消费 JSON** | `GET` 返回 `{template, rendered_md}`，前端遍历 `template.slots` 直接渲染槽位编辑器，不再需要 `parseSlotTemplate()` 解析 Markdown |
-| **保存时写 JSON，服务端重渲染 MD** | 前端 `PUT` 发送 `{slots:{...}, freeContent:"..."}` JSON → 服务端写入 `.json` → 调用 `renderTemplate(prefills, cleanOutput:true)` 重新生成 `.md` |
+| **R2 三文件存储（v3.0 物理隔离）** | `.json` 存结构化槽位数据（Story Elf 维护），`.free.md` 存自由编辑区内容（人类/Agent 自由写），`.md` 存 clean Markdown（两者拼接渲染）。`.json` 与 `.free.md` **物理隔离**——写入 free_content 永远不会覆盖 slots，反之亦然 |
+| **前端直接消费 JSON** | `GET` 返回 `{template, slots, free_content, rendered_md}`，前端遍历 `template.slots` 渲染槽位编辑器，`free_content` 填入自由编辑区 |
+| **保存时 slots/free 分离写入** | `PUT {slots:{...}}` → 只写 `.json`；`PUT {free_content:"..."}` → 只写 `.free.md`。两个文件互不触碰，架构级安全保障 |
 | **删除 stripTemplateMarkers** | clean Markdown 不含任何 `<!-- -->` 标记，不再需要后处理清理 |
 | **模板更新不覆盖已有作品** | 已保存到 R2 的 `.json` 文件保留当时的数据。只有新作品或手动重置时使用新模板定义 |
 | **中英双语在同一个 SlotDef 中** | `hint: { zh: '...', en: '...' }` — 加语言只需加字段，无需复制整套模板 |
 | **对话泡数据与 placeholder 解耦** | hint 不再设为 textarea placeholder（输入即消失），而是独立在对话泡中以打字机呈现，输入内容后 hint 依然可见。hint 数据来源从前端 `data-hint` 属性（v2.4 从 Markdown 注释解析）改为直接从模板 JSON 的 `SlotDef.hint` 字段读取 |
 | **对话泡与聊天窗口是两套独立系统** | 左侧 `#elf-dialog` 预留给用户↔AI 对话交互；上方 `#elf-hint-bubble` 用于展示槽位 hint。两套系统同时存在、互不干扰 |
 
-### R2 文件内容示意（以世界观为例，v2.5 双文件）
+### R2 文件内容示意（以世界观为例，v3.0 三文件物理隔离）
 
-**`.json` 文件**（`world_bible.json`，供前端直接消费）：
-
+**`.json` 文件**（`world_bible.json`，仅 slots，Story Elf 维护）：
 ```json
 {
   "slots": {
-    "world_power_system": "这个世界存在三种基本力量：元素之力（火水土风）、生命之力（治愈与生长）、虚空之力（毁灭与转化）。力量的获取需要通过"启明仪式"与对应的元素精灵签订契约...",
-    "world_social_structure": "",
-    "world_taboos": "使用虚空之力会逐渐侵蚀使用者的生命力。每使用一次，寿命减少一年...",
-    "world_core_theme": "",
-    "world_emotional_tone": ""
-  },
-  "freeContent": ""
+    "power_system": "...",
+    "social_structure": "...",
+    "central_thesis": "..."
+  }
 }
 ```
+
+**`.free.md` 文件**（`world_bible.free.md`，自由编辑区，人类/Agent 自由写）：
+```markdown
+## 额外设定笔记
+
+这里可以写任何自由格式的内容...
+```
+
+**`.md` 文件**（`world_bible.md`，clean Markdown，slots + free_content 拼接渲染）：
 
 **`.md` 文件**（`world_bible.md`，clean Markdown，供人类阅读和 AI 参考）：
 
