@@ -135,6 +135,19 @@ async function loadWorkspaces() {
   if (works.length > 0) { sel.value = works[0].id; onWorkspaceChange(); }
 }
 
+var _cacheReady = false;
+
+async function preWarmCache(workId) {
+  // 页面加载时一次性预加载所有单例模块 + 卡片列表到缓存
+  var singletons = ['m0', 'm1', 'm2', 'm4_strategy'];
+  var cardLists = ['m3_card', 'm4_card', 'm5_intent', 'm6_chapter'];
+  await Promise.all(
+    singletons.map(function (t) { return loadModule(t + '_' + workId); })
+      .concat(cardLists.map(function (t) { return loadModuleList(workId, t); }))
+  );
+  _cacheReady = true;
+}
+
 async function onWorkspaceChange() {
   var id = qs('#workspace-selector').value;
   if (!id) {
@@ -145,10 +158,13 @@ async function onWorkspaceChange() {
   state.currentWorkId = id;
   saveState();
   qs('#split-view').style.display = 'grid';
-  applyGridColumns(); // 初始三栏布局
-  cacheClear(); // 切换作品，清空模块缓存
+  applyGridColumns();
+  cacheClear(); // 切换作品，清空旧缓存
+  _cacheReady = false;
+
   refreshPipelineGuide(id);
-  loadWorkConfig(); // 加载模板 level 配置
+  loadWorkConfig();
+  preWarmCache(id); // 后台异步预加载，不阻塞渲染
   await switchModule('original_concept');
   updateElfContext();
 }
@@ -197,6 +213,7 @@ async function switchModule(module) {
     case 'writing': await loadM6(); break;
   }
   updateElfContext();
+  _switchLock = null; // 切换完成后重置锁
 }
 
 function updateElfContext() {
@@ -890,15 +907,25 @@ async function renderEntityCardList() {
 }
 
 async function openEntityCard(entityId, name) {
+  // 切换前保存当前卡片
+  var p = capturePayload();
+  if (p) {
+    var fp = fingerprint(p);
+    if (fp !== _lastSaved) { _pendingPayload = p; flushPendingPayload(); }
+  }
+
   state.currentEntityId = entityId;
   var data = await loadModule('m3_card_' + entityId);
   var template = (data && data.data && data.data.template) ? data.data.template : null;
   if (template) {
     template.free_content = (data && data.data) ? (data.data.free_content || '') : '';
     showSlotEditor(template);
-  } else {
   }
-  renderEntityCardList();
+
+  // 只更新高亮，不重建整个列表 DOM
+  qsa('#split-left .card-item[data-entity-id]').forEach(function (el) {
+    el.classList.toggle('active', el.dataset.entityId === entityId);
+  });
   updateElfContext();
 }
 
@@ -936,11 +963,18 @@ async function renderFhCardList() {
   overviewCard.style.cssText = 'padding:0.35rem 0.75rem;margin-bottom:0.4rem;font-size:0.78rem;cursor:pointer;border-radius:6px;border:1px solid var(--border);color:var(--cyan);';
   overviewCard.textContent = '📋 ' + (t('label.fh_strategy') || '伏笔策略总览');
   overviewCard.addEventListener('click', async function () {
+    // 保存当前卡片
+    var p = capturePayload();
+    if (p) {
+      var fp = fingerprint(p);
+      if (fp !== _lastSaved) { _pendingPayload = p; flushPendingPayload(); }
+    }
     state.currentFhId = null;
     var d = await loadModule('m4_strategy_' + state.currentWorkId);
     var tpl = (d && d.data && d.data.template) ? d.data.template : null;
     if (tpl) { tpl.free_content = (d && d.data) ? (d.data.free_content || '') : ''; showSlotEditor(tpl); }
-    renderFhCardList();
+    // 只更新高亮
+    qsa('#split-left .card-item[data-entity-id]').forEach(function (el) { el.classList.remove('active'); });
   });
   frag.appendChild(overviewCard);
 
@@ -970,10 +1004,16 @@ async function renderFhCardList() {
 }
 
 async function openFhCard(entityId, name) {
+  // 切换前保存当前卡片
+  var p = capturePayload();
+  if (p) {
+    var fp = fingerprint(p);
+    if (fp !== _lastSaved) { _pendingPayload = p; flushPendingPayload(); }
+  }
+
   state.currentFhId = entityId;
   var data = await loadModule('m4_card_' + entityId);
   var template = null;
-  // V3 统一 API 对 m4_card 返回 is_card 格式
   if (data && data.data) {
     if (data.data.card && data.data.card.slots) {
       template = { sections: [{ heading: data.data.card.name || name, level: 1, slots: data.data.card.slots }], free_content: data.data.free_content || '' };
@@ -983,7 +1023,11 @@ async function openFhCard(entityId, name) {
     }
   }
   if (template) showSlotEditor(template);
-  renderFhCardList();
+
+  // 只更新高亮，不重建整个列表 DOM
+  qsa('#split-left .card-item[data-entity-id]').forEach(function (el) {
+    el.classList.toggle('active', el.dataset.entityId === entityId);
+  });
   updateElfContext();
 }
 
@@ -1019,27 +1063,16 @@ async function loadChapterCardList() {
   var left = qs('#split-left');
   left.innerHTML = '';
 
-  // V3: 从 modules 表获取章节列表 + outline 获取元数据
-  var [modList, outline] = await Promise.all([
-    loadModuleList(state.currentWorkId, state.currentModule === 'chapters' ? 'm5_intent' : 'm6_chapter'),
-    hGet('/api/write/outline/' + state.currentWorkId),
-  ]);
+  // V3: 从 modules 表获取章节列表（已缓存）
+  var modList = await loadModuleList(state.currentWorkId, state.currentModule === 'chapters' ? 'm5_intent' : 'm6_chapter');
 
   left.innerHTML = '';
   if (!modList || !modList.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
-  var modules = modList.data.modules || [];
-  var outlineSections = (outline && outline.ok && outline.data && outline.data.sections) ? outline.data.sections : [];
-
-  // 合并：module 提供 id/name/status，outline 提供 word_count/version/summary
-  var sectionMeta = {};
-  outlineSections.forEach(function (s) { sectionMeta[s.id] = s; });
-
-  var sections = modules.map(function (m) {
+  var sections = (modList.data.modules || []).map(function (m) {
     var sid = m.id.replace(/^m[56]_(intent|chapter)_/, '');
-    var meta = sectionMeta[sid] || {};
     return { id: sid, title: m.name, order_index: m.order_index,
-      section_summary: meta.section_summary || null, word_count: meta.word_count || 0, version: meta.version || 0 };
+      section_summary: null, word_count: 0, version: m.status === 'done' ? 2 : (m.status === 'in_progress' ? 1 : 0) };
   });
   if (!sections.length) {
     var wid = state.currentWorkId;
