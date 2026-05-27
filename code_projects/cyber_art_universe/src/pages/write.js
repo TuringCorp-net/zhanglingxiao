@@ -165,6 +165,11 @@ async function onWorkspaceChange() {
 // Module Switching
 // ============================================================
 async function switchModule(module) {
+  // 切换前强制保存当前模块（防止 blur 事件时序问题导致数据丢失）
+  clearTimeout(_autoSaveTimer);
+  var p = capturePayload();
+  if (p) { _pendingPayload = null; await sendPayload(p); }
+
   state.currentModule = module;
   state.currentSectionId = null;
   state.currentSectionTitle = '';
