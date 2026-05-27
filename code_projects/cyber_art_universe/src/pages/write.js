@@ -798,42 +798,30 @@ async function loadM0() {
 // ============================================================
 // M1: 世界观
 // ============================================================
-async function loadM1() { loadBibleModule('worldbuilding', '/api/write/worldbuilding/'); }
-
-// ============================================================
-// M2: 主线剧情（独立实现——API 返回 outline_md 而非 content）
-// ============================================================
-async function loadM2() {
+async function loadM1() {
   var left = qs('#split-left');
   left.innerHTML = '';
-  var cached = cacheGet('m2_outline');
-  if (!cached) left.appendChild(loadingHTML());
-  var data = cached || await hGet('/api/write/outline/' + state.currentWorkId);
-  if (data && !cached) cacheSet('m2_outline', data);
+  loadRotatingHint('m1');
+  var data = await loadModule('m1_' + state.currentWorkId);
   left.innerHTML = '';
-  loadRotatingHint('m2');
-
-  var template = (data && data.data && data.data.template) ? data.data.template : null;
-  if (template) {
-    showSlotEditor(template);
+  if (data && data.data && data.data.template) {
+    showSlotEditor(data.data.template);
   } else {
     showTextEditor('');
   }
 }
 
-async function loadBibleModule(module, apiPath) {
+// ============================================================
+// M2: 主线剧情
+// ============================================================
+async function loadM2() {
   var left = qs('#split-left');
   left.innerHTML = '';
-  var cached = cacheGet('m1_worldbuilding');
-  if (!cached) left.appendChild(loadingHTML());
-  var data = cached || await hGet(apiPath + state.currentWorkId);
-  if (data && !cached) cacheSet('m1_worldbuilding', data);
+  loadRotatingHint('m2');
+  var data = await loadModule('m2_' + state.currentWorkId);
   left.innerHTML = '';
-  loadRotatingHint('m1');
-
-  var template = (data && data.data && data.data.template) ? data.data.template : null;
-  if (template) {
-    showSlotEditor(template);
+  if (data && data.data && data.data.template) {
+    showSlotEditor(data.data.template);
   } else {
     showTextEditor('');
   }
@@ -855,15 +843,11 @@ async function renderEntityCardList() {
   console.log('[SF:M3] renderEntityCardList start');
   var left = qs('#split-left');
   left.innerHTML = '';
-  // 优先从缓存读取
-  var cached = cacheGet('m3_characters');
-  if (!cached) left.appendChild(loadingHTML());
-  var data = cached || await hGet('/api/content/' + state.currentWorkId + '/entities');
-  if (data && !cached) cacheSet('m3_characters', data);
+  var data = await loadModuleList(state.currentWorkId, 'm3_card');
   left.innerHTML = '';
   if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
-  var entities = (data.data || []).filter(function (e) { return e.type !== 'foreshadowing'; });
+  var entities = (data.data.modules || []).map(function (m) { return { id: m.id.replace('m3_card_', ''), name: m.name, type: 'character' }; });
   if (!entities.length) { left.innerHTML = '<div class="left-panel-empty">' + t('label.no_characters') + '</div>'; return; }
 
   var byType = {};
@@ -894,10 +878,8 @@ async function renderEntityCardList() {
 
 async function openEntityCard(entityId, name) {
   state.currentEntityId = entityId;
-  var cached = cacheGet('m3_card_' + entityId);
-  var data = cached || await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
-  if (data && !cached) cacheSet('m3_card_' + entityId, data);
-  var template = (data && data.ok && data.data && data.data.template) ? data.data.template : null;
+  var data = await loadModule('m3_card_' + entityId);
+  var template = (data && data.data && data.data.template) ? data.data.template : null;
   if (template) showSlotEditor(template);
   renderEntityCardList();
   updateElfContext();
@@ -909,17 +891,13 @@ async function openEntityCard(entityId, name) {
 async function loadM4() {
   showTextEditor('');
 
-  // 加载策略总览（foreshadowing.md）到右侧
-  var data = await hGet('/api/write/foreshadowing/' + state.currentWorkId);
-  var template = (data && data.ok && data.data && data.data.template) ? data.data.template : null;
-  if (template) {
-    showSlotEditor(template);
-  } else {
-    showTextEditor('');
-  }
+  // 加载策略总览
+  var data = await loadModule('m4_strategy_' + state.currentWorkId);
+  var template = (data && data.data && data.data.template) ? data.data.template : null;
+  if (template) showSlotEditor(template);
+  else showTextEditor('');
 
   await renderFhCardList();
-  // 默认选中第一个伏笔条目
   var first = qs('#split-left .card-item[data-entity-id]');
   if (first) first.click();
 }
@@ -928,14 +906,11 @@ async function renderFhCardList() {
   console.log('[SF:M4] renderFhCardList start');
   var left = qs('#split-left');
   left.innerHTML = '';
-  left.appendChild(loadingHTML());
-  var cached = cacheGet('m4_cards');
-  var data = cached || await hGet('/api/content/' + state.currentWorkId + '/entities');
-  if (!cached && data) cacheSet('m4_cards', data);
+  var data = await loadModuleList(state.currentWorkId, 'm4_card');
   left.innerHTML = '';
   if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
-  var entities = (data.data || []).filter(function (e) { return e.type === 'foreshadowing'; });
+  var entities = (data.data.modules || []).map(function (m) { return { id: m.id.replace('m4_card_', ''), name: m.name, type: 'foreshadowing' }; });
 
   // 策略总览入口（始终在顶部）
   var frag = document.createDocumentFragment();
@@ -944,8 +919,8 @@ async function renderFhCardList() {
   overviewCard.textContent = '📋 ' + (t('label.fh_strategy') || '伏笔策略总览');
   overviewCard.addEventListener('click', async function () {
     state.currentFhId = null;
-    var d = await hGet('/api/write/foreshadowing/' + state.currentWorkId);
-    var tpl = (d && d.ok && d.data && d.data.template) ? d.data.template : null;
+    var d = await loadModule('m4_strategy_' + state.currentWorkId);
+    var tpl = (d && d.data && d.data.template) ? d.data.template : null;
     if (tpl) showSlotEditor(tpl);
     renderFhCardList();
   });
@@ -979,17 +954,17 @@ async function renderFhCardList() {
 
 async function openFhCard(entityId, name) {
   state.currentFhId = entityId;
-  var cached = cacheGet('m4_card_' + entityId);
-  var data = cached || await hGet('/api/write/works/' + state.currentWorkId + '/entities/' + entityId + '/card');
-  if (data && !cached) cacheSet('m4_card_' + entityId, data);
-  var template = (data && data.ok && data.data && data.data.template) ? data.data.template : null;
-  if (template) {
-    // 卡片格式 { name, slots: [...] } → sections 格式
-    if (template.slots && !template.sections) {
-      template = { sections: [{ heading: template.name || name, level: 1, slots: template.slots }], free_content: template.free_content || '' };
+  var data = await loadModule('m4_card_' + entityId);
+  var template = null;
+  // V3 统一 API 对 m4_card 返回 is_card 格式
+  if (data && data.data) {
+    if (data.data.card && data.data.card.slots) {
+      template = { sections: [{ heading: data.data.card.name || name, level: 1, slots: data.data.card.slots }], free_content: data.data.free_content || '' };
+    } else if (data.data.template) {
+      template = data.data.template;
     }
-    showSlotEditor(template);
   }
+  if (template) showSlotEditor(template);
   renderFhCardList();
   updateElfContext();
 }
@@ -1026,16 +1001,29 @@ async function loadChapterCardList() {
   console.log('[SF:M5/M6] loadChapterCardList start, module=' + state.currentModule);
   var left = qs('#split-left');
   left.innerHTML = '';
-  // 优先从缓存读取
-  var cached = cacheGet('m5_chapters');
-  if (!cached) left.appendChild(loadingHTML());
-  var data = cached || await hGet('/api/write/outline/' + state.currentWorkId);
-  if (data && !cached) cacheSet('m5_chapters', data);
-  console.log('[SF:M5/M6] API response:', data ? 'ok=' + data.ok : 'NULL', 'sections=' + (data && data.data && data.data.sections ? data.data.sections.length : 0));
-  left.innerHTML = '';
-  if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
 
-  var sections = data.data.sections || [];
+  // V3: 从 modules 表获取章节列表 + outline 获取元数据
+  var [modList, outline] = await Promise.all([
+    loadModuleList(state.currentWorkId, state.currentModule === 'chapters' ? 'm5_intent' : 'm6_chapter'),
+    hGet('/api/write/outline/' + state.currentWorkId),
+  ]);
+
+  left.innerHTML = '';
+  if (!modList || !modList.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
+
+  var modules = modList.data.modules || [];
+  var outlineSections = (outline && outline.ok && outline.data && outline.data.sections) ? outline.data.sections : [];
+
+  // 合并：module 提供 id/name/status，outline 提供 word_count/version/summary
+  var sectionMeta = {};
+  outlineSections.forEach(function (s) { sectionMeta[s.id] = s; });
+
+  var sections = modules.map(function (m) {
+    var sid = m.id.replace(/^m[56]_(intent|chapter)_/, '');
+    var meta = sectionMeta[sid] || {};
+    return { id: sid, title: m.name, order_index: m.order_index,
+      section_summary: meta.section_summary || null, word_count: meta.word_count || 0, version: meta.version || 0 };
+  });
   if (!sections.length) {
     var wid = state.currentWorkId;
     left.innerHTML = '<div class="left-panel-empty">' + t('label.no_chapters')
