@@ -117,46 +117,58 @@ TEST_MODULES=(
   "M5_intent|${M5_FIRST}"
 )
 
-# 记录原始内容，用于 cleanup
-declare -A BEFORE_MAP
+# 记录原始数据（slots + free_content），用于 cleanup 完整恢复
+declare -A BEFORE_FC_MAP
+declare -A BEFORE_SLOTS_MAP
 
 for entry in "${TEST_MODULES[@]}"; do
   LABEL="${entry%%|*}"
   MID="${entry##*|}"
   [ -z "$MID" ] || [ "$MID" = "null" ] && { echo "  SKIP $LABEL: no module found"; continue; }
 
-  # GET before
-  BEFORE=$(api_get "/api/write/module/$MID?lang=zh" | python3 -c "import json,sys; print(json.load(sys.stdin)['data'].get('free_content',''))" 2>/dev/null)
-  BEFORE_MAP["$MID"]="$BEFORE"
+  # GET before: 保存 slots + free_content
+  BEFORE_JSON=$(api_get "/api/write/module/$MID?lang=zh")
+  BEFORE_FC=$(echo "$BEFORE_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin)['data'].get('free_content',''))" 2>/dev/null)
+  BEFORE_SLOTS=$(echo "$BEFORE_JSON" | python3 -c "import json,sys; print(json.dumps(json.load(sys.stdin)['data'].get('slots',{})))" 2>/dev/null)
+  BEFORE_FC_MAP["$MID"]="$BEFORE_FC"
+  BEFORE_SLOTS_MAP["$MID"]="$BEFORE_SLOTS"
 
-  # PUT: 追加标记
-  NEW_FC="${BEFORE}"$'\n\n'"${TEST_MARKER}"
+  # PUT: 追加标记（仅修改 free_content，slots 由服务端自动保留）
+  NEW_FC="${BEFORE_FC}"$'\n\n'"${TEST_MARKER}"
   PUT_RESP=$(api_put "/api/write/module/$MID?lang=zh" "$(python3 -c "import json; print(json.dumps({'free_content': '''${NEW_FC}'''}))")")
   PUT_OK=$(echo "$PUT_RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('ok',False))" 2>/dev/null)
 
-  # GET after: 验证标记存在
-  AFTER=$(api_get "/api/write/module/$MID?lang=zh" | python3 -c "import json,sys; print(json.load(sys.stdin)['data'].get('free_content',''))" 2>/dev/null)
-  HAS_MARKER=$(echo "$AFTER" | grep -Fc "$TEST_MARKER" || true)
+  # GET after: 验证标记存在 + slots 未被覆盖
+  AFTER_JSON=$(api_get "/api/write/module/$MID?lang=zh")
+  AFTER_FC=$(echo "$AFTER_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin)['data'].get('free_content',''))" 2>/dev/null)
+  AFTER_SLOTS=$(echo "$AFTER_JSON" | python3 -c "import json,sys; print(json.dumps(json.load(sys.stdin)['data'].get('slots',{})))" 2>/dev/null)
+  HAS_MARKER=$(echo "$AFTER_FC" | grep -Fc "$TEST_MARKER" || true)
+  SLOTS_INTACT=$( [ "$AFTER_SLOTS" = "$BEFORE_SLOTS" ] && echo "1" || echo "0" )
 
   check "$PUT_OK" "True"  "$LABEL PUT ok"
   check "$HAS_MARKER" "1"  "$LABEL marker persisted"
+  check "$SLOTS_INTACT" "1" "$LABEL slots preserved"
 done
 
-# ---- Step 5: Cleanup — 恢复原始数据 ----
+# ---- Step 5: Cleanup — 完整恢复原始数据 ----
 echo ""
-echo "--- Step 5: Cleanup — restore original free_content ---"
+echo "--- Step 5: Cleanup — restore original slots + free_content ---"
 for entry in "${TEST_MODULES[@]}"; do
   LABEL="${entry%%|*}"
   MID="${entry##*|}"
   [ -z "$MID" ] || [ "$MID" = "null" ] && continue
 
-  ORIGINAL="${BEFORE_MAP[$MID]}"
-  CLEAN_RESP=$(api_put "/api/write/module/$MID?lang=zh" "$(python3 -c "import json; print(json.dumps({'free_content': '''${ORIGINAL}'''}))")")
+  ORIG_FC="${BEFORE_FC_MAP[$MID]}"
+  ORIG_SLOTS="${BEFORE_SLOTS_MAP[$MID]}"
+
+  # PUT 原始数据（slots + free_content 一起恢复）
+  RESTORE_BODY=$(python3 -c "import json; print(json.dumps({'slots': ${ORIG_SLOTS}, 'free_content': '${ORIG_FC}'}))")
+  CLEAN_RESP=$(api_put "/api/write/module/$MID?lang=zh" "$RESTORE_BODY")
   CLEAN_OK=$(echo "$CLEAN_RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('ok',False))" 2>/dev/null)
 
   # 验证 marker 已删除
-  VERIFY=$(api_get "/api/write/module/$MID?lang=zh" | python3 -c "import json,sys; print(json.load(sys.stdin)['data'].get('free_content',''))" 2>/dev/null)
-  NO_MARKER=$(echo "$VERIFY" | grep -Fc "$TEST_MARKER" || true)
+  VERIFY_FC=$(api_get "/api/write/module/$MID?lang=zh" | python3 -c "import json,sys; print(json.load(sys.stdin)['data'].get('free_content',''))" 2>/dev/null)
+  NO_MARKER=$(echo "$VERIFY_FC" | grep -Fc "$TEST_MARKER" || true)
 
   check "$CLEAN_OK" "True"  "$LABEL cleanup PUT ok"
   check "$NO_MARKER" "0"    "$LABEL marker removed"

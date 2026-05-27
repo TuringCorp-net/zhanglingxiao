@@ -385,6 +385,17 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   }
 
   const body = await request.json() as { slots?: Record<string, string>; free_content?: string };
+  const hasSlots = body.slots && typeof body.slots === 'object' && Object.keys(body.slots).length > 0;
+  const hasFreeContent = !!body.free_content;
+
+  // free_content-only 写入：保留已有 slots，不覆盖
+  if (!hasSlots && hasFreeContent) {
+    const jsonKey = r2Path(mod.work_id, lang, cfg.jsonKeyFromModule(mod));
+    const existing = await readR2Json(env, jsonKey);
+    if (existing?.slots && Object.keys(existing.slots).length > 0) {
+      body.slots = existing.slots;
+    }
+  }
 
   // M5 intent 特殊处理：平铺 slots → 嵌套 JSON
   if (mod.type === 'm5_intent') {
