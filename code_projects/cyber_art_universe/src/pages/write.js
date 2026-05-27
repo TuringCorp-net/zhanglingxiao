@@ -571,6 +571,15 @@ function serializeSlots() {
   });
   var freeArea = document.getElementById('slot-free-area');
   var freeContent = freeArea ? freeArea.value.trim() : '';
+
+  // 单槽位 text 模式（M0/M6 用 showTextEditor）：从 writing-editor 读取
+  if (Object.keys(slots).length === 0) {
+    var we = qs('#writing-editor');
+    if (we && we.style.display !== 'none') {
+      slots.content = we.value;
+    }
+  }
+
   return { slots: slots, free_content: freeContent };
 }
 
