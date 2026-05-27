@@ -96,12 +96,11 @@ async function refreshPipelineGuide(workId) {
     byType[m.type].push(m);
   });
 
-  // 预热单例模块缓存（切换时秒开，不读 R2）
+  // 预热单例模块缓存（await 确保完成后才响应用户交互，避免竞态覆盖保存数据）
   var singletons = ['m0', 'm1', 'm2', 'm4_strategy'];
-  singletons.forEach(function (t) {
-    var mid = t + '_' + workId;
-    if (!cacheGet(mid)) loadModule(mid); // fire-and-forget，写入缓存
-  });
+  await Promise.all(singletons.map(function (t) {
+    return loadModule(t + '_' + workId);
+  }));
 
   // 根据 modules 表 status 字段更新 pipeline 状态
   function statusOf(type) {
@@ -256,7 +255,11 @@ async function loadModule(moduleId) {
   var cached = cacheGet(moduleId);
   if (cached) return cached;
   var data = await hGet('/api/write/module/' + moduleId);
-  if (data && data.ok) { cacheSet(moduleId, data); return data; }
+  if (data && data.ok) {
+    // 仅当缓存仍为空时写入，防止覆盖在 fetch 期间由 saveModule 写入的新数据
+    if (!cacheGet(moduleId)) cacheSet(moduleId, data);
+    return data;
+  }
   return null;
 }
 
