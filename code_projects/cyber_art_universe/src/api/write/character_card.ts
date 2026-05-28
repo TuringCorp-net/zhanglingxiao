@@ -2,8 +2,8 @@
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { workContentPath, extractLang, type Lang } from '../../lib/work_content';
-import { renderTemplate, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/template';
+import { workContentPath, extractLang, type Lang } from '../../lib/l1/work-content';
+import { renderTemplate, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/l1/template';
 
 // ============================================================
 // 人物卡 — 结构化模板定义（单一来源，双语）

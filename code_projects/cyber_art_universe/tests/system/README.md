@@ -23,7 +23,7 @@ BASE_URL="https://cau.turingcorp.net" TOKEN="xxx" ./tests/system/v3_module_api.s
 
 | 文件 | 覆盖范围 | 说明 |
 |------|---------|------|
-| `v3_module_api.sh` | M0-M5 统一 Module API | GET list / GET module / PUT free_content / GET verify 闭环 |
+| `v3_module_api.sh` | M0-M5 统一 Module API + V4 版本/diff | GET list / GET module / PUT free_content / GET verify 闭环 / versions / diff |
 
 ## 新增测试
 

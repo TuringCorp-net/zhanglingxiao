@@ -274,9 +274,14 @@ async function loadModule(moduleId) {
   return null;
 }
 
-// 保存 Module
+// 保存 Module（V4: 携带修改前内容，服务端零 R2 读取即可生成历史快照）
 async function saveModule(moduleId, slots, freeContent) {
+  var cached = cacheGet(moduleId);
   var body = { slots: slots || {}, free_content: freeContent || '' };
+  if (cached && cached.data) {
+    if (cached.data.slots) body._prev_slots = cached.data.slots;
+    if (cached.data.free_content !== undefined) body._prev_free_content = cached.data.free_content;
+  }
   var resp = await hPut('/api/write/module/' + moduleId, body);
   if (resp && resp.ok) {
     cacheSet(moduleId, resp);
@@ -1231,9 +1236,12 @@ function flushPendingPayload() {
   sendPayload(p);
 }
 
+var _saving = false;  // 防止并发 sendPayload 产生重复快照
+
 // V3 统一保存：module_id → PUT /api/write/module/{id}
 async function sendPayload(p) {
-  var fc_preview = (p.free_content || '').substring(0, 40);
+  if (_saving) { _pendingPayload = p; return; }
+  _saving = true;
   try {
     var resp = await saveModule(p.moduleId, p.slots, p.free_content);
     if (resp && resp.ok) {
@@ -1245,6 +1253,14 @@ async function sendPayload(p) {
   } catch (e) {
     console.error('[sendPayload] FAILED mod=' + p.mod, e);
     _lastSaved = '';
+  } finally {
+    _saving = false;
+    // 发送期间堆积的新 payload，立即发送
+    if (_pendingPayload) {
+      var next = _pendingPayload;
+      _pendingPayload = null;
+      sendPayload(next);
+    }
   }
 }
 

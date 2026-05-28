@@ -5,8 +5,8 @@ import { ErrorCodes } from '../../lib/errors';
 import { callAI } from '../../lib/ai';
 import { renderTemplate as renderText } from '../../lib/l1/render';
 import worldbuildingGenMd from '../../lib/l1/prompts/tools/worldbuilding_gen.md';
-import { workContentPath, SUPPORTED_LANGS, DEFAULT_BILINGUAL, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
-import { renderTemplate, renderTemplateAsJson, extractTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/template';
+import { workContentPath, SUPPORTED_LANGS, DEFAULT_BILINGUAL, extractLang, type Lang, LANG_LABELS } from '../../lib/l1/work-content';
+import { renderTemplate, renderTemplateAsJson, extractTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/l1/template';
 
 // ============================================================
 // 世界观设定圣经 — 结构化模板定义（单一来源，双语）

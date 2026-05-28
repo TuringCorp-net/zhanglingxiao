@@ -1,6 +1,6 @@
 // R2 Markdown 读写层 — 作品/章节内容存储（多语言支持）
-import { Env } from '../db/schema';
-import { parseJSON } from './response';
+import { Env } from '../../db/schema';
+import { parseJSON } from '../response';
 
 // ============================================================
 // 多语言支持

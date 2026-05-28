@@ -15,7 +15,7 @@ import {
   resolveWorkR2Key,
   workR2Key,
   sectionR2Key,
-} from '../lib/work_content';
+} from '../lib/l1/work-content';
 import { parsePagination } from '../lib/constants';
 
 // 验证 Bearer token（与 write 侧共享 USER_TOKEN secret，支持逗号分隔多 token）

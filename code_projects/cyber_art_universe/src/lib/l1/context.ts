@@ -1,7 +1,7 @@
 // L1: 上下文组装
 // 将作品元信息 + 上下文包 + 动态参数组装成 AgentVars。
 
-import { type Lang, LANG_LABELS } from '../work_content';
+import { type Lang, LANG_LABELS } from './work-content';
 import type { AgentVars, WorkMeta, ContextOpts } from './types';
 
 /**

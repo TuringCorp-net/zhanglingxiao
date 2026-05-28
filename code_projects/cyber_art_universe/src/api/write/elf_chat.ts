@@ -7,7 +7,7 @@ import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { callAI, AIError, type Message } from '../../lib/ai';
 import { recordAIUsage, extractUserToken } from '../../lib/telemetry';
-import { extractLang } from '../../lib/work_content';
+import { extractLang } from '../../lib/l1/work-content';
 import { getScenario } from '../../lib/l1/scenarios';
 import { assembleContext } from '../../lib/l1/context';
 import { buildSystemPrompt } from '../../lib/l1/instructions';

@@ -128,6 +128,19 @@ export interface Event {
 }
 
 // ============================================================
+// 文件版本历史（V4）
+// ============================================================
+export interface FileVersion {
+  id: string;
+  work_id: string;
+  r2_key: string;
+  version_num: number;
+  snapshot_key: string;
+  size_bytes: number | null;
+  created_at: string;
+}
+
+// ============================================================
 // Workers Env 绑定
 // ============================================================
 export interface Env {

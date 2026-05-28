@@ -10,7 +10,7 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
   const manifest = {
     site: 'Cyber Art Universe',
     description: 'AI-native content society — Read + Write dual API. Humans and AI Agents share the same endpoints.',
-    version: '3.0',
+    version: '3.1',
     docs: {
       guidebook: '/llms.txt',
       openapi: '/openapi.yaml',
@@ -68,6 +68,8 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         module_list: 'GET /api/write/modules?work_id=X&type=Y',
         module_get: 'GET/PUT /api/write/module/{module_id}',
         module_generate: 'POST /api/write/module/{module_id}/generate',
+        module_versions: 'GET /api/write/module/{module_id}/versions',
+        module_diff: 'GET /api/write/module/{module_id}/diff?v1=X&v2=Y',
         works: 'GET/POST /api/write/works',
         work: 'GET/PUT/DELETE /api/write/works/{id}',
         preview: 'GET /api/write/works/{id}/preview',
@@ -361,6 +363,38 @@ Returns \`{ok: true, data: {template, rendered_md, ...}}\`
 
 ---
 
+
+
+**GET /api/write/module/{module_id}/versions** — List version history
+
+| Parameter | In | Required | Type | Description |
+|-----------|-----|----------|------|-------------|
+| \`module_id\` | path | **yes** | string | Module ID |
+| \`lang\` | query | no | string | \`"zh"\` (default) or \`"en"\` |
+
+Returns \`{ok: true, data: {module_id, json_key, free_key, json_versions: [{id, version_num, size_bytes, created_at}], free_versions: [...]}}\`
+
+Each PUT to a module automatically creates a version snapshot (of the content BEFORE the write). Default 10 versions per file (configurable via \`maxVersions\` parameter).
+
+---
+
+**GET /api/write/module/{module_id}/diff** — Diff two versions
+
+| Parameter | In | Required | Type | Description |
+|-----------|-----|----------|------|-------------|
+| \`module_id\` | path | **yes** | string | Module ID |
+| \`v1\` | query | **yes** | string (UUID) | First version ID |
+| \`v2\` | query | **yes** | string | Second version ID, or \`"current"\` to compare with current content |
+| \`key\` | query | no | string | \`"free"\` to diff \`.free.md\` instead of \`.json\` (default: json) |
+| \`slot_only\` | query | no | string | \`"1"\` to return only slot-level changes (JSON files only) |
+| \`lang\` | query | no | string | \`"zh"\` (default) or \`"en"\` |
+
+Returns \`{ok: true, data: {key, versionA: {id, num, createdAt}, versionB: {id, num, createdAt}, changes: [{type: "added"|"removed"|"modified", path, oldValue?, newValue?}]}}\`
+
+Diff type depends on file: JSON files get slot-level diff (\`path: "slots.power_system"\`), Markdown files get line-level diff (\`path: "line:5"\`).
+
+---
+
 #### Writing Workflow (External Agent)
 
 \`\`\`
@@ -591,8 +625,9 @@ This means external Agents do not need to learn per-module slot schemas — they
 - \`chapters/{section_id}.json\` + \`.md\` — M6 chapter drafts
 - \`checks/{section_id}.json\` — M6 check cache
 - \`marketing/{section_id}_extract.json\` — Marketing extracts
+- \`.versions/{filename}/{uuid}.json\` — V4 version history snapshots (auto-created on each PUT)
 
-**D1 Core Tables**: \`works\`, \`modules\` (v3.0 — unified M0-M8 registry), \`sections\`, \`entities\`, \`events\`, \`reviews\`, \`subscriptions\`
+**D1 Core Tables**: \`works\`, \`modules\` (v3.0 — unified M0-M8 registry), \`sections\`, \`entities\`, \`file_versions\` (V4 — version metadata), \`events\`, \`reviews\`, \`subscriptions\`
 
 ---
 
@@ -613,9 +648,10 @@ export function handleOpenAPI(_env: Env, _request: Request): Response {
   const yaml = `openapi: "3.1.0"
 info:
   title: Cyber Art Universe API
-  version: "3.0"
+  version: "3.1"
   description: |
     AI-native content society — Read + Write dual API.
+    V4: version history & diff for all module files.
     Humans and AI Agents share the same endpoints.
     Full Agent Guidebook: /llms.txt
     Machine-readable manifest: /.well-known/agent-manifest.json
@@ -986,6 +1022,37 @@ paths:
       tags: [Write - Module API]
       summary: AI generate module content
       security: [{ BearerAuth: [] }]
+
+  /api/write/module/{module_id}/versions:
+    get:
+      tags: [Write - Module API]
+      summary: List version history for a module file
+      description: Returns .json and .free.md version lists. Each PUT auto-creates a snapshot (of content BEFORE write).
+      security: [{ BearerAuth: [] }]
+
+  /api/write/module/{module_id}/diff:
+    get:
+      tags: [Write - Module API]
+      summary: Diff two versions of a module file
+      description: JSON files = slot-level diff. Markdown files = line-level diff. Supports v2=current to compare with live content.
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: v1
+          in: query
+          required: true
+          schema: { type: string }
+          description: First version ID
+        - name: v2
+          in: query
+          required: true
+          schema: { type: string }
+          description: Second version ID, or "current"
+        - name: key
+          in: query
+          schema: { type: string, enum: [json, free], default: json }
+        - name: slot_only
+          in: query
+          schema: { type: string }
 
   /api/write/works/{id}/entities:
     post:

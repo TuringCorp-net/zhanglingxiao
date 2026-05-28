@@ -27,6 +27,7 @@
 | v2.4.0 | 2026-05-22 | 模板数据流全生命周期：新增 §10.9 模板数据流（TemplateDef 单一来源 → 渲染 → 解析 → 编辑 → 序列化 → R2 持久化完整循环）。Hint 对话泡数据流说明。 |
 | v2.5.0 | 2026-05-26 | 模板系统 JSON 化：LLM 输出统一为 `{"slots":{...}}` JSON 格式，Markdown 由 `renderTemplate()` 服务端组装。R2 双文件存储（`.json` 结构化数据 + `.md` clean Markdown）。前端直接消费 JSON 结构，不再依赖 `parseSlotTemplate` Markdown 解析。删除 `stripTemplateMarkers`。更新 §10.9 模板数据流。 |
 | v3.0.0 | 2026-05-27 | **统一数据架构**：系统收敛为 Module / ModuleList 两种结构。新增 `modules` D1 表统一管理 M0-M8 所有实例。API 收敛为 `/api/write/module/{id}` + `/api/write/modules` + `/api/write/module/{id}/generate` 三个端点。M0/M6 改为单槽位模板，全模块统一使用槽位编辑器（消除 text/slot 分支）。前端数据层收敛为 `loadModule`/`saveModule`/`loadModuleList`。M5 意图卡表单编辑器替换为 INTENT_TEMPLATE 槽位编辑器。Story Elf 上下文包改用 modules 表查询。缓存 key 统一为 module_id。 |
+| v3.1.0 | 2026-05-28 | **V4 版本历史 & Diff**：L1 层整理（template.ts / work-content.ts 移入 `src/lib/l1/`）。新增 `version.ts`（每次 PUT 自动版本快照，R2 `.versions/` 子目录 + D1 `file_versions` 表，默认 10 个版本可配置）+ `diff.ts`（JSON slot 级 + MD 行级对比）。API 新增 `GET /api/write/module/{id}/versions` 和 `GET /api/write/module/{id}/diff`。`src/lib/` 根目录收敛为 5 个文件（ai / response / errors / constants / telemetry）。 |
 
 ---
 
@@ -1051,6 +1052,8 @@ Story Forger 的流水线本身就是一个结构化的创作步骤。将此流�
 │  works/{id}/{lang}/intents/*.json       ← M5 产出            │
 │  works/{id}/{lang}/constraints.json     ← M1 约束缓存        │
 │  works/{id}/{lang}/checks/*.json        ← M6 校验缓存        │
+│  works/{id}/{lang}/.versions/           ← V4 版本快照        │
+│    {filename}/{versionId}.json          ← 历史版本内容        │
 │                                                              │
 │  {lang} = zh | en（主力市场）| ja | ko | fr ...（按需扩展）│
 └─────────────────────────────────────────────────────────────┘
@@ -1061,6 +1064,8 @@ Story Forger 的流水线本身就是一个结构化的创作步骤。将此流�
 │  works       ← M1/M2 的元信息（title, category, status）    │
 │  sections    ← M2大纲节点 + M6章节记录（r2_object_key 含 lang 前缀）│
 │  entities    ← M3 人物/地点/道具 + M4 伏笔条目（type, description）│
+│  modules     ← V3 统一模块实例（M0-M8 全部类型）             │
+│  file_versions ← V4 文件版本历史（version_num / snapshot_key / r2_key）│
 │  events      ← M6 每次章节变更的审计日志                    │
 └─────────────────────────────────────────────────────────────┘
 ```

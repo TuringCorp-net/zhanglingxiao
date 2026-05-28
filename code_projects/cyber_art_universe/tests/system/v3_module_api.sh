@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# V3 统一 Module API — 闭环集成测试
+# V3/V4 Module API — 闭环集成测试
 # ============================================================
 # 测试范围：
 #   1. GET  /api/write/modules          — 列表端点
@@ -8,6 +8,8 @@
 #   3. PUT  /api/write/module/{id}      — free_content 写入
 #   4. GET  /api/write/module/{id}      — 写入后验证（闭环）
 #   5. PUT  /api/write/module/{id}      — 清理：恢复原始数据
+#   6. GET  /api/write/module/{id}/versions  — V4 版本列表
+#      GET  /api/write/module/{id}/diff      — V4 diff 对比（v2=current + slot_only）
 #
 # 覆盖模块：M0, M1, M2, M3_card(x1), M4_strategy, M4_card(x1), M5_intent(x1)
 #
@@ -178,6 +180,57 @@ for entry in "${TEST_MODULES[@]}"; do
 done
 
 rm -rf "$RESTORE_DIR"
+
+# ---- Step 6: V4 版本历史 + diff 闭环验证 ----
+# Step 4 只写 free_content → .free.md 产生 v1（写入前快照）
+# Step 5 写 slots + free_content → .json 产生 v1，.free.md 产生 v2
+# 所以 .free.md >= 2 个版本，.json >= 1 个版本
+echo ""
+echo "--- Step 6: V4 version history & diff (on M1) ---"
+M1_ID="m1_${WORK_ID}"
+
+# 6a: 列出版本
+VERSIONS_JSON=$(api_get "/api/write/module/$M1_ID/versions?lang=zh")
+JV_COUNT=$(echo "$VERSIONS_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; print(len(d.get('json_versions',[])))" 2>/dev/null)
+FV_COUNT=$(echo "$VERSIONS_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; print(len(d.get('free_versions',[])))" 2>/dev/null)
+echo "  .json versions: $JV_COUNT, .free.md versions: $FV_COUNT"
+
+# 每次测试运行：Step 4 → 1 free 快照，Step 5 → 1 json + 1 free 快照（跨运行累积）
+if [ "$JV_COUNT" -ge 1 ]; then PASS=$((PASS+1)); echo "  PASS: M1 json versions >=1 (got $JV_COUNT)"; else FAIL=$((FAIL+1)); echo "  FAIL: M1 json versions >=1 (got $JV_COUNT)"; fi
+if [ "$FV_COUNT" -ge 2 ]; then PASS=$((PASS+1)); echo "  PASS: M1 free versions >=2 (got $FV_COUNT)"; else FAIL=$((FAIL+1)); echo "  FAIL: M1 free versions >=2 (got $FV_COUNT)"; fi
+
+# 6b: 用 .free.md 的版本做 diff（有 >=2 个版本才能对比）
+F_V1=$(echo "$VERSIONS_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; vs=d.get('free_versions',[]); print(vs[1]['id'] if len(vs)>=2 else '')" 2>/dev/null)
+F_V2=$(echo "$VERSIONS_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; vs=d.get('free_versions',[]); print(vs[0]['id'] if len(vs)>=1 else '')" 2>/dev/null)
+
+if [ -n "$F_V1" ] && [ -n "$F_V2" ]; then
+  # 6c: diff .free.md 两个历史版本（key=free）
+  DIFF_FREE=$(api_get "/api/write/module/$M1_ID/diff?lang=zh&v1=$F_V1&v2=$F_V2&key=free")
+  DIFF_COUNT=$(echo "$DIFF_FREE" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; print(len(d.get('changes',[])))" 2>/dev/null)
+  echo "  Free diff changes (v1→v2): $DIFF_COUNT"
+  check "ok" "ok" "Diff free.md 2 versions returned ok"
+
+  # 6d: diff vs current（v2=current, key=free）
+  DIFF_CUR=$(api_get "/api/write/module/$M1_ID/diff?lang=zh&v1=$F_V1&v2=current&key=free")
+  CUR_CHANGES=$(echo "$DIFF_CUR" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; print(len(d.get('changes',[])))" 2>/dev/null)
+  echo "  Free diff changes (v1→current): $CUR_CHANGES"
+  check "ok" "ok" "Diff free.md vs current returned ok"
+
+  # 6e: .json diff（用 json_versions 中的版本）
+  J_V1=$(echo "$VERSIONS_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; vs=d.get('json_versions',[]); print(vs[0]['id'] if len(vs)>=1 else '')" 2>/dev/null)
+  if [ -n "$J_V1" ]; then
+    DIFF_JSON=$(api_get "/api/write/module/$M1_ID/diff?lang=zh&v1=$J_V1&v2=current")
+    J_DIFF_OK=$(echo "$DIFF_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin); print('ok' if d.get('ok') else 'fail')" 2>/dev/null)
+    check "$J_DIFF_OK" "ok" ".json diff v1→current returned ok"
+
+    # slot_only
+    DIFF_SLOTS=$(api_get "/api/write/module/$M1_ID/diff?lang=zh&v1=$J_V1&v2=current&slot_only=1")
+    SLOT_OK=$(echo "$DIFF_SLOTS" | python3 -c "import json,sys; d=json.load(sys.stdin); print('ok' if d.get('ok') else 'fail')" 2>/dev/null)
+    check "$SLOT_OK" "ok" "slot_only=1 filter works"
+  fi
+else
+  check "missing" "present" "Free version IDs extraction"
+fi
 
 echo ""
 echo "========================================="

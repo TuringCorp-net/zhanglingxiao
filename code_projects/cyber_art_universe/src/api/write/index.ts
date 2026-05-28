@@ -18,7 +18,7 @@ import { extractHooks, generateTitles, repurposeSection } from './marketing';
 import { readOriginalConcept, updateOriginalConcept } from './original_concept';
 import { handleElfChat } from './elf_chat';
 import { readHints } from './hints';
-import { getModule, updateModule, listModules, generateModule } from './module';
+import { getModule, updateModule, listModules, generateModule, listModuleVersions, diffModuleVersions } from './module';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -96,6 +96,13 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   }
   if (resource === 'module' && resourceId && subResource === 'generate' && !subResourceId) {
     if (request.method === 'POST') return generateModule(env, request, resourceId);
+  }
+  // V4: 版本历史 & diff
+  if (resource === 'module' && resourceId && subResource === 'versions' && !subResourceId) {
+    if (request.method === 'GET') return listModuleVersions(env, request, resourceId);
+  }
+  if (resource === 'module' && resourceId && subResource === 'diff' && !subResourceId) {
+    if (request.method === 'GET') return diffModuleVersions(env, request, resourceId);
   }
 
   if (resource === 'worldbuilding') {

@@ -8,8 +8,8 @@ import draftGenerateMd from '../../lib/l1/prompts/tools/draft_generate.md';
 import draftCheckMd from '../../lib/l1/prompts/tools/draft_check.md';
 import draftPolishMd from '../../lib/l1/prompts/tools/draft_polish.md';
 import draftRewriteMd from '../../lib/l1/prompts/tools/draft_rewrite.md';
-import { writeSectionContent, readSectionMarkdown, workContentPath, extractLang, readR2JSONWithLangFallback } from '../../lib/work_content';
-import { extractTemplateJson } from '../../lib/template';
+import { writeSectionContent, readSectionMarkdown, workContentPath, extractLang, readR2JSONWithLangFallback } from '../../lib/l1/work-content';
+import { extractTemplateJson } from '../../lib/l1/template';
 
 // 事件日志（审计）
 async function logEvent(env: Env, eventType: string, workId: string, sectionId: string | null, summary: string): Promise<void> {

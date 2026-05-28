@@ -5,8 +5,8 @@ import { ErrorCodes } from '../../lib/errors';
 import { callAI } from '../../lib/ai';
 import { renderTemplate as renderText } from '../../lib/l1/render';
 import outlineGenMd from '../../lib/l1/prompts/tools/outline_gen.md';
-import { writeOutline, workContentPath, sectionR2Key, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
-import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/template';
+import { writeOutline, workContentPath, sectionR2Key, extractLang, type Lang, LANG_LABELS } from '../../lib/l1/work-content';
+import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/l1/template';
 
 // ============================================================
 // 长篇框架大纲 — 结构化模板定义（单一来源，双语）

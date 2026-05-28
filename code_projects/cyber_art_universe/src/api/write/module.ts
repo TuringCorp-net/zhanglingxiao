@@ -12,8 +12,10 @@ import { ErrorCodes } from '../../lib/errors';
 import {
   renderTemplate, renderCard, buildTemplateJson, buildCardJson,
   type TemplateDef, type SlotDef, type R2SlotData,
-} from '../../lib/template';
-import { workContentPath, extractLang, type Lang } from '../../lib/work_content';
+} from '../../lib/l1/template';
+import { workContentPath, extractLang, type Lang } from '../../lib/l1/work-content';
+import { createSnapshot, listVersions } from '../../lib/l1/version';
+import { diffVersions as diffModVersions, diffWithCurrent, type DiffResult } from '../../lib/l1/diff';
 import { BIBLE_TEMPLATE } from './worldbuilding';
 import { OUTLINE_TEMPLATE } from './outline';
 import { CHARACTER_TEMPLATE } from './character_card';
@@ -300,7 +302,12 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     });
   }
 
-  const body = await request.json() as { slots?: Record<string, string>; free_content?: string };
+  const body = await request.json() as {
+    slots?: Record<string, string>;
+    free_content?: string;
+    _prev_slots?: Record<string, string>;     // V4: 前端缓存中的旧 slots
+    _prev_free_content?: string;               // V4: 前端缓存中的旧 free_content
+  };
   const hasSlots = body.slots && typeof body.slots === 'object' && Object.keys(body.slots).length > 0;
   const hasFreeContent = body.free_content !== undefined;
 
@@ -315,6 +322,15 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   const jsonKey = r2Path(mod.work_id, lang, jsonRelKey);
   const mdKey = r2Path(mod.work_id, lang, mdRelKey);
   const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
+
+  // ---- V4: 优先使用前端缓存中的旧内容（零 R2 读取）；无则回退 R2 ----
+  // 只有实际被修改的文件才产生快照（未修改的文件不需要重复快照）
+  const prevJsonContent = body._prev_slots
+    ? JSON.stringify({ slots: body._prev_slots }, null, 2)
+    : ((hasSlots && jsonKey) ? await readR2Text(env, jsonKey) : null);
+  const prevFreeContent = body._prev_free_content !== undefined
+    ? body._prev_free_content
+    : ((hasFreeContent && freeKey) ? await readR2Text(env, freeKey) : null);
 
   // ---- 写 free_content → .free.md（独立文件，永远不碰 .json） ----
   if (hasFreeContent) {
@@ -360,6 +376,14 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   }
 
   await touchModule(env, moduleId);
+
+  // ---- V4 自动版本快照（写入前的内容） ----
+  if (prevJsonContent) {
+    await createSnapshot(env, mod.work_id, jsonKey, prevJsonContent);
+  }
+  if (prevFreeContent) {
+    await createSnapshot(env, mod.work_id, freeKey, prevFreeContent);
+  }
 
   // 读回当前 slots 用于响应
   const currentSlotData = hasSlots ? { slots } : await readR2Json(env, jsonKey);
@@ -458,6 +482,134 @@ export async function generateModule(env: Env, request: Request, moduleId: strin
         status: 400, headers: { 'Content-Type': 'application/json' },
       });
   }
+}
+
+// ============================================================
+// GET /api/write/module/{module_id}/versions — 列出历史版本
+// ============================================================
+export async function listModuleVersions(env: Env, request: Request, moduleId: string): Promise<Response> {
+  const mod = await env.DB.prepare(
+    'SELECT id, work_id, type, r2_json_key, r2_md_key FROM modules WHERE id = ?'
+  ).bind(moduleId).first<{
+    id: string; work_id: string; type: string;
+    r2_json_key: string | null; r2_md_key: string | null;
+  }>();
+
+  if (!mod) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Module not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const lang = extractLang(request);
+  const cfg = MODULE_CONFIG[mod.type];
+  if (!cfg) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, `Unknown module type: ${mod.type}`)), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const jsonRelKey = cfg.jsonKeyFromModule(mod);
+  const jsonKey = r2Path(mod.work_id, lang, jsonRelKey);
+  const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
+
+  // 返回 .json 和 .free.md 各自的版本列表
+  const [jsonVersions, freeVersions] = await Promise.all([
+    jsonKey ? listVersions(env, jsonKey) : Promise.resolve([]),
+    freeKey ? listVersions(env, freeKey) : Promise.resolve([]),
+  ]);
+
+  return new Response(JSON.stringify(jsonSuccess({
+    module_id: moduleId,
+    json_key: jsonKey,
+    free_key: freeKey,
+    json_versions: jsonVersions,
+    free_versions: freeVersions,
+  })), { headers: { 'Content-Type': 'application/json' } });
+}
+
+// ============================================================
+// GET /api/write/module/{module_id}/diff?v1=X&v2=Y — 对比版本
+// v2=current 时对比当前内容与历史版本
+// ============================================================
+export async function diffModuleVersions(env: Env, request: Request, moduleId: string): Promise<Response> {
+  const mod = await env.DB.prepare(
+    'SELECT id, work_id, type, r2_json_key, r2_md_key FROM modules WHERE id = ?'
+  ).bind(moduleId).first<{
+    id: string; work_id: string; type: string;
+    r2_json_key: string | null; r2_md_key: string | null;
+  }>();
+
+  if (!mod) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Module not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const url = new URL(request.url);
+  const v1 = url.searchParams.get('v1');
+  const v2 = url.searchParams.get('v2');
+  const targetKey = url.searchParams.get('key'); // 可选：指定对比 json 还是 free 文件
+  const slotOnly = url.searchParams.get('slot_only') === '1'; // 可选：仅对比 slots
+
+  if (!v1 || !v2) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'v1 and v2 query params required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const lang = extractLang(request);
+  const cfg = MODULE_CONFIG[mod.type];
+  if (!cfg) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, `Unknown module type: ${mod.type}`)), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const jsonRelKey = cfg.jsonKeyFromModule(mod);
+  const jsonKey = r2Path(mod.work_id, lang, jsonRelKey);
+  const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
+
+  // 默认对比 .json 文件；如果传了 key=free 则对比 .free.md
+  const r2Key = targetKey === 'free' ? freeKey : jsonKey;
+  if (!r2Key) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, 'No file to diff')), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  let result: DiffResult | null = null;
+
+  if (v2 === 'current') {
+    // 对比历史版本与当前内容
+    let currentContent = '';
+    try {
+      const obj = await env.WORKS_BUCKET.get(r2Key);
+      if (obj) currentContent = await obj.text();
+    } catch { /* empty */ }
+    result = await diffWithCurrent(env, r2Key, currentContent, v1);
+  } else {
+    result = await diffModVersions(env, r2Key, v1, v2);
+  }
+
+  if (!result) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Version(s) not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 如果请求 slot_only，则只返回 slots 级 diff
+  if (slotOnly && r2Key.endsWith('.json')) {
+    const slotChanges = result.changes.filter(c => c.path.startsWith('slots.'));
+    return new Response(JSON.stringify(jsonSuccess({
+      ...result,
+      changes: slotChanges,
+    })), { headers: { 'Content-Type': 'application/json' } });
+  }
+
+  return new Response(JSON.stringify(jsonSuccess(result)), {
+    headers: { 'Content-Type': 'application/json' },
+  });
 }
 
 // ============================================================

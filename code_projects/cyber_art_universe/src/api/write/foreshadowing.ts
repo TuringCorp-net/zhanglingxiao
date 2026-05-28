@@ -11,8 +11,8 @@ import { ErrorCodes } from '../../lib/errors';
 import { callAI } from '../../lib/ai';
 import { renderTemplate as renderText } from '../../lib/l1/render';
 import foreshadowingGenMd from '../../lib/l1/prompts/tools/foreshadowing_gen.md';
-import { workContentPath, extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
-import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/template';
+import { workContentPath, extractLang, type Lang, LANG_LABELS } from '../../lib/l1/work-content';
+import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/l1/template';
 
 // ============================================================
 // 伏笔账本 — 结构化模板定义（单一来源，双语）

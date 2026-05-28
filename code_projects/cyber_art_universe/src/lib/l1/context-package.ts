@@ -3,7 +3,7 @@
 // 同作品同语言 = 完全固定 → DeepSeek 缓存 100% 命中。
 
 import { Env } from '../../db/schema';
-import { workContentPath, type Lang } from '../work_content';
+import { workContentPath, type Lang } from './work-content';
 
 // ============================================================
 // 类型

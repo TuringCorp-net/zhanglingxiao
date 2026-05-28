@@ -9,7 +9,7 @@ import { ErrorCodes } from '../../lib/errors';
 import { generateWithAI } from '../../lib/ai';
 import { renderTemplate as renderText } from '../../lib/l1/render';
 import hintsDynamicMd from '../../lib/l1/prompts/tools/hints_dynamic.md';
-import { extractLang, type Lang, LANG_LABELS } from '../../lib/work_content';
+import { extractLang, type Lang, LANG_LABELS } from '../../lib/l1/work-content';
 
 const HINT_MODULES = ['m0', 'm1', 'm2'] as const;
 

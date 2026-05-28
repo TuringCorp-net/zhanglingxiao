@@ -19,6 +19,7 @@
 | v1.7.0 | 2026-05-09 | 冲突地图删除 + 伏笔 Markdown 模板 + 软木板合并入写作桌统一界面 |
 | v2.0.0 | 2026-05-20 | M0 原始构想模块 + Story Elf 浮动伴侣 + 多语言 ?lang= 架构 + 三标记槽位编辑器 + M3/M4 统一 entity 存储 + ADMIN_TOKEN 独立 Secret + CSS 清理（textarea field-sizing） |
 | v2.4.0 | 2026-05-21 | 模板分级系统（L0/L1/L2）+ 双语模板统一化（SlotDefinition）+ M3/M4 模板拆分（character_card.ts / foreshadowing_card.ts）+ 删 entities.ts + Level 前端可见性控制 + 作品级 config API |
+| v3.0.0 | 2026-05-28 | **V3 统一数据架构 + V4 L1 层整理**：新增 `modules` D1 表 + 统一 Module API（GET/PUT/generate）+ R2 三文件物理隔离（.json / .free.md / .md）。L1 层文件归位（template.ts / work-content.ts 移入 l1/）。新增 `version.ts`（版本历史，每次 PUT 自动快照）+ `diff.ts`（JSON slot 级 + MD 行级 diff）。新增 `file_versions` D1 表。API 新增 `GET .../versions` 和 `GET .../diff` 端点。`src/lib/` 根目录收敛为 ai.ts / response.ts / errors.ts / constants.ts / telemetry.ts |
 
 ---
 
@@ -26,7 +27,7 @@
 
 - **部署位置**：CAU Worker `cyber_art_api` 的子路由（`/api/write/*`）
 - **部署域名**：`CAU.turingcorp.net`（与 Read 侧共用）
-- **代码目录**：`src/api/write/`（12 个模块：workspace / character_card / foreshadowing_card / worldbuilding / outline / foreshadowing / draft / marketing / original_concept / elf_chat / hints / index）+ `src/lib/ai.ts`（AI Gateway 客户端，Layer 1）+ `src/lib/template.ts`（模板定义与渲染）
+- **代码目录**：`src/api/write/`（13 个模块：workspace / character_card / foreshadowing_card / worldbuilding / outline / foreshadowing / draft / marketing / original_concept / elf_chat / hints / module / index）+ `src/lib/l0/aiGateway.ts`（L0 AI 调用）+ `src/lib/l1/`（L1 内容操作层：template / work-content / version / diff / context-package / context / render / scenarios / instructions / types）
 - **前端**：`src/pages/write.html` + `write.js`（统一写作桌 UI）
 - **D1/R2**：与 CAU Read 侧共享，无新增迁移
 
@@ -47,14 +48,18 @@
 | `l1/instructions.ts` | 17 | L1：System prompt 构建。`buildSystemPrompt()` — 加载 .md 模板 → render → 完整 system prompt | v2.5.0 |
 | `l1/scenarios.ts` | 64 | L1：场景注册中心。场景配置 + .md prompt import + 注册表 | v2.5.0 |
 | `l1/prompts/` | 2 文件 | L1：人类维护的 prompt 模板。`reader_companion/system.md` + `writer_companion/system.md` | v2.5.0 |
-| `template.ts` | 143 | `SlotDef`/`TemplateDef` 类型 + `renderTemplate()`/`renderCard()` — 双语模板统一渲染 | 新增，v2.4.0 |
+| `l1/template.ts` | 400 | `SlotDef`/`TemplateDef` 类型 + `renderTemplate()`/`renderCard()`/`extractTemplateJson()` — 双语模板统一渲染与 JSON 解析 | v2.4.0，V4 移入 l1/ |
+| `l1/work-content.ts` | 242 | R2 Markdown 读写层 — R2 路径构建、多语言回退、Frontmatter 编解码、作品/章节/大纲读写 | V4 从 lib/ 移入 l1/ |
+| `l1/version.ts` | 170 | V4 新增：版本历史。`saveWithVersion()` — 写入 R2 + 自动快照 + D1 记录 + 超出上限清理。`getVersion()` / `listVersions()` / `rollbackToVersion()`。默认保留 10 个版本（可配置） | V4 |
+| `l1/diff.ts` | 222 | V4 新增：内容 diff。`diffVersions()` / `diffWithCurrent()` — JSON slot 级对比 + MD 逐行对比。`diffSlots()` — 纯函数供 L2 使用 | V4 |
 | `telemetry.ts` | 55 | 系统遥测：`recordAIUsage()` — AI 调用用量写入 D1 + console.log。`extractUserToken()` — 用户标识提取 | 新增，v2.5.0 |
 
 ### 2.2 Write API 模块（`src/api/write/`）
 
 | 文件 | 行数 | 用途 | SRS 覆盖 |
 |------|------|------|---------|
-| `index.ts` | 95 | Write 侧路由分发（动态 segment 匹配，entity 按 type 分发） | — |
+| `index.ts` | 190 | Write 侧路由分发（动态 segment 匹配，entity 按 type 分发，V4 版本/diff 路由） | — |
+| `module.ts` | 620 | V3 统一 Module API：GET/PUT 单模块 + GET 列表 + POST generate + V4 versions/diff | V3/V4 |
 | `workspace.ts` | 240 | 工作区 CRUD + 4 状态转换 + config 存取 | SF-001~005 |
 | `character_card.ts` | 195 | M3 人物卡模板定义 + CRUD（create/read/update card） | SF-014 |
 | `foreshadowing_card.ts` | 135 | M4 伏笔卡模板定义 + CRUD（create/read/update card） | SF-023 |
@@ -154,7 +159,16 @@
 | GET | `/api/write/works/{id}/config` | `workspace.ts` | 作品配置读取 | ✅ |
 | PUT | `/api/write/works/{id}/config` | `workspace.ts` | 作品配置更新（如 template_level） | ✅ |
 
-**Write 侧端点总数**：31 个（+9 工作区 +2 config +4 世界观 +3 伏笔 +3 大纲 +6 流水线 +3 营销 +3 状态转换 -2 entity 合并）
+### 3.9 V4 版本历史 & Diff
+
+| 方法 | 路径 | 模块 | SRS | 状态 |
+|------|------|------|-----|------|
+| GET | `/api/write/module/{id}/versions` | `module.ts` | V4 | ✅ |
+| GET | `/api/write/module/{id}/diff?v1=X&v2=Y` | `module.ts` | V4 | ✅ |
+
+`diff` 端点支持参数：`v2=current`（对比当前内容）、`key=free`（对比 .free.md 文件）、`slot_only=1`（仅返回 slots 级变更）。
+
+**Write 侧端点总数**：33 个（+9 工作区 +2 config +4 世界观 +3 伏笔 +3 大纲 +6 流水线 +3 营销 +3 状态转换 +2 V4 versions/diff -2 entity 合并）
 
 ---
 
@@ -204,11 +218,10 @@
 |------|--------|--------|
 | L0 (AI Gateway) | 1 | ~250 |
 | 遥测（telemetry.ts） | 1 | ~55 |
-| L1 (Agent 层) | 8 | ~520 |
-| 共享层（template.ts + ai.ts 兼容层） | 2 | ~148 |
-| Write API 模块 | 12 | ~1,480 |
+| L1 (Agent 层) | 8 | ~2,000 |（含 V4 新增 version.ts ~170 行 + diff.ts ~220 行 + template.ts ~400 行 + work-content.ts ~240 行） |
+| Write API 模块 | 13 | ~2,100 |（含 V3 新增 module.ts ~620 行）|
 | 前端 | 5 | ~1,250 |
-| **总计** | **25** | **~3,000** |
+| **总计** | **27** | **~4,000** |
 
 ---
 

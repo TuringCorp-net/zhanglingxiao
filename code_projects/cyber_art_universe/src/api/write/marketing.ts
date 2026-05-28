@@ -7,7 +7,7 @@ import { renderTemplate as renderText } from '../../lib/l1/render';
 import marketingExtractMd from '../../lib/l1/prompts/tools/marketing_extract.md';
 import marketingTitlesMd from '../../lib/l1/prompts/tools/marketing_titles.md';
 import marketingRepurposeMd from '../../lib/l1/prompts/tools/marketing_repurpose.md';
-import { workContentPath, sectionR2Key, extractLang } from '../../lib/work_content';
+import { workContentPath, sectionR2Key, extractLang } from '../../lib/l1/work-content';
 
 // POST /api/write/marketing/extract/{section_id} — SF-040 爆点提炼
 export async function extractHooks(env: Env, request: Request, sectionId: string): Promise<Response> {

@@ -126,6 +126,9 @@ function handleToolsList(): Response {
       { name: 'generate_chapter', description: 'AI generate full chapter draft (Draft v0)', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' } }, required: ['work_id', 'section_id'] } },
       { name: 'check_consistency', description: 'Check chapter against worldbuilding constraints', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' } }, required: ['work_id', 'section_id'] } },
       { name: 'polish_chapter', description: 'AI polish chapter based on check results', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' }, style_notes: { type: 'string' } }, required: ['work_id', 'section_id'] } },
+      // V4 version history & diff tools
+      { name: 'get_module_versions', description: 'List all historical versions of a module file (auto-snapshotted on each save)', inputSchema: { type: 'object', properties: { module_id: { type: 'string' } }, required: ['module_id'] } },
+      { name: 'diff_module_versions', description: 'Diff two versions of a module file (slot-level for JSON, line-level for Markdown)', inputSchema: { type: 'object', properties: { module_id: { type: 'string' }, v1: { type: 'string' }, v2: { type: 'string' }, slot_only: { type: 'string' } }, required: ['module_id', 'v1', 'v2'] } },
     ],
   })), {
     headers: { 'Content-Type': 'application/json' },

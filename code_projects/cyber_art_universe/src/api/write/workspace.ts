@@ -3,7 +3,7 @@ import { Env, Work } from '../../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { parsePagination } from '../../lib/constants';
-import { buildWorkFrontmatter, writeWorkContent, readWorkContent, workR2Key, sectionR2Key, writeSectionContent, readSectionMarkdown, workContentPath } from '../../lib/work_content';
+import { buildWorkFrontmatter, writeWorkContent, readWorkContent, workR2Key, sectionR2Key, writeSectionContent, readSectionMarkdown, workContentPath } from '../../lib/l1/work-content';
 
 // GET /api/write/works
 // 注意：当前无用户认证，返回所有作品。未来接入用户系统后需加 WHERE author = ? 过滤。
