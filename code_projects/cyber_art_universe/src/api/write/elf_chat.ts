@@ -1,18 +1,17 @@
-// Story Elf — AI 对话 API
+// Story Elf — AI 对话 API（L2 Agent 入口）
 // Read 侧（伴读精灵）和 Write 侧（写作精灵）共享此端点。
-// 上下文组装和 system prompt 由 L1 模块完成。
+// 上下文组装、system prompt 构建、Agent 循环由 L2 模块完成。
 
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { callAI, AIError, type Message } from '../../lib/ai';
+import { AIError } from '../../lib/ai';
 import { recordAIUsage, extractUserToken } from '../../lib/telemetry';
 import { extractLang } from '../../lib/l1/work-content';
-import { getScenario } from '../../lib/l1/scenarios';
-import { assembleContext } from '../../lib/l1/context';
-import { buildSystemPrompt } from '../../lib/l1/instructions';
 import { getOrBuildContextPackage } from '../../lib/l1/context-package';
 import type { WorkMeta, ContextOpts } from '../../lib/l1/types';
+import { agentLoop } from '../../lib/l2/agent';
+import type { Message } from '../../lib/l0/aiGateway';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -61,77 +60,67 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
     sectionTitle: body.context?.section_title,
   };
 
-  // L1: 获取/构建写作上下文包（M0-M5，R2 缓存） → 组装 vars → 渲染 system prompt
-  const scenarioId = body.page === 'write' ? 'writer_companion' : 'reader_companion';
-  const scenario = getScenario(scenarioId);
-  if (!scenario) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, `Unknown scenario: ${scenarioId}`)), {
-      status: 500, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // 上下文包：首次调用构建并缓存到 R2，后续会话直接复用（同作品+同语言 = 完全固定 → 缓存命中）
+  // L1: 获取/构建写作上下文包（M0-M5，R2 缓存）
   const contextPkg = await getOrBuildContextPackage(env, body.work_id, lang);
-  const vars = assembleContext(workMeta, lang, contextPkg, opts);
-  const systemPrompt = buildSystemPrompt(scenario.promptFile, vars);
 
-  // 构建消息：system（frozen，缓存命中） + user/assistant 对话历史
-  // 动态上下文（模块/章节）放在 user message 前缀，避免破坏 system prompt 的缓存稳定性
-  const conversationMessages: Message[] = body.messages.map(m => ({
+  // 构建对话历史
+  // 前端传来完整的 messages 数组（user/assistant 交替），最后一条是本轮用户输入
+  const allMessages: Message[] = body.messages.map(m => ({
     role: m.role as 'user' | 'assistant',
     content: m.content,
   }));
 
-  // 在第一条 user message 前注入当前模块/章节信息（如果有）
-  if (opts.module || opts.sectionTitle) {
-    const prefixParts: string[] = [];
-    if (opts.module) prefixParts.push(`[当前模块: ${opts.module}]`);
-    if (opts.sectionTitle) prefixParts.push(`[当前章节: ${opts.sectionTitle}]`);
-    const prefix = prefixParts.join(' ') + '\n\n';
+  // 最后一条是本轮输入，前面的全是对话历史
+  const userMessage = allMessages.length > 0 ? allMessages[allMessages.length - 1].content : '';
+  const history: Message[] = allMessages.slice(0, -1);
 
-    const firstUserIdx = conversationMessages.findIndex(m => m.role === 'user');
-    if (firstUserIdx >= 0) {
-      conversationMessages[firstUserIdx] = {
-        role: 'user',
-        content: prefix + conversationMessages[firstUserIdx].content,
-      };
-    } else {
-      // 没有 user 消息（罕见），创建一条
-      conversationMessages.unshift({ role: 'user', content: prefix });
-    }
+  // 验证最后一条消息是 user 角色
+  const lastMsg = allMessages[allMessages.length - 1];
+  if (!lastMsg || lastMsg.role !== 'user' || !userMessage) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'Last message must be from user')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
   }
 
-  const messages: Message[] = [
-    { role: 'system', content: systemPrompt },
-    ...conversationMessages,
-  ];
-
   try {
-    const result = await callAI(env, messages);
+    const result = await agentLoop(
+      env,
+      workMeta,
+      contextPkg,
+      {
+        workId: body.work_id,
+        lang,
+        page: body.page,
+        contextModule: opts.module,
+        contextSectionTitle: opts.sectionTitle,
+      },
+      history,
+      userMessage,
+    );
 
     // 遥测：记录用量
-    if (result.usage) {
-      await recordAIUsage(env, {
-        work_id: body.work_id,
-        user_token: extractUserToken(request),
-        page: body.page,
-        model: result.model,
-        tokens_in: result.usage.input,
-        tokens_out: result.usage.output,
-        cache_hit: result.usage.cacheHit || 0,
-        cache_miss: result.usage.cacheMiss || 0,
-      });
-    }
+    await recordAIUsage(env, {
+      work_id: body.work_id,
+      user_token: extractUserToken(request),
+      page: body.page,
+      model: result.usage.model,
+      tokens_in: result.usage.input,
+      tokens_out: result.usage.output,
+      cache_hit: result.usage.cacheHit,
+      cache_miss: result.usage.cacheMiss,
+    });
 
     return new Response(JSON.stringify(jsonSuccess({
       work_id: body.work_id,
       lang,
-      reply: result.content.trim(),
+      reply: result.reply,
+      steps: result.steps,
+      usage: result.usage,
     })), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (err) {
-    console.error('[elf_chat] AI call failed:', (err as Error).message);
+    console.error('[elf_chat] Agent loop failed:', (err as Error).message);
     if (err instanceof AIError) {
       const status = err.code === 'TIMEOUT' ? 504 : err.code === 'RATE_LIMITED' ? 429 : 503;
       return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, err.message)), {

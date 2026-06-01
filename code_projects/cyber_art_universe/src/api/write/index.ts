@@ -10,15 +10,18 @@ import {
 } from './workspace';
 import { createCharacter, readCharacterCard, updateCharacterCard, updateEntity, deleteEntity } from './character_card';
 import { createForeshadowing, readForeshadowingCard, updateForeshadowingCard } from './foreshadowing_card';
-import { generateWorldbuilding, readWorldbuilding, updateWorldbuilding, readConstraints } from './worldbuilding';
-import { generateOutline, readOutline, updateOutline } from './outline';
-import { createIntent, readIntent, generateDraft, checkConsistency, polishDraft, outputDraft, rewriteSection } from './draft';
-import { generateForeshadowing, readForeshadowing, updateForeshadowing } from './foreshadowing';
+import { readWorldbuilding, updateWorldbuilding, readConstraints } from './worldbuilding';
+import { readOutline, updateOutline } from './outline';
+import { createIntent, readIntent, checkConsistency, polishDraft, outputDraft, rewriteSection } from './draft';
+import { readForeshadowing, updateForeshadowing } from './foreshadowing';
 import { extractHooks, generateTitles, repurposeSection } from './marketing';
 import { readOriginalConcept, updateOriginalConcept } from './original_concept';
 import { handleElfChat } from './elf_chat';
 import { readHints } from './hints';
 import { getModule, updateModule, listModules, generateModule, listModuleVersions, diffModuleVersions } from './module';
+import { getModuleGuide } from '../../lib/l2/guides';
+import { jsonSuccess } from '../../lib/response';
+import { extractLang, type Lang } from '../../lib/l1/work-content';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -106,7 +109,10 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   }
 
   if (resource === 'worldbuilding') {
-    if (resourceId === 'generate' && !subResource && request.method === 'POST') return generateWorldbuilding(env, request);
+    if (resourceId === 'generate' && !subResource && request.method === 'POST') {
+      const body = await request.clone().json() as { work_id: string };
+      return generateModule(env, request, `m1_${body.work_id}`);
+    }
     if (resourceId && subResource === 'constraints' && !action && request.method === 'GET') return readConstraints(env, request, resourceId);
     if (resourceId && !subResource && !action) {
       if (request.method === 'GET') return readWorldbuilding(env, request, resourceId);
@@ -128,7 +134,10 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // 大纲
   // ================================================================
   if (resource === 'outline') {
-    if (resourceId === 'generate' && !subResource && request.method === 'POST') return generateOutline(env, request);
+    if (resourceId === 'generate' && !subResource && request.method === 'POST') {
+      const body = await request.clone().json() as { work_id: string };
+      return generateModule(env, request, `m2_${body.work_id}`);
+    }
     if (resourceId && !subResource && !action) {
       if (request.method === 'GET') return readOutline(env, request, resourceId);
       if (request.method === 'PUT') return updateOutline(env, request, resourceId);
@@ -143,7 +152,10 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
     if (resourceId === 'intent' && subResource && subResourceId && !action) {
       if (request.method === 'GET') return readIntent(env, request, subResource, subResourceId);
     }
-    if (resourceId === 'generate' && !subResource && request.method === 'POST') return generateDraft(env, request);
+    if (resourceId === 'generate' && !subResource && request.method === 'POST') {
+      const body = await request.clone().json() as { work_id: string; section_id: string };
+      return generateModule(env, request, `m6_chapter_${body.section_id}`);
+    }
     if (resourceId === 'polish' && !subResource && request.method === 'POST') return polishDraft(env, request);
     if (resourceId === 'rewrite' && subResource && !subResourceId && !action && request.method === 'POST') return rewriteSection(env, request, subResource);
     if (resourceId === 'check' && subResource && subResourceId && !action && request.method === 'POST') return checkConsistency(env, request, subResource, subResourceId);
@@ -154,7 +166,10 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // 伏笔账本 (SF-023)
   // ================================================================
   if (resource === 'foreshadowing') {
-    if (resourceId === 'generate' && !subResource && request.method === 'POST') return generateForeshadowing(env, request);
+    if (resourceId === 'generate' && !subResource && request.method === 'POST') {
+      const body = await request.clone().json() as { work_id: string };
+      return generateModule(env, request, `m4_strategy_${body.work_id}`);
+    }
     if (resourceId && !subResource && !action) {
       if (request.method === 'GET') return readForeshadowing(env, request, resourceId);
       if (request.method === 'PUT') return updateForeshadowing(env, request, resourceId);
@@ -173,6 +188,19 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // ================================================================
   if (resource === 'elf' && resourceId === 'chat' && !subResource && !action) {
     if (request.method === 'POST') return handleElfChat(env, request);
+  }
+
+  // ================================================================
+  // 写作指南 — 按模块类型获取 M0-M6 写作指南（供外部 Agent / Story Elf 工具调用）
+  // ================================================================
+  if (resource === 'guide' && resourceId && !subResource && !action) {
+    if (request.method === 'GET') {
+      const lang = extractLang(request);
+      const guide = getModuleGuide(resourceId, lang as Lang);
+      return new Response(JSON.stringify(jsonSuccess({ module_type: resourceId, lang, guide })), {
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
   }
 
   // ================================================================

@@ -42,6 +42,7 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         template_level: 'L1/L2 progressive template level system',
         marketing: 'Hook extraction / title generation / content repurposing',
         elf_chat: 'Story Elf AI Chat — context-aware reading companion + writing assistant',
+        writing_guide: 'Module writing guide — per-module (M0-M6) positioning, template structure, and writing tips for external AI Agents',
       },
       mcp: 'MCP Protocol — resources/list + resources/read (novel:// + sf://) + tools/list + tools/call (11 tools)',
     },
@@ -87,6 +88,7 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         marketing_titles: 'POST /api/write/marketing/titles/{work_id}',
         marketing_repurpose: 'POST /api/write/marketing/repurpose/{section_id}',
         elf_chat: 'POST /api/write/elf/chat',
+        writing_guide: 'GET /api/write/guide/{module_type}?lang=zh',
       },
       mcp: 'POST /api/mcp',
       discovery: {
@@ -453,6 +455,25 @@ Diff type depends on file: JSON files get slot-level diff (\`path: "slots.power_
 - Read side: reading companion — analyze plot, answer questions, discover foreshadowing
 - Write side: writing assistant — brainstorm, consistency discussion, inspiration
 - Auto-collects worldbuilding/characters/outline/current chapter as conversation context
+
+### Module Writing Guide
+
+**GET /api/write/guide/{module_type}?lang=zh** — Get M0-M6 module writing guide
+
+Returns the module's positioning, template structure, writing tips, and special rules. Use this before generating or modifying content for a specific module to ensure output aligns with Story Forger conventions.
+
+| \`module_type\` | Description |
+|-----------------|-------------|
+| \`m0\` | Original Concept — the story's "seed", author's initial inspiration. **Read-only for AI Agents — discuss and suggest, do NOT modify.** |
+| \`m1\` | Setting Bible — the work's highest constraint document. All M2-M6 creation must follow M1 rules. |
+| \`m2\` | Story Framework Outline — three/four-act structure, pacing, subplot planning |
+| \`m3_card\` | Character Card — **one card per character**. Fields: name, identity, personality, appearance, motivation, ability boundaries, growth arc, relationship network |
+| \`m4_strategy\` | Foreshadowing Strategy — overall hook planning approach. **One per work.** |
+| \`m4_card\` | Foreshadowing Hook Card — **one card per hook**. Plant → reinforce → partially reveal → payoff lifecycle |
+| \`m5_intent\` | Chapter Intent Card — **one card per chapter**. Writing blueprint: conflict to advance, info to reveal, suspense to create, emotional goal, POV character, opening hook, cliffhanger |
+| \`m6_chapter\` | Chapter Content — free Markdown prose. Write based on corresponding M5 intent card + M1 style guide |
+
+Returns \`{ok: true, data: {module_type, lang, guide}}\`. The \`guide\` field contains Markdown-formatted text guidance + JSON template structure (if the module has a structured template).
 
 ---
 
@@ -1134,6 +1155,21 @@ paths:
       tags: [Write - Story Elf]
       summary: Story Elf chat
       security: [{ BearerAuth: [] }]
+
+  /api/write/guide/{module_type}:
+    get:
+      tags: [Write - Story Elf]
+      summary: Get module writing guide
+      description: Returns positioning, template structure, writing tips, and special rules for a specific M0-M6 module. Use before generating or modifying module content.
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: module_type
+          in: path
+          required: true
+          schema: { type: string, enum: [m0, m1, m2, m3_card, m4_strategy, m4_card, m5_intent, m6_chapter] }
+        - name: lang
+          in: query
+          schema: { type: string, enum: [zh, en], default: zh }
 
   # ===== MCP =====
   /api/mcp:
