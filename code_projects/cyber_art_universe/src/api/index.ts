@@ -15,6 +15,7 @@ import { searchContent, retrieveInWork } from './search';
 import { handleAgentManifest, handleLLMsTxt, handleOpenAPI } from './discovery';
 import { handleMCP } from './mcp';
 import { handleWriteRoute } from './write/index';
+import { extractL1toL2, extractL2toL3IfDue } from '../lib/l2/memory';
 
 // ============================================================
 // 用户认证
@@ -209,5 +210,23 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     return handleRequest(request, env);
+  },
+
+  // Cron 定时任务：每天凌晨 3:00 执行记忆提取（"睡眠"）
+  async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
+    console.log('[cron] 记忆提取开始...');
+    try {
+      const result = await extractL1toL2(env);
+      console.log(`[cron] L1→L2 完成: ${result.users_processed} 用户, ${result.sessions_extracted} 会话`);
+
+      // L2→L3 条件触发（仅对本次有新会话的用户）
+      if (result.users_processed > 0) {
+        // 由于 extractL1toL2 已处理了所有用户，这里简单记录
+        // L2→L3 的触发条件在 extractL2toL3IfDue 内部检查
+        console.log('[cron] L2→L3 检查待后续完善（需逐个用户调用 extractL2toL3IfDue）');
+      }
+    } catch (err) {
+      console.error('[cron] 记忆提取失败:', (err as Error).message);
+    }
   },
 };

@@ -111,6 +111,44 @@
   }
 
   // ============================================================
+  // 会话管理 — 用于记忆系统的 session 连续性
+  // ============================================================
+  var SESSION_KEY = 'sf_session_id';
+  var MSGS_KEY = 'sf_session_msgs';
+  var _messages = [];
+
+  // 恢复之前保存的会话状态
+  try {
+    var savedMsgs = JSON.parse(localStorage.getItem(MSGS_KEY) || '[]');
+    if (Array.isArray(savedMsgs)) _messages = savedMsgs;
+  } catch (x) {}
+
+  function getSessionId() {
+    var id = localStorage.getItem(SESSION_KEY);
+    if (!id) {
+      id = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+      localStorage.setItem(SESSION_KEY, id);
+    }
+    return id;
+  }
+
+  function getMessages() { return _messages.slice(); }
+
+  function saveMessages() {
+    try {
+      // 只保留最近 50 条消息（防止 localStorage 溢出）
+      if (_messages.length > 50) _messages = _messages.slice(-50);
+      localStorage.setItem(MSGS_KEY, JSON.stringify(_messages));
+    } catch (x) {}
+  }
+
+  function clearSession() {
+    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(MSGS_KEY);
+    _messages = [];
+  }
+
+  // ============================================================
   // 拖动
   // ============================================================
   var drag = { moved: false, sx: 0, sy: 0, ox: 0, oy: 0 };
@@ -273,6 +311,11 @@
       div.textContent = text;
       msgs.appendChild(div);
       msgs.scrollTop = msgs.scrollHeight;
+      // 记忆系统：将消息追加到会话历史
+      if (role === 'user' || role === 'ai') {
+        _messages.push({ role: role, content: text });
+        saveMessages();
+      }
     },
 
     clearMessages: function () {
@@ -307,7 +350,8 @@
           work_id: ctx.work_id,
           section_id: ctx.section_id || undefined,
           page: ctx.page || 'read',
-          messages: [{ role: 'user', content: msg }],
+          session_id: getSessionId(),
+          messages: getMessages(),
           context: { section_title: ctx.section_title },
         }),
       }).then(function (r) { return r.json(); }).then(function (data) {
@@ -365,5 +409,10 @@
 
     // 设置当前活跃槽位
     setActiveSlot: function (slotId) { _hintState.activeSlotId = slotId; },
+
+    // 会话管理（用于记忆系统）
+    getSessionId: getSessionId,
+    getMessages: getMessages,
+    clearSession: clearSession,
   };
 })();

@@ -11,6 +11,7 @@ import { renderTemplateAsJson, type TemplateDef } from '../l1/template';
 import { renderTemplate as renderText } from '../l1/render';
 import { workContentPath, type Lang, LANG_LABELS } from '../l1/work-content';
 import { getModuleGuide } from './guides';
+import { saveChecklist } from './memory';
 
 // 模板定义（M3_card 暂无专用 prompt 模板，使用通用生成逻辑）
 import { BIBLE_TEMPLATE } from '../../api/write/worldbuilding';
@@ -46,7 +47,7 @@ export function createTools(env: Env, workId: string, lang: string): L2ToolDef[]
 // 共享的 checklist 状态（同一会话内跨 tool call 持久）
 let _checklistState: { todos: { content: string; status: string }[] } = { todos: [] };
 
-function createChecklistTool(): L2ToolDef {
+function createChecklistTool(env: Env): L2ToolDef {
   return {
     def: {
       type: 'function',
@@ -77,6 +78,14 @@ function createChecklistTool(): L2ToolDef {
     execute: async (params: Record<string, unknown>) => {
       const todos = params.todos as Array<{ content: string; status: string }>;
       _checklistState.todos = todos;
+
+      // 持久化到 R2（跨会话恢复）
+      const workId = params.work_id as string;
+      if (workId) {
+        saveChecklist(env, workId, todos).catch(err =>
+          console.error('[checklist] 持久化失败:', (err as Error).message));
+      }
+
       const counts = { pending: 0, in_progress: 0, completed: 0 };
       for (const t of todos) {
         if (t.status === 'pending') counts.pending++;

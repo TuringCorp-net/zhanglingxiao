@@ -6,6 +6,7 @@ import { getPromptTemplate } from '../l1/scenarios';
 import { renderTemplate } from '../l1/render';
 import type { AgentVars } from '../l1/types';
 import type { ToolDef } from '../l0/aiGateway';
+import { readRecentL2Files, readL3Profile } from './memory';
 
 // ============================================================
 // 参考案例包（R2 缓存 key）
@@ -60,8 +61,9 @@ export async function buildAgentSystemPrompt(
   vars: AgentVars,
   tools: ToolDef[],
   workId: string,
+  userToken?: string,
 ): Promise<string> {
-  const layers = await buildAgentSystemPromptLayers(env, vars, tools, workId);
+  const layers = await buildAgentSystemPromptLayers(env, vars, tools, workId, userToken);
   return layers.full;
 }
 
@@ -74,6 +76,7 @@ export async function buildAgentSystemPromptLayers(
   vars: AgentVars,
   tools: ToolDef[],
   workId: string,
+  userToken?: string,
 ): Promise<SystemPromptLayers> {
   // —— Layer 1: 统一人格 ——
   let layer1 = '';
@@ -132,8 +135,26 @@ export async function buildAgentSystemPromptLayers(
     }
   } catch { /* checklist 加载失败不影响主流程 */ }
 
-  // 5b. 作品级记忆（L2.1 接入）
-  memParts.push('*（作品级记忆和用户画像将在 L2.1 接入，当前暂未启用。）*');
+  // 5b. L2 短期记忆 + L3 长期画像（L2.1）
+  if (userToken) {
+    try {
+      const l2Content = await readRecentL2Files(env, userToken, 7);
+      if (l2Content) {
+        memParts.push(`## 近期记忆（最近 7 天）\n\n${l2Content}`);
+      }
+    } catch { /* 记忆加载失败不影响主流程 */ }
+
+    try {
+      const l3Profile = await readL3Profile(env, userToken);
+      if (l3Profile) {
+        memParts.push(`---\n\n${l3Profile}`);
+      }
+    } catch { /* 画像加载失败不影响主流程 */ }
+  }
+
+  if (memParts.length === 0) {
+    memParts.push('*（暂无记忆数据。随着对话积累，短期记忆和长期画像将在此展示。）*');
+  }
 
   const layer5 = memParts.join('\n\n');
 

@@ -308,9 +308,11 @@ print("--- Step 5: Layer 5 (Memory) ---")
 
 ref_l5 = data["m0"]["layer_5_memory"]
 
-# 5a: 占位文字
-check_contains(ref_l5, "作品级记忆和用户画像将在 L2.1 接入",
-               "Layer 5 包含 L2.1 占位文字")
+# 5a: 记忆层内容（L2.1 实现后，包含真实记忆或兜底占位）
+check(
+    "暂无记忆数据" in ref_l5 or "作品级记忆" in ref_l5 or "近期记忆" in ref_l5 or len(ref_l5) <= 5,
+    "Layer 5 包含预期内容（兜底占位或真实记忆数据）"
+)
 
 # 5b: 跨模块一致性
 print()
@@ -353,7 +355,7 @@ layer_markers = [
     ("Layer 2", "## 作品完整上下文"),
     ("Layer 3", "## 经典作品创作框架参考"),
     ("Layer 4", "## 可用工具"),
-    ("Layer 5", "作品级记忆"),
+    ("Layer 5", "短期记忆和长期画像"),
 ]
 
 positions = []

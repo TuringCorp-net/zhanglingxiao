@@ -67,7 +67,7 @@ export async function agentLoop(
     module: opts.contextModule,
     sectionTitle: opts.contextSectionTitle,
   });
-  const systemPrompt = await buildAgentSystemPrompt(env, ctxVars, toolDefs, opts.workId);
+  const systemPrompt = await buildAgentSystemPrompt(env, ctxVars, toolDefs, opts.workId, opts.userToken);
 
   // 2. 构建初始 messages
   const messages: Message[] = [
@@ -199,7 +199,7 @@ export async function agentDebug(
   });
 
   // 使用分层构建，同时获得完整 prompt 和逐层数据
-  const layers = await buildAgentSystemPromptLayers(env, ctxVars, toolDefs, opts.workId);
+  const layers = await buildAgentSystemPromptLayers(env, ctxVars, toolDefs, opts.workId, opts.userToken);
 
   // 构建 messages（与 agentLoop 相同）
   const messages: Message[] = [

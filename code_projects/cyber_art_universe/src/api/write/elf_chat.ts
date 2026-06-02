@@ -12,6 +12,7 @@ import { getOrBuildContextPackage } from '../../lib/l1/context-package';
 import type { WorkMeta, ContextOpts } from '../../lib/l1/types';
 import { agentLoop, agentDebug } from '../../lib/l2/agent';
 import type { Message } from '../../lib/l0/aiGateway';
+import { saveSessionLog } from '../../lib/l2/memory';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -22,6 +23,7 @@ interface ElfChatRequest {
   work_id: string;
   section_id?: string;
   page: 'read' | 'write';
+  session_id?: string;        // 前端管理的会话 ID（用于记忆系统）
   messages: ChatMessage[];
   context?: {
     module?: string;
@@ -83,6 +85,8 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
     });
   }
 
+  const userToken = extractUserToken(request);
+
   try {
     // —— Debug 模式：不调 LLM，返回组装好的 messages + layers ——
     if ((body as { debug?: string }).debug === 'prompt') {
@@ -94,6 +98,7 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
           workId: body.work_id,
           lang,
           page: body.page,
+          userToken,
           contextModule: opts.module,
           contextSectionTitle: opts.sectionTitle,
         },
@@ -121,6 +126,7 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
         workId: body.work_id,
         lang,
         page: body.page,
+        userToken,
         contextModule: opts.module,
         contextSectionTitle: opts.sectionTitle,
       },
@@ -131,7 +137,7 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
     // 遥测：记录用量
     await recordAIUsage(env, {
       work_id: body.work_id,
-      user_token: extractUserToken(request),
+      user_token: userToken,
       page: body.page,
       model: result.usage.model,
       tokens_in: result.usage.input,
@@ -139,6 +145,35 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
       cache_hit: result.usage.cacheHit,
       cache_miss: result.usage.cacheMiss,
     });
+
+    // L1 会话日志：保存完整对话记录（供记忆提取用）
+    if (userToken) {
+      const sessionId = body.session_id || crypto.randomUUID();
+      // 构建 L1 消息：前端消息 + Agent 步骤
+      const l1Messages: Message[] = [
+        ...allMessages.slice(0, -1),  // 前端传来的历史（去除最后一条 user，避免重复）
+        { role: 'user', content: userMessage },
+      ];
+      // 追加 Agent 的工具调用和最终回复
+      for (const step of result.steps) {
+        if (step.type === 'tool_call') {
+          l1Messages.push({
+            role: 'assistant',
+            content: '',
+            tool_calls: [{ id: 'l1', type: 'function', function: { name: step.tool, arguments: JSON.stringify(step.params) } }],
+          });
+        } else if (step.type === 'tool_result') {
+          l1Messages.push({ role: 'tool', tool_call_id: 'l1', content: step.summary });
+        }
+      }
+      // 追加最终回复
+      l1Messages.push({ role: 'assistant', content: result.reply });
+
+      // 异步保存（不阻塞响应）
+      saveSessionLog(env, userToken, sessionId, body.page, body.work_id,
+        String(work.title || ''), l1Messages).catch(err =>
+        console.error('[elf_chat] L1 保存失败:', (err as Error).message));
+    }
 
     return new Response(JSON.stringify(jsonSuccess({
       work_id: body.work_id,
