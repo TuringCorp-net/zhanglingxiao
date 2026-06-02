@@ -10,8 +10,30 @@ import { Env } from '../../db/schema';
 
 /** 标准消息格式 */
 export interface Message {
-  role: 'system' | 'user' | 'assistant';
+  role: 'system' | 'user' | 'assistant' | 'tool';
   content: string;
+  tool_call_id?: string;   // role='tool' 时必填
+  tool_calls?: ToolCall[]; // role='assistant' 且模型调用了工具时
+}
+
+/** 工具调用（从 LLM 响应中解析） */
+export interface ToolCall {
+  id: string;
+  type: 'function';
+  function: {
+    name: string;
+    arguments: string; // JSON 字符串
+  };
+}
+
+/** 工具定义（传给 LLM 的 JSON Schema） */
+export interface ToolDef {
+  type: 'function';
+  function: {
+    name: string;
+    description: string;
+    parameters: Record<string, unknown>;
+  };
 }
 
 /** callAI 调用选项 */
@@ -22,12 +44,15 @@ export interface AICallOptions {
   timeout?: number;        // 默认 30000ms
   retries?: number;        // 默认 2（共 3 次尝试）
   responseFormat?: 'text' | 'json';
+  tools?: ToolDef[];       // 可用工具列表
+  tool_choice?: 'auto' | 'none'; // 工具调用策略
 }
 
 /** callAI 返回结果 */
 export interface AICallResult {
   content: string;
   model: string;
+  tool_calls?: ToolCall[];           // 模型请求的工具调用
   usage?: { input: number; output: number; cacheHit?: number; cacheMiss?: number };
 }
 
@@ -81,12 +106,7 @@ function buildGatewayURL(model: string): string {
 
 /**
  * 通过 Cloudflare AI Gateway 调用大模型。
- *
- * @param env       Worker Env（需包含 CF_AIG_TOKEN Secret）
- * @param messages  标准消息数组，支持 system / user / assistant
- * @param options   可选：model, maxTokens, temperature, timeout, retries, responseFormat
- * @returns AICallResult { content, model, usage? }
- * @throws AIError  超时、限流、认证失败等
+ * 支持 tool calling（DeepSeek V3.2+ OpenAI 兼容格式）。
  */
 export async function callAI(
   env: Env,
@@ -103,31 +123,49 @@ export async function callAI(
   const maxRetries = options.retries ?? DEFAULT_RETRIES;
   const timeoutMs = options.timeout ?? DEFAULT_TIMEOUT;
 
-  // —— 构建请求体 ——
+  // —— 构建请求体（支持 tool / tool_calls 消息） ——
   let systemPrompt = '';
-  const chatMessages: { role: string; content: string }[] = [];
+  const chatMessages: Record<string, unknown>[] = [];
 
   for (const msg of messages) {
     if (msg.role === 'system') {
       systemPrompt += (systemPrompt ? '\n\n' : '') + msg.content;
+    } else if (msg.role === 'tool') {
+      chatMessages.push({
+        role: 'tool',
+        tool_call_id: msg.tool_call_id || '',
+        content: msg.content,
+      });
+    } else if (msg.role === 'assistant' && msg.tool_calls) {
+      chatMessages.push({
+        role: 'assistant',
+        content: msg.content || null,
+        tool_calls: msg.tool_calls,
+      });
     } else {
       chatMessages.push({ role: msg.role, content: msg.content });
     }
   }
 
+  const bodyMessages = systemPrompt
+    ? [{ role: 'system', content: systemPrompt }, ...chatMessages]
+    : chatMessages;
+
   const body: Record<string, unknown> = {
     model,
-    messages: systemPrompt
-      ? [{ role: 'system', content: systemPrompt }, ...chatMessages]
-      : chatMessages,
+    messages: bodyMessages,
   };
   if (options.maxTokens !== undefined) body.max_tokens = options.maxTokens;
   if (options.temperature !== undefined) body.temperature = options.temperature;
+  if (options.tools && options.tools.length > 0) {
+    body.tools = options.tools;
+    body.tool_choice = options.tool_choice || 'auto';
+  }
 
   // JSON 模式：追加指令
   if (options.responseFormat === 'json') {
     body.messages = [
-      ...(body.messages as { role: string; content: string }[]),
+      ...(body.messages as Record<string, unknown>[]),
       { role: 'system', content: 'You must respond with valid JSON only. No markdown fences, no explanatory text.' },
     ];
   }
@@ -171,19 +209,23 @@ export async function callAI(
       }
 
       const result = await response.json() as {
-        choices?: { message?: { content?: string } }[];
+        choices?: { message?: { content?: string; tool_calls?: ToolCall[] } }[];
         model?: string;
         usage?: { prompt_tokens?: number; completion_tokens?: number; prompt_cache_hit_tokens?: number; prompt_cache_miss_tokens?: number };
       };
 
-      const content = result?.choices?.[0]?.message?.content?.trim();
-      if (!content) {
-        throw new AIError('INVALID_RESPONSE', 'Empty response from model');
+      const choice = result?.choices?.[0];
+      const responseContent = choice?.message?.content?.trim() || '';
+      const toolCalls = choice?.message?.tool_calls;
+
+      // 有 tool_calls 时 content 可能为空——这是合法的
+      if (!responseContent && !toolCalls) {
+        throw new AIError('INVALID_RESPONSE', 'Empty response from model (no content and no tool calls)');
       }
 
       // JSON 模式：提取 JSON（去除可能的 markdown fence）
-      let finalContent = content;
-      if (options.responseFormat === 'json') {
+      let finalContent = responseContent;
+      if (options.responseFormat === 'json' && finalContent) {
         const fenceMatch = finalContent.match(/```(?:json)?\s*([\s\S]*?)```/);
         if (fenceMatch) finalContent = fenceMatch[1].trim();
         try { JSON.parse(finalContent); } catch { /* 返回原始内容 */ }
@@ -192,6 +234,7 @@ export async function callAI(
       return {
         content: finalContent,
         model: result.model || model,
+        tool_calls: toolCalls && toolCalls.length > 0 ? toolCalls : undefined,
         usage: result.usage ? {
           input: result.usage.prompt_tokens || 0,
           output: result.usage.completion_tokens || 0,

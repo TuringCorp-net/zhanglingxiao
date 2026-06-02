@@ -4,7 +4,6 @@ import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { callAI, generateWithAI } from '../../lib/ai';
 import { renderTemplate as renderText } from '../../lib/l1/render';
-import draftGenerateMd from '../../lib/l1/prompts/tools/draft_generate.md';
 import draftCheckMd from '../../lib/l1/prompts/tools/draft_check.md';
 import draftPolishMd from '../../lib/l1/prompts/tools/draft_polish.md';
 import draftRewriteMd from '../../lib/l1/prompts/tools/draft_rewrite.md';
@@ -122,119 +121,9 @@ export async function createIntent(env: Env, request: Request): Promise<Response
   });
 }
 
-// POST /api/write/draft/generate
-export async function generateDraft(env: Env, request: Request): Promise<Response> {
-  const body = await request.json() as { work_id: string; section_id: string };
-  if (!body.work_id || !body.section_id) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id and section_id are required')), {
-      status: 400, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const lang = extractLang(request);
-
-  const section = await env.DB.prepare(
-    'SELECT id, title, order_index, section_summary FROM sections WHERE id = ? AND work_id = ?'
-  ).bind(body.section_id, body.work_id).first<Record<string, unknown>>();
-  if (!section) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.SECTION_NOT_FOUND, 'Section not found')), {
-      status: 404, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const work = await env.DB.prepare('SELECT id, title, category FROM works WHERE id = ?').bind(body.work_id).first<Record<string, unknown>>();
-  if (!work) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
-      status: 404, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // 构建写作上下文
-  let worldContext = '';
-  const wb = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'world_bible.md'));
-  if (wb) worldContext = (await wb.text()).substring(0, 3000);
-
-  const prevChapters = await env.DB.prepare(
-    'SELECT title, section_summary, word_count FROM sections WHERE work_id = ? AND order_index < ? ORDER BY order_index DESC LIMIT 3'
-  ).bind(body.work_id, section.order_index).all<Record<string, unknown>>();
-  const prevContext = (prevChapters.results || []).reverse().map(s =>
-    `- ${s.title}: ${s.section_summary || '无摘要'} (${s.word_count}字)`
-  ).join('\n');
-
-  // 意图卡
-  let intentContext = '';
-  const intentsPrefix = workContentPath(body.work_id, lang, 'intents/');
-  const intents = await env.WORKS_BUCKET.list({ prefix: intentsPrefix });
-  for (const obj of intents.objects || []) {
-    const raw = await env.WORKS_BUCKET.get(obj.key);
-    if (raw) {
-      const data = JSON.parse(await raw.text());
-      if (data.section_id === body.section_id) {
-        const emoGoal = data.emotional_goal ? `\n情绪目标：${data.emotional_goal}` : '';
-        const povInfo = data.pov_character ? `\n视角角色：${data.pov_character}${data.pov_strategy ? `（策略：${data.pov_strategy}）` : ''}` : '';
-        intentContext = `本章目标：${data.goal}${emoGoal}${povInfo}\n钩子：${(data.hooks || []).join('、')}\n风格：${data.style_notes || '无'}`;
-        break;
-      }
-    }
-  }
-
-  const prompt = renderText(draftGenerateMd, {
-    work_title: work.title,
-    category: work.category || '未指定',
-    chapter_index: String(Number(section.order_index) + 1),
-    chapter_title: section.title,
-    world_context: worldContext ? `【世界观设定】\n${worldContext}\n` : '',
-    prev_context: prevContext ? `【前文概要】\n${prevContext}\n` : '',
-    intent_context: intentContext ? `【本章创作意图】\n${intentContext}\n` : '',
-    section_summary: section.section_summary ? `【章节摘要】${section.section_summary}` : '',
-  });
-
-  const aiResult = await callAI(env, [{ role: 'user', content: prompt }], {
-    maxTokens: 4096,
-    responseFormat: 'json',
-  });
-
-  if (!aiResult?.content) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, 'AI service unavailable')), {
-      status: 503, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // 从单槽位 JSON 提取正文
-  const parsed = extractTemplateJson(aiResult.content);
-  const chapterBody = parsed?.slots?.content || aiResult.content; // 兜底：直接用原始输出
-
-  // 写入 R2
-  await writeSectionContent(env, body.work_id, body.section_id, {
-    title: section.title,
-    order_index: section.order_index,
-    ai_generated: true,
-    version: 0,
-  }, chapterBody, lang);
-
-  // 更新 D1
-  const wordCount = chapterBody.replace(/[#*\-\s]/g, '').length;
-  const now = new Date().toISOString();
-  await env.DB.prepare(
-    'UPDATE sections SET word_count = ?, updated_at = ? WHERE id = ?'
-  ).bind(wordCount, now, body.section_id).run();
-
-  await logEvent(env, 'draft.generated', body.work_id, body.section_id as string, `Draft v0 generated: ${section.title} (${wordCount} chars)`);
-
-  return new Response(JSON.stringify(jsonSuccess({
-    section_id: body.section_id,
-    work_id: body.work_id,
-    title: section.title,
-    body: chapterBody,
-    word_count: wordCount,
-    version: 0,
-    ai_generated: true,
-  })), {
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
-
+// ============================================================
 // POST /api/write/draft/check/{work_id}/{section_id}
+// ============================================================
 export async function checkConsistency(env: Env, request: Request, workId: string, sectionId: string): Promise<Response> {
   const section = await env.DB.prepare('SELECT id, title FROM sections WHERE id = ? AND work_id = ?').bind(sectionId, workId).first<Record<string, unknown>>();
   if (!section) {

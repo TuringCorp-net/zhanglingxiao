@@ -8,11 +8,8 @@
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { callAI } from '../../lib/ai';
-import { renderTemplate as renderText } from '../../lib/l1/render';
-import foreshadowingGenMd from '../../lib/l1/prompts/tools/foreshadowing_gen.md';
-import { workContentPath, extractLang, type Lang, LANG_LABELS } from '../../lib/l1/work-content';
-import { renderTemplate, renderTemplateAsJson, extractTemplateJson, buildTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/l1/template';
+import { workContentPath, extractLang, type Lang } from '../../lib/l1/work-content';
+import { type TemplateDef } from '../../lib/l1/template';
 
 // ============================================================
 // 伏笔账本 — 结构化模板定义（单一来源，双语）
@@ -41,98 +38,6 @@ export const FORESHADOWING_TEMPLATE: TemplateDef = {
 /** R2 路径 */
 function fhJsonPath(workId: string, lang: Lang) { return workContentPath(workId, lang, 'foreshadowing.json'); }
 function fhMdPath(workId: string, lang: Lang) { return workContentPath(workId, lang, 'foreshadowing.md'); }
-
-// ============================================================
-// POST /api/write/foreshadowing/generate?lang=zh|en
-// ============================================================
-
-export async function generateForeshadowing(env: Env, request: Request): Promise<Response> {
-  const body = await request.json() as { work_id: string; style_notes?: string };
-  if (!body.work_id) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id is required')), {
-      status: 400, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const lang = extractLang(request);
-  const langLabel = LANG_LABELS[lang];
-
-  const work = await env.DB.prepare('SELECT id, title, category FROM works WHERE id = ?').bind(body.work_id).first<{ id: string; title: string; category: string }>();
-  if (!work) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
-      status: 404, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // 收集规划上下文
-  let worldContext = '';
-  const wb = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'world_bible.md'));
-  if (wb) worldContext = (await wb.text()).substring(0, 2000);
-
-  let outlineContext = '';
-  const outline = await env.WORKS_BUCKET.get(workContentPath(body.work_id, lang, 'outline.md'));
-  if (outline) outlineContext = (await outline.text()).substring(0, 2000);
-
-  const sections = await env.DB.prepare(
-    'SELECT title, order_index FROM sections WHERE work_id = ? ORDER BY order_index'
-  ).bind(body.work_id).all<{ title: string; order_index: number }>();
-  const chapterTitles = (sections.results || []).map(s => `第${s.order_index + 1}章「${s.title}」`).join('、');
-
-  const templateJson = renderTemplateAsJson(FORESHADOWING_TEMPLATE, lang, 2);
-
-  const prompt = renderText(foreshadowingGenMd, {
-    work_title: work.title,
-    world_context_section: worldContext ? `## 世界观参考\n${worldContext}` : '',
-    outline_context_section: outlineContext ? `## 大纲参考\n${outlineContext}` : '',
-    section_titles_section: chapterTitles ? `## 章节标题\n${chapterTitles}` : '(尚未规划章节)',
-    template_json: templateJson,
-    lang_label: langLabel,
-  });
-
-  const aiResult = await callAI(env, [{ role: 'user', content: prompt }], {
-    maxTokens: 4096,
-    responseFormat: 'json',
-  });
-
-  if (!aiResult?.content) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, 'AI service unavailable')), {
-      status: 503, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const parsed = extractTemplateJson(aiResult.content);
-  if (!parsed) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.EXTERNAL_SERVICE_ERROR, 'AI returned invalid JSON')), {
-      status: 500, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const slotData: R2SlotData = { slots: parsed.slots };
-  const renderedMd = renderTemplate(FORESHADOWING_TEMPLATE, lang, 2, { prefills: parsed.slots, cleanOutput: true });
-
-  // 写 R2 双文件
-  await env.WORKS_BUCKET.put(fhJsonPath(body.work_id, lang), JSON.stringify(slotData, null, 2), {
-    httpMetadata: { contentType: 'application/json' },
-  });
-  await env.WORKS_BUCKET.put(fhMdPath(body.work_id, lang), renderedMd, {
-    httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
-  });
-
-  const template = buildTemplateJson(FORESHADOWING_TEMPLATE, lang, 2, slotData);
-
-  return new Response(JSON.stringify(jsonSuccess({
-    work_id: body.work_id,
-    lang,
-    template,
-    rendered_md: renderedMd,
-  })), {
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
-
-// ============================================================
-// GET /api/write/foreshadowing/{work_id}?lang=zh|en
-// ============================================================
 
 export async function readForeshadowing(env: Env, request: Request, workId: string): Promise<Response> {
   // V3: 委托到统一 Module API

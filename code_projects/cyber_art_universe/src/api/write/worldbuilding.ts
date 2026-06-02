@@ -2,11 +2,7 @@
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { callAI } from '../../lib/ai';
-import { renderTemplate as renderText } from '../../lib/l1/render';
-import worldbuildingGenMd from '../../lib/l1/prompts/tools/worldbuilding_gen.md';
-import { workContentPath, SUPPORTED_LANGS, DEFAULT_BILINGUAL, extractLang, type Lang, LANG_LABELS } from '../../lib/l1/work-content';
-import { renderTemplate, renderTemplateAsJson, extractTemplateJson, type TemplateDef, type R2SlotData } from '../../lib/l1/template';
+import { type TemplateDef } from '../../lib/l1/template';
 
 // ============================================================
 // 世界观设定圣经 — 结构化模板定义（单一来源，双语）
@@ -74,16 +70,6 @@ export const BIBLE_TEMPLATE: TemplateDef = {
   },
 };
 
-/** R2 路径 */
-function bibleJsonPath(workId: string, lang: Lang) { return workContentPath(workId, lang, 'world_bible.json'); }
-function bibleMdPath(workId: string, lang: Lang) { return workContentPath(workId, lang, 'world_bible.md'); }
-
-/** 写 R2 双文件 */
-async function writeBible(env: Env, workId: string, lang: Lang, slotData: R2SlotData, renderedMd: string) {
-  const json = JSON.stringify(slotData, null, 2);
-  await env.WORKS_BUCKET.put(bibleJsonPath(workId, lang), json, { httpMetadata: { contentType: 'application/json' } });
-  await env.WORKS_BUCKET.put(bibleMdPath(workId, lang), renderedMd, { httpMetadata: { contentType: 'text/markdown; charset=utf-8' } });
-}
 
 /** 从 slot 数据提取约束规则 */
 function extractConstraintsFromSlots(slots: Record<string, string>): { section: string; rule: string }[] {
@@ -109,95 +95,8 @@ function extractConstraintsFromSlots(slots: Record<string, string>): { section: 
 }
 
 // ============================================================
-// POST /api/write/worldbuilding/generate
-// ============================================================
-
-export async function generateWorldbuilding(env: Env, request: Request): Promise<Response> {
-  const body = await request.json() as { work_id: string; prompt?: string; style_notes?: string; bilingual?: boolean; langs?: string[] };
-  if (!body.work_id) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id is required')), {
-      status: 400, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const work = await env.DB.prepare('SELECT id, title, category, summary FROM works WHERE id = ?').bind(body.work_id).first<Record<string, unknown>>();
-  if (!work) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
-      status: 404, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const bilingual = body.bilingual ?? true;
-  const targetLangs: Lang[] = bilingual
-    ? (body.langs?.filter(l => SUPPORTED_LANGS.includes(l as Lang)) as Lang[] || DEFAULT_BILINGUAL)
-    : [extractLang(request)];
-
-  // 收集上下文
-  const entities = await env.DB.prepare('SELECT name, type, description FROM entities WHERE work_id = ?').bind(body.work_id).all<Record<string, unknown>>();
-  const sections = await env.DB.prepare('SELECT title, section_summary FROM sections WHERE work_id = ? ORDER BY order_index LIMIT 3').bind(body.work_id).all<Record<string, unknown>>();
-
-  const entityContext = (entities.results || []).map(e => `- ${e.name}(${e.type}): ${e.description || '暂无描述'}`).join('\n');
-  const outlineContext = (sections.results || []).map(s => `- ${s.title}: ${s.section_summary || ''}`).join('\n');
-
-  const results: Record<string, { content: string; constraints: { section: string; rule: string }[] }> = {};
-
-  await Promise.all(targetLangs.map(async (lang) => {
-    const templateJson = renderTemplateAsJson(BIBLE_TEMPLATE, lang, 2);
-    const langLabel = LANG_LABELS[lang];
-
-    const prompt = renderText(worldbuildingGenMd, {
-      work_title: work.title,
-      category: work.category || '未指定',
-      summary: work.summary || '未提供',
-      author_prompt: body.prompt || '无',
-      style_notes: body.style_notes || '专业、详细',
-      entity_context: entityContext ? `已有角色/实体：\n${entityContext}` : '',
-      outline_context: outlineContext ? `已有章节概要：\n${outlineContext}` : '',
-      template_json: templateJson,
-      lang_label: langLabel,
-    });
-
-    const aiResult = await callAI(env, [{ role: 'user', content: prompt }], {
-      maxTokens: 4096,
-      responseFormat: 'json',
-    });
-
-    if (!aiResult?.content) return;
-
-    const parsed = extractTemplateJson(aiResult.content);
-    if (!parsed) {
-      console.error('[worldbuilding] JSON parse failed for', lang, 'raw:', aiResult.content.substring(0, 200));
-      return;
-    }
-
-    const slotData: R2SlotData = { slots: parsed.slots };
-    const renderedMd = renderTemplate(BIBLE_TEMPLATE, lang, 2, { prefills: parsed.slots, cleanOutput: true });
-
-    await writeBible(env, body.work_id, lang, slotData, renderedMd);
-
-    const constraints = extractConstraintsFromSlots(parsed.slots);
-    const constraintsJson = JSON.stringify(constraints, null, 2);
-    await env.WORKS_BUCKET.put(workContentPath(body.work_id, lang, 'constraints.json'), constraintsJson, {
-      httpMetadata: { contentType: 'application/json' },
-    });
-
-    results[lang] = { content: renderedMd, constraints };
-  }));
-
-  return new Response(JSON.stringify(jsonSuccess({
-    work_id: body.work_id,
-    bilingual: targetLangs.length > 1,
-    languages: targetLangs,
-    results,
-  })), {
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
-
-// ============================================================
 // GET /api/write/worldbuilding/{work_id}?lang=zh|en
 // ============================================================
-
 export async function readWorldbuilding(env: Env, request: Request, workId: string): Promise<Response> {
   // V3: 委托到统一 Module API
   const { getModule } = await import('./module');

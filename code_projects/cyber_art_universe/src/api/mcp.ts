@@ -8,10 +8,10 @@ import { searchContent, retrieveInWork } from './search';
 import { createSubscription } from './subscriptions';
 import { readWorldbuilding } from './write/worldbuilding';
 import { readOutline } from './write/outline';
-import { generateDraft, checkConsistency, polishDraft } from './write/draft';
-import { generateWorldbuilding } from './write/worldbuilding';
-import { generateOutline } from './write/outline';
+import { checkConsistency, polishDraft } from './write/draft';
 import { readForeshadowing } from './write/foreshadowing';
+import { generateModuleContent } from '../lib/l2/tools';
+import { extractLang } from '../lib/l1/work-content';
 import { readOriginalConcept } from './write/original_concept';
 
 // MCP 请求/响应类型
@@ -178,30 +178,34 @@ async function handleToolsCall(env: Env, request: Request, params?: Record<strin
       const entityId = args.entity_id as string || '';
       return getEntity(env, request, workId, entityId);
     }
-    // Write 工具 — SF-052 与 REST 共用处理函数
+    // Write 工具 — 已迁移到 L2 generateModuleContent()
     case 'generate_worldbuilding': {
-      const genWbReq = new Request(request.url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ work_id: args.work_id, prompt: args.prompt }),
+      const lang = extractLang(request);
+      const content = await generateModuleContent(env, args.work_id as string, 'm1', lang, {
+        instructions: args.prompt as string | undefined,
       });
-      return generateWorldbuilding(env, genWbReq);
+      return new Response(JSON.stringify(jsonSuccess({ generated: content })), {
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
     case 'generate_outline': {
-      const genOlReq = new Request(request.url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ work_id: args.work_id, num_chapters: args.num_chapters || 5 }),
+      const lang = extractLang(request);
+      const content = await generateModuleContent(env, args.work_id as string, 'm2', lang, {
+        instructions: args.prompt as string | undefined,
       });
-      return generateOutline(env, genOlReq);
+      return new Response(JSON.stringify(jsonSuccess({ generated: content })), {
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
     case 'generate_chapter': {
-      const genChReq = new Request(request.url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ work_id: args.work_id, section_id: args.section_id }),
+      const lang = extractLang(request);
+      const content = await generateModuleContent(env, args.work_id as string, 'm6_chapter', lang, {
+        instructions: args.prompt as string | undefined,
+        sectionId: args.section_id as string | undefined,
       });
-      return generateDraft(env, genChReq);
+      return new Response(JSON.stringify(jsonSuccess({ generated: content })), {
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
     case 'check_consistency': {
       const checkReq = new Request(request.url, {
