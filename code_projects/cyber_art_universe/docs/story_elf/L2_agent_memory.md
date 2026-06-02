@@ -383,56 +383,170 @@ Step 2: L2 → L3 提取（"深睡"）
 
 ---
 
-## 七、与现有系统的对接
+## 七、实施关键决策
 
-### 7.1 当前代码修改点
+> 以下是在编码前必须明确的未决问题。每个决策均参考 Claude Code 和 OpenClaw 的实践，并结合 Workers 平台约束给出建议。
+
+### 7.1 会话边界：前端管理 session_id
+
+**参考业界**：Claude Code 的"会话"由用户在 CLI 中管理——每次 `/clear` 或退出重进即新会话。OpenClaw 的会话由用户创建和管理。两者都是**客户端定义会话边界**，服务端不干预。
+
+**决策**：前端负责会话管理。
+
+- 前端首次发送消息时，生成一个 `session_id`（UUID），存入 `localStorage`
+- 后续消息复用同一个 `session_id`，直到用户手动点击"新对话"或 `localStorage` 被清除
+- 前端在每次 `elf/chat` 请求中携带 `session_id`
+- 同一 `session_id` + 同一日期 → 追加到同一个 L1 日志文件
+- 跨天（次日）→ 即使 `session_id` 相同，也创建新 L1 文件（按日期分目录）
+
+**需要修改前端 `story-elf.js`**：
+```javascript
+// 当前：只发一条消息
+messages: [{ role: 'user', content: msg }]
+
+// 新：发送完整会话历史 + session_id
+session_id: StoryElf.getSessionId(),
+messages: StoryElf.getMessages(),   // [{role:'user',content}, {role:'assistant',content}, ...]
+```
+
+前端维护 `messages[]` 数组。每次收到 assistant 回复后追加到数组末尾。
+
+### 7.2 L1 保存时的消息范围
+
+**问题**：前端传来的是调用前的历史。Worker 的 Agent 循环产生了新的 assistant 消息（含 tool_calls）和 tool 消息。L1 应该保存哪个版本？
+
+**决策**：保存 Worker 处理后的**完整版**——即原始前端消息 + Agent 新产生的消息。
+
+```
+前端传来: [user]
+Worker 处理:
+  → Agent Turn 1: assistant(tool_calls=read_module)
+  → Agent Turn 2: assistant(final reply)
+L1 保存: [user, assistant(tool_calls), tool(read_module result), assistant(final)]
+```
+
+这样 L1 是完整的、可用于记忆提取的原始数据。
+
+### 7.3 Tool Call 是否保存
+
+**参考业界**：Claude Code 的记忆提取中，工具调用被视为"Agent 做了什么"的信号，而非细粒度记录。OpenClaw 的 daily notes 只记录对话摘要和关键行动，不记录工具细节。
+
+**决策**：**保存 tool_call（动作），不保存 tool_result（数据）。**
+
+- 保存 `{ role: 'tool_call', tool: 'read_module', params: { module_type: 'm2' } }` → "用户关注了大纲"
+- 保存 `{ role: 'tool_call', tool: 'generate_slot', ... }` → "用户主动生成了内容"
+- 不保存 tool_result —— 数据已在 R2，重复存储无意义
+
+这为记忆提取提供了有价值的信号：从"用户调了什么工具"可以推断用户的关注重点和创作阶段。
+
+### 7.4 提取触发时机：ctx.waitUntil
+
+**平台约束**：Cloudflare Workers 没有后台进程。HTTP 响应返回后 Worker 终止。
+
+**决策**：使用 `ctx.waitUntil()` 异步触发提取。
+
+```
+elf_chat.ts 流程:
+  1. agentLoop() → LLM 调用 → 生成回复
+  2. 保存 L1 日志（同步，~5ms）
+  3. return Response（用户收到回复，~30ms）
+  4. ctx.waitUntil(extractL1toL2(env, user_token, session_id))  ← 异步，不阻塞用户
+```
+
+`ctx.waitUntil()` 确保即使 Response 已返回，提取任务仍继续执行直到完成（Worker 的 CPU 时间限制内：付费计划 30s，L1→L2 一次 LLM 调用约 2-5s）。
+
+**不需要 Workflows**。Workers + ctx.waitUntil 对 L2.0 完全足够。Workflows 留到需要持久后台执行时再用（如批量生成、离线任务）。
+
+### 7.5 提取状态追踪
+
+**问题**：需要记录"哪些 L1 已被提取"和"L2→L3 何时该触发"。
+
+**决策**：轻量状态文件，存在 R2。
+
+- **L1→L2 状态**：在每个 L1 日志文件的 `extracted_to_stm` 字段标记。提取后设为 `true`。下次扫描时跳过已提取的。
+- **L2→L3 状态**：`users/{token}/ltm/.extraction-state.json`
+  ```json
+  { "last_l3_extraction": "2026-06-01", "session_count_since_l3": 8 }
+  ```
+
+不用 D1——状态简单，R2 一个 JSON 文件足够。
+
+### 7.6 文件溢出
+
+**决策**：不需要专门的溢出处理。
+
+L2 每天一份文件，提取 Prompt 明确要求"简洁"。单文件预期 < 5KB，远低于 50KB 上限。如果真的超出（极罕见），自然拆分为 `{date}_part2.md`，注入时读取同一天的所有 part 文件。
+
+### 7.7 Workers vs Workflows 选择
+
+| 需求 | L2.0（当前） | L2.2+（未来） |
+|------|-------------|--------------|
+| L1 日志保存 | Worker 同步写入 ✅ | — |
+| L1→L2 提取 | Worker + ctx.waitUntil ✅ | Workflow 更从容 |
+| L2→L3 提取 | Worker + ctx.waitUntil ✅ | Workflow 更适合定期任务 |
+| 离线批量处理 | ❌ 不需要 | Workflow 天然支持 |
+| 复杂度 | 低 | 中等 |
+
+**结论**：L2.0 ~ L2.1 用 Workers + ctx.waitUntil。当需要"用户离线后持续处理"时迁移到 Workflows（对应 L2_agent_design.md §4.5 的演进路径）。
+
+---
+
+## 八、与现有系统的对接
+
+### 8.1 代码修改清单
 
 | 修改 | 文件 | 说明 |
 |------|------|------|
-| 会话结束时保存 L1 日志 | `elf_chat.ts` | 在 `agentLoop` 返回后，将 messages 数组追加到 R2 |
-| L1→L2 提取调用 | 新增 `src/lib/l2/memory.ts` | 会话结束后触发轻量 LLM 调用 |
-| Layer 5 注入 L2 + L3 | `prompt.ts` | 读取近 7 天 L2 + ltm/memory-profile.md，注入 system prompt |
-| L2→L3 提取调度 | `memory.ts` | 计数检查 + 触发重量 LLM 调用 |
+| 会话管理 | `story-elf.js` | 新增 `getSessionId()` / `getMessages()` / 维护 messages[] |
+| 请求格式扩展 | `elf_chat.ts` | 接收 `session_id`，作为 `ElfChatRequest` 的新字段 |
+| L1 日志保存 | `elf_chat.ts` | Agent 循环结束后，将完整 messages 写入 R2 |
+| L1→L2 提取 | 新增 `src/lib/l2/memory.ts` | `extractL1toL2()` — LLM 调用 + 写入 STM 文件 |
+| L2→L3 提取 | 同上 | `extractL2toL3()` — 检查触发条件 + LLM 调用 + 更新 memory-profile.md |
+| Layer 5 注入 L2 + L3 | `prompt.ts` | 读取近 7 天 L2 + memory-profile.md，注入 Layer 5 |
+| Checklist 持久化 | `elf_chat.ts` | 会话结束时自动保存 checklist 到 R2 |
 
-### 7.2 Checklist 持久化（已有基础）
+### 8.2 Checklist 持久化（已有基础）
 
 当前 `prompt.ts` Layer 5 已实现 checklist 从 R2 读取的逻辑。会话结束时自动保存 checklist 到 R2 `works/{work_id}/elf_checklist.json`——这是 L2 记忆的一部分。
 
-### 7.3 与 Layer 5 缓存策略的配合
+### 8.3 与 Layer 5 缓存策略的配合
 
 记忆注入层（Layer 5）放在 system prompt 最尾部。变更时：
 - Layer 1-4 完全命中缓存（~166K tokens）
-- 仅 Layer 5 的变更部分 miss（~500-2000 tokens）
+- 仅 Layer 5 的变更部分 miss（~500-3000 tokens）
 - 缓存效率 > 98%
 
 ---
 
-## 八、实施路径
+## 九、实施路径
 
 ### L2.1 — 基础记忆（当前目标）
 
-1. **L1 会话日志**：会话结束时自动保存到 R2
-2. **L2 短期记忆提取**：每次会话后触发 L1→L2 LLM 提取
-3. **Layer 5 注入 L2**：读取近 7 天 L2 文件，注入 system prompt
-4. **Checklist 持久化**：会话结束时自动保存 checklist
+1. **前端会话管理**：`story-elf.js` 新增 session_id + messages[] 维护
+2. **L1 会话日志**：`elf_chat.ts` 每次请求后保存完整 messages 到 R2
+3. **L1→L2 提取**：`memory.ts` — ctx.waitUntil 异步触发，LLM 提取关键事实
+4. **Layer 5 注入 L2**：`prompt.ts` 读取近 7 天 L2，注入 system prompt
+5. **Checklist 持久化**：会话结束时自动保存 checklist
 
 ### L2.2 — 长期画像
 
-5. **L3 长期记忆提取**：每 7 天/10 次会话触发 L2→L3 提取
-6. **Layer 5 注入 L3**：精简画像注入 system prompt
-7. **双向链接**：L3→L2→L1 链接体系
+6. **L3 长期记忆提取**：`memory.ts` — 每 7 天/10 次会话触发 L2→L3 提取
+7. **Layer 5 注入 L3**：memory-profile.md 全文注入 system prompt
+8. **双向链接**：L3→L2→L1 链接体系
 
 ### L2.3+ — 高级特性
 
-8. **记忆去重与合并**：检测重复/冲突的事实
-9. **记忆衰减**：旧记忆权重降低，超期自动归档
-10. **Read 侧记忆**：阅读偏好、阅读历史
+9. **记忆去重与合并**：检测重复/冲突的事实
+10. **记忆衰减**：旧记忆权重降低，超期自动归档
+11. **Read 侧记忆**：阅读偏好、阅读历史
+12. **Workflows 迁移**：长时任务迁移到 Workflows
 
 ---
 
-## 九、版本历史
+## 十、版本历史
 
 | 版本 | 日期 | 说明 |
 |------|------|------|
+| v1.2.0 | 2026-06-02 | 新增 §七「实施关键决策」：会话边界（前端管理 session_id）、提取触发（ctx.waitUntil）、Tool Call 保存策略、Workers vs Workflows 选择、提取状态追踪、文件溢出处理 |
 | v1.1.0 | 2026-06-02 | 存储路径规范化：L1 `logs` → `memory-logs`；L2 `stm/` → `stm/stm-memory/`；L3 `profile.md` → `ltm/memory-profile.md`。L3 格式从 JSON 改为 Markdown |
 | v1.0.0 | 2026-06-02 | 初版：三级记忆模型定稿。借鉴 Claude Code（四层索引 + Auto Memory + Auto Dream）和 OpenClaw（三阶段睡眠 + 六维评分）。核心调整：L2 改为时间驱动而非作品驱动，L2↔L3 双向链接 |
