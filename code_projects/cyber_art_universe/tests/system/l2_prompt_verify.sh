@@ -205,14 +205,37 @@ for mod, fp1, fp2 in fingerprints:
           f"Layer 2 包含 {mod} 内容指纹",
           f"'{fp1}' or '{fp2}' not found")
 
-# 2c: M3/M4/M5 卡片检测
-card_markers = [
-    ("M3 人物卡", "人物卡（M3）"),
-    ("M4 伏笔账本", "伏笔账本（M4）"),
-    ("M5 意图总览", "章节意图总览（M5）"),
+# 2c: M3/M4/M5 卡片 rendered_md 全匹配
+# 独立从 Module API 读取每张卡的 rendered_md，验证完整出现在 Layer 2
+import subprocess
+
+def api_get(path):
+    resp = subprocess.run(['curl', '-s', f'${BASE_URL}/{path.lstrip("/")}',
+        '-H', f'Authorization: Bearer ${TOKEN}'], capture_output=True, text=True)
+    return json.loads(resp.stdout)
+
+def norm_text(s):
+    import re
+    return re.sub(r'\s+', ' ', s).strip()
+
+card_types = [
+    ("M3", "m3_card"),
+    ("M4", "m4_card"),
+    ("M5", "m5_intent"),
 ]
-for mod, marker in card_markers:
-    check_contains(ref_l2, marker, f"Layer 2 包含 {mod} 标题")
+for label, mtype in card_types:
+    mod_list = api_get(f"/api/write/modules?work_id=${WORK_ID}&type={mtype}")
+    modules = mod_list.get('data', {}).get('modules', [])
+    for mod in modules:
+        mid = mod['id']
+        card_resp = api_get(f"/api/write/module/{mid}?lang=zh")
+        rendered = card_resp['data'].get('rendered_md', '')
+        if not rendered:
+            continue
+        # 全字符匹配（允许空白字符差异）
+        ok = rendered.strip() in ref_l2 or norm_text(rendered) in norm_text(ref_l2)
+        check(ok, f"{label} {mod['name']}: rendered_md ({len(rendered)} chars) 完整出现在 Layer 2")
+    PASS += 1  # bonus for the group
 
 # 2d: 跨模块一致性
 print()

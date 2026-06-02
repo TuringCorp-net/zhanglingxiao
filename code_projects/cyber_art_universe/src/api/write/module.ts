@@ -21,10 +21,6 @@ import { OUTLINE_TEMPLATE } from './outline';
 import { CHARACTER_TEMPLATE } from './character_card';
 import { FORESHADOWING_TEMPLATE } from './foreshadowing';
 import { FORESHADOWING_CARD_SLOTS } from './foreshadowing_card';
-import { generateWorldbuilding } from './worldbuilding';
-import { generateOutline } from './outline';
-import { generateDraft } from './draft';
-import { generateForeshadowing } from './foreshadowing';
 
 // ============================================================
 // 模板定义
@@ -138,7 +134,7 @@ const MODULE_CONFIG: Record<string, ModuleConfig> = {
   m5_intent: {
     tmpl: INTENT_TEMPLATE, isCard: false,
     jsonKeyFromModule: (m) => `intents/${m.id.replace('m5_intent_', '')}.json`,
-    mdKeyFromModule: () => '',
+    mdKeyFromModule: (m) => `intents/${m.id.replace('m5_intent_', '')}.md`,
   },
   m6_chapter: {
     tmpl: CHAPTER_TEMPLATE, isCard: false,
@@ -377,11 +373,13 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
 
   await touchModule(env, moduleId);
 
-  // ---- V4 自动版本快照（写入前的内容） ----
-  if (prevJsonContent) {
+  // ---- V4 自动版本快照（文件被写入 + 内容确实变化 → 才快照旧内容） ----
+  const newJsonContent = hasSlots ? JSON.stringify({ slots }, null, 2) : '';
+  const newFreeContent = hasFreeContent ? body.free_content! : '';
+  if (hasSlots && prevJsonContent && prevJsonContent !== newJsonContent) {
     await createSnapshot(env, mod.work_id, jsonKey, prevJsonContent);
   }
-  if (prevFreeContent) {
+  if (hasFreeContent && prevFreeContent && prevFreeContent !== newFreeContent) {
     await createSnapshot(env, mod.work_id, freeKey, prevFreeContent);
   }
 
@@ -446,7 +444,9 @@ export async function listModules(env: Env, request: Request): Promise<Response>
 }
 
 // ============================================================
+// ============================================================
 // POST /api/write/module/{module_id}/generate
+// generate 逻辑已迁移到 L2 generateModuleContent()，此处为 REST 兼容包装
 // ============================================================
 export async function generateModule(env: Env, request: Request, moduleId: string): Promise<Response> {
   const mod = await env.DB.prepare(
@@ -459,28 +459,60 @@ export async function generateModule(env: Env, request: Request, moduleId: strin
     });
   }
 
-  switch (mod.type) {
-    case 'm1':
-      return generateWorldbuilding(env, request);
-    case 'm2':
-      return generateOutline(env, request);
-    case 'm4_strategy':
-      return generateForeshadowing(env, request);
-    case 'm5_intent':
-    case 'm6_chapter': {
-      const body = await request.clone().json() as Record<string, unknown>;
-      body.section_id = mod.id.replace(/^m[56]_(intent|chapter)_/, '');
-      const newReq = new Request(request.url, {
-        method: 'POST',
-        headers: request.headers,
-        body: JSON.stringify(body),
+  // M0 保护：原始构想不可通过 generate 修改
+  if (mod.type === 'm0') {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, 'M0 cannot be modified via generate. M0 is read-only.')), {
+      status: 403, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const lang = extractLang(request);
+  const body = await request.json() as { instructions?: string; slot_id?: string };
+
+  try {
+    // 使用 L2 共享生成函数（system/user 分离，缓存友好）
+    const { generateModuleContent } = await import('../../lib/l2/tools');
+    const content = await generateModuleContent(env, mod.work_id, mod.type, lang, {
+      instructions: body.instructions,
+      slotId: body.slot_id,
+    });
+
+    // 自动写入结果（REST 端点兼容行为）
+    const cfg = MODULE_CONFIG[mod.type];
+    if (cfg) {
+      // 存储隔离：slots → .json，free_content → .free.md
+      const writeBody: Record<string, unknown> = {};
+      if (mod.type === 'm6_chapter' || mod.type === 'm0') {
+        writeBody.free_content = content;
+      } else {
+        // 尝试从 JSON 结果中解析 slots
+        try {
+          const parsed = JSON.parse(content);
+          if (parsed.slots) {
+            writeBody.slots = parsed.slots;
+          } else {
+            writeBody.slots = { content };
+          }
+        } catch {
+          writeBody.slots = { content };
+        }
+      }
+      const writeReq = new Request(request.url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept-Language': lang },
+        body: JSON.stringify(writeBody),
       });
-      return generateDraft(env, newReq);
+      return updateModule(env, writeReq, moduleId);
     }
-    default:
-      return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, `Generate not supported for type: ${mod.type}`)), {
-        status: 400, headers: { 'Content-Type': 'application/json' },
-      });
+
+    return new Response(JSON.stringify(jsonSuccess({ module_id: moduleId, generated: content })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (err) {
+    console.error('[generateModule] failed:', (err as Error).message);
+    return new Response(JSON.stringify(jsonError(ErrorCodes.AI_SERVICE_UNAVAILABLE, (err as Error).message)), {
+      status: 503, headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
 
