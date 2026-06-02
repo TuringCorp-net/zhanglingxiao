@@ -10,7 +10,7 @@ import { recordAIUsage, extractUserToken } from '../../lib/telemetry';
 import { extractLang } from '../../lib/l1/work-content';
 import { getOrBuildContextPackage } from '../../lib/l1/context-package';
 import type { WorkMeta, ContextOpts } from '../../lib/l1/types';
-import { agentLoop } from '../../lib/l2/agent';
+import { agentLoop, agentDebug } from '../../lib/l2/agent';
 import type { Message } from '../../lib/l0/aiGateway';
 
 interface ChatMessage {
@@ -28,6 +28,7 @@ interface ElfChatRequest {
     section_title?: string;
     panel?: string;
   };
+  debug?: 'prompt';          // debug 模式：不调 LLM，返回组装好的 messages + layers
 }
 
 export async function handleElfChat(env: Env, request: Request): Promise<Response> {
@@ -83,6 +84,35 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
   }
 
   try {
+    // —— Debug 模式：不调 LLM，返回组装好的 messages + layers ——
+    if ((body as { debug?: string }).debug === 'prompt') {
+      const debugResult = await agentDebug(
+        env,
+        workMeta,
+        contextPkg,
+        {
+          workId: body.work_id,
+          lang,
+          page: body.page,
+          contextModule: opts.module,
+          contextSectionTitle: opts.sectionTitle,
+        },
+        history,
+        userMessage,
+      );
+      return new Response(JSON.stringify(jsonSuccess({
+        work_id: body.work_id,
+        lang,
+        debug_mode: 'prompt',
+        messages: debugResult.messages,
+        system_prompt_layers: debugResult.system_prompt_layers,
+        user_message_prefix: debugResult.user_message_prefix,
+        stats: debugResult.stats,
+      })), {
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
     const result = await agentLoop(
       env,
       workMeta,
