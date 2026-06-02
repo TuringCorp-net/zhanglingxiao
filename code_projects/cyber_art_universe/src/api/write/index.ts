@@ -22,6 +22,7 @@ import { getModule, updateModule, listModules, generateModule, listModuleVersion
 import { getModuleGuide } from '../../lib/l2/guides';
 import { jsonSuccess } from '../../lib/response';
 import { extractLang, type Lang } from '../../lib/l1/work-content';
+import { handleMemoryTestSetup, handleMemoryTestTeardown } from './memory-test';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -201,6 +202,16 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
         headers: { 'Content-Type': 'application/json; charset=utf-8' },
       });
     }
+  }
+
+  // ================================================================
+  // 记忆系统测试辅助（写入/清理预制的测试记忆数据）
+  // ================================================================
+  if (resource === 'memory-test' && resourceId === 'setup' && !subResource && !action) {
+    if (request.method === 'POST') return handleMemoryTestSetup(env, request);
+  }
+  if (resource === 'memory-test' && resourceId === 'teardown' && !subResource && !action) {
+    if (request.method === 'POST') return handleMemoryTestTeardown(env, request);
   }
 
   // ================================================================

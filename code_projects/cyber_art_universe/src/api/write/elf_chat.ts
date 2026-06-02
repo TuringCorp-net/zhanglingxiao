@@ -24,6 +24,7 @@ interface ElfChatRequest {
   section_id?: string;
   page: 'read' | 'write';
   session_id?: string;        // 前端管理的会话 ID（用于记忆系统）
+  user_token?: string;        // 记忆系统测试用：覆盖 Authorization 提取的 user_token
   messages: ChatMessage[];
   context?: {
     module?: string;
@@ -85,7 +86,8 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
     });
   }
 
-  const userToken = extractUserToken(request);
+  // user_token：优先使用请求体中的显式指定（测试用），否则从 Authorization 提取
+  const userToken = (body as { user_token?: string }).user_token || extractUserToken(request);
 
   try {
     // —— Debug 模式：不调 LLM，返回组装好的 messages + layers ——
