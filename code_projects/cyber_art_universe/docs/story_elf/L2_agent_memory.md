@@ -1,6 +1,6 @@
 # Story Elf L2 — Agent 记忆系统设计
 
-> 版本: v1.0.0 | 状态: 设计草案 | 最后更新: 2026-06-02
+> 版本: v1.1.0 | 状态: 设计草案 | 最后更新: 2026-06-02
 >
 > **关联文档**：[L2 Agent 架构设计](L2_agent_design.md) → 本文档 → [L2 Agent 测试计划](L2_agent_test.md)
 >
@@ -41,21 +41,21 @@ Story Elf 的目标不是"一问一答的工具"，而是"记得你的创作伙�
 │  │ L3: 长期记忆（Long-Term Memory）                          │ │
 │  │   跨作品、跨会话的持久用户画像                              │ │
 │  │   风格偏好 / 节奏偏好 / 创作习惯 / 互动风格                 │ │
-│  │   存储: users/{token}/profile.md                       │ │
-│  │   注入: system prompt Layer 5（精简摘要）                  │ │
+│  │   存储: users/{token}/ltm/memory-profile.md               │ │
+│  │   注入: system prompt Layer 5（全文）                      │ │
 │  │   链接: 指向来源 L2 文件 [[l2-xxx]]                       │ │
 │  ├─────────────────────────────────────────────────────────┤ │
 │  │ L2: 短期记忆（Short-Term Memory）                         │ │
 │  │   按时间组织的跨作品提炼                                    │ │
 │  │   关键决策 / 偏好 / 作者反馈 / 灵感方向                     │ │
-│  │   存储: users/{token}/stm/{date}.md（按日）               │ │
+│  │   存储: users/{token}/stm/stm-memory/{date}.md（按日）    │ │
 │  │   注入: system prompt Layer 5（近期条目）                   │ │
 │  │   链接: 指向来源 L1 文件 [[l1-{session_id}]]               │ │
 │  │         L3 可能反向链接到这里 [[l2-{date}]]                │ │
 │  ├─────────────────────────────────────────────────────────┤ │
-│  │ L1: 瞬时记忆（Session Log）                               │ │
+│  │ L1: 瞬时记忆（Memory Log）                                │ │
 │  │   每次对话的完整原始记录                                    │ │
-│  │   存储: users/{token}/logs/{page}/{date}_{session_id}.json │ │
+│  │   存储: users/{token}/memory-logs/{page}/{date}_{sess}.json│ │
 │  │   不注入 system prompt（仅供 L2 提取用）                    │ │
 │  │   Write/Read 两侧分开存储，共享 L2/L3 提取管道              │ │
 │  └─────────────────────────────────────────────────────────┘ │
@@ -87,7 +87,7 @@ Story Elf 的目标不是"一问一答的工具"，而是"记得你的创作伙�
 
 ### 3.1 存储
 
-**路径**：`users/{user_token}/logs/{page}/{work_id}/{date}_{session_id}.json`
+**路径**：`users/{user_token}/memory-logs/{page}/{work_id}/{date}_{session_id}.json`
 
 - `page`：`write` 或 `read`
 - `work_id`：当前作品 ID（Read 侧可能是作品浏览，Write 侧是创作）
@@ -141,7 +141,7 @@ Story Elf 的目标不是"一问一答的工具"，而是"记得你的创作伙�
 
 ### 4.2 存储
 
-**路径**：`users/{user_token}/stm/{YYYY-MM-DD}.md`
+**路径**：`users/{user_token}/stm/stm-memory/{YYYY-MM-DD}.md`
 
 **内容**：每日一份 Markdown 文件，从当天所有 L1 会话中提取的关键信息。声明式事实。
 
@@ -205,7 +205,7 @@ Story Elf 的目标不是"一问一答的工具"，而是"记得你的创作伙�
 - **画像的微妙性**。最有价值的恰恰是那些无法归类的、微妙的创作倾向——新出现的模式不能被预设字段束缚
 - **业界一致选择**。Claude Code 和 OpenClaw 的 L3 层都使用 Markdown，而非 JSON
 
-**存储**：`users/{user_token}/profile.md`
+**存储**：`users/{user_token}/ltm/memory-profile.md`
 
 ```markdown
 # 用户画像
@@ -255,7 +255,7 @@ L3 画像文件全文注入 system prompt Layer 5（文件小，< 10KB）。放�
 │ ---                                                      │
 │                                                          │
 │ # 用户画像                                                │
-│ ...（profile.md 全文）...                                  │
+│ ...（memory-profile.md 全文）...                             │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -266,9 +266,9 @@ L3 画像文件全文注入 system prompt Layer 5（文件小，< 10KB）。放�
 **L2 → L1**：L2 中的每条事实通过 `[[l1-{session_id}]]` 链接回原始会话日志。当 LLM 需要了解"为什么会有这个偏好"时，可以追溯到原始对话。
 
 ```
-L3 (profile.md)
-  └─ [[l2-2026-06-02]] → users/{token}/stm/2026-06-02.md
-       └─ [[l1-sess_abc123]] → users/{token}/logs/write/{work_id}/2026-06-02_sess_abc123.json
+L3 (ltm/memory-profile.md)
+  └─ [[l2-2026-06-02]] → users/{token}/stm/stm-memory/2026-06-02.md
+       └─ [[l1-sess_abc123]] → users/{token}/memory-logs/write/{work_id}/2026-06-02_sess_abc123.json
 ```
 
 ---
@@ -290,8 +290,8 @@ Step 1: L1 → L2 提取（"浅睡 + REM"）
   ↓
 Step 2: L2 → L3 提取（"深睡"）
   · 触发：每 7 天或每 10 次会话
-  · 输入：近 30 天的 L2 文件 + 现有 profile.md
-  · 输出：更新后的 profile.md
+  · 输入：近 30 天的 L2 文件 + 现有 memory-profile.md
+  · 输出：更新后的 memory-profile.md
   · LLM 调用：中等（~3000 input tokens + 画像提炼）
 ```
 
@@ -346,13 +346,13 @@ Step 2: L2 → L3 提取（"深睡"）
 
 ```
 你是 Story Elf 的长期画像提炼器。你的任务是从近期的短期记忆（L2）
-中，提炼用户的持久创作画像，写入 profile.md。
+中，提炼用户的持久创作画像，写入 memory-profile.md。
 
 ## 提炼原则
 
 1. 只关注跨作品、跨时间的稳定模式
    - 如果某偏好只在 1-2 天内出现 → 留在 L2
-   - 如果某偏好在多个 L2 文件中反复出现 → 提炼到 profile.md
+   - 如果某偏好在多个 L2 文件中反复出现 → 提炼到 memory-profile.md
 
 2. 输出格式：Markdown，用约定的 ## 标题组织，标题下为自由叙述文本
    - ## 写作风格 —— 节奏、句长、对话风格、描写密度、基调
@@ -391,7 +391,7 @@ Step 2: L2 → L3 提取（"深睡"）
 |------|------|------|
 | 会话结束时保存 L1 日志 | `elf_chat.ts` | 在 `agentLoop` 返回后，将 messages 数组追加到 R2 |
 | L1→L2 提取调用 | 新增 `src/lib/l2/memory.ts` | 会话结束后触发轻量 LLM 调用 |
-| Layer 5 注入 L2 + L3 | `prompt.ts` | 读取近 7 天 L2 + profile.md，注入 system prompt |
+| Layer 5 注入 L2 + L3 | `prompt.ts` | 读取近 7 天 L2 + ltm/memory-profile.md，注入 system prompt |
 | L2→L3 提取调度 | `memory.ts` | 计数检查 + 触发重量 LLM 调用 |
 
 ### 7.2 Checklist 持久化（已有基础）
@@ -434,4 +434,5 @@ Step 2: L2 → L3 提取（"深睡"）
 
 | 版本 | 日期 | 说明 |
 |------|------|------|
+| v1.1.0 | 2026-06-02 | 存储路径规范化：L1 `logs` → `memory-logs`；L2 `stm/` → `stm/stm-memory/`；L3 `profile.md` → `ltm/memory-profile.md`。L3 格式从 JSON 改为 Markdown |
 | v1.0.0 | 2026-06-02 | 初版：三级记忆模型定稿。借鉴 Claude Code（四层索引 + Auto Memory + Auto Dream）和 OpenClaw（三阶段睡眠 + 六维评分）。核心调整：L2 改为时间驱动而非作品驱动，L2↔L3 双向链接 |
