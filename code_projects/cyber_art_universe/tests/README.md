@@ -80,9 +80,11 @@ tests/
 | Layer 2 上下文包 | M0-M5 完整内容（含 19 张卡片 rendered_md） | 结构标题 + 内容指纹 + 卡片全字符匹配 + 8 模块跨对比 |
 | Layer 3 参考案例库 | 4 部经典作品框架分析 | 5 项特征标记 + 8 模块跨对比 |
 | Layer 4 工具说明 | 5 个工具名称 + 顺序 | 工具名 + 顺序 + 8 模块跨对比 |
-| Layer 5 记忆层 | L2.1 占位文字 | 占位检查 + 8 模块跨对比 |
+| Layer 5 记忆层 | L2 短期记忆 + L3 长期画像（含预制 fixtures 内容验证） | 占位/兜底检查 + 8 模块跨对比 + 16 项 fixtures 内容/链接验证 |
 | 动态信息隔离 | `[当前模块: X]` 注入位置 | 16 项：prefix 验证 + system prompt 泄漏检查 |
 | 层序 | Layer 1 < 2 < 3 < 4 < 5 | 位置关系验证 |
+
+**记忆测试数据**：持久 fixtures 存储在 `users/memory-test-001/` 下（L2×2 天 + L3×1 份），通过 `POST /api/write/memory-test/setup` 一次性上传。验证时使用 `user_token: "memory-test-001"` 读取。
 
 **运行**：
 ```bash
@@ -94,7 +96,7 @@ BASE_URL=https://cau.turingcorp.net TOKEN=admin-TuringCorp-13572468 WORK_ID=aa48
 ```
 
 **结果解读**：
-- ✅ 104 项全部通过 = prompt 组装逻辑正确，所有卡片内容完整
+- ✅ 120 项全部通过 = prompt 组装逻辑正确，所有卡片内容完整
 - ❌ 某项失败 → 检查对应层的代码逻辑，修复后重新验证
 
 ## 运行方式
@@ -123,7 +125,7 @@ TOKEN="admin-TuringCorp-13572468" ./tests/system/v3_module_api.sh
 - [x] agent_test.sh 实现
 - [x] v3_module_api.sh 实现
 - [x] l2_prompt_verify.sh 实现
-- [x] L2 System Prompt 组装验证通过（104/104）
+- [x] L2 System Prompt 组装验证通过（120/120，含记忆层）
 - [x] L2 工具调用冒烟验证通过（read_module M1/M2）
 - [ ] 固化为 CI 测试用例
 

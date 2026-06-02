@@ -321,6 +321,55 @@ for mt in MODULES[1:]:
     check_eq(cur, ref_l5, f"m0 vs {mt} — Layer 5 一致",
              f"m0={len(ref_l5)} chars, {mt}={len(cur)} chars")
 
+# 5c: 记忆内容验证（使用持久测试 fixtures: memory-test-001）
+print()
+print("  --- Layer 5 记忆内容验证 (memory-test-001 fixtures) ---")
+mem_test_resp = json.loads(subprocess.run([
+    'curl', '-s', '-X', 'POST', f'${BASE_URL}/api/write/elf/chat',
+    '-H', f'Authorization: Bearer ${TOKEN}',
+    '-H', 'Content-Type: application/json',
+    '-d', json.dumps({
+        "work_id": "${WORK_ID}", "page": "write",
+        "user_token": "memory-test-001",
+        "messages": [{"role": "user", "content": "test"}],
+        "debug": "prompt"
+    }, ensure_ascii=False)
+], capture_output=True, text=True).stdout)
+
+mem_l5 = mem_test_resp['data']['system_prompt_layers']['layer_5_memory']
+
+# L2 STM 内容标记
+l2_markers = [
+    ("偏好短句、快节奏叙事", "L2 写作偏好"),
+    ("坠落型", "L2 作品决策"),
+    ("软魔法", "L2 作品决策-魔法体系"),
+    ("悲壮的希望", "L2 作品决策-结局"),
+    ("镜像反派", "L2 作品决策-角色"),
+    ("### 2026-06-01", "L2 日期结构-01"),
+    ("### 2026-06-02", "L2 日期结构-02"),
+    ("[[l1-sess_test", "L2 L1链接"),
+]
+for marker, label in l2_markers:
+    check_contains(mem_l5, marker, f"Memory L2: {label}")
+
+# L3 LTM 内容标记
+l3_markers = [
+    ("用户画像", "L3 标题"),
+    ("软魔法体系", "L3 世界观"),
+    ("专业口吻", "L3 互动风格"),
+    ("[[l2-2026-06", "L3 L2链接"),
+    ("最后更新", "L3 元信息-更新"),
+    ("来源 L2 文件", "L3 元信息-来源"),
+]
+for marker, label in l3_markers:
+    check_contains(mem_l5, marker, f"Memory L3: {label}")
+
+# 链接双向验证
+check("[[" in mem_l5 and "]]" in mem_l5,
+      "Memory: 双向链接语法正确")
+check("l1-sess_" in mem_l5 and "l2-2026-06" in mem_l5,
+      "Memory: L2→L1 和 L3→L2 链接均存在")
+
 print()
 
 # ============================================================
