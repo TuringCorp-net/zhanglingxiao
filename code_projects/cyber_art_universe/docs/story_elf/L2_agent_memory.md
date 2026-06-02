@@ -62,8 +62,8 @@ Story Elf 的目标不是"一问一答的工具"，而是"记得你的创作伙�
 │                                                               │
 │            ┌──────────────┐    ┌──────────────┐               │
 │            │ L1 → L2 提取  │    │ L2 → L3 提取  │               │
-│            │ "浅睡+REM"    │    │ "深睡"        │               │
-│            │ 每次会话后触发 │    │ 每 N 次会话触发 │               │
+│            │ "浅睡" Cron   │    │ "深睡" 条件触发│               │
+│            │ 每天凌晨 3 点  │    │ ≥7天+≥10会话  │               │
 │            └──────────────┘    └──────────────┘               │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -439,23 +439,42 @@ L1 保存: [user, assistant(tool_calls), tool(read_module result), assistant(fin
 
 这为记忆提取提供了有价值的信号：从"用户调了什么工具"可以推断用户的关注重点和创作阶段。
 
-### 7.4 提取触发时机：ctx.waitUntil
+### 7.4 提取触发时机：Cron 定时任务
 
-**平台约束**：Cloudflare Workers 没有后台进程。HTTP 响应返回后 Worker 终止。
+**平台能力**：Cloudflare Workers 原生支持 Cron Triggers，通过 `wrangler.toml` 配置定时任务。
 
-**决策**：使用 `ctx.waitUntil()` 异步触发提取。
+**决策**：使用 Cron 定时任务触发记忆提取。典型配置：每天凌晨 3:00 执行"浅睡"。
 
 ```
-elf_chat.ts 流程:
-  1. agentLoop() → LLM 调用 → 生成回复
-  2. 保存 L1 日志（同步，~5ms）
-  3. return Response（用户收到回复，~30ms）
-  4. ctx.waitUntil(extractL1toL2(env, user_token, session_id))  ← 异步，不阻塞用户
+wrangler.toml:
+[triggers]
+crons = ["0 3 * * *"]   # 每天凌晨 3:00 UTC+8
+
+Cron handler (src/api/memory-cron.ts):
+  1. 扫描 memory-logs/ 下近 1-2 天的新 L1 文件（未提取的）
+  2. 拉取所有新 L1 内容，合并为一次 LLM 调用
+  3. L1→L2 提取 → 写入当天 stm-memory/{date}.md
+  4. 标记 L1 文件 extracted_to_stm = true
+  5. 检查 L2→L3 触发条件（距上次 ≥7 天）
+     → 如满足，触发 L2→L3 提取 → 更新 memory-profile.md
 ```
 
-`ctx.waitUntil()` 确保即使 Response 已返回，提取任务仍继续执行直到完成（Worker 的 CPU 时间限制内：付费计划 30s，L1→L2 一次 LLM 调用约 2-5s）。
+**为什么 Cron 优于 ctx.waitUntil**：
 
-**不需要 Workflows**。Workers + ctx.waitUntil 对 L2.0 完全足够。Workflows 留到需要持久后台执行时再用（如批量生成、离线任务）。
+- **解耦用户请求**：提取不绑定 HTTP 请求。用户不来 → 照样提取。用户频繁来 → 不会产生 N 次重复提取
+- **批处理效率**：一天的所有 L1 合并为**一次** LLM 调用，而非 N 次
+- **零用户感知**：深夜执行，用户响应时间不受任何影响
+- **完美隐喻**：Story Elf 在深夜"睡眠"，整理当天的记忆。符合 OpenClaw 的 Deep Sleep 概念
+- **纯云端运行**：不依赖前端。即使没有任何用户在线，记忆提取照常工作
+
+**Cron 的频率配置**：
+
+| 提取 | Cron | 说明 |
+|------|------|------|
+| L1→L2 | `0 3 * * *`（每天凌晨 3 点） | 每次扫描近 1-2 天未提取的 L1 |
+| L2→L3 | 在 L1→L2 Cron 中检查 | 距上次 ≥7 天且 ≥10 次新会话 → 触发 |
+
+**L2.0 不需要 Workflows**。Cron Worker 的超时限制与普通 Worker 相同（30s），一次批处理 LLM 调用（约 3-5s）远在限制内。
 
 ### 7.5 提取状态追踪
 
@@ -482,12 +501,12 @@ L2 每天一份文件，提取 Prompt 明确要求"简洁"。单文件预期 < 5
 | 需求 | L2.0（当前） | L2.2+（未来） |
 |------|-------------|--------------|
 | L1 日志保存 | Worker 同步写入 ✅ | — |
-| L1→L2 提取 | Worker + ctx.waitUntil ✅ | Workflow 更从容 |
-| L2→L3 提取 | Worker + ctx.waitUntil ✅ | Workflow 更适合定期任务 |
-| 离线批量处理 | ❌ 不需要 | Workflow 天然支持 |
-| 复杂度 | 低 | 中等 |
+| L1→L2 提取 | Cron Worker 定时批处理 ✅ | — |
+| L2→L3 提取 | Cron Worker 内条件触发 ✅ | Workflow 更适合定期任务 |
+| 离线批量处理 | Cron 已覆盖 ✅ | Workflow 天然支持 |
+| 复杂度 | 低（标准 CF Cron） | 中等 |
 
-**结论**：L2.0 ~ L2.1 用 Workers + ctx.waitUntil。当需要"用户离线后持续处理"时迁移到 Workflows（对应 L2_agent_design.md §4.5 的演进路径）。
+**结论**：L2.0 ~ L2.1 用 Cron Worker 处理所有记忆提取。当需要超过 30s 的长时间处理时迁移到 Workflows（对应 L2_agent_design.md §4.5 的演进路径）。
 
 ---
 
@@ -500,10 +519,12 @@ L2 每天一份文件，提取 Prompt 明确要求"简洁"。单文件预期 < 5
 | 会话管理 | `story-elf.js` | 新增 `getSessionId()` / `getMessages()` / 维护 messages[] |
 | 请求格式扩展 | `elf_chat.ts` | 接收 `session_id`，作为 `ElfChatRequest` 的新字段 |
 | L1 日志保存 | `elf_chat.ts` | Agent 循环结束后，将完整 messages 写入 R2 |
-| L1→L2 提取 | 新增 `src/lib/l2/memory.ts` | `extractL1toL2()` — LLM 调用 + 写入 STM 文件 |
-| L2→L3 提取 | 同上 | `extractL2toL3()` — 检查触发条件 + LLM 调用 + 更新 memory-profile.md |
+| Cron 定时提取 | 新增 `src/api/memory-cron.ts` | Cron handler：扫描 L1 → L1→L2 批量提取 → 标记已处理 |
+| L1→L2 提取逻辑 | 新增 `src/lib/l2/memory.ts` | `extractL1toL2()` — LLM 调用 + 写入 STM 文件 |
+| L2→L3 提取逻辑 | 同上 | `extractL2toL3()` — 检查触发条件 + LLM 调用 + 更新 memory-profile.md |
 | Layer 5 注入 L2 + L3 | `prompt.ts` | 读取近 7 天 L2 + memory-profile.md，注入 Layer 5 |
 | Checklist 持久化 | `elf_chat.ts` | 会话结束时自动保存 checklist 到 R2 |
+| Cron 配置 | `wrangler.toml` | 新增 `[triggers] crons = ["0 3 * * *"]` |
 
 ### 8.2 Checklist 持久化（已有基础）
 
@@ -524,15 +545,16 @@ L2 每天一份文件，提取 Prompt 明确要求"简洁"。单文件预期 < 5
 
 1. **前端会话管理**：`story-elf.js` 新增 session_id + messages[] 维护
 2. **L1 会话日志**：`elf_chat.ts` 每次请求后保存完整 messages 到 R2
-3. **L1→L2 提取**：`memory.ts` — ctx.waitUntil 异步触发，LLM 提取关键事实
-4. **Layer 5 注入 L2**：`prompt.ts` 读取近 7 天 L2，注入 system prompt
-5. **Checklist 持久化**：会话结束时自动保存 checklist
+3. **Cron 定时提取**：`wrangler.toml` 配置 `crons = ["0 3 * * *"]`，新增 `memory-cron.ts`
+4. **L1→L2 批处理**：`memory.ts` — Cron 触发，扫描未处理的 L1，合并为一次 LLM 调用
+5. **Layer 5 注入 L2**：`prompt.ts` 读取近 7 天 L2，注入 system prompt
+6. **Checklist 持久化**：会话结束时自动保存 checklist
 
 ### L2.2 — 长期画像
 
-6. **L3 长期记忆提取**：`memory.ts` — 每 7 天/10 次会话触发 L2→L3 提取
-7. **Layer 5 注入 L3**：memory-profile.md 全文注入 system prompt
-8. **双向链接**：L3→L2→L1 链接体系
+7. **L3 长期记忆提取**：Cron 任务内条件触发 — 距上次 ≥7 天 → L2→L3 提取
+8. **Layer 5 注入 L3**：memory-profile.md 全文注入 system prompt
+9. **双向链接**：L3→L2→L1 链接体系
 
 ### L2.3+ — 高级特性
 
