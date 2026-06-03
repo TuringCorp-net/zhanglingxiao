@@ -275,7 +275,9 @@ async function loadModule(moduleId) {
 }
 
 // 保存 Module（V4: 携带修改前内容，服务端零 R2 读取即可生成历史快照）
-async function saveModule(moduleId, slots, freeContent) {
+// 409 Conflict: 自动处理——重新拉取最新内容、刷新缓存后静默重试保存
+async function saveModule(moduleId, slots, freeContent, _retryCount) {
+  _retryCount = _retryCount || 0;
   var cached = cacheGet(moduleId);
   var body = { slots: slots || {}, free_content: freeContent || '' };
   if (cached && cached.data) {
@@ -283,12 +285,55 @@ async function saveModule(moduleId, slots, freeContent) {
     if (cached.data.free_content !== undefined) body._prev_free_content = cached.data.free_content;
   }
   var resp = await hPut('/api/write/module/' + moduleId, body);
+
+  // 409 Conflict：内容被 Story Elf 等外部修改过 → 静默刷新后重试
+  if (resp && resp.status === 409 && _retryCount < 1) {
+    cacheClear([moduleId]);
+    // 重新拉取最新数据
+    var fresh = await loadModule(moduleId);
+    if (fresh && fresh.ok) {
+      // 更新 DOM 中的模板槽位（用户可能正在看）
+      refreshSlotsFromData(fresh.data);
+      // 用新缓存的 _prev_slots 重试保存
+      return saveModule(moduleId, slots, freeContent, _retryCount + 1);
+    }
+  }
+
   if (resp && resp.ok) {
     cacheSet(moduleId, resp);
   } else {
     cacheClear([moduleId]);
   }
   return resp;
+}
+
+// 静默更新 DOM 中的槽位内容（不覆盖用户正在编辑的文本）
+function refreshSlotsFromData(data) {
+  if (!data || !data.slots) return;
+  var slots = data.slots;
+  // 更新模板槽位 textarea
+  Object.keys(slots).forEach(function (slotId) {
+    var newContent = slots[slotId];
+    if (!newContent || !newContent.trim()) return;
+    var el = document.querySelector('[data-slot-id=\"' + slotId + '\"]');
+    if (el && !el.matches(':focus')) {
+      // 只在用户未聚焦该槽位时更新（不打断正在编辑的内容）
+      el.value = newContent;
+      // 更新缓存中的槽位数据
+      var modId = getModuleId();
+      if (modId) {
+        var cached = cacheGet(modId);
+        if (cached && cached.data && cached.data.slots) {
+          cached.data.slots[slotId] = newContent;
+        }
+      }
+    }
+  });
+  // 更新 rendered_md 预览（如果可见）
+  var previewEl = document.getElementById('rendered-preview');
+  if (previewEl && data.rendered_md) {
+    previewEl.textContent = data.rendered_md;
+  }
 }
 
 // 加载 ModuleList
@@ -1245,6 +1290,9 @@ async function sendPayload(p) {
   try {
     var resp = await saveModule(p.moduleId, p.slots, p.free_content);
     if (resp && resp.ok) {
+      _lastSaved = fingerprint(p);
+    } else if (resp && resp.status === 409) {
+      // 409 已在 saveModule 中静默处理（刷新后重试），不报错
       _lastSaved = fingerprint(p);
     } else {
       console.error('[sendPayload] FAILED mod=' + p.mod + (resp ? ' HTTP ' + (resp.status || '') : ' network'));
