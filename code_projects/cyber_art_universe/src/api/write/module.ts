@@ -528,6 +528,7 @@ export async function listModuleVersions(env: Env, request: Request, moduleId: s
 
 // ============================================================
 // GET /api/write/module/{module_id}/diff?v1=X&v2=Y — 对比版本
+// v1/v2 支持 relative references：previous / current / 版本号(1,2,3...) / UUID
 // v2=current 时对比当前内容与历史版本
 // ============================================================
 export async function diffModuleVersions(env: Env, request: Request, moduleId: string): Promise<Response> {
@@ -545,12 +546,12 @@ export async function diffModuleVersions(env: Env, request: Request, moduleId: s
   }
 
   const url = new URL(request.url);
-  const v1 = url.searchParams.get('v1');
-  const v2 = url.searchParams.get('v2');
-  const targetKey = url.searchParams.get('key'); // 可选：指定对比 json 还是 free 文件
-  const slotOnly = url.searchParams.get('slot_only') === '1'; // 可选：仅对比 slots
+  const v1Raw = url.searchParams.get('v1');
+  const v2Raw = url.searchParams.get('v2');
+  const targetKey = url.searchParams.get('key');
+  const slotOnly = url.searchParams.get('slot_only') === '1';
 
-  if (!v1 || !v2) {
+  if (!v1Raw || !v2Raw) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'v1 and v2 query params required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
@@ -567,6 +568,33 @@ export async function diffModuleVersions(env: Env, request: Request, moduleId: s
   const jsonRelKey = cfg.jsonKeyFromModule(mod);
   const jsonKey = r2Path(mod.work_id, lang, jsonRelKey);
   const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
+
+  // 解析 relative references：previous / current / 版本号 → 真实 version ID
+  const resolveRef = async (raw: string, key: string): Promise<string> => {
+    if (raw === 'current') return 'current'; // current 已是原生支持
+    if (raw === 'previous' || raw === 'latest') {
+      const vers = await listVersions(env, key);
+      if (raw === 'previous') {
+        // previous = 最后一个历史快照（不含 current）
+        if (vers.length < 1) return 'current'; // 没有历史版本
+        return vers[0].id; // listVersions returns newest first
+      }
+      // latest = 最新版本（包含 current... 其实就是 current）
+      return 'current';
+    }
+    // 版本号：数字 → 查找对应 UUID
+    const num = parseInt(raw, 10);
+    if (!isNaN(num) && num > 0) {
+      const vers = await listVersions(env, key);
+      const found = vers.find(v => v.version_num === num);
+      if (found) return found.id;
+      return raw; // 找不到，当作 UUID 尝试
+    }
+    return raw; // 默认当作 UUID
+  };
+
+  const v1 = targetKey === 'free' ? v1Raw : await resolveRef(v1Raw, jsonKey);
+  const v2 = targetKey === 'free' ? v2Raw : await resolveRef(v2Raw, jsonKey);
 
   // 默认对比 .json 文件；如果传了 key=free 则对比 .free.md
   const r2Key = targetKey === 'free' ? freeKey : jsonKey;

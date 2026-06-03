@@ -159,7 +159,7 @@ markers_l1 = [
     "可修改范围",
     "模糊时进行引导",
     "遵循模板格式",
-    "修改前说明意图",
+    "修改后总结",
     "当前作品",
     "镜中棋局",
     "fantasy",
@@ -281,14 +281,14 @@ print("--- Step 4: Layer 4 (Tool Descriptions) ---")
 ref_l4 = data["m0"]["layer_4_tools"]
 
 # 4a: 工具名检查
-tool_names = ["checklist_write", "get_writing_guide", "read_module", "write_to_slot"]
+tool_names = ["checklist_write", "get_writing_guide", "read_module", "write_to_slot", "get_version_history", "get_version_diff"]
 for tn in tool_names:
     check_contains(ref_l4, tn, f"Layer 4 包含工具 '{tn}'")
 
 # 4b: 工具顺序检查
 import re
-tool_pattern = re.findall(r'\*\*(checklist_write|get_writing_guide|read_module|write_to_slot)\*\*', ref_l4)
-expected_order = ["checklist_write", "get_writing_guide", "read_module", "write_to_slot"]
+tool_pattern = re.findall(r'\*\*(checklist_write|get_writing_guide|read_module|write_to_slot|get_version_history|get_version_diff)\*\*', ref_l4)
+expected_order = ["checklist_write", "get_writing_guide", "read_module", "write_to_slot", "get_version_history", "get_version_diff"]
 check_eq(tool_pattern, expected_order, "工具定义顺序正确",
          f"expected={expected_order}, got={tool_pattern}")
 

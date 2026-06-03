@@ -8,9 +8,11 @@
 import { Env } from '../../db/schema';
 import type { L2ToolDef } from './types';
 import { getModule, updateModule } from '../../api/write/module';
-import { type Lang } from '../l1/work-content';
+import { type Lang, workContentPath } from '../l1/work-content';
 import { getModuleGuide } from './guides';
 import { saveChecklist } from './memory';
+import { listVersions } from '../l1/version';
+import { diffWithCurrent } from '../l1/diff';
 
 // ============================================================
 // 工具工厂
@@ -18,10 +20,12 @@ import { saveChecklist } from './memory';
 
 export function createTools(env: Env, workId: string, lang: string): L2ToolDef[] {
   return [
-    createChecklistTool(env, workId),
+    createChecklistTool(env),
     createWritingGuideTool(env),
     createReadModuleTool(env),
     createWriteToSlotTool(env),
+    createVersionHistoryTool(env),
+    createVersionDiffTool(env),
   ];
 }
 
@@ -355,6 +359,190 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
         msg += '\n\n' + warnings.join('\n');
       }
       return msg;
+    },
+  };
+}
+
+// ============================================================
+// get_version_history — 查看模块的修改历史
+// ============================================================
+
+function createVersionHistoryTool(env: Env): L2ToolDef {
+  return {
+    def: {
+      type: 'function',
+      function: {
+        name: 'get_version_history',
+        description: '查看指定模块的历史版本列表。在修改前可调用此工具了解最近的变更记录，避免重复劳动或冲突。参数 module_type 即可，无需版本 ID。返回最近 10 个版本的编号、时间和概要。',
+        parameters: {
+          type: 'object',
+          properties: {
+            module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_strategy', 'm4_card', 'm5_intent', 'm6_chapter'] },
+          },
+          required: ['module_type'],
+        },
+      },
+    },
+    is_mutating: false,
+    execute: async (params: Record<string, unknown>) => {
+      const moduleType = params.module_type as string;
+      const workId = params.work_id as string;
+      const lang = (params._lang as string) || 'zh';
+
+      if (!moduleType) {
+        return '❌ get_version_history 需要传入 module_type 参数。\n例如: get_version_history({"module_type": "m1"})';
+      }
+
+      try {
+        // 查询模块
+        const moduleId = `${moduleType}_${workId}`;
+        const mod = await env.DB.prepare(
+          'SELECT id, work_id, type, r2_json_key FROM modules WHERE id = ?'
+        ).bind(moduleId).first<{ id: string; work_id: string; type: string; r2_json_key: string | null }>();
+
+        if (!mod || !mod.r2_json_key) {
+          return `模块 ${moduleType} 暂无版本历史。此模块可能尚未创建或从未被修改过。`;
+        }
+
+        const jsonKey = workContentPath(mod.work_id, lang as 'zh' | 'en', mod.r2_json_key);
+        const versions = await listVersions(env, jsonKey);
+
+        if (!versions || versions.length === 0) {
+          return `模块 ${moduleType} 暂无历史版本记录。每次通过 write_to_slot 写入内容时，系统会自动保存修改前的版本。`;
+        }
+
+        let result = `模块 ${moduleType} 的版本历史（共 ${versions.length} 个版本，最近 ${Math.min(10, versions.length)} 个）:\n\n`;
+        for (const v of versions.slice(0, 10)) {
+          const date = new Date(v.created_at).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+          const sizeStr = v.size_bytes ? ` (${Math.round(v.size_bytes / 1024)}KB)` : '';
+          result += `- v${v.version_num} — ${date}${sizeStr}\n`;
+        }
+
+        if (versions.length > 1) {
+          result += `\n💡 要查看两次修改之间的具体差异，请使用 get_version_diff。\n例如对比上一次修改与当前内容: get_version_diff({"module_type": "${moduleType}", "v1": "previous"})\n或对比特定版本号: get_version_diff({"module_type": "${moduleType}", "v1": 1})`;
+        }
+        return result;
+      } catch (err) {
+        return `❌ 获取版本历史失败: ${(err as Error).message}`;
+      }
+    },
+  };
+}
+
+// ============================================================
+// get_version_diff — 对比两个版本之间的差异
+// ============================================================
+
+function createVersionDiffTool(env: Env): L2ToolDef {
+  return {
+    def: {
+      type: 'function',
+      function: {
+        name: 'get_version_diff',
+        description: '对比模块两个版本之间的差异，查看具体修改了什么内容。v1/v2 可使用相对引用（无需 UUID）：默认 v1="previous"(上次修改前)、v2="current"(当前内容)。也可指定版本号如 v1=1（对比版本1与当前内容）。',
+        parameters: {
+          type: 'object',
+          properties: {
+            module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_strategy', 'm4_card', 'm5_intent', 'm6_chapter'] },
+            v1: { type: 'string', description: '对比的起点版本。默认"previous"（上次修改前的版本）。可选: "previous", "current", 版本号(如1,2,3), 或具体版本ID' },
+            v2: { type: 'string', description: '对比的终点版本。默认"current"（当前内容）。可选: "previous", "current", 版本号, 或具体版本ID' },
+          },
+          required: ['module_type'],
+        },
+      },
+    },
+    is_mutating: false,
+    execute: async (params: Record<string, unknown>) => {
+      const moduleType = params.module_type as string;
+      const workId = params.work_id as string;
+      const lang = (params._lang as string) || 'zh';
+      const v1Raw = (params.v1 as string) || 'previous';
+      const v2Raw = (params.v2 as string) || 'current';
+
+      if (!moduleType) {
+        return '❌ get_version_diff 需要传入 module_type 参数。\n例如对比上次修改与当前内容: get_version_diff({"module_type": "m1"})\n或对比特定版本: get_version_diff({"module_type": "m1", "v1": 1})';
+      }
+
+      try {
+        const moduleId = `${moduleType}_${workId}`;
+        const mod = await env.DB.prepare(
+          'SELECT id, work_id, type, r2_json_key FROM modules WHERE id = ?'
+        ).bind(moduleId).first<{ id: string; work_id: string; type: string; r2_json_key: string | null }>();
+
+        if (!mod || !mod.r2_json_key) {
+          return `模块 ${moduleType} 暂无版本数据，无法对比。`;
+        }
+
+        const jsonKey = workContentPath(mod.work_id, lang as 'zh' | 'en', mod.r2_json_key);
+
+        // 解析 relative references
+        const resolveRef = async (raw: string, key: string): Promise<string> => {
+          if (raw === 'current') return 'current';
+          const vers = await listVersions(env, key);
+          if (raw === 'previous') {
+            return vers.length > 0 ? vers[0].id : 'current';
+          }
+          const num = parseInt(raw, 10);
+          if (!isNaN(num) && num > 0) {
+            const found = vers.find(v => v.version_num === num);
+            if (found) return found.id;
+            return `版本号 ${num} 不存在。可用版本号范围: 1-${vers.length}。`;
+          }
+          return raw; // 当作 UUID
+        };
+
+        const v1 = await resolveRef(v1Raw, jsonKey);
+        if (v1.startsWith('版本号')) return `❌ ${v1}`;
+
+        if (v2Raw === 'current') {
+          // 对比历史版本 v1 vs 当前内容
+          let currentContent = '';
+          try {
+            const obj = await env.WORKS_BUCKET.get(jsonKey);
+            if (obj) currentContent = await obj.text();
+          } catch { /* empty */ }
+
+          const result = await diffWithCurrent(env, jsonKey, currentContent, v1);
+          if (!result) return `版本 ${v1Raw} 与当前内容之间没有差异，或版本不存在。`;
+
+          let msg = `对比 ${v1Raw} → 当前内容（共 ${result.changes.length} 处变更）:\n\n`;
+          for (const c of result.changes.slice(0, 20)) {
+            const icon = c.type === 'added' ? '+' : c.type === 'removed' ? '-' : '~';
+            msg += `${icon} ${c.path}`;
+            if (c.type === 'modified' && c.oldValue && c.newValue) {
+              const oldShort = c.oldValue.substring(0, 60).replace(/\n/g, ' ');
+              const newShort = c.newValue.substring(0, 60).replace(/\n/g, ' ');
+              msg += `\n   旧: ${oldShort}${c.oldValue.length > 60 ? '...' : ''}`;
+              msg += `\n   新: ${newShort}${c.newValue.length > 60 ? '...' : ''}`;
+            }
+            msg += '\n';
+          }
+          if (result.changes.length > 20) {
+            msg += `\n... 还有 ${result.changes.length - 20} 处变更未显示。`;
+          }
+          return msg;
+        } else {
+          // v2 不是 current，需要解析
+          const v2 = await resolveRef(v2Raw, jsonKey);
+          if (v2.startsWith('版本号')) return `❌ ${v2}`;
+
+          const { diffVersions } = await import('../l1/diff');
+          const result = await diffVersions(env, jsonKey, v1, v2);
+          if (!result) return `版本 ${v1Raw} 与 ${v2Raw} 之间没有差异，或版本不存在。`;
+
+          let msg = `对比 v${v1Raw} → v${v2Raw}（共 ${result.changes.length} 处变更）:\n\n`;
+          for (const c of result.changes.slice(0, 20)) {
+            const icon = c.type === 'added' ? '+' : c.type === 'removed' ? '-' : '~';
+            msg += `${icon} ${c.path}\n`;
+          }
+          if (result.changes.length > 20) {
+            msg += `\n... 还有 ${result.changes.length - 20} 处变更未显示。`;
+          }
+          return msg;
+        }
+      } catch (err) {
+        return `❌ 获取版本差异失败: ${(err as Error).message}`;
+      }
     },
   };
 }
