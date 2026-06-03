@@ -157,7 +157,7 @@ export function getModuleGuide(moduleType: string, lang: Lang): string {
   // 附加模板结构（仅当模块有结构化模板定义时）
   const templateJson = renderTemplateStructure(moduleType, lang);
   if (templateJson) {
-    parts.push(`\n## 模板结构\n\n以下是该模块的模板定义（含所有槽位的 ID、label、hint）：\n\n\`\`\`json\n${templateJson}\n\`\`\``);
+    parts.push(`\n## 模板结构\n\n以下是该模块的模板定义（含所有槽位的 ID、label、hint）。**调用 write_to_slot 时，slot_values 的 key 必须严格使用此模板中的 slot_id，不可自行发明或修改。**\n\n\`\`\`json\n${templateJson}\n\`\`\``);
   }
 
   return parts.join('\n');

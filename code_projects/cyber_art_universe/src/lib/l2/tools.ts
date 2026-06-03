@@ -216,7 +216,7 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'write_to_slot',
-        description: '将你生成的内容写入指定模块的槽位。所有写入自动走版本历史，可回滚。在写入前应先调用 get_writing_guide 了解模块规范，调用 read_module 了解当前状态。参数: module_type(模块类型), slot_values(槽位ID→内容的映射), free_content(可选), module_id(可选，默认 {module_type}_{work_id})',
+        description: '将你生成的内容写入指定模块的槽位。所有写入自动走版本历史，可回滚。在写入前应先调用 get_writing_guide 了解模块规范，调用 read_module 了解当前状态。参数: module_type(模块类型), slot_values(槽位ID→内容的映射，key 必须严格使用 get_writing_guide 返回的模板 slot_id，不可自行发明), free_content(可选), module_id(可选，默认 {module_type}_{work_id})',
         parameters: {
           type: 'object',
           properties: {

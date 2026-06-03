@@ -313,6 +313,25 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     });
   }
 
+  // 校验 slot ID：写入的 slot ID 必须存在于模板定义中
+  if (hasSlots && body.slots) {
+    const validIds = new Set<string>();
+    if (cfg.isCard && cfg.cardSlots) {
+      cfg.cardSlots.forEach(s => validIds.add(s.id));
+    } else if (cfg.tmpl) {
+      cfg.tmpl.sections.forEach(sec => sec.slots.forEach(s => validIds.add(s.id)));
+    }
+    if (validIds.size > 0) {
+      const unknown = Object.keys(body.slots).filter(id => !validIds.has(id));
+      if (unknown.length > 0) {
+        return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS,
+          `无效的槽位 ID: ${unknown.join(', ')}。请通过 get_writing_guide 获取精确的 slot_id。有效的 slot_id 包括: ${[...validIds].slice(0, 8).join(', ')}...`)), {
+          status: 400, headers: { 'Content-Type': 'application/json' },
+        });
+      }
+    }
+  }
+
   const jsonRelKey = cfg.jsonKeyFromModule(mod);
   const mdRelKey = cfg.mdKeyFromModule(mod);
   const jsonKey = r2Path(mod.work_id, lang, jsonRelKey);
