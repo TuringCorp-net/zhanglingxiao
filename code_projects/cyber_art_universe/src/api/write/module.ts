@@ -376,11 +376,18 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   const currentFreeContent = hasFreeContent ? body.free_content! : await readR2Text(env, freeKey);
 
   // ---- 写 slots → .json（独立文件，永远不碰 .free.md） ----
-  const slots = hasSlots ? body.slots! : {};
+  // 合并写入：先读取现有 slot 数据，将新 slot 值合并进去（而非替换全部）
+  let mergedSlots: Record<string, string> = {};
+  if (hasSlots) {
+    if (jsonKey) {
+      const existing = await readR2Json(env, jsonKey);
+      mergedSlots = { ...(existing?.slots || {}), ...body.slots! };
+    } else {
+      mergedSlots = body.slots!;
+    }
 
-  // ---- 写 slots .json ----
-  if (hasSlots && jsonKey) {
-    const slotData: R2SlotData = { slots };
+    // 写合并后的 slots
+    const slotData: R2SlotData = { slots: mergedSlots };
     await env.WORKS_BUCKET.put(jsonKey, JSON.stringify(slotData, null, 2), {
       httpMetadata: { contentType: 'application/json' },
     });
@@ -389,8 +396,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   // ---- 渲染 .md（从 slots + free_content 拼接） ----
   let renderedMd = '';
   if (hasSlots) {
-    // 获取写入后的 slots
-    const writeSlots = slots;
+    const writeSlots = mergedSlots;
     if (cfg.isCard && cfg.cardSlots && mdKey) {
       renderedMd = renderCardOnly(mod.name, cfg.cardSlots, lang, 2, writeSlots, currentFreeContent);
       await env.WORKS_BUCKET.put(mdKey, renderedMd, {
@@ -411,7 +417,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   await touchModule(env, moduleId);
 
   // ---- V4 自动版本快照（文件被写入 + 内容确实变化 → 才快照旧内容） ----
-  const newJsonContent = hasSlots ? JSON.stringify({ slots }, null, 2) : '';
+  const newJsonContent = hasSlots ? JSON.stringify({ slots: mergedSlots }, null, 2) : '';
   const newFreeContent = hasFreeContent ? body.free_content! : '';
   if (hasSlots && prevJsonContent && prevJsonContent !== newJsonContent) {
     await createSnapshot(env, mod.work_id, jsonKey, prevJsonContent);
@@ -421,7 +427,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   }
 
   // 读回当前 slots 用于响应
-  const currentSlotData = hasSlots ? { slots } : await readR2Json(env, jsonKey);
+  const currentSlotData = hasSlots ? { slots: mergedSlots } : await readR2Json(env, jsonKey);
   const currentSlots = currentSlotData?.slots || {};
 
   if (cfg.isCard && cfg.cardSlots) {
