@@ -356,35 +356,6 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   const mdKey = r2Path(mod.work_id, lang, mdRelKey);
   const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
 
-  // ---- V4: 乐观并发控制 —— 检测前端缓存与 R2 真实内容的冲突 ----
-  // 当 _prev_slots 与当前 R2 内容不一致时，说明数据已被他人（Story Elf 或
-  // 其他页签）修改，前端持有的缓存是过期的。此时阻止写入，防止旧数据覆盖新数据。
-  if (hasSlots && body._prev_slots && jsonKey) {
-    const currentR2 = await readR2Json(env, jsonKey);
-    if (currentR2?.slots) {
-      const prevFingerprint = JSON.stringify(body._prev_slots);
-      const currentFingerprint = JSON.stringify(currentR2.slots);
-      if (prevFingerprint !== currentFingerprint) {
-        // 检测到冲突：计算差异摘要
-        const prevKeys = Object.keys(body._prev_slots).filter(k => (body._prev_slots![k] || '').trim());
-        const currentKeys = Object.keys(currentR2.slots).filter(k => (currentR2.slots[k] || '').trim());
-        const added = currentKeys.filter(k => !prevKeys.includes(k));
-        const removed = prevKeys.filter(k => !currentKeys.includes(k));
-        const diffParts: string[] = [];
-        if (added.length) diffParts.push(`${added.length} 个槽位被新增`);
-        if (removed.length) diffParts.push(`${removed.length} 个槽位被修改`);
-        const diffStr = diffParts.length > 0 ? `（${diffParts.join('，')}）` : '';
-
-        return new Response(JSON.stringify(jsonError(ErrorCodes.RESOURCE_CONFLICT,
-          `⚠️ 保存冲突：自你上次加载此模块后，内容已被他人（如 Story Elf）修改${diffStr}。\n\n` +
-          `为避免覆盖他人的修改，请刷新页面获取最新内容后再继续编辑。\n` +
-          `当前 R2 有 ${currentKeys.length} 个非空槽位，你的缓存有 ${prevKeys.length} 个。`)), {
-          status: 409, headers: { 'Content-Type': 'application/json' },
-        });
-      }
-    }
-  }
-
   // ---- V4: 优先使用前端缓存中的旧内容（零 R2 读取）；无则回退 R2 ----
   // 只有实际被修改的文件才产生快照（未修改的文件不需要重复快照）
   const prevJsonContent = body._prev_slots

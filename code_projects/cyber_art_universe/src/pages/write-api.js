@@ -52,11 +52,8 @@ function hPut(path, body) {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${userToken}` },
     body: JSON.stringify(body),
-  }).then(r => {
-    if (r.status === 409) return { ok: false, status: 409 };  // 冲突 → 前端静默重试
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  }).catch(err => { console.error('hPut error:', path, err.message || err); return null; });
+  }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .catch(err => { console.error('hPut error:', path, err.message || err); return null; });
 }
 
 function hPatch(path, body) {
