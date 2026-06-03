@@ -313,7 +313,9 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     });
   }
 
-  // 校验 slot ID：写入的 slot ID 必须存在于模板定义中
+  // 校验 slot ID：过滤掉模板中不存在的 slot_id，仅写入有效部分
+  // 不硬拒绝整个请求——让 LLM 看到反馈后自行纠正
+  let slotWarnings: string[] = [];
   if (hasSlots && body.slots) {
     const validIds = new Set<string>();
     if (cfg.isCard && cfg.cardSlots) {
@@ -324,10 +326,26 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     if (validIds.size > 0) {
       const unknown = Object.keys(body.slots).filter(id => !validIds.has(id));
       if (unknown.length > 0) {
-        return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS,
-          `无效的槽位 ID: ${unknown.join(', ')}。请通过 get_writing_guide 获取精确的 slot_id。有效的 slot_id 包括: ${[...validIds].slice(0, 8).join(', ')}...`)), {
-          status: 400, headers: { 'Content-Type': 'application/json' },
+        const suggestions = unknown.map(id => {
+          // 尝试找相似的有效 ID
+          const similar = [...validIds].find(vid => vid.includes(id.substring(0, 3)) || id.includes(vid.substring(0, 3)));
+          return similar ? `"${id}" → 建议使用 "${similar}"` : `"${id}"`;
         });
+        slotWarnings = [
+          `⚠️ 以下 ${unknown.length} 个槽位 ID 不属于 ${mod.type} 模板，已跳过：`,
+          ...suggestions.map(s => `  - ${s}`),
+          `💡 请调用 get_writing_guide("${mod.type}") 获取精确的 slot_id 后重新写入这些内容。`,
+        ];
+        // 移除无效 slot，只写入有效部分
+        for (const id of unknown) {
+          delete body.slots[id];
+        }
+        // 如果全部无效且无 free_content，返回友好提示
+        if (Object.keys(body.slots).length === 0 && !hasFreeContent) {
+          return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, slotWarnings.join('\n'))), {
+            status: 400, headers: { 'Content-Type': 'application/json' },
+          });
+        }
       }
     }
   }
@@ -410,6 +428,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     const cardJson = buildCardJson(mod.name, cfg.cardSlots, lang, 2, { slots: currentSlots });
     return new Response(JSON.stringify(jsonSuccess({
       module_id: moduleId, lang, saved: true,
+      ...(slotWarnings.length > 0 ? { slot_warnings: slotWarnings } : {}),
       is_card: true,
       card: cardJson,
       slots: currentSlots,
@@ -422,6 +441,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   const template = buildTemplateJson(cfg.tmpl, lang, 2, { slots: currentSlots });
   return new Response(JSON.stringify(jsonSuccess({
     module_id: moduleId, lang, saved: true,
+    ...(slotWarnings.length > 0 ? { slot_warnings: slotWarnings } : {}),
     template,
     slots: currentSlots,
     free_content: currentFreeContent,

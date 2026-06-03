@@ -266,8 +266,17 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
         return `写入失败: ${JSON.stringify((data as { error?: { message?: string } }).error)}`;
       }
 
-      const slotCount = Object.keys(slotValues).length;
-      return `✅ 已写入 ${slotCount} 个槽位到模块 ${moduleId}。版本历史已自动保存，可回滚。`;
+      const resultData = (data.data || {}) as Record<string, unknown>;
+      const warnings = resultData.slot_warnings as string[] | undefined;
+      const writtenCount = Object.keys(resultData.slots || {}).filter(
+        k => (resultData.slots as Record<string, string>)[k]?.trim()
+      ).length;
+
+      let msg = `✅ 已写入 ${writtenCount} 个槽位到模块 ${moduleId}。版本历史已自动保存，可回滚。`;
+      if (warnings && warnings.length > 0) {
+        msg += '\n\n' + warnings.join('\n');
+      }
+      return msg;
     },
   };
 }
