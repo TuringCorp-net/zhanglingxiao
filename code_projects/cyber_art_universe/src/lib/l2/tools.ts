@@ -39,6 +39,38 @@ export function createTools(env: Env, workId: string, lang: string): L2ToolDef[]
   ];
 }
 
+// ============================================================
+// 归属权校验辅助
+// ============================================================
+
+/**
+ * 校验 user_token 是否对指定 work 有操作权限。
+ * 返回 null 表示通过，返回 string 表示错误消息。
+ */
+async function checkWorkAccess(env: Env, workId: string, userToken: string, action: string): Promise<string | null> {
+  if (!workId) return null; // 无 work_id 的操作（如 get_writing_guide）不需要校验
+
+  // Admin token 跳过校验
+  if (userToken === 'admin-Tu') return null;
+
+  try {
+    const work = await env.DB.prepare(
+      'SELECT user_token FROM works WHERE id = ?'
+    ).bind(workId).first<{ user_token: string }>();
+
+    if (!work) return `错误：作品 ${workId} 不存在。`;
+    // user_token 为空表示旧数据，允许访问（向后兼容）
+    if (!work.user_token || work.user_token === '') return null;
+    if (work.user_token !== userToken) {
+      return `错误：你没有权限${action}此作品。此作品属于其他用户。`;
+    }
+    return null;
+  } catch (err) {
+    console.error('[tools] 权限校验失败:', (err as Error).message);
+    return `错误：权限校验失败。`;
+  }
+}
+
 
 // ============================================================
 // checklist_write — LLM 自管理任务进度
@@ -162,6 +194,12 @@ function createReadModuleTool(env: Env): L2ToolDef {
     execute: async (params: Record<string, unknown>) => {
       const moduleType = params.module_type as string;
       const workId = params.work_id as string;
+      const userToken = (params._user_token as string) || '';
+
+      // 归属权校验
+      const accessError = await checkWorkAccess(env, workId, userToken, '读取');
+      if (accessError) return accessError;
+
       const moduleId = (params.module_id as string) || `${moduleType}_${workId}`;
 
       const url = `https://internal/api/write/module/${moduleId}?lang=${params._lang || 'zh'}`;
@@ -352,6 +390,12 @@ function createGenerateSlotTool(env: Env, workId: string, lang: string): L2ToolD
     },
     is_mutating: false,
     execute: async (params: Record<string, unknown>) => {
+      const userToken = (params._user_token as string) || '';
+
+      // 归属权校验
+      const accessError = await checkWorkAccess(env, workId, userToken, '生成');
+      if (accessError) return accessError;
+
       try {
         return await generateModuleContent(env, workId, params.module_type as string, lang as Lang, {
           slotId: params.slot_id as string | undefined,
@@ -390,7 +434,14 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
     is_mutating: true,
     execute: async (params: Record<string, unknown>) => {
       const moduleType = params.module_type as string;
-      const moduleId = (params.module_id as string) || `${moduleType}_${params.work_id as string}`;
+      const workId = params.work_id as string;
+      const userToken = (params._user_token as string) || '';
+
+      // 归属权校验
+      const accessError = await checkWorkAccess(env, workId, userToken, '修改');
+      if (accessError) return accessError;
+
+      const moduleId = (params.module_id as string) || `${moduleType}_${workId}`;
       const slotValues = params.slot_values as Record<string, string>;
       const freeContent = params.free_content as string | undefined;
 

@@ -133,6 +133,7 @@ export async function agentLoop(
       // 注入隐式参数
       toolParams._lang = lang;
       toolParams.work_id = opts.workId;
+      toolParams._user_token = opts.userToken || '';
 
       steps.push({ type: 'tool_call', tool: toolName, params: toolParams });
 

@@ -42,11 +42,23 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
     });
   }
 
-  // 查询作品基本信息
+  // user_token：优先使用请求体中的显式指定（测试用），否则从 Authorization 提取
+  const userToken = (body as { user_token?: string }).user_token || extractUserToken(request);
+
+  // 查询作品 + 归属权校验
   const work = await env.DB.prepare(
-    'SELECT id, title, category, summary FROM works WHERE id = ?'
+    'SELECT id, title, category, summary, user_token FROM works WHERE id = ?'
   ).bind(body.work_id).first<Record<string, unknown>>();
   if (!work) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 归属权校验：admin + debug 模式可访问所有，普通用户只能访问自己的作品
+  const isAdmin = userToken === 'admin-Tu' || (body as { user_token?: string }).user_token === 'admin-Tu';
+  const isDebug = (body as { debug?: string }).debug === 'prompt';
+  if (!isAdmin && !isDebug && String(work.user_token || '') !== '' && String(work.user_token) !== userToken) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
       status: 404, headers: { 'Content-Type': 'application/json' },
     });
@@ -85,9 +97,6 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
-
-  // user_token：优先使用请求体中的显式指定（测试用），否则从 Authorization 提取
-  const userToken = (body as { user_token?: string }).user_token || extractUserToken(request);
 
   try {
     // —— Debug 模式：不调 LLM，返回组装好的 messages + layers ——

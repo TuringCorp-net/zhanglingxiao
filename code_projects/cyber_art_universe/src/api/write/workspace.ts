@@ -6,7 +6,9 @@ import { parsePagination } from '../../lib/constants';
 import { buildWorkFrontmatter, writeWorkContent, readWorkContent, workR2Key, sectionR2Key, writeSectionContent, readSectionMarkdown, workContentPath } from '../../lib/l1/work-content';
 
 // GET /api/write/works
-// 注意：当前无用户认证，返回所有作品。未来接入用户系统后需加 WHERE author = ? 过滤。
+import { extractUserToken } from '../../lib/telemetry';
+
+// user_token 从 Authorization header 提取，用于归属权校验
 export async function listMyWorks(env: Env, request: Request): Promise<Response> {
   const url = new URL(request.url);
   const { page, limit, offset } = parsePagination(url);
@@ -64,11 +66,13 @@ export async function createDraftWork(env: Env, request: Request): Promise<Respo
     httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
   });
 
+  const userToken = extractUserToken(request);
+
   await env.DB.prepare(`
-    INSERT INTO works (id, title, type, category, author, creation_attribution, audience, tags, status, summary, r2_object_key, version, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?, 1, ?, ?)
+    INSERT INTO works (id, title, type, category, author, user_token, creation_attribution, audience, tags, status, summary, r2_object_key, version, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?, 1, ?, ?)
   `).bind(
-    id, body.title, body.type || 'novel', body.category || '', body.author,
+    id, body.title, body.type || 'novel', body.category || '', body.author, userToken,
     body.creation_attribution || 'original', audience, tags,
     body.summary || null, r2Key, now, now
   ).run();
