@@ -158,12 +158,12 @@ function createReadModuleTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'read_module',
-        description: '读取指定模块的当前内容（slots 结构化数据 + free_content 自由写作）。在需要了解作者已经写了什么时调用。参数 module_type 可选: m1(世界观), m2(大纲), m3_card(人物卡), m4_strategy(伏笔策略), m4_card(伏笔卡), m5_intent(意图卡), m6_chapter(章节正文)',
+        description: '读取指定模块的当前内容（slots 结构化数据 + free_content 自由写作）。在需要了解作者已经写了什么时调用。参数 module_type 可选: m1(世界观), m2(大纲), m3_card(人物卡—自动返回全部卡片), m4_strategy(伏笔策略), m4_card(伏笔卡—自动返回全部卡片), m5_intent(意图卡—自动返回全部卡片), m6_chapter(章节正文)。卡片类模块无需指定 module_id，自动返回该类型的所有卡片。',
         parameters: {
           type: 'object',
           properties: {
             module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_strategy', 'm4_card', 'm5_intent', 'm6_chapter'] },
-            module_id: { type: 'string', description: '模块 ID（可选）。不传则使用默认模块（如 m1_{work_id}）。卡片类模块必须传具体 ID' },
+            module_id: { type: 'string', description: '可选：指定具体的模块 ID。不传则 m1/m2/m4_strategy/m6_chapter 使用默认模块，卡片类(m3_card/m4_card/m5_intent)自动返回所有卡片' },
           },
           required: ['module_type'],
         },
@@ -178,9 +178,53 @@ function createReadModuleTool(env: Env): L2ToolDef {
       const accessError = await checkWorkAccess(env, workId, userToken, '读取');
       if (accessError) return accessError;
 
+      const lang = (params._lang as string) || 'zh';
+
+      // 卡片类模块：自动列出所有卡片并返回完整内容
+      const CARD_TYPES = ['m3_card', 'm4_card', 'm5_intent'];
+      if (CARD_TYPES.includes(moduleType) && !params.module_id) {
+        try {
+          const mods = await env.DB.prepare(
+            'SELECT id, name FROM modules WHERE work_id = ? AND type = ? ORDER BY order_index ASC'
+          ).bind(workId, moduleType).all<{ id: string; name: string }>();
+
+          if (!mods.results?.length) {
+            return `模块类型 ${moduleType} 下暂无卡片。`;
+          }
+
+          const cardResults: string[] = [];
+          for (const mod of mods.results) {
+            const url = `https://internal/api/write/module/${mod.id}?lang=${lang}`;
+            const req = new Request(url, { headers: { 'Accept-Language': lang } });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const resp = await getModule(env, req as any, mod.id);
+            const cardData = await resp.json() as Record<string, unknown>;
+            if (cardData.ok) {
+              const card = (cardData.data || {}) as Record<string, unknown>;
+              const cardSlots = card.slots || {};
+              const cardFree = card.free_content || '';
+              cardResults.push(`### ${mod.name} (${mod.id})\n`);
+              if (Object.keys(cardSlots as object).length > 0) {
+                cardResults.push(`\`\`\`json\n${JSON.stringify(cardSlots, null, 2)}\n\`\`\`\n`);
+              }
+              if (cardFree) {
+                cardResults.push(`自由写作区: ${(cardFree as string).substring(0, 2000)}\n`);
+              }
+            }
+          }
+
+          return cardResults.length > 0
+            ? `模块类型: ${moduleType}（共 ${mods.results.length} 张卡片）\n\n${cardResults.join('\n')}`
+            : `模块类型 ${moduleType} 下暂无有效卡片内容。`;
+        } catch (err) {
+          return `读取卡片列表失败: ${(err as Error).message}`;
+        }
+      }
+
+      // 单模块读取（非卡片类型，或指定了具体 module_id）
       const moduleId = (params.module_id as string) || `${moduleType}_${workId}`;
-      const url = `https://internal/api/write/module/${moduleId}?lang=${params._lang || 'zh'}`;
-      const req = new Request(url, { headers: { 'Accept-Language': (params._lang as string) || 'zh' } });
+      const url = `https://internal/api/write/module/${moduleId}?lang=${lang}`;
+      const req = new Request(url, { headers: { 'Accept-Language': lang } });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response = await getModule(env, req as any, moduleId);
       const data = await response.json() as Record<string, unknown>;
