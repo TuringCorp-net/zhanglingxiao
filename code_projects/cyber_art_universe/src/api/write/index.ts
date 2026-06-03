@@ -22,7 +22,7 @@ import { getModule, updateModule, listModules, generateModule, listModuleVersion
 import { getModuleGuide } from '../../lib/l2/guides';
 import { jsonSuccess } from '../../lib/response';
 import { extractLang, type Lang } from '../../lib/l1/work-content';
-import { handleMemoryTestSetup, handleMemoryTestTeardown } from './memory-test';
+import { handleMemoryTestSetup, handleMemoryTestTeardown, handleMemoryExtractL2, handleMemoryExtractL3 } from './memory-test';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -212,6 +212,12 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   }
   if (resource === 'memory-test' && resourceId === 'teardown' && !subResource && !action) {
     if (request.method === 'POST') return handleMemoryTestTeardown(env, request);
+  }
+  if (resource === 'memory-test' && resourceId === 'extract-l2' && !subResource && !action) {
+    if (request.method === 'POST') return handleMemoryExtractL2(env, request);
+  }
+  if (resource === 'memory-test' && resourceId === 'extract-l3' && !subResource && !action) {
+    if (request.method === 'POST') return handleMemoryExtractL3(env, request);
   }
 
   // ================================================================

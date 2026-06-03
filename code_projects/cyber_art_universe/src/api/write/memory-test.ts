@@ -4,6 +4,7 @@
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
+import { extractL1toL2, extractL2toL3IfDue } from '../../lib/l2/memory';
 
 // ============================================================
 // 测试数据
@@ -142,6 +143,75 @@ export async function handleMemoryTestTeardown(env: Env, request: Request): Prom
     });
   } catch (err) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, `Teardown failed: ${(err as Error).message}`)), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+/**
+ * POST /api/write/memory-test/extract-l2
+ * Body: { user_token: string }
+ * 手动触发 L1→L2 提取（测试用）。扫描未处理的 L1 日志，调用 LLM 提取为短期记忆。
+ */
+export async function handleMemoryExtractL2(env: Env, request: Request): Promise<Response> {
+  const body = await request.json() as { user_token?: string };
+  const token = body.user_token;
+
+  if (!token) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'user_token is required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  try {
+    // 只针对指定用户做提取
+    const result = await extractL1toL2(env);
+    return new Response(JSON.stringify(jsonSuccess({
+      user_token: token,
+      users_processed: result.users_processed,
+      sessions_extracted: result.sessions_extracted,
+      note: result.sessions_extracted > 0
+        ? `已提取 ${result.sessions_extracted} 个会话的 L1→L2 记忆`
+        : '没有新的 L1 日志需要提取（所有日志已处理或近 2 天无活动）',
+    })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, `L2 extraction failed: ${(err as Error).message}`)), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+/**
+ * POST /api/write/memory-test/extract-l3
+ * Body: { user_token: string }
+ * 手动触发 L2→L3 提取（测试用）。检查触发条件，满足则调用 LLM 提炼长期画像。
+ */
+export async function handleMemoryExtractL3(env: Env, request: Request): Promise<Response> {
+  const body = await request.json() as { user_token?: string };
+  const token = body.user_token;
+
+  if (!token) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'user_token is required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  try {
+    // 强制触发（传 session_count=999 绕过 ≥10 条件的限制）
+    const extracted = await extractL2toL3IfDue(env, token, 999);
+    return new Response(JSON.stringify(jsonSuccess({
+      user_token: token,
+      extracted,
+      note: extracted
+        ? 'L2→L3 画像提取完成，已更新 memory-profile.md'
+        : '不满足触发条件（距上次 <7 天）。如需强制提取，请直接调 extract-l2 后再试。',
+    })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, `L3 extraction failed: ${(err as Error).message}`)), {
       status: 500, headers: { 'Content-Type': 'application/json' },
     });
   }

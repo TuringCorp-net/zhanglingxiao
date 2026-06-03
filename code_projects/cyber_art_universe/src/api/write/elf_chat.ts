@@ -171,8 +171,8 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
       // 追加最终回复
       l1Messages.push({ role: 'assistant', content: result.reply });
 
-      // 异步保存（不阻塞响应）
-      saveSessionLog(env, userToken, sessionId, body.page, body.work_id,
+      // 保存 L1 日志到 R2（~5ms，可忽略不计）
+      await saveSessionLog(env, userToken, sessionId, body.page, body.work_id,
         String(work.title || ''), l1Messages).catch(err =>
         console.error('[elf_chat] L1 保存失败:', (err as Error).message));
     }
