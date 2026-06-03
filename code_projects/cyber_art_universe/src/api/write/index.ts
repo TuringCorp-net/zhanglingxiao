@@ -12,13 +12,12 @@ import { createCharacter, readCharacterCard, updateCharacterCard, updateEntity, 
 import { createForeshadowing, readForeshadowingCard, updateForeshadowingCard } from './foreshadowing_card';
 import { readWorldbuilding, updateWorldbuilding, readConstraints } from './worldbuilding';
 import { readOutline, updateOutline } from './outline';
-import { createIntent, readIntent, checkConsistency, polishDraft, outputDraft, rewriteSection } from './draft';
+import { createIntent, readIntent, outputDraft } from './draft';
 import { readForeshadowing, updateForeshadowing } from './foreshadowing';
-import { extractHooks, generateTitles, repurposeSection } from './marketing';
+import { readHints } from './hints';
 import { readOriginalConcept, updateOriginalConcept } from './original_concept';
 import { handleElfChat } from './elf_chat';
-import { readHints } from './hints';
-import { getModule, updateModule, listModules, generateModule, listModuleVersions, diffModuleVersions } from './module';
+import { getModule, updateModule, listModules, listModuleVersions, diffModuleVersions } from './module';
 import { getModuleGuide } from '../../lib/l2/guides';
 import { jsonSuccess } from '../../lib/response';
 import { extractLang, type Lang } from '../../lib/l1/work-content';
@@ -98,9 +97,6 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
     if (request.method === 'GET') return getModule(env, request, resourceId);
     if (request.method === 'PUT') return updateModule(env, request, resourceId);
   }
-  if (resource === 'module' && resourceId && subResource === 'generate' && !subResourceId) {
-    if (request.method === 'POST') return generateModule(env, request, resourceId);
-  }
   // V4: 版本历史 & diff
   if (resource === 'module' && resourceId && subResource === 'versions' && !subResourceId) {
     if (request.method === 'GET') return listModuleVersions(env, request, resourceId);
@@ -110,10 +106,6 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   }
 
   if (resource === 'worldbuilding') {
-    if (resourceId === 'generate' && !subResource && request.method === 'POST') {
-      const body = await request.clone().json() as { work_id: string };
-      return generateModule(env, request, `m1_${body.work_id}`);
-    }
     if (resourceId && subResource === 'constraints' && !action && request.method === 'GET') return readConstraints(env, request, resourceId);
     if (resourceId && !subResource && !action) {
       if (request.method === 'GET') return readWorldbuilding(env, request, resourceId);
@@ -135,10 +127,6 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // 大纲
   // ================================================================
   if (resource === 'outline') {
-    if (resourceId === 'generate' && !subResource && request.method === 'POST') {
-      const body = await request.clone().json() as { work_id: string };
-      return generateModule(env, request, `m2_${body.work_id}`);
-    }
     if (resourceId && !subResource && !action) {
       if (request.method === 'GET') return readOutline(env, request, resourceId);
       if (request.method === 'PUT') return updateOutline(env, request, resourceId);
@@ -153,13 +141,6 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
     if (resourceId === 'intent' && subResource && subResourceId && !action) {
       if (request.method === 'GET') return readIntent(env, request, subResource, subResourceId);
     }
-    if (resourceId === 'generate' && !subResource && request.method === 'POST') {
-      const body = await request.clone().json() as { work_id: string; section_id: string };
-      return generateModule(env, request, `m6_chapter_${body.section_id}`);
-    }
-    if (resourceId === 'polish' && !subResource && request.method === 'POST') return polishDraft(env, request);
-    if (resourceId === 'rewrite' && subResource && !subResourceId && !action && request.method === 'POST') return rewriteSection(env, request, subResource);
-    if (resourceId === 'check' && subResource && subResourceId && !action && request.method === 'POST') return checkConsistency(env, request, subResource, subResourceId);
     if (resourceId === 'output' && subResource && !subResourceId && !action && request.method === 'GET') return outputDraft(env, request, subResource);
   }
 
@@ -167,10 +148,6 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // 伏笔账本 (SF-023)
   // ================================================================
   if (resource === 'foreshadowing') {
-    if (resourceId === 'generate' && !subResource && request.method === 'POST') {
-      const body = await request.clone().json() as { work_id: string };
-      return generateModule(env, request, `m4_strategy_${body.work_id}`);
-    }
     if (resourceId && !subResource && !action) {
       if (request.method === 'GET') return readForeshadowing(env, request, resourceId);
       if (request.method === 'PUT') return updateForeshadowing(env, request, resourceId);
@@ -223,12 +200,6 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // ================================================================
   // 营销辅助 (SF-040~042)
   // ================================================================
-  if (resource === 'marketing') {
-    if (resourceId === 'extract' && subResource && !subResourceId && !action && request.method === 'POST') return extractHooks(env, request, subResource);
-    if (resourceId === 'titles' && subResource && !subResourceId && !action && request.method === 'POST') return generateTitles(env, request, subResource);
-    if (resourceId === 'repurpose' && subResource && !subResourceId && !action && request.method === 'POST') return repurposeSection(env, request, subResource);
-  }
-
   return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Write endpoint not found')), {
     status: 404, headers: { 'Content-Type': 'application/json' },
   });

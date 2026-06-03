@@ -4,9 +4,6 @@ import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { callAI, generateWithAI } from '../../lib/ai';
 import { renderTemplate as renderText } from '../../lib/l1/render';
-import draftCheckMd from '../../lib/l1/prompts/tools/draft_check.md';
-import draftPolishMd from '../../lib/l1/prompts/tools/draft_polish.md';
-import draftRewriteMd from '../../lib/l1/prompts/tools/draft_rewrite.md';
 import { writeSectionContent, readSectionMarkdown, workContentPath, extractLang, readR2JSONWithLangFallback } from '../../lib/l1/work-content';
 import { extractTemplateJson } from '../../lib/l1/template';
 

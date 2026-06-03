@@ -8,9 +8,7 @@ import { searchContent, retrieveInWork } from './search';
 import { createSubscription } from './subscriptions';
 import { readWorldbuilding } from './write/worldbuilding';
 import { readOutline } from './write/outline';
-import { checkConsistency, polishDraft } from './write/draft';
 import { readForeshadowing } from './write/foreshadowing';
-import { generateModuleContent } from '../lib/l2/tools';
 import { extractLang } from '../lib/l1/work-content';
 import { readOriginalConcept } from './write/original_concept';
 
@@ -121,11 +119,6 @@ function handleToolsList(): Response {
       { name: 'subscribe_to_updates', description: 'Subscribe to content updates', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, target_type: { type: 'string' }, target_id: { type: 'string' } } } },
       { name: 'get_entity_graph', description: 'Get entity relationship graph', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, entity_id: { type: 'string' } } } },
       // Write side tools — SF-051 MCP Tools
-      { name: 'generate_worldbuilding', description: 'AI generate structured setting bible', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, prompt: { type: 'string' } }, required: ['work_id'] } },
-      { name: 'generate_outline', description: 'AI generate chapter outline with sections', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, num_chapters: { type: 'number' } }, required: ['work_id'] } },
-      { name: 'generate_chapter', description: 'AI generate full chapter draft (Draft v0)', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' } }, required: ['work_id', 'section_id'] } },
-      { name: 'check_consistency', description: 'Check chapter against worldbuilding constraints', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' } }, required: ['work_id', 'section_id'] } },
-      { name: 'polish_chapter', description: 'AI polish chapter based on check results', inputSchema: { type: 'object', properties: { work_id: { type: 'string' }, section_id: { type: 'string' }, style_notes: { type: 'string' } }, required: ['work_id', 'section_id'] } },
       // V4 version history & diff tools
       { name: 'get_module_versions', description: 'List all historical versions of a module file (auto-snapshotted on each save)', inputSchema: { type: 'object', properties: { module_id: { type: 'string' } }, required: ['module_id'] } },
       { name: 'diff_module_versions', description: 'Diff two versions of a module file (slot-level for JSON, line-level for Markdown)', inputSchema: { type: 'object', properties: { module_id: { type: 'string' }, v1: { type: 'string' }, v2: { type: 'string' }, slot_only: { type: 'string' } }, required: ['module_id', 'v1', 'v2'] } },
@@ -178,51 +171,9 @@ async function handleToolsCall(env: Env, request: Request, params?: Record<strin
       const entityId = args.entity_id as string || '';
       return getEntity(env, request, workId, entityId);
     }
-    // Write 工具 — 已迁移到 L2 generateModuleContent()
-    case 'generate_worldbuilding': {
-      const lang = extractLang(request);
-      const content = await generateModuleContent(env, args.work_id as string, 'm1', lang, {
-        instructions: args.prompt as string | undefined,
-      });
-      return new Response(JSON.stringify(jsonSuccess({ generated: content })), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-    case 'generate_outline': {
-      const lang = extractLang(request);
-      const content = await generateModuleContent(env, args.work_id as string, 'm2', lang, {
-        instructions: args.prompt as string | undefined,
-      });
-      return new Response(JSON.stringify(jsonSuccess({ generated: content })), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-    case 'generate_chapter': {
-      const lang = extractLang(request);
-      const content = await generateModuleContent(env, args.work_id as string, 'm6_chapter', lang, {
-        instructions: args.prompt as string | undefined,
-        sectionId: args.section_id as string | undefined,
-      });
-      return new Response(JSON.stringify(jsonSuccess({ generated: content })), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-    case 'check_consistency': {
-      const checkReq = new Request(request.url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
-      });
-      return checkConsistency(env, checkReq, args.work_id as string, args.section_id as string);
-    }
-    case 'polish_chapter': {
-      const polishReq = new Request(request.url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ work_id: args.work_id, section_id: args.section_id, style_notes: args.style_notes }),
-      });
-      return polishDraft(env, polishReq);
-    }
+    // Write 工具 — 已统一迁移到 Story Elf (POST /api/write/elf/chat)
+    // generate_worldbuilding / generate_outline / generate_chapter 不再直接暴露
+    // 外部 Agent 通过 elf/chat 对话端点完成生成，享受完整上下文 + 记忆 + 参考案例
     default:
       return mcpError(`Unknown tool: ${name}`);
   }
