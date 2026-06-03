@@ -396,15 +396,16 @@ print()
 # ============================================================
 print("--- Step 7: 层序验证 ---")
 
-# 在完整 system prompt (messages[0].content) 中检查层序
-full_sp = data["m0"]["messages"][0]["content"]
+# 在完整 system prompt 中检查层序（使用 memory-test-001 fixtures 的响应，
+# 因为其 Layer 5 内容是确定性的预制数据，不受真实交互影响）
+full_sp = mem_test_resp['data']['messages'][0]['content']
 
 layer_markers = [
     ("Layer 1", "你是 Story Elf（故事精灵）"),
     ("Layer 2", "## 作品完整上下文"),
     ("Layer 3", "## 经典作品创作框架参考"),
     ("Layer 4", "## 可用工具"),
-    ("Layer 5", "近期记忆"),
+    ("Layer 5", "## 近期记忆（最近 7 天）"),
 ]
 
 positions = []
