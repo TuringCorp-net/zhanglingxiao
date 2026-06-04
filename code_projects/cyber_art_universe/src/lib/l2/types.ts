@@ -18,7 +18,8 @@ export interface AgentLoopOptions {
   workId: string;
   lang: string;
   page: 'read' | 'write';
-  userToken?: string;        // 用户标识（用于 L2/L3 记忆注入 Layer 5）
+  userToken?: string;        // 用户标识（用于 L2/L3 记忆注入 Layer 5 + Session 持久化）
+  sessionId?: string;        // Session ID（L2 内部自动持久化到 R2，可选——不传则无状态模式）
   contextModule?: string;
   contextSectionTitle?: string;
   maxIterations?: number;    // 最大工具调用轮次，默认 30（支持复杂任务分解）

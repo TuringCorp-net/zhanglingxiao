@@ -13,6 +13,7 @@ import type { WorkMeta } from '../l1/types';
 export interface AgentLoopResult {
   reply: string;
   steps: AgentStep[];
+  messages: Message[];  // 完整 messages 数组（含 system prompt + 所有轮次），供 Session 持久化
   usage: {
     input: number;
     output: number;
@@ -49,6 +50,7 @@ export async function agentLoop(
   opts: AgentLoopOptions,
   conversationHistory: Message[],
   userMessage: string,
+  preBuiltSystemPrompt?: string,  // 复用已构建的 System Prompt（Session 后续轮次，由 session.ts 传入）
 ): Promise<AgentLoopResult> {
   const maxIterations = opts.maxIterations || 30;
   const lang = opts.lang as 'zh' | 'en';
@@ -59,7 +61,7 @@ export async function agentLoop(
   let totalCacheMiss = 0;
   let lastModel = '';
 
-  // 1. 构建 System Prompt
+  // 1. System Prompt：有 preBuilt 则复用 ImmutablePrefix，否则首次构建
   const tools = createTools(env, opts.workId, lang);
   const toolDefs = tools.map(t => t.def);
 
@@ -67,7 +69,7 @@ export async function agentLoop(
     module: opts.contextModule,
     sectionTitle: opts.contextSectionTitle,
   });
-  const systemPrompt = await buildAgentSystemPrompt(env, ctxVars, toolDefs, opts.workId, opts.userToken);
+  const systemPrompt = preBuiltSystemPrompt || await buildAgentSystemPrompt(env, ctxVars, toolDefs, opts.workId, opts.userToken);
 
   // 2. 构建初始 messages
   const messages: Message[] = [
@@ -93,6 +95,7 @@ export async function agentLoop(
   }
 
   // 3. Agent 循环
+  let reply = '';
   for (let iteration = 0; iteration < maxIterations; iteration++) {
     const result = await callAI(env, messages, {
       tools: toolDefs.length > 0 ? toolDefs : undefined,
@@ -107,14 +110,14 @@ export async function agentLoop(
       totalCacheMiss += result.usage.cacheMiss || 0;
     }
 
-    // 无 tool_calls → 循环结束，返回最终回复
+    // 无 tool_calls → 循环结束
     if (!result.tool_calls || result.tool_calls.length === 0) {
       steps.push({ type: 'done', text: result.content });
-      return { reply: result.content, steps, usage: { input: totalInput, output: totalOutput, cacheHit: totalCacheHit, cacheMiss: totalCacheMiss, model: lastModel } };
+      reply = result.content;
+      break;
     }
 
     // 有 tool_calls → 执行工具
-    // 先将 assistant 消息（含 tool_calls）加入 messages
     messages.push({
       role: 'assistant',
       content: result.content || '',
@@ -124,28 +127,19 @@ export async function agentLoop(
     for (const tc of result.tool_calls) {
       const toolName = tc.function.name;
       let toolParams: Record<string, unknown>;
-      try {
-        toolParams = JSON.parse(tc.function.arguments);
-      } catch {
-        toolParams = {};
-      }
+      try { toolParams = JSON.parse(tc.function.arguments); } catch { toolParams = {}; }
 
-      // 注入隐式参数
       toolParams._lang = lang;
       toolParams.work_id = opts.workId;
       toolParams._user_token = opts.userToken || '';
 
       steps.push({ type: 'tool_call', tool: toolName, params: toolParams });
 
-      // 查找并执行工具
       const tool = tools.find(t => t.def.function.name === toolName);
       let toolResult: string;
       if (tool) {
-        try {
-          toolResult = await tool.execute(toolParams);
-        } catch (err) {
-          toolResult = `工具执行错误: ${(err as Error).message}`;
-        }
+        try { toolResult = await tool.execute(toolParams); }
+        catch (err) { toolResult = `工具执行错误: ${(err as Error).message}`; }
       } else {
         toolResult = `未知工具: ${toolName}`;
       }
@@ -153,27 +147,26 @@ export async function agentLoop(
       const summary = toolResult.length > 200 ? toolResult.substring(0, 200) + '...' : toolResult;
       steps.push({ type: 'tool_result', tool: toolName, summary });
 
-      // 工具结果追加到 messages
-      messages.push({
-        role: 'tool',
-        tool_call_id: tc.id,
-        content: toolResult,
-      });
+      messages.push({ role: 'tool', tool_call_id: tc.id, content: toolResult });
     }
   }
 
   // 达到最大迭代次数 → 强制 LLM 总结
-  const summaryPrompt = lang === 'en'
-    ? 'Based on all the tool call results above, please give the author a complete response.'
-    : '请基于以上所有工具调用的结果，给作者一个完整的回复。';
-  messages.push({ role: 'user', content: summaryPrompt });
-  const finalResult = await callAI(env, messages);
-  if (finalResult.usage) {
-    totalInput += finalResult.usage.input;
-    totalOutput += finalResult.usage.output;
+  if (!reply) {
+    const summaryPrompt = lang === 'en'
+      ? 'Based on all the tool call results above, please give the author a complete response.'
+      : '请基于以上所有工具调用的结果，给作者一个完整的回复。';
+    messages.push({ role: 'user', content: summaryPrompt });
+    const finalResult = await callAI(env, messages);
+    if (finalResult.usage) {
+      totalInput += finalResult.usage.input;
+      totalOutput += finalResult.usage.output;
+    }
+    steps.push({ type: 'done', text: finalResult.content });
+    reply = finalResult.content;
   }
-  steps.push({ type: 'done', text: finalResult.content });
-  return { reply: finalResult.content, steps, usage: { input: totalInput, output: totalOutput, cacheHit: totalCacheHit, cacheMiss: totalCacheMiss, model: lastModel } };
+
+  return { reply, steps, messages, usage: { input: totalInput, output: totalOutput, cacheHit: totalCacheHit, cacheMiss: totalCacheMiss, model: lastModel } };
 }
 
 /**

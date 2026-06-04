@@ -153,3 +153,18 @@ export interface Env {
   AI_API_KEY?: string;    // @deprecated 迁移到 CF_AIG_TOKEN + AI Gateway
   CF_AIG_TOKEN?: string;  // Cloudflare AI Gateway 认证 token
 }
+
+// ============================================================
+// Story Elf Session
+// ============================================================
+export interface ElfSession {
+  id: string;
+  user_token: string;
+  work_id: string;
+  page: string;           // 'read' | 'write'
+  title: string;
+  status: string;         // 'active' | 'archived'
+  message_count: number;
+  created_at: string;
+  updated_at: string;
+}

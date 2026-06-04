@@ -17,6 +17,7 @@ import { readForeshadowing, updateForeshadowing } from './foreshadowing';
 import { readHints } from './hints';
 import { readOriginalConcept, updateOriginalConcept } from './original_concept';
 import { handleElfChat } from './elf_chat';
+import { handleCreateSession, handleListSessions, handleGetSession, handleArchiveSession } from './elf_sessions';
 import { getModule, updateModule, listModules, listModuleVersions, diffModuleVersions } from './module';
 import { getModuleGuide } from '../../lib/l2/guides';
 import { jsonSuccess } from '../../lib/response';
@@ -159,6 +160,20 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // ================================================================
   if (resource === 'hints' && resourceId && !subResource && !action) {
     if (request.method === 'GET') return readHints(env, request, resourceId);
+  }
+
+  // ================================================================
+  // Story Elf Session 管理
+  // ================================================================
+  if (resource === 'elf' && resourceId === 'sessions' && !subResource && !action) {
+    if (request.method === 'POST') return handleCreateSession(env, request);
+    if (request.method === 'GET') return handleListSessions(env, request);
+  }
+  if (resource === 'elf' && resourceId === 'sessions' && subResource && !subResourceId && !action) {
+    if (request.method === 'GET') return handleGetSession(env, request, subResource);
+  }
+  if (resource === 'elf' && resourceId === 'sessions' && subResource && subResourceId === 'archive' && !action) {
+    if (request.method === 'POST') return handleArchiveSession(env, request, subResource);
   }
 
   // ================================================================

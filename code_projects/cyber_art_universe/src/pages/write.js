@@ -157,6 +157,7 @@ async function onWorkspaceChange() {
   }
   state.currentWorkId = id;
   saveState();
+  StoryElf.initSession(id, 'write'); // 初始化服务端 Session（异步，不阻塞）
   qs('#split-view').style.display = 'grid';
   applyGridColumns();
   cacheClear(); // 切换作品，清空旧缓存
@@ -1449,19 +1450,22 @@ StoryElf.sendChat = function () {
   if (!msg) return;
   StoryElf.addMessage(msg, 'user');
   StoryElf.clearInput();
-  StoryElf.addMessage(t('label.ai_thinking'), 'ai');
+  var currentMessages = StoryElf.getMessages(); // 在添加占位消息前捕获，避免占位消息混入历史
+  StoryElf.addMessage(t('label.ai_thinking'), 'system'); // system 角色不持久化
   var ctx = StoryElf.getContext() || {};
   hPost('/api/write/elf/chat', {
     work_id: state.currentWorkId,
     section_id: state.currentSectionId || undefined,
     page: 'write',
-    messages: [{ role: 'user', content: msg }],
+    session_id: StoryElf.getSessionId(),
+    messages: currentMessages,
     context: { module: state.currentModule, section_title: ctx.section_title || state.currentSectionTitle, panel: ctx.panel },
   }).then(function (data) {
     var msgs = document.getElementById('elf-chat-messages');
     var last = msgs && msgs.lastChild;
     if (last) last.remove();
     if (data && data.ok) {
+      StoryElf.addSteps(data.data.steps);
       StoryElf.addMessage(data.data.reply, 'ai');
     } else {
       var err = document.createElement('div');

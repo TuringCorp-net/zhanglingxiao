@@ -1,6 +1,6 @@
 # Story Elf 系统设计
 
-> 版本: v0.4.1 | 状态: 草案 | 最后更新: 2026-05-28
+> 版本: v0.5.0 | 状态: 草案 | 最后更新: 2026-06-04
 > **关联文档**：[架构总览](../ARCHITECTURE.md) → [SRS](SRS.md) → 本文档 → [L2 Agent 架构设计](L2_agent_design.md) → [Story Elf 前端设计](frontend_design.md) → [AI Gateway 指南](cloudflare_ai_gateway_guide.md) → [模板分级探讨](original_concept_smart_guide_story_elf.md)
 
 ---
@@ -339,21 +339,25 @@ v2.4 中通过 `parseSlotTemplate()` 从 Markdown `<!-- -->` 标记提取槽位�
 Story Elf 的 AI 能力基于两层架构：
 
 - **Layer 1（AI Gateway 客户端）**：通过 Cloudflare AI Gateway 统一调用大模型，隐藏真实 API key，支持多模型切换。
-- **Layer 2（Agent 层）**：在裸大模型之上叠加工作流编排、上下文组装、系统指令和用户记忆，使 Story Elf 成为一个有"人格"的创作伙伴。
+- **Layer 2（Agent 层）**：在裸大模型之上叠加工作流编排、上下文组装、系统指令、用户记忆、**Session 管理** 和 Agent 循环，使 Story Elf 成为一个有"人格"的创作伙伴。
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    Layer 2: Agent 层                          │
-│                    lib/agent/                                 │
+│                    src/lib/l2/                                 │
 │                                                               │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐   │
-│  │ instructions │  │   context    │  │     memory       │   │
-│  │ System Prompt│  │ 上下文组装    │  │ 对话历史/偏好     │   │
-│  │ 按角色/模块   │  │ R2 + DB 拉取 │  │ 持久化存储        │   │
+│  │   prompt.ts  │  │   agent.ts   │  │   session.ts     │   │
+│  │ 5层 System   │  │ agentLoop()  │  │ Session 全生命周期│   │
+│  │ Prompt 构建  │  │ 纯 AI 循环   │  │ 创建/恢复/持久化 │   │
+│  └──────────────┘  └──────────────┘  └──────────────────┘   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐   │
+│  │   tools.ts   │  │  memory.ts   │  │    guides.ts     │   │
+│  │ 工具注册+执行 │  │ L1→L2→L3记忆│  │ M0-M6 写作指南   │   │
 │  └──────────────┘  └──────────────┘  └──────────────────┘   │
 │                                                               │
-│  调用方：elf_chat.ts（Story Elf 对话）                         │
-│         hints.ts（动态提示生成）                               │
+│  调用方：elf_chat.ts（API Handler，薄层——校验+委托）           │
+│         elf_sessions.ts（Session API，薄层——校验+委托）       │
 └──────────────────────────┬──────────────────────────────────┘
                            │
 ┌──────────────────────────▼──────────────────────────────────┐
@@ -590,17 +594,83 @@ Agent 层当前由 L1 的 `context-package` + `instructions` + `prompts/` 组成
 **调用关系**：
 
 ```
-elf_chat.ts（Story Elf 对话）
-  ├─ agent/context.ts      → 拉取作品上下文
-  ├─ agent/instructions.ts → 获取 system prompt
-  ├─ agent/memory.ts       → 读取/追加对话历史
-  └─ lib/ai.ts :: callAI() → 调用大模型
-
-draft.ts / outline.ts / worldbuilding.ts / ...（工具类生成）
-  └─ lib/ai.ts :: callAI() → 直接调用 AI Gateway
+API 层（薄层 — 校验 + 委托）
+  │
+  ├─ elf_chat.ts（Story Elf 对话）
+  │    ├─ L1 context-package.ts → 获取上下文包
+  │    └─ L2 session.ts :: continueSession() → 编排并执行对话
+  │
+  ├─ elf_sessions.ts（Session CRUD）
+  │    └─ L2 session.ts :: createSession / getSession / listSessions / archiveSession
+  │
+L2 Agent 层（核心业务逻辑）
+  │
+  ├─ session.ts（Session Manager — 本节的焦点）
+  │    ├─ continueSession(): 加载 → agentLoop → 持久化
+  │    ├─ createSession / getSession / listSessions / archiveSession
+  │    └─ R2 路径: users/{token}/elf-sessions/{id}/messages.json
+  │                          D1 表: elf_sessions
+  │
+  ├─ agent.ts :: agentLoop() — 纯 AI 循环，不感知 Session
+  ├─ prompt.ts — 5 层 System Prompt 构建
+  ├─ tools.ts — 6 个工具注册与执行
+  ├─ memory.ts — L1→L2→L3 记忆系统
+  └─ guides.ts — M0-M6 写作指南
 ```
 
-区分原则：Story Elf 对话需要 Agent 层完整能力（上下文感知 + 角色人格 + 对话记忆）；工具类生成是一次性任务指令，直接用 Layer 1。
+### 9.4.1 Session Manager 设计
+
+Session Manager（`src/lib/l2/session.ts`）是 L2 Agent 层的新增模块，负责 Session 的全生命周期管理。
+
+**设计目标**：
+- API 层不直接操作 R2/D1。Session 的存储细节封装在 L2 内部
+- `agentLoop()` 保持纯函数——输入 messages，输出 messages + reply
+- Session 的持久化格式就是 `agentLoop()` 返回的完整 `messages[]` 数组
+
+**Session 存储格式**：
+
+```
+R2: users/{userToken}/elf-sessions/{sessionId}/messages.json
+D1:  elf_sessions 表（元信息：title, status, message_count, updated_at）
+```
+
+`messages.json` 内容 = `agentLoop()` 返回的 `result.messages` 原样存储：
+```json
+[
+  {"role": "system", "content": "完整 System Prompt (Layer 1-5)..."},
+  {"role": "user", "content": "[当前模块: m1]\n\n帮我看看世界观"},
+  {"role": "assistant", "content": null, "tool_calls": [...]},
+  {"role": "tool", "tool_call_id": "...", "content": "..."},
+  {"role": "assistant", "content": "你的世界观设定包含..."}
+]
+```
+
+这也是 DeepSeek 多轮对话的标准格式：**1 个 System Prompt（ImmutablePrefix）+ N 轮 user/assistant 交互**。
+
+**continueSession() 编排流程**：
+
+```
+1. 从 R2 加载 storedMessages
+2. 如果 storedMessages[0].role === 'system'
+     → preBuiltSystemPrompt = storedMessages[0].content（复用，不重建）
+3. agentLoop(env, workMeta, contextPkg, opts, history, userMessage, preBuiltSystemPrompt)
+4. 保存 result.messages 到 R2 + 更新 D1 元信息
+5. 返回 result
+```
+
+System Prompt 不需要特殊处理——它天然位于 `messages[0]`，恢复 Session 时直接提取即可。
+
+**Session CRUD**：
+
+| 函数 | 功能 |
+|------|------|
+| `createSession(env, userToken, workId, page, title?)` | 创建 Session（D1 元信息），messages 在首次对话后写入 R2 |
+| `getSession(env, userToken, sessionId)` | 获取 Session 元信息 + 完整 messages[] |
+| `listSessions(env, userToken, workId?, status?)` | 列出 Session（按 updated_at 倒序） |
+| `archiveSession(env, userToken, sessionId)` | 归档（status='archived'），数据保留用于记忆提取 |
+| `continueSession(env, workMeta, contextPkg, opts, history, userMessage)` | 对话回合编排 |
+
+区分原则：Story Elf 对话需要 Agent 层完整能力（上下文感知 + 角色人格 + 对话记忆 + Session 管理）；工具类生成是一次性任务指令，直接用 Layer 1。
 
 ### 9.5 实施阶段
 

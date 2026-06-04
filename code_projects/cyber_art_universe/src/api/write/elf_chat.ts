@@ -10,9 +10,10 @@ import { recordAIUsage, extractUserToken } from '../../lib/telemetry';
 import { extractLang } from '../../lib/l1/work-content';
 import { getOrBuildContextPackage } from '../../lib/l1/context-package';
 import type { WorkMeta, ContextOpts } from '../../lib/l1/types';
-import { agentLoop, agentDebug } from '../../lib/l2/agent';
+import { agentDebug } from '../../lib/l2/agent';
 import type { Message } from '../../lib/l0/aiGateway';
 import { saveSessionLog } from '../../lib/l2/memory';
+import { continueSession } from '../../lib/l2/session';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -129,7 +130,7 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
       });
     }
 
-    const result = await agentLoop(
+    const result = await continueSession(
       env,
       workMeta,
       contextPkg,
@@ -138,6 +139,7 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
         lang,
         page: body.page,
         userToken,
+        sessionId: body.session_id,  // 由 L2 session.ts 编排：加载 → agentLoop → 保存
         contextModule: opts.module,
         contextSectionTitle: opts.sectionTitle,
       },
