@@ -9,11 +9,8 @@ import { listWorks, getWork, getWorkOutline, getSection } from './works';
 import { listEntities, getEntity } from './entities';
 import { searchContent, retrieveInWork } from './search';
 import { createSubscription } from './subscriptions';
-import { readWorldbuilding } from './write/worldbuilding';
-import { readOutline } from './write/outline';
-import { readForeshadowing } from './write/foreshadowing';
+import { getModule } from './write/module';
 import { extractLang } from '../lib/l1/work-content';
-import { readOriginalConcept } from './write/original_concept';
 
 // MCP 请求/响应类型
 interface MCPRequest {
@@ -94,15 +91,15 @@ async function handleResourcesRead(env: Env, request: Request, params?: Record<s
       }
       case 'worldbuilding': {
         if (!sfParsed.workId) return mcpError('work_id required');
-        return readWorldbuilding(env, request, sfParsed.workId);
+        return getModule(env, request, `m1_${sfParsed.workId}`);
       }
       case 'foreshadowing': {
         if (!sfParsed.workId) return mcpError('work_id required');
-        return readForeshadowing(env, request, sfParsed.workId);
+        return getModule(env, request, `m4_strategy_${sfParsed.workId}`);
       }
       case 'original_concept': {
         if (!sfParsed.workId) return mcpError('work_id required');
-        return readOriginalConcept(env, request, sfParsed.workId);
+        return getModule(env, request, `m0_${sfParsed.workId}`);
       }
     }
   }

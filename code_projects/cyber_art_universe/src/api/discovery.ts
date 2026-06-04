@@ -36,15 +36,11 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         events: 'Global event feed',
       },
       write: {
-        unified_module: 'V3 Unified Module API — single read/write/generate interface for all M0-M8 modules (slot-based templates)',
-        workspace: 'Work CRUD + publish/unpublish + preview + config',
-        sections: 'Section CRUD + ordering',
-        entities: 'Entity CRUD (characters, foreshadowing cards)',
-        draft_pipeline: 'Draft generate/check/polish/rewrite/output',
-        template_level: 'L1/L2 progressive template level system',
-        marketing: 'Hook extraction / title generation / content repurposing',
-        elf_chat: 'Story Elf AI Chat — context-aware reading companion + writing assistant',
-        writing_guide: 'Module writing guide — per-module (M0-M6) positioning, template structure, and writing tips for external AI Agents',
+        unified_module: 'V4 Unified Module API — single GET/PUT interface for all M0-M8 modules. Agents write free_content Markdown, Story Elf handles structured decomposition.',
+        workspace: 'Work CRUD + publish/unpublish + preview + config + sections',
+        elf_chat: 'Story Elf AI Chat — conversational writing assistant. Agent describes intent → Elf reads context → calls tools → returns results.',
+        elf_sessions: 'Conversation session management (create/list/get/archive)',
+        writing_guide: 'Per-module writing guide — positioning, template structure, and writing tips for external AI Agents',
       },
       mcp: 'MCP Protocol — resources/list + resources/read (novel:// + sf://) + tools/list + tools/call (11 tools)',
     },
@@ -68,11 +64,6 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         health: 'GET /api/health',
       },
       write: {
-        module_list: 'GET /api/write/modules?work_id=X&type=Y',
-        module_get: 'GET/PUT /api/write/module/{module_id}',
-        module_generate: 'POST /api/write/module/{module_id}/generate',
-        module_versions: 'GET /api/write/module/{module_id}/versions',
-        module_diff: 'GET /api/write/module/{module_id}/diff?v1=X&v2=Y',
         works: 'GET/POST /api/write/works',
         work: 'GET/PUT/DELETE /api/write/works/{id}',
         preview: 'GET /api/write/works/{id}/preview',
@@ -81,15 +72,13 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         reopen: 'PATCH /api/write/works/{id}/reopen',
         config: 'GET/PUT /api/write/works/{id}/config',
         sections: 'POST/PUT/DELETE /api/write/works/{id}/sections/{sid}',
-        entities: 'POST/PUT/DELETE /api/write/works/{id}/entities/{eid}',
-        draft_generate: 'POST /api/write/draft/generate',
-        draft_check: 'POST /api/write/draft/check/{work_id}/{section_id}',
-        draft_polish: 'POST /api/write/draft/polish',
-        draft_rewrite: 'POST /api/write/draft/rewrite/{section_id}',
-        marketing_extract: 'POST /api/write/marketing/extract/{section_id}',
-        marketing_titles: 'POST /api/write/marketing/titles/{work_id}',
-        marketing_repurpose: 'POST /api/write/marketing/repurpose/{section_id}',
+        module_list: 'GET /api/write/modules?work_id=X&type=Y',
+        module_get: 'GET /api/write/module/{module_id}',
+        module_put: 'PUT /api/write/module/{module_id}  — Body: {free_content: "..."}',
+        module_versions: 'GET /api/write/module/{module_id}/versions',
+        module_diff: 'GET /api/write/module/{module_id}/diff?v1=X&v2=Y',
         elf_chat: 'POST /api/write/elf/chat',
+        elf_sessions: 'POST/GET /api/write/elf/sessions',
         writing_guide: 'GET /api/write/guide/{module_type}?lang=zh',
       },
       mcp: 'POST /api/mcp',
@@ -412,44 +401,6 @@ Diff type depends on file: JSON files get slot-level diff (\`path: "slots.power_
 
 ---
 
-### Entity Management
-
-**POST /api/write/works/{id}/entities** — Create entity (also creates module: m3_card or m4_card)
-- Body: \`{name, type: "character"|"foreshadowing"|..., description?}\`
-
-**PUT /api/write/works/{id}/entities/{eid}** — Update entity D1 metadata
-
-**DELETE /api/write/works/{id}/entities/{eid}** — Delete entity + its module record
-
-### Draft Pipeline
-
-**POST /api/write/draft/generate?lang=zh** — AI generate draft v0
-- Body: \`{work_id, section_id}\`
-
-**POST /api/write/draft/check/{work_id}/{section_id}?lang=zh** — Consistency check
-- Returns: \`[{severity, type, description, location, suggestion}]\`
-
-**POST /api/write/draft/polish?lang=zh** — AI polish
-- Body: \`{work_id, section_id, fix_issues?, style_notes?}\`
-
-**GET /api/write/draft/output/{section_id}?lang=zh** — Final output + audit report
-
-**POST /api/write/draft/rewrite/{section_id}?lang=zh** — Rewrite chapter
-- Body: \`{work_id, instructions?, style_notes?}\`
-
-### Marketing
-
-**POST /api/write/marketing/extract/{section_id}?lang=zh** — Extract hooks
-- Body: \`{work_id}\`
-- Returns: golden_lines, conflict_points, hooks, suggested_hashtags
-
-**POST /api/write/marketing/titles/{work_id}?lang=zh** — Generate titles
-- Body: \`{num_variants?: 5, style_notes?}\`
-- Returns multi-variant title/subtitle/hook
-
-**POST /api/write/marketing/repurpose/{section_id}?format=short_video|x|linkedin&lang=zh** — Repurpose content
-- Body: \`{work_id, style_notes?}\`
-
 ### Story Elf AI Chat
 
 **POST /api/write/elf/chat?lang=zh** — Chat with Story Elf
@@ -492,9 +443,9 @@ All MCP requests use the \`type\` field in POST body:
 **resources/read** — Read a specific resource
 - Body: \`{type: "resources/read", params: {uri: "novel://work/xxx/outline"}}\`
 
-**tools/list** — List all callable tools (11 total)
+**tools/list** — List all callable tools
 - Read: search_content, get_outline, get_section, retrieve_relevant_chunks, subscribe_to_updates, get_entity_graph
-- Write: generate_worldbuilding, generate_outline, generate_chapter, check_consistency, polish_chapter
+- Write: tools managed by Story Elf (chat-based)
 
 **tools/call** — Call a specific tool
 - Body: \`{type: "tools/call", params: {name: "generate_chapter", arguments: {work_id, section_id}}}\`
@@ -577,25 +528,31 @@ This means external Agents do not need to learn per-module slot schemas — they
 
 ## IV. Common Agent Task Patterns
 
-### Pattern 1: Write a Complete Novel
+### Pattern 1: Write a Complete Novel (V4 — via Story Elf Chat)
 
 \`\`\`
  1. POST /api/write/works → create work, get work_id
- 2. PUT  /api/write/module/m0_{work_id} → write M0 concept (body: {free_content: "..."})
- 3. POST /api/write/module/m1_{work_id}/generate → AI generate M1 worldview
- 4. PUT  /api/write/module/m1_{work_id} → refine M1 (body: {free_content: "..."})
- 5. POST /api/write/module/m2_{work_id}/generate → AI generate M2 outline + sections
- 6. PUT  /api/write/module/m2_{work_id} → refine M2 (body: {free_content: "..."})
- 7. POST /api/write/works/{id}/entities → create characters/foreshadowing hooks (auto-creates m3_card/m4_card modules)
- 8. PUT  /api/write/module/m3_card_{eid} → write character (body: {free_content: "..."})
- 9. PUT  /api/write/module/m4_strategy_{work_id} → write M4 strategy (body: {free_content: "..."})
-10. PUT  /api/write/module/m5_intent_{sid} → write intent card (body: {free_content: "..."})
-11. POST /api/write/draft/generate → generate draft for each chapter
-12. POST /api/write/draft/check/{work_id}/{sid} → check each chapter
-13. POST /api/write/draft/polish → polish each chapter
-14. PATCH /api/write/works/{id}/publish → publish
+ 2. POST /api/write/elf/chat → "帮我写《作品名》的原始构想，主题是..."
+    → Story Elf reads context, writes M0 free_content, returns result
+ 3. POST /api/write/elf/chat → "基于 M0，生成完整的世界观设定"
+    → Story Elf reads M0 → writes M1 slots → returns result
+ 4. POST /api/write/elf/chat → "生成 M2 长篇大纲，分三幕结构"
+    → Story Elf reads M1 → writes M2 outline → creates sections
+ 5. (continue for M3-M6 via chat, refining iteratively)
+ 6. PATCH /api/write/works/{id}/publish → publish
 \`\`\`
-> After each PUT, Story Elf can decompose \`free_content\` into structured template slots.
+
+### Pattern 1b: Direct Module Write (Agent writes prose, Story Elf decomposes)
+
+\`\`\`
+ 1. POST /api/write/works → create work, get work_id
+ 2. GET  /api/write/modules?work_id=X&type=m1 → find M1 module_id
+ 3. PUT  /api/write/module/m1_{work_id} → write M1 prose
+    Body: {"free_content": "## Power System\\n\\nMirror Force (镜之力)..."}
+ 4. POST /api/write/elf/chat → "请将我写的 M1 内容分解到模板槽位"
+    → Story Elf reads free_content → decomposes to slots → returns suggestions
+ 5. GET  /api/write/module/m1_{work_id} → verify structured result
+\`\`\`
 
 
 ### Pattern 2: Read & Analyze a Work
@@ -731,10 +688,6 @@ tags:
     description: Workspace management (auth required)
   - name: Write - Module API
     description: Unified M0-M8 module read/write/generate (auth required)
-  - name: Write - Draft Pipeline
-    description: Chapter generation/check/polish/rewrite/output (auth required)
-  - name: Write - Marketing
-    description: Marketing tools (auth required)
   - name: Write - Story Elf
     description: AI chat companion (auth required)
   - name: MCP
@@ -1076,81 +1029,6 @@ paths:
         - name: slot_only
           in: query
           schema: { type: string }
-
-  /api/write/works/{id}/entities:
-    post:
-      tags: [Write - Module API]
-      summary: Create entity (auto-creates m3_card or m4_card module)
-      security: [{ BearerAuth: [] }]
-
-  /api/write/works/{id}/entities/{eid}:
-    put:
-      tags: [Write - Module API]
-      summary: Update entity metadata
-      security: [{ BearerAuth: [] }]
-    delete:
-      tags: [Write - Module API]
-      summary: Delete entity and its module record
-      security: [{ BearerAuth: [] }]
-
-  /api/write/works/{id}/entities/{eid}/card:
-    get:
-      tags: [Write - Module API]
-      summary: Read entity card (legacy — prefer GET /api/write/module/m3_card_{eid})
-      security: [{ BearerAuth: [] }]
-    put:
-      tags: [Write - Module API]
-      summary: Edit entity card (legacy — prefer PUT /api/write/module/m3_card_{eid})
-      security: [{ BearerAuth: [] }]
-
-  # ===== Write - Draft Pipeline =====
-  /api/write/draft/generate:
-    post:
-      tags: [Write - Draft Pipeline]
-      summary: AI generate draft v0
-      security: [{ BearerAuth: [] }]
-
-  /api/write/draft/check/{work_id}/{section_id}:
-    post:
-      tags: [Write - Draft Pipeline]
-      summary: Consistency check
-      security: [{ BearerAuth: [] }]
-
-  /api/write/draft/polish:
-    post:
-      tags: [Write - Draft Pipeline]
-      summary: AI polish chapter
-      security: [{ BearerAuth: [] }]
-
-  /api/write/draft/output/{section_id}:
-    get:
-      tags: [Write - Draft Pipeline]
-      summary: Final output with audit report
-      security: [{ BearerAuth: [] }]
-
-  /api/write/draft/rewrite/{section_id}:
-    post:
-      tags: [Write - Draft Pipeline]
-      summary: Rewrite chapter
-      security: [{ BearerAuth: [] }]
-
-  /api/write/marketing/extract/{section_id}:
-    post:
-      tags: [Write - Marketing]
-      summary: Extract hooks
-      security: [{ BearerAuth: [] }]
-
-  /api/write/marketing/titles/{work_id}:
-    post:
-      tags: [Write - Marketing]
-      summary: Generate titles
-      security: [{ BearerAuth: [] }]
-
-  /api/write/marketing/repurpose/{section_id}:
-    post:
-      tags: [Write - Marketing]
-      summary: Repurpose content
-      security: [{ BearerAuth: [] }]
 
   /api/write/elf/chat:
     post:

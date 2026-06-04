@@ -3,13 +3,7 @@
 // 指南不进 system prompt，由 LLM 按需通过工具调用获取（就近原则）。
 
 import { renderTemplateAsJson, renderCardAsJson, type Lang } from '../l1/template';
-
-// 模板定义（仅用于渲染模板结构部分）
-import { BIBLE_TEMPLATE } from '../../api/write/worldbuilding';
-import { OUTLINE_TEMPLATE } from '../../api/write/outline';
-import { CHARACTER_TEMPLATE } from '../../api/write/character_card';
-import { FORESHADOWING_TEMPLATE } from '../../api/write/foreshadowing';
-import { FORESHADOWING_CARD_SLOTS } from '../../api/write/foreshadowing_card';
+import { BIBLE_TEMPLATE, OUTLINE_TEMPLATE, CHARACTER_TEMPLATE, FORESHADOWING_TEMPLATE, FORESHADOWING_CARD_SLOTS } from '../../api/write/module';
 
 // ============================================================
 // 文字指导（中文）

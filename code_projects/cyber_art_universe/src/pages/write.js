@@ -339,15 +339,8 @@ async function loadRotatingHint(module) {
 
   var textEl = left.querySelector('.hint-text');
 
-  var hints = [];
-  try {
-    var data = await hGet('/api/write/hints/' + module + '?work_id=' + (state.currentWorkId || '') + '&_t=' + Date.now());
-    if (data && data.ok) {
-      hints = data.data.all || [];
-    }
-  } catch (e) {}
-
-  if (hints.length === 0) return;
+  // V4: hints 端点已移除，提示由 Story Elf 在对话中动态提供
+  return;
 
   // 缓存
   _hintCache[module] = hints;
@@ -1189,15 +1182,9 @@ function initChapterDrag() {
       e.preventDefault(); item.classList.remove('drag-over');
       var tid = item.dataset.sectionId;
       if (_dragSrc === tid) return;
-      var od = await hGet('/api/write/outline/' + state.currentWorkId);
-      if (!od || !od.ok) return;
-      var secs = od.data.sections.slice();
-      var fi = secs.findIndex(function (x) { return x.id === _dragSrc; });
-      var ti = secs.findIndex(function (x) { return x.id === tid; });
-      if (fi < 0 || ti < 0) return;
-      var mv = secs.splice(fi, 1)[0]; secs.splice(ti, 0, mv);
-      var r = await hPut('/api/write/outline/' + state.currentWorkId, { sections: secs.map(function (x, i) { return { id: x.id, title: x.title, order_index: i }; }) });
-      if (r && r.ok) { cacheClear(); loadChapterCardList(); }
+      // V4: 章节重排待适配 module API (GET/PUT /api/write/module/m2_{workId})
+      // 旧 outline 端点格式(sections数组)与 module slots 格式不兼容
+      console.warn('章节重排功能待适配 V4 module API');
     });
   });
 }
@@ -1312,8 +1299,10 @@ async function aiGenerateForModule() {
     await hPost('/api/write/module/m4_strategy_' + wid + '/generate', { work_id: wid });
     loadM4();
   } else if ((state.currentModule === 'writing' || state.currentModule === 'chapters') && state.currentSectionId) {
-    var data = await hPost('/api/write/draft/generate', { work_id: wid, section_id: state.currentSectionId });
-    if (data && data.ok) showTextEditor(data.data.body || '');
+    // V4: 章节生成通过 Story Elf 对话完成
+    StoryElf.toggle();
+    var chatInput = document.getElementById('elf-chat-input');
+    if (chatInput) { chatInput.value = '请根据 M5 意图卡生成当前章节的正文内容'; StoryElf.sendChat(); }
   }
   refreshPipelineGuide(wid);
 }
@@ -1322,9 +1311,10 @@ async function aiPolishForModule() {
   var wid = state.currentWorkId, sid = state.currentSectionId;
   if (!wid) return;
   if (state.currentModule === 'writing' && sid) {
-    if (!confirm(t('prompt.ai_polish_confirm'))) return;
-    var data = await hPost('/api/write/draft/polish', { work_id: wid, section_id: sid });
-    if (data && data.ok) showTextEditor(data.data.body || '');
+    // V4: 润色通过 Story Elf 对话完成
+    StoryElf.toggle();
+    var polishInput = document.getElementById('elf-chat-input');
+    if (polishInput) { polishInput.value = '请帮我润色优化当前章节的内容'; StoryElf.sendChat(); }
   } else {
     // 对于非 M6 模块，polish = 用当前编辑器内容调用
     StoryElf.toggle();
@@ -1497,20 +1487,9 @@ StoryElf.sendChat = function () {
 async function loadLintToElf() {
   var wid = state.currentWorkId, sid = state.currentSectionId;
   if (!wid || !sid) return;
-  StoryElf.addMessage(t('label.loading'), 'ai');
-  var data = await hPost('/api/write/draft/check/' + wid + '/' + sid, {});
-  var msgs = document.getElementById('elf-chat-messages');
-  var last = msgs && msgs.lastChild;
-  if (last) last.remove();
-  if (data && data.ok) {
-    var issues = data.data.issues || [];
-    if (!issues.length) { StoryElf.addMessage(t('status.no_issues'), 'ai'); return; }
-    issues.forEach(function (i) {
-      StoryElf.addMessage((i.severity === 'error' ? '[' + t('status.error') + '] ' : '[' + t('status.warning') + '] ') + (i.description || ''), 'ai');
-    });
-  } else {
-    StoryElf.addMessage(t('prompt.ai_unavailable'), 'ai');
-  }
+  // V4: 一致性校验通过 Story Elf 对话完成
+  var checkInput = document.getElementById('elf-chat-input');
+  if (checkInput) { checkInput.value = '请帮我检查当前章节与世界设定、大纲和伏笔的一致性'; StoryElf.sendChat(); }
 }
 
 // ============================================================

@@ -66,7 +66,7 @@ export async function listSessions(
   sql += ' ORDER BY updated_at DESC';
 
   const result = await env.DB.prepare(sql).bind(...params).all();
-  return (result.results || []) as ElfSession[];
+  return (result.results || []) as unknown as ElfSession[];
 }
 
 /** 获取 Session 元信息 + 完整 messages 数组 */

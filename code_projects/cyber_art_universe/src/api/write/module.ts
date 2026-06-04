@@ -1,26 +1,20 @@
 /**
- * V3 统一 Module API — module.ts
+ * V4 统一 Module API — module.ts
  *
- * 覆盖需求: M0-M6 所有模块的统一读写入口
- *   M0: 原始构想 (ORIGINAL_CONCEPT_TEMPLATE)
- *   M1: 世界观设定圣经 (BIBLE_TEMPLATE, from worldbuilding.ts)
- *   M2: 长篇框架大纲 (OUTLINE_TEMPLATE, from outline.ts)
- *   M3: 人物卡 (CHARACTER_TEMPLATE, from character_card.ts)
- *   M4: 伏笔策略总览 (FORESHADOWING_TEMPLATE, from foreshadowing.ts) + 伏笔条目卡 (FORESHADOWING_CARD_SLOTS)
- *   M5: 章节意图卡 (INTENT_TEMPLATE, 14 slot)
- *   M6: 章节正文 (CHAPTER_TEMPLATE, 单槽位)
+ * M0-M6 所有模块的统一读写入口。外部 Agent 和人类作者使用完全相同的 API。
+ * Agent 只需往 free_content 写入 Markdown，Story Elf 负责结构化拆解。
  *
  * API 端点:
  *   GET  /api/write/module/{module_id}          → getModule()
  *   PUT  /api/write/module/{module_id}          → updateModule()
  *   GET  /api/write/modules?work_id=&type=       → listModules()
- *   GET  /api/write/module/{module_id}/versions  → listModuleVersions()  [V4]
- *   GET  /api/write/module/{module_id}/diff      → diffModuleVersions()  [V4]
+ *   GET  /api/write/module/{module_id}/versions  → listModuleVersions()
+ *   GET  /api/write/module/{module_id}/diff      → diffModuleVersions()
  *
  * 存储隔离:
  *   slots → .json（Story Elf 结构化维护）
  *   free_content → .free.md（人类/Agent 自由写）
- *   渲染输出 → .md（服务端组装，供人类阅读）
+ *   渲染输出 → .md（从 slots + free_content 拼接，供人类阅读）
  *   三个文件物理隔离，永远不会互相覆盖
  *
  * V4 版本历史: 每次 PUT 自动快照到 R2 .versions/ + D1 file_versions 表
@@ -29,21 +23,18 @@ import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import {
-  renderTemplate, renderCard, buildTemplateJson, buildCardJson,
+  buildTemplateJson, buildCardJson,
   type TemplateDef, type SlotDef, type R2SlotData,
 } from '../../lib/l1/template';
 import { workContentPath, extractLang, type Lang } from '../../lib/l1/work-content';
 import { createSnapshot, listVersions } from '../../lib/l1/version';
 import { diffVersions as diffModVersions, diffWithCurrent, type DiffResult } from '../../lib/l1/diff';
-import { BIBLE_TEMPLATE } from './worldbuilding';
-import { OUTLINE_TEMPLATE } from './outline';
-import { CHARACTER_TEMPLATE } from './character_card';
-import { FORESHADOWING_TEMPLATE } from './foreshadowing';
-import { FORESHADOWING_CARD_SLOTS } from './foreshadowing_card';
 
 // ============================================================
-// 模板定义
+// 模板定义 — M0-M6 所有模块的槽位结构
 // ============================================================
+
+// --- M0: 原始构想 ---
 const ORIGINAL_CONCEPT_TEMPLATE: TemplateDef = {
   title: { zh: '原始构想', en: 'Original Concept' },
   intro: {
@@ -62,24 +53,234 @@ const ORIGINAL_CONCEPT_TEMPLATE: TemplateDef = {
   outro: { zh: 'M0 自由编辑区', en: 'M0 Free editing zone' },
 };
 
-const CHAPTER_TEMPLATE: TemplateDef = {
-  title: { zh: '章节正文', en: 'Chapter Content' },
+// --- M1: 世界观设定圣经 ---
+export const BIBLE_TEMPLATE: TemplateDef = {
+  title: { zh: '世界观设定圣经', en: 'Setting Bible' },
   intro: {
-    zh: '在此撰写章节正文。左侧可参考大纲和意图卡。',
-    en: 'Write the chapter body here. Reference the outline and intent card in the left panel.',
+    zh: '本文件是作品的最高约束文档。所有人物、情节、章节内容必须服从此圣经的规则。\n> 各章节标题为设定框架，内容由作者与 AI 共同填充。可版本化、可回滚。',
+    en: 'This document is the supreme constraint for the work. All characters, plots, and chapter content must obey the rules herein.\n> Section headings form the structural framework; content is filled collaboratively by the author and AI. Version-controlled and rollback-capable.',
   },
-  sections: [{
-    heading: { zh: '正文', en: 'Body' },
-    slots: [
-      { id: 'content', level: 1, label: { zh: '', en: '' }, hint: {
-        zh: '在此撰写章节正文内容',
-        en: 'Write your chapter content here',
-      } },
-    ],
-  }],
-  outro: { zh: 'M6 自由编辑区', en: 'M6 Free editing zone' },
+  sections: [
+    {
+      heading: { zh: '一、世界规则与边界', en: 'I. World Rules & Boundaries' },
+      slots: [
+        { id: 'power_system',    level: 1, label: { zh: '力量/技术体系', en: 'Power / Technology System' }, hint: { zh: '描述这个世界的力量来源、等级划分、使用规则与代价', en: 'Describe the source of power, hierarchy, usage rules, and costs in this world' } },
+        { id: 'social_structure', level: 2, label: { zh: '社会组织与结构', en: 'Social Organization & Structure' }, hint: { zh: '国家、势力、阶层、家族等社会组织形态', en: 'Nations, factions, classes, clans, and other social structures' } },
+        { id: 'taboos_costs',     level: 2, label: { zh: '禁忌与代价', en: 'Taboos & Costs' }, hint: { zh: '世界中不可触碰的禁忌、使用力量的代价', en: 'Untouchable taboos in this world, costs of using power' } },
+      ],
+    },
+    {
+      heading: { zh: '二、核心主题与价值观', en: 'II. Core Themes & Values' },
+      slots: [
+        { id: 'central_thesis',   level: 1, label: { zh: '核心命题', en: 'Central Thesis' }, hint: { zh: '作品要传达的核心思想或问题', en: 'The core idea or question the work seeks to convey' } },
+        { id: 'emotional_tone',   level: 2, label: { zh: '情感基调', en: 'Emotional Tone' }, hint: { zh: '整体的情感色彩：黑暗/希望/悲壮/轻松 等', en: 'Overall emotional register: dark / hopeful / tragic / lighthearted, etc.' } },
+        { id: 'narrative_stance', level: 2, label: { zh: '叙事立场', en: 'Narrative Stance' }, hint: { zh: '从谁的视角看世界？隐含的价值判断', en: 'Whose perspective shapes the world? Implicit value judgments' } },
+      ],
+    },
+    {
+      heading: { zh: '三、角色体系', en: 'III. Character System' },
+      slots: [
+        { id: 'protagonist',             level: 1, label: { zh: '主角', en: 'Protagonist' }, hint: { zh: '姓名、身份、核心动机、能力边界、成长弧线', en: 'Name, identity, core motivation, ability boundaries, growth arc' } },
+        { id: 'supporting_characters',  level: 2, label: { zh: '核心配角', en: 'Key Supporting Characters' }, hint: { zh: '与主角的关系、各自动机、在主线中的作用', en: 'Relationship to protagonist, individual motivations, role in the main plot' } },
+        { id: 'relationship_web',       level: 2, label: { zh: '角色关系网', en: 'Character Relationship Web' }, hint: { zh: '角色之间的关键关系（可后续由 M3 人物卡模块细化）', en: 'Key relationships between characters (to be refined by M3 Character Cards)' } },
+      ],
+    },
+    {
+      heading: { zh: '四、场景与资源', en: 'IV. Settings & Resources' },
+      slots: [
+        { id: 'major_locations', level: 2, label: { zh: '主要地点', en: 'Major Locations' }, hint: { zh: '关键场景的地理位置、特征、叙事功能', en: 'Geography, features, and narrative function of key settings' } },
+        { id: 'key_items',       level: 2, label: { zh: '关键道具/技能', en: 'Key Items / Artifacts' }, hint: { zh: '可被反复使用的叙事资源（MacGuffin、圣物、核心能力等）', en: 'Reusable narrative resources (MacGuffins, relics, core abilities, etc.)' } },
+      ],
+    },
+    {
+      heading: { zh: '五、承诺清单', en: 'V. Promise Checklist' },
+      slots: [
+        { id: 'promise_checklist', level: 2, label: { zh: '', en: '' }, hint: {
+          zh: '列出你对读者的承诺——可以是一条，也可以是多条。每条一句话概括。例如：\n1) 主角终将复仇\n2) 隐藏身份会被揭穿\n3) 两个敌对势力终有一战\n承诺是你与读者之间的契约——一旦写下，后续必须兑现。',
+          en: 'List your promises to the reader — one or many. One sentence per promise. For example:\n1) The protagonist will ultimately take revenge\n2) The hidden identity will be exposed\n3) Two enemy factions will clash\nPromises are a contract with your readers — once written, they must be fulfilled.',
+        } },
+      ],
+    },
+    {
+      heading: { zh: '六、禁区与风格', en: 'VI. Boundaries & Style' },
+      slots: [
+        { id: 'content_red_lines', level: 1, label: { zh: '内容禁区', en: 'Content Red Lines' }, hint: { zh: '绝对不能触碰的内容主题', en: 'Themes and content that must never be touched' } },
+        { id: 'language_style',    level: 2, label: { zh: '语言风格', en: 'Language Style' }, hint: { zh: '叙事语言的风格定位：简洁/华丽/口语化/文学性 等', en: 'Prose style: concise / ornate / colloquial / literary, etc.' } },
+        { id: 'pacing_preference', level: 2, label: { zh: '节奏偏好', en: 'Pacing Preference' }, hint: { zh: '快节奏/慢热/张弛有度 等', en: 'Fast-paced / slow-burn / balanced rhythm, etc.' } },
+      ],
+    },
+  ],
+  outro: { zh: 'M1 自由编辑区', en: 'M1 Free editing zone' },
 };
 
+// --- M2: 长篇框架大纲 ---
+export const OUTLINE_TEMPLATE: TemplateDef = {
+  title: { zh: '长篇框架大纲', en: 'Story Framework Outline' },
+  intro: {
+    zh: '本文件描述作品的整体叙事结构。包含主线/支线阶段划分、阶段目标、高潮点与转折点。\n> 这是作品的"骨架"，所有章节编写必须在此框架内展开。可迭代优化，但始终不违背 Setting Bible 的约束。',
+    en: 'This document describes the overall narrative structure, including main/subplot phase planning, stage goals, climaxes, and turning points.\n> This is the "skeleton" of the work. All chapter writing must unfold within this framework. Iterable, but must always respect the Setting Bible constraints.',
+  },
+  sections: [
+    {
+      heading: { zh: '一、故事概览', en: 'I. Story Overview' },
+      slots: [
+        { id: 'one_line_pitch', level: 1, label: { zh: '一句话梗概', en: 'One-Line Pitch' }, hint: { zh: '用一句话概括整个故事，类似电梯演讲', en: 'Summarize the entire story in one sentence — an elevator pitch' } },
+        { id: 'story_type',     level: 2, label: { zh: '故事类型', en: 'Story Type' }, hint: { zh: '王道RPG / 悬疑推理 / 史诗奇幻 / 都市情感 / 科幻冒险 ...', en: 'Hero\'s Journey / Mystery-Thriller / Epic Fantasy / Urban Drama / Sci-Fi Adventure ...' } },
+        { id: 'core_conflict',  level: 1, label: { zh: '核心冲突', en: 'Core Conflict' }, hint: { zh: '推动整个故事的核心矛盾是什么？谁 vs 谁，为什么？', en: 'What is the central conflict driving the entire story? Who vs. Whom, and why?' } },
+      ],
+    },
+    {
+      heading: { zh: '二、主线阶段划分', en: 'II. Main Plot — Act Structure' },
+      slots: [
+        { id: 'main_plot', level: 1, label: { zh: '', en: '' }, hint: {
+          zh: '描述你的故事主线结构。可以参考三幕式（开端建立冲突 → 发展升级张力 → 高潮爆发回收 → 结局沉淀余韵），也可以自由安排你的结构。\n\n包含：各阶段的章节范围、核心事件、阶段目标、关键转折。',
+          en: 'Describe your main storyline structure. You can use the classic three-act framework (Setup → Development → Climax → Resolution) or organize it your own way.',
+        } },
+      ],
+    },
+    {
+      heading: { zh: '三、支线规划', en: 'III. Subplot Planning' },
+      slots: [
+        { id: 'subplots', level: 2, label: { zh: '', en: '' }, hint: {
+          zh: '列出你的支线。每条简述：与主线关系、独立价值、预计章节数。',
+          en: 'List your subplots. For each: relationship to the main plot, standalone value, estimated chapter count.',
+        } },
+      ],
+    },
+    {
+      heading: { zh: '四、节奏规划', en: 'IV. Pacing Plan' },
+      slots: [
+        { id: 'pacing', level: 2, label: { zh: '', en: '' }, hint: {
+          zh: '规划各阶段的节奏和情绪曲线。节奏比字数更重要——让高潮和低谷自然交替，给读者喘息的空间。',
+          en: 'Plan the pacing and emotional arc for each phase. Pacing matters more than word count — let peaks and valleys alternate naturally.',
+        } },
+      ],
+    },
+    {
+      heading: { zh: '五、关键转折点', en: 'V. Key Turning Points' },
+      slots: [
+        { id: 'turning_points', level: 2, label: { zh: '', en: '' }, hint: {
+          zh: '列出所有不可逆的情节转折，标注预计所在章节。每一个转折点都应该让读者从此用不同的眼光看待这个故事。',
+          en: 'List all irreversible plot turns with estimated chapter positions. Each turning point should make readers see the story through different eyes.',
+        } },
+      ],
+    },
+    {
+      heading: { zh: '六、伏笔埋设总体规划', en: 'VI. Foreshadowing Master Plan' },
+      slots: [
+        { id: 'foreshadowing_master', level: 2, label: { zh: '', en: '' }, hint: {
+          zh: '规划跨章节的伏笔布局。标注每条伏笔的类型、埋设章节、回收章节。详细追踪由 M4 伏笔账本管理，此处只需总体规划。',
+          en: 'Plan cross-chapter foreshadowing. Note each hook\'s type, planting chapter, and payoff chapter. Detailed tracking is managed by M4 Foreshadowing Ledger.',
+        } },
+      ],
+    },
+  ],
+  outro: { zh: 'M2 自由编辑区', en: 'M2 Free editing zone' },
+};
+
+// --- M3: 人物卡 ---
+export const CHARACTER_TEMPLATE: TemplateDef = {
+  title: { zh: '人物卡', en: 'Character Card' },
+  intro: {
+    zh: '本文档记录角色的完整设定。所有章节中该角色的言行必须与此卡一致。',
+    en: 'This document records the complete profile of the character. All depictions of this character in chapters must be consistent with this card.',
+  },
+  sections: [
+    {
+      heading: { zh: '一、基本信息', en: 'I. Basic Information' },
+      slots: [
+        { id: 'name',          level: 1, label: { zh: '姓名', en: 'Name' }, hint: { zh: '角色的姓名', en: 'The character\'s full name' } },
+        { id: 'identity',      level: 1, label: { zh: '身份/职业', en: 'Identity / Occupation' }, hint: { zh: '角色的社会身份和职业', en: 'The character\'s social identity and profession' } },
+        { id: 'age',           level: 2, label: { zh: '年龄', en: 'Age' }, hint: { zh: '角色的年龄', en: 'The character\'s age' } },
+        { id: 'appearance',    level: 2, label: { zh: '外表特征', en: 'Appearance' }, hint: { zh: '角色的外貌描述', en: 'Physical description of the character' } },
+        { id: 'role_in_story', level: 1, label: { zh: '在故事中的角色', en: 'Role in Story' }, hint: { zh: '主角 / 核心配角 / 阶段人物 / 章节人物', en: 'Protagonist / Key Supporting / Stage Character / Chapter Character' } },
+      ],
+    },
+    {
+      heading: { zh: '二、性格与动机', en: 'II. Personality & Motivation' },
+      slots: [
+        { id: 'core_personality', level: 1, label: { zh: '核心性格', en: 'Core Personality' }, hint: { zh: '3-5 个关键词描述性格特征', en: '3-5 keywords describing personality traits' } },
+        { id: 'inner_motivation', level: 1, label: { zh: '内在动机', en: 'Inner Motivation' }, hint: { zh: '这个角色真正想要的是什么？深层驱动力', en: 'What does this character truly want? Deep driving force' } },
+        { id: 'external_goal',   level: 2, label: { zh: '外在目标', en: 'External Goal' }, hint: { zh: '这个角色表面上在追求什么？', en: 'What is this character pursuing on the surface?' } },
+        { id: 'fears_weaknesses',level: 2, label: { zh: '恐惧与弱点', en: 'Fears & Weaknesses' }, hint: { zh: '角色的软肋、害怕什么、性格缺陷', en: 'Soft spots, what they fear, character flaws' } },
+        { id: 'values_bottom_lines', level: 2, label: { zh: '价值观与底线', en: 'Values & Bottom Lines' }, hint: { zh: '角色不会逾越的原则', en: 'Principles they will not cross' } },
+      ],
+    },
+    {
+      heading: { zh: '三、能力与限制', en: 'III. Abilities & Limitations' },
+      slots: [
+        { id: 'skills',          level: 2, label: { zh: '能力/技能', en: 'Skills / Abilities' }, hint: { zh: '角色擅长什么，与世界观的力量体系如何关联', en: 'What is the character good at? How does it relate to the world\'s power system?' } },
+        { id: 'ability_boundaries', level: 2, label: { zh: '能力边界', en: 'Ability Boundaries' }, hint: { zh: '角色不能做什么（受 Setting Bible 世界规则约束）', en: 'What can the character NOT do (constrained by the Setting Bible\'s world rules)?' } },
+        { id: 'resources',       level: 2, label: { zh: '资源与人脉', en: 'Resources & Connections' }, hint: { zh: '角色可调用的外部资源', en: 'External resources the character can call upon' } },
+        { id: 'related_m1',      level: 2, label: { zh: '关联的 M1 世界规则', en: 'Related M1 World Rules' }, hint: { zh: '列出此角色受约束的世界规则', en: 'List the world rules that constrain this character' } },
+        { id: 'related_m4',      level: 2, label: { zh: '关联的 M4 伏笔', en: 'Related M4 Foreshadowing' }, hint: { zh: '与此角色相关的伏笔 ID 列表', en: 'Foreshadowing hook IDs related to this character' } },
+      ],
+    },
+    {
+      heading: { zh: '四、关系网络', en: 'IV. Relationship Network' },
+      slots: [
+        { id: 'rel_protagonist', level: 1, label: { zh: '与主角的关系', en: 'Relationship with Protagonist' }, hint: { zh: '描述此角色与主角之间的关系：是盟友？师徒？对手？', en: 'Describe the relationship with the protagonist: ally, mentor, rival?' } },
+        { id: 'rel_others',      level: 2, label: { zh: '与其他核心人物的关系', en: 'Relationships with Other Key Characters' }, hint: { zh: '与主角之外的关键人物的关系', en: 'Relationships with key characters other than the protagonist' } },
+        { id: 'rel_hostile',     level: 2, label: { zh: '敌对/竞争关系', en: 'Hostile / Competitive Relationships' }, hint: { zh: '此角色的对手、敌人或竞争者', en: 'This character\'s opponents, enemies, or competitors' } },
+        { id: 'rel_emotional',   level: 2, label: { zh: '情感关系', en: 'Romantic / Emotional Relationships' }, hint: { zh: '恋爱、亲情、友情等情感纽带', en: 'Romantic, familial, friendship, and other emotional bonds' } },
+      ],
+    },
+    {
+      heading: { zh: '五、成长弧线', en: 'V. Growth Arc' },
+      slots: [
+        { id: 'arc_type',      level: 1, label: { zh: '弧线类型', en: 'Arc Type' }, hint: { zh: '成长(growth) / 堕落(fall) / 救赎(redemption) / 悲剧(tragic) / 觉醒(awakening) / 稳定(steady)', en: 'growth / fall / redemption / tragic / awakening / steady' } },
+        { id: 'starting_state', level: 2, label: { zh: '起点状态', en: 'Starting State' }, hint: { zh: '角色在故事开始时的处境和心理状态', en: 'The character\'s situation and mental state at the beginning of the story' } },
+        { id: 'growth_nodes',   level: 2, label: { zh: '关键成长节点', en: 'Key Growth Nodes' }, hint: { zh: '角色在哪些情节节点发生重大变化', en: 'At which plot nodes does the character undergo significant change?' } },
+        { id: 'ending_state',   level: 2, label: { zh: '终点状态（预期）', en: 'Ending State (Projected)' }, hint: { zh: '角色在故事结束时预计的状态', en: 'The expected state of the character at the end of the story' } },
+      ],
+    },
+    {
+      heading: { zh: '六、语言与行为特征', en: 'VI. Speech & Behavioral Traits' },
+      slots: [
+        { id: 'catchphrases',    level: 2, label: { zh: '口头禅/说话风格', en: 'Catchphrases / Speaking Style' }, hint: { zh: '此角色的标志性语言风格、口头禅', en: 'Signature speech patterns, catchphrases' } },
+        { id: 'gestures',        level: 2, label: { zh: '习惯动作', en: 'Habitual Gestures' }, hint: { zh: '此角色不自觉的身体语言、习惯性动作', en: 'Unconscious body language, habitual movements' } },
+        { id: 'appearance_details', level: 2, label: { zh: '外貌细节', en: 'Appearance Details' }, hint: { zh: '区别于其他角色的外貌标志', en: 'Distinctive appearance markers that set this character apart' } },
+        { id: 'quirks',          level: 2, label: { zh: '特殊癖好', en: 'Quirks' }, hint: { zh: '与众不同的嗜好或怪癖', en: 'Unique quirks or eccentricities' } },
+      ],
+    },
+  ],
+  outro: { zh: 'M3 自由编辑区', en: 'M3 Free editing zone' },
+};
+
+// --- M4: 伏笔策略总览 ---
+export const FORESHADOWING_TEMPLATE: TemplateDef = {
+  title: { zh: '伏笔账本', en: 'Foreshadowing Ledger' },
+  intro: {
+    zh: '伏笔是横跨多个章节的暗线。好的伏笔让读者在回收时恍然大悟。\n> 本文档帮助你在写作前主动规划伏笔网络，而非事后扫描。',
+    en: 'Foreshadowing is the art of planting clues across chapters. Great foreshadowing makes readers gasp in hindsight.\n> This document helps you proactively plan your foreshadowing network before writing — not scan chapters after the fact.',
+  },
+  sections: [{
+    heading: { zh: '一、伏笔策略总览', en: 'I. Foreshadowing Strategy Overview' },
+    slots: [
+      { id: 'fh_strategy', level: 1, label: { zh: '', en: '' }, hint: { zh: '用一段话描述整部作品的伏笔策略：密集还是稀疏？以什么类型的伏笔为主？', en: 'Describe your overall foreshadowing strategy in a paragraph: dense or sparse? What types dominate?' } },
+    ],
+  }],
+  outro: { zh: 'M4 自由编辑区', en: 'M4 Free editing zone' },
+};
+
+// --- M4_card: 伏笔条目卡槽位 ---
+export const FORESHADOWING_CARD_SLOTS: SlotDef[] = [
+  { id: 'fh_type',           level: 1, label: { zh: '伏笔类型', en: 'Hook Type' }, hint: { zh: '身份伏笔 / 道具伏笔 / 对白伏笔 / 能力伏笔 / 事件伏笔 / 意象伏笔', en: 'Identity / Prop / Dialogue / Ability / Event / Imagery' } },
+  { id: 'fh_intensity',      level: 2, label: { zh: '伏笔强度', en: 'Hook Intensity' }, hint: { zh: '🔴 核心（贯穿全书）/ 🟡 重要（跨多章）/ 🟢 彩蛋（轻量）', en: '🔴 Core (throughout) / 🟡 Major (multi-chapter) / 🟢 Minor (Easter egg)' } },
+  { id: 'fh_characters',     level: 1, label: { zh: '关联人物', en: 'Related Characters' }, hint: { zh: '此伏笔涉及的角色名', en: 'Characters involved in this hook' } },
+  { id: 'fh_chapter_range',  level: 2, label: { zh: '关联章节范围', en: 'Chapter Range' }, hint: { zh: '第 ? 章 ～ 第 ? 章', en: 'ch? ~ ch?' } },
+  { id: 'fh_m1_rule',        level: 2, label: { zh: '依赖的 M1 规则', en: 'Depends on M1 Rule' }, hint: { zh: '此伏笔依赖的世界规则', en: 'World rule this hook depends on' } },
+  { id: 'fh_plant_chapter',  level: 2, label: { zh: '埋种计划', en: 'Planting Plan' }, hint: { zh: '埋种章节：第 ? 章', en: 'Plant in Chapter: ch?' } },
+  { id: 'fh_plant_method',   level: 2, label: { zh: '埋种计划', en: 'Planting Plan' }, hint: { zh: '埋种方式：用什么方式让读者接触到这个伏笔？', en: 'Method: How will readers encounter this clue?' } },
+  { id: 'fh_dev_reinforce',  level: 2, label: { zh: '发展路径', en: 'Development Path' }, hint: { zh: '强化暗示：第 ? 章，如何再次暗示或加强', en: 'Reinforcement: ch?, how to reinforce' } },
+  { id: 'fh_dev_reveal',     level: 2, label: { zh: '发展路径', en: 'Development Path' }, hint: { zh: '部分揭示：第 ? 章，读者开始意识到什么？', en: 'Partial Reveal: ch?, what begins to surface?' } },
+  { id: 'fh_dev_misdirect',  level: 2, label: { zh: '发展路径', en: 'Development Path' }, hint: { zh: '误导/反转（可选）：第 ? 章，是否有意误导读者？', en: 'Misdirection (optional): ch?' } },
+  { id: 'fh_payoff_chapter', level: 2, label: { zh: '回收计划', en: 'Payoff Plan' }, hint: { zh: '回收章节：第 ? 章', en: 'Resolve in Chapter: ch?' } },
+  { id: 'fh_payoff_method',  level: 2, label: { zh: '回收计划', en: 'Payoff Plan' }, hint: { zh: '回收方式：如何让读者恍然大悟、拍案叫绝？', en: 'Method: How to make readers gasp?' } },
+  { id: 'fh_status',         level: 2, label: { zh: '状态', en: 'Status' }, hint: { zh: '🌱 已规划 / 🌿 已埋种 / 🌳 发展中 / 💡 部分揭示 / ✅ 已回收', en: '🌱 Planned / 🌿 Planted / 🌳 Developing / 💡 Partially Revealed / ✅ Resolved' } },
+];
+
+// --- M5: 章节意图卡 ---
 const INTENT_TEMPLATE: TemplateDef = {
   title: { zh: '章节意图卡', en: 'Chapter Intent Card' },
   intro: {
@@ -106,6 +307,25 @@ const INTENT_TEMPLATE: TemplateDef = {
     ],
   }],
   outro: { zh: 'M5 自由编辑区', en: 'M5 Free editing zone' },
+};
+
+// --- M6: 章节正文 ---
+const CHAPTER_TEMPLATE: TemplateDef = {
+  title: { zh: '章节正文', en: 'Chapter Content' },
+  intro: {
+    zh: '在此撰写章节正文。左侧可参考大纲和意图卡。',
+    en: 'Write the chapter body here. Reference the outline and intent card in the left panel.',
+  },
+  sections: [{
+    heading: { zh: '正文', en: 'Body' },
+    slots: [
+      { id: 'content', level: 1, label: { zh: '', en: '' }, hint: {
+        zh: '在此撰写章节正文内容',
+        en: 'Write your chapter content here',
+      } },
+    ],
+  }],
+  outro: { zh: 'M6 自由编辑区', en: 'M6 Free editing zone' },
 };
 
 // ============================================================
@@ -170,7 +390,6 @@ function r2Path(workId: string, lang: Lang, relKey: string): string {
   return workContentPath(workId, lang, relKey);
 }
 
-/** free_content 独立文件路径：.json → .free.md */
 function freeKeyFromJsonKey(jsonRelKey: string): string {
   if (!jsonRelKey) return '';
   return jsonRelKey.replace(/\.json$/, '.free.md');
@@ -225,12 +444,14 @@ export async function getModule(env: Env, request: Request, moduleId: string): P
   const mdKey = r2Path(mod.work_id, lang, mdRelKey);
   const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
 
-  // 并发读取 slots + free_content（物理隔离，互不影响）
   const [slotData, md, freeContent] = await Promise.all([
     readR2Json(env, jsonKey),
     readR2Text(env, mdKey),
     readR2Text(env, freeKey),
   ]);
+
+  const name = (mod.type === 'm3_card') ? mod.name : undefined;
+  const isEmpty = !slotData && !md && !freeContent;
 
   // 卡片模式（M4_card）
   if (cfg.isCard && cfg.cardSlots) {
@@ -238,62 +459,31 @@ export async function getModule(env: Env, request: Request, moduleId: string): P
     return new Response(JSON.stringify(jsonSuccess({
       module_id: mod.id, work_id: mod.work_id, type: mod.type,
       name: mod.name, order_index: mod.order_index, status: mod.status,
-      editor_type: 'slot',
-      is_card: true,
+      editor_type: 'slot', is_card: true,
       card: cardJson,
       slots: slotData?.slots || {},
       free_content: freeContent,
       rendered_md: md,
-      is_template: !slotData && !md && !freeContent,
+      is_template: isEmpty,
     })), { headers: { 'Content-Type': 'application/json' } });
   }
 
-  // 槽位编辑器模式（M0, M1, M2, M3_card, M4_strategy, M6）
-  let resolvedSlotData = slotData;
-  // 旧数据兼容：仅有 .md 无 .json 时，将 md 内容作为 content slot
-  if (!resolvedSlotData && md && jsonKey) {
-    resolvedSlotData = { slots: { content: md } };
-  }
-
-  if (!resolvedSlotData && !md && !freeContent) {
-    const name = (mod.type === 'm3_card') ? mod.name : undefined;
-    const emptyMd = renderTemplate(cfg.tmpl, lang, 2, { name, cleanOutput: true });
-    const template = buildTemplateJson(cfg.tmpl, lang, 2, null);
-    return new Response(JSON.stringify(jsonSuccess({
-      module_id: mod.id, work_id: mod.work_id, type: mod.type,
-      name: mod.name, order_index: mod.order_index, status: mod.status,
-      editor_type: 'slot',
-      template,
-      slots: {},
-      free_content: '',
-      rendered_md: emptyMd,
-      is_template: true,
-    })), { headers: { 'Content-Type': 'application/json' } });
-  }
-
-  const name = (mod.type === 'm3_card') ? mod.name : undefined;
-  const template = buildTemplateJson(cfg.tmpl, lang, 2, resolvedSlotData);
-  // rendered_md 不含 free_content — 前端自行在自由编辑区渲染
-  const renderedMd = md || (cfg.tmpl ? renderTemplate(cfg.tmpl, lang, 2, {
-    name, prefills: resolvedSlotData?.slots || {}, cleanOutput: true,
-  }) : '');
-
+  // 槽位编辑器模式
+  const template = buildTemplateJson(cfg.tmpl, lang, 2, slotData);
   return new Response(JSON.stringify(jsonSuccess({
     module_id: mod.id, work_id: mod.work_id, type: mod.type,
     name: mod.name, order_index: mod.order_index, status: mod.status,
     editor_type: 'slot',
     template,
-    slots: resolvedSlotData?.slots || {},
+    slots: slotData?.slots || {},
     free_content: freeContent,
-    rendered_md: renderedMd,
-    is_template: false,
+    rendered_md: md,
+    is_template: isEmpty,
   })), { headers: { 'Content-Type': 'application/json' } });
 }
 
 // ============================================================
 // PUT /api/write/module/{module_id}
-// slots → .json（Story Elf 维护），free_content → .free.md（人类/Agent 自由写）
-// 两个文件物理隔离，永远不会互相覆盖
 // ============================================================
 export async function updateModule(env: Env, request: Request, moduleId: string): Promise<Response> {
   const mod = await env.DB.prepare(
@@ -320,8 +510,8 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   const body = await request.json() as {
     slots?: Record<string, string>;
     free_content?: string;
-    _prev_slots?: Record<string, string>;     // V4: 前端缓存中的旧 slots
-    _prev_free_content?: string;               // V4: 前端缓存中的旧 free_content
+    _prev_slots?: Record<string, string>;
+    _prev_free_content?: string;
   };
   const hasSlots = body.slots && typeof body.slots === 'object' && Object.keys(body.slots).length > 0;
   const hasFreeContent = body.free_content !== undefined;
@@ -332,8 +522,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     });
   }
 
-  // 校验 slot ID：过滤掉模板中不存在的 slot_id，仅写入有效部分
-  // 不硬拒绝整个请求——让 LLM 看到反馈后自行纠正
+  // 校验 slot ID
   let slotWarnings: string[] = [];
   if (hasSlots && body.slots) {
     const validIds = new Set<string>();
@@ -345,21 +534,11 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     if (validIds.size > 0) {
       const unknown = Object.keys(body.slots).filter(id => !validIds.has(id));
       if (unknown.length > 0) {
-        const suggestions = unknown.map(id => {
-          // 尝试找相似的有效 ID
-          const similar = [...validIds].find(vid => vid.includes(id.substring(0, 3)) || id.includes(vid.substring(0, 3)));
-          return similar ? `"${id}" → 建议使用 "${similar}"` : `"${id}"`;
-        });
         slotWarnings = [
-          `⚠️ 以下 ${unknown.length} 个槽位 ID 不属于 ${mod.type} 模板，已跳过：`,
-          ...suggestions.map(s => `  - ${s}`),
-          `💡 请调用 get_writing_guide("${mod.type}") 获取精确的 slot_id 后重新写入这些内容。`,
+          `⚠️ 以下 ${unknown.length} 个槽位 ID 不属于 ${mod.type} 模板：${unknown.join(', ')}`,
+          `💡 有效 ID: ${[...validIds].join(', ')}`,
         ];
-        // 移除无效 slot，只写入有效部分
-        for (const id of unknown) {
-          delete body.slots[id];
-        }
-        // 如果全部无效且无 free_content，返回友好提示
+        for (const id of unknown) delete body.slots[id];
         if (Object.keys(body.slots).length === 0 && !hasFreeContent) {
           return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, slotWarnings.join('\n'))), {
             status: 400, headers: { 'Content-Type': 'application/json' },
@@ -370,13 +549,10 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   }
 
   const jsonRelKey = cfg.jsonKeyFromModule(mod);
-  const mdRelKey = cfg.mdKeyFromModule(mod);
   const jsonKey = r2Path(mod.work_id, lang, jsonRelKey);
-  const mdKey = r2Path(mod.work_id, lang, mdRelKey);
   const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
 
-  // ---- V4: 优先使用前端缓存中的旧内容（零 R2 读取）；无则回退 R2 ----
-  // 只有实际被修改的文件才产生快照（未修改的文件不需要重复快照）
+  // V4: 旧内容快照
   const prevJsonContent = body._prev_slots
     ? JSON.stringify({ slots: body._prev_slots }, null, 2)
     : ((hasSlots && jsonKey) ? await readR2Text(env, jsonKey) : null);
@@ -384,19 +560,16 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     ? body._prev_free_content
     : ((hasFreeContent && freeKey) ? await readR2Text(env, freeKey) : null);
 
-  // ---- 写 free_content → .free.md（独立文件，永远不碰 .json） ----
-  // STR-P2-02: R2 写入无 try/catch，D1+R2 不一致风险。建议添加错误处理和日志。
+  // 写 free_content → .free.md
   if (hasFreeContent) {
     await env.WORKS_BUCKET.put(freeKey, body.free_content!, {
       httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
     });
   }
 
-  // 获取当前的 free_content（可能刚写入，也可能来自已有文件）
   const currentFreeContent = hasFreeContent ? body.free_content! : await readR2Text(env, freeKey);
 
-  // ---- 写 slots → .json（独立文件，永远不碰 .free.md） ----
-  // 合并写入：先读取现有 slot 数据，将新 slot 值合并进去（而非替换全部）
+  // 写 slots → .json（合并，非替换）
   let mergedSlots: Record<string, string> = {};
   if (hasSlots) {
     if (jsonKey) {
@@ -405,38 +578,14 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     } else {
       mergedSlots = body.slots!;
     }
-
-    // 写合并后的 slots
-    const slotData: R2SlotData = { slots: mergedSlots };
-    await env.WORKS_BUCKET.put(jsonKey, JSON.stringify(slotData, null, 2), {
+    await env.WORKS_BUCKET.put(jsonKey, JSON.stringify({ slots: mergedSlots }, null, 2), {
       httpMetadata: { contentType: 'application/json' },
     });
   }
 
-  // ---- 渲染 .md（从 slots + free_content 拼接） ----
-  let renderedMd = '';
-  if (hasSlots) {
-    const writeSlots = mergedSlots;
-    if (cfg.isCard && cfg.cardSlots && mdKey) {
-      renderedMd = renderCardOnly(mod.name, cfg.cardSlots, lang, 2, writeSlots, currentFreeContent);
-      await env.WORKS_BUCKET.put(mdKey, renderedMd, {
-        httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
-      });
-    } else if (cfg.tmpl && mdKey) {
-      const name = (mod.type === 'm3_card') ? mod.name : undefined;
-      renderedMd = renderTemplate(cfg.tmpl, lang, 2, { name, prefills: writeSlots, cleanOutput: true });
-      if (currentFreeContent) {
-        renderedMd = renderedMd.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + currentFreeContent.trim() + '\n');
-      }
-      await env.WORKS_BUCKET.put(mdKey, renderedMd, {
-        httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
-      });
-    }
-  }
-
   await touchModule(env, moduleId);
 
-  // ---- V4 自动版本快照（文件被写入 + 内容确实变化 → 才快照旧内容） ----
+  // V4 自动版本快照
   const newJsonContent = hasSlots ? JSON.stringify({ slots: mergedSlots }, null, 2) : '';
   const newFreeContent = hasFreeContent ? body.free_content! : '';
   if (hasSlots && prevJsonContent && prevJsonContent !== newJsonContent) {
@@ -446,7 +595,6 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     await createSnapshot(env, mod.work_id, freeKey, prevFreeContent);
   }
 
-  // 读回当前 slots 用于响应
   const currentSlotData = hasSlots ? { slots: mergedSlots } : await readR2Json(env, jsonKey);
   const currentSlots = currentSlotData?.slots || {};
 
@@ -455,11 +603,8 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     return new Response(JSON.stringify(jsonSuccess({
       module_id: moduleId, lang, saved: true,
       ...(slotWarnings.length > 0 ? { slot_warnings: slotWarnings } : {}),
-      is_card: true,
-      card: cardJson,
-      slots: currentSlots,
+      is_card: true, card: cardJson, slots: currentSlots,
       free_content: currentFreeContent,
-      rendered_md: renderedMd,
     })), { headers: { 'Content-Type': 'application/json' } });
   }
 
@@ -468,15 +613,13 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   return new Response(JSON.stringify(jsonSuccess({
     module_id: moduleId, lang, saved: true,
     ...(slotWarnings.length > 0 ? { slot_warnings: slotWarnings } : {}),
-    template,
-    slots: currentSlots,
+    template, slots: currentSlots,
     free_content: currentFreeContent,
-    rendered_md: renderedMd,
   })), { headers: { 'Content-Type': 'application/json' } });
 }
 
 // ============================================================
-// GET /api/write/modules?work_id=X&type=m3_card
+// GET /api/write/modules?work_id=X&type=Y
 // ============================================================
 export async function listModules(env: Env, request: Request): Promise<Response> {
   const url = new URL(request.url);
@@ -491,10 +634,7 @@ export async function listModules(env: Env, request: Request): Promise<Response>
 
   let query = 'SELECT id, type, name, order_index, status FROM modules WHERE work_id = ?';
   const bindings: string[] = [workId];
-  if (type) {
-    query += ' AND type = ?';
-    bindings.push(type);
-  }
+  if (type) { query += ' AND type = ?'; bindings.push(type); }
   query += ' ORDER BY order_index ASC, name ASC';
 
   const result = await env.DB.prepare(query).bind(...bindings).all<{
@@ -509,7 +649,7 @@ export async function listModules(env: Env, request: Request): Promise<Response>
 }
 
 // ============================================================
-// GET /api/write/module/{module_id}/versions — 列出历史版本
+// GET /api/write/module/{module_id}/versions
 // ============================================================
 export async function listModuleVersions(env: Env, request: Request, moduleId: string): Promise<Response> {
   const mod = await env.DB.prepare(
@@ -537,7 +677,6 @@ export async function listModuleVersions(env: Env, request: Request, moduleId: s
   const jsonKey = r2Path(mod.work_id, lang, jsonRelKey);
   const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
 
-  // 返回 .json 和 .free.md 各自的版本列表
   const [jsonVersions, freeVersions] = await Promise.all([
     jsonKey ? listVersions(env, jsonKey) : Promise.resolve([]),
     freeKey ? listVersions(env, freeKey) : Promise.resolve([]),
@@ -545,17 +684,13 @@ export async function listModuleVersions(env: Env, request: Request, moduleId: s
 
   return new Response(JSON.stringify(jsonSuccess({
     module_id: moduleId,
-    json_key: jsonKey,
-    free_key: freeKey,
-    json_versions: jsonVersions,
-    free_versions: freeVersions,
+    json_key: jsonKey, free_key: freeKey,
+    json_versions: jsonVersions, free_versions: freeVersions,
   })), { headers: { 'Content-Type': 'application/json' } });
 }
 
 // ============================================================
-// GET /api/write/module/{module_id}/diff?v1=X&v2=Y — 对比版本
-// v1/v2 支持 relative references：previous / current / 版本号(1,2,3...) / UUID
-// v2=current 时对比当前内容与历史版本
+// GET /api/write/module/{module_id}/diff?v1=X&v2=Y
 // ============================================================
 export async function diffModuleVersions(env: Env, request: Request, moduleId: string): Promise<Response> {
   const mod = await env.DB.prepare(
@@ -595,34 +730,26 @@ export async function diffModuleVersions(env: Env, request: Request, moduleId: s
   const jsonKey = r2Path(mod.work_id, lang, jsonRelKey);
   const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
 
-  // 解析 relative references：previous / current / 版本号 → 真实 version ID
   const resolveRef = async (raw: string, key: string): Promise<string> => {
-    if (raw === 'current') return 'current'; // current 已是原生支持
+    if (raw === 'current') return 'current';
     if (raw === 'previous' || raw === 'latest') {
       const vers = await listVersions(env, key);
-      if (raw === 'previous') {
-        // previous = 最后一个历史快照（不含 current）
-        if (vers.length < 1) return 'current'; // 没有历史版本
-        return vers[0].id; // listVersions returns newest first
-      }
-      // latest = 最新版本（包含 current... 其实就是 current）
+      if (raw === 'previous') return vers.length < 1 ? 'current' : vers[0].id;
       return 'current';
     }
-    // 版本号：数字 → 查找对应 UUID
     const num = parseInt(raw, 10);
     if (!isNaN(num) && num > 0) {
       const vers = await listVersions(env, key);
       const found = vers.find(v => v.version_num === num);
       if (found) return found.id;
-      return raw; // 找不到，当作 UUID 尝试
+      return raw;
     }
-    return raw; // 默认当作 UUID
+    return raw;
   };
 
   const v1 = targetKey === 'free' ? v1Raw : await resolveRef(v1Raw, jsonKey);
   const v2 = targetKey === 'free' ? v2Raw : await resolveRef(v2Raw, jsonKey);
 
-  // 默认对比 .json 文件；如果传了 key=free 则对比 .free.md
   const r2Key = targetKey === 'free' ? freeKey : jsonKey;
   if (!r2Key) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, 'No file to diff')), {
@@ -631,14 +758,9 @@ export async function diffModuleVersions(env: Env, request: Request, moduleId: s
   }
 
   let result: DiffResult | null = null;
-
   if (v2 === 'current') {
-    // 对比历史版本与当前内容
     let currentContent = '';
-    try {
-      const obj = await env.WORKS_BUCKET.get(r2Key);
-      if (obj) currentContent = await obj.text();
-    } catch { /* empty */ }
+    try { const obj = await env.WORKS_BUCKET.get(r2Key); if (obj) currentContent = await obj.text(); } catch { /* empty */ }
     result = await diffWithCurrent(env, r2Key, currentContent, v1);
   } else {
     result = await diffModVersions(env, r2Key, v1, v2);
@@ -650,13 +772,11 @@ export async function diffModuleVersions(env: Env, request: Request, moduleId: s
     });
   }
 
-  // 如果请求 slot_only，则只返回 slots 级 diff
   if (slotOnly && r2Key.endsWith('.json')) {
     const slotChanges = result.changes.filter(c => c.path.startsWith('slots.'));
-    return new Response(JSON.stringify(jsonSuccess({
-      ...result,
-      changes: slotChanges,
-    })), { headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify(jsonSuccess({ ...result, changes: slotChanges })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   return new Response(JSON.stringify(jsonSuccess(result)), {
@@ -672,15 +792,4 @@ async function touchModule(env: Env, moduleId: string): Promise<void> {
   await env.DB.prepare(
     'UPDATE modules SET status = CASE WHEN status = \'empty\' THEN \'in_progress\' ELSE status END, updated_at = ? WHERE id = ?'
   ).bind(now, moduleId).run();
-}
-
-function renderCardOnly(
-  name: string, slots: SlotDef[], lang: Lang, userLevel: number,
-  prefills: Record<string, string>, freeContent?: string,
-): string {
-  let md = renderCard(name, slots, lang, userLevel, prefills, true);
-  if (freeContent) {
-    md = md.replace(/\n---\n[\s\S]*$/, '\n---\n\n' + freeContent.trim() + '\n');
-  }
-  return md;
 }
