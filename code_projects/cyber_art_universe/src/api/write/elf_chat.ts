@@ -26,13 +26,14 @@ interface ElfChatRequest {
   page: 'read' | 'write';
   session_id?: string;        // 前端管理的会话 ID（用于记忆系统）
   user_token?: string;        // 记忆系统测试用：覆盖 Authorization 提取的 user_token
+  mock_reply?: string;        // 测试用：模拟 AI 回复，不调 LLM 但完整走 Session 持久化
   messages: ChatMessage[];
   context?: {
     module?: string;
     section_title?: string;
     panel?: string;
   };
-  debug?: 'prompt';          // debug 模式：不调 LLM，返回组装好的 messages + layers
+  debug?: 'prompt';          // debug 模式：不调 LLM，返回组装好的 messages + layers（不持久化）
 }
 
 export async function handleElfChat(env: Env, request: Request): Promise<Response> {
@@ -44,7 +45,10 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
   }
 
   // user_token：优先使用请求体中的显式指定（测试用），否则从 Authorization 提取
-  const userToken = (body as { user_token?: string }).user_token || extractUserToken(request);
+  const authHeader = request.headers.get('Authorization') || '';
+  const fullToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+  const userToken = (body as { user_token?: string }).user_token || extractUserToken(request);  // 截断版（遥测/记忆用）
+  const sessionUserToken = fullToken || userToken;  // 完整版（Session R2 路径用，需与 elf_sessions.ts 一致）
 
   // 查询作品 + 归属权校验
   const work = await env.DB.prepare(
@@ -138,8 +142,10 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
         workId: body.work_id,
         lang,
         page: body.page,
-        userToken,
+        userToken: userToken,
+        sessionUserToken,            // 完整 token — Session R2 路径需与创建时一致
         sessionId: body.session_id,  // 由 L2 session.ts 编排：加载 → agentLoop → 保存
+        mockReply: body.mock_reply,  // 测试用：模拟 AI 回复，不调 LLM
         contextModule: opts.module,
         contextSectionTitle: opts.sectionTitle,
       },

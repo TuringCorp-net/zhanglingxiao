@@ -18,12 +18,14 @@ export interface AgentLoopOptions {
   workId: string;
   lang: string;
   page: 'read' | 'write';
-  userToken?: string;        // 用户标识（用于 L2/L3 记忆注入 Layer 5 + Session 持久化）
+  userToken?: string;        // 用户标识（用于 L2/L3 记忆注入 Layer 5 + 遥测）
+  sessionUserToken?: string; // Session 持久化用的完整 token（R2 路径需与 elf_sessions 创建时一致）
   sessionId?: string;        // Session ID（L2 内部自动持久化到 R2，可选——不传则无状态模式）
+  mockReply?: string;        // 测试用：模拟 AI 回复，不调 LLM，但完整走 Session 持久化流程
   contextModule?: string;
   contextSectionTitle?: string;
   maxIterations?: number;    // 最大工具调用轮次，默认 30（支持复杂任务分解）
-  debug?: 'prompt';          // debug 模式：不调 LLM，返回组装好的 messages + layers
+  debug?: 'prompt';          // debug 模式：不调 LLM，返回组装好的 messages + layers（不持久化）
 }
 
 /** Agent 循环的单步结果（用于 SSE 推送） */

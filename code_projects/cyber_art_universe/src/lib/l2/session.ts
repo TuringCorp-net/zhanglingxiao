@@ -101,7 +101,12 @@ export async function archiveSession(
   ).bind(sessionId, userToken).first<{ id: string; status: string }>();
 
   if (!session) return null;
-  if (session.status === 'archived') return null; // 已归档，幂等返回
+  if (session.status === 'archived') {
+    // 已归档，幂等返回当前状态
+    return (await env.DB.prepare(
+      'SELECT id, user_token, work_id, page, title, status, message_count, created_at, updated_at FROM elf_sessions WHERE id = ?'
+    ).bind(sessionId).first()) as ElfSession;
+  }
 
   const now = new Date().toISOString();
   await env.DB.prepare(
@@ -167,9 +172,10 @@ export async function continueSession(
   userMessage: string,
 ): Promise<AgentLoopResult> {
   // 1. 尝试加载已存储的 System Prompt（存在于 messages[0]，天然位置，无需特殊处理）
+  const sToken = opts.sessionUserToken || opts.userToken || '';
   let preBuiltSystemPrompt: string | undefined;
-  if (opts.sessionId && opts.userToken) {
-    const storedMessages = await loadSessionMessages(env, opts.userToken, opts.sessionId);
+  if (opts.sessionId && sToken) {
+    const storedMessages = await loadSessionMessages(env, sToken, opts.sessionId);
     if (storedMessages && storedMessages.length > 0 && storedMessages[0].role === 'system') {
       preBuiltSystemPrompt = storedMessages[0].content;
     }
@@ -179,9 +185,9 @@ export async function continueSession(
   const result = await agentLoop(env, workMeta, contextPkg, opts, conversationHistory, userMessage, preBuiltSystemPrompt);
 
   // 3. 持久化完整 messages 数组到 R2 + 更新 D1
-  if (opts.sessionId && opts.userToken) {
+  if (opts.sessionId && sToken) {
     try {
-      await saveSessionMessages(env, opts.userToken, opts.sessionId, result.messages);
+      await saveSessionMessages(env, sToken, opts.sessionId, result.messages);
       await updateSessionMeta(env, opts.sessionId, result.messages);
     } catch (err) {
       console.error('[session] 持久化失败:', (err as Error).message);

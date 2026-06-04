@@ -85,13 +85,19 @@ export async function agentLoop(
     if (opts.contextModule) prefixParts.push(`[当前模块: ${opts.contextModule}]`);
     if (opts.contextSectionTitle) prefixParts.push(`[当前章节: ${opts.contextSectionTitle}]`);
     userMessagePrefix = prefixParts.join(' ') + '\n\n';
-    // 找到最后一条 user 消息（即刚追加的）
     for (let i = messages.length - 1; i >= 0; i--) {
       if (messages[i].role === 'user') {
         messages[i] = { role: 'user', content: userMessagePrefix + messages[i].content };
         break;
       }
     }
+  }
+
+  // —— Mock 模式：不调 LLM，使用模拟回复（Session 测试用，完整走持久化流程）——
+  if (opts.mockReply) {
+    messages.push({ role: 'assistant', content: opts.mockReply });
+    steps.push({ type: 'done', text: opts.mockReply });
+    return { reply: opts.mockReply, steps, messages, usage: { input: 0, output: 0, cacheHit: 0, cacheMiss: 0, model: 'mock' } };
   }
 
   // 3. Agent 循环
