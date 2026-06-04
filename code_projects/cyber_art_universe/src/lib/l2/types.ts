@@ -18,9 +18,8 @@ export interface AgentLoopOptions {
   workId: string;
   lang: string;
   page: 'read' | 'write';
-  userToken?: string;        // 用户标识（用于 L2/L3 记忆注入 Layer 5 + 遥测）
-  sessionUserToken?: string; // Session 持久化用的完整 token（R2 路径需与 elf_sessions 创建时一致）
-  sessionId?: string;        // Session ID（L2 内部自动持久化到 R2，可选——不传则无状态模式）
+  userToken?: string;        // 用户标识（完整 token，用于 Session 持久化 + L2/L3 记忆 + 归属校验）
+  sessionId?: string;        // Session ID（可选——不传则无状态模式）
   mockReply?: string;        // 测试用：模拟 AI 回复，不调 LLM，但完整走 Session 持久化流程
   contextModule?: string;
   contextSectionTitle?: string;

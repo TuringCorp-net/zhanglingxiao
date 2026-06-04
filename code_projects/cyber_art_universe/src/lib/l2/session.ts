@@ -172,7 +172,7 @@ export async function continueSession(
   userMessage: string,
 ): Promise<AgentLoopResult> {
   // 1. 尝试加载已存储的 System Prompt（存在于 messages[0]，天然位置，无需特殊处理）
-  const sToken = opts.sessionUserToken || opts.userToken || '';
+  const sToken = opts.userToken || '';
   let preBuiltSystemPrompt: string | undefined;
   if (opts.sessionId && sToken) {
     const storedMessages = await loadSessionMessages(env, sToken, opts.sessionId);

@@ -45,10 +45,7 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
   }
 
   // user_token：优先使用请求体中的显式指定（测试用），否则从 Authorization 提取
-  const authHeader = request.headers.get('Authorization') || '';
-  const fullToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
-  const userToken = (body as { user_token?: string }).user_token || extractUserToken(request);  // 截断版（遥测/记忆用）
-  const sessionUserToken = fullToken || userToken;  // 完整版（Session R2 路径用，需与 elf_sessions.ts 一致）
+  const userToken = (body as { user_token?: string }).user_token || extractUserToken(request);
 
   // 查询作品 + 归属权校验
   const work = await env.DB.prepare(
@@ -142,8 +139,7 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
         workId: body.work_id,
         lang,
         page: body.page,
-        userToken: userToken,
-        sessionUserToken,            // 完整 token — Session R2 路径需与创建时一致
+        userToken,
         sessionId: body.session_id,  // 由 L2 session.ts 编排：加载 → agentLoop → 保存
         mockReply: body.mock_reply,  // 测试用：模拟 AI 回复，不调 LLM
         contextModule: opts.module,

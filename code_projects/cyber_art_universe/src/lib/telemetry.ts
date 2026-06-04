@@ -43,11 +43,13 @@ export async function recordAIUsage(env: Env, record: AIUsageRecord): Promise<vo
 }
 
 /**
- * 从 Authorization header 提取脱敏用户标识。
- * 取 token 前 8 位作为伪匿名标识，后续可映射到真实 user_id。
+ * 从 Authorization header 提取用户标识（完整 token）。
+ * 目前为开发和测试阶段，token 硬编码在环境变量中。
+ * 未来实现用户注册后，token 由服务端生成（一次性展示，用户保管），
+ * 服务端只存 hash(token) 做验证，token 本身即为用户标识。
  */
 export function extractUserToken(request: Request): string {
   const auth = request.headers.get('Authorization') || '';
   const token = auth.startsWith('Bearer ') ? auth.slice(7) : auth;
-  return token.slice(0, 8) || 'anonymous';
+  return token || 'anonymous';
 }
