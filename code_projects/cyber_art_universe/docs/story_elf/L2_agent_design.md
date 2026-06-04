@@ -4,7 +4,7 @@
 >
 > 本文档是 Story Elf L2（Agent 场景层）的权威架构设计，融合了 CodeWhale 参考分析、DeepSeek API 能力评估和 Story Forger 现有代码的实地审查。
 >
-> **关联文档**：[Story Elf 系统设计](system_design.md) → [Story Elf SRS](SRS.md) → 本文档 → [Story Elf 前端设计](frontend_design.md) → [AI Gateway 指南](cloudflare_ai_gateway_guide.md)
+> **关联文档**：[Story Elf 系统设计](system_design.md) → 本文档 → [AI Gateway 指南](cloudflare_ai_gateway_guide.md)（功能需求已并入代码 → 见 `src/lib/l0/aiGateway.ts` / `src/lib/l1/context-package.ts` / `src/api/write/elf_chat.ts` 头部注释）
 
 ---
 

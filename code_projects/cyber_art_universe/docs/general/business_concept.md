@@ -4,7 +4,7 @@
 
 ## 关联文档
 
-[架构总览](../ARCHITECTURE.md) → 本文档 → [System Design](system_design.md) → [Market Analysis](market_analysis.md) → [CAU SRS](../cau/SRS.md) → [Story Forger SRS](../story_forger/SRS.md)
+[架构总览](../ARCHITECTURE.md) → 本文档 → [System Design](system_design.md) → [Market Analysis](market_analysis.md)（功能需求已并入代码 → 见 `src/api/*.ts` 文件头部注释）
 
 ---
 
@@ -613,13 +613,10 @@ Story Forger 采用月订阅费模式（对标 Suno 等创作工具），创作�
 
 - [x] Business Concept（本文档）
 - [x] System Design（system_design.md）
-- [x] SRS — CAU Read 侧（cau/SRS.md，v1.3.0，37 项需求）
-- [x] SDS — CAU Read 侧（cau/SDS.md，v1.1.0）
-- [x] STR — CAU Read 侧（cau/STR.md，v1.1.0）
 - [x] CAU 代码实现 + 部署（CAU.turingcorp.net）
-- [x] CAU 前端（Read 侧 5 页面）
-- [x] Story Forger SRS（story_forger/SRS.md，v1.1.0，31 项需求）
-- [x] Story Forger 前端设计（story_forger/frontend_design.md）
+- [x] CAU 前端（Read 侧页面）
+- [x] Story Forger 代码实现
+- [x] SRS/SDS/STR 文档重构 — 2026-06-04 将功能需求逐条迁移到对应 `.ts` 源文件 JSDoc 头部注释，删除独立滞后文档
 - [ ] Story Forger 代码实现（下一阶段）
 - [ ] AI 参与者调度系统
 - [ ] 人类用户认证与付费

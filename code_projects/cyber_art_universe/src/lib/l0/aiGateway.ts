@@ -1,6 +1,18 @@
-// L0: AI Gateway 客户端
-// 通过 Cloudflare AI Gateway（BYOK）统一调用大模型。
-// 这是最底层的基础设施——除非 Gateway 本身变更，否则不应修改此文件。
+/**
+ * L0: AI Gateway 客户端
+ *
+ * 覆盖需求 (Story Elf SRS):
+ *   SE-020: Cloudflare AI Gateway 统一入口 — callAI()
+ *   SE-021: BYOK 认证 — CF_AIG_TOKEN Secret
+ *   SE-022: 默认模型 deepseek-v4-flash
+ *   SE-023: 消息格式 system/user/assistant — Message 类型
+ *   SE-024: 重试机制 — 指数退避，默认 2 次重试
+ *   SE-025: 超时控制 — AbortController 30s 默认
+ *   SE-026: JSON 模式 — responseFormat: 'json'
+ *   SE-027: 统一错误类型 — AIError (TIMEOUT/RATE_LIMITED/AUTH_FAILED/...)
+ *
+ * 这是最底层的基础设施——除非 Gateway 本身变更，否则不应修改此文件。
+ */
 
 import { Env } from '../../db/schema';
 

@@ -1,4 +1,23 @@
-// 章节生产流水线 — SF-030~034（多语言支持 + JSON 输出统一）
+/**
+ * 章节生产流水线 — draft.ts
+ *
+ * 覆盖需求:
+ *   SF-030: 创建意图卡 (POST /api/write/draft/intent) — createIntent()
+ *           定义本章目标、情绪目标、POV 策略、结构要求、伏笔回收点
+ *   SF-031: 初稿生成 (POST /api/write/draft/generate)
+ *           ⚠️ 当前路由中未接线（V3 迁移后暂未恢复）
+ *   SF-032: 一致性校验 (POST /api/write/draft/check/{work_id}/{section_id}) — checkConsistency()
+ *           对照设定圣经、大纲、伏笔账本检测矛盾，severity: warning/error
+ *   SF-033: 润色优化 (POST /api/write/draft/polish) — polishDraft()
+ *           接受 fix_issues 列表 + style_notes，润色后 version=1
+ *   SF-034: 中稿输出 (GET /api/write/draft/output/{section_id}) — outputDraft()
+ *           返回正文 + audit_report（含 AI 标识 + 终审提示）
+ *   SF-035: 章节重写 (POST /api/write/draft/rewrite/{section_id}) — rewriteSection()
+ *           保留原意图卡约束，接受 instructions + style_notes
+ *
+ * 标准流程: Intent Card → Draft v0 → Consistency Check → Polish → Draft v1
+ * ⚠️ 注意: SF-032/SF-033/SF-035 的代码函数存在但当前路由中未接线
+ */
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
@@ -145,6 +164,7 @@ export async function checkConsistency(env: Env, request: Request, workId: strin
     constraintsContext = (constraints || []).map((c: { section: string; rule: string }) => `- [${c.section}] ${c.rule}`).join('\n');
   }
 
+  // STR-P2-01: 截断长章节到 4000 字符，超长章节信息丢失较大。可考虑提高到 8000 或分片检查。
   const sectionBody = content.body.substring(0, 4000);
 
   const prompt = renderText(draftCheckMd, {

@@ -1,4 +1,7 @@
-// MCP 集成 — 将 API 暴露为 MCP Resources/Tools（Read + Write）
+/**
+ * MCP 集成 — 将 API 暴露为 MCP Resources/Tools（Read + Write）
+ * 覆盖需求: F-070 (MCP 协议) / SF-050~052 (Write 侧 MCP Tools)
+ */
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';

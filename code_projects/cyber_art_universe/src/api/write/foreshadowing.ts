@@ -1,10 +1,19 @@
-// Story Forger — 伏笔账本（SF-023）（多语言 + 规划导向 + JSON 槽位数据）
-//
-// 设计原则（区别于"AI 扫描已有章节提取伏笔"的反向做法）：
-//   伏笔是作者主动设计的暗线。AI 的角色是：
-//     1. 帮助作者在写作前基于大纲/世界观规划伏笔网络
-//     2. M6 一致性校验时正向检查伏笔是否按计划回收
-//   不做：AI 全盘扫描已写好的章节来"发现"伏笔
+/**
+ * 伏笔账本 — foreshadowing.ts
+ *
+ * 覆盖需求:
+ *   SF-023: 伏笔账本 — 规划导向（非事后扫描）
+ *           6 种类型 + 5 阶段生命周期 + 3 级强度
+ *           GET/PUT /api/write/foreshadowing/{work_id}
+ *           → V3 委托到统一 Module API (m4_strategy_{workId})
+ *
+ * 设计原则:
+ *   伏笔是作者主动设计的暗线。AI 帮助作者在写作前规划伏笔网络，
+ *   M6 一致性校验时正向检查伏笔是否按计划回收。
+ *   不做 AI 全盘扫描已有章节来"发现"伏笔。
+ *
+ * 伏笔条目卡: foreshadowing_card.ts（13 个槽位，独立实体 CRUD）
+ */
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';

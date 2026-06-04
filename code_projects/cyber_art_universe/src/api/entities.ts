@@ -1,4 +1,7 @@
-// 实体 API — 人物/地点/组织/事件 CRUD
+/**
+ * 实体 API — 人物/地点/组织/事件 CRUD
+ * 覆盖需求: F-020 (列表) / F-021 (详情) / F-022 (时间线) / F-023 (对比) / F-024 (管理 → 已迁移到 Story Forger)
+ */
 import { Env, Entity } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';

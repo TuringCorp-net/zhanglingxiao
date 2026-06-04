@@ -1,4 +1,108 @@
-// Story Forger Write 侧路由分发
+/**
+ * Story Forger Write 侧路由分发 — index.ts
+ *
+ * 路由总览（逐条映射到 SRS 需求 ID + handler 函数）:
+ *
+ * 工作区 (workspace.ts):
+ *   GET    /api/write/works                → SF-002 listMyWorks
+ *   POST   /api/write/works                → SF-001 createDraftWork
+ *   GET    /api/write/works/{id}           → SF-003 getMyWork
+ *   PUT    /api/write/works/{id}           → SF-003 updateMyWork
+ *   DELETE /api/write/works/{id}           → SF-004 deleteMyWork
+ *   GET    /api/write/works/{id}/preview   → SF-005 previewWork
+ *   PATCH  /api/write/works/{id}/publish   → 状态: draft→published
+ *   PATCH  /api/write/works/{id}/close     → 状态: published→closed
+ *   PATCH  /api/write/works/{id}/reopen    → 状态: closed→published
+ *   GET    /api/write/works/{id}/config    → 作品配置读取
+ *   PUT    /api/write/works/{id}/config    → 作品配置更新
+ *   POST   /api/write/works/{id}/sections  → createSection
+ *   PUT    /api/write/works/{id}/sections/{sid} → updateSection
+ *   DELETE /api/write/works/{id}/sections/{sid} → deleteSection
+ *
+ * V3 统一 Module API (module.ts):
+ *   GET    /api/write/module/{id}          → getModule (M0-M6)
+ *   PUT    /api/write/module/{id}          → updateModule (M0-M6)
+ *   GET    /api/write/modules              → listModules
+ *   GET    /api/write/module/{id}/versions → listModuleVersions [V4]
+ *   GET    /api/write/module/{id}/diff     → diffModuleVersions [V4]
+ *
+ * 实体 CRUD → 按 type 分发 (character_card.ts / foreshadowing_card.ts):
+ *   POST   /api/write/works/{id}/entities  → SF-014 createCharacter / createForeshadowing
+ *   PUT    /api/write/works/{id}/entities/{eid}      → updateEntity
+ *   DELETE /api/write/works/{id}/entities/{eid}      → deleteEntity
+ *   GET    /api/write/works/{id}/entities/{eid}/card → readCharacterCard / readForeshadowingCard
+ *   PUT    /api/write/works/{id}/entities/{eid}/card → updateCharacterCard / updateForeshadowingCard
+ *
+ * 世界观 (worldbuilding.ts):
+ *   GET    /api/write/worldbuilding/{id}             → SF-011 readWorldbuilding
+ *   PUT    /api/write/worldbuilding/{id}             → SF-012 updateWorldbuilding
+ *   GET    /api/write/worldbuilding/{id}/constraints → SF-013 readConstraints
+ *
+ * 原始构想 (original_concept.ts):
+ *   GET    /api/write/original-concept/{id}  → SF-006 readOriginalConcept
+ *   PUT    /api/write/original-concept/{id}  → SF-006 updateOriginalConcept
+ *
+ * 大纲 (outline.ts):
+ *   GET    /api/write/outline/{id}           → SF-021 readOutline
+ *   PUT    /api/write/outline/{id}           → SF-022 updateOutline
+ *
+ * 章节 (draft.ts):
+ *   POST   /api/write/draft/intent           → SF-030 createIntent
+ *   GET    /api/write/draft/intent/{wid}/{sid} → readIntent
+ *   GET    /api/write/draft/output/{sid}     → SF-034 outputDraft
+ *
+ * 伏笔 (foreshadowing.ts):
+ *   GET    /api/write/foreshadowing/{id}     → SF-023 readForeshadowing
+ *   PUT    /api/write/foreshadowing/{id}     → SF-023 updateForeshadowing
+ *
+ * 提示 (hints.ts):
+ *   GET    /api/write/hints/{module}         → SF-067 readHints
+ *
+ * Story Elf (elf_chat.ts / elf_sessions.ts):
+ *   POST   /api/write/elf/chat               → SF-055 handleElfChat
+ *   POST   /api/write/elf/sessions           → handleCreateSession
+ *   GET    /api/write/elf/sessions           → handleListSessions
+ *   GET    /api/write/elf/sessions/{id}      → handleGetSession
+ *   POST   /api/write/elf/sessions/{id}/archive → handleArchiveSession
+ *
+ * 写作指南:
+ *   GET    /api/write/guide/{module_type}     → getModuleGuide
+ *
+ * ⚠️ 注意: 以下端点的 handler 函数存在但当前路由未接线:
+ *   - SF-031: generateDraft (POST /api/write/draft/generate)
+ *   - SF-032: checkConsistency (POST /api/write/draft/check)
+ *   - SF-033: polishDraft (POST /api/write/draft/polish)
+ *   - SF-035: rewriteSection (POST /api/write/draft/rewrite)
+ *   - SF-040: extractHooks (POST /api/write/marketing/extract)
+ *   - SF-041: generateTitles (POST /api/write/marketing/titles)
+ *   - SF-042: repurposeSection (POST /api/write/marketing/repurpose)
+ *
+ * ============================================================
+ * 前端设计（写作桌 — write.html / write.js）
+ * ============================================================
+ *
+ * 设计哲学（四个关键词）：
+ *   - 桌面感：不是"打开一个编辑器"，而是"进入创作桌面，所有工具都在手边"
+ *   - 结构化：世界观/长篇框架/人物卡/伏笔账本是预设模板，作者往里面填内容
+ *   - 统一界面：不区分"规划模式"和"写作模式"，Pipeline 导航 + 分栏 + Story Elf，一个界面
+ *   - 可配置：分隔线可拖拽调整宽度，预设合理默认值
+ *
+ * 三栏布局设计原则：
+ *   - 左栏（参考层）：轮换提示 / 人物卡片 / 章节卡片 / 伏笔列表
+ *   - 中栏（自由编辑区）：视觉焦点，鼓励"先吐出来，再结构化"
+ *   - 右栏（模板槽位）：模板框架只读 + 槽位 textarea 可编辑，按 level 分级
+ *   - Story Elf 浮动在右下角，是左（参考）+ 中（自由写作）→ 右（模板槽位）的桥梁
+ *   - 分隔线可拖拽，默认各 1/3，最小 15%
+ *
+ * Pipeline 引导条设计意图：
+ *   - 长篇创作最大障碍是"不知道从哪开始"，引导条将 M0→M1→...→M6 可视化
+ *   - 始终可见、状态驱动（R2 资产判定）、点击跳转、建议但不强制顺序
+ *   - ⚠️ SF-063 状态自动判定尚未实现（updatePipelineStatuses() 已预留）
+ *
+ * 技术选型：纯 HTML+CSS+JS / CSS Grid + Flexbox 三栏 / HTML5 Drag & Drop / marked.js / 系统字体
+ * 与 CAU Read 侧的关系：共享 style.css + app.js / Write --cyan vs Read --accent / 作者需 Token
+ */
+
 import { Env } from '../../db/schema';
 import { jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';

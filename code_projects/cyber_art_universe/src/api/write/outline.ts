@@ -1,4 +1,21 @@
-// 大纲引擎 — SF-020~022（多语言支持 + 长篇框架模板 + JSON 槽位数据）
+/**
+ * 大纲引擎 — outline.ts
+ *
+ * 覆盖需求:
+ *   SF-020: 生成大纲 (POST /api/write/outline/generate)
+ *           → V3 委托到 POST /api/write/module/{m2_xxx}/generate
+ *   SF-021: 读取大纲 (GET /api/write/outline/{work_id}) — readOutline()
+ *   SF-022: 编辑大纲 (PUT /api/write/outline/{work_id}) — updateOutline()
+ *           含章节拖拽重排（SF-025 合并入此）
+ *   SF-017: 长篇框架模板 — OUTLINE_TEMPLATE（6 章节，中英双语）
+ *
+ * SF-023: 伏笔账本 → 见 foreshadowing.ts + foreshadowing_card.ts
+ * SF-024: 冲突地图 → ❌ 已删除（冲突本质已融入 M2 长篇框架）
+ *
+ * OUTLINE_TEMPLATE 章节:
+ *   一、故事概览 / 二、主线阶段划分 / 三、支线规划
+ *   四、节奏规划 / 五、关键转折点 / 六、伏笔埋设总体规划
+ */
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';

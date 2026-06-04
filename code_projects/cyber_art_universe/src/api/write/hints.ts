@@ -1,7 +1,16 @@
-// Story Forger — 智能提示系统（静态 + AI 动态，中英双语配对）
-// 静态提示：R2 system/hints/{module}.json  → [{"zh":"...","en":"..."},...]
-// 动态提示：R2 works/{wid}/hints/{module}.json  → [{"zh":"...","en":"..."},...]
-//   由 Story Elf 内部生成，非公开 API（无 POST 端点）
+/**
+ * 智能提示系统 — hints.ts
+ *
+ * 覆盖需求:
+ *   SF-067: 智能提示系统 — 静态 + Story Elf 动态提示
+ *           静态: R2 system/hints/{module}.json（中英双语配对）
+ *           动态: R2 works/{workId}/hints/{module}.json（Story Elf 内部生成）
+ *           前端每次显示一条，60-120 分钟随机轮换，语言切换自适应
+ *           M0/M1/M2 左面板轮换提示
+ *
+ * readHints(): 合并静态+动态提示返回
+ * appendDynamicHint(): Story Elf 生成双语提示追加到 R2（去重，最多 10 条）
+ */
 
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';

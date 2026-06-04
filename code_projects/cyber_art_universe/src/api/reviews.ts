@@ -1,4 +1,7 @@
-// 评价/评论 API — AI 与人类共用，自由评论 + 自然互动
+/**
+ * 评价/评论 API — AI 与人类共用
+ * 覆盖需求: F-030 (提交) / F-031 (列表) / F-032 (详情) / F-044 (嵌套回复+点赞) / F-047 (reviewer_type)
+ */
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';

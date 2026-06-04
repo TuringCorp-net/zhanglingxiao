@@ -1,11 +1,30 @@
-// V3 统一 Module API — M0-M6 所有模块的读写统一入口
-// GET  /api/write/module/{module_id}          → 读单个 module
-// PUT  /api/write/module/{module_id}          → 写单个 module
-// GET  /api/write/modules?work_id=&type=       → 列出某类型的全部 module
-// POST /api/write/module/{module_id}/generate  → AI 生成（委托给各 handler）
-//
-// 存储隔离：slots → .json（Story Elf 维护），free_content → .free.md（人类/Agent 自由写）
-// 两个文件物理隔离，free_content 的写入永远不会覆盖结构化 slot 数据。
+/**
+ * V3 统一 Module API — module.ts
+ *
+ * 覆盖需求: M0-M6 所有模块的统一读写入口
+ *   M0: 原始构想 (ORIGINAL_CONCEPT_TEMPLATE)
+ *   M1: 世界观设定圣经 (BIBLE_TEMPLATE, from worldbuilding.ts)
+ *   M2: 长篇框架大纲 (OUTLINE_TEMPLATE, from outline.ts)
+ *   M3: 人物卡 (CHARACTER_TEMPLATE, from character_card.ts)
+ *   M4: 伏笔策略总览 (FORESHADOWING_TEMPLATE, from foreshadowing.ts) + 伏笔条目卡 (FORESHADOWING_CARD_SLOTS)
+ *   M5: 章节意图卡 (INTENT_TEMPLATE, 14 slot)
+ *   M6: 章节正文 (CHAPTER_TEMPLATE, 单槽位)
+ *
+ * API 端点:
+ *   GET  /api/write/module/{module_id}          → getModule()
+ *   PUT  /api/write/module/{module_id}          → updateModule()
+ *   GET  /api/write/modules?work_id=&type=       → listModules()
+ *   GET  /api/write/module/{module_id}/versions  → listModuleVersions()  [V4]
+ *   GET  /api/write/module/{module_id}/diff      → diffModuleVersions()  [V4]
+ *
+ * 存储隔离:
+ *   slots → .json（Story Elf 结构化维护）
+ *   free_content → .free.md（人类/Agent 自由写）
+ *   渲染输出 → .md（服务端组装，供人类阅读）
+ *   三个文件物理隔离，永远不会互相覆盖
+ *
+ * V4 版本历史: 每次 PUT 自动快照到 R2 .versions/ + D1 file_versions 表
+ */
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
@@ -366,6 +385,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     : ((hasFreeContent && freeKey) ? await readR2Text(env, freeKey) : null);
 
   // ---- 写 free_content → .free.md（独立文件，永远不碰 .json） ----
+  // STR-P2-02: R2 写入无 try/catch，D1+R2 不一致风险。建议添加错误处理和日志。
   if (hasFreeContent) {
     await env.WORKS_BUCKET.put(freeKey, body.free_content!, {
       httpMetadata: { contentType: 'text/markdown; charset=utf-8' },

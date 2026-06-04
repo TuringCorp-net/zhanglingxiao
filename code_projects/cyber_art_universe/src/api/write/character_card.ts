@@ -1,4 +1,18 @@
-// Story Forger — M3 人物卡：模板定义 + CRUD + JSON 槽位数据
+/**
+ * M3 人物卡 — character_card.ts
+ *
+ * 覆盖需求:
+ *   SF-014: 角色/实体管理 — createCharacter() + updateEntity() + deleteEntity()
+ *           entities 表 D1 CRUD（POST/PUT/DELETE /api/write/works/{id}/entities）
+ *   SF-018: 人物卡模板 — CHARACTER_TEMPLATE（6 章框架，中英双语）
+ *           首次无内容时返回完整模板框架，非空白
+ *           v1.8.0 新增: arc_type（弧线类型）、关联 M1 世界规则、关联 M4 伏笔
+ *   SF-071: M3/M4 模板拆分 — 人物卡模板从 entities.ts 独立为 character_card.ts
+ *
+ * CHARACTER_TEMPLATE 章节:
+ *   一、基本信息 / 二、性格与动机 / 三、能力与限制（含 M1/M4 交叉引用）
+ *   四、关系网络 / 五、成长弧线（含 arc_type） / 六、语言与行为特征
+ */
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';

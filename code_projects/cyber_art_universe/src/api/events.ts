@@ -1,4 +1,7 @@
-// 事件与榜单 API
+/**
+ * 事件与榜单 API
+ * 覆盖需求: F-040 (事件流) / F-041 (榜单列表) / F-042 (榜单详情) / F-043 (事件记录)
+ */
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';

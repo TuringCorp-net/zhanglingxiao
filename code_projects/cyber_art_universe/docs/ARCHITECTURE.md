@@ -18,25 +18,21 @@ docs/
 │   └── L1_Category.md           # 一级分类设计：内容分类体系
 │
 ├── cau/                         # CAU 阅读端
-│   ├── original_concept.md      # 原始构想：项目的起源和愿景
-│   ├── SRS.md                   # 需求规格：功能需求清单
-│   ├── SDS.md                   # 软件设计：实际实现描述
-│   ├── STR.md                   # 测试审查：测试方案和审查报告
-│   └── frontend_design.md       # 前端设计：阅读端 UI/UX 设计
+│   └── original_concept.md      # 原始构想：项目的起源和愿景
+│       （SRS/SDS/STR 已并入代码注释 → src/api/*.ts 头部 JSDoc）
 │
 ├── story_forger/                # Story Forger 写作工具
 │   ├── original_concept.md      # 原始构想：写作引擎的起源
 │   ├── system_design.md         # 系统设计：模板系统、Pipeline、约束体系
-│   ├── SRS.md                   # 需求规格：功能需求清单（SF-XXX）
-│   ├── SDS.md                   # 软件设计：代码模块和 API 端点
-│   ├── STR.md                   # 测试审查：测试方案和审查报告
-│   ├── frontend_design.md       # 前端设计：写作桌 UI/UX 设计
-│   └── milestone_review_0520.md # 里程碑审查：2026-05-20 评审报告
+│   ├── milestone_review_0520.md # 里程碑审查：2026-05-20 评审报告
+│   │   （SRS/SDS/STR 已并入代码注释 → src/api/write/*.ts + src/pages/write.js 头部 JSDoc）
 │
 └── story_elf/                   # Story Elf AI 辅助层
     ├── original_concept_smart_guide_story_elf.md  # 原始探讨：模板分级引导设计对话
     ├── system_design.md         # 系统设计：分级系统、多语言、自由编辑互动
-    └── frontend_design.md       # 前端设计：Hint 对话泡、打字机动效、Level 切换 UI
+    ├── L2_agent_design.md       # L2 Agent 架构：session/memory/tool/prompt 层
+    └── cloudflare_ai_gateway_guide.md  # AI Gateway 部署指南
+        （SRS 已并入代码注释 → src/lib/l0/aiGateway.ts + src/lib/l1/context-package.ts + src/lib/telemetry.ts 头部 JSDoc）
 ```
 
 ---
@@ -133,16 +129,16 @@ Story Elf 是唯一同时服务于 CAU 和 Story Forger 的模块：
 `ARCHITECTURE.md` → `general/business_concept.md` → `general/system_design.md`
 
 ### 想开发 CAU 阅读端
-`cau/SRS.md` → `cau/SDS.md` → `cau/frontend_design.md`
+`cau/original_concept.md`（SRS 需求 ID 见 `src/api/index.ts` + `src/api/works.ts` 等文件头部注释）
 
 ### 想开发 Story Forger 写作端
-`story_forger/original_concept.md` → `story_forger/system_design.md` → `story_forger/SRS.md` → `story_forger/SDS.md` → `story_forger/frontend_design.md`
+`story_forger/original_concept.md` → `story_forger/system_design.md`（SRS 需求 ID 见 `src/api/write/index.ts` 头部注释 + 各模块文件头部 JSDoc）
 
 ### 想开发 Story Elf AI 辅助
-`story_elf/original_concept_smart_guide_story_elf.md` → `story_elf/system_design.md` → `story_elf/frontend_design.md`
+`story_elf/original_concept_smart_guide_story_elf.md` → `story_elf/system_design.md` → `story_elf/L2_agent_design.md`（SRS 需求 ID 见 `src/lib/l0/aiGateway.ts` / `src/lib/l1/context-package.ts` / `src/lib/telemetry.ts` 头部注释）
 
 ### 想做代码审查或测试
-`{module}/SRS.md` → `{module}/SDS.md` → `{module}/STR.md`
+直接阅读对应模块的 `.ts` 源代码文件——功能需求 ID 已标注在函数/文件头部的 JSDoc 注释中。测试用例见 `tests/` 目录。
 
 ---
 
@@ -154,17 +150,14 @@ Story Elf 是唯一同时服务于 CAU 和 Story Forger 的模块：
 |---------|--------|------|
 | 原始构想 | `original_concept*.md` | 项目/模块的起源和愿景，一旦定稿原则上不修改 |
 | 系统设计 | `system_design.md` | 该模块的技术架构和设计决策 |
-| 需求规格 | `SRS.md` | 功能需求清单和状态跟踪 |
-| 软件设计 | `SDS.md` | 代码实际实现描述（代码是 truth source） |
-| 测试审查 | `STR.md` | 测试方案和审查报告 |
-| 前端设计 | `frontend_design.md` | 前端 UI/UX 设计文档 |
+| 功能需求/实现/审核 | 已并入代码 | SRS/SDS/STR 内容已逐条迁移到对应 `.ts` 文件的 JSDoc 头部注释中（2026-06-04） |
 
 ### 关联文档节
 
 每个文档应在头部包含 `## 文档说明` 节，其中有一行 `**关联文档**`，用 `→` 箭头连接推荐阅读顺序。所有链接使用相对路径。示例：
 
 ```markdown
-- **关联文档**：[架构总览](../ARCHITECTURE.md) → [SRS](SRS.md) → [SDS](SDS.md) → [前端设计](frontend_design.md)
+- **关联文档**：[架构总览](../ARCHITECTURE.md) → system_design 文档（功能需求已并入代码文件头部注释，直接阅读对应 `.ts` 源文件即可）
 ```
 
 ### 跨模块修改检查清单

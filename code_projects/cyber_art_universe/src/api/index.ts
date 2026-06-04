@@ -1,4 +1,38 @@
-// Cyber Art Universe — 路由分发入口
+/**
+ * Cyber Art Universe — 路由分发入口
+ *
+ * 覆盖需求 (CAU SRS):
+ *   F-001~006 内容层 (works.ts) / F-010~012 发现层 (discovery.ts)
+ *   F-020~024 实体系统 (entities.ts) / F-030~032, F-044~047 评价 (reviews.ts)
+ *   F-040~043 事件/榜单 (events.ts) / F-050~052 订阅 (subscriptions.ts)
+ *   F-060~061 搜索 (search.ts) / F-070 MCP 集成 (mcp.ts)
+ *   F-090 用户认证 (Authorization: Bearer)
+ *
+ * Write 侧路由 → src/api/write/index.ts
+ *
+ * ============================================================
+ * 前端设计（CAU Read 侧 — style.css / index.html / read.html / work.html）
+ * ============================================================
+ *
+ * 设计哲学：简约、沉浸、赛博
+ *   - 简约：无框架，纯 HTML+CSS+Vanilla JS，极轻渲染壳
+ *   - 沉浸：阅读页为第一优先级，排版干净，零干扰
+ *   - 赛博：深色主题，紫/青霓虹点缀，呼应 "Cyber Art Universe"
+ *
+ * 色彩语义（全局 CSS Variables）：
+ *   - 紫色系 (--accent #7c3aed) = Read 侧主色 / 激活态 / 主要操作
+ *   - 青色系 (--cyan #06b6d4)  = Write 侧主色 / Pipeline 进行中 / 信息提示
+ *   - 绿色 (--success) = 成功 / 红色 (--error) = 错误 / 黄色 (--warn) = 警告
+ *
+ * 页面结构：
+ *   - index.html  — 首页（分类横条 + 作品列表 + Read/Write 双 tab）
+ *   - work.html   — 作品详情（信息 + 章节目录 + 角色列表）
+ *   - read.html   — 阅读器（Markdown 渲染 + 字体调节 + 章节导航）
+ *   - write.html  — Story Forger 写作桌（Write 侧，见 write/index.ts）
+ *
+ * 技术选型：CSS Variables + 无框架 + marked.js (CDN) + 系统字体栈（零加载）
+ * 数据流：HTML → fetch(API) → JSON → marked.parse() → DOM
+ */
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';

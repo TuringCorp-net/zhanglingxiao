@@ -1,4 +1,14 @@
-// Story Forger — 营销与分发辅助 (SF-040~042)（多语言支持）
+/**
+ * 营销与分发辅助 — marketing.ts
+ *
+ * 覆盖需求:
+ *   SF-040: 爆点提炼 (POST /api/write/marketing/extract/{section_id}) — extractHooks()
+ *           从章节提取 golden_lines/hooks/conflict_points/suggested_hashtags
+ *   SF-041: 标题/简介生成 (POST /api/write/marketing/titles/{work_id}) — generateTitles()
+ *           生成多版本 title/subtitle/hook
+ *   SF-042: 分发改写 (POST /api/write/marketing/repurpose/{section_id}?format=) — repurposeSection()
+ *           支持 short_video / x / linkedin 三种格式
+ */
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';

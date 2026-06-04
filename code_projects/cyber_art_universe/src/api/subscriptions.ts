@@ -1,4 +1,7 @@
-// 订阅 API
+/**
+ * 订阅 API
+ * 覆盖需求: F-050 (查询) / F-051 (创建) / F-052 (取消)
+ */
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';

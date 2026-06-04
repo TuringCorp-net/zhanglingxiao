@@ -1,6 +1,10 @@
-// 系统遥测 —— AI 调用用量统计与健康度监控
-// 记录每次大模型调用的 token 使用量、缓存命中率等。
-// 数据写入 D1 ai_usage_log 表，同时 console.log 结构化日志供实时查看。
+/**
+ * 系统遥测 — AI 调用用量统计与健康度监控
+ *
+ * 覆盖需求 (Story Elf SRS):
+ *   SE-080: AI 用量记录 — recordAIUsage() 写入 D1 ai_usage_log 表 + console.log
+ *   SE-081: 用户级用量统计 — user_token 字段区分用户
+ */
 
 import { Env } from '../db/schema';
 

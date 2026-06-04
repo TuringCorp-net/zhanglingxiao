@@ -1,5 +1,22 @@
-// Story Forger — 写作桌主逻辑（v2.0：左右分栏 + Pipeline 唯一导航 + 槽位编辑器）
-// 依赖：write-api.js (HTTP 层)
+/**
+ * Story Forger — 写作桌主逻辑
+ *
+ * 覆盖需求:
+ *   SF-061: 写作桌界面 — Pipeline 导航 (M0-M6) + 左右分栏（左=结构化参考，右=编辑区）
+ *           Pipeline 胶囊点击切换模块，左栏按模块呈现参考内容，右栏统一编辑器
+ *   SF-062: 左右分栏系统 — 分隔线拖拽调整比例（25%~65%），位置持久化 localStorage
+ *           默认 40:60，虚线分隔（上下留空）
+ *   SF-064: 槽位编辑器引擎（v2.5 JSON 化）— 模板框架只读渲染 + 槽位 textarea 可编辑
+ *           前端直接消费 API JSON template.slots 结构渲染 DOM
+ *           中栏独立自由编辑区（free_content 字段）
+ *   SF-065: 重复结构支持 — 同类条目 [+] 追加 / [×] 删除按钮
+ *   SF-066: M5 意图卡槽位编辑器 — INTENT_TEMPLATE 14 slot 统一槽位编辑
+ *   SF-068: 模板分级系统 — 按 SlotDef.level (L1/L2) 过滤可见性，Pipeline 右侧 L1/L2 切换按钮
+ *   SF-063: 写作引导流程 — ⏳ 待实现（Pipeline 状态指示）
+ *
+ * 依赖: write-api.js (HTTP 层), story-elf.js (AI 伴侣)
+ */
+
 
 // ============================================================
 // State

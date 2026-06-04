@@ -1,8 +1,37 @@
-// Story Elf — 自包含浮动 AI 助手组件
-// 使用方式：<script src="/story-elf.js"></script> + <link rel="stylesheet" href="/story-elf.css">
-// 自动在页面右下角创建可拖拽的 Story Elf 浮动组件，位置跨页面保持。
-// Write 页面可通过 window.StoryElf 覆盖行为（check / suggest / sendChat）。
-// Session 由服务端统一管理（API Agent 和前端用户共用）。
+/**
+ * Story Elf — 自包含浮动 AI 助手组件
+ *
+ * 覆盖需求:
+ *   SF-053: Story Elf 浮动组件 — 自包含 JS，可拖拽，位置跨页面保持 (localStorage)
+ *           <script src="/story-elf.js"> 即可使用，window.StoryElf API 暴露
+ *   SF-054: Context-Aware 上下文感知 — StoryElf.setContext({page, work_id, ...})
+ *   SF-072: Hint 对话泡 — 槽位聚焦时打字机效果逐字呈现 hint markdown
+ *           数据来自模板 JSON SlotDef.hint 字段（前端直接消费 JSON 结构）
+ *           ~40ms/字 + 标点智能停顿，markdown 渐进渲染
+ *           与左侧聊天窗口（#elf-dialog）是两套独立系统
+ *   SF-055: Write 侧写作精灵 — 一致性检查、建议、对话式润色
+ *   SF-056: Read 侧伴读精灵 — 浮动形象 + 对话框，⏳ AI 后端待实现
+ *
+ * 组件架构（四大模块）:
+ *   1. 浮动小精灵 UI — 拖拽移动 + 位置 localStorage 持久化
+ *   2. 对话泡 (Hint Bubble) — hint 渲染 + requestAnimationFrame 打字机效果
+ *   3. 聊天窗口 (#elf-dialog) — 与 AI 对话，独立于对话泡
+ *   4. 动作按钮 — 检查/建议等快捷操作，write.js 通过 setActions() 注入
+ *
+ * Hint 对话泡设计意图：
+ *   将槽位提示从 textarea placeholder 中移出，改为 Story Elf 以"对话泡"呈现
+ *   - 槽位界面干净：所有 textarea 不设 placeholder hint
+ *   - 对话感：用户点击槽位时 Elf 弹出对话泡，逐字显示
+ *   - 提示常驻：即便槽位已有内容，提示也不消失（不像 placeholder 输入即隐藏）
+ *
+ * Hint 交互流程:
+ *   用户聚焦槽位 → 对话泡出现 → 逐字打字 (~40ms/字, 标点+200ms/~100ms)
+ *   → 用户边看边输入 → blur → 对话泡消失
+ *   切换槽位时中断当前动画立即开始新的；手动关闭后可重新聚焦触发
+ *
+ * Session 由服务端统一管理（API Agent 和前端用户共用）。
+ */
+
 
 (function () {
   'use strict';

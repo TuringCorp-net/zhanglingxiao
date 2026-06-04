@@ -9,7 +9,7 @@
 - **与 SDS 的区别**：SDS 描述"代码实际做了什么"（实现层），本文档描述"系统设计的逻辑与原则"（设计层）。
 - **与 CAU System Design 的区别**：CAU System Design 描述整个平台的底层架构（D1/R2/API 层/Read 侧），本文档聚焦 Story Forger 写作引擎内部的模块逻辑。
 - **何时更新**：流水线逻辑变更、模块间约束关系调整、新的跨模块校验规则引入时。
-- **关联文档**：[架构总览](../ARCHITECTURE.md) → [Original Concept](original_concept.md) → [SRS](SRS.md) → 本文档 → [SDS](SDS.md) → [前端设计](frontend_design.md) → [Story Elf 设计](../story_elf/system_design.md)
+- **关联文档**：[架构总览](../ARCHITECTURE.md) → [Original Concept](original_concept.md) → 本文档 → [Story Elf 设计](../story_elf/system_design.md)（功能需求已并入代码 → 见 `src/api/write/index.ts` 头部注释）
 
 ---
 

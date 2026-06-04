@@ -1,4 +1,25 @@
-// 世界观引擎 — SF-010~016（多语言支持 + JSON 槽位数据）
+/**
+ * 世界观引擎 — worldbuilding.ts
+ *
+ * 覆盖需求:
+ *   SF-010: 生成设定圣经 (POST /api/write/worldbuilding/generate)
+ *           → V3 委托到 POST /api/write/module/{m1_xxx}/generate
+ *   SF-011: 读取设定圣经 (GET /api/write/worldbuilding/{work_id})
+ *           首次无内容时返回双语结构化空模板（6 大章节框架），非空白文档
+ *   SF-012: 更新设定圣经 (PUT /api/write/worldbuilding/{work_id})
+ *   SF-013: 设定约束清单 (GET /api/write/worldbuilding/{work_id}/constraints)
+ *           从 slot 数据中提取承诺清单 + 内容禁区作为约束
+ *   SF-015: 世界观结构化模板 — BIBLE_TEMPLATE（6 章节，中英双语单一来源）
+ *   SF-016: 多语言支持 — ?lang=zh|en 参数，R2 按语言分目录存储
+ *
+ * BIBLE_TEMPLATE 章节:
+ *   一、世界规则与边界（power_system/social_structure/taboos_costs）
+ *   二、核心主题与价值观（central_thesis/emotional_tone/narrative_stance）
+ *   三、角色体系（protagonist/supporting_characters/relationship_web）
+ *   四、场景与资源（major_locations/key_items）
+ *   五、承诺清单（promise_checklist）
+ *   六、禁区与风格（content_red_lines/language_style/pacing_preference）
+ */
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';

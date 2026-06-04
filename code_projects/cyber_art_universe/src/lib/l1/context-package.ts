@@ -1,6 +1,14 @@
-// L1: 写作上下文包组装
-// 在会话开始时一次性构建 M0-M5 完整上下文，作为 system prompt 的 frozen prefix。
-// 同作品同语言 = 完全固定 → DeepSeek 缓存 100% 命中。
+/**
+ * L1: 写作上下文包组装
+ *
+ * 覆盖需求 (Story Elf SRS):
+ *   SE-030: 作品上下文拉取 — getOrBuildContextPackage(env, workId, lang)
+ *           M0-M5 结构化 MD 并发拉取，R2 缓存
+ *   SE-031: 上下文截断策略 — 各源独立字符截断上限
+ *   SE-032: 上下文缓存 — 同 workId+lang 在单次请求内复用
+ *
+ * 同作品同语言 = 完全固定 → DeepSeek 缓存 100% 命中。
+ */
 
 import { Env } from '../../db/schema';
 import { workContentPath, type Lang } from './work-content';

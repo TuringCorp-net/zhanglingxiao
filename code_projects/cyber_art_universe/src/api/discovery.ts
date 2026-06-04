@@ -1,5 +1,7 @@
-// Discovery Layer — Agent Entry Points
-// Agent discovery path: /.well-known/agent-manifest.json → /llms.txt → /openapi.yaml
+/**
+ * Discovery Layer — Agent Entry Points
+ * 覆盖需求: F-010 (AI Manifest) / F-011 (LLMs.txt) / F-012 (OpenAPI)
+ */
 import { Env } from '../db/schema';
 import { jsonSuccess } from '../lib/response';
 

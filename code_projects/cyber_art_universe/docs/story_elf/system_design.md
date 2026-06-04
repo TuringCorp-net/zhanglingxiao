@@ -1,7 +1,7 @@
 # Story Elf 系统设计
 
 > 版本: v0.5.0 | 状态: 草案 | 最后更新: 2026-06-04
-> **关联文档**：[架构总览](../ARCHITECTURE.md) → [SRS](SRS.md) → 本文档 → [L2 Agent 架构设计](L2_agent_design.md) → [Story Elf 前端设计](frontend_design.md) → [AI Gateway 指南](cloudflare_ai_gateway_guide.md) → [模板分级探讨](original_concept_smart_guide_story_elf.md)
+> **关联文档**：[架构总览](../ARCHITECTURE.md) → 本文档 → [L2 Agent 架构设计](L2_agent_design.md) → [AI Gateway 指南](cloudflare_ai_gateway_guide.md) → [模板分级探讨](original_concept_smart_guide_story_elf.md)（功能需求已并入代码 → 见 `src/lib/l0/aiGateway.ts` / `src/api/write/elf_chat.ts` 头部注释）
 
 ---
 

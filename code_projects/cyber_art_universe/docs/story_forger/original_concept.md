@@ -2,7 +2,7 @@
 - 该文档记录了Cyber art universe项目在思考过程中的一些原始思路以及探讨过程，作为文档记载下来。
 - 本文档的内容不应被修改，且本文档不应该被删除作为历史记录。
 - **例外**（2026-05-06）：经项目作者授权，移除「模块一：爆款逻辑引擎」。该模块定位与写作引擎其他模块差异较大，未来可能独立为单独工具。
-- **关联文档**：[架构总览](../ARCHITECTURE.md) → 本文档 → [Story Forger SRS](SRS.md) → [Story Forger System Design](system_design.md) → [CAU Original Concept](../cau/original_concept.md)
+- **关联文档**：[架构总览](../ARCHITECTURE.md) → 本文档 → [Story Forger System Design](system_design.md) → [CAU Original Concept](../cau/original_concept.md)（功能需求已并入代码 → 见 `src/api/write/index.ts` 等文件头部注释）
 
 ---
 

@@ -1,5 +1,12 @@
-// Story Forger — HTTP 通信层
-// 依赖全局变量：userToken, currentLang（在 write.js 中定义）
+/**
+ * Story Forger — HTTP 通信层
+ *
+ * hGet/hPost/hPut/hPatch: API helpers with error handling (.catch → null)
+ * 支持 lang 参数切换（?lang=zh|en）
+ *
+ * 覆盖需求: SF-064 (槽位编辑器数据通信), SF-066 (M5 意图卡统一 API)
+ */
+
 
 const USER_TOKEN_KEY = 'sf_user_token';
 const LANG_KEY = 'sf_lang';

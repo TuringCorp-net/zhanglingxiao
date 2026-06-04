@@ -1,4 +1,11 @@
-// 内容 API — 作品与章节 CRUD
+/**
+ * 内容 API — 作品与章节 CRUD
+ *
+ * 覆盖需求 (CAU SRS):
+ *   F-001: 作品目录 / F-002: 作品元数据 / F-003: 作品大纲
+ *   F-004: 章节内容 / F-005: 作品管理 / F-006: 章节管理
+ *   ⚠️ F-005/F-006 已迁移至 Story Forger workspace.ts
+ */
 import { Env, Work, Section } from '../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';

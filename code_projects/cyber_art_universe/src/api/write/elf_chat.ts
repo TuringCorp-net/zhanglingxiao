@@ -1,6 +1,40 @@
-// Story Elf — AI 对话 API（L2 Agent 入口）
-// Read 侧（伴读精灵）和 Write 侧（写作精灵）共享此端点。
-// 上下文组装、system prompt 构建、Agent 循环由 L2 模块完成。
+/**
+ * Story Elf AI 对话 — elf_chat.ts (L2 Agent 入口)
+ *
+ * 覆盖需求:
+ *   SF-053: Story Elf 浮动组件 — 自包含 JS (story-elf.js)，可拖拽，位置跨页面保持
+ *   SF-054: Context-Aware 上下文感知 — 页面自动将当前阅读/写作位置传给 Elf
+ *   SF-055: Write 侧写作精灵 — 一致性检查、建议、对话式润色
+ *   SF-056: Read 侧伴读精灵 — 浮动形象 + 对话框，⏳ AI 后端待实现
+ *   SF-072: Hint 对话泡 — 槽位聚焦时打字机效果呈现 hint markdown
+ *           数据来自模板 JSON SlotDef.hint 字段（前端直接消费 JSON）
+ *
+ * Read 侧（伴读精灵）和 Write 侧（写作精灵）共享此 POST /api/write/elf/chat 端点。
+ * 上下文组装 → system prompt 构建 → Agent 循环由 L2 模块完成。
+ *
+ * ============================================================
+ * 前端设计（Story Elf — story-elf.js / story-elf.css）
+ * ============================================================
+ *
+ * 组件架构（四大模块）：
+ *   1. 浮动小精灵 UI — 拖拽移动 + 位置 localStorage 持久化
+ *   2. Hint 对话泡 — hint markdown 渲染 + requestAnimationFrame 打字机效果
+ *   3. 聊天窗口 (#elf-dialog) — 与 AI 对话，独立于对话泡
+ *   4. 动作按钮 — 检查/建议等快捷操作，write.js 通过 setActions() 注入
+ *
+ * Hint 对话泡设计意图：
+ *   将槽位提示从 textarea placeholder 移出，以"对话泡"形式呈现
+ *   - 槽位界面干净：textarea 不设 placeholder hint
+ *   - 对话感：聚焦槽位时 Elf 弹出对话泡，逐字显示（~40ms/字，标点 +200ms/+100ms）
+ *   - 提示常驻：即使槽位已有内容，提示也不消失（不像 placeholder 输入即隐藏）
+ *
+ * Hint 视觉规格（story-elf.css）：
+ *   - 定位：跟随 Story Elf 浮动组件，出现在其上方或侧边
+ *   - 最大宽度 320px，半透明深色面板，圆角卡片
+ *   - 淡入动画（出现）+ requestAnimationFrame 逐字打字（内容）
+ *   - z-index: 200（高于编辑器，低于模态弹窗）
+ *   - blur 时淡出，手动关闭后可重新聚焦触发
+ */
 
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';

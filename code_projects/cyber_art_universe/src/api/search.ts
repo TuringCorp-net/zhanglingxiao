@@ -1,4 +1,7 @@
-// 语义搜索 API — 基于 D1 LIKE 的全文搜索
+/**
+ * 搜索 API — D1 LIKE 全文搜索（检索与推理分离原则）
+ * 覆盖需求: F-060 (全局搜索) / F-061 (作品内检索)
+ */
 import { Env } from '../db/schema';
 import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';

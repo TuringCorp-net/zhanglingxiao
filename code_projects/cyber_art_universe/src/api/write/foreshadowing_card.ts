@@ -1,4 +1,15 @@
-// Story Forger — M4 伏笔卡：模板定义 + CRUD + JSON 槽位数据
+/**
+ * M4 伏笔卡 — foreshadowing_card.ts
+ *
+ * 覆盖需求:
+ *   SF-023: 伏笔条目卡 CRUD — createForeshadowing() + readForeshadowingCard() + updateForeshadowingCard()
+ *           13 个槽位: 类型/强度/关联人物/章节范围/M1规则/埋种/发展/回收/状态
+ *   SF-071: M3/M4 模板拆分 — 伏笔卡模板从 entities.ts 独立为 foreshadowing_card.ts
+ *
+ * 伏笔生命周期 (5 阶段): 🌱 已规划 → 🌿 已埋种 → 🌳 发展中 → 💡 部分揭示 → ✅ 已回收
+ * 伏笔类型 (6 种): 身份/道具/对白/能力/事件/意象
+ * 伏笔强度 (3 级): 🔴 核心（贯穿全书）/ 🟡 重要（跨多章）/ 🟢 彩蛋（轻量）
+ */
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';

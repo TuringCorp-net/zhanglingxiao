@@ -1,4 +1,21 @@
-// 工作区管理 — SF-001~005 + 状态转换 + Sections CRUD
+/**
+ * 工作区管理 — workspace.ts
+ *
+ * 覆盖需求:
+ *   SF-001: 创建作品 (POST /api/write/works) — createDraftWork()
+ *   SF-002: 列出我的作品 (GET /api/write/works) — listMyWorks()
+ *   SF-003: 更新作品元信息 (PUT /api/write/works/{id}) — updateMyWork()
+ *   SF-004: 删除作品 (DELETE /api/write/works/{id}) — deleteMyWork()
+ *   SF-005: 预览作品 (GET /api/write/works/{id}/preview) — previewWork()
+ *
+ * 作品状态生命周期 (draft → published → closed):
+ *   publishWork() — draft → published（需≥1 section）
+ *   closeWork()   — published → closed
+ *   reopenWork()  — closed → published
+ *   deleteMyWork() — draft/closed 可删，published 不可删 (409)
+ *
+ * 可见性规则: draft 仅作者可见; published 公开可见; closed 仅作者后台可见
+ */
 import { Env, Work } from '../../db/schema';
 import { jsonSuccess, jsonError, parseJSON } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
