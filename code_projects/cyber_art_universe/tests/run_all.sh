@@ -14,7 +14,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 BASE_URL="${BASE_URL:-https://cau.turingcorp.net}"
 TOKEN="${TOKEN:-admin-TuringCorp-13572468}"
 WORK_ID="${WORK_ID:-aa489993-1e7b-4804-b6af-723619b150b6}"
-export BASE_URL TOKEN WORK_ID
+TEST_WORK_ID="${TEST_WORK_ID:-$WORK_ID}"
+export BASE_URL TOKEN WORK_ID TEST_WORK_ID
 
 TOTAL_PASS=0
 TOTAL_FAIL=0

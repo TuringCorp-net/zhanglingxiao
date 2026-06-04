@@ -35,12 +35,12 @@ echo ""
 # 1. llms.txt 可发现
 check "llms.txt 可访问" \
   "$BASE/llms.txt" \
-  "CAU"
+  "Cyber Art Universe"
 
 # 2. AI Manifest
 check "ai-manifest.json 可访问" \
   "$BASE/.well-known/ai-manifest.json" \
-  '"resources"'
+  '"site"'
 
 # 3. Catalog API
 check "Catalog API 可搜到作品" \
