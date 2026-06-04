@@ -138,11 +138,36 @@ def check(condition, label, detail=""):
         if detail:
             print(f"     {detail}")
 
+def show_diff(a, b, max_len=200):
+    """找到 a 和 b 第一个不同的字符位置并展示上下文"""
+    if a == b: return "identical"
+    for i, (ca, cb) in enumerate(zip(a, b)):
+        if ca != cb:
+            start = max(0, i - 30)
+            return (f"diverge at char {i}:\n"
+                    f"     expected[{start}:{i+50}]: {repr(a[start:i+50])}\n"
+                    f"     actual[{start}:{i+50}]:   {repr(b[start:i+50])}")
+    # 长度不同但前缀相同
+    return f"length mismatch: expected={len(a)}, got={len(b)}"
+
 def check_eq(a, b, label, detail=""):
-    check(a == b, label, detail if detail else f"expected={repr(a)[:100]}, got={repr(b)[:100]}")
+    if a == b:
+        check(True, label, detail)
+    else:
+        if len(str(a)) + len(str(b)) < 200:
+            detail = f"expected={repr(a)}, got={repr(b)}"
+        else:
+            detail = show_diff(str(a), str(b))
+        check(False, label, detail)
 
 def check_contains(text, marker, label):
-    check(marker in text, label, f"marker '{marker}' not found")
+    if marker in text:
+        check(True, label)
+    else:
+        # 在 text 中搜索最接近 marker 的位置
+        pos = text.find(marker[:20]) if len(marker) >= 20 else -1
+        ctx = f" (context around nearest match: ...{text[max(0,pos-40):pos+80]}...)" if pos >= 0 else f" (text length={len(text)})"
+        check(False, label, f"marker '{marker[:80]}' not found{ctx}")
 
 # ============================================================
 # Step 1: Layer 1 — 统一人格

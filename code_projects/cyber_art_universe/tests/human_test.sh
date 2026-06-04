@@ -22,7 +22,9 @@ check() {
     echo "PASS (HTTP $code)"
     PASS=$((PASS + 1))
   else
-    echo "FAIL (HTTP $code, expected '$expect' not found)"
+    echo "FAIL (HTTP $code)"
+    echo "       expected: $expect"
+    echo "       response: $(echo "$body" | head -c 300)"
     FAIL=$((FAIL + 1))
   fi
 }

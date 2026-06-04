@@ -27,10 +27,11 @@ def api_put(path, body_obj):
 
 passed = 0
 failed = 0
-def check(ok, desc):
+def check(ok, desc, detail=""):
     global passed, failed
     if ok: passed += 1; print(f"  PASS: {desc}")
     else: failed += 1; print(f"  FAIL: {desc}")
+    if detail: print(f"       {detail}")
 
 # 自动发现需要测试的模块 ID
 def find_module_ids():
@@ -64,16 +65,18 @@ for label, mid in modules:
     # ③ 追加密标并写回
     new_fc = (before.get("free_content", "") + "\n\n" + MARKER).strip()
     put_ok = api_put(f"/api/write/module/{mid}?lang=zh", {"free_content": new_fc})
-    check(put_ok.get("ok") == True, f"{label} PUT ok")
+    check(put_ok.get("ok") == True, f"{label} PUT ok",
+          f"response: {json.dumps(put_ok)[:200]}")
 
     # ④ 读回验证
     after = api_get(f"/api/write/module/{mid}?lang=zh")["data"]
-    check(MARKER in after.get("free_content", ""), f"{label} marker persisted")
-    check(
-        json.dumps(before.get("slots", {}), sort_keys=True) ==
-        json.dumps(after.get("slots", {}), sort_keys=True),
-        f"{label} slots preserved"
-    )
+    after_fc = after.get("free_content", "")
+    check(MARKER in after_fc, f"{label} marker persisted",
+          f"marker not found in free_content (len={len(after_fc)})")
+    slots_before = json.dumps(before.get("slots", {}), sort_keys=True)
+    slots_after = json.dumps(after.get("slots", {}), sort_keys=True)
+    check(slots_before == slots_after, f"{label} slots preserved",
+          f"slots changed: before has {len(slots_before)} chars, after has {len(slots_after)} chars")
 
 # ---- Step 5: 恢复 ----
 print()
@@ -84,16 +87,18 @@ for label, mid in modules:
 
     # ⑤ 写回原始数据
     restore_ok = api_put(f"/api/write/module/{mid}?lang=zh", snapshot)
-    check(restore_ok.get("ok") == True, f"{label} cleanup PUT ok")
+    check(restore_ok.get("ok") == True, f"{label} cleanup PUT ok",
+          f"response: {json.dumps(restore_ok)[:200]}")
 
     # ⑥ 验证恢复
     verify = api_get(f"/api/write/module/{mid}?lang=zh")["data"]
-    check(MARKER not in verify.get("free_content", ""), f"{label} marker removed")
-    check(
-        json.dumps(verify.get("slots", {}), sort_keys=True) ==
-        json.dumps(snapshot["slots"], sort_keys=True),
-        f"{label} slots fully restored"
-    )
+    verify_fc = verify.get("free_content", "")
+    check(MARKER not in verify_fc, f"{label} marker removed",
+          f"marker still present in free_content")
+    verify_slots = json.dumps(verify.get("slots", {}), sort_keys=True)
+    orig_slots = json.dumps(snapshot["slots"], sort_keys=True)
+    check(verify_slots == orig_slots, f"{label} slots fully restored",
+          f"slots differ after restore (verify={len(verify_slots)} chars, orig={len(orig_slots)} chars)")
 
 shutil.rmtree(snapshot_dir, ignore_errors=True)
 print(f"\n  Module RW: {passed} passed, {failed} failed")
