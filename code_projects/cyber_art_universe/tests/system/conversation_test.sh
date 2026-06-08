@@ -151,11 +151,11 @@ SESS_CREATE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$API/elf/sessions"
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d "{\"work_id\": \"$WORK_ID\", \"page\": \"write\"}")
-check "POST /elf/sessions returns 404" "$SESS_CREATE" "404"
+check "404" "$SESS_CREATE" "POST /elf/sessions returns 404"
 
 SESS_LIST=$(curl -s -o /dev/null -w "%{http_code}" "$API/elf/sessions" \
   -H "Authorization: Bearer $TOKEN")
-check "GET /elf/sessions returns 404" "$SESS_LIST" "404"
+check "404" "$SESS_LIST" "GET /elf/sessions returns 404"
 
 # ============================================================
 # Step 6: Chat still works without any session in request
@@ -173,7 +173,7 @@ MINIMAL_RESP=$(curl -s -X POST "$API/elf/chat" \
     \"messages\": [{\"role\": \"user\", \"content\": \"Hi\"}]
   }")
 MIN_OK=$(echo "$MINIMAL_RESP" | jval "print(d['ok'])")
-check "Minimal chat request works" "$MIN_OK" "True"
+check "True" "$MIN_OK" "Minimal chat request works"
 
 # ============================================================
 # Summary

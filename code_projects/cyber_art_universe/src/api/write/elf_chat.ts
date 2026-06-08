@@ -231,8 +231,7 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
 
     // —— Persist compressed result to R2 ——
     if (userToken) {
-      saveConversation(env, userToken, body.work_id, body.page, result.messages)
-        .catch(err => console.error('[elf_chat] Conversation save failed:', (err as Error).message));
+      await saveConversation(env, userToken, body.work_id, body.page, result.messages);
     }
 
     // —— Telemetry ——
@@ -262,8 +261,7 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
       }
       l1Messages.push({ role: 'assistant', content: result.reply });
 
-      saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), l1Messages)
-        .catch(err => console.error('[elf_chat] L1 daily log save failed:', (err as Error).message));
+      await saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), l1Messages);
     }
 
     return new Response(JSON.stringify(jsonSuccess({
