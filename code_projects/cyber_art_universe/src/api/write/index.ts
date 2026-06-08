@@ -50,7 +50,7 @@ import {
   getWorkConfig, updateWorkConfig,
 } from './workspace';
 import { getModule, updateModule, listModules, listModuleVersions, diffModuleVersions } from './module';
-import { handleElfChat, handleGetConversation } from './elf_chat';
+import { handleElfChat, handleGetConversation, handleDeleteConversation } from './elf_chat';
 import { getModuleGuide } from '../../lib/l2/guides';
 import { jsonSuccess } from '../../lib/response';
 import { extractLang, type Lang } from '../../lib/l1/work-content';
@@ -117,6 +117,7 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // ================================================================
   if (resource === 'elf' && resourceId === 'conversation' && !subResource && !action) {
     if (request.method === 'GET') return handleGetConversation(env, request);
+    if (request.method === 'DELETE') return handleDeleteConversation(env, request);
   }
   if (resource === 'elf' && resourceId === 'chat' && !subResource && !action) {
     if (request.method === 'POST') return handleElfChat(env, request);

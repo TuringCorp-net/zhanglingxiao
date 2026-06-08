@@ -10,6 +10,20 @@ API="$BASE_URL/api/write"
 
 PASS=0; FAIL=0
 
+# Cleanup: delete test conversation files so production data stays clean
+cleanup() {
+  echo
+  echo "--- Cleanup ---"
+  curl -s -X DELETE "$API/elf/conversation?work_id=$WORK_ID&page=write" \
+    -H "Authorization: Bearer $TOKEN" > /dev/null
+  echo "  🧹 Cleaned up conversation: $WORK_ID/write"
+
+  curl -s -X DELETE "$API/elf/conversation?work_id=$WORK_ID&page=read" \
+    -H "Authorization: Bearer $TOKEN" > /dev/null
+  echo "  🧹 Cleaned up conversation: $WORK_ID/read"
+}
+trap cleanup EXIT
+
 check() {
   local expected="$1" actual="$2" desc="$3"
   if [ "$expected" = "$actual" ]; then

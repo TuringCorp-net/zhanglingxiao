@@ -288,6 +288,35 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
 }
 
 // ============================================================
+// DELETE /api/write/elf/conversation — reset a perpetual conversation
+// ============================================================
+
+export async function handleDeleteConversation(env: Env, request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  const workId = url.searchParams.get('work_id');
+  const page = url.searchParams.get('page') || 'write';
+
+  const userToken = extractUserToken(request);
+  if (!userToken || !workId) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'user_token and work_id required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  try {
+    await env.WORKS_BUCKET.delete(convKey(userToken, workId, page));
+    return new Response(JSON.stringify(jsonSuccess({ deleted: true, work_id: workId, page })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (err) {
+    console.error('[elf_chat] Conversation delete failed:', (err as Error).message);
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, 'Failed to delete conversation')), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+// ============================================================
 // GET /api/write/elf/conversation — return recent messages for frontend display
 // ============================================================
 
