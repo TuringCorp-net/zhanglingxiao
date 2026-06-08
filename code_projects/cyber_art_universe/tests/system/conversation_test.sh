@@ -10,17 +10,28 @@ API="$BASE_URL/api/write"
 
 PASS=0; FAIL=0
 
-# Cleanup: delete test conversation files so production data stays clean
+# Save original conversation state so we can restore it after tests
+ORIG_WRITE=$(curl -s "$API/elf/conversation?work_id=$WORK_ID&page=write" \
+  -H "Authorization: Bearer $TOKEN" | python3 -c "import sys,json; d=json.load(sys.stdin); print(json.dumps(d['data']['messages']))" 2>/dev/null || echo "[]")
+ORIG_READ=$(curl -s "$API/elf/conversation?work_id=$WORK_ID&page=read" \
+  -H "Authorization: Bearer $TOKEN" | python3 -c "import sys,json; d=json.load(sys.stdin); print(json.dumps(d['data']['messages']))" 2>/dev/null || echo "[]")
+
+# Cleanup: restore original conversation state, don't touch real data
 cleanup() {
   echo
-  echo "--- Cleanup ---"
-  curl -s -X DELETE "$API/elf/conversation?work_id=$WORK_ID&page=write" \
-    -H "Authorization: Bearer $TOKEN" > /dev/null
-  echo "  🧹 Cleaned up conversation: $WORK_ID/write"
+  echo "--- Cleanup (restoring original state) ---"
 
-  curl -s -X DELETE "$API/elf/conversation?work_id=$WORK_ID&page=read" \
-    -H "Authorization: Bearer $TOKEN" > /dev/null
-  echo "  🧹 Cleaned up conversation: $WORK_ID/read"
+  curl -s -X PUT "$API/elf/conversation" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $TOKEN" \
+    -d "{\"work_id\":\"$WORK_ID\",\"page\":\"write\",\"messages\":$ORIG_WRITE}" > /dev/null
+  echo "  🧹 Restored conversation: $WORK_ID/write ($(echo "$ORIG_WRITE" | python3 -c "import sys,json; print(len(json.load(sys.stdin)))") messages)"
+
+  curl -s -X PUT "$API/elf/conversation" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $TOKEN" \
+    -d "{\"work_id\":\"$WORK_ID\",\"page\":\"read\",\"messages\":$ORIG_READ}" > /dev/null
+  echo "  🧹 Restored conversation: $WORK_ID/read ($(echo "$ORIG_READ" | python3 -c "import sys,json; print(len(json.load(sys.stdin)))") messages)"
 }
 trap cleanup EXIT
 

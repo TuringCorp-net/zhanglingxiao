@@ -288,29 +288,34 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
 }
 
 // ============================================================
-// DELETE /api/write/elf/conversation — reset a perpetual conversation
+// PUT /api/write/elf/conversation — restore a conversation to a known state
 // ============================================================
 
-export async function handleDeleteConversation(env: Env, request: Request): Promise<Response> {
-  const url = new URL(request.url);
-  const workId = url.searchParams.get('work_id');
-  const page = url.searchParams.get('page') || 'write';
-
+export async function handlePutConversation(env: Env, request: Request): Promise<Response> {
   const userToken = extractUserToken(request);
-  if (!userToken || !workId) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'user_token and work_id required')), {
+  if (!userToken) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'auth required')), {
+      status: 401, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const body = await request.json() as { work_id: string; page?: string; messages: Message[] };
+  if (!body.work_id || !Array.isArray(body.messages)) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id and messages[] required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
 
+  const page = body.page || 'write';
+
   try {
-    await env.WORKS_BUCKET.delete(convKey(userToken, workId, page));
-    return new Response(JSON.stringify(jsonSuccess({ deleted: true, work_id: workId, page })), {
+    await saveConversation(env, userToken, body.work_id, page, body.messages);
+    return new Response(JSON.stringify(jsonSuccess({ saved: true, work_id: body.work_id, page, count: body.messages.length })), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (err) {
-    console.error('[elf_chat] Conversation delete failed:', (err as Error).message);
-    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, 'Failed to delete conversation')), {
+    console.error('[elf_chat] Conversation PUT failed:', (err as Error).message);
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, 'Failed to save conversation')), {
       status: 500, headers: { 'Content-Type': 'application/json' },
     });
   }
