@@ -9,16 +9,16 @@
 
 ## 测试目标
 
-验证 CAU 核心链路：**Story Forger 写作 → 发布 → CAU 阅读 → AI Agent 抓取**，以及 **Story Elf Session 管理 + System Prompt 组装**。
+验证 CAU 核心链路：**Story Forger 写作 → 发布 → CAU 阅读 → AI Agent 抓取**，以及 **Story Elf 永续对话 + System Prompt 组装**。
 
 ## 测试架构（两层）
 
 ```
 Layer A — 离线验证（零 LLM 成本）         Layer B — 端到端验证（真实 LLM 调用）
 ├── system/l2_prompt_verify.sh  121 项    ├── generate_slot / write_to_slot
-└── system/session_test.sh       31 项    ├── 多工具链 (read→generate→write)
+└── system/conversation_test.sh  12 项    ├── 多工具链 (read→generate→write)
      └── 通过 mock_reply 模拟 AI 回复     ├── 多轮对话 + 历史传递
-        完整走 Session 持久化路径          └── checklist_write 工具
+        完整走永续对话持久化路径            └── checklist_write 工具
 ```
 
 Layer A 覆盖 90%+ 的结构性验证。Layer B 在 LLM 流程稳定后再实施。
@@ -35,7 +35,7 @@ tests/
 └── system/
     ├── README.md                 # System test 约定
     ├── l2_prompt_verify.sh       # L2 Prompt 组装验证（121 项，零 LLM 成本）
-    ├── session_test.sh           # Session 管理验证（31 项，零 LLM 成本）
+    └── conversation_test.sh      # 永续对话验证（12 项，零 LLM 成本）
     └── v3_module_api.sh          # V3/V4 Module API 闭环测试
 ```
 
@@ -58,7 +58,7 @@ BASE_URL=https://cau.turingcorp.net TOKEN=admin-TuringCorp-13572468 WORK_ID=aa48
 | 套件 | 项数 | LLM 成本 | 说明 |
 |------|------|---------|------|
 | `l2_prompt_verify.sh` | 121 | 零 | System Prompt 5 层组装 + 动态信息隔离 + 层序 |
-| `session_test.sh` | 31 | 零 | Session 创建/多轮/ImmutablePrefix/恢复/归档/边界 |
+| `conversation_test.sh` | 12 | 零 | 永续对话/消息持久化/作品隔离/Read-Write 隔离 |
 | `v3_module_api.sh` | ~20 | 零 | V3/V4 Module API CRUD + 版本/diff 闭环 |
 | `human_test.sh` | 5 | 零 | 人类阅读路径（Catalog/Browse/Section） |
 | `agent_test.sh` | 6 | 零 | AI Agent 阅读路径（Manifest/llms.txt/Catalog/Content） |
@@ -67,19 +67,18 @@ BASE_URL=https://cau.turingcorp.net TOKEN=admin-TuringCorp-13572468 WORK_ID=aa48
 
 通过 `debug:prompt` 端点拦截 System Prompt，逐模块 × 逐层验证组装正确性。外循环 Layer 1-5 + 动态隔离 + 层序，内循环 M0-M6（8 个模块）。
 
-### system/session_test.sh — Session 管理验证
+### system/conversation_test.sh — 永续对话验证
 
-通过 `mock_reply` 模拟 AI 回复，零 LLM 成本地验证 Session 全生命周期：
+通过 `mock_reply` 模拟 AI 回复，零 LLM 成本地验证永续对话流程：
 
 | 步骤 | 验证内容 |
 |------|---------|
-| Step 1 | Session 创建 — D1 元信息、messages 为空、列表可见 |
-| Step 2 | 首次对话 — mock 回复、message_count=1、messages[0]=system |
-| Step 3 | 多轮续接 — 消息追加、ImmutablePrefix 不变、动态模块在 user prefix |
-| Step 4 | Session 恢复 — GET 返回完整 messages 数组 |
-| Step 5 | 归档 — status=archived、消息仍可读、不在活跃列表 |
-| Step 6 | 跨 Session — 同作品两 Session 的 System Prompt 完全一致 |
-| Step 7 | 边界情况 — 404、重复归档幂等、401 |
+| Step 1 | 无 session_id 的 Chat — mock 回复正常返回 |
+| Step 2 | GET conversation — 返回持久化消息 |
+| Step 3 | 多轮消息累积 — 对话历史增长 |
+| Step 4 | Read/Write 隔离 — 不同 page 的对话独立 |
+| Step 5 | Session 端点已移除 — 404 |
+| Step 6 | 最小字段 Chat — 无多余字段可正常工作 |
 
 ### system/v3_module_api.sh — V3/V4 Module API 测试
 

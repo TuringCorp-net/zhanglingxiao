@@ -36,36 +36,50 @@ interface ExtractionState {
 }
 
 // ============================================================
-// L1: 保存会话日志
+// L1: 保存会话日志（每日追加，无 Session ID）
 // ============================================================
 
+/** 每日日志（按天聚合，追加写入） */
+interface DailyLog {
+  date: string;
+  page: string;
+  work_id: string;
+  work_title: string;
+  entries: {
+    timestamp: string;
+    messages: SessionMessage[];
+  }[];
+  extracted_to_stm: boolean;
+}
+
 /**
- * 保存一次会话的完整消息记录到 R2。
+ * 保存一轮对话记录到当日 L1 Memory Log（追加写入）。
+ * 同一天内多次对话追加到同一文件。跨天自动创建新文件。
+ *
  * 在 elf_chat.ts 的 Agent 循环结束后调用。
  */
-export async function saveSessionLog(
+export async function saveDailyLog(
   env: Env,
   userToken: string,
-  sessionId: string,
   page: string,
   workId: string,
   workTitle: string,
   messages: Message[],
 ): Promise<void> {
-  const today = new Date().toISOString().slice(0, 10);
-  const path = `users/${userToken}/memory-logs/${page}/${workId}/${today}_${sessionId}.json`;
+  const now = new Date();
+  const today = now.toISOString().slice(0, 10);
+  const path = `users/${userToken}/memory-logs/${page}/${workId}/${today}.json`;
 
-  // 将 Message[] 转换为 L1 格式
+  // Convert messages to L1 format
   const sessionMessages: SessionMessage[] = messages.map(m => {
     if (m.role === 'tool') {
       return {
         role: 'tool_result',
-        content: m.content?.substring(0, 200) || '',  // 只存摘要
+        content: m.content?.substring(0, 200) || '',
         tool_call_id: m.tool_call_id,
       };
     }
     if (m.role === 'assistant' && m.tool_calls && m.tool_calls.length > 0) {
-      // 保存 tool_call 动作信号（不保存 tool_result——数据在 R2）
       return {
         role: 'tool_call',
         tool: m.tool_calls[0].function.name,
@@ -78,22 +92,33 @@ export async function saveSessionLog(
     };
   });
 
-  const log: SessionLog = {
-    session_id: sessionId,
-    date: today,
-    page: page as 'read' | 'write',
-    work_id: workId,
-    work_title: workTitle,
+  const entry = {
+    timestamp: now.toISOString(),
     messages: sessionMessages,
-    extracted_to_stm: false,
   };
 
   try {
+    // Load existing daily log, or create new one
+    let log: DailyLog;
+    const existing = await env.WORKS_BUCKET.get(path);
+    if (existing) {
+      log = JSON.parse(await existing.text()) as DailyLog;
+      log.entries.push(entry);
+    } else {
+      log = {
+        date: today,
+        page,
+        work_id: workId,
+        work_title: workTitle,
+        entries: [entry],
+        extracted_to_stm: false,
+      };
+    }
     await env.WORKS_BUCKET.put(path, JSON.stringify(log, null, 2), {
       httpMetadata: { contentType: 'application/json' },
     });
   } catch (err) {
-    console.error('[memory] L1 日志保存失败:', (err as Error).message);
+    console.error('[memory] L1 daily log save failed:', (err as Error).message);
   }
 }
 

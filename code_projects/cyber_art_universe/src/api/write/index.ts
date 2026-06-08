@@ -30,12 +30,9 @@
  *     GET    /api/write/module/{id}/versions  — listModuleVersions
  *     GET    /api/write/module/{id}/diff      — diffModuleVersions
  *
- *   Story Elf (elf_chat.ts / elf_sessions.ts):
+ *   Story Elf (elf_chat.ts):
  *     POST   /api/write/elf/chat              — handleElfChat
- *     POST   /api/write/elf/sessions          — createSession
- *     GET    /api/write/elf/sessions          — listSessions
- *     GET    /api/write/elf/sessions/{id}     — getSession
- *     POST   /api/write/elf/sessions/{id}/archive — archiveSession
+ *     GET    /api/write/elf/conversation      — handleGetConversation (前端加载对话历史)
  *
  *   写作指南:
  *     GET    /api/write/guide/{module_type}   — getModuleGuide
@@ -53,8 +50,7 @@ import {
   getWorkConfig, updateWorkConfig,
 } from './workspace';
 import { getModule, updateModule, listModules, listModuleVersions, diffModuleVersions } from './module';
-import { handleElfChat } from './elf_chat';
-import { handleCreateSession, handleListSessions, handleGetSession, handleArchiveSession } from './elf_sessions';
+import { handleElfChat, handleGetConversation } from './elf_chat';
 import { getModuleGuide } from '../../lib/l2/guides';
 import { jsonSuccess } from '../../lib/response';
 import { extractLang, type Lang } from '../../lib/l1/work-content';
@@ -119,15 +115,8 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   // ================================================================
   // Story Elf
   // ================================================================
-  if (resource === 'elf' && resourceId === 'sessions' && !subResource && !action) {
-    if (request.method === 'POST') return handleCreateSession(env, request);
-    if (request.method === 'GET') return handleListSessions(env, request);
-  }
-  if (resource === 'elf' && resourceId === 'sessions' && subResource && !subResourceId && !action) {
-    if (request.method === 'GET') return handleGetSession(env, request, subResource);
-  }
-  if (resource === 'elf' && resourceId === 'sessions' && subResource && subResourceId === 'archive' && !action) {
-    if (request.method === 'POST') return handleArchiveSession(env, request, subResource);
+  if (resource === 'elf' && resourceId === 'conversation' && !subResource && !action) {
+    if (request.method === 'GET') return handleGetConversation(env, request);
   }
   if (resource === 'elf' && resourceId === 'chat' && !subResource && !action) {
     if (request.method === 'POST') return handleElfChat(env, request);

@@ -24,8 +24,9 @@ import { Env } from '../../db/schema';
 export interface Message {
   role: 'system' | 'user' | 'assistant' | 'tool';
   content: string;
-  tool_call_id?: string;   // role='tool' 时必填
-  tool_calls?: ToolCall[]; // role='assistant' 且模型调用了工具时
+  tool_call_id?: string;     // role='tool' 时必填
+  tool_calls?: ToolCall[];   // role='assistant' 且模型调用了工具时
+  reasoning_content?: string; // DeepSeek V4 思考模式：思维链内容（工具调用轮次需回传）
 }
 
 /** 工具调用（从 LLM 响应中解析） */
@@ -65,6 +66,7 @@ export interface AICallResult {
   content: string;
   model: string;
   tool_calls?: ToolCall[];           // 模型请求的工具调用
+  reasoning_content?: string;        // DeepSeek V4 思考内容
   usage?: { input: number; output: number; cacheHit?: number; cacheMiss?: number };
 }
 
@@ -149,11 +151,14 @@ export async function callAI(
         content: msg.content,
       });
     } else if (msg.role === 'assistant' && msg.tool_calls) {
-      chatMessages.push({
+      // DeepSeek V4 工具调用轮次：必须回传 reasoning_content
+      const tcMsg: Record<string, unknown> = {
         role: 'assistant',
         content: msg.content || null,
         tool_calls: msg.tool_calls,
-      });
+      };
+      if (msg.reasoning_content) tcMsg.reasoning_content = msg.reasoning_content;
+      chatMessages.push(tcMsg);
     } else {
       chatMessages.push({ role: msg.role, content: msg.content });
     }
@@ -221,18 +226,21 @@ export async function callAI(
       }
 
       const result = await response.json() as {
-        choices?: { message?: { content?: string; tool_calls?: ToolCall[] } }[];
+        choices?: { message?: { content?: string; reasoning_content?: string; tool_calls?: ToolCall[] } }[];
         model?: string;
         usage?: { prompt_tokens?: number; completion_tokens?: number; prompt_cache_hit_tokens?: number; prompt_cache_miss_tokens?: number };
       };
 
       const choice = result?.choices?.[0];
-      const responseContent = choice?.message?.content?.trim() || '';
+      const rawContent = choice?.message?.content?.trim() || '';
+      const reasoningContent = choice?.message?.reasoning_content?.trim() || '';
       const toolCalls = choice?.message?.tool_calls;
 
-      // 有 tool_calls 时 content 可能为空——这是合法的
+      // DeepSeek V4 思考模式：当 content 为空时，回复可能在 reasoning_content 中
+      // 有 tool_calls 时 content 可能为空——这也是合法的（模型在思考下一步工具调用）
+      const responseContent = rawContent || reasoningContent;
       if (!responseContent && !toolCalls) {
-        throw new AIError('INVALID_RESPONSE', 'Empty response from model (no content and no tool calls)');
+        throw new AIError('INVALID_RESPONSE', 'Empty response from model (no content, no reasoning, and no tool calls)');
       }
 
       // JSON 模式：提取 JSON（去除可能的 markdown fence）
@@ -247,6 +255,7 @@ export async function callAI(
         content: finalContent,
         model: result.model || model,
         tool_calls: toolCalls && toolCalls.length > 0 ? toolCalls : undefined,
+        reasoning_content: reasoningContent || undefined,
         usage: result.usage ? {
           input: result.usage.prompt_tokens || 0,
           output: result.usage.completion_tokens || 0,

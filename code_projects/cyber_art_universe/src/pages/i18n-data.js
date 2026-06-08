@@ -188,6 +188,13 @@ var I18N = {
 
   elf: {
     send:              { zh: '发送', en: 'Send' },
+    history:           { zh: '对话历史', en: 'History' },
+    history_btn:       { zh: '历史对话', en: 'History' },
+    new_chat:          { zh: '新对话', en: 'New Chat' },
+    no_sessions:       { zh: '暂无对话', en: 'No conversations' },
+    untitled:          { zh: '未命名对话', en: 'Untitled' },
+    msgs:              { zh: '条消息', en: 'msgs' },
+    load_failed:       { zh: '加载失败', en: 'Load failed' },
     ai_unavailable:    { zh: '（AI 暂时无法回应，请稍后重试）', en: '(AI is temporarily unavailable, please try again later)' },
     network_error:     { zh: '（网络异常，请稍后重试）', en: '(Network error, please try again later)' },
     write_placeholder: { zh: '让 AI 帮你修改这段...', en: 'Ask AI to polish this...' },

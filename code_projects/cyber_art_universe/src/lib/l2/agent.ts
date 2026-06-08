@@ -116,19 +116,24 @@ export async function agentLoop(
       totalCacheMiss += result.usage.cacheMiss || 0;
     }
 
-    // 无 tool_calls → 循环结束
+    // 无 tool_calls → 循环结束，保存最终回复到 messages 中（确保 R2 持久化完整）
     if (!result.tool_calls || result.tool_calls.length === 0) {
+      messages.push({ role: 'assistant', content: result.content });
       steps.push({ type: 'done', text: result.content });
       reply = result.content;
       break;
     }
 
-    // 有 tool_calls → 执行工具
-    messages.push({
+    // 有 tool_calls → 执行工具（DeepSeek V4 要求回传 reasoning_content）
+    const assistantMsg: Message = {
       role: 'assistant',
       content: result.content || '',
       tool_calls: result.tool_calls,
-    });
+    };
+    if (result.reasoning_content) {
+      assistantMsg.reasoning_content = result.reasoning_content;
+    }
+    messages.push(assistantMsg);
 
     for (const tc of result.tool_calls) {
       const toolName = tc.function.name;
@@ -168,6 +173,7 @@ export async function agentLoop(
       totalInput += finalResult.usage.input;
       totalOutput += finalResult.usage.output;
     }
+    messages.push({ role: 'assistant', content: finalResult.content });
     steps.push({ type: 'done', text: finalResult.content });
     reply = finalResult.content;
   }

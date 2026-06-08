@@ -45,11 +45,9 @@
     + '    <div class="elf-dialog-header">'
     + '      <span>Story Elf</span>'
     + '      <div style="display:flex;align-items:center;gap:2px">'
-    + '        <button class="elf-dialog-history-btn" id="elf-dialog-history" title="' + t('elf.history', '对话历史') + '">📜</button>'
     + '        <button class="elf-dialog-close" id="elf-dialog-close">×</button>'
     + '      </div>'
     + '    </div>'
-    + '    <div class="elf-session-list" id="elf-session-list" style="display:none"></div>'
     + '    <div class="elf-chat-messages" id="elf-chat-messages"></div>'
     + '    <div class="elf-chat-input-row">'
     + '      <input id="elf-chat-input" placeholder="Ask Story Elf..." onkeydown="if(event.key===\'Enter\')StoryElf.sendChat()">'
@@ -98,77 +96,38 @@
   }
 
   // ============================================================
-  // 会话管理 — 服务端统一管理（API Agent 和前端用户共用）
-  // 前端仅缓存 active_session_id（用于恢复当前对话），消息历史从服务端 API 拉取
+  // 对话管理 — 每个 (work, page) 只有一个永续对话
+  // 页面加载时从服务端加载历史消息；无需 Session ID
   // ============================================================
-  var ACTIVE_KEY = 'sf_active_session';
-  var _activeSessionId = localStorage.getItem(ACTIVE_KEY) || '';
   var _messages = [];     // 用户+AI 消息（供 sendChat 发送）
   var _workId = '';       // 关联的作品 ID
+  var _page = 'write';    // 当前页面类型
 
   function _getToken() { return localStorage.getItem('sf_user_token') || ''; }
   function _getLang() { return localStorage.getItem('sf_lang') || 'zh'; }
 
-  // 从服务端加载 session 消息
-  async function _loadSessionFromServer(sessionId) {
+  // 从服务端加载永续对话历史
+  async function _loadConversation(workId, page) {
+    _workId = workId;
+    _page = page || 'write';
     try {
-      var resp = await fetch('/api/write/elf/sessions/' + sessionId + '?lang=' + _getLang(), {
+      var resp = await fetch('/api/write/elf/conversation?work_id=' + workId + '&page=' + _page + '&lang=' + _getLang(), {
         headers: { 'Authorization': 'Bearer ' + _getToken() }
       });
       var data = await resp.json();
       if (data && data.ok) {
-        _activeSessionId = sessionId;
-        localStorage.setItem(ACTIVE_KEY, sessionId);
-        // 存储完整 messages 数组（供 sendChat 发送）
         _messages = (data.data.messages || []).slice();
-        // 更新 work_id
-        if (data.data.work_id) _workId = data.data.work_id;
         _renderMessages();
         return true;
       }
-    } catch (x) { console.error('加载 session 失败:', x); }
+    } catch (x) { console.error('加载对话失败:', x); }
     return false;
-  }
-
-  // 在服务端创建新 session
-  async function _createSessionOnServer(workId, page) {
-    try {
-      var resp = await fetch('/api/write/elf/sessions?lang=' + _getLang(), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _getToken() },
-        body: JSON.stringify({ work_id: workId, page: page || 'write' })
-      });
-      var data = await resp.json();
-      if (data && data.ok) {
-        _activeSessionId = data.data.id;
-        localStorage.setItem(ACTIVE_KEY, _activeSessionId);
-        _workId = workId;
-        _messages = [];
-        StoryElf.clearMessages();
-        return true;
-      }
-    } catch (x) { console.error('创建 session 失败:', x); }
-    return false;
-  }
-
-  // 初始化：确保有活跃 session（由页面调用）
-  async function _initSession(workId, page) {
-    _workId = workId;
-    if (_activeSessionId) {
-      var ok = await _loadSessionFromServer(_activeSessionId);
-      if (ok) return; // 恢复成功
-      // session 已被归档或不存在 → 清除并新建
-      _activeSessionId = '';
-      localStorage.removeItem(ACTIVE_KEY);
-    }
-    await _createSessionOnServer(workId, page);
   }
 
   // 渲染消息到聊天区（只显示 user + 有 content 的 assistant 消息）
   function _renderMessages() {
     StoryElf.clearMessages();
     _messages.forEach(function (m) {
-      // 只渲染 user 和 assistant 的最终回复（跳过 system、tool、tool_call）
       if (m.role === 'user') {
         _renderMsgDOM(m.content, 'user');
       } else if (m.role === 'assistant' && m.content) {
@@ -188,136 +147,9 @@
     msgs.appendChild(div);
   }
 
-  // — 对外接口 —
-  function getSessionId() { return _activeSessionId; }
-
   function getMessages() {
-    // 返回用户+AI 消息（不含 system/tool），供 sendChat 发送给 API
     return _messages.filter(function (m) {
       return m.role === 'user' || (m.role === 'assistant' && m.content);
-    });
-  }
-
-  // 新建对话（归档当前 + 创建新 session）
-  async function _newSession() {
-    if (_activeSessionId && _messages.length > 0) {
-      try {
-        await fetch('/api/write/elf/sessions/' + _activeSessionId + '/archive?lang=' + _getLang(), {
-          method: 'POST',
-          headers: { 'Authorization': 'Bearer ' + _getToken() }
-        });
-      } catch (x) {}
-    }
-    await _createSessionOnServer(_workId, 'write');
-  }
-
-  // 归档当前 session
-  async function _archiveCurrentSession() {
-    if (!_activeSessionId) return;
-    try {
-      await fetch('/api/write/elf/sessions/' + _activeSessionId + '/archive?lang=' + _getLang(), {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + _getToken() }
-      });
-    } catch (x) {}
-    _activeSessionId = '';
-    localStorage.removeItem(ACTIVE_KEY);
-    _messages = [];
-  }
-
-  // ============================================================
-  // 对话列表 UI（数据来自服务端）
-  // ============================================================
-  function _showSessionList() {
-    var list = document.getElementById('elf-session-list');
-    var msgs = document.getElementById('elf-chat-messages');
-    var inputRow = document.querySelector('.elf-chat-input-row');
-    if (list) list.style.display = 'block';
-    if (msgs) msgs.style.display = 'none';
-    if (inputRow) inputRow.style.display = 'none';
-    _renderSessionList();
-  }
-
-  function _hideSessionList() {
-    var list = document.getElementById('elf-session-list');
-    var msgs = document.getElementById('elf-chat-messages');
-    var inputRow = document.querySelector('.elf-chat-input-row');
-    if (list) list.style.display = 'none';
-    if (msgs) msgs.style.display = '';
-    if (inputRow) inputRow.style.display = '';
-  }
-
-  function _toggleSessionList() {
-    var list = document.getElementById('elf-session-list');
-    if (list && list.style.display === 'block') {
-      _hideSessionList();
-    } else {
-      _showSessionList();
-    }
-  }
-
-  async function _renderSessionList() {
-    var list = document.getElementById('elf-session-list');
-    if (!list) return;
-    var html = '<button class="elf-new-session-btn" id="elf-new-session-btn">＋ ' + t('elf.new_chat', '新对话') + '</button>';
-
-    try {
-      var resp = await fetch('/api/write/elf/sessions?work_id=' + (_workId || '') + '&status=active&lang=' + _getLang(), {
-        headers: { 'Authorization': 'Bearer ' + _getToken() }
-      });
-      var data = await resp.json();
-      var sessions = (data && data.ok && data.data) ? data.data : [];
-
-      if (sessions.length === 0) {
-        html += '<div style="text-align:center;color:var(--text-muted);font-size:0.7rem;padding:1rem">' + t('elf.no_sessions', '暂无对话') + '</div>';
-      } else {
-        sessions.forEach(function (s) {
-          var dateStr = '';
-          try { dateStr = new Date(s.updated_at).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }); } catch (x) {}
-          var isActive = s.id === _activeSessionId;
-          html += '<div class="elf-session-item' + (isActive ? ' active' : '') + '" data-sid="' + s.id + '">'
-            + '<div class="elf-session-info">'
-            + '<div class="elf-session-title">' + _escapeHTML(s.title || t('elf.untitled', '未命名对话')) + '</div>'
-            + '<div class="elf-session-meta">' + dateStr + ' · ' + (s.message_count || 0) + ' ' + t('elf.msgs', '条消息') + '</div>'
-            + '</div>'
-            + '<button class="elf-session-del" data-del="' + s.id + '" title="' + t('elf.archive', '归档') + '">📦</button>'
-            + '</div>';
-        });
-      }
-    } catch (x) {
-      html += '<div style="text-align:center;color:var(--text-muted);font-size:0.7rem;padding:1rem">加载失败</div>';
-    }
-
-    list.innerHTML = html;
-
-    var newBtn = document.getElementById('elf-new-session-btn');
-    if (newBtn) newBtn.addEventListener('click', function () { _newSession().then(function () { _hideSessionList(); }); });
-
-    list.querySelectorAll('.elf-session-item').forEach(function (item) {
-      item.addEventListener('click', function (e) {
-        if (e.target.closest('.elf-session-del')) return;
-        var sid = item.getAttribute('data-sid');
-        if (sid) { _loadSessionFromServer(sid).then(function () { _hideSessionList(); }); }
-      });
-    });
-
-    list.querySelectorAll('.elf-session-del').forEach(function (btn) {
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var sid = btn.getAttribute('data-del');
-        if (!sid) return;
-        fetch('/api/write/elf/sessions/' + sid + '/archive?lang=' + _getLang(), {
-          method: 'POST', headers: { 'Authorization': 'Bearer ' + _getToken() }
-        }).then(function () {
-          if (sid === _activeSessionId) {
-            _activeSessionId = '';
-            localStorage.removeItem(ACTIVE_KEY);
-            _messages = [];
-            StoryElf.clearMessages();
-          }
-          _renderSessionList();
-        }).catch(function () {});
-      });
     });
   }
 
@@ -406,9 +238,6 @@
 
     var sendBtn = document.getElementById('elf-send-btn');
     if (sendBtn) sendBtn.addEventListener('click', function () { StoryElf.sendChat(); });
-
-    var historyBtn = document.getElementById('elf-dialog-history');
-    if (historyBtn) historyBtn.addEventListener('click', function () { _toggleSessionList(); });
   }
 
   function onDragStart(e) {
@@ -524,8 +353,8 @@
   // 公共 API
   // ============================================================
   window.StoryElf = {
-    // Session 初始化（Write/Read 页面在 DOM ready 后调用）
-    initSession: function (workId, page) { return _initSession(workId, page); },
+    // 加载永续对话历史（Write/Read 页面在 DOM ready 后调用）
+    loadConversation: function (workId, page) { return _loadConversation(workId, page); },
 
     toggle: function () {
       var d = document.getElementById('elf-dialog');
@@ -535,7 +364,7 @@
     addMessage: function (text, role) {
       _renderMsgDOM(text, role);
       // 追加到内存（供 sendChat 发送）
-      if (role === 'user' || role === 'ai') {
+      if (role === 'user' || role === 'assistant') {
         _messages.push({ role: role, content: text });
       }
     },
@@ -573,7 +402,6 @@
           work_id: ctx.work_id,
           section_id: ctx.section_id || undefined,
           page: ctx.page || 'read',
-          session_id: getSessionId(),
           messages: currentMessages,
           context: { section_title: ctx.section_title },
         }),
@@ -583,15 +411,15 @@
         if (last && last.textContent === '...') last.remove();
         if (data && data.ok) {
           _addSteps(data.data.steps);
-          StoryElf.addMessage(data.data.reply, 'ai');
+          StoryElf.addMessage(data.data.reply, 'assistant');
         } else {
-          StoryElf.addMessage(t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later'), 'ai');
+          StoryElf.addMessage(t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later'), 'assistant');
         }
       }).catch(function () {
         var msgs = document.getElementById('elf-chat-messages');
         var last = msgs && msgs.lastChild;
         if (last && last.textContent === '...') last.remove();
-        StoryElf.addMessage(t('elf.network_error', 'Network error, please try again later'), 'ai');
+        StoryElf.addMessage(t('elf.network_error', 'Network error, please try again later'), 'assistant');
       });
     },
 
@@ -625,12 +453,7 @@
     hideHintBubble: function () { _hideHintBubble(); },
     setActiveSlot: function (slotId) { _hintState.activeSlotId = slotId; },
 
-    // 会话管理（服务端统一管理）
-    getSessionId: getSessionId,
     getMessages: getMessages,
-    newSession: function () { return _newSession(); },
-    archiveCurrent: _archiveCurrentSession,
-    // Agent 步骤展示
     addSteps: _addSteps,
   };
 })();

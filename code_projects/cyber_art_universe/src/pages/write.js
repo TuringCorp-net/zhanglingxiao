@@ -174,7 +174,7 @@ async function onWorkspaceChange() {
   }
   state.currentWorkId = id;
   saveState();
-  StoryElf.initSession(id, 'write'); // 初始化服务端 Session（异步，不阻塞）
+  StoryElf.loadConversation(id, 'write'); // 加载永续对话历史（异步，不阻塞）
   qs('#split-view').style.display = 'grid';
   applyGridColumns();
   cacheClear(); // 切换作品，清空旧缓存
@@ -1460,20 +1460,28 @@ StoryElf.sendChat = function () {
   var currentMessages = StoryElf.getMessages(); // 在添加占位消息前捕获，避免占位消息混入历史
   StoryElf.addMessage(t('label.ai_thinking'), 'system'); // system 角色不持久化
   var ctx = StoryElf.getContext() || {};
-  hPost('/api/write/elf/chat', {
+  var reqBody = {
     work_id: state.currentWorkId,
     section_id: state.currentSectionId || undefined,
     page: 'write',
-    session_id: StoryElf.getSessionId(),
     messages: currentMessages,
     context: { module: state.currentModule, section_title: ctx.section_title || state.currentSectionTitle, panel: ctx.panel },
-  }).then(function (data) {
+  };
+  // TODO: 临时诊断日志，定位问题后删除
+  console.log('[elf_chat] 请求体:', JSON.stringify({
+    work_id: reqBody.work_id,
+    msg_count: reqBody.messages.length,
+    msg_roles: reqBody.messages.map(function(m) { return m.role; }),
+    token: localStorage.getItem('sf_user_token') ? (localStorage.getItem('sf_user_token').substring(0, 8) + '...') : '(空)',
+  }));
+  hPost('/api/write/elf/chat', reqBody).then(function (data) {
+    console.log('[elf_chat] 响应:', data ? ('ok=' + data.ok + ', error=' + JSON.stringify(data.error || '无')) : 'null');
     var msgs = document.getElementById('elf-chat-messages');
     var last = msgs && msgs.lastChild;
     if (last) last.remove();
     if (data && data.ok) {
       StoryElf.addSteps(data.data.steps);
-      StoryElf.addMessage(data.data.reply, 'ai');
+      StoryElf.addMessage(data.data.reply, 'assistant');
     } else {
       var err = document.createElement('div');
       err.className = 'elf-chat-msg ai';

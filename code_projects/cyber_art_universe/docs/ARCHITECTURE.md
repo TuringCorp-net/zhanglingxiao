@@ -28,9 +28,8 @@ docs/
 │   │   （SRS/SDS/STR 已并入代码注释 → src/api/write/*.ts + src/pages/write.js 头部 JSDoc）
 │
 └── story_elf/                   # Story Elf AI 辅助层
-    ├── original_concept_smart_guide_story_elf.md  # 原始探讨：模板分级引导设计对话
+    ├── original_concept.md  # 原始探讨：模板分级引导设计对话，L2 Agent 架构：session/memory/tool/prompt 层，L two Agent Memory架构。
     ├── system_design.md         # 系统设计：分级系统、多语言、自由编辑互动
-    ├── L2_agent_design.md       # L2 Agent 架构：session/memory/tool/prompt 层
     └── cloudflare_ai_gateway_guide.md  # AI Gateway 部署指南
         （SRS 已并入代码注释 → src/lib/l0/aiGateway.ts + src/lib/l1/context-package.ts + src/lib/telemetry.ts 头部 JSDoc）
 ```

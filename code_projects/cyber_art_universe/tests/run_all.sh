@@ -5,7 +5,7 @@
 #   bash tests/run_all.sh
 #   TOKEN=xxx WORK_ID=xxx bash tests/run_all.sh
 #
-# Layer A（零 LLM 成本）: l2_prompt_verify.sh + session_test.sh + v3_module_api.sh
+# Layer A（零 LLM 成本）: l2_prompt_verify.sh + conversation_test.sh + v3_module_api.sh
 # Layer B（阅读路径）: human_test.sh + agent_test.sh
 
 set -euo pipefail
@@ -48,7 +48,7 @@ echo ""
 
 # Layer A — 零 LLM 成本
 run_suite "L2 Prompt Assembly (121项)" "$SCRIPT_DIR/system/l2_prompt_verify.sh"
-run_suite "Session Management (31项)"  "$SCRIPT_DIR/system/session_test.sh"
+run_suite "Perpetual Conversation (12项)" "$SCRIPT_DIR/system/conversation_test.sh"
 run_suite "V3/V4 Module API"            "$SCRIPT_DIR/system/v3_module_api.sh"
 
 # Layer B — 阅读路径
