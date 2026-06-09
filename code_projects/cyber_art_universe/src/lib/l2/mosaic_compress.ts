@@ -236,7 +236,7 @@ async function runHeavyCompressLLM(
 ): Promise<Message[]> {
   const inputText = messages.map((m, i) => {
     const roleLabel = m.role === 'user' ? 'User' : m.role === 'assistant' ? 'Assistant' : m.role;
-    return `[${i}] ${roleLabel}: ${(m.content || '').substring(0, 200)}`;
+    return `[${i}] ${roleLabel}: ${m.content || ''}`;
   }).join('\n\n');
 
   const systemPrompt = `You are a dialogue compressor. Compress the conversation below into exactly 2 messages (a summary pair). Preserve the original language of the input.

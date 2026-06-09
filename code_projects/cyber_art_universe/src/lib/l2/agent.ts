@@ -160,7 +160,7 @@ export async function agentLoop(
         toolResult = `未知工具: ${toolName}`;
       }
 
-      const summary = toolResult.length > 200 ? toolResult.substring(0, 200) + '...' : toolResult;
+      const summary = toolResult;
       steps.push({ type: 'tool_result', tool: toolName, summary });
 
       messages.push({ role: 'tool', tool_call_id: tc.id, content: toolResult });

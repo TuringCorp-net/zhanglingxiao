@@ -75,7 +75,7 @@ export async function saveDailyLog(
     if (m.role === 'tool') {
       return {
         role: 'tool_result',
-        content: m.content?.substring(0, 200) || '',
+        content: m.content || '',
         tool_call_id: m.tool_call_id,
       };
     }
