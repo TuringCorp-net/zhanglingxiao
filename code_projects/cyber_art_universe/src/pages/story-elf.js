@@ -196,6 +196,12 @@
   function _addSteps(steps) {
     if (!steps || !steps.length) return;
 
+    // Only show working block if there are actual process steps (not just 'done')
+    var hasProcess = steps.some(function (s) {
+      return s.type === 'text_delta' || s.type === 'tool_call' || s.type === 'tool_result' || s.type === 'error';
+    });
+    if (!hasProcess) return;
+
     var msgs = document.getElementById('elf-chat-messages');
     if (!msgs) return;
 
