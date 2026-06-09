@@ -1480,6 +1480,7 @@ StoryElf.sendChat = function () {
     var last = msgs && msgs.lastChild;
     if (last) last.remove();
     if (data && data.ok) {
+      console.log('[elf_chat] response steps:', data.data.steps ? data.data.steps.length : 0, 'types:', (data.data.steps || []).map(function(s){return s.type;}));
       StoryElf.addSteps(data.data.steps);
       StoryElf.addMessage(data.data.reply, 'assistant');
 
