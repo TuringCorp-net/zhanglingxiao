@@ -281,7 +281,11 @@
     block.appendChild(body);
     msgs.appendChild(block);
     msgs.scrollTop = msgs.scrollHeight;
-    console.log('[elf] working block appended to DOM, visible:', block.offsetHeight > 0);
+    console.log('[elf] working block appended, visible:', block.offsetHeight > 0, 'parent:', block.parentElement ? block.parentElement.id : 'none');
+    // 延时检查是否被清掉
+    setTimeout(function () {
+      console.log('[elf] working block after 100ms: in DOM?', document.contains(block), 'visible:', block.offsetHeight > 0);
+    }, 100);
   }
 
   // ============================================================
