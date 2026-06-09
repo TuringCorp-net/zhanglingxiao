@@ -181,7 +181,6 @@ async function onWorkspaceChange() {
   _cacheReady = false;
 
   refreshPipelineGuide(id);
-  loadWorkConfig();
   preWarmCache(id); // 后台异步预加载，不阻塞渲染
   await switchModule('original_concept');
   updateElfContext();
@@ -413,92 +412,6 @@ function rotateHint(module) {
   }, 3600000); // 1 小时
 }
 
-// ============================================================
-// Template Level 可见性控制
-// ============================================================
-var _currentLevel = 1; // 当前作品模板 level（默认 L1）
-
-/** 根据当前 level 显示/隐藏 section 和 slot */
-function applySlotLevel() {
-  // Section div：父隐藏 → 子自动隐藏（DOM display:none 继承）
-  var sections = document.querySelectorAll('#slot-groups .slot-section');
-  sections.forEach(function(sec) {
-    var lv = parseInt(sec.dataset.level) || 0;
-    if (lv > _currentLevel) {
-      sec.classList.add('slot-hidden');
-    } else {
-      sec.classList.remove('slot-hidden');
-    }
-  });
-  // Slot item：同 section 内不同 slot 可能有不同 level
-  var items = document.querySelectorAll('#slot-groups .slot-item');
-  items.forEach(function(item) {
-    var sl = parseInt((item.dataset.level || 'L2').replace('L', '')) || 2;
-    if (sl > _currentLevel) {
-      item.classList.add('slot-hidden');
-    } else {
-      item.classList.remove('slot-hidden');
-    }
-  });
-}
-
-/** 从服务端加载作品 config */
-async function loadWorkConfig() {
-  var wid = state.currentWorkId;
-  if (!wid) return;
-  try {
-    var data = await hGet('/api/write/works/' + wid + '/config');
-    if (data && data.ok && data.data && data.data.template_level) {
-      _currentLevel = data.data.template_level;
-    }
-  } catch (e) {
-    // 默认 L1
-  }
-  renderLevelIndicator();
-  applySlotLevel();
-}
-
-/** 渲染 Level 指示器到 pipeline bar */
-function renderLevelIndicator() {
-  var el = document.getElementById('level-indicator');
-  if (!el) {
-    var stepsEl = document.getElementById('pipeline-steps');
-    if (!stepsEl) return;
-    el = document.createElement('span');
-    el.id = 'level-indicator';
-    el.className = 'level-indicator';
-    el.title = '点击切换模板等级';
-    el.addEventListener('click', function () {
-      var next = _currentLevel >= 2 ? 1 : _currentLevel + 1;
-      setSlotLevel(next);
-    });
-    stepsEl.parentNode.insertBefore(el, stepsEl.nextSibling);
-  }
-  updateLevelIndicator();
-}
-
-function updateLevelIndicator() {
-  var el = document.getElementById('level-indicator');
-  if (!el) return;
-  el.textContent = 'L' + _currentLevel;
-  el.title = _currentLevel >= 2 ? '当前：完整模板 (L2)。点击回到基础模板 (L1)' : '当前：基础模板 (L1)。点击解锁完整模板 (L2)';
-  if (_currentLevel >= 2) {
-    el.classList.add('level-unlocked');
-  } else {
-    el.classList.remove('level-unlocked');
-  }
-}
-
-/** 设置 level 并持久化 */
-function setSlotLevel(newLevel) {
-  _currentLevel = newLevel;
-  applySlotLevel();
-  var wid = state.currentWorkId;
-  if (wid) {
-    hPut('/api/write/works/' + wid + '/config', { template_level: newLevel }).catch(function() {});
-  }
-  updateLevelIndicator();
-}
 
 // ============================================================
 // Slot Editor Engine — JSON 直接消费
@@ -562,7 +475,6 @@ function renderSlotEditor(data) {
     sections.forEach(function(section) {
       var secDiv = document.createElement('div');
       secDiv.className = 'slot-section';
-      secDiv.dataset.level = section.level || 0;
       // Section heading（Markdown → HTML，加 ## 前缀确保渲染为 h2 获得色块背景样式）
       if (section.heading) {
         var hDiv = document.createElement('div');
@@ -580,15 +492,12 @@ function renderSlotEditor(data) {
 
   var freeArea = document.getElementById('slot-free-area');
   if (freeArea) freeArea.value = data.free_content || '';
-
-  applySlotLevel();
 }
 
 // 渲染单个 slot：有 label → 用 ### 渲染（h3 青色），hint 存入 data-hint 供 Story Elf 使用
 function renderSlotItem(parent, slot) {
   var item = document.createElement('div');
   item.className = 'slot-item';
-  item.dataset.level = 'L' + (slot.level || 1);
 
   // 有 label 则渲染为 ### heading（h3 青色样式）
   if (slot.label) {
