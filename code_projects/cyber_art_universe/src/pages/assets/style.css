@@ -572,23 +572,13 @@ ul, ol { list-style: none; }
 
 .slot-textarea {
   width: 100%; field-sizing: content;
-  min-height: 2.5rem; max-height: 8rem;
-  overflow-y: auto; resize: none;
+  min-height: 2.5rem;
   background: transparent; color: var(--text);
   border: 1px solid transparent; border-radius: 6px;
   padding: 0.4rem 0.6rem; font-size: 0.82rem; line-height: 1.6;
   font-family: var(--font); box-sizing: border-box;
   transition: background 0.2s, border-color 0.2s;
-  /* 滚动条默认隐藏，hover/focus 时显示 */
-  scrollbar-width: thin; scrollbar-color: transparent transparent;
 }
-.slot-textarea:hover,
-.slot-textarea:focus { scrollbar-color: var(--text-muted) transparent; }
-/* Webkit 滚动条 */
-.slot-textarea::-webkit-scrollbar { width: 4px; }
-.slot-textarea::-webkit-scrollbar-thumb { background: transparent; border-radius: 2px; }
-.slot-textarea:hover::-webkit-scrollbar-thumb,
-.slot-textarea:focus::-webkit-scrollbar-thumb { background: var(--text-muted); }
 .slot-textarea:hover {
   border-color: var(--border);
 }
