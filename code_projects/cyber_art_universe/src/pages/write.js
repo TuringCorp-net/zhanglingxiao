@@ -537,12 +537,20 @@ function renderSlotItem(parent, slot) {
   ta.style.display = 'none';
   item.appendChild(ta);
 
-  // 点击 Preview → 切到 Edit
-  preview.addEventListener('click', function () {
+  // 点击 Preview → 切到 Edit，按点击 Y 坐标比例近似定位光标
+  preview.addEventListener('click', function (e) {
     ta.rows = Math.max(2, Math.min(12, (ta.value || '').split('\n').length));
     preview.style.display = 'none';
     ta.style.display = '';
-    ta.focus();
+
+    // 按点击位置的垂直比例估算光标位置（近似，非精确）
+    var rect = preview.getBoundingClientRect();
+    if (rect.height > 0) {
+      var frac = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+      var pos = Math.floor(frac * ta.value.length);
+      ta.setSelectionRange(pos, pos);
+    }
+    ta.focus({ preventScroll: true });
   });
 
   // 离开 Edit → 切回 Preview
