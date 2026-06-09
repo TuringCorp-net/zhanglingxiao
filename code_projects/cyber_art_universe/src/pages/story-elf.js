@@ -177,7 +177,15 @@
   }
 
   // ============================================================
-  // Agent 步骤展示
+  // Agent 步骤展示 — 工作块 (Working Block)
+  //
+  // 设计意图：
+  //   三层信息呈现 — Checklist（进度卡片，置顶）+ 中间消息（过程叙述）+
+  //   工具调用（步骤标签）。全部收纳在一个可折叠的"工作块"中，
+  //   默认展开。最终回复作为独立消息在工作块之后展示。
+  //
+  //   参考：Claude Code TodoWrite + 过程折叠设计。
+  //   用户信任度建立初期应看到完整过程，后续可手动收拢。
   // ============================================================
   var _TOOL_LABELS = {
     'read_module': '读取模块',
@@ -193,31 +201,83 @@
     return _TOOL_LABELS[toolName] || toolName;
   }
 
-  function _addSystemMsg(text, cssClass) {
-    var msgs = document.getElementById('elf-chat-messages');
-    if (!msgs) return;
-    var div = document.createElement('div');
-    div.className = 'elf-chat-msg ' + (cssClass || 'step');
-    div.textContent = text;
-    msgs.appendChild(div);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
   function _addSteps(steps) {
     if (!steps || !steps.length) return;
+
+    var msgs = document.getElementById('elf-chat-messages');
+    if (!msgs) return;
+
+    var block = document.createElement('div');
+    block.className = 'elf-working-block';
+
+    // Header — click to collapse/expand
+    var header = document.createElement('div');
+    header.className = 'elf-working-header';
+    header.innerHTML = '<span>⚙ Story Elf 工作中...</span><span class=\"elf-working-toggle\">▾</span>';
+    header.addEventListener('click', function () {
+      block.classList.toggle('elf-working-collapsed');
+    });
+    block.appendChild(header);
+
+    // Body — default open
+    var body = document.createElement('div');
+    body.className = 'elf-working-body';
+
+    // 1) Checklist cards (checklist_write results) — pinned at top
+    var lastChecklist = null;
+    steps.forEach(function (s) {
+      if (s.type === 'tool_result' && s.tool === 'checklist_write' && s.summary) {
+        lastChecklist = s.summary;
+      }
+    });
+    if (lastChecklist) {
+      var card = document.createElement('div');
+      card.className = 'elf-checklist';
+      var lines = lastChecklist.split('\n');
+      if (lines.length > 0) {
+        var title = document.createElement('div');
+        title.className = 'elf-checklist-title';
+        title.textContent = '📋 ' + lines[0];
+        card.appendChild(title);
+      }
+      if (lines.length > 1) {
+        var items = document.createElement('div');
+        items.className = 'elf-checklist-items';
+        items.textContent = lines.slice(1).join('\n');
+        card.appendChild(items);
+      }
+      body.appendChild(card);
+    }
+
+    // 2) Process steps — intermediate messages + tool calls + results
     steps.forEach(function (s) {
       if (s.type === 'text_delta') {
-        // 工具调用前的中间文本（如 "好的，让我先看看模板规范"）
-        _renderMsgDOM(s.text, 'ai');
+        var line = document.createElement('div');
+        line.className = 'elf-process-msg';
+        _renderMessageContent(line, s.text, 'ai');
+        body.appendChild(line);
       } else if (s.type === 'tool_call') {
-        _addSystemMsg('🔧 ' + _toolLabel(s.tool), 'step');
-      } else if (s.type === 'tool_result') {
-        _addSystemMsg('✅ ' + (s.summary || s.tool || ''), 'step');
+        var line = document.createElement('div');
+        line.className = 'elf-process-step';
+        line.textContent = '🔧 ' + _toolLabel(s.tool);
+        body.appendChild(line);
+      } else if (s.type === 'tool_result' && s.tool !== 'checklist_write') {
+        var line = document.createElement('div');
+        line.className = 'elf-process-step';
+        var summary = s.summary || '';
+        line.textContent = '✅ ' + (summary.length > 120 ? summary.substring(0, 120) + '...' : summary);
+        body.appendChild(line);
       } else if (s.type === 'error') {
-        _addSystemMsg('❌ ' + s.message, 'step error');
+        var line = document.createElement('div');
+        line.className = 'elf-process-step error';
+        line.textContent = '❌ ' + s.message;
+        body.appendChild(line);
       }
-      // done 最终回复已在 reply 中单独展示，不重复
     });
+
+    block.appendChild(body);
+    msgs.appendChild(block);
+    msgs.scrollTop = msgs.scrollHeight;
   }
 
   // ============================================================
