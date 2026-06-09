@@ -209,10 +209,13 @@
 
     var block = document.createElement('div');
     block.className = 'elf-working-block';
+    // Force visibility for debugging — remove after confirmed working
+    block.style.cssText = 'margin:4px 0;border:1px solid #7c3aed;border-radius:6px;overflow:hidden;font-size:0.75rem;background:#1a1025';
 
     // Header — click to collapse/expand
     var header = document.createElement('div');
     header.className = 'elf-working-header';
+    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 10px;background:rgba(124,58,237,0.15);cursor:pointer;color:#a78bfa;user-select:none';
     header.innerHTML = '<span>⚙ Story Elf 工作中...</span><span class=\"elf-working-toggle\">▾</span>';
     header.addEventListener('click', function () {
       block.classList.toggle('elf-working-collapsed');
@@ -278,6 +281,7 @@
     block.appendChild(body);
     msgs.appendChild(block);
     msgs.scrollTop = msgs.scrollHeight;
+    console.log('[elf] working block appended to DOM, visible:', block.offsetHeight > 0);
   }
 
   // ============================================================
