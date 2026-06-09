@@ -403,6 +403,9 @@
   }
 
   function _showHintBubble(rawMd, opts) {
+    // 暂时屏蔽 hint 对话泡（大部分填写已由 Story Elf 完成，hint 价值降低）
+    // TODO: 后续决定是否彻底移除
+    return;
     opts = opts || {};
     if (!rawMd || !rawMd.trim()) return;
     if (_hintState._hideTimer) {
