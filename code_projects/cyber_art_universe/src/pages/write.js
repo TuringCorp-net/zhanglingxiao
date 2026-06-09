@@ -1484,6 +1484,11 @@ StoryElf.sendChat = function () {
       StoryElf.addMessage(data.data.reply, 'assistant');
 
       // Elf 写入了模块 → 清除缓存 + 如果当前在对应模块则刷新编辑器
+      //
+      // TODO: 未来优化方向 (slot-level cache):
+      // 1. 将 _moduleCache 从模块级拆分为 slot 级，清除时只 invalidate 被写入的 slot
+      // 2. 后端 write_to_slot 返回实际写入的 slot 内容，前端直接更新 cache + DOM，
+      //    消除额外的 HTTP 请求和 R2 读取
       (data.data.steps || []).forEach(function (s) {
         if (s.type === 'tool_call' && s.tool === 'write_to_slot') {
           var mt = s.params.module_type;
