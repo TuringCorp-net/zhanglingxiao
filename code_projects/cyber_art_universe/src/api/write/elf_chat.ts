@@ -244,10 +244,16 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
 
     // —— L1 Memory Log: save raw conversation for memory extraction (daily rotation) ——
     if (userToken) {
+      // Build the same prefix that agentLoop injects into the LLM context
+      const prefixParts: string[] = [];
+      if (opts.module) prefixParts.push(`[当前模块: ${opts.module}]`);
+      if (opts.sectionTitle) prefixParts.push(`[当前章节: ${opts.sectionTitle}]`);
+      const userPrefix = prefixParts.length > 0 ? prefixParts.join(' ') + '\n\n' : '';
+
       // Build raw L1 messages: frontend messages + agent steps + final reply
       const l1Messages: Message[] = [
         ...allMessages.slice(0, -1),
-        { role: 'user', content: userMessage },
+        { role: 'user', content: userPrefix + userMessage },
       ];
       for (const step of result.steps) {
         if (step.type === 'tool_call') {
