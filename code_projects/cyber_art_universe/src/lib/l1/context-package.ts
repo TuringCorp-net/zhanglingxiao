@@ -17,11 +17,16 @@ import { workContentPath, type Lang } from './work-content';
 // 类型
 // ============================================================
 
+/** 上下文包缓存默认有效期：24 小时 */
+export const DEFAULT_CONTEXT_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+
 export interface ContextPackageOptions {
   /** 是否包含 M5 意图卡（默认 true）。超大规模作品可关闭 */
   includeM5?: boolean;
-  /** 强制重建（忽略 R2 缓存），默认 false */
+  /** 强制重建（忽略 R2 缓存与有效期），默认 false */
   forceRebuild?: boolean;
+  /** R2 缓存有效期（毫秒）。超过此时间自动重建。默认 24h。设为 0 表示每次重建 */
+  maxAgeMs?: number;
 }
 
 // ============================================================
@@ -48,18 +53,28 @@ export async function getOrBuildContextPackage(
 ): Promise<string> {
   const key = cacheKey(workId, lang);
 
-  // 非强制重建时，尝试从 R2 缓存读取
+  const maxAgeMs = opts.maxAgeMs ?? DEFAULT_CONTEXT_CACHE_TTL_MS;
+
+  // 非强制重建时，尝试从 R2 缓存读取（检查有效期）
   if (!opts.forceRebuild) {
     const cached = await env.WORKS_BUCKET.get(key);
     if (cached) {
-      // 检测 M5 是否需要自修复（旧数据无 .md 文件）
-      const needsHeal = await env.DB.prepare(
-        "SELECT COUNT(*) as cnt FROM modules WHERE work_id = ? AND type = 'm5_intent' AND r2_md_key IS NULL"
-      ).bind(workId).first<{ cnt: number }>();
-      if (!needsHeal || needsHeal.cnt === 0) {
-        return await cached.text();
+      // 缓存过期检查（R2 object.uploaded 是 Cloudflare 内置时间戳）
+      const cacheAge = Date.now() - (cached.uploaded?.getTime() ?? 0);
+      const isExpired = maxAgeMs > 0 && cacheAge > maxAgeMs;
+
+      if (!isExpired) {
+        // 检测 M5 是否需要自修复（旧数据无 .md 文件）
+        const needsHeal = await env.DB.prepare(
+          "SELECT COUNT(*) as cnt FROM modules WHERE work_id = ? AND type = 'm5_intent' AND r2_md_key IS NULL"
+        ).bind(workId).first<{ cnt: number }>();
+        if (!needsHeal || needsHeal.cnt === 0) {
+          return await cached.text();
+        }
+        // 有 M5 模块需要修复 → 删除旧缓存，强制重建
+        await env.WORKS_BUCKET.delete(key);
       }
-      // 有 M5 模块需要修复 → 删除旧缓存，强制重建
+      // 缓存过期 → 删除，继续重建
       await env.WORKS_BUCKET.delete(key);
     }
   }
