@@ -1455,6 +1455,8 @@ StoryElf.setActions([
 StoryElf.sendChat = function () {
   var msg = StoryElf.getInput();
   if (!msg) return;
+  // 取消待执行的 auto-save，避免在 Elf 回复期间覆盖后端写入
+  clearTimeout(_autoSaveTimer);
   StoryElf.addMessage(msg, 'user');
   StoryElf.clearInput();
   var currentMessages = StoryElf.getMessages(); // 在添加占位消息前捕获，避免占位消息混入历史
