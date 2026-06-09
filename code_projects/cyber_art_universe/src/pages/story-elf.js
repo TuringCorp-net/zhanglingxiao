@@ -185,6 +185,7 @@
     'generate_slot': '生成内容',
     'write_to_slot': '写入槽位',
     'checklist_write': '更新任务清单',
+    'create_card': '新建卡片',
     'get_version_history': '查看版本历史',
     'get_version_diff': '对比版本差异',
   };

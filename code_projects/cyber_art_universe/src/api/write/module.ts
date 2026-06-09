@@ -413,6 +413,61 @@ async function readR2Text(env: Env, key: string): Promise<string> {
 }
 
 // ============================================================
+// POST /api/write/modules — create a new module (card, chapter, etc.)
+// ============================================================
+
+export async function createModule(env: Env, request: Request): Promise<Response> {
+  const body = await request.json() as { work_id: string; type: string; name?: string };
+  if (!body.work_id || !body.type) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id and type are required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Validate module type
+  const validTypes = ['m3_card', 'm4_card', 'm4_strategy', 'm5_intent', 'm6_chapter'];
+  if (!validTypes.includes(body.type)) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, `type must be one of: ${validTypes.join(', ')}`)), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Verify work exists
+  const work = await env.DB.prepare('SELECT id FROM works WHERE id = ?').bind(body.work_id).first();
+  if (!work) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Work not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Get next order_index
+  const maxOrder = await env.DB.prepare(
+    'SELECT MAX(order_index) as mx FROM modules WHERE work_id = ? AND type = ?'
+  ).bind(body.work_id, body.type).first<{ mx: number | null }>();
+  const orderIndex = (maxOrder?.mx ?? -1) + 1;
+
+  const moduleId = `${body.type}_${crypto.randomUUID()}`;
+  const name = body.name || `${body.type} #${orderIndex + 1}`;
+  const now = new Date().toISOString();
+
+  await env.DB.prepare(
+    'INSERT INTO modules (id, work_id, type, name, order_index, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, \'empty\', ?, ?)'
+  ).bind(moduleId, body.work_id, body.type, name, orderIndex, now, now).run();
+
+  return new Response(JSON.stringify(jsonSuccess({
+    id: moduleId,
+    work_id: body.work_id,
+    type: body.type,
+    name,
+    order_index: orderIndex,
+    status: 'empty',
+    created_at: now,
+  })), {
+    status: 201, headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+// ============================================================
 // GET /api/write/module/{module_id}
 // ============================================================
 export async function getModule(env: Env, request: Request, moduleId: string): Promise<Response> {

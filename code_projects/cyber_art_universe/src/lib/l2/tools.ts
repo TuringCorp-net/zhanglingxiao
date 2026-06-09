@@ -23,6 +23,7 @@ export function createTools(env: Env, workId: string, lang: string): L2ToolDef[]
     createChecklistTool(env),
     createWritingGuideTool(env),
     createReadModuleTool(env),
+    createCardTool(env),
     createWriteToSlotTool(env),
     createVersionHistoryTool(env),
     createVersionDiffTool(env),
@@ -274,6 +275,60 @@ function createReadModuleTool(env: Env): L2ToolDef {
         // Module has no content yet
       }
       return summary || `模块 ${moduleId} 内容为空（新模块，尚未填写任何内容）。`;
+    },
+  };
+}
+
+// ============================================================
+// create_card — 新建卡片（人物卡、伏笔卡、章节蓝图、章节等）
+// ============================================================
+
+function createCardTool(env: Env): L2ToolDef {
+  return {
+    def: {
+      type: 'function',
+      function: {
+        name: 'create_card',
+        description: '创建一张新卡片（人物卡/伏笔卡/章节蓝图/章节）。当你需要新增角色、伏笔条目、章节蓝图或具体章节时使用。成功创建后可用 write_to_slot 填入内容。参数: work_id, type(模块类型: m3_card/m4_card/m5_intent/m6_chapter), name(卡片名称，如角色名/伏笔名/章节名，必填)',
+        parameters: {
+          type: 'object',
+          properties: {
+            work_id: { type: 'string', description: '作品 ID' },
+            type: { type: 'string', description: '模块类型。m3_card=人物卡, m4_card=伏笔卡, m5_intent=章节蓝图, m6_chapter=具体章节' },
+            name: { type: 'string', description: '卡片名称。人物卡填角色名，伏笔卡填伏笔主题，章节蓝图/章节填章节标题' },
+          },
+          required: ['work_id', 'type', 'name'],
+        },
+      },
+    },
+    is_mutating: true,
+    execute: async (params: Record<string, unknown>) => {
+      const workId = (params.work_id as string) || '';
+      const moduleType = (params.type as string) || '';
+      const name = (params.name as string) || '';
+
+      if (!moduleType) return '❌ create_card 需要传入 type 参数。可选的类型: m3_card, m4_card, m5_intent, m6_chapter';
+      if (!name) return '❌ create_card 需要传入 name 参数（卡片名称）';
+
+      const { createModule } = await import('../../api/write/module');
+      const url = `https://internal/api/write/modules`;
+      const req = new Request(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ work_id: workId, type: moduleType, name }),
+      });
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const response = await createModule(env, req as any);
+        const data = await response.json() as Record<string, unknown>;
+        if (data.ok) {
+          const d = data.data as Record<string, unknown>;
+          return `✅ 卡片创建成功: ${d.name} (ID: ${d.id}, 类型: ${d.type})\n\n现在可以用 write_to_slot 往这张卡里写内容了。module_type 用 "${moduleType}"，如果有多张同类型卡片，需要用 module_id = "${d.id}" 来精确指定。`;
+        }
+        return `❌ 创建失败: ${JSON.stringify(data.error)}`;
+      } catch (err) {
+        return `❌ 创建卡片时出错: ${(err as Error).message}`;
+      }
     },
   };
 }
