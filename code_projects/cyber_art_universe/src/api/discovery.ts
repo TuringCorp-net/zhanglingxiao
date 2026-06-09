@@ -408,6 +408,9 @@ Diff type depends on file: JSON files get slot-level diff (\`path: "slots.power_
 - Read side: reading companion — analyze plot, answer questions, discover foreshadowing
 - Write side: writing assistant — brainstorm, consistency discussion, inspiration
 - Auto-collects worldbuilding/characters/outline/current chapter as conversation context
+- **context.module**: value from \`GET /api/write/modules?work_id=X\` → use \`module.type\` (e.g. \`"m3"\`) to focus the conversation on a specific module
+- **context.section_title**: value from \`GET /api/content/{work_id}/outline\` → use a section title (e.g. \`"Chapter 3: The Mirror Realm"\`) to focus on a specific chapter
+- **Workflow**: \`GET modules\` + \`GET outline\` → pick target → \`POST elf/chat\` with \`context\` set
 
 ### Module Writing Guide
 
