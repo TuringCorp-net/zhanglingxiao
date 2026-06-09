@@ -358,7 +358,16 @@
 
     toggle: function () {
       var d = document.getElementById('elf-dialog');
-      if (d) d.style.display = d.style.display === 'none' ? 'flex' : 'none';
+      if (!d) return;
+      var wasHidden = d.style.display === 'none' || !d.style.display;
+      d.style.display = wasHidden ? 'flex' : 'none';
+      if (wasHidden) {
+        // 打开时滚动到最新消息
+        setTimeout(function () {
+          var msgs = document.getElementById('elf-chat-messages');
+          if (msgs) msgs.scrollTop = msgs.scrollHeight;
+        }, 0);
+      }
     },
 
     addMessage: function (text, role) {
