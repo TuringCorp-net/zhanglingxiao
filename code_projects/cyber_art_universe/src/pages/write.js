@@ -1500,7 +1500,11 @@ StoryElf.sendChat = function () {
           var frontMod = modMap[mt];
           if (frontMod) {
             cacheClear([mt + '_' + state.currentWorkId]);
-            if (state.currentModule === frontMod) switchModule(frontMod);
+            // 直接调 loadMx() 而非 switchModule() —— switchModule 有防抖锁，
+            // 同一模块重复调用会 return，导致不刷新
+            var loadFn = { original_concept: loadM0, worldbuilding: loadM1, outline: loadM2,
+              characters: loadM3, foreshadowing: loadM4, chapters: loadM5, writing: loadM6 }[frontMod];
+            if (state.currentModule === frontMod && loadFn) loadFn();
           }
         }
       });
