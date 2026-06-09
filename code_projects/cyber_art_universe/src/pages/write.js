@@ -1502,9 +1502,10 @@ StoryElf.sendChat = function () {
             m5_intent: 'chapters', m6_chapter: 'writing' };
           var frontMod = modMap[mt];
           if (frontMod) {
-            cacheClear([mt + '_' + state.currentWorkId]);
-            // 直接调 loadMx() 而非 switchModule() —— switchModule 有防抖锁，
-            // 同一模块重复调用会 return，导致不刷新
+            // 清除所有模块缓存。不能按 moduleType+workId 清——M3/M4/M5/M6
+            // 是多卡片/多章节结构，moduleId 是 UUID，与 type+workId 格式不匹配。
+            // 清全量缓存确保下次加载时从服务端拉取最新内容。
+            cacheClear();
             var loadFn = { original_concept: loadM0, worldbuilding: loadM1, outline: loadM2,
               characters: loadM3, foreshadowing: loadM4, chapters: loadM5, writing: loadM6 }[frontMod];
             if (state.currentModule === frontMod && loadFn) loadFn();
