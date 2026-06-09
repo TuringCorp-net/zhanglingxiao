@@ -1482,6 +1482,23 @@ StoryElf.sendChat = function () {
     if (data && data.ok) {
       StoryElf.addSteps(data.data.steps);
       StoryElf.addMessage(data.data.reply, 'assistant');
+
+      // Elf 写入了模块 → 清除缓存 + 如果当前在对应模块则刷新编辑器
+      (data.data.steps || []).forEach(function (s) {
+        if (s.type === 'tool_call' && s.tool === 'write_to_slot') {
+          var mt = s.params.module_type;
+          if (!mt) return;
+          // 将 module_type (如 "m2") 映射到前端模块名 (如 "outline")
+          var modMap = { m0: 'original_concept', m1: 'worldbuilding', m2: 'outline',
+            m3_card: 'characters', m4_strategy: 'foreshadowing', m4_card: 'foreshadowing',
+            m5_intent: 'chapters', m6_chapter: 'writing' };
+          var frontMod = modMap[mt];
+          if (frontMod) {
+            cacheClear([mt + '_' + state.currentWorkId]);
+            if (state.currentModule === frontMod) switchModule(frontMod);
+          }
+        }
+      });
     } else {
       var err = document.createElement('div');
       err.className = 'elf-chat-msg ai';
