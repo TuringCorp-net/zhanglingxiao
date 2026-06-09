@@ -279,13 +279,33 @@
     });
 
     block.appendChild(body);
-    msgs.appendChild(block);
-    msgs.scrollTop = msgs.scrollHeight;
-    console.log('[elf] working block appended, visible:', block.offsetHeight > 0, 'parent:', block.parentElement ? block.parentElement.id : 'none');
-    // 延时检查是否被清掉
+    // DEBUG: 先 append 到 body 顶部确认渲染正常
+    document.body.insertBefore(block, document.body.firstChild);
+    block.style.position = 'fixed';
+    block.style.top = '10px';
+    block.style.left = '10px';
+    block.style.zIndex = '99999';
+    block.style.maxWidth = '400px';
+    block.style.maxHeight = '500px';
+    block.style.overflow = 'auto';
+    console.log('[elf] working block appended to body, visible:', block.offsetHeight > 0);
+    // 200ms 后移回聊天区
+    var b = block;
     setTimeout(function () {
-      console.log('[elf] working block after 100ms: in DOM?', document.contains(block), 'visible:', block.offsetHeight > 0);
-    }, 100);
+      if (b.parentElement === document.body) {
+        document.body.removeChild(b);
+        b.style.position = '';
+        b.style.top = '';
+        b.style.left = '';
+        b.style.zIndex = '';
+        b.style.maxWidth = '';
+        b.style.maxHeight = '';
+        b.style.overflow = '';
+        msgs.appendChild(b);
+        msgs.scrollTop = msgs.scrollHeight;
+        console.log('[elf] working block moved to chat');
+      }
+    }, 3000);
   }
 
   // ============================================================
