@@ -206,14 +206,17 @@
   function _addSteps(steps) {
     if (!steps || !steps.length) return;
     steps.forEach(function (s) {
-      if (s.type === 'tool_call') {
+      if (s.type === 'text_delta') {
+        // 工具调用前的中间文本（如 "好的，让我先看看模板规范"）
+        _renderMsgDOM(s.text, 'ai');
+      } else if (s.type === 'tool_call') {
         _addSystemMsg('🔧 ' + _toolLabel(s.tool), 'step');
       } else if (s.type === 'tool_result') {
         _addSystemMsg('✅ ' + (s.summary || s.tool || ''), 'step');
       } else if (s.type === 'error') {
         _addSystemMsg('❌ ' + s.message, 'step error');
       }
-      // text_delta / done 不展示
+      // done 最终回复已在 reply 中单独展示，不重复
     });
   }
 
@@ -400,7 +403,7 @@
       StoryElf.addMessage(msg, 'user');
       StoryElf.clearInput();
       var currentMessages = getMessages();
-      StoryElf.addMessage('...', 'system');
+      StoryElf.addMessage(t('label.ai_thinking', 'Story Elf thinking...'), 'system');
       var ctx = StoryElf.getContext() || {};
       var token = _getToken();
       var lang = _getLang();

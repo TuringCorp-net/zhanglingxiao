@@ -115,7 +115,7 @@ var I18N = {
     suggest_start:    { zh: '建议从这里开始', en: 'Suggested start' },
     preview_holder:   { zh: '预览将在此显示', en: 'Preview will appear here' },
     select_work_start:{ zh: '选择作品后开始', en: 'Select a work to begin' },
-    ai_thinking:      { zh: 'AI 思考中...', en: 'AI thinking...' },
+    ai_thinking:      { zh: 'Story Elf 思考中...', en: 'Story Elf thinking...' },
     updated_editor:   { zh: '已在写作区更新结果', en: 'Updated in editor' },
   },
 

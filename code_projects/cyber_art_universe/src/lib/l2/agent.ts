@@ -135,6 +135,11 @@ export async function agentLoop(
     }
     messages.push(assistantMsg);
 
+    // 将 assistant 的工具调用前的文本（如 "好的，让我先看看模板"）作为步骤传给前端
+    if (result.content) {
+      steps.push({ type: 'text_delta', text: result.content });
+    }
+
     for (const tc of result.tool_calls) {
       const toolName = tc.function.name;
       let toolParams: Record<string, unknown>;
