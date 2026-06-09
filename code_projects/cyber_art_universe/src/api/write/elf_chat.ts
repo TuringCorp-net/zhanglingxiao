@@ -38,6 +38,20 @@
  *   - 淡入动画（出现）+ requestAnimationFrame 逐字打字（内容）
  *   - z-index: 200（高于编辑器，低于模态弹窗）
  *   - blur 时淡出，手动关闭后可重新聚焦触发
+ *
+ * 工作块（Working Block）设计：
+ *   Agent 执行过程中产生的中间消息、工具调用、Checklist 更新，
+ *   收纳在一个可折叠的"工作块"中展示于聊天区。默认展开，点击标题栏收拢。
+ *
+ *   三层信息呈现：
+ *     1. Checklist 进度卡片 — 置顶，仅显示最后一次 checklist_write 结果。
+ *        格式：📋 任务清单 (N项, XX%) + ⬜/🔄/✅ 状态标记。
+ *     2. 中间消息 — text_delta 步骤，Elf 的自然语言叙述（"好的，让我先看看模板"）。
+ *     3. 工具调用 — 🔧 tool_label + ✅ tool_result（120 字摘要）。
+ *     最终回复在工作块之后作为独立 assistant 消息展示。
+ *
+ *   参考：Claude Code TodoWrite + 过程折叠设计。
+ *   用户信任度建立初期默认展开，可手动收拢减少视觉干扰。
  */
 
 import { Env } from '../../db/schema';
