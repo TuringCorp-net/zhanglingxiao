@@ -480,15 +480,19 @@ function renderSlotEditor(data) {
         var hDiv = document.createElement('div');
         hDiv.className = 'slot-framework';
         try { hDiv.innerHTML = marked.parse('## ' + section.heading); } catch(e) { hDiv.textContent = section.heading; }
-        // Collapse/expand toggle icon
-        var collapseIcon = document.createElement('span');
-        collapseIcon.className = 'slot-framework-collapse-icon';
-        collapseIcon.textContent = '−';
-        hDiv.appendChild(collapseIcon);
-        hDiv.addEventListener('click', function () {
-          secDiv.classList.toggle('slot-section-collapsed');
-          collapseIcon.textContent = secDiv.classList.contains('slot-section-collapsed') ? '+' : '−';
-        });
+        // Collapse/expand toggle icon on the h2 (一级目录 only)
+        var h2 = hDiv.querySelector('h2');
+        if (h2) {
+          var collapseIcon = document.createElement('span');
+          collapseIcon.className = 'slot-framework-collapse-icon';
+          collapseIcon.textContent = '−';
+          h2.appendChild(collapseIcon);
+          h2.addEventListener('click', function (e) {
+            e.stopPropagation();
+            secDiv.classList.toggle('slot-section-collapsed');
+            collapseIcon.textContent = secDiv.classList.contains('slot-section-collapsed') ? '+' : '−';
+          });
+        }
         secDiv.appendChild(hDiv);
       }
       // Slots
