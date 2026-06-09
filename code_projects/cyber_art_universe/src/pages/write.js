@@ -537,7 +537,7 @@ function renderSlotItem(parent, slot) {
   ta.style.display = 'none';
   item.appendChild(ta);
 
-  // 点击 Preview → 切到 Edit
+  // 点击 Preview → 切到 Edit（光标自动置于末尾，后续优化光标定位）
   preview.addEventListener('click', function () {
     ta.rows = Math.max(2, Math.min(12, (ta.value || '').split('\n').length));
     preview.style.display = 'none';
