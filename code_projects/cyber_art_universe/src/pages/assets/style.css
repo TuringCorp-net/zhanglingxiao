@@ -550,7 +550,8 @@ ul, ol { list-style: none; }
   transition: background 0.15s;
 }
 .slot-framework h2:hover {
-  background: rgba(var(--accent-rgb), 0.12);
+  background: var(--accent);
+  color: var(--text-on-accent);
 }
 .slot-framework-collapse-icon {
   font-size: 0.75rem;
