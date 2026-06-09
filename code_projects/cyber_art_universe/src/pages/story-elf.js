@@ -193,6 +193,28 @@
     return _TOOL_LABELS[toolName] || toolName;
   }
 
+  // Ensure working block styles are injected once
+  var _workingBlockStylesInjected = false;
+  function _injectWorkingBlockStyles() {
+    if (_workingBlockStylesInjected) return;
+    _workingBlockStylesInjected = true;
+    var style = document.createElement('style');
+    style.textContent = ''
+      + '.elf-working-block { margin:6px 0; border:1px solid var(--border,#333); border-radius:6px; overflow:hidden; font-size:0.75rem; }'
+      + '.elf-working-header { display:flex; justify-content:space-between; align-items:center; padding:5px 10px; background:var(--bg-hover,rgba(124,58,237,0.1)); cursor:pointer; color:var(--text-muted,#888); user-select:none; }'
+      + '.elf-working-collapsed .elf-working-toggle { transform:rotate(-90deg); }'
+      + '.elf-working-collapsed .elf-working-body { display:none; }'
+      + '.elf-working-body { padding:6px 10px; max-height:300px; overflow-y:auto; }'
+      + '.elf-checklist { background:var(--bg,rgba(0,0,0,0.15)); border:1px solid var(--border,#333); border-radius:4px; padding:6px 8px; margin-bottom:6px; }'
+      + '.elf-checklist-title { font-weight:600; margin-bottom:3px; font-size:0.7rem; }'
+      + '.elf-checklist-items { line-height:1.5; white-space:pre-wrap; font-size:0.7rem; color:var(--text-muted,#888); }'
+      + '.elf-process-msg { margin:3px 0; padding:3px 6px; border-radius:4px; font-size:0.7rem; line-height:1.4; }'
+      + '.elf-process-step { margin:2px 0; padding:2px 6px; font-size:0.68rem; color:var(--text-muted,#888); }'
+      + '.elf-process-step.error { color:var(--error,#f44); }'
+      + '.elf-working-toggle { background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.8rem; padding:0 2px; transition:transform 0.15s; }';
+    document.head.appendChild(style);
+  }
+
   function _addSteps(steps) {
     if (!steps || !steps.length) return;
 
@@ -201,6 +223,8 @@
       return s.type === 'text_delta' || s.type === 'tool_call' || s.type === 'tool_result' || s.type === 'error';
     });
     if (!hasProcess) return;
+
+    _injectWorkingBlockStyles();
 
     var msgs = document.getElementById('elf-chat-messages');
     if (!msgs) return;

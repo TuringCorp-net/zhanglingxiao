@@ -1469,15 +1469,7 @@ StoryElf.sendChat = function () {
     messages: currentMessages,
     context: { module: state.currentModule, section_title: ctx.section_title || state.currentSectionTitle, panel: ctx.panel },
   };
-  // TODO: 临时诊断日志，定位问题后删除
-  console.log('[elf_chat] 请求体:', JSON.stringify({
-    work_id: reqBody.work_id,
-    msg_count: reqBody.messages.length,
-    msg_roles: reqBody.messages.map(function(m) { return m.role; }),
-    token: localStorage.getItem('sf_user_token') ? (localStorage.getItem('sf_user_token').substring(0, 8) + '...') : '(空)',
-  }));
   hPost('/api/write/elf/chat', reqBody).then(function (data) {
-    console.log('[elf_chat] 响应:', data ? ('ok=' + data.ok + ', error=' + JSON.stringify(data.error || '无')) : 'null');
     var msgs = document.getElementById('elf-chat-messages');
     var last = msgs && msgs.lastChild;
     if (last) last.remove();
