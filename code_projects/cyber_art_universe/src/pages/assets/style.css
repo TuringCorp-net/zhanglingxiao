@@ -570,6 +570,24 @@ ul, ol { list-style: none; }
 .slot-section.slot-hidden,
 .slot-item.slot-hidden { display: none; }
 
+/* Slot preview — Markdown 渲染显示，点击切编辑 */
+.slot-preview {
+  min-height: 2.5rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.82rem; line-height: 1.6;
+  border: 1px solid transparent; border-radius: 6px;
+  transition: background 0.2s, border-color 0.2s;
+  cursor: text;
+}
+.slot-preview:hover { border-color: var(--border); }
+.slot-preview-empty { display: block; min-height: 2rem; }
+.slot-preview h1, .slot-preview h2, .slot-preview h3 { margin: 0.3rem 0 0.1rem; }
+.slot-preview p { margin: 0.2rem 0; }
+.slot-preview ul, .slot-preview ol { margin: 0.2rem 0; padding-left: 1.2rem; }
+.slot-preview code { background: rgba(var(--accent-rgb), 0.1); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.78rem; }
+.slot-preview pre { background: rgba(0,0,0,0.2); padding: 0.4rem 0.6rem; border-radius: 4px; overflow-x: auto; }
+.slot-preview pre code { background: none; padding: 0; }
+
 .slot-textarea {
   width: 100%; field-sizing: content;
   min-height: 2.5rem; resize: none;

@@ -507,7 +507,8 @@ function renderSlotEditor(data) {
   if (freeArea) freeArea.value = data.free_content || '';
 }
 
-// 渲染单个 slot：有 label → 用 ### 渲染（h3 青色），hint 存入 data-hint 供 Story Elf 使用
+// 渲染单个 slot — Preview (Markdown 渲染) / Edit (纯文本) 切换
+// 默认 Preview：点击 → Edit；blur → 回到 Preview
 function renderSlotItem(parent, slot) {
   var item = document.createElement('div');
   item.className = 'slot-item';
@@ -520,14 +521,38 @@ function renderSlotItem(parent, slot) {
     item.appendChild(lblDiv);
   }
 
-  // Textarea
+  // Preview div（Markdown 渲染）
+  var preview = document.createElement('div');
+  preview.className = 'slot-preview';
+  var rawContent = slot.content || '';
+  try { preview.innerHTML = rawContent ? marked.parse(rawContent) : '<span class=\"slot-preview-empty\"></span>'; } catch(e) { preview.textContent = rawContent; }
+  item.appendChild(preview);
+
+  // Textarea（隐藏，点击 preview 时切换）
   var ta = document.createElement('textarea');
   ta.className = 'slot-textarea';
-  ta.rows = Math.max(2, Math.min(6, (slot.content || '').split('\n').length));
-  ta.value = slot.content || '';
+  ta.value = rawContent;
   ta.dataset.slotId = slot.id || '';
   if (slot.hint) ta.dataset.hint = slot.hint;
+  ta.style.display = 'none';
   item.appendChild(ta);
+
+  // 点击 Preview → 切到 Edit
+  preview.addEventListener('click', function () {
+    ta.rows = Math.max(2, Math.min(12, (ta.value || '').split('\n').length));
+    preview.style.display = 'none';
+    ta.style.display = '';
+    ta.focus();
+  });
+
+  // 离开 Edit → 切回 Preview
+  ta.addEventListener('blur', function () {
+    var newRaw = ta.value;
+    try { preview.innerHTML = newRaw ? marked.parse(newRaw) : '<span class=\"slot-preview-empty\"></span>'; } catch(e) { preview.textContent = newRaw; }
+    preview.style.display = '';
+    ta.style.display = 'none';
+  });
+
   parent.appendChild(item);
   _textareaList.push(ta);
 }
