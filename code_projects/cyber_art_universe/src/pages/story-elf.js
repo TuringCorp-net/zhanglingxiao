@@ -194,28 +194,23 @@
   }
 
   function _addSteps(steps) {
-    console.log('[elf] _addSteps called, count:', steps ? steps.length : 0);
-    if (!steps || !steps.length) { console.log('[elf] _addSteps: no steps, skip'); return; }
+    if (!steps || !steps.length) return;
 
     // Only show working block if there are actual process steps (not just 'done')
     var hasProcess = steps.some(function (s) {
       return s.type === 'text_delta' || s.type === 'tool_call' || s.type === 'tool_result' || s.type === 'error';
     });
-    console.log('[elf] _addSteps: hasProcess:', hasProcess, 'types:', steps.map(function(s){return s.type;}));
-    if (!hasProcess) { console.log('[elf] _addSteps: no process steps, skip block'); return; }
+    if (!hasProcess) return;
 
     var msgs = document.getElementById('elf-chat-messages');
     if (!msgs) return;
 
     var block = document.createElement('div');
     block.className = 'elf-working-block';
-    // Force visibility for debugging — remove after confirmed working
-    block.style.cssText = 'margin:4px 0;border:1px solid #7c3aed;border-radius:6px;overflow:hidden;font-size:0.75rem;background:#1a1025';
 
     // Header — click to collapse/expand
     var header = document.createElement('div');
     header.className = 'elf-working-header';
-    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 10px;background:rgba(124,58,237,0.15);cursor:pointer;color:#a78bfa;user-select:none';
     header.innerHTML = '<span>⚙ Story Elf 工作中...</span><span class=\"elf-working-toggle\">▾</span>';
     header.addEventListener('click', function () {
       block.classList.toggle('elf-working-collapsed');
@@ -279,33 +274,8 @@
     });
 
     block.appendChild(body);
-    // DEBUG: 先 append 到 body 顶部确认渲染正常
-    document.body.insertBefore(block, document.body.firstChild);
-    block.style.position = 'fixed';
-    block.style.top = '10px';
-    block.style.left = '10px';
-    block.style.zIndex = '99999';
-    block.style.maxWidth = '400px';
-    block.style.maxHeight = '500px';
-    block.style.overflow = 'auto';
-    console.log('[elf] working block appended to body, visible:', block.offsetHeight > 0);
-    // 200ms 后移回聊天区
-    var b = block;
-    setTimeout(function () {
-      if (b.parentElement === document.body) {
-        document.body.removeChild(b);
-        b.style.position = '';
-        b.style.top = '';
-        b.style.left = '';
-        b.style.zIndex = '';
-        b.style.maxWidth = '';
-        b.style.maxHeight = '';
-        b.style.overflow = '';
-        msgs.appendChild(b);
-        msgs.scrollTop = msgs.scrollHeight;
-        console.log('[elf] working block moved to chat');
-      }
-    }, 3000);
+    msgs.appendChild(block);
+    msgs.scrollTop = msgs.scrollHeight;
   }
 
   // ============================================================
