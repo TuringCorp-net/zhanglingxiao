@@ -547,7 +547,8 @@ ul, ol { list-style: none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: background 0.15s;
+  color: var(--accent-light);
+  transition: background 0.15s, color 0.15s;
 }
 .slot-framework h2:hover {
   background: var(--accent);
@@ -620,7 +621,7 @@ ul, ol { list-style: none; }
   border-radius: 4px;
 }
 .slot-framework h2 {
-  font-size: 0.85rem; color: var(--text);
+  font-size: 0.85rem; color: var(--accent-light);
   margin: 0.4rem 0 0.2rem;
   padding: 0.2rem 0.75rem;
   background: rgba(var(--accent-rgb), 0.03);
