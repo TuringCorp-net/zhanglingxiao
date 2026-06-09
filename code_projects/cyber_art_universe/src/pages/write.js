@@ -480,6 +480,15 @@ function renderSlotEditor(data) {
         var hDiv = document.createElement('div');
         hDiv.className = 'slot-framework';
         try { hDiv.innerHTML = marked.parse('## ' + section.heading); } catch(e) { hDiv.textContent = section.heading; }
+        // Collapse/expand toggle icon
+        var collapseIcon = document.createElement('span');
+        collapseIcon.className = 'slot-framework-collapse-icon';
+        collapseIcon.textContent = '−';
+        hDiv.appendChild(collapseIcon);
+        hDiv.addEventListener('click', function () {
+          secDiv.classList.toggle('slot-section-collapsed');
+          collapseIcon.textContent = secDiv.classList.contains('slot-section-collapsed') ? '+' : '−';
+        });
         secDiv.appendChild(hDiv);
       }
       // Slots

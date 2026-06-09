@@ -541,6 +541,29 @@ ul, ol { list-style: none; }
 }
 .slot-item:last-child { margin-bottom: 0; }
 /* 模板 level 分级：section / slot 按 level 隐藏，父 section 隐藏 → 子自动不显示 */
+/* 可折叠 section — 点击标题收起/展开 */
+.slot-framework {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.slot-framework:hover { background: rgba(255,255,255,0.04); }
+.slot-framework-collapse-icon {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 8px;
+  min-width: 14px;
+  text-align: center;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+}
+.slot-framework:hover .slot-framework-collapse-icon { opacity: 1; }
+.slot-section-collapsed .slot-item,
+.slot-section-collapsed .slot-group-card { display: none; }
+
+/* deprecated level toggle — kept for backward compat */
 .slot-section.slot-hidden,
 .slot-item.slot-hidden { display: none; }
 
