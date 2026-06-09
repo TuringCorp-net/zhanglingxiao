@@ -413,10 +413,10 @@ async function readR2Text(env: Env, key: string): Promise<string> {
 }
 
 // ============================================================
-// POST /api/write/modules — create a new module (card, chapter, etc.)
+// POST /api/write/cards — create a new card (character, foreshadowing, chapter, etc.)
 // ============================================================
 
-export async function createModule(env: Env, request: Request): Promise<Response> {
+export async function createCard(env: Env, request: Request): Promise<Response> {
   const body = await request.json() as { work_id: string; type: string; name?: string };
   if (!body.work_id || !body.type) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id and type are required')), {

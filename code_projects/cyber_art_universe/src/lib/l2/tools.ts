@@ -310,8 +310,8 @@ function createCardTool(env: Env): L2ToolDef {
       if (!moduleType) return '❌ create_card 需要传入 type 参数。可选的类型: m3_card, m4_card, m5_intent, m6_chapter';
       if (!name) return '❌ create_card 需要传入 name 参数（卡片名称）';
 
-      const { createModule } = await import('../../api/write/module');
-      const url = `https://internal/api/write/modules`;
+      const { createCard } = await import('../../api/write/module');
+      const url = `https://internal/api/write/cards`;
       const req = new Request(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -319,7 +319,7 @@ function createCardTool(env: Env): L2ToolDef {
       });
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const response = await createModule(env, req as any);
+        const response = await createCard(env, req as any);
         const data = await response.json() as Record<string, unknown>;
         if (data.ok) {
           const d = data.data as Record<string, unknown>;
