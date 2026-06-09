@@ -216,3 +216,51 @@ export async function handleMemoryExtractL3(env: Env, request: Request): Promise
     });
   }
 }
+
+// ============================================================
+// GET /api/write/memory-test/read-l1 — read L1 daily log (debug)
+// ============================================================
+
+function extractFullUserToken(request: Request): string {
+  const auth = request.headers.get('Authorization') || '';
+  return auth.startsWith('Bearer ') ? auth.slice(7) : '';
+}
+
+export async function handleMemoryReadL1(env: Env, request: Request): Promise<Response> {
+  const token = extractFullUserToken(request);
+  if (!token || token !== (env.ADMIN_TOKEN?.trim() || '')) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'Admin token required')), {
+      status: 401, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const url = new URL(request.url);
+  const workId = url.searchParams.get('work_id');
+  const page = url.searchParams.get('page') || 'write';
+  const date = url.searchParams.get('date') || new Date().toISOString().slice(0, 10);
+
+  if (!workId) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const path = `users/${token}/memory-logs/${page}/${workId}/${date}.json`;
+  try {
+    const obj = await env.WORKS_BUCKET.get(path);
+    if (!obj) {
+      return new Response(JSON.stringify(jsonSuccess({ exists: false, path })), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    const raw = await obj.text();
+    const log = JSON.parse(raw);
+    return new Response(JSON.stringify(jsonSuccess({ exists: true, path, log })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, `Read failed: ${(err as Error).message}`)), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
