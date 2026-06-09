@@ -21,7 +21,7 @@ import { workContentPath, type Lang } from './work-content';
 export const DEFAULT_CONTEXT_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 export interface ContextPackageOptions {
-  /** 是否包含 M5 意图卡（默认 true）。超大规模作品可关闭 */
+  /** 是否包含 M5 意图卡（默认 false，按需开启）。M5 为章节级蓝图，体量大、变化频，仅在处理特定章节时加入 */
   includeM5?: boolean;
   /** 强制重建（忽略 R2 缓存与有效期），默认 false */
   forceRebuild?: boolean;
@@ -80,7 +80,7 @@ export async function getOrBuildContextPackage(
   }
 
   // 构建
-  const includeM5 = opts.includeM5 !== false; // 默认 true
+  const includeM5 = opts.includeM5 === true; // 默认 false，按需开启
   const pkg = await buildContextPackage(env, workId, lang, { includeM5 });
 
   // 写入 R2 缓存
