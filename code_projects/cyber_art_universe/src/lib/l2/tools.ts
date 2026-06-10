@@ -202,7 +202,7 @@ function createReadModuleTool(env: Env): L2ToolDef {
       const lang = (params._lang as string) || 'zh';
 
       // 卡片类模块：自动列出所有卡片并返回完整内容
-      const CARD_TYPES = ['m3_card', 'm4_card', 'm5_intent'];
+      const CARD_TYPES = ['m3_card', 'm4_card', 'm5_intent', 'm6_chapter'];
       if (CARD_TYPES.includes(moduleType) && !params.module_id) {
         try {
           const mods = await env.DB.prepare(
@@ -401,7 +401,7 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
 
       if (!data.ok) {
         const errMsg = (data as { error?: { message?: string } }).error?.message || JSON.stringify((data as { error?: { message?: string } }).error);
-        return `❌ 写入失败: ${errMsg}\n\n可能原因及修复建议:\n- 如果提示 "Module not found"，说明 module_id 不正确。请确认 module_type 参数已传入（如 "m1"），或不传 module_id 让系统自动使用默认值\n- 如果提示 slot ID 无效，说明你使用的槽位 ID 不在模板中。请调用 get_writing_guide("${moduleType}") 获取该模块的精确 slot_id 列表，然后重新写入\n- 如果模块确实不存在，请检查 work_id 是否正确`;
+        return `❌ 写入失败: ${errMsg}\n\n可能原因及修复建议:\n- 如果提示 "Module not found"：可能是不存在的卡片——请先用 create_card 创建，再用 write_to_slot 写入内容\n- 如果提示 slot ID 无效，说明你使用的槽位 ID 不在模板中。请调用 get_writing_guide("${moduleType}") 获取该模块的精确 slot_id 列表，然后重新写入\n- 如果模块确实不存在，请检查 work_id 是否正确`;
       }
 
       const resultData = (data.data || {}) as Record<string, unknown>;
