@@ -38,7 +38,13 @@
  *     GET    /api/write/guide/{module_type}   — getModuleGuide
  *
  *   测试:
- *     POST   /api/write/memory-test/*         — test helpers
+ *     POST   /api/write/memory-test/setup       — 写入测试记忆数据
+ *     POST   /api/write/memory-test/teardown    — 清理测试记忆数据
+ *     POST   /api/write/memory-test/extract-l2  — 手动触发 STM 合并
+ *     POST   /api/write/memory-test/extract-l3  — 手动触发 LTM 合并
+ *     GET    /api/write/memory-test/read-l1     — 读取 L1 日志 (admin)
+ *     GET    /api/write/memory-test/read-l2     — 读取 STM final (admin)
+ *     GET    /api/write/memory-test/read-l3     — 读取 LTM final (admin)
  */
 import { Env } from '../../db/schema';
 import { jsonError } from '../../lib/response';
@@ -54,7 +60,8 @@ import { handleElfChat, handleGetConversation, handlePutConversation } from './e
 import { getModuleGuide } from '../../lib/l2/guides';
 import { jsonSuccess } from '../../lib/response';
 import { extractLang, type Lang } from '../../lib/l1/work-content';
-import { handleMemoryTestSetup, handleMemoryTestTeardown, handleMemoryExtractL2, handleMemoryExtractL3, handleMemoryReadL1 } from './memory-test';
+import { handleMemoryTestSetup, handleMemoryTestTeardown, handleMemoryExtractL2, handleMemoryExtractL3, handleMemoryReadL1, handleMemoryReadL2, handleMemoryReadL3 } from './memory-test';
+import { handleMemoryEval, handleMemoryEvalResults } from './memory-eval';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -156,6 +163,18 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   }
   if (resource === 'memory-test' && resourceId === 'extract-l3' && !subResource && !action) {
     if (request.method === 'POST') return handleMemoryExtractL3(env, request);
+  }
+  if (resource === 'memory-test' && resourceId === 'read-l2' && !subResource && !action) {
+    if (request.method === 'GET') return handleMemoryReadL2(env, request);
+  }
+  if (resource === 'memory-test' && resourceId === 'read-l3' && !subResource && !action) {
+    if (request.method === 'GET') return handleMemoryReadL3(env, request);
+  }
+  if (resource === 'memory-test' && resourceId === 'eval' && !subResource && !action) {
+    if (request.method === 'POST') return handleMemoryEval(env, request);
+  }
+  if (resource === 'memory-test' && resourceId === 'eval-results' && !subResource && !action) {
+    if (request.method === 'GET') return handleMemoryEvalResults(env, request);
   }
 
   return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Write endpoint not found')), {

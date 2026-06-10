@@ -247,17 +247,27 @@ export default {
   },
 
   // Cron 定时任务：每天凌晨 3:00 执行记忆提取（"睡眠"）
+  // - 浅睡：L1→L2 STM 增量合并（每天）
+  // - 深睡：L2→L3 LTM 画像提炼（距上次 ≥ 3 天时自动触发）
   async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
     console.log('[cron] 记忆提取开始...');
     try {
+      // 1. STM 浅睡：所有活跃用户 L1→L2
       const result = await extractL1toL2(env);
-      console.log(`[cron] L1→L2 完成: ${result.users_processed} 用户, ${result.sessions_extracted} 会话`);
+      console.log(`[cron] L1→L2 STM 完成: ${result.users_processed} 用户, ${result.sessions_extracted} 会话`);
 
-      // L2→L3 条件触发（仅对本次有新会话的用户）
-      if (result.users_processed > 0) {
-        // 由于 extractL1toL2 已处理了所有用户，这里简单记录
-        // L2→L3 的触发条件在 extractL2toL3IfDue 内部检查
-        console.log('[cron] L2→L3 检查待后续完善（需逐个用户调用 extractL2toL3IfDue）');
+      // 2. LTM 深睡：对本次处理过的用户，检查是否需要 L2→L3
+      let ltmCount = 0;
+      for (const userToken of result.users) {
+        try {
+          const didExtract = await extractL2toL3IfDue(env, userToken);
+          if (didExtract) ltmCount++;
+        } catch (err) {
+          console.error(`[cron] L2→L3 用户 ${userToken} 失败:`, (err as Error).message);
+        }
+      }
+      if (ltmCount > 0) {
+        console.log(`[cron] L2→L3 LTM 完成: ${ltmCount} 用户画像已更新`);
       }
     } catch (err) {
       console.error('[cron] 记忆提取失败:', (err as Error).message);

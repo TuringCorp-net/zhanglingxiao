@@ -122,6 +122,67 @@ TOKEN="admin-TuringCorp-13572468" WORK_ID="aa489993-1e7b-4804-b6af-723619b150b6"
 
 ---
 
+### memory-eval — 记忆系统 LLM-as-Judge 评估（半生产环境）
+
+通过真实 LLM 调用验证 4 大类记忆/压缩 prompt 的输出质量。由 Claude（评判 LLM）读取 DeepSeek 返回结果并逐项评审。
+
+**⚠️ 此测试会产生真实 LLM token 成本，不纳入 `run_all.sh`，需手动触发。**
+
+#### 测试场景（8 个子场景）
+
+| 类别 | 子场景 | 验证目标 |
+|------|--------|---------|
+| `mosaic_light` | L1_normal（5轮中文对话） | 逐条压缩：格式、关键信息保留、压缩率 |
+| | L2_tool_calls（含工具调用） | 逐条压缩：工具调用信号是否保留 |
+| `mosaic_heavy` | H1_decisions（12轮决策） | 成对压缩：关键决策是否完整捕获 |
+| | H2_repetitive（含重复内容） | 成对压缩：去重能力（重复偏好不重复记录） |
+| `stm_merge` | S1_merge（新+旧STM） | STM合并：增量合并、去重、旧记忆保留、自然遗忘 |
+| | S2_initial（纯新对话） | STM提取：初始记忆提取质量、模板遵循 |
+| `ltm_merge` | T1_merge（跨作品+旧LTM） | LTM合并：跨作品模式识别、画像增量更新 |
+| | T2_initial（纯新对话） | LTM提取：初始画像提炼、自然语言叙述质量 |
+
+#### 运行方式
+
+```bash
+# 运行全部 8 个场景（约 60-90 秒，~50K tokens）
+curl -s -X POST https://CAU.turingcorp.net/api/write/memory-test/eval \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer admin-TuringCorp-13572468' \
+  -d '{"category": "all"}'
+
+# 按类别运行
+curl ... -d '{"category": "stm_merge"}'
+
+# 按子场景运行
+curl ... -d '{"scenarios": ["stm_merge/S1_merge", "ltm_merge/T1_merge"]}'
+
+# 查看历史评估 run 列表
+curl "https://CAU.turingcorp.net/api/write/memory-test/eval-results?run_id=xxx"
+
+# 查看某次 run 的单个场景
+curl "https://CAU.turingcorp.net/api/write/memory-test/eval-results?run_id=xxx&scenario=stm_merge/S1_merge"
+```
+
+#### 评判流程
+
+评估端点返回每个场景的完整数据包（system prompt + user prompt + LLM 输出 + usage），由 Claude 作为评判 LLM 逐项检查：
+
+1. **格式遵循**：输出是否符合 prompt 要求的 JSON/Markdown 格式？
+2. **信息保真**：关键决策/偏好是否被完整保留？有没有遗漏？
+3. **合并质量**（STM/LTM）：新旧信息是否自然融合？有没有重复或矛盾？
+4. **去重/遗忘**（mosaic_heavy/STM）：重复内容是否被智能合并？旧信息是否自然淡化？
+5. **叙述质量**（LTM）：画像是否使用自然语言描述而非列表化？
+
+每次评判结果以表格形式呈现，标注 PASS / ⚠️ PASS（小瑕疵）/ ❌ FAIL。
+
+#### 评判历史
+
+| 日期 | Run ID | 结果 |
+|------|--------|------|
+| 2026-06-10 | `eval_2026-06-10T09-59-35` | 8/8 PASS，2 个小瑕疵（末尾消息偶发丢失、一条推断越界） |
+
+---
+
 ## 待覆盖盲区（下一步验证计划）
 
 > 以下为当前测试体系的已知盲区。这些验证需要真实 LLM 调用，待 L2 核心代码更成熟后再实施。

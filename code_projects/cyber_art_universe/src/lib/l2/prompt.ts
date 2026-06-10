@@ -6,7 +6,8 @@ import { getPromptTemplate } from '../l1/scenarios';
 import { renderTemplate } from '../l1/render';
 import type { AgentVars } from '../l1/types';
 import type { ToolDef } from '../l0/aiGateway';
-import { readRecentL2Files, readL3Profile } from './memory';
+import { readSTMFinal, readLTMFinal } from './memory';
+import toolGuideTemplate from './prompts/tool_guide.md';
 
 // ============================================================
 // 参考案例包（R2 缓存 key）
@@ -104,17 +105,7 @@ export async function buildAgentSystemPromptLayers(
     const toolDescriptions = tools.map(t =>
       `- **${t.function.name}**: ${t.function.description}`
     ).join('\n');
-    layer4 = `## 可用工具\n\n你可以调用以下工具来辅助作者创作。工具是可选的——只在确实需要时才调用。你可以在一轮对话中调用多个工具，按自己判断的顺序执行。每次工具调用后你会收到结果，然后可以决定下一步做什么。\n\n${toolDescriptions}\n\n**工具使用指南**：\n- 不确定作者当前模块的内容时，先用 \`read_module\` 了解现状\n- 生成内容前，确认理解了模板结构和上下文包中的约束\n- 生成后，用 \`write_to_slot\` 保存结果（自动走版本历史）\n- 如果作者的要求不够具体，先问清楚再操作，不要自行决定
-
-**处理复杂任务**：
-当作者的任务涉及多个步骤时（如"参考XX优化角色"、"帮我完成这一章"），你应该：
-1. 先将复杂任务分解为 2-5 个子步骤
-2. 在回复中简要说明你的计划（如"我将分三步：先读现状，再参考案例，最后生成修改"）
-3. 逐步执行每个子步骤，每步可以包含多次工具调用
-4. 全部完成后给出总结
-你最多可以进行 30 轮工具调用——足够完成大多数复杂创作任务。
-
-对于特别复杂的任务，你可以使用 \`checklist_write\` 工具来创建任务清单，然后逐步执行并在完成每个子任务时更新状态。这样作者能看到你的进度，你也可以在需要作者确认的节点停下来等待反馈。`;
+    layer4 = toolGuideTemplate.replace('{{tool_list}}', toolDescriptions);
   }
 
   // —— Layer 5: 记忆注入层 ——
@@ -135,17 +126,17 @@ export async function buildAgentSystemPromptLayers(
     }
   } catch { /* checklist 加载失败不影响主流程 */ }
 
-  // 5b. L2 短期记忆 + L3 长期画像（L2.1）
+  // 5b. L2 短期记忆（STM final）+ L3 长期画像（LTM final）
   if (userToken) {
     try {
-      const l2Content = await readRecentL2Files(env, userToken, 7);
-      if (l2Content) {
-        memParts.push(`## 近期记忆（最近 7 天）\n\n${l2Content}`);
+      const stmContent = await readSTMFinal(env, userToken);
+      if (stmContent) {
+        memParts.push(`## 短期记忆\n\n${stmContent}`);
       }
     } catch { /* 记忆加载失败不影响主流程 */ }
 
     try {
-      const l3Profile = await readL3Profile(env, userToken);
+      const l3Profile = await readLTMFinal(env, userToken);
       if (l3Profile) {
         memParts.push(`---\n\n${l3Profile}`);
       }

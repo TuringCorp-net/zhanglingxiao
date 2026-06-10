@@ -8,6 +8,8 @@
 // lightWindow / heavyWindow serve as anti-jitter: compression only fires at window boundaries.
 
 import { Env } from '../../db/schema';
+import compressPrompt from './prompts/mosaic_compress/system.md';
+import pairPrompt from './prompts/mosaic_pair/system.md';
 import { callAI, type Message } from '../l0/aiGateway';
 
 // ============================================================
@@ -151,25 +153,13 @@ async function runLightCompressLLM(
     return `[${i}] ${roleLabel}: ${content}`;
   }).join('\n\n');
 
-  const systemPrompt = `You are a dialogue compressor. Compress each message below to its essential core — remove filler words, repetition, and small talk. Preserve the original language of the input.
-
-## Principles
-1. Compress each message independently. Output order and numbering MUST match input exactly.
-2. Preserve: user decisions, preferences, feedback, assistant conclusions, commitments, key suggestions
-3. Remove: filler words, repeated confirmations, small talk, completed tool-call processes
-4. Keep each compressed message concise (≤80 words)
-
-## Output format
-Output ONLY a JSON array (no other text):
-[{"i": <index>, "c": "<compressed content>"}, ...]`;
-
   try {
     let content: string;
     if (config._mockCallAI) {
-      content = await config._mockCallAI(systemPrompt, `Please compress the following ${messages.length} messages:\n\n${msgLines}`);
+      content = await config._mockCallAI(compressPrompt, `Please compress the following ${messages.length} messages:\n\n${msgLines}`);
     } else {
       const result = await callAI(env, [
-        { role: 'system', content: systemPrompt },
+        { role: 'system', content: compressPrompt },
         { role: 'user', content: `Please compress the following ${messages.length} messages:\n\n${msgLines}` },
       ], { model: config.model || 'deepseek-v4-flash', maxTokens: 2048, temperature: 0.3 });
       content = result.content || '';
@@ -239,27 +229,13 @@ async function runHeavyCompressLLM(
     return `[${i}] ${roleLabel}: ${m.content || ''}`;
   }).join('\n\n');
 
-  const systemPrompt = `You are a dialogue compressor. Compress the conversation below into exactly 2 messages (a summary pair). Preserve the original language of the input.
-
-## Principles
-1. Output EXACTLY 2 messages:
-   - Message 1 (role: "user"): a summary listing key decisions, preferences, creative directions, todos/commitments
-   - Message 2 (role: "assistant"): a confirmation listing recorded directions and pending follow-ups
-2. Ancient, redundant information already covered by later conversations can be omitted
-3. Use declarative facts, one per line. Keep the total under 500 words.
-4. Preserve unfinished action items that need follow-up
-
-## Output format
-Output ONLY a JSON array (no other text):
-[{"role": "user", "content": "<summary>"}, {"role": "assistant", "content": "<confirmation>"}]`;
-
   try {
     let content: string;
     if (config._mockCallAI) {
-      content = await config._mockCallAI(systemPrompt, inputText);
+      content = await config._mockCallAI(pairPrompt, inputText);
     } else {
       const result = await callAI(env, [
-        { role: 'system', content: systemPrompt },
+        { role: 'system', content: pairPrompt },
         { role: 'user', content: inputText },
       ], { model: config.model || 'deepseek-v4-flash', maxTokens: 2048, temperature: 0.3 });
       content = result.content || '';

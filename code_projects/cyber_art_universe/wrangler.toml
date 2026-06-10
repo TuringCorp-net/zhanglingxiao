@@ -8,9 +8,8 @@ routes = [
 ]
 
 # Cron 定时任务：每天凌晨 3:00 执行记忆提取（"睡眠"）
-# 首次实现阶段暂时禁用，手动触发测试
-# [triggers]
-# crons = ["0 3 * * *"]
+[triggers]
+crons = ["0 3 * * *"]
 
 [[d1_databases]]
 binding = "DB"

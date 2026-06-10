@@ -1,23 +1,39 @@
 // L2: 记忆系统核心
-// 三级记忆模型：L1 瞬时（Session Log）→ L2 短期（STM）→ L3 长期（LTM）
-// 设计文档：docs/story_elf/L2_agent_memory.md
+// 三级记忆模型：L1 瞬时（Session Log）→ L2 短期（STM final）→ L3 长期（LTM final）
+// 设计文档：docs/story_elf/original_concept.md §agent memory
+//
+// 增量合并式提取（类似马赛克压缩）：
+// - STM：每天凌晨 3:00，将当日 L1 + 现有 stm-final.md → LLM 合并 → 新 stm-final.md（同时保存 stm-memory/{date}.md 存档）
+// - LTM：每 3 天一次，将近 3 日 L1 + 现有 ltm-final.md → LLM 合并 → 新 ltm-final.md（同时保存 ltm-memory/{date}.md 存档）
+//
+// 双标志位：
+// - extracted_to_stm：L1 文件是否已参与 STM 合并
+// - extracted_to_ltm：L1 文件是否已参与 LTM 合并
+// 两个标志位独立，STM 每天执行，LTM 每 3 天执行。
 
 import { Env } from '../../db/schema';
 import { callAI, type Message } from '../l0/aiGateway';
+import stmPrompt from './prompts/memory_stm/system.md';
+import ltmPrompt from './prompts/memory_ltm/system.md';
 
 // ============================================================
 // 类型
 // ============================================================
 
-/** L1 会话日志 */
-export interface SessionLog {
-  session_id: string;
-  date: string;            // YYYY-MM-DD
-  page: 'read' | 'write';
+/** L1 每日日志（按天聚合，同一天多次对话追加到同一文件） */
+interface DailyLog {
+  date: string;
+  page: string;
   work_id: string;
   work_title: string;
-  messages: SessionMessage[];
+  entries: {
+    timestamp: string;
+    messages: SessionMessage[];
+  }[];
+  /** L1→L2 是否已提取 */
   extracted_to_stm: boolean;
+  /** L2→L3 是否已提取 */
+  extracted_to_ltm: boolean;
 }
 
 interface SessionMessage {
@@ -29,28 +45,14 @@ interface SessionMessage {
   tool_call_id?: string;
 }
 
-/** L2→L3 提取状态 */
+/** L2→L3 提取状态（仅记录上次提取时间） */
 interface ExtractionState {
   last_l3_extraction: string;    // YYYY-MM-DD
-  session_count_since_l3: number;
 }
 
 // ============================================================
-// L1: 保存会话日志（每日追加，无 Session ID）
+// L1: 保存会话日志（每日追加）
 // ============================================================
-
-/** 每日日志（按天聚合，追加写入） */
-interface DailyLog {
-  date: string;
-  page: string;
-  work_id: string;
-  work_title: string;
-  entries: {
-    timestamp: string;
-    messages: SessionMessage[];
-  }[];
-  extracted_to_stm: boolean;
-}
 
 /**
  * 保存一轮对话记录到当日 L1 Memory Log（追加写入）。
@@ -70,7 +72,7 @@ export async function saveDailyLog(
   const today = now.toISOString().slice(0, 10);
   const path = `users/${userToken}/memory-logs/${page}/${workId}/${today}.json`;
 
-  // Convert messages to L1 format
+  // 转换 messages 为 L1 存储格式
   const sessionMessages: SessionMessage[] = messages.map(m => {
     if (m.role === 'tool') {
       return {
@@ -98,7 +100,6 @@ export async function saveDailyLog(
   };
 
   try {
-    // Load existing daily log, or create new one
     let log: DailyLog;
     const existing = await env.WORKS_BUCKET.get(path);
     if (existing) {
@@ -112,6 +113,7 @@ export async function saveDailyLog(
         work_title: workTitle,
         entries: [entry],
         extracted_to_stm: false,
+        extracted_to_ltm: false,
       };
     }
     await env.WORKS_BUCKET.put(path, JSON.stringify(log, null, 2), {
@@ -123,80 +125,97 @@ export async function saveDailyLog(
 }
 
 // ============================================================
-// L1→L2: 短期记忆提取
+// L1→L2: 短期记忆增量合并（每天执行）
 // ============================================================
 
 /**
- * Cron 触发：批量提取未处理的 L1 日志 → L2 短期记忆。
- * 扫描近 1-2 天未提取的 L1 文件，按用户分组，为每个用户生成一次 LLM 提取调用。
+ * Cron 触发：扫描近 1-2 天未处理 STM 的 L1 日志，
+ * 与现有 stm-final.md 合并 → LLM 一次调用完成提取 + 去重 + 自然遗忘。
  */
-export async function extractL1toL2(env: Env): Promise<{ users_processed: number; sessions_extracted: number }> {
+export async function extractL1toL2(env: Env): Promise<{
+  users_processed: number;
+  sessions_extracted: number;
+  users: string[];
+}> {
   const today = new Date();
   const dates = [
     today.toISOString().slice(0, 10),
     new Date(today.getTime() - 86400000).toISOString().slice(0, 10),
   ];
 
-  // 1. 发现活跃用户
   const userTokens = await discoverActiveUsers(env, dates);
-
+  const processedUsers: string[] = [];
   let usersProcessed = 0;
   let sessionsExtracted = 0;
 
   for (const userToken of userTokens) {
     try {
-      // 2. 为该用户查找未处理的 L1 文件
-      const unprocessedLogs = await findUnprocessedLogs(env, userToken, dates);
-      if (unprocessedLogs.length === 0) continue;
+      const unprocessedKeys = await findUnprocessedLogs(env, userToken, dates, 'extracted_to_stm');
+      if (unprocessedKeys.length === 0) continue;
 
-      // 3. 读取 L1 内容并合并
-      const allSessions: { session_id: string; date: string; content: string }[] = [];
-      for (const logKey of unprocessedLogs) {
+      // 读取并格式化 L1 内容
+      const l1Contents: string[] = [];
+      for (const key of unprocessedKeys) {
         try {
-          const obj = await env.WORKS_BUCKET.get(logKey);
+          const obj = await env.WORKS_BUCKET.get(key);
           if (!obj) continue;
-          const log: SessionLog = JSON.parse(await obj.text());
+          const log: DailyLog = JSON.parse(await obj.text());
           if (log.extracted_to_stm) continue;
-
-          // 将会话内容格式化为可读文本
-          const content = formatSessionForExtraction(log);
-          allSessions.push({ session_id: log.session_id, date: log.date, content });
+          l1Contents.push(formatDailyLogForExtraction(log));
         } catch { /* 单文件损坏不中断批处理 */ }
       }
 
-      if (allSessions.length === 0) continue;
+      if (l1Contents.length === 0) continue;
 
-      // 4. 调用 LLM 提取 L2 记忆
-      const stmEntry = await runL1toL2Extraction(env, allSessions);
-      if (!stmEntry) continue;
+      // 读取现有 STM final
+      const existingSTM = await readSTMFinal(env, userToken);
 
-      // 5. 追加到当天 L2 文件
-      await appendToSTMFile(env, userToken, today.toISOString().slice(0, 10), stmEntry);
+      // LLM 合并：当日 L1 + 现有 STM → 新 STM
+      const newSTM = await runSTMMerge(env, l1Contents.join('\n\n---\n\n'), existingSTM);
+      if (!newSTM) continue;
 
-      // 6. 标记 L1 文件为已提取
-      for (const logKey of unprocessedLogs) {
-        await markExtracted(env, logKey);
+      // 写入新 STM final（注入 prompt 用）
+      await env.WORKS_BUCKET.put(
+        `users/${userToken}/stm/stm-final.md`,
+        newSTM,
+        { httpMetadata: { contentType: 'text/markdown; charset=utf-8' } },
+      );
+
+      // 同时保存按日存档（保留原始提取结果，供未来回溯/二次精炼）
+      const todayStr = today.toISOString().slice(0, 10);
+      await env.WORKS_BUCKET.put(
+        `users/${userToken}/stm/stm-memory/${todayStr}.md`,
+        newSTM,
+        { httpMetadata: { contentType: 'text/markdown; charset=utf-8' } },
+      );
+
+      // 标记 L1 文件为已提取 STM
+      for (const key of unprocessedKeys) {
+        await markExtracted(env, key, 'extracted_to_stm');
       }
 
       usersProcessed++;
-      sessionsExtracted += allSessions.length;
+      sessionsExtracted += l1Contents.length;
+      processedUsers.push(userToken);
     } catch (err) {
       console.error(`[memory] 用户 ${userToken} 的 L1→L2 提取失败:`, (err as Error).message);
     }
   }
 
-  return { users_processed: usersProcessed, sessions_extracted: sessionsExtracted };
+  return { users_processed: usersProcessed, sessions_extracted: sessionsExtracted, users: processedUsers };
 }
 
 // ============================================================
-// L2→L3: 长期画像提取
+// L2→L3: 长期画像增量合并（每 3 天执行）
 // ============================================================
 
 /**
- * 检查 L2→L3 触发条件（距上次 ≥7 天 且 ≥10 次新会话）。
- * 满足条件时触发 LLM 提取，更新 memory-profile.md。
+ * 检查 L2→L3 触发条件：距上次 L3 提取 ≥ 3 天。
+ * 满足条件时，将近 3 天未提取 LTM 的 L1 + 现有 ltm-final.md → LLM 合并。
+ * 同时保存按日存档（ltm/ltm-memory/{date}.md）供未来回溯。
+ * 纯时间驱动，不再依赖会话次数。
  */
-export async function extractL2toL3IfDue(env: Env, userToken: string, newSessionCount: number): Promise<boolean> {
+export async function extractL2toL3IfDue(env: Env, userToken: string): Promise<boolean> {
   const state = await getExtractionState(env, userToken);
   const today = new Date().toISOString().slice(0, 10);
 
@@ -204,30 +223,63 @@ export async function extractL2toL3IfDue(env: Env, userToken: string, newSession
     ? Math.floor((Date.now() - new Date(state.last_l3_extraction).getTime()) / 86400000)
     : 999;
 
-  const totalSessions = state.session_count_since_l3 + newSessionCount;
+  if (daysSinceLast < 3) return false;
 
-  if (daysSinceLast < 7 || totalSessions < 10) {
-    // 不满足触发条件 → 只更新计数
-    await updateExtractionState(env, userToken, state.last_l3_extraction || today, totalSessions);
-    return false;
+  // 近 3 天的日期列表
+  const dates: string[] = [];
+  for (let i = 0; i < 3; i++) {
+    dates.push(new Date(Date.now() - i * 86400000).toISOString().slice(0, 10));
   }
 
-  // 触发 L2→L3 提取
   try {
-    const l2Content = await readRecentL2Files(env, userToken, 30);
-    if (!l2Content) return false;
+    const unprocessedKeys = await findUnprocessedLogs(env, userToken, dates, 'extracted_to_ltm');
+    if (unprocessedKeys.length === 0) {
+      // 没有新 L1，但仍更新状态避免反复检查
+      await updateExtractionState(env, userToken, today);
+      return false;
+    }
 
-    const newProfile = await runL2toL3Extraction(env, l2Content, userToken);
-    if (!newProfile) return false;
+    // 读取并格式化 L1 内容
+    const l1Contents: string[] = [];
+    for (const key of unprocessedKeys) {
+      try {
+        const obj = await env.WORKS_BUCKET.get(key);
+        if (!obj) continue;
+        const log: DailyLog = JSON.parse(await obj.text());
+        if (log.extracted_to_ltm) continue;
+        l1Contents.push(formatDailyLogForExtraction(log));
+      } catch { /* skip corrupted */ }
+    }
 
-    // 写入 memory-profile.md
-    const profilePath = `users/${userToken}/ltm/memory-profile.md`;
-    await env.WORKS_BUCKET.put(profilePath, newProfile, {
-      httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
-    });
+    if (l1Contents.length === 0) return false;
 
-    // 重置计数
-    await updateExtractionState(env, userToken, today, 0);
+    // 读取现有 LTM final
+    const existingLTM = await readLTMFinal(env, userToken);
+
+    // LLM 合并：近期 L1 + 现有 LTM → 新 LTM
+    const newLTM = await runLTMMerge(env, l1Contents.join('\n\n---\n\n'), existingLTM);
+    if (!newLTM) return false;
+
+    // 写入新 LTM final（注入 prompt 用）
+    await env.WORKS_BUCKET.put(
+      `users/${userToken}/ltm/ltm-final.md`,
+      newLTM,
+      { httpMetadata: { contentType: 'text/markdown; charset=utf-8' } },
+    );
+
+    // 同时保存按日存档（保留原始提取结果，供未来回溯/二次精炼）
+    await env.WORKS_BUCKET.put(
+      `users/${userToken}/ltm/ltm-memory/${today}.md`,
+      newLTM,
+      { httpMetadata: { contentType: 'text/markdown; charset=utf-8' } },
+    );
+
+    // 标记 L1 文件为已提取 LTM
+    for (const key of unprocessedKeys) {
+      await markExtracted(env, key, 'extracted_to_ltm');
+    }
+
+    await updateExtractionState(env, userToken, today);
     return true;
   } catch (err) {
     console.error('[memory] L2→L3 提取失败:', (err as Error).message);
@@ -240,38 +292,26 @@ export async function extractL2toL3IfDue(env: Env, userToken: string, newSession
 // ============================================================
 
 /**
- * 读取近 N 天的 L2 短期记忆文件。
- * 供 prompt.ts 的 buildAgentSystemPromptLayers() 调用。
+ * 读取 STM final（增量合并后的短期记忆，单文件）。
+ * 供 prompt.ts 的 Layer 5 注入调用。
  */
-export async function readRecentL2Files(env: Env, userToken: string, days: number): Promise<string> {
-  const parts: string[] = [];
-  const today = new Date();
-
-  for (let i = 0; i < days; i++) {
-    const d = new Date(today.getTime() - i * 86400000);
-    const dateStr = d.toISOString().slice(0, 10);
-    const path = `users/${userToken}/stm/stm-memory/${dateStr}.md`;
-
-    try {
-      const obj = await env.WORKS_BUCKET.get(path);
-      if (obj) {
-        const content = await obj.text();
-        if (content.trim()) {
-          parts.push(`### ${dateStr}\n\n${content}`);
-        }
-      }
-    } catch { /* 缺失某天的文件正常 */ }
+export async function readSTMFinal(env: Env, userToken: string): Promise<string> {
+  try {
+    const obj = await env.WORKS_BUCKET.get(`users/${userToken}/stm/stm-final.md`);
+    if (!obj) return '';
+    return await obj.text();
+  } catch {
+    return '';
   }
-
-  return parts.join('\n\n');
 }
 
 /**
- * 读取 L3 长期画像。
+ * 读取 LTM final（长期用户画像，单文件）。
+ * 供 prompt.ts 的 Layer 5 注入调用。
  */
-export async function readL3Profile(env: Env, userToken: string): Promise<string> {
+export async function readLTMFinal(env: Env, userToken: string): Promise<string> {
   try {
-    const obj = await env.WORKS_BUCKET.get(`users/${userToken}/ltm/memory-profile.md`);
+    const obj = await env.WORKS_BUCKET.get(`users/${userToken}/ltm/ltm-final.md`);
     if (!obj) return '';
     return await obj.text();
   } catch {
@@ -309,20 +349,20 @@ export async function saveChecklist(
 // 内部函数
 // ============================================================
 
-/** 发现近 N 天有活动的用户 */
+/** 发现近 N 天有 L1 日志活动的用户 */
 async function discoverActiveUsers(env: Env, dates: string[]): Promise<string[]> {
   const users = new Set<string>();
 
-  // 通过 R2 list 扫描 users/ 前缀
   try {
     let cursor: string | undefined;
     do {
       const listed = await env.WORKS_BUCKET.list({ prefix: 'users/', limit: 500, cursor });
       for (const obj of listed.objects) {
-        // 检查是否匹配目标日期
+        // 检查是否匹配目标日期的 L1 日志文件
+        // 路径格式：users/{token}/memory-logs/{page}/{work_id}/{date}.json
+        if (!obj.key.includes('/memory-logs/')) continue;
         for (const d of dates) {
-          if (obj.key.includes(`/${d}_`)) {
-            // 提取 user_token：users/{token}/...
+          if (obj.key.endsWith(`/${d}.json`)) {
             const parts = obj.key.split('/');
             if (parts.length >= 2 && parts[0] === 'users') {
               users.add(parts[1]);
@@ -340,8 +380,16 @@ async function discoverActiveUsers(env: Env, dates: string[]): Promise<string[]>
   return Array.from(users);
 }
 
-/** 查找某用户未处理的 L1 日志 */
-async function findUnprocessedLogs(env: Env, userToken: string, dates: string[]): Promise<string[]> {
+/**
+ * 查找某用户未处理的 L1 日志。
+ * @param flag 要检查的标志位：'extracted_to_stm' 或 'extracted_to_ltm'
+ */
+async function findUnprocessedLogs(
+  env: Env,
+  userToken: string,
+  dates: string[],
+  flag: 'extracted_to_stm' | 'extracted_to_ltm',
+): Promise<string[]> {
   const keys: string[] = [];
   const prefix = `users/${userToken}/memory-logs/`;
 
@@ -350,8 +398,9 @@ async function findUnprocessedLogs(env: Env, userToken: string, dates: string[])
     do {
       const listed = await env.WORKS_BUCKET.list({ prefix, limit: 200, cursor });
       for (const obj of listed.objects) {
+        // 匹配 {date}.json 结尾的文件
         for (const d of dates) {
-          if (obj.key.includes(`/${d}_`)) {
+          if (obj.key.endsWith(`/${d}.json`)) {
             keys.push(obj.key);
             break;
           }
@@ -366,123 +415,135 @@ async function findUnprocessedLogs(env: Env, userToken: string, dates: string[])
   return keys;
 }
 
-/** 将会话日志格式化为提取 LLM 可读的文本 */
-function formatSessionForExtraction(log: SessionLog): string {
+/**
+ * 将 DailyLog 格式化为 LLM 可读的文本。
+ * DailyLog 结构：{ entries: [{ timestamp, messages: [...] }] }
+ */
+function formatDailyLogForExtraction(log: DailyLog): string {
   const lines: string[] = [];
-  lines.push(`## 会话 ${log.session_id}`);
-  lines.push(`日期: ${log.date} | 作品: ${log.work_title} (${log.work_id}) | 页面: ${log.page}`);
+  lines.push(`## ${log.date} | 作品: ${log.work_title} (${log.work_id}) | 页面: ${log.page}`);
   lines.push('');
 
-  for (const msg of log.messages) {
-    switch (msg.role) {
-      case 'user':
-        lines.push(`**作者**: ${msg.content || ''}`);
-        break;
-      case 'assistant':
-        if (msg.content) {
-          lines.push(`**Story Elf**: ${msg.content.substring(0, 500)}`);
-        }
-        break;
-      case 'tool_call':
-        lines.push(`_[调用了工具: ${msg.tool}(${JSON.stringify(msg.params || {})})]_`);
-        break;
-      case 'tool_result':
-        // 不显示 tool_result 详情
-        break;
-    }
+  for (const entry of log.entries) {
+    lines.push(`### ${entry.timestamp}`);
     lines.push('');
+    for (const msg of entry.messages) {
+      switch (msg.role) {
+        case 'user':
+          lines.push(`**作者**: ${msg.content || ''}`);
+          break;
+        case 'assistant':
+          if (msg.content) {
+            lines.push(`**Story Elf**: ${msg.content}`);
+          }
+          break;
+        case 'tool_call':
+          lines.push(`_[调用了工具: ${msg.tool}(${JSON.stringify(msg.params || {})})]_`);
+          break;
+        case 'tool_result':
+          // 不保存 tool_result 详情（数据已在 R2，重复存储无意义）
+          break;
+      }
+      lines.push('');
+    }
   }
 
   return lines.join('\n');
 }
 
-/** 调用 LLM 提取 L1→L2 */
-async function runL1toL2Extraction(
+// ============================================================
+// LLM 调用：增量合并
+// ============================================================
+
+/**
+ * STM 合并：当日 L1 内容 + 现有 STM final → 新 STM final。
+ * 一次 LLM 调用完成"提取新信息 + 与旧记忆合并去重 + 自然遗忘"。
+ */
+export async function runSTMMerge(
   env: Env,
-  sessions: { session_id: string; date: string; content: string }[],
+  l1Content: string,
+  existingSTM: string,
 ): Promise<string | null> {
-  const sessionTexts = sessions.map(s => s.content).join('\n\n---\n\n');
+  const hasExisting = existingSTM.trim().length > 0;
+  const today = new Date().toISOString().slice(0, 10);
 
-  const systemPrompt = `你是 Story Elf 的记忆提取器。你的任务是从对话记录中提取关键信息，形成声明式事实。
+  // 统计 L1 中的会话条目数
+  const sessionCount = (l1Content.match(/^### /gm) || []).length;
 
-## 提取原则
-
-1. **声明式事实，不是命令**
-   ✅ "偏好短句、快节奏叙事"
-   ❌ "永远用短句写"
-
-2. **只提取用户明确表达或强烈暗示的信息**
-   - 用户明确说的偏好、做的决策
-   - 用户的反馈（正面或负面）
-   - 创作方向的关键选择
-
-3. **不提取以下内容**
-   - 临时性的闲聊或客套话
-   - 已经在对话中显然是一次性的操作
-   - 工具调用的技术细节
-
-4. **简洁**：每条事实一行，不超过 150 字。
-
-## 输出格式
-
-请按以下格式输出（只输出记忆条目，不要其他文字）：
-
-## 写作偏好
-- {事实}
-
-## 作品决策（{作品名}）
-- {决策}
-
-## 作者反馈
-- {反馈}
-
-## 待办/计划
-- {待办}`;
+  const userPrompt = hasExisting
+    ? `以下是现有短期记忆，请结合最新的对话记录进行合并更新。\n\n## 现有短期记忆\n\n${existingSTM.trim()}\n\n---\n\n## 最新对话记录\n\n${l1Content}\n\n请输出合并后的完整短期记忆（${today}，合并了 ${sessionCount} 份新对话记录）。`
+    : `以下是最新的对话记录。请从中提取关键信息，生成初始短期记忆。\n\n${l1Content}\n\n请输出完整的短期记忆文件（${today}，来自 ${sessionCount} 份新对话记录）。`;
 
   try {
     const result = await callAI(env, [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: `以下是最新的对话记录。请从中提取关键信息：\n\n${sessionTexts.substring(0, 15000)}` },
+      { role: 'system', content: stmPrompt },
+      { role: 'user', content: userPrompt },
     ], {
       model: 'deepseek-v4-flash',
-      maxTokens: 1024,
+      maxTokens: 2048,
       temperature: 0.3,
     });
 
     const content = result.content?.trim();
-    if (!content || content.length < 10) return null;
+    if (!content || content.length < 20) return null;
     return content;
   } catch (err) {
-    console.error('[memory] L1→L2 LLM 调用失败:', (err as Error).message);
+    console.error('[memory] STM 合并 LLM 调用失败:', (err as Error).message);
     return null;
   }
 }
 
-/** 追加 L2 条目到当天 STM 文件 */
-async function appendToSTMFile(env: Env, userToken: string, dateStr: string, entry: string): Promise<void> {
-  const path = `users/${userToken}/stm/stm-memory/${dateStr}.md`;
+/**
+ * LTM 合并：近期 L1 内容 + 现有 LTM final → 新 LTM final。
+ * 一次 LLM 调用完成"提炼持久画像 + 与旧画像合并 + 自然演化"。
+ */
+export async function runLTMMerge(
+  env: Env,
+  l1Content: string,
+  existingLTM: string,
+): Promise<string | null> {
+  const hasExisting = existingLTM.trim().length > 0;
+  const today = new Date().toISOString().slice(0, 10);
+  const sessionCount = (l1Content.match(/^### /gm) || []).length;
 
-  let existing = '';
+  const userPrompt = hasExisting
+    ? `以下是现有用户画像，请结合最新的对话记录进行合并更新。\n\n## 现有用户画像\n\n${existingLTM.trim()}\n\n---\n\n## 最新对话记录\n\n${l1Content}\n\n请输出更新后的完整用户画像（${today}，基于 ${sessionCount} 份新对话记录）。`
+    : `以下是最新的对话记录。请从中提炼用户的持久创作画像。\n\n${l1Content}\n\n请输出完整的用户画像文件（${today}，基于 ${sessionCount} 份新对话记录）。`;
+
   try {
-    const obj = await env.WORKS_BUCKET.get(path);
-    if (obj) existing = await obj.text();
-  } catch { /* 文件可能不存在 */ }
+    const result = await callAI(env, [
+      { role: 'system', content: ltmPrompt },
+      { role: 'user', content: userPrompt },
+    ], {
+      model: 'deepseek-v4-flash',
+      maxTokens: 2048,
+      temperature: 0.3,
+    });
 
-  const header = existing ? '\n\n' : `# ${dateStr} 短期记忆\n\n`;
-  const newContent = existing + header + entry;
-
-  await env.WORKS_BUCKET.put(path, newContent, {
-    httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
-  });
+    const content = result.content?.trim();
+    if (!content || content.length < 20) return null;
+    return content;
+  } catch (err) {
+    console.error('[memory] LTM 合并 LLM 调用失败:', (err as Error).message);
+    return null;
+  }
 }
 
+// ============================================================
+// 提取状态管理
+// ============================================================
+
 /** 标记 L1 文件为已提取 */
-async function markExtracted(env: Env, key: string): Promise<void> {
+async function markExtracted(
+  env: Env,
+  key: string,
+  flag: 'extracted_to_stm' | 'extracted_to_ltm',
+): Promise<void> {
   try {
     const obj = await env.WORKS_BUCKET.get(key);
     if (!obj) return;
-    const log: SessionLog = JSON.parse(await obj.text());
-    log.extracted_to_stm = true;
+    const log: DailyLog = JSON.parse(await obj.text());
+    log[flag] = true;
     await env.WORKS_BUCKET.put(key, JSON.stringify(log, null, 2), {
       httpMetadata: { contentType: 'application/json' },
     });
@@ -495,71 +556,17 @@ async function getExtractionState(env: Env, userToken: string): Promise<Extracti
     const obj = await env.WORKS_BUCKET.get(`users/${userToken}/ltm/.extraction-state.json`);
     if (obj) return JSON.parse(await obj.text()) as ExtractionState;
   } catch { /* 文件不存在，返回默认 */ }
-  return { last_l3_extraction: '', session_count_since_l3: 0 };
+  return { last_l3_extraction: '' };
 }
 
 /** 更新 L2→L3 提取状态 */
-async function updateExtractionState(env: Env, userToken: string, lastDate: string, count: number): Promise<void> {
-  const state: ExtractionState = { last_l3_extraction: lastDate, session_count_since_l3: count };
+async function updateExtractionState(env: Env, userToken: string, lastDate: string): Promise<void> {
+  const state: ExtractionState = { last_l3_extraction: lastDate };
   await env.WORKS_BUCKET.put(
     `users/${userToken}/ltm/.extraction-state.json`,
     JSON.stringify(state, null, 2),
     { httpMetadata: { contentType: 'application/json' } },
   );
-}
-
-/** 调用 LLM 提取 L2→L3 */
-async function runL2toL3Extraction(env: Env, l2Content: string, userToken: string): Promise<string | null> {
-  const systemPrompt = `你是 Story Elf 的长期画像提炼器。你的任务是从近期的短期记忆（L2）中，提炼用户的持久创作画像，写入 memory-profile.md。
-
-## 提炼原则
-
-1. 只关注跨作品、跨时间的稳定模式
-   - 如果某偏好只在 1-2 天内出现 → 留在 L2
-   - 如果某偏好在多个 L2 文件中反复出现 → 提炼到画像
-
-2. 输出格式：Markdown，用约定的 ## 标题组织，标题下为自由叙述文本
-   - ## 写作风格 — 节奏、句长、对话风格、描写密度、基调
-   - ## 世界观构建 — 体系偏好、结构模式、关注点
-   - ## 角色偏好 — 弧线类型、关系模式、角色原型
-   - ## 互动风格 — 与 Elf 的互动方式、纠错偏好、沟通口吻
-   - 允许按需添加新标题
-
-3. 叙述风格：用完整的自然语言描述，不要列表化、不要缩写
-   ✅ "偏好快节奏叙事，句子简短有力。不喜欢冗长的环境描写，
-       但善于用动作和对白来暗示环境氛围。"
-   ❌ "pace: fast, sentence_length: short"
-
-4. 如果某个维度没有足够的证据，可以省略该标题。
-
-5. 头部包含元信息：最后更新日期、来源 L2 文件数量`;
-
-  try {
-    const result = await callAI(env, [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: `以下是最新的短期记忆。请提炼用户画像：\n\n${l2Content.substring(0, 20000)}` },
-    ], {
-      model: 'deepseek-v4-flash',
-      maxTokens: 2048,
-      temperature: 0.3,
-    });
-
-    const content = result.content?.trim();
-    if (!content || content.length < 20) return null;
-
-    // 添加元信息头部
-    const today = new Date().toISOString().slice(0, 10);
-    const sourceCount = (l2Content.match(/^### \d{4}-\d{2}-\d{2}$/gm) || []).length;
-
-    return `# 用户画像
-
-> 最后更新：${today} | 来源 L2 文件：${sourceCount} 份
-
-${content}`;
-  } catch (err) {
-    console.error('[memory] L2→L3 LLM 调用失败:', (err as Error).message);
-    return null;
-  }
 }
 
 // ============================================================
