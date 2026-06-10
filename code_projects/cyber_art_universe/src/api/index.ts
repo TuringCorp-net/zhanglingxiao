@@ -284,60 +284,148 @@ export default {
   // - 浅睡：L1→L2 STM 增量合并（每天）
   // - 深睡：L2→L3 LTM 画像提炼（距上次 ≥ 3 天时自动触发）
   //
-  // Fan-out 架构：每个用户触发一个独立的 Worker invocation，
-  // Cloudflare 自动分布到多实例并发。1000 个用户和 10 个用户的耗时几乎一样。
-  // 内部端点 /api/internal/cron-memory 无需鉴权（同 Worker 内部调用），
-  // 无需重试（catch 跳过），无需幂等（标志位天然保护）。
+  // Fan-out 分批并发架构：
+  //   每批 50 个用户并发 fetch 到内部端点 → Cloudflare 自动分布到多实例。
+  //   批次间串行，避免子请求风暴。日志同时写 console + R2 system/logs/。
   async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
-    console.log('[cron] 记忆提取开始（fan-out 模式）...');
-    const today = new Date();
+    const runStartedAt = new Date();
+    const todayStr = runStartedAt.toISOString().slice(0, 10);
+    console.log(`[cron] ====== 记忆提取开始 ${todayStr} ======`);
     const dates = [
-      today.toISOString().slice(0, 10),
-      new Date(today.getTime() - 86400000).toISOString().slice(0, 10),
+      todayStr,
+      new Date(runStartedAt.getTime() - 86400000).toISOString().slice(0, 10),
     ];
+
+    // 系统日志结构（最终写入 R2）
+    const systemLog: {
+      date: string;
+      started_at: string;
+      total_users_found: number;
+      batches: Array<{
+        batch: number;
+        total_batches: number;
+        users_in_batch: number;
+        success: number;
+        stm_extracted: number;
+        ltm_extracted: number;
+        failed: Array<{ user: string; reason: string }>;
+      }>;
+      summary: { success: number; failed: number; stm: number; ltm: number };
+    } = {
+      date: todayStr,
+      started_at: runStartedAt.toISOString(),
+      total_users_found: 0,
+      batches: [],
+      summary: { success: 0, failed: 0, stm: 0, ltm: 0 },
+    };
 
     try {
       const userTokens = await discoverActiveUsers(env, dates);
-      console.log(`[cron] 发现 ${userTokens.length} 个活跃用户，开始并发分发...`);
+      systemLog.total_users_found = userTokens.length;
+      console.log(`[cron] 发现 ${userTokens.length} 个活跃用户`);
 
       if (userTokens.length === 0) {
         console.log('[cron] 无活跃用户，跳过');
         return;
       }
 
-      // 分批并发：每批 N 个用户同时 fetch → Cloudflare 自动分布到多实例。
-      // 批次大小受 Worker 子请求上限约束（Bundled 50 / Unbound 1000），
-      // 取保守值 50，兼容所有付费计划。
       const BATCH_SIZE = 50;
-      let success = 0, stmCount = 0, ltmCount = 0;
+      let globalSuccess = 0, globalFail = 0, globalSTM = 0, globalLTM = 0;
 
       for (let i = 0; i < userTokens.length; i += BATCH_SIZE) {
-        const batch = userTokens.slice(i, i + BATCH_SIZE);
+        const batchTokens = userTokens.slice(i, i + BATCH_SIZE);
         const batchNum = Math.floor(i / BATCH_SIZE) + 1;
         const totalBatches = Math.ceil(userTokens.length / BATCH_SIZE);
+        const batchStartedAt = Date.now();
 
+        // 并发分发本批所有用户
         const results = await Promise.allSettled(
-          batch.map(async (userToken) => {
-            const url = new URL('/api/internal/cron-memory', 'https://cau.turingcorp.net');
-            url.searchParams.set('user_token', userToken);
-            const res = await fetch(url.toString(), { method: 'POST' });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            return await res.json() as { ok: boolean; data?: { stm_extracted: boolean; ltm_extracted: boolean } };
+          batchTokens.map(async (userToken): Promise<{
+            user: string;
+            status: 'ok' | 'error';
+            stm?: boolean;
+            ltm?: boolean;
+            error?: string;
+          }> => {
+            try {
+              const url = new URL('/api/internal/cron-memory', 'https://cau.turingcorp.net');
+              url.searchParams.set('user_token', userToken);
+              const res = await fetch(url.toString(), { method: 'POST' });
+              if (!res.ok) {
+                return { user: userToken, status: 'error', error: `HTTP ${res.status}` };
+              }
+              const body = await res.json() as { ok: boolean; data?: { stm_extracted: boolean; ltm_extracted: boolean } };
+              if (!body.ok) {
+                return { user: userToken, status: 'error', error: 'internal endpoint returned ok=false' };
+              }
+              return {
+                user: userToken,
+                status: 'ok',
+                stm: body.data?.stm_extracted ?? false,
+                ltm: body.data?.ltm_extracted ?? false,
+              };
+            } catch (err) {
+              return { user: userToken, status: 'error', error: (err as Error).message };
+            }
           })
         );
 
+        // 统计本批结果
+        let batchSuccess = 0, batchSTM = 0, batchLTM = 0;
+        const batchFailed: Array<{ user: string; reason: string }> = [];
+
         for (const r of results) {
-          if (r.status === 'fulfilled' && r.value?.ok) {
-            success++;
-            if (r.value.data?.stm_extracted) stmCount++;
-            if (r.value.data?.ltm_extracted) ltmCount++;
+          if (r.status === 'fulfilled') {
+            if (r.value.status === 'ok') {
+              batchSuccess++;
+              if (r.value.stm) batchSTM++;
+              if (r.value.ltm) batchLTM++;
+            } else {
+              batchFailed.push({ user: r.value.user, reason: r.value.error || 'unknown' });
+            }
+          } else {
+            // Promise 本身 reject（理论上不会，因为内部 catch 了）
+            batchFailed.push({ user: '(unknown)', reason: `Promise rejected: ${String(r.reason).substring(0, 100)}` });
           }
         }
-        console.log(`[cron] 批次 ${batchNum}/${totalBatches} 完成 (${batch.length} 用户)`);
+
+        globalSuccess += batchSuccess;
+        globalFail += batchFailed.length;
+        globalSTM += batchSTM;
+        globalLTM += batchLTM;
+
+        const batchMs = Date.now() - batchStartedAt;
+        const failDetail = batchFailed.length > 0
+          ? ` | 失败: ${batchFailed.map(f => `${f.user.substring(0, 16)}(${f.reason})`).join(', ')}`
+          : '';
+        console.log(`[cron] 批次 ${batchNum}/${totalBatches} 完成 | ${batchSuccess}/${batchTokens.length} 成功 | STM=${batchSTM} LTM=${batchLTM} | ${batchMs}ms${failDetail}`);
+
+        systemLog.batches.push({
+          batch: batchNum,
+          total_batches: totalBatches,
+          users_in_batch: batchTokens.length,
+          success: batchSuccess,
+          stm_extracted: batchSTM,
+          ltm_extracted: batchLTM,
+          failed: batchFailed,
+        });
       }
-      console.log(`[cron] 全部完成: ${success}/${userTokens.length} 成功, STM=${stmCount} LTM=${ltmCount}`);
+
+      systemLog.summary = { success: globalSuccess, failed: globalFail, stm: globalSTM, ltm: globalLTM };
+      console.log(`[cron] ====== 全部完成: ${globalSuccess} 成功 ${globalFail} 失败 | STM=${globalSTM} LTM=${globalLTM} ======`);
     } catch (err) {
-      console.error('[cron] 记忆提取失败:', (err as Error).message);
+      console.error('[cron] 记忆提取致命错误:', (err as Error).message);
+      systemLog.summary = { ...systemLog.summary, failed: systemLog.total_users_found };
+    } finally {
+      // 持久化系统日志到 R2（按天追加，同一天多次运行会覆盖为最新）
+      try {
+        const logPath = `system/logs/memory-cron/${todayStr}.json`;
+        await env.WORKS_BUCKET.put(logPath, JSON.stringify(systemLog, null, 2), {
+          httpMetadata: { contentType: 'application/json' },
+        });
+      } catch (logErr) {
+        console.error('[cron] 系统日志写入失败:', (logErr as Error).message);
+      }
     }
   },
 };
