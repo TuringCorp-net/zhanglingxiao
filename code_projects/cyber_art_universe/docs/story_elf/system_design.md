@@ -1,6 +1,6 @@
 # Story Elf 系统设计
 
-> 版本: v0.5.0 | 状态: 草案 | 最后更新: 2026-06-04
+> 版本: v0.6.0 | 状态: 草案 | 最后更新: 2026-06-10
 > **关联文档**：[架构总览](../ARCHITECTURE.md) → 本文档 → [L2 Agent 架构设计](L2_agent_design.md) → [AI Gateway 指南](cloudflare_ai_gateway_guide.md) → [模板分级探讨](original_concept_smart_guide_story_elf.md)（功能需求已并入代码 → 见 `src/lib/l0/aiGateway.ts` / `src/api/write/elf_chat.ts` 头部注释）
 
 ---
@@ -731,3 +731,114 @@ ai_usage_log (
 - **不透传给用户**。usage 数据是系统内部指标，不暴露在 API 响应中
 - **不阻塞主请求**。D1 写入 <5ms，当前同步写入即可。未来高并发时改为 `ctx.waitUntil`
 - **渐进扩展**。当前只采集 AI 用量，后续可扩展 R2 延迟、DB 查询耗时等指标
+
+---
+
+## 11. 记忆提取 & Cron Fan-out 架构
+
+> 详细设计见 [L2 Agent 记忆系统设计](L2_agent_memory.md)。本节覆盖 Cron 调度、分发架构和系统日志。
+
+### 11.1 提取流水线
+
+```
+Cron: 0 3 * * * (每天凌晨 3:00)
+  │
+  ├─ STM 浅睡（每天）
+  │    L1(.json) + stm-final.md → LLM 合并 → 新 stm-final.md + stm-memory/{date}.md
+  │    标志位: extracted_to_stm
+  │
+  └─ LTM 深睡（距上次 ≥ 3 天时自动触发）
+       L1(.json) + ltm-final.md → LLM 合并 → 新 ltm-final.md + ltm-memory/{date}.md
+       标志位: extracted_to_ltm
+       扫描窗口: 近 30 天（标志位防止重复提取）
+
+增量合并式提取（类似马赛克压缩）：
+  每次 LLM 调用同时完成"提取新信息 + 与现有记忆合并去重 + 自然遗忘"。
+  L1 文件按天保存为 dated archive，供未来回溯。
+```
+
+### 11.2 Fan-out 分批并发架构
+
+为避免单 Worker 串行处理大量用户的性能瓶颈，Cron handler 采用分批并发模式：
+
+```
+scheduled()
+  ├─ discoverActiveUsers([今天, 昨天])                    ← R2 list 扫描
+  ├─ 按 BATCH_SIZE=50 分批
+  │    ├─ 批次 1: Promise.allSettled([u1..u50].map(fetch))  ← 50 个并发 Worker
+  │    ├─ 批次 2: Promise.allSettled([u51..u100].map(fetch))
+  │    └─ ...
+  └─ 写入 system/logs/memory-cron/{date}.json              ← 系统日志
+```
+
+**设计决策**：
+
+| 决策 | 选择 | 理由 |
+|------|------|------|
+| 分发方式 | `fetch()` 到同一 Worker 的内部端点 `/api/internal/cron-memory` | 每个 fetch 触发独立 Worker invocation，Cloudflare 自动分布到多实例 |
+| 批大小 | 50 | 兼容 Bundled（子请求上限 50）和 Unbound（1000），保守安全 |
+| 批次间 | 串行 | 避免子请求风暴；`Promise.allSettled` 只并发批内用户 |
+| 鉴权 | 无 | 同 Worker 内部调用，不经过公网 |
+| 重试 | 无 | 当前串行模式本就不重试，失败用户记录到系统日志后跳过 |
+| 幂等 | `extracted_to_stm`/`extracted_to_ltm` 标志位 | 同一用户被意外触发两次时，第二次发现标志位已 true，直接跳过 |
+
+**内部端点**：`POST /api/internal/cron-memory?user_token=xxx`
+
+每个 Worker invocation 处理一个用户：`extractSTMForUser()` → `extractL2toL3IfDue()`。
+
+**扩展容量估算**（Unbound 计划）：
+
+| 用户数 | 批数 | 预估耗时 | 瓶颈 |
+|--------|------|---------|------|
+| 100 | 2 | ~30s | — |
+| 1,000 | 20 | ~5 min | — |
+| 10,000 | 200 | ~25 min | 接近 30min Cron 上限 |
+| 50,000+ | 1000 | >30min | 需迁移到 Cloudflare Workflows |
+
+### 11.3 系统日志
+
+每次 Cron 运行结果持久化到 R2：
+
+**路径**：`system/logs/memory-cron/{YYYY-MM-DD}.json`
+
+**结构**：
+
+```json
+{
+  "date": "2026-06-10",
+  "started_at": "2026-06-10T03:00:01.000Z",
+  "total_users_found": 150,
+  "batches": [
+    {
+      "batch": 1, "total_batches": 3,
+      "users_in_batch": 50,
+      "success": 48,
+      "stm_extracted": 48, "ltm_extracted": 12,
+      "failed": [
+        {"user": "usr_abc123", "reason": "HTTP 502"}
+      ]
+    }
+  ],
+  "summary": { "success": 148, "failed": 2, "stm": 148, "ltm": 37 }
+}
+```
+
+**双重日志**：
+- `console.log` → Cloudflare Logs（实时查看，按 `[cron]` 前缀过滤）
+- R2 系统日志 → 历史回溯、故障排查（保留最近 30 天）
+
+### 11.4 记忆存储路径
+
+```
+users/{token}/
+├── memory-logs/{page}/{work_id}/{date}.json    ← L1 原始日志（含 extracted_to_stm / extracted_to_ltm）
+├── stm/
+│   ├── stm-final.md                             ← STM consolidated（注入 Agent System Prompt Layer 5）
+│   └── stm-memory/{date}.md                     ← STM 每日存档
+└── ltm/
+    ├── ltm-final.md                             ← LTM consolidated（注入 Agent System Prompt Layer 5）
+    ├── ltm-memory/{date}.md                     ← LTM 每次存档
+    └── .extraction-state.json                   ← { last_l3_extraction }
+
+system/logs/memory-cron/{date}.json              ← 系统日志
+```
