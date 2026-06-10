@@ -225,9 +225,9 @@ export async function extractL2toL3IfDue(env: Env, userToken: string): Promise<b
 
   if (daysSinceLast < 3) return false;
 
-  // 近 3 天的日期列表
+  // 近 30 天的日期列表（足够覆盖用户沉默期，extracted_to_ltm 标志位防止重复提取）
   const dates: string[] = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 30; i++) {
     dates.push(new Date(Date.now() - i * 86400000).toISOString().slice(0, 10));
   }
 

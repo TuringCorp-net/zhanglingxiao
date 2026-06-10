@@ -249,6 +249,12 @@ export default {
   // Cron 定时任务：每天凌晨 3:00 执行记忆提取（"睡眠"）
   // - 浅睡：L1→L2 STM 增量合并（每天）
   // - 深睡：L2→L3 LTM 画像提炼（距上次 ≥ 3 天时自动触发）
+  //
+  // ⚠️ 扩展注意：当前为单 Worker 串行处理所有用户。
+  // 每个用户 ≈1 次 LLM fetch（8-15s），受 Worker 子请求上限（Bundled 50 / Unbound 1000）约束。
+  // 用户量 >50 时，将下方的串行 for 循环改为 fan-out 模式：
+  //   对每个用户发 fetch() 到同一 Worker 的内部端点 → Cloudflare 自动分布到多实例并发。
+  //   无需鉴权（内部调用）、无需重试（当前本就不重试）、无需幂等（标志位天然保护）。
   async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
     console.log('[cron] 记忆提取开始...');
     try {
