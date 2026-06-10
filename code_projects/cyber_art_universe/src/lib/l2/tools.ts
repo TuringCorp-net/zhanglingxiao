@@ -175,12 +175,12 @@ function createReadModuleTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'read_module',
-        description: '读取指定模块的当前内容（slots 结构化数据 + free_content 自由写作）。在需要了解作者已经写了什么时调用。参数 module_type 可选: m1(世界观), m2(大纲), m3_card(人物卡—自动返回全部卡片), m4_strategy(伏笔策略), m4_card(伏笔卡—自动返回全部卡片), m5_intent(意图卡—自动返回全部卡片), m6_chapter(章节正文)。卡片类模块无需指定 module_id，自动返回该类型的所有卡片。',
+        description: '读取指定模块的当前内容（slots 结构化数据 + free_content 自由写作）。在需要了解作者已经写了什么时调用。参数 module_type 可选: m0(原始构想—只读), m1(世界观), m2(大纲), m3_card(人物卡), m4_strategy(伏笔策略), m4_card(伏笔卡), m5_intent(意图卡), m6_chapter(章节正文)。卡片类模块(m3_card/m4_card/m5_intent/m6_chapter)无需指定 module_id，自动返回该类型的所有卡片。单文件模块(m0/m1/m2/m4_strategy)不传 module_id 时使用默认 ID。',
         parameters: {
           type: 'object',
           properties: {
-            module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_strategy', 'm4_card', 'm5_intent', 'm6_chapter'] },
-            module_id: { type: 'string', description: '可选：指定具体的模块 ID。不传则 m1/m2/m4_strategy/m6_chapter 使用默认模块，卡片类(m3_card/m4_card/m5_intent)自动返回所有卡片' },
+            module_type: { type: 'string', description: '模块类型', enum: ['m0', 'm1', 'm2', 'm3_card', 'm4_strategy', 'm4_card', 'm5_intent', 'm6_chapter'] },
+            module_id: { type: 'string', description: '可选：指定具体的模块 ID。不传则单文件模块(m0/m1/m2/m4_strategy)使用默认 ID，卡片类(m3_card/m4_card/m5_intent/m6_chapter)自动返回所有卡片' },
           },
           required: ['module_type'],
         },
@@ -256,7 +256,7 @@ function createReadModuleTool(env: Env): L2ToolDef {
 
       if (!data.ok) {
         const errMsg = (data as { error?: { message?: string } }).error?.message || JSON.stringify((data as { error?: { message?: string } }).error);
-        return `❌ 读取模块失败: ${errMsg}\n\n可能原因及修复建议:\n- 如果 module_id 不正确，请确认该模块的真实 ID。你可以不传 module_id，系统会自动使用默认 ID（格式: {module_type}_{work_id}）\n- 对于卡片类模块（m3_card/m4_card/m5_intent），不传 module_id 会自动返回所有卡片，无需指定具体的卡片 ID\n- 如果模块确实不存在，说明该作品下还没有创建此模块`;
+        return `❌ 读取模块失败: ${errMsg}\n\n可能原因及修复建议:\n- 如果 module_id 不正确，请确认该模块的真实 ID。你可以不传 module_id，系统会自动使用默认 ID（格式: {module_type}_{work_id}）\n- 对于卡片类模块（m3_card/m4_card/m5_intent/m6_chapter），不传 module_id 会自动返回所有卡片\n- 如果模块确实不存在，说明该作品下还没有创建此模块`;
       }
 
       const result = (data.data || {}) as Record<string, unknown>;
