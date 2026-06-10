@@ -385,7 +385,7 @@ export default {
             }
           } else {
             // Promise 本身 reject（理论上不会，因为内部 catch 了）
-            batchFailed.push({ user: '(unknown)', reason: `Promise rejected: ${String(r.reason).substring(0, 100)}` });
+            batchFailed.push({ user: '(unknown)', reason: `Promise rejected: ${String(r.reason)}` });
           }
         }
 

@@ -181,7 +181,8 @@ function parseLightResult(raw: string, original: Message[]): Message[] {
     for (const item of items) map.set(item.i, item.c);
     return original.map((msg, i) => {
       const c = map.get(i);
-      return c && c.length > 0 ? { ...msg, content: c } : { ...msg, content: (msg.content || '').substring(0, 100) };
+      // 压缩失败 → 保留原文，下次压缩时可能成功
+      return c && c.length > 0 ? { ...msg, content: c } : msg;
     });
   } catch {
     return original; // Parse error → fall back to originals
