@@ -305,26 +305,37 @@ export default {
         return;
       }
 
-      // 每个用户触发一个独立的 Worker invocation（并发 fetch → Cloudflare 自动分布到多实例）
-      const results = await Promise.allSettled(
-        userTokens.map(async (userToken) => {
-          const url = new URL('/api/internal/cron-memory', 'https://cau.turingcorp.net');
-          url.searchParams.set('user_token', userToken);
-          const res = await fetch(url.toString(), { method: 'POST' });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          return await res.json() as { ok: boolean; data?: { stm_extracted: boolean; ltm_extracted: boolean } };
-        })
-      );
-
+      // 分批并发：每批 N 个用户同时 fetch → Cloudflare 自动分布到多实例。
+      // 批次大小受 Worker 子请求上限约束（Bundled 50 / Unbound 1000），
+      // 取保守值 50，兼容所有付费计划。
+      const BATCH_SIZE = 50;
       let success = 0, stmCount = 0, ltmCount = 0;
-      for (const r of results) {
-        if (r.status === 'fulfilled' && r.value?.ok) {
-          success++;
-          if (r.value.data?.stm_extracted) stmCount++;
-          if (r.value.data?.ltm_extracted) ltmCount++;
+
+      for (let i = 0; i < userTokens.length; i += BATCH_SIZE) {
+        const batch = userTokens.slice(i, i + BATCH_SIZE);
+        const batchNum = Math.floor(i / BATCH_SIZE) + 1;
+        const totalBatches = Math.ceil(userTokens.length / BATCH_SIZE);
+
+        const results = await Promise.allSettled(
+          batch.map(async (userToken) => {
+            const url = new URL('/api/internal/cron-memory', 'https://cau.turingcorp.net');
+            url.searchParams.set('user_token', userToken);
+            const res = await fetch(url.toString(), { method: 'POST' });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return await res.json() as { ok: boolean; data?: { stm_extracted: boolean; ltm_extracted: boolean } };
+          })
+        );
+
+        for (const r of results) {
+          if (r.status === 'fulfilled' && r.value?.ok) {
+            success++;
+            if (r.value.data?.stm_extracted) stmCount++;
+            if (r.value.data?.ltm_extracted) ltmCount++;
+          }
         }
+        console.log(`[cron] 批次 ${batchNum}/${totalBatches} 完成 (${batch.length} 用户)`);
       }
-      console.log(`[cron] 完成: ${success}/${userTokens.length} 成功, STM=${stmCount} LTM=${ltmCount}`);
+      console.log(`[cron] 全部完成: ${success}/${userTokens.length} 成功, STM=${stmCount} LTM=${ltmCount}`);
     } catch (err) {
       console.error('[cron] 记忆提取失败:', (err as Error).message);
     }
