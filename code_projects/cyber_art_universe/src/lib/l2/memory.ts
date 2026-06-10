@@ -129,8 +129,85 @@ export async function saveDailyLog(
 // ============================================================
 
 /**
- * Cron 触发：扫描近 1-2 天未处理 STM 的 L1 日志，
- * 与现有 stm-final.md 合并 → LLM 一次调用完成提取 + 去重 + 自然遗忘。
+ * 为单个用户执行 STM 提取（per-user，供 fan-out 架构调用）。
+ * 扫描该用户近 1-2 天未处理的 L1，合并到 stm-final.md。
+ * 每个 Worker invocation 只处理一个用户，天然支持 Cloudflare 动态扩容。
+ */
+export async function extractSTMForUser(env: Env, userToken: string): Promise<{
+  sessions_extracted: number;
+}> {
+  const today = new Date();
+  const dates = [
+    today.toISOString().slice(0, 10),
+    new Date(today.getTime() - 86400000).toISOString().slice(0, 10),
+  ];
+
+  try {
+    const unprocessedKeys = await findUnprocessedLogs(env, userToken, dates, 'extracted_to_stm');
+    if (unprocessedKeys.length === 0) return { sessions_extracted: 0 };
+
+    const l1Contents: string[] = [];
+    for (const key of unprocessedKeys) {
+      try {
+        const obj = await env.WORKS_BUCKET.get(key);
+        if (!obj) continue;
+        const log: DailyLog = JSON.parse(await obj.text());
+        if (log.extracted_to_stm) continue;
+        l1Contents.push(formatDailyLogForExtraction(log));
+      } catch { /* 单文件损坏不中断批处理 */ }
+    }
+
+    if (l1Contents.length === 0) return { sessions_extracted: 0 };
+
+    const existingSTM = await readSTMFinal(env, userToken);
+    const newSTM = await runSTMMerge(env, l1Contents.join('\n\n---\n\n'), existingSTM);
+    if (!newSTM) return { sessions_extracted: 0 };
+
+    // 写入 STM final + 按日存档
+    await env.WORKS_BUCKET.put(
+      `users/${userToken}/stm/stm-final.md`,
+      newSTM,
+      { httpMetadata: { contentType: 'text/markdown; charset=utf-8' } },
+    );
+    const todayStr = today.toISOString().slice(0, 10);
+    await env.WORKS_BUCKET.put(
+      `users/${userToken}/stm/stm-memory/${todayStr}.md`,
+      newSTM,
+      { httpMetadata: { contentType: 'text/markdown; charset=utf-8' } },
+    );
+
+    for (const key of unprocessedKeys) {
+      await markExtracted(env, key, 'extracted_to_stm');
+    }
+
+    return { sessions_extracted: l1Contents.length };
+  } catch (err) {
+    console.error(`[memory] 用户 ${userToken} 的 L1→L2 提取失败:`, (err as Error).message);
+    return { sessions_extracted: 0 };
+  }
+}
+
+/**
+ * 为单个用户执行全部记忆处理（STM + LTM）。
+ * 供内部 Cron 分发端点调用。
+ */
+export async function processMemoriesForUser(env: Env, userToken: string): Promise<{
+  stm_extracted: boolean;
+  ltm_extracted: boolean;
+  sessions: number;
+}> {
+  const stm = await extractSTMForUser(env, userToken);
+  const ltm = await extractL2toL3IfDue(env, userToken);
+  return {
+    stm_extracted: stm.sessions_extracted > 0,
+    ltm_extracted: ltm,
+    sessions: stm.sessions_extracted,
+  };
+}
+
+/**
+ * Cron 触发（批量模式）：扫描所有活跃用户，串行执行 STM 提取。
+ * 保留给 memory-test 端点使用。生产 Cron 请用 processMemoriesForUser + fan-out。
  */
 export async function extractL1toL2(env: Env): Promise<{
   users_processed: number;
@@ -149,56 +226,11 @@ export async function extractL1toL2(env: Env): Promise<{
   let sessionsExtracted = 0;
 
   for (const userToken of userTokens) {
-    try {
-      const unprocessedKeys = await findUnprocessedLogs(env, userToken, dates, 'extracted_to_stm');
-      if (unprocessedKeys.length === 0) continue;
-
-      // 读取并格式化 L1 内容
-      const l1Contents: string[] = [];
-      for (const key of unprocessedKeys) {
-        try {
-          const obj = await env.WORKS_BUCKET.get(key);
-          if (!obj) continue;
-          const log: DailyLog = JSON.parse(await obj.text());
-          if (log.extracted_to_stm) continue;
-          l1Contents.push(formatDailyLogForExtraction(log));
-        } catch { /* 单文件损坏不中断批处理 */ }
-      }
-
-      if (l1Contents.length === 0) continue;
-
-      // 读取现有 STM final
-      const existingSTM = await readSTMFinal(env, userToken);
-
-      // LLM 合并：当日 L1 + 现有 STM → 新 STM
-      const newSTM = await runSTMMerge(env, l1Contents.join('\n\n---\n\n'), existingSTM);
-      if (!newSTM) continue;
-
-      // 写入新 STM final（注入 prompt 用）
-      await env.WORKS_BUCKET.put(
-        `users/${userToken}/stm/stm-final.md`,
-        newSTM,
-        { httpMetadata: { contentType: 'text/markdown; charset=utf-8' } },
-      );
-
-      // 同时保存按日存档（保留原始提取结果，供未来回溯/二次精炼）
-      const todayStr = today.toISOString().slice(0, 10);
-      await env.WORKS_BUCKET.put(
-        `users/${userToken}/stm/stm-memory/${todayStr}.md`,
-        newSTM,
-        { httpMetadata: { contentType: 'text/markdown; charset=utf-8' } },
-      );
-
-      // 标记 L1 文件为已提取 STM
-      for (const key of unprocessedKeys) {
-        await markExtracted(env, key, 'extracted_to_stm');
-      }
-
+    const result = await extractSTMForUser(env, userToken);
+    if (result.sessions_extracted > 0) {
       usersProcessed++;
-      sessionsExtracted += l1Contents.length;
+      sessionsExtracted += result.sessions_extracted;
       processedUsers.push(userToken);
-    } catch (err) {
-      console.error(`[memory] 用户 ${userToken} 的 L1→L2 提取失败:`, (err as Error).message);
     }
   }
 
@@ -349,8 +381,8 @@ export async function saveChecklist(
 // 内部函数
 // ============================================================
 
-/** 发现近 N 天有 L1 日志活动的用户 */
-async function discoverActiveUsers(env: Env, dates: string[]): Promise<string[]> {
+/** 发现近 N 天有 L1 日志活动的用户（供 Cron fan-out 使用） */
+export async function discoverActiveUsers(env: Env, dates: string[]): Promise<string[]> {
   const users = new Set<string>();
 
   try {

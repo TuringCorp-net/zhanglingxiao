@@ -49,7 +49,7 @@ import { searchContent, retrieveInWork } from './search';
 import { handleAgentManifest, handleLLMsTxt, handleOpenAPI } from './discovery';
 import { handleMCP } from './mcp';
 import { handleWriteRoute } from './write/index';
-import { extractL1toL2, extractL2toL3IfDue } from '../lib/l2/memory';
+import { discoverActiveUsers, processMemoriesForUser } from '../lib/l2/memory';
 
 // ============================================================
 // 用户认证
@@ -215,6 +215,12 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     }
 
     // ================================================================
+    // 内部端点（Cron fan-out 分发，无需鉴权）
+    // ================================================================
+    if (segments[0] === 'internal' && segments[1] === 'cron-memory') {
+      return handleInternalCronMemory(env, request);
+    }
+
     // Write 侧（Story Forger）
     // ================================================================
     if (segments[0] === 'write') {
@@ -241,6 +247,34 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
 // ============================================================
 // Workers 入口
 // ============================================================
+// 内部端点：/api/internal/cron-memory?user_token=xxx
+// 由 Cron fan-out 触发，每个 Worker invocation 处理一个用户。
+// 无需鉴权（同一 Worker 内部调用）。
+// ============================================================
+async function handleInternalCronMemory(env: Env, request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  const userToken = url.searchParams.get('user_token');
+  if (!userToken) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'user_token required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  try {
+    const result = await processMemoriesForUser(env, userToken);
+    console.log(`[cron:${userToken}] STM=${result.stm_extracted} LTM=${result.ltm_extracted} sessions=${result.sessions}`);
+    return new Response(JSON.stringify(jsonSuccess(result)), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (err) {
+    console.error(`[cron:${userToken}] 失败:`, (err as Error).message);
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, (err as Error).message)), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+// ============================================================
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     return handleRequest(request, env);
@@ -250,31 +284,47 @@ export default {
   // - 浅睡：L1→L2 STM 增量合并（每天）
   // - 深睡：L2→L3 LTM 画像提炼（距上次 ≥ 3 天时自动触发）
   //
-  // ⚠️ 扩展注意：当前为单 Worker 串行处理所有用户。
-  // 每个用户 ≈1 次 LLM fetch（8-15s），受 Worker 子请求上限（Bundled 50 / Unbound 1000）约束。
-  // 用户量 >50 时，将下方的串行 for 循环改为 fan-out 模式：
-  //   对每个用户发 fetch() 到同一 Worker 的内部端点 → Cloudflare 自动分布到多实例并发。
-  //   无需鉴权（内部调用）、无需重试（当前本就不重试）、无需幂等（标志位天然保护）。
+  // Fan-out 架构：每个用户触发一个独立的 Worker invocation，
+  // Cloudflare 自动分布到多实例并发。1000 个用户和 10 个用户的耗时几乎一样。
+  // 内部端点 /api/internal/cron-memory 无需鉴权（同 Worker 内部调用），
+  // 无需重试（catch 跳过），无需幂等（标志位天然保护）。
   async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
-    console.log('[cron] 记忆提取开始...');
-    try {
-      // 1. STM 浅睡：所有活跃用户 L1→L2
-      const result = await extractL1toL2(env);
-      console.log(`[cron] L1→L2 STM 完成: ${result.users_processed} 用户, ${result.sessions_extracted} 会话`);
+    console.log('[cron] 记忆提取开始（fan-out 模式）...');
+    const today = new Date();
+    const dates = [
+      today.toISOString().slice(0, 10),
+      new Date(today.getTime() - 86400000).toISOString().slice(0, 10),
+    ];
 
-      // 2. LTM 深睡：对本次处理过的用户，检查是否需要 L2→L3
-      let ltmCount = 0;
-      for (const userToken of result.users) {
-        try {
-          const didExtract = await extractL2toL3IfDue(env, userToken);
-          if (didExtract) ltmCount++;
-        } catch (err) {
-          console.error(`[cron] L2→L3 用户 ${userToken} 失败:`, (err as Error).message);
+    try {
+      const userTokens = await discoverActiveUsers(env, dates);
+      console.log(`[cron] 发现 ${userTokens.length} 个活跃用户，开始并发分发...`);
+
+      if (userTokens.length === 0) {
+        console.log('[cron] 无活跃用户，跳过');
+        return;
+      }
+
+      // 每个用户触发一个独立的 Worker invocation（并发 fetch → Cloudflare 自动分布到多实例）
+      const results = await Promise.allSettled(
+        userTokens.map(async (userToken) => {
+          const url = new URL('/api/internal/cron-memory', 'https://cau.turingcorp.net');
+          url.searchParams.set('user_token', userToken);
+          const res = await fetch(url.toString(), { method: 'POST' });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return await res.json() as { ok: boolean; data?: { stm_extracted: boolean; ltm_extracted: boolean } };
+        })
+      );
+
+      let success = 0, stmCount = 0, ltmCount = 0;
+      for (const r of results) {
+        if (r.status === 'fulfilled' && r.value?.ok) {
+          success++;
+          if (r.value.data?.stm_extracted) stmCount++;
+          if (r.value.data?.ltm_extracted) ltmCount++;
         }
       }
-      if (ltmCount > 0) {
-        console.log(`[cron] L2→L3 LTM 完成: ${ltmCount} 用户画像已更新`);
-      }
+      console.log(`[cron] 完成: ${success}/${userTokens.length} 成功, STM=${stmCount} LTM=${ltmCount}`);
     } catch (err) {
       console.error('[cron] 记忆提取失败:', (err as Error).message);
     }
