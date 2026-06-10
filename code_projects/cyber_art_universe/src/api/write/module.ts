@@ -281,7 +281,7 @@ export const FORESHADOWING_CARD_SLOTS: SlotDef[] = [
 ];
 
 // --- M5: 章节意图卡 ---
-const INTENT_TEMPLATE: TemplateDef = {
+export const INTENT_TEMPLATE: TemplateDef = {
   title: { zh: '章节意图卡', en: 'Chapter Intent Card' },
   intro: {
     zh: '每章写作前的创作意图规划。定义本章要推进什么冲突、揭示什么信息、制造什么悬念。',
@@ -310,7 +310,7 @@ const INTENT_TEMPLATE: TemplateDef = {
 };
 
 // --- M6: 章节正文 ---
-const CHAPTER_TEMPLATE: TemplateDef = {
+export const CHAPTER_TEMPLATE: TemplateDef = {
   title: { zh: '章节正文', en: 'Chapter Content' },
   intro: {
     zh: '在此撰写章节正文。左侧可参考大纲和意图卡。',

@@ -175,7 +175,7 @@ function createReadModuleTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'read_module',
-        description: '读取指定模块的当前内容（slots 结构化数据 + free_content 自由写作）。在需要了解作者已经写了什么时调用。参数 module_type 可选: m0(原始构想—只读), m1(世界观), m2(大纲), m3_card(人物卡), m4_strategy(伏笔策略), m4_card(伏笔卡), m5_intent(意图卡), m6_chapter(章节正文)。卡片类模块(m3_card/m4_card/m5_intent/m6_chapter)无需指定 module_id，自动返回该类型的所有卡片。单文件模块(m0/m1/m2/m4_strategy)不传 module_id 时使用默认 ID。',
+        description: '读取指定模块的当前内容。使用方式取决于模块类型：\n\n**单文件模块 (m0/m1/m2/m4_strategy)**：不传 module_id 直接用默认 ID 读取全部内容。\n\n**卡片类模块 (m3_card/m4_card/m5_intent/m6_chapter)**：分两步——① 不传 module_id → 获取卡片列表（仅 name + id）→ ② 选择目标卡片，传入 module_id → 获取该卡片的完整 slots + free_content。\n\n⚠️ 对于卡片类模块，请勿跳过第①步直接猜 module_id。拿到列表后选择合适的卡片，再传入 module_id 读取具体内容。',
         parameters: {
           type: 'object',
           properties: {
@@ -213,34 +213,10 @@ function createReadModuleTool(env: Env): L2ToolDef {
             return `模块类型 ${moduleType} 下暂无卡片。\n此作品可能还没有创建该类型的卡片。`;
           }
 
-          const cardResults: string[] = [];
-          let failedCount = 0;
-          for (const mod of mods.results) {
-            const url = `https://internal/api/write/module/${mod.id}?lang=${lang}`;
-            const req = new Request(url, { headers: { 'Accept-Language': lang } });
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const resp = await getModule(env, req as any, mod.id);
-            const cardData = await resp.json() as Record<string, unknown>;
-            if (cardData.ok) {
-              const card = (cardData.data || {}) as Record<string, unknown>;
-              const cardSlots = card.slots || {};
-              const cardFree = card.free_content || '';
-              cardResults.push(`### ${mod.name} (${mod.id})\n`);
-              if (Object.keys(cardSlots as object).length > 0) {
-                cardResults.push(`\`\`\`json\n${JSON.stringify(cardSlots, null, 2)}\n\`\`\`\n`);
-              }
-              if (cardFree) {
-                cardResults.push(`自由写作区: ${(cardFree as string).substring(0, 2000)}\n`);
-              }
-            } else {
-              failedCount++;
-            }
-          }
-
-          const header = `模块类型: ${moduleType}（共 ${mods.results.length} 张卡片${failedCount > 0 ? `，${failedCount} 张读取失败` : ''}）\n\n`;
-          return cardResults.length > 0
-            ? header + cardResults.join('\n')
-            : `模块类型 ${moduleType} 下尚无有效卡片内容，所有卡片（${mods.results.length} 张）均读取失败。\n这可能是因为卡片文件尚未创建或已损坏。`;
+          // 只返回卡片列表（name + id），不读取具体内容。
+          // 拿到目标卡片的 module_id 后，请再次调用 read_module 并传入 module_id 以获取完整内容。
+          const cardList = mods.results.map(m => `- **${m.name}**: \`${m.id}\``).join('\n');
+          return `模块类型: ${moduleType}（共 ${mods.results.length} 张卡片）\n\n${cardList}\n\n💡 请选择需要读取的卡片，用 read_module 传入对应的 module_id 获取完整内容。`;
         } catch (err) {
           return `❌ 读取卡片列表时发生错误: ${(err as Error).message}\n这可能是因为 modules 表中没有该类型的记录。请确认该作品下确实存在 ${moduleType} 类型的卡片。`;
         }
@@ -269,7 +245,7 @@ function createReadModuleTool(env: Env): L2ToolDef {
         summary += `=== 结构化槽位 ===\n${JSON.stringify(slots, null, 2)}\n\n`;
       }
       if (freeContent) {
-        summary += `=== 自由写作区 ===\n${(freeContent as string).substring(0, 3000)}`;
+        summary += `=== 自由写作区 ===\n${freeContent}`;
       }
       if (!summary.trim().endsWith('自由写作区')) {
         // Module has no content yet
