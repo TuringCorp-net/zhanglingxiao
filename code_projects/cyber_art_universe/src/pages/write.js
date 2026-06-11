@@ -42,12 +42,25 @@ function loadState() {
 function saveState() {
   try {
     localStorage.setItem('sf_desk_v3', JSON.stringify({
-      currentWorkId: state.currentWorkId,
       leftPct: state.leftPct,
       midPct: state.midPct,
       chapterFilter: state.chapterFilter,
     }));
   } catch (e) {}
+}
+
+// 用户级配置 — 从 R2 加载 / 保存到 R2（跨设备持久化）
+async function loadUserConfig() {
+  if (!userToken) return;
+  var data = await hGet('/api/write/me/config');
+  if (data && data.ok && data.data && data.data.current_work_id) {
+    state.currentWorkId = data.data.current_work_id;
+  }
+}
+
+async function saveUserConfig() {
+  if (!userToken) return;
+  await hPut('/api/write/me/config', { current_work_id: state.currentWorkId || null });
 }
 
 // ============================================================
@@ -159,8 +172,8 @@ function closeWorkspaceModal(e) {
   cancelNewWork();
 }
 
-// 加载作品列表 → 渲染卡片（替代旧的 <select> option 填充）
-async function loadWorkspaces() {
+// 加载作品列表 → 渲染卡片（autoSelect: 仅在初始加载时恢复作品选择）
+async function loadWorkspaces(autoSelect) {
   var grid = qs('#ws-card-grid');
   if (!grid) return;
   grid.innerHTML = '<div class="loading" style="padding:2rem;text-align:center;color:var(--text-muted)">' + t('label.loading') + '</div>';
@@ -173,10 +186,10 @@ async function loadWorkspaces() {
   _worksList = data.data || [];
   renderWorkspaceCards();
 
-  // 恢复上次选择的作品（持久化在 localStorage），找不到则回退到第一个
-  if (_worksList.length > 0) {
+  // 仅在初始页面加载时恢复上次选择的作品，模态框打开时不触发
+  if (autoSelect && _worksList.length > 0) {
     var targetId = state.currentWorkId;
-    // 检查上次选择的作品是否仍在列表中
+    // 检查上次选择的作品是否仍在列表中，否则回退第一个
     var found = targetId && _worksList.some(function (w) { return w.id === targetId; });
     if (!found) targetId = _worksList[0].id;
     onWorkspaceChange(targetId);
@@ -236,6 +249,7 @@ async function onWorkspaceChange(workId) {
   }
 
   state.currentWorkId = workId;
+  saveUserConfig(); // 持久化到服务端（跨设备）
   StoryElf.loadConversation(workId, 'write');
   qs('#split-view').style.display = 'grid';
   applyGridColumns();
@@ -1597,7 +1611,7 @@ async function loadLintToElf() {
 // ============================================================
 // 初始化
 // ============================================================
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
   qs('#global-nav').innerHTML = renderNav();
   loadState();
   initSplitDrag();
@@ -1672,5 +1686,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  if (typeof userToken !== 'undefined' && userToken) loadWorkspaces();
+  if (typeof userToken !== 'undefined' && userToken) {
+    await loadUserConfig();
+    loadWorkspaces(true); // 初始加载时恢复上次作品
+  }
 });

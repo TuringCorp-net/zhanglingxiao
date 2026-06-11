@@ -19,6 +19,10 @@
  *     PATCH  /api/write/works/{id}/reopen    — reopenWork
  *     GET    /api/write/works/{id}/config    — getWorkConfig
  *     PUT    /api/write/works/{id}/config    — updateWorkConfig
+ *
+ *   用户配置 (user_config.ts):
+ *     GET    /api/write/me/config            — getUserConfig
+ *     PUT    /api/write/me/config            — updateUserConfig
  *     POST   /api/write/works/{id}/sections  — createSection
  *     PUT    /api/write/works/{id}/sections/{sid} — updateSection
  *     DELETE /api/write/works/{id}/sections/{sid} — deleteSection
@@ -62,6 +66,7 @@ import { jsonSuccess } from '../../lib/response';
 import { extractLang, type Lang } from '../../lib/l1/work-content';
 import { handleMemoryTestSetup, handleMemoryTestTeardown, handleMemoryExtractL2, handleMemoryExtractL3, handleMemoryReset, handleMemoryReadL1, handleMemoryReadL2, handleMemoryReadL3 } from './memory-test';
 import { handleMemoryEval, handleMemoryEvalResults } from './memory-eval';
+import { getUserConfig, updateUserConfig } from './user_config';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
@@ -178,6 +183,14 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   }
   if (resource === 'memory-test' && resourceId === 'eval-results' && !subResource && !action) {
     if (request.method === 'GET') return handleMemoryEvalResults(env, request);
+  }
+
+  // ================================================================
+  // 用户级配置（R2: users/{token}/config.json）
+  // ================================================================
+  if (resource === 'me' && resourceId === 'config' && !subResource && !action) {
+    if (request.method === 'GET') return getUserConfig(env, request);
+    if (request.method === 'PUT') return updateUserConfig(env, request);
   }
 
   return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Write endpoint not found')), {
