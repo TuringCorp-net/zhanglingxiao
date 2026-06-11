@@ -338,14 +338,19 @@ export default {
         const totalBatches = Math.ceil(userTokens.length / BATCH_SIZE);
         const batchStartedAt = Date.now();
 
-        // 批内并发：每个用户独立调用 processMemoriesForUser
-        // Cloudflare Workers 子请求上限（Bundled 50 / Unbound 1000）即为扩容天花板
-        // 超过上限时需迁移到 Cloudflare Queues / Workflows
+        // 批内并发：每个用户通过 Service Binding 触发独立 Worker invocation
+        // env.SELF.fetch → Cloudflare 内部控制面路由 → 每个 fetch 是一个独立实例
+        // 不走公网 DNS，无 HTTP 522 问题。1000 个用户 ≈ 1000 个并发 Worker
         const results = await Promise.allSettled(
           batchTokens.map(async (userToken) => {
             try {
-              const r = await processMemoriesForUser(env, userToken);
-              return { user: userToken, status: 'ok' as const, stm: r.stm_extracted, ltm: r.ltm_extracted };
+              const url = new URL('/api/internal/cron-memory', 'https://internal');
+              url.searchParams.set('user_token', userToken);
+              const res = await env.SELF.fetch(url.toString(), { method: 'POST' });
+              if (!res.ok) return { user: userToken, status: 'error' as const, error: `HTTP ${res.status}` };
+              const body = await res.json() as { ok: boolean; data?: { stm_extracted: boolean; ltm_extracted: boolean } };
+              if (!body.ok) return { user: userToken, status: 'error' as const, error: 'internal endpoint returned ok=false' };
+              return { user: userToken, status: 'ok' as const, stm: body.data?.stm_extracted ?? false, ltm: body.data?.ltm_extracted ?? false };
             } catch (err) {
               return { user: userToken, status: 'error' as const, error: (err as Error).message };
             }

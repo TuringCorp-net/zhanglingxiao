@@ -147,6 +147,7 @@ export interface Env {
   DB: D1Database;
   WORKS_BUCKET: R2Bucket;
   ASSETS: Fetcher;
+  SELF: Fetcher;  // Service binding → 自己，供 Cron fan-out 内部调用
   USER_TOKEN?: string;   // 用户 token（逗号分隔，未来替换为实时登录校验）
   ADMIN_TOKEN?: string;  // 后台管理 token（固定值，Claude / 自动化任务使用）
   AI_PROVIDER?: string;  // @deprecated 迁移到 CF_AIG_TOKEN + AI Gateway

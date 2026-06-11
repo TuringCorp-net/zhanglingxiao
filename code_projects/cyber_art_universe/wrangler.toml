@@ -21,6 +21,10 @@ migrations_dir = "migrations"
 binding = "WORKS_BUCKET"
 bucket_name = "cyber-art-works"
 
+[[services]]
+binding = "SELF"
+service = "cyber_art_api"
+
 [assets]
 directory = "src/pages"
 
