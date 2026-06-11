@@ -330,6 +330,8 @@ export default {
       }
 
       const BATCH_SIZE = 50;
+      // 少量用户时直接处理，避免 Worker fetch 自己的 URL 导致 HTTP 522
+      const USE_DIRECT = userTokens.length <= 3;
       let globalSuccess = 0, globalFail = 0, globalSTM = 0, globalLTM = 0;
 
       for (let i = 0; i < userTokens.length; i += BATCH_SIZE) {
@@ -338,37 +340,64 @@ export default {
         const totalBatches = Math.ceil(userTokens.length / BATCH_SIZE);
         const batchStartedAt = Date.now();
 
-        // 并发分发本批所有用户
-        const results = await Promise.allSettled(
-          batchTokens.map(async (userToken): Promise<{
-            user: string;
-            status: 'ok' | 'error';
-            stm?: boolean;
-            ltm?: boolean;
-            error?: string;
-          }> => {
+        const results: Array<PromiseSettledResult<{
+          user: string;
+          status: 'ok' | 'error';
+          stm?: boolean;
+          ltm?: boolean;
+          error?: string;
+        }>> = [];
+
+        if (USE_DIRECT) {
+          // 直接调用，不经过 HTTP（避免 Cron Worker fetch 自己的公网 URL 超时）
+          for (const userToken of batchTokens) {
             try {
-              const url = new URL('/api/internal/cron-memory', 'https://cau.turingcorp.net');
-              url.searchParams.set('user_token', userToken);
-              const res = await fetch(url.toString(), { method: 'POST' });
-              if (!res.ok) {
-                return { user: userToken, status: 'error', error: `HTTP ${res.status}` };
-              }
-              const body = await res.json() as { ok: boolean; data?: { stm_extracted: boolean; ltm_extracted: boolean } };
-              if (!body.ok) {
-                return { user: userToken, status: 'error', error: 'internal endpoint returned ok=false' };
-              }
-              return {
-                user: userToken,
-                status: 'ok',
-                stm: body.data?.stm_extracted ?? false,
-                ltm: body.data?.ltm_extracted ?? false,
-              };
+              const r = await processMemoriesForUser(env, userToken);
+              results.push({
+                status: 'fulfilled',
+                value: { user: userToken, status: 'ok', stm: r.stm_extracted, ltm: r.ltm_extracted },
+              });
             } catch (err) {
-              return { user: userToken, status: 'error', error: (err as Error).message };
+              results.push({
+                status: 'fulfilled',
+                value: { user: userToken, status: 'error', error: (err as Error).message },
+              });
             }
-          })
-        );
+          }
+        } else {
+          // Fan-out 模式：多用户时通过 fetch 触发独立 Worker invocation
+          const fetchResults = await Promise.allSettled(
+            batchTokens.map(async (userToken): Promise<{
+              user: string;
+              status: 'ok' | 'error';
+              stm?: boolean;
+              ltm?: boolean;
+              error?: string;
+            }> => {
+              try {
+                const url = new URL('/api/internal/cron-memory', 'https://cau.turingcorp.net');
+                url.searchParams.set('user_token', userToken);
+                const res = await fetch(url.toString(), { method: 'POST' });
+                if (!res.ok) {
+                  return { user: userToken, status: 'error', error: `HTTP ${res.status}` };
+                }
+                const body = await res.json() as { ok: boolean; data?: { stm_extracted: boolean; ltm_extracted: boolean } };
+                if (!body.ok) {
+                  return { user: userToken, status: 'error', error: 'internal endpoint returned ok=false' };
+                }
+                return {
+                  user: userToken,
+                  status: 'ok',
+                  stm: body.data?.stm_extracted ?? false,
+                  ltm: body.data?.ltm_extracted ?? false,
+                };
+              } catch (err) {
+                return { user: userToken, status: 'error', error: (err as Error).message };
+              }
+            })
+          );
+          results.push(...fetchResults);
+        }
 
         // 统计本批结果
         let batchSuccess = 0, batchSTM = 0, batchLTM = 0;
