@@ -759,14 +759,15 @@ Cron: 0 3 * * * (每天凌晨 3:00)
 
 ### 11.2 Fan-out 分批并发架构
 
-为避免单 Worker 串行处理大量用户的性能瓶颈，Cron handler 采用分批并发模式：
+Cron handler 采用分批并发模式——直接调用 `processMemoriesForUser()`，不经过 HTTP：
 
 ```
 scheduled()
   ├─ discoverActiveUsers([今天, 昨天])                    ← R2 list 扫描
   ├─ 按 BATCH_SIZE=50 分批
-  │    ├─ 批次 1: Promise.allSettled([u1..u50].map(fetch))  ← 50 个并发 Worker
-  │    ├─ 批次 2: Promise.allSettled([u51..u100].map(fetch))
+  │    ├─ 批次 1: Promise.allSettled([u1..u50].map(processMemoriesForUser))
+  │    │    └─ 批内 50 个用户并发调 LLM（8-15s/用户）
+  │    ├─ 批次 2: Promise.allSettled([u51..u100].map(...))
   │    └─ ...
   └─ 写入 system/logs/memory-cron/{date}.json              ← 系统日志
 ```
@@ -775,16 +776,15 @@ scheduled()
 
 | 决策 | 选择 | 理由 |
 |------|------|------|
-| 分发方式 | `fetch()` 到同一 Worker 的内部端点 `/api/internal/cron-memory` | 每个 fetch 触发独立 Worker invocation，Cloudflare 自动分布到多实例 |
+| 分发方式 | 直接调用 `processMemoriesForUser(env, userToken)` | 避免 Worker fetch 自己 custom domain 导致 HTTP 522；self-fetch 同样消耗子请求配额，无扩容优势 |
 | 批大小 | 50 | 兼容 Bundled（子请求上限 50）和 Unbound（1000），保守安全 |
-| 批次间 | 串行 | 避免子请求风暴；`Promise.allSettled` 只并发批内用户 |
-| 鉴权 | 无 | 同 Worker 内部调用，不经过公网 |
-| 重试 | 无 | 当前串行模式本就不重试，失败用户记录到系统日志后跳过 |
+| 批次间 | 串行 | 避免 LLM 调用风暴；`Promise.allSettled` 只并发批内用户 |
+| 重试 | 无 | 失败用户记录到系统日志后跳过 |
 | 幂等 | `extracted_to_stm`/`extracted_to_ltm` 标志位 | 同一用户被意外触发两次时，第二次发现标志位已 true，直接跳过 |
 
 **内部端点**：`POST /api/internal/cron-memory?user_token=xxx`
 
-每个 Worker invocation 处理一个用户：`extractSTMForUser()` → `extractL2toL3IfDue()`。
+保留用于手动测试和调试，不作为 Cron 主路径。
 
 **扩展容量估算**（Unbound 计划）：
 
@@ -793,7 +793,7 @@ scheduled()
 | 100 | 2 | ~30s | — |
 | 1,000 | 20 | ~5 min | — |
 | 10,000 | 200 | ~25 min | 接近 30min Cron 上限 |
-| 50,000+ | 1000 | >30min | 需迁移到 Cloudflare Workflows |
+| 50,000+ | 1000 | >30min | 需迁移到 Cloudflare Workflows / Queues |
 
 ### 11.3 系统日志
 
