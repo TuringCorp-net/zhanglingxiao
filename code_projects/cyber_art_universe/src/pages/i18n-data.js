@@ -124,8 +124,8 @@ var I18N = {
   ws: {
     edit_title:       { zh: '编辑名称',     en: 'Edit Title' },
     edit_title_placeholder: { zh: '输入新名称...', en: 'New name...' },
-    publish_work:     { zh: '发布作品',     en: 'Publish' },
-    unpublish_work:   { zh: '撤回草稿',     en: 'Unpublish' },
+    publish_work:     { zh: '发布',         en: 'Publish' },
+    unpublish_work:   { zh: '取消发布',     en: 'Unpublish' },
     delete_work:      { zh: '删除作品',     en: 'Delete Work' },
     delete_confirm:   { zh: '确定要删除「{title}」吗？此操作不可撤销。', en: 'Delete "{title}"? This cannot be undone.' },
     delete_success:   { zh: '已删除',       en: 'Deleted' },
