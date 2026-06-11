@@ -126,7 +126,7 @@ export async function buildAgentSystemPromptLayers(
     }
   } catch { /* checklist 加载失败不影响主流程 */ }
 
-  // 5b. L2 短期记忆（STM final）+ L3 长期画像（LTM final）
+  // 5b. L2 短期记忆 + L3 长期记忆
   if (userToken) {
     try {
       const stmContent = await readSTMFinal(env, userToken);
@@ -138,16 +138,16 @@ export async function buildAgentSystemPromptLayers(
     try {
       const l3Profile = await readLTMFinal(env, userToken);
       if (l3Profile) {
-        memParts.push(`## 长期画像\n\n${l3Profile}`);
+        memParts.push(`## 长期记忆\n\n${l3Profile}`);
       }
-    } catch { /* 画像加载失败不影响主流程 */ }
+    } catch { /* 记忆加载失败不影响主流程 */ }
   }
 
   if (memParts.length === 0) {
-    memParts.push('## 短期记忆\n\n*（暂无数据。随着对话积累，短期记忆将在此展示。）*\n\n## 长期画像\n\n*（暂无数据。随着对话积累，长期画像将在此展示。）*');
+    memParts.push('## 短期记忆\n\n*（暂无数据。随着对话积累，短期记忆将在此展示。）*\n\n---\n\n## 长期记忆\n\n*（暂无数据。随着对话积累，长期记忆将在此展示。）*');
   }
 
-  const layer5 = memParts.join('\n\n');
+  const layer5 = memParts.join('\n\n---\n\n');
 
   // 拼接完整 system prompt
   const parts = [layer1, layer2, layer3, layer4, layer5].filter(p => p.length > 0);

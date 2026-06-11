@@ -238,7 +238,7 @@ export async function extractL1toL2(env: Env): Promise<{
 }
 
 // ============================================================
-// L2→L3: 长期画像增量合并（每 3 天执行）
+// L2→L3: 长期记忆增量合并（每 3 天执行）
 // ============================================================
 
 /**
@@ -338,7 +338,7 @@ export async function readSTMFinal(env: Env, userToken: string): Promise<string>
 }
 
 /**
- * 读取 LTM final（长期用户画像，单文件）。
+ * 读取 LTM final（长期记忆，单文件）。
  * 供 prompt.ts 的 Layer 5 注入调用。
  */
 export async function readLTMFinal(env: Env, userToken: string): Promise<string> {
