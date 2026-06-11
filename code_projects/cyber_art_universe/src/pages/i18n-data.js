@@ -117,6 +117,14 @@ var I18N = {
     select_work_start:{ zh: '选择作品后开始', en: 'Select a work to begin' },
     ai_thinking:      { zh: 'Story Elf 思考中...', en: 'Story Elf thinking...' },
     updated_editor:   { zh: '已在写作区更新结果', en: 'Updated in editor' },
+    no_works:         { zh: '还没有作品，点击左上角 + 创建你的第一部作品吧', en: 'No works yet. Click + to create your first work.' },
+    creating:         { zh: '创建中...',   en: 'Creating...' },
+  },
+
+  ws: {
+    collection:       { zh: '作品集',       en: 'Works' },
+    new_work:         { zh: '新增作品',     en: 'New Work' },
+    name_placeholder: { zh: '输入作品名称...', en: 'Work name...' },
   },
 
   action: {
@@ -130,6 +138,8 @@ var I18N = {
     edit:             { zh: '编辑',     en: 'Edit' },
     send:             { zh: '发送',     en: 'Send' },
     toggle_binder:    { zh: '折叠/展开', en: 'Toggle' },
+    confirm:          { zh: '确认',       en: 'Confirm' },
+    cancel:           { zh: '取消',       en: 'Cancel' },
   },
 
   template_notice: {

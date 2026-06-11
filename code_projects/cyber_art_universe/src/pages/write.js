@@ -139,23 +139,165 @@ async function refreshPipelineGuide(workId) {
 }
 
 // ============================================================
-// Workspace
+// Workspace — 作品集（浮出层替代 <select> 下拉框）
 // ============================================================
+var _worksList = [];
+
+// 打开作品集浮出层
+function openWorkspaceModal() {
+  var overlay = qs('#workspace-overlay');
+  if (overlay) overlay.style.display = 'flex';
+  loadWorkspaces();
+}
+
+// 关闭作品集浮出层（点击遮罩关闭）
+function closeWorkspaceModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  var overlay = qs('#workspace-overlay');
+  if (overlay) overlay.style.display = 'none';
+  cancelNewWork();
+}
+
+// 加载作品列表 → 渲染卡片（替代旧的 <select> option 填充）
 async function loadWorkspaces() {
-  var sel = qs('#workspace-selector');
-  sel.innerHTML = '<option value="">' + t('label.loading') + '</option>';
+  var grid = qs('#ws-card-grid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="loading" style="padding:2rem;text-align:center;color:var(--text-muted)">' + t('label.loading') + '</div>';
+
   var data = await hGet('/api/write/works');
-  if (!data || !data.ok) { sel.innerHTML = '<option value="">' + t('label.load_failed') + '</option>'; return; }
-  var works = data.data || [];
-  sel.innerHTML = '<option value="">' + t('label.select_work') + '</option>';
-  works.forEach(function (w) { sel.innerHTML += '<option value="' + w.id + '">' + escHtml(w.title) + ' (' + w.status + ')</option>'; });
-  if (works.length > 0) { sel.value = works[0].id; onWorkspaceChange(); }
+  if (!data || !data.ok) {
+    grid.innerHTML = '<div class="ws-card-empty">' + t('label.load_failed') + '</div>';
+    return;
+  }
+  _worksList = data.data || [];
+  renderWorkspaceCards();
+
+  // 初始加载时自动选中第一个作品（与旧下拉框行为一致）
+  if (_worksList.length > 0 && !state.currentWorkId) {
+    onWorkspaceChange(_worksList[0].id);
+  }
+}
+
+// 渲染作品卡片
+function renderWorkspaceCards() {
+  var grid = qs('#ws-card-grid');
+  if (!grid) return;
+
+  if (_worksList.length === 0) {
+    grid.innerHTML = '<div class="ws-card-empty">' + t('label.no_works') + '</div>';
+    return;
+  }
+
+  var html = '';
+  _worksList.forEach(function (w) {
+    var isActive = state.currentWorkId === w.id;
+    var statusLabel = { draft: '草稿', published: '已发布', closed: '已关闭' }[w.status] || w.status;
+    html += '<div class="ws-card' + (isActive ? ' active' : '') + '" onclick="onWorkspaceChange(\'' + w.id + '\')">'
+      + '<div class="ws-card-title">' + escHtml(w.title) + '</div>'
+      + '<div class="ws-card-meta">'
+        + '<span class="ws-card-status ' + w.status + '">' + statusLabel + '</span>'
+      + '</div>'
+      + '</div>';
+  });
+  grid.innerHTML = html;
+  updateWorkspaceBtn();
+}
+
+// 更新 pipeline bar 按钮文字为当前作品名
+function updateWorkspaceBtn() {
+  var btn = qs('#workspace-btn');
+  if (!btn) return;
+  if (state.currentWorkId) {
+    var w = _worksList.find(function (x) { return x.id === state.currentWorkId; });
+    btn.textContent = w ? w.title : t('label.select_work');
+    btn.classList.toggle('has-work', !!w);
+  } else {
+    btn.textContent = t('label.select_work');
+    btn.classList.remove('has-work');
+  }
+}
+
+// 选择作品 — 与原 onWorkspaceChange() 逻辑完全一致，仅改为接收 workId 参数
+async function onWorkspaceChange(workId) {
+  if (!workId) {
+    qs('#split-view').style.display = 'none';
+    qs('#pipeline-guide').style.display = 'none';
+    return;
+  }
+  // 同一作品，仅关闭浮出层
+  if (state.currentWorkId === workId) {
+    closeWorkspaceModal({ target: qs('#workspace-overlay') });
+    return;
+  }
+
+  state.currentWorkId = workId;
+  StoryElf.loadConversation(workId, 'write');
+  qs('#split-view').style.display = 'grid';
+  applyGridColumns();
+  cacheClear();
+  _cacheReady = false;
+
+  // 更新 UI + 关闭浮出层
+  updateWorkspaceBtn();
+  renderWorkspaceCards();
+  closeWorkspaceModal({ target: qs('#workspace-overlay') });
+
+  refreshPipelineGuide(workId);
+  preWarmCache(workId);
+  await switchModule('original_concept');
+  updateElfContext();
+}
+
+// — 新增作品 —
+function showNewWorkInput() {
+  var row = qs('#ws-new-work-row');
+  if (row) { row.style.display = 'flex'; }
+  var inp = qs('#ws-new-work-input');
+  if (inp) { inp.value = ''; setTimeout(function () { inp.focus(); }, 100); }
+}
+
+function cancelNewWork() {
+  var row = qs('#ws-new-work-row');
+  if (row) row.style.display = 'none';
+  var inp = qs('#ws-new-work-input');
+  if (inp) inp.value = '';
+}
+
+async function createNewWork() {
+  var inp = qs('#ws-new-work-input');
+  if (!inp) return;
+  var title = inp.value.trim();
+  if (!title) { inp.focus(); return; }
+
+  // 从 token 推导默认作者名（格式如 "CAU-TuringCorp-13572468" → "TuringCorp"）
+  var author = localStorage.getItem('sf_author_name');
+  if (!author && userToken) {
+    var parts = userToken.split('-');
+    author = parts.length >= 2 ? parts[1] : 'CAU Author';
+  } else if (!author) {
+    author = 'CAU Author';
+  }
+
+  inp.disabled = true;
+  var confirmBtn = qs('.ws-new-work-confirm');
+  if (confirmBtn) { confirmBtn.disabled = true; confirmBtn.textContent = t('label.creating'); }
+
+  var data = await hPost('/api/write/works', { title: title, author: author });
+  if (data && data.ok) {
+    localStorage.setItem('sf_author_name', author);
+    cancelNewWork();
+    await loadWorkspaces();
+    if (data.data && data.data.id) onWorkspaceChange(data.data.id);
+  } else {
+    inp.disabled = false;
+    if (confirmBtn) { confirmBtn.disabled = false; confirmBtn.textContent = t('action.confirm'); }
+    alert(t('prompt.create_failed') + ((data && data.error) ? data.error : ''));
+  }
 }
 
 var _cacheReady = false;
 
 async function preWarmCache(workId) {
-  // 页面加载时一次性预加载所有单例模块 + 卡片列表到缓存
   var singletons = ['m0', 'm1', 'm2', 'm4_strategy'];
   var cardLists = ['m3_card', 'm4_card', 'm5_intent', 'm6_chapter'];
   await Promise.all(
@@ -163,27 +305,6 @@ async function preWarmCache(workId) {
       .concat(cardLists.map(function (t) { return loadModuleList(workId, t); }))
   );
   _cacheReady = true;
-}
-
-async function onWorkspaceChange() {
-  var id = qs('#workspace-selector').value;
-  if (!id) {
-    qs('#split-view').style.display = 'none';
-    qs('#pipeline-guide').style.display = 'none';
-    return;
-  }
-  state.currentWorkId = id;
-  saveState();
-  StoryElf.loadConversation(id, 'write'); // 加载永续对话历史（异步，不阻塞）
-  qs('#split-view').style.display = 'grid';
-  applyGridColumns();
-  cacheClear(); // 切换作品，清空旧缓存
-  _cacheReady = false;
-
-  refreshPipelineGuide(id);
-  preWarmCache(id); // 后台异步预加载，不阻塞渲染
-  await switchModule('original_concept');
-  updateElfContext();
 }
 
 // ============================================================
