@@ -402,14 +402,26 @@ async function onWorkspaceChange(workId) {
     qs('#pipeline-guide').style.display = 'none';
     return;
   }
-  // 同一作品，仅关闭浮出层
+  // 同一作品 — 仅当浮出层打开时关闭它，不重复加载
   if (state.currentWorkId === workId) {
-    closeWorkspaceModal({ target: qs('#workspace-overlay') });
-    return;
+    var overlay = qs('#workspace-overlay');
+    if (overlay && overlay.style.display !== 'none') {
+      closeWorkspaceModal({ target: overlay });
+      return;
+    }
+    // 浮出层未打开（初始加载恢复）→ 继续完整加载流程
   }
 
+  // 1. 先保存当前作品的内容（此时 state.currentWorkId 仍是旧作品）
+  clearTimeout(_autoSaveTimer);
+  var p = capturePayload();
+  if (p) await sendPayload(p);
+
+  // 2. 切换到新作品
   state.currentWorkId = workId;
-  saveUserConfig(); // 持久化到服务端（跨设备）
+  state.currentModule = null;  // 阻止 switchModule 内部重复保存（capturePayload 返回 null）
+  _lastSaved = '';
+  saveUserConfig();
   StoryElf.loadConversation(workId, 'write');
   qs('#split-view').style.display = 'grid';
   applyGridColumns();
