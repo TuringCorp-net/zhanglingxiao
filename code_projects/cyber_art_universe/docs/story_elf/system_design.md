@@ -759,41 +759,48 @@ Cron: 0 3 * * * (每天凌晨 3:00)
 
 ### 11.2 Fan-out 分批并发架构
 
-Cron handler 采用分批并发模式——直接调用 `processMemoriesForUser()`，不经过 HTTP：
+Cron handler 通过 Service Binding (`env.SELF.fetch`) 为每个用户触发独立的 Worker invocation：
 
 ```
-scheduled()
+scheduled()（调度 Worker — 1 个 invocation）
   ├─ discoverActiveUsers([今天, 昨天])                    ← R2 list 扫描
   ├─ 按 BATCH_SIZE=50 分批
-  │    ├─ 批次 1: Promise.allSettled([u1..u50].map(processMemoriesForUser))
-  │    │    └─ 批内 50 个用户并发调 LLM（8-15s/用户）
-  │    ├─ 批次 2: Promise.allSettled([u51..u100].map(...))
+  │    ├─ 批次 1: Promise.allSettled([
+  │    │      env.SELF.fetch(/api/internal/cron-memory?user_token=u1)  → Worker-A
+  │    │      env.SELF.fetch(/api/internal/cron-memory?user_token=u2)  → Worker-B
+  │    │      ...
+  │    │    ])  ← 50 个独立 Worker，各自调 LLM（8-15s）
+  │    ├─ 批次 2: 同上
   │    └─ ...
   └─ 写入 system/logs/memory-cron/{date}.json              ← 系统日志
 ```
+
+每个执行 Worker 调用 `processMemoriesForUser()` → `extractSTMForUser()` + `extractL2toL3IfDue()`。
 
 **设计决策**：
 
 | 决策 | 选择 | 理由 |
 |------|------|------|
-| 分发方式 | 直接调用 `processMemoriesForUser(env, userToken)` | 避免 Worker fetch 自己 custom domain 导致 HTTP 522；self-fetch 同样消耗子请求配额，无扩容优势 |
-| 批大小 | 50 | 兼容 Bundled（子请求上限 50）和 Unbound（1000），保守安全 |
-| 批次间 | 串行 | 避免 LLM 调用风暴；`Promise.allSettled` 只并发批内用户 |
+| 分发方式 | `env.SELF.fetch()` — Service Binding 到自身 | Cloudflare 内部控制面路由，不走公网 DNS，无 HTTP 522。每个 fetch 即独立 Worker invocation |
+| Service Binding | `[[services]] binding="SELF" service="cyber_art_api"` | 零延迟 Worker 间通信，`wrangler.toml` 2 行配置 |
+| 批大小 | 50 | 兼容 Bundled（子请求上限 50）和 Workers Paid（1000），保守安全 |
+| 批次间 | 串行 | 避免瞬时子请求风暴；`Promise.allSettled` 只并发批内用户 |
+| 鉴权 | 无 | 内部控制面调用，不经过公网 |
 | 重试 | 无 | 失败用户记录到系统日志后跳过 |
 | 幂等 | `extracted_to_stm`/`extracted_to_ltm` 标志位 | 同一用户被意外触发两次时，第二次发现标志位已 true，直接跳过 |
 
 **内部端点**：`POST /api/internal/cron-memory?user_token=xxx`
 
-保留用于手动测试和调试，不作为 Cron 主路径。
+供 Service Binding 调用。也保留用于手动测试。
 
-**扩展容量估算**（Unbound 计划）：
+**扩展容量估算**（Workers Paid 计划，子请求上限 1000）：
 
-| 用户数 | 批数 | 预估耗时 | 瓶颈 |
-|--------|------|---------|------|
-| 100 | 2 | ~30s | — |
-| 1,000 | 20 | ~5 min | — |
-| 10,000 | 200 | ~25 min | 接近 30min Cron 上限 |
-| 50,000+ | 1000 | >30min | 需迁移到 Cloudflare Workflows / Queues |
+| 用户数 | 批数 | 并发 Worker | 预估耗时 | 瓶颈 |
+|--------|------|-----------|---------|------|
+| 50 | 1 | 50 | ~15s | — |
+| 1,000 | 20 | 50×20 | ~5 min | — |
+| 10,000 | 200 | 50×200 | ~25 min | 接近 30min Cron 上限 |
+| 50,000+ | 1000 | — | >30min | 需迁移到 Cloudflare Workflows / Queues |
 
 ### 11.3 系统日志
 

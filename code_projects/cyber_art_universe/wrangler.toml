@@ -9,7 +9,7 @@ routes = [
 
 # Cron 定时任务：每天凌晨 3:00 执行记忆提取（"睡眠"）
 [triggers]
-crons = ["0 3 * * *"]
+crons = ["10 4 * * *"]
 
 [[d1_databases]]
 binding = "DB"

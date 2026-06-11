@@ -334,6 +334,94 @@ export async function handleMemoryExtractL3(env: Env, request: Request): Promise
 }
 
 // ============================================================
+// POST /api/write/memory-test/reset
+// ============================================================
+
+/**
+ * POST /api/write/memory-test/reset
+ * Body: { user_token: string }
+ * 重置指定用户的所有记忆提取状态：标志位 → false，删除 STM/LTM final 和存档。
+ * 用于生产环境测试——恢复到 Cron 从未运行过的状态。
+ */
+export async function handleMemoryReset(env: Env, request: Request): Promise<Response> {
+  const body = await request.json() as { user_token?: string };
+  const token = body.user_token;
+  if (!token) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'user_token is required')), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const actions: string[] = [];
+  try {
+    // 1. 重置所有 L1 文件的标志位
+    const l1Prefix = `users/${token}/memory-logs/`;
+    let cursor: string | undefined;
+    let l1Reset = 0;
+    do {
+      const listed = await env.WORKS_BUCKET.list({ prefix: l1Prefix, limit: 200, cursor });
+      for (const obj of listed.objects) {
+        try {
+          const file = await env.WORKS_BUCKET.get(obj.key);
+          if (!file) continue;
+          const log = JSON.parse(await file.text());
+          if (log.extracted_to_stm !== undefined) {
+            log.extracted_to_stm = false;
+            log.extracted_to_ltm = false;
+            await env.WORKS_BUCKET.put(obj.key, JSON.stringify(log, null, 2), {
+              httpMetadata: { contentType: 'application/json' },
+            });
+            l1Reset++;
+          }
+        } catch { /* skip corrupted */ }
+      }
+      cursor = listed.truncated ? listed.cursor : undefined;
+    } while (cursor);
+    actions.push(`重置 ${l1Reset} 个 L1 文件的标志位为 false`);
+
+    // 2. 删除 STM final + 存档
+    const stmPrefix = `users/${token}/stm/`;
+    cursor = undefined;
+    let stmDeleted = 0;
+    do {
+      const listed = await env.WORKS_BUCKET.list({ prefix: stmPrefix, limit: 200, cursor });
+      for (const obj of listed.objects) {
+        await env.WORKS_BUCKET.delete(obj.key);
+        stmDeleted++;
+      }
+      cursor = listed.truncated ? listed.cursor : undefined;
+    } while (cursor);
+    actions.push(`删除 ${stmDeleted} 个 STM 文件`);
+
+    // 3. 删除 LTM final + 存档 + 提取状态
+    const ltmPrefix = `users/${token}/ltm/`;
+    cursor = undefined;
+    let ltmDeleted = 0;
+    do {
+      const listed = await env.WORKS_BUCKET.list({ prefix: ltmPrefix, limit: 200, cursor });
+      for (const obj of listed.objects) {
+        await env.WORKS_BUCKET.delete(obj.key);
+        ltmDeleted++;
+      }
+      cursor = listed.truncated ? listed.cursor : undefined;
+    } while (cursor);
+    actions.push(`删除 ${ltmDeleted} 个 LTM 文件（含 .extraction-state.json）`);
+
+    return new Response(JSON.stringify(jsonSuccess({
+      user_token: token,
+      actions,
+      note: '状态已重置。下次 Cron 将视为首次提取。',
+    })), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.INTERNAL_ERROR, `Reset failed: ${(err as Error).message}`)), {
+      status: 500, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+// ============================================================
 // 读取端点（debug，admin token 鉴权）
 // ============================================================
 

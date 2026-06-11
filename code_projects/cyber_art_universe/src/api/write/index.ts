@@ -60,7 +60,7 @@ import { handleElfChat, handleGetConversation, handlePutConversation } from './e
 import { getModuleGuide } from '../../lib/l2/guides';
 import { jsonSuccess } from '../../lib/response';
 import { extractLang, type Lang } from '../../lib/l1/work-content';
-import { handleMemoryTestSetup, handleMemoryTestTeardown, handleMemoryExtractL2, handleMemoryExtractL3, handleMemoryReadL1, handleMemoryReadL2, handleMemoryReadL3 } from './memory-test';
+import { handleMemoryTestSetup, handleMemoryTestTeardown, handleMemoryExtractL2, handleMemoryExtractL3, handleMemoryReset, handleMemoryReadL1, handleMemoryReadL2, handleMemoryReadL3 } from './memory-test';
 import { handleMemoryEval, handleMemoryEvalResults } from './memory-eval';
 
 export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
@@ -163,6 +163,9 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   }
   if (resource === 'memory-test' && resourceId === 'extract-l3' && !subResource && !action) {
     if (request.method === 'POST') return handleMemoryExtractL3(env, request);
+  }
+  if (resource === 'memory-test' && resourceId === 'reset' && !subResource && !action) {
+    if (request.method === 'POST') return handleMemoryReset(env, request);
   }
   if (resource === 'memory-test' && resourceId === 'read-l2' && !subResource && !action) {
     if (request.method === 'GET') return handleMemoryReadL2(env, request);
