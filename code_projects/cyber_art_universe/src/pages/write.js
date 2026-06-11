@@ -209,7 +209,7 @@ function renderWorkspaceCards() {
   var html = '';
   _worksList.forEach(function (w) {
     var isActive = state.currentWorkId === w.id;
-    var statusLabel = { draft: '草稿', published: '已发布', closed: '已关闭' }[w.status] || w.status;
+    var statusLabel = { draft: '草稿', published: '已发布', closed: '草稿' }[w.status] || w.status;
     html += '<div class="ws-card' + (isActive ? ' active' : '') + '" onclick="onWorkspaceChange(\'' + w.id + '\')">'
       + '<button class="ws-card-menu-btn" onclick="event.stopPropagation();toggleCardMenu(event,\'' + w.id + '\')" title="' + t('action.edit') + '">⋯</button>'
       + '<div class="ws-card-title">' + escHtml(w.title) + '</div>'
@@ -272,22 +272,22 @@ function renderCardMenuItems(w) {
 
   var html = '';
   // 编辑名称
-  html += '<button class="ws-card-menu-item" onclick="editTitle()">✏️ ' + t('ws.edit_title') + '</button>';
+  html += '<button class="ws-card-menu-item" onclick="editTitle()">' + t('ws.edit_title') + '</button>';
 
-  // 状态切换
+  // 状态切换（仅双态：草稿 ↔ 已发布）
   var statusActions = {
-    draft:  { label: t('ws.publish_work'), icon: '📤' },
-    published: { label: t('ws.close_work'), icon: '🔒' },
-    closed: { label: t('ws.reopen_work'), icon: '📖' },
+    draft:     { label: t('ws.publish_work') },
+    published: { label: t('ws.unpublish_work') },
+    closed:    { label: t('ws.publish_work') }, // 遗留 closed 视为草稿
   };
   var action = statusActions[w.status];
   if (action) {
-    html += '<button class="ws-card-menu-item" onclick="changeWorkStatus(\'' + w.id + '\',\'' + w.status + '\')">' + action.icon + ' ' + action.label + '</button>';
+    html += '<button class="ws-card-menu-item" onclick="changeWorkStatus(\'' + w.id + '\',\'' + w.status + '\')">' + action.label + '</button>';
   }
 
   // 分隔线 + 删除
   html += '<div class="ws-card-menu-divider"></div>';
-  html += '<button class="ws-card-menu-item ws-card-menu-item-danger" onclick="deleteWork(\'' + w.id + '\')">🗑 ' + t('ws.delete_work') + '</button>';
+  html += '<button class="ws-card-menu-item ws-card-menu-item-danger" onclick="deleteWork(\'' + w.id + '\')">' + t('ws.delete_work') + '</button>';
 
   itemsEl.innerHTML = html;
 }
@@ -335,19 +335,23 @@ async function confirmEditTitle() {
   }
 }
 
-// — 修改状态 —
+// — 修改状态（双态：草稿 ↔ 已发布） —
 async function changeWorkStatus(workId, currentStatus) {
   var endpoint;
-  if (currentStatus === 'draft') endpoint = '/api/write/works/' + workId + '/publish';
-  else if (currentStatus === 'published') endpoint = '/api/write/works/' + workId + '/close';
-  else if (currentStatus === 'closed') endpoint = '/api/write/works/' + workId + '/reopen';
-  else return;
+  var newStatus;
+  if (currentStatus === 'draft' || currentStatus === 'closed') {
+    endpoint = '/api/write/works/' + workId + '/publish';
+    newStatus = 'published';
+  } else if (currentStatus === 'published') {
+    endpoint = '/api/write/works/' + workId + '/close';
+    newStatus = 'draft';
+  } else return;
 
   closeCardMenu();
   var data = await hPatch(endpoint);
   if (data && data.ok) {
     var w = _worksList.find(function (x) { return x.id === workId; });
-    if (w) w.status = data.data && data.data.status ? data.data.status : (currentStatus === 'draft' ? 'published' : currentStatus === 'published' ? 'closed' : 'published');
+    if (w) w.status = (data.data && data.data.status) ? data.data.status : newStatus;
     renderWorkspaceCards();
   } else {
     alert(t('ws.update_failed') + (data && data.error ? ': ' + data.error : ''));

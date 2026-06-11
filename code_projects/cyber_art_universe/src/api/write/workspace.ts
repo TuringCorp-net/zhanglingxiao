@@ -244,7 +244,7 @@ export async function publishWork(env: Env, _request: Request, id: string): Prom
   });
 }
 
-// PATCH /api/write/works/{id}/close
+// PATCH /api/write/works/{id}/close — 已发布 → 退回草稿
 export async function closeWork(env: Env, _request: Request, id: string): Promise<Response> {
   const row = await env.DB.prepare('SELECT id, status FROM works WHERE id = ?').bind(id).first<{ id: string; status: string }>();
   if (!row) {
@@ -253,13 +253,13 @@ export async function closeWork(env: Env, _request: Request, id: string): Promis
     });
   }
   if (row.status !== 'published') {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_STATUS_CONFLICT, 'Only published works can be closed')), {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_STATUS_CONFLICT, 'Only published works can be unpublished')), {
       status: 409, headers: { 'Content-Type': 'application/json' },
     });
   }
   const now = new Date().toISOString();
-  await env.DB.prepare('UPDATE works SET status = ?, updated_at = ? WHERE id = ?').bind('closed', now, id).run();
-  return new Response(JSON.stringify(jsonSuccess({ id, status: 'closed' })), {
+  await env.DB.prepare('UPDATE works SET status = ?, updated_at = ? WHERE id = ?').bind('draft', now, id).run();
+  return new Response(JSON.stringify(jsonSuccess({ id, status: 'draft' })), {
     headers: { 'Content-Type': 'application/json' },
   });
 }
