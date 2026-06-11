@@ -34,6 +34,19 @@
       <div id="ws-card-grid" class="ws-card-grid">
         <div class="loading" style="padding:2rem;text-align:center;color:var(--text-muted)">加载中...</div>
       </div>
+
+      <!-- 作品卡片右键菜单 -->
+      <div id="ws-card-menu" class="ws-card-menu" style="display:none" onclick="event.stopPropagation()">
+        <div id="ws-card-menu-items"></div>
+        <div id="ws-card-menu-edit" style="display:none">
+          <input id="ws-card-menu-edit-input" class="ws-card-menu-edit-input" maxlength="80"
+            onkeydown="if(event.key==='Enter')confirmEditTitle()">
+          <div class="ws-card-menu-edit-actions">
+            <button class="ws-card-menu-btn-confirm" onclick="confirmEditTitle()" data-i18n="action.confirm">确认</button>
+            <button class="ws-card-menu-btn-cancel" onclick="cancelEditTitle()" data-i18n="action.cancel">取消</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

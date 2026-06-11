@@ -211,6 +211,7 @@ function renderWorkspaceCards() {
     var isActive = state.currentWorkId === w.id;
     var statusLabel = { draft: '草稿', published: '已发布', closed: '已关闭' }[w.status] || w.status;
     html += '<div class="ws-card' + (isActive ? ' active' : '') + '" onclick="onWorkspaceChange(\'' + w.id + '\')">'
+      + '<button class="ws-card-menu-btn" onclick="event.stopPropagation();toggleCardMenu(event,\'' + w.id + '\')" title="' + t('action.edit') + '">⋯</button>'
       + '<div class="ws-card-title">' + escHtml(w.title) + '</div>'
       + '<div class="ws-card-meta">'
         + '<span class="ws-card-status ' + w.status + '">' + statusLabel + '</span>'
@@ -219,6 +220,161 @@ function renderWorkspaceCards() {
   });
   grid.innerHTML = html;
   updateWorkspaceBtn();
+}
+
+// — 卡片菜单（三点按钮） —
+var _menuWorkId = null;
+
+function toggleCardMenu(event, workId) {
+  event.stopPropagation();
+  var menu = qs('#ws-card-menu');
+  if (!menu) return;
+
+  // 已打开同一菜单 → 关闭
+  if (_menuWorkId === workId && menu.style.display === 'block') {
+    closeCardMenu();
+    return;
+  }
+
+  _menuWorkId = workId;
+  var w = _worksList.find(function (x) { return x.id === workId; });
+  if (!w) return;
+
+  // 定位菜单
+  var btn = event.currentTarget;
+  var btnRect = btn.getBoundingClientRect();
+  var modal = qs('.ws-modal');
+  var modalRect = modal.getBoundingClientRect();
+  menu.style.top = (btnRect.top - modalRect.top + 4) + 'px';
+  menu.style.left = Math.min(btnRect.right - modalRect.left - 180, modalRect.width - 190) + 'px';
+  menu.style.display = 'block';
+
+  // 渲染菜单项
+  cancelEditTitle();
+  renderCardMenuItems(w);
+
+  // 点击其他地方关闭
+  setTimeout(function () { document.addEventListener('click', closeCardMenu, { once: true }); }, 0);
+}
+
+function closeCardMenu() {
+  var menu = qs('#ws-card-menu');
+  if (menu) { menu.style.display = 'none'; cancelEditTitle(); }
+  _menuWorkId = null;
+}
+
+function renderCardMenuItems(w) {
+  var itemsEl = qs('#ws-card-menu-items');
+  var editEl = qs('#ws-card-menu-edit');
+  if (!itemsEl || !editEl) return;
+  editEl.style.display = 'none';
+  itemsEl.style.display = '';
+
+  var html = '';
+  // 编辑名称
+  html += '<button class="ws-card-menu-item" onclick="editTitle()">✏️ ' + t('ws.edit_title') + '</button>';
+
+  // 状态切换
+  var statusActions = {
+    draft:  { label: t('ws.publish_work'), icon: '📤' },
+    published: { label: t('ws.close_work'), icon: '🔒' },
+    closed: { label: t('ws.reopen_work'), icon: '📖' },
+  };
+  var action = statusActions[w.status];
+  if (action) {
+    html += '<button class="ws-card-menu-item" onclick="changeWorkStatus(\'' + w.id + '\',\'' + w.status + '\')">' + action.icon + ' ' + action.label + '</button>';
+  }
+
+  // 分隔线 + 删除
+  html += '<div class="ws-card-menu-divider"></div>';
+  html += '<button class="ws-card-menu-item ws-card-menu-item-danger" onclick="deleteWork(\'' + w.id + '\')">🗑 ' + t('ws.delete_work') + '</button>';
+
+  itemsEl.innerHTML = html;
+}
+
+// — 编辑标题 —
+var _editingWorkId = null;
+
+function editTitle() {
+  _editingWorkId = _menuWorkId;
+  var w = _worksList.find(function (x) { return x.id === _menuWorkId; });
+  if (!w) return;
+  var itemsEl = qs('#ws-card-menu-items');
+  var editEl = qs('#ws-card-menu-edit');
+  var inp = qs('#ws-card-menu-edit-input');
+  if (!itemsEl || !editEl || !inp) return;
+  itemsEl.style.display = 'none';
+  editEl.style.display = '';
+  inp.value = w.title;
+  setTimeout(function () { inp.focus(); inp.select(); }, 50);
+}
+
+function cancelEditTitle() {
+  _editingWorkId = null;
+  var editEl = qs('#ws-card-menu-edit');
+  if (editEl) editEl.style.display = 'none';
+  var itemsEl = qs('#ws-card-menu-items');
+  if (itemsEl) itemsEl.style.display = '';
+}
+
+async function confirmEditTitle() {
+  var inp = qs('#ws-card-menu-edit-input');
+  if (!inp || !_editingWorkId) return;
+  var newTitle = inp.value.trim();
+  if (!newTitle) { inp.focus(); return; }
+
+  var data = await hPut('/api/write/works/' + _editingWorkId, { title: newTitle });
+  if (data && data.ok) {
+    // 更新本地缓存
+    var w = _worksList.find(function (x) { return x.id === _editingWorkId; });
+    if (w) w.title = newTitle;
+    closeCardMenu();
+    renderWorkspaceCards();
+  } else {
+    alert(t('ws.update_failed'));
+  }
+}
+
+// — 修改状态 —
+async function changeWorkStatus(workId, currentStatus) {
+  var endpoint;
+  if (currentStatus === 'draft') endpoint = '/api/write/works/' + workId + '/publish';
+  else if (currentStatus === 'published') endpoint = '/api/write/works/' + workId + '/close';
+  else if (currentStatus === 'closed') endpoint = '/api/write/works/' + workId + '/reopen';
+  else return;
+
+  closeCardMenu();
+  var data = await hPatch(endpoint);
+  if (data && data.ok) {
+    var w = _worksList.find(function (x) { return x.id === workId; });
+    if (w) w.status = data.data && data.data.status ? data.data.status : (currentStatus === 'draft' ? 'published' : currentStatus === 'published' ? 'closed' : 'published');
+    renderWorkspaceCards();
+  } else {
+    alert(t('ws.update_failed') + (data && data.error ? ': ' + data.error : ''));
+  }
+}
+
+// — 删除作品 —
+async function deleteWork(workId) {
+  closeCardMenu();
+  var w = _worksList.find(function (x) { return x.id === workId; });
+  var title = w ? w.title : workId;
+  if (!confirm(t('ws.delete_confirm').replace('{title}', title))) return;
+
+  var data = await hDelete('/api/write/works/' + workId);
+  if (data && data.ok) {
+    _worksList = _worksList.filter(function (x) { return x.id !== workId; });
+    // 如果删除的是当前作品，清空状态
+    if (state.currentWorkId === workId) {
+      state.currentWorkId = null;
+      saveUserConfig();
+      qs('#split-view').style.display = 'none';
+      qs('#pipeline-guide').style.display = 'none';
+    }
+    renderWorkspaceCards();
+  } else {
+    alert(t('ws.delete_failed') + (data && data.error ? ': ' + data.error : ''));
+  }
 }
 
 // 更新 pipeline bar 按钮文字为当前作品名

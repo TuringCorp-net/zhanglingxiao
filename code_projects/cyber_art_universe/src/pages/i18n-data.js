@@ -122,6 +122,16 @@ var I18N = {
   },
 
   ws: {
+    edit_title:       { zh: '编辑名称',     en: 'Edit Title' },
+    edit_title_placeholder: { zh: '输入新名称...', en: 'New name...' },
+    publish_work:     { zh: '发布作品',     en: 'Publish' },
+    close_work:       { zh: '下架作品',     en: 'Close' },
+    reopen_work:      { zh: '重新上架',     en: 'Reopen' },
+    delete_work:      { zh: '删除作品',     en: 'Delete Work' },
+    delete_confirm:   { zh: '确定要删除「{title}」吗？此操作不可撤销。', en: 'Delete "{title}"? This cannot be undone.' },
+    delete_success:   { zh: '已删除',       en: 'Deleted' },
+    delete_failed:    { zh: '删除失败',     en: 'Delete failed' },
+    update_failed:    { zh: '更新失败',     en: 'Update failed' },
     collection:       { zh: '作品集',       en: 'Works' },
     new_work:         { zh: '新增作品',     en: 'New Work' },
     name_placeholder: { zh: '输入作品名称...', en: 'Work name...' },

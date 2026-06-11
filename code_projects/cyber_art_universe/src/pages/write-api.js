@@ -78,6 +78,15 @@ function hPatch(path, body) {
     .catch(err => { console.error('hPatch error:', path, err); return null; });
 }
 
+function hDelete(path) {
+  const sep = path.includes('?') ? '&' : '?';
+  return fetchWithRetry(`${path}${sep}${langParam()}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${userToken}` },
+  }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .catch(err => { console.error('hDelete error:', path, err.message || err); return null; });
+}
+
 // — 语言切换 —
 
 function switchLang(lang) {

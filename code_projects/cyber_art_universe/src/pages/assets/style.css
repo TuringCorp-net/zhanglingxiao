@@ -503,6 +503,80 @@ ul, ol { list-style: none; }
   color: var(--text-muted); font-size: 0.85rem;
 }
 
+/* — 作品卡片三点菜单按钮 — */
+.ws-card {
+  position: relative;
+}
+.ws-card-menu-btn {
+  position: absolute; top: 6px; right: 6px;
+  width: 22px; height: 22px; border-radius: 50%;
+  border: none; background: transparent;
+  color: var(--text-muted); font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; line-height: 1; opacity: 0;
+}
+.ws-card:hover .ws-card-menu-btn { opacity: 1; }
+.ws-card-menu-btn:hover { background: var(--bg-hover); color: var(--text); }
+
+/* — 弹出菜单 — */
+.ws-card-menu {
+  position: absolute; z-index: 210;
+  min-width: 160px; max-width: 220px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  padding: 0.35rem 0;
+  overflow: hidden;
+}
+.ws-card-menu-item {
+  display: block; width: 100%; padding: 0.45rem 0.85rem;
+  border: none; background: transparent;
+  color: var(--text-dim); font-size: 0.78rem; font-family: var(--font);
+  text-align: left; cursor: pointer;
+  transition: all 0.12s; white-space: nowrap;
+}
+.ws-card-menu-item:hover { background: var(--bg-hover); color: var(--text); }
+.ws-card-menu-divider {
+  height: 1px; background: var(--border); margin: 0.25rem 0;
+}
+.ws-card-menu-item.ws-card-menu-item-danger {
+  color: var(--error);
+}
+.ws-card-menu-item.ws-card-menu-item-danger:hover {
+  background: rgba(239,68,68,0.1); color: var(--error);
+}
+
+/* — 编辑标题输入 — */
+.ws-card-menu-edit { padding: 0.4rem 0.6rem; }
+.ws-card-menu-edit-input {
+  width: 100%; padding: 0.35rem 0.5rem;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: 5px;
+  font-size: 0.78rem; font-family: var(--font);
+  outline: none; margin-bottom: 0.4rem; box-sizing: border-box;
+}
+.ws-card-menu-edit-input:focus { border-color: var(--accent-light); }
+.ws-card-menu-edit-actions {
+  display: flex; gap: 0.35rem; justify-content: flex-end;
+}
+.ws-card-menu-btn-confirm,
+.ws-card-menu-btn-cancel {
+  padding: 0.2rem 0.65rem; border-radius: 4px;
+  font-size: 0.7rem; font-family: var(--font); cursor: pointer;
+  transition: all 0.12s;
+}
+.ws-card-menu-btn-confirm {
+  border: none; background: var(--accent);
+  color: var(--text-on-accent);
+}
+.ws-card-menu-btn-confirm:hover { background: var(--accent-light); }
+.ws-card-menu-btn-cancel {
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-dim);
+}
+.ws-card-menu-btn-cancel:hover { border-color: var(--text-muted); color: var(--text); }
+
 /* — Pipeline Guide — */
 .pipeline-guide {
   flex: 1;
