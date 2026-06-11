@@ -406,7 +406,7 @@ async function onWorkspaceChange(workId) {
   if (state.currentWorkId === workId) {
     var overlay = qs('#workspace-overlay');
     if (overlay && overlay.style.display !== 'none') {
-      closeWorkspaceModal({ target: overlay });
+      closeWorkspaceModal();
       return;
     }
     // 浮出层未打开（初始加载恢复）→ 继续完整加载流程
@@ -431,7 +431,7 @@ async function onWorkspaceChange(workId) {
   // 更新 UI + 关闭浮出层
   updateWorkspaceBtn();
   renderWorkspaceCards();
-  closeWorkspaceModal({ target: qs('#workspace-overlay') });
+  closeWorkspaceModal();
 
   refreshPipelineGuide(workId);
   preWarmCache(workId);
