@@ -42,6 +42,7 @@ function loadState() {
 function saveState() {
   try {
     localStorage.setItem('sf_desk_v3', JSON.stringify({
+      currentWorkId: state.currentWorkId,
       leftPct: state.leftPct,
       midPct: state.midPct,
       chapterFilter: state.chapterFilter,
@@ -172,9 +173,13 @@ async function loadWorkspaces() {
   _worksList = data.data || [];
   renderWorkspaceCards();
 
-  // 初始加载时自动选中第一个作品（与旧下拉框行为一致）
-  if (_worksList.length > 0 && !state.currentWorkId) {
-    onWorkspaceChange(_worksList[0].id);
+  // 恢复上次选择的作品（持久化在 localStorage），找不到则回退到第一个
+  if (_worksList.length > 0) {
+    var targetId = state.currentWorkId;
+    // 检查上次选择的作品是否仍在列表中
+    var found = targetId && _worksList.some(function (w) { return w.id === targetId; });
+    if (!found) targetId = _worksList[0].id;
+    onWorkspaceChange(targetId);
   }
 }
 
