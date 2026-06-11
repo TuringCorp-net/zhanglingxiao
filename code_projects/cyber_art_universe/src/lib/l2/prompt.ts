@@ -138,13 +138,13 @@ export async function buildAgentSystemPromptLayers(
     try {
       const l3Profile = await readLTMFinal(env, userToken);
       if (l3Profile) {
-        memParts.push(`---\n\n${l3Profile}`);
+        memParts.push(`## 长期画像\n\n${l3Profile}`);
       }
     } catch { /* 画像加载失败不影响主流程 */ }
   }
 
   if (memParts.length === 0) {
-    memParts.push('*（暂无记忆数据。随着对话积累，短期记忆和长期画像将在此展示。）*');
+    memParts.push('## 短期记忆\n\n*（暂无数据。随着对话积累，短期记忆将在此展示。）*\n\n## 长期画像\n\n*（暂无数据。随着对话积累，长期画像将在此展示。）*');
   }
 
   const layer5 = memParts.join('\n\n');
