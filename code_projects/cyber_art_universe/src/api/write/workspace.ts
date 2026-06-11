@@ -36,6 +36,9 @@ export async function listMyWorks(env: Env, request: Request): Promise<Response>
   if (status) {
     whereClause = 'WHERE status = ?';
     bindings.push(status);
+  } else {
+    // 默认不返回已删除的作品（status = 'deleted'）
+    whereClause = "WHERE status != 'deleted'";
   }
 
   const countResult = await env.DB.prepare(
@@ -173,20 +176,21 @@ export async function updateMyWork(env: Env, request: Request, id: string): Prom
   });
 }
 
-// DELETE /api/write/works/{id}
+// DELETE /api/write/works/{id} — 软删除：status → 'deleted'，R2 文件保留
 export async function deleteMyWork(env: Env, _request: Request, id: string): Promise<Response> {
   const row = await env.DB.prepare('SELECT id, status FROM works WHERE id = ?').bind(id).first<{ id: string; status: string }>();
-  if (!row) {
+  if (!row || row.status === 'deleted') {
     return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
       status: 404, headers: { 'Content-Type': 'application/json' },
     });
   }
   if (row.status === 'published') {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_STATUS_CONFLICT, 'Published works cannot be deleted. Close it first.')), {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_STATUS_CONFLICT, 'Published works cannot be deleted. Unpublish it first.')), {
       status: 409, headers: { 'Content-Type': 'application/json' },
     });
   }
-  await env.DB.prepare('DELETE FROM works WHERE id = ?').bind(id).run();
+  const now = new Date().toISOString();
+  await env.DB.prepare('UPDATE works SET status = ?, updated_at = ? WHERE id = ?').bind('deleted', now, id).run();
   return new Response(JSON.stringify(jsonSuccess({ id, deleted: true })), {
     headers: { 'Content-Type': 'application/json' },
   });
