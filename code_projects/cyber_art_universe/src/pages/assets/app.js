@@ -68,37 +68,16 @@ function switchLang(lang) {
   location.reload();
 }
 
-// — Story Elf 共享函数（Read/Write 共用，位置跨页面保持） —
+// — Story Elf 共享函数（v2.7: 拖拽/切换统一由 story-elf.js 处理） —
+// 以下为兼容旧代码的薄封装，新逻辑见 story-elf.js 的 bindEvents / _floatToggle
 function toggleElf() {
-  var d = document.getElementById('elf-dialog');
-  if (d) d.style.display = d.style.display === 'none' ? 'flex' : 'none';
+  if (typeof StoryElf !== 'undefined' && StoryElf._floatToggle) {
+    StoryElf._floatToggle();
+  }
 }
-var _elfDrag = { moved: false, startX: 0, startY: 0, offX: 0, offY: 0 };
 function startElfDrag(e) {
-  if (e.target.closest('.elf-action-btn') || e.target.closest('.elf-dialog') || e.target.closest('input')) return;
-  e.preventDefault();
-  var elf = document.getElementById('story-elf');
-  var r = elf.getBoundingClientRect();
-  _elfDrag = { moved: false, startX: e.clientX, startY: e.clientY, offX: e.clientX - r.left, offY: e.clientY - r.top };
-  elf.style.left = r.left + 'px';
-  elf.style.top = r.top + 'px';
-  function mv(ev) {
-    var dx = Math.abs(ev.clientX - _elfDrag.startX), dy = Math.abs(ev.clientY - _elfDrag.startY);
-    if (dx > 3 || dy > 3) _elfDrag.moved = true;
-    if (_elfDrag.moved) {
-      elf.style.left = Math.max(0, Math.min(window.innerWidth - 170, ev.clientX - _elfDrag.offX)) + 'px';
-      elf.style.top = Math.max(0, Math.min(window.innerHeight - 220, ev.clientY - _elfDrag.offY)) + 'px';
-    }
-  }
-  function up() {
-    document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up);
-    if (_elfDrag.moved) {
-      try { localStorage.setItem('sf_elf_pos', JSON.stringify({ l: elf.style.left, t: elf.style.top })); } catch (x) {}
-    } else if (e.target.closest('.elf-avatar')) {
-      toggleElf();
-    }
-  }
-  document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+  // v2.7: 拖拽已由 story-elf.js 的 bindEvents 统一处理，此处为兼容占位
+  // 不再重复实现，避免事件冲突
 }
 
 function initElfPosition() {

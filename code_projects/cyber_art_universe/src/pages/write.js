@@ -29,14 +29,15 @@ var state = {
   currentEntityId: null,
   currentFhId: null,
   chapterFilter: 'all',
-  leftPct: 33,   // 左栏百分比
-  midPct: 34,    // 中栏百分比，右栏 = 100 - left - mid
+  leftPct: 33,            // 左栏百分比
+  midPct: 34,             // 中栏百分比，右栏 = 100 - left - mid
+  leftPanelUpperPct: 40,  // 左栏上半部百分比 (卡片区)
 };
 
 function loadState() {
   try {
     var saved = JSON.parse(localStorage.getItem('sf_desk_v3') || '{}');
-    Object.assign(state, { chapterFilter: 'all', leftPct: 33, midPct: 34 }, saved);
+    Object.assign(state, { chapterFilter: 'all', leftPct: 33, midPct: 34, leftPanelUpperPct: 40 }, saved);
   } catch (e) {}
 }
 function saveState() {
@@ -45,6 +46,7 @@ function saveState() {
       leftPct: state.leftPct,
       midPct: state.midPct,
       chapterFilter: state.chapterFilter,
+      leftPanelUpperPct: state.leftPanelUpperPct,
     }));
   } catch (e) {}
 }
@@ -631,101 +633,6 @@ async function loadModuleList(workId, type) {
 }
 
 // ============================================================
-// Rotating Hint Engine
-// ============================================================
-var _hintTimer = null;
-var _hintIndex = {};  // {module: current index} — 跨语言切换保持不变
-var _hintShown = {};  // {module: [shown indices]} — 避免短期重复
-var _hintCache = {};  // {module: hints[]}
-
-async function loadRotatingHint(module) {
-  var left = qs('#split-left');
-  // 移除旧提示
-  var old = left.querySelector('.rotating-hint');
-  if (old) old.remove();
-
-  // 添加占位
-  var el = qs('#tmpl-rotating-hint').content.cloneNode(true);
-  left.appendChild(el);
-
-  var textEl = left.querySelector('.hint-text');
-
-  // V4: hints 端点已移除，提示由 Story Elf 在对话中动态提供
-  return;
-
-  // 缓存
-  _hintCache[module] = hints;
-
-  // 选一条：如果已有记录（如切语言），用同一条；否则随机
-  if (_hintIndex[module] != null && _hintIndex[module] < hints.length) {
-    var pick = _hintIndex[module];
-  } else {
-    if (!_hintShown[module]) _hintShown[module] = [];
-    var shown = _hintShown[module];
-    var available = [];
-    for (var j = 0; j < hints.length; j++) {
-      if (shown.indexOf(j) < 0) available.push(j);
-    }
-    if (available.length === 0) {
-      _hintShown[module] = [];
-      available = hints.map(function (_, k) { return k; });
-    }
-    var pick = available[Math.floor(Math.random() * available.length)];
-  }
-  _hintIndex[module] = pick;
-  _hintShown[module].push(pick);
-
-  textEl.innerHTML = marked.parse(hints[pick]);
-
-  // 设置下一次轮换（60-120 分钟随机）
-  clearTimeout(_hintTimer);
-  _hintTimer = setTimeout(function () {
-    rotateHint(module);
-  }, 3600000); // 1 小时
-}
-
-function rotateHint(module) {
-  if (!_hintCache[module]) { loadRotatingHint(module); return; }
-
-  var hints = _hintCache[module];
-  var textEl = qs('#split-left .hint-text');
-  if (!textEl) return;
-
-  var shown = _hintShown[module] || [];
-  var available = [];
-  for (var i = 0; i < hints.length; i++) {
-    if (shown.indexOf(i) < 0) available.push(i);
-  }
-  if (available.length === 0) {
-    _hintShown[module] = [];
-    available = hints.map(function (_, k) { return k; });
-  }
-  var pick = available[Math.floor(Math.random() * available.length)];
-  _hintIndex[module] = pick;
-  _hintShown[module].push(pick);
-
-  // 动画：淡出再淡入
-  var container = textEl.closest('.rotating-hint');
-  if (container) {
-    container.style.opacity = '0';
-    container.style.transition = 'opacity 0.3s';
-    setTimeout(function () {
-      textEl.innerHTML = marked.parse(hints[pick]);
-      container.style.opacity = '1';
-    }, 350);
-  } else {
-    textEl.innerHTML = marked.parse(hints[pick]);
-  }
-
-  // 下次轮换
-  clearTimeout(_hintTimer);
-  _hintTimer = setTimeout(function () {
-    rotateHint(module);
-  }, 3600000); // 1 小时
-}
-
-
-// ============================================================
 // Slot Editor Engine — JSON 直接消费
 // ============================================================
 var _templateData = null;   // 当前 template JSON
@@ -1088,9 +995,7 @@ function serializeFormContent() {
 // M0: 原始构想
 // ============================================================
 async function loadM0() {
-  var left = qs('#split-left');
-  left.innerHTML = '';
-  loadRotatingHint('m0');
+  setLeftPanelMode('full');
 
   var moduleId = 'm0_' + state.currentWorkId;
   var data = await loadModule(moduleId);
@@ -1104,11 +1009,8 @@ async function loadM0() {
 // M1: 世界观
 // ============================================================
 async function loadM1() {
-  var left = qs('#split-left');
-  left.innerHTML = '';
-  loadRotatingHint('m1');
+  setLeftPanelMode('full');
   var data = await loadModule('m1_' + state.currentWorkId);
-  left.innerHTML = '';
   if (data && data.data && data.data.template) {
     data.data.template.free_content = data.data.free_content || '';
     showSlotEditor(data.data.template);
@@ -1121,11 +1023,8 @@ async function loadM1() {
 // M2: 主线剧情
 // ============================================================
 async function loadM2() {
-  var left = qs('#split-left');
-  left.innerHTML = '';
-  loadRotatingHint('m2');
+  setLeftPanelMode('full');
   var data = await loadModule('m2_' + state.currentWorkId);
-  left.innerHTML = '';
   if (data && data.data && data.data.template) {
     data.data.template.free_content = data.data.free_content || '';
     showSlotEditor(data.data.template);
@@ -1138,16 +1037,17 @@ async function loadM2() {
 // M3: 人物卡
 // ============================================================
 async function loadM3() {
+  setLeftPanelMode('split');
   showTextEditor('');
 
   await renderEntityCardList();
   // 默认选中第一个角色
-  var first = qs('#split-left .card-item[data-entity-id]');
+  var first = qs('#left-upper .card-item[data-entity-id]');
   if (first) first.click();
 }
 
 async function renderEntityCardList() {
-  var left = qs('#split-left');
+  var left = qs('#left-upper');
   left.innerHTML = '';
   var data = await loadModuleList(state.currentWorkId, 'm3_card');
   left.innerHTML = '';
@@ -1198,7 +1098,7 @@ async function openEntityCard(entityId, name) {
   }
 
   // 只更新高亮，不重建整个列表 DOM
-  qsa('#split-left .card-item[data-entity-id]').forEach(function (el) {
+  qsa('#left-upper .card-item[data-entity-id]').forEach(function (el) {
     el.classList.toggle('active', el.dataset.entityId === entityId);
   });
   updateElfContext();
@@ -1208,6 +1108,7 @@ async function openEntityCard(entityId, name) {
 // M4: 伏笔账本 — 与 M3 统一：左侧 entity 列表，右侧单文件编辑
 // ============================================================
 async function loadM4() {
+  setLeftPanelMode('split');
   showTextEditor('');
 
   // 加载策略总览
@@ -1219,12 +1120,12 @@ async function loadM4() {
   } else showTextEditor('');
 
   await renderFhCardList();
-  var first = qs('#split-left .card-item[data-entity-id]');
+  var first = qs('#left-upper .card-item[data-entity-id]');
   if (first) first.click();
 }
 
 async function renderFhCardList() {
-  var left = qs('#split-left');
+  var left = qs('#left-upper');
   left.innerHTML = '';
   var data = await loadModuleList(state.currentWorkId, 'm4_card');
   left.innerHTML = '';
@@ -1249,7 +1150,7 @@ async function renderFhCardList() {
     var tpl = (d && d.data && d.data.template) ? d.data.template : null;
     if (tpl) { tpl.free_content = (d && d.data) ? (d.data.free_content || '') : ''; showSlotEditor(tpl); }
     // 只更新高亮
-    qsa('#split-left .card-item[data-entity-id]').forEach(function (el) { el.classList.remove('active'); });
+    qsa('#left-upper .card-item[data-entity-id]').forEach(function (el) { el.classList.remove('active'); });
   });
   frag.appendChild(overviewCard);
 
@@ -1300,7 +1201,7 @@ async function openFhCard(entityId, name) {
   if (template) showSlotEditor(template);
 
   // 只更新高亮，不重建整个列表 DOM
-  qsa('#split-left .card-item[data-entity-id]').forEach(function (el) {
+  qsa('#left-upper .card-item[data-entity-id]').forEach(function (el) {
     el.classList.toggle('active', el.dataset.entityId === entityId);
   });
   updateElfContext();
@@ -1310,6 +1211,7 @@ async function openFhCard(entityId, name) {
 // M5 / M6: 章节蓝图 / 逐章编写
 // ============================================================
 async function loadM5() {
+  setLeftPanelMode('split');
   setThreePanelMode();
   // 显示自由编辑区（中栏），隐藏右侧槽位编辑器（M5 用表单编辑器）
   var te = qs('#writing-editor');
@@ -1321,21 +1223,22 @@ async function loadM5() {
 
   await loadChapterCardList();
   // 默认选中第一章
-  var first = qs('#split-left .chapter-card[data-section-id]');
+  var first = qs('#left-upper .chapter-card[data-section-id]');
   if (first) first.click();
 }
 
 async function loadM6() {
+  setLeftPanelMode('split');
   setTwoPanelMode();
   showTextEditor(''); // 占位，openChapter 会填入内容
 
   await loadChapterCardList();
-  var first = qs('#split-left .chapter-card[data-section-id]');
+  var first = qs('#left-upper .chapter-card[data-section-id]');
   if (first) first.click();
 }
 
 async function loadChapterCardList() {
-  var left = qs('#split-left');
+  var left = qs('#left-upper');
   left.innerHTML = '';
 
   // V3: 从 modules 表获取章节列表（已缓存）
@@ -1432,9 +1335,9 @@ async function openChapter(sectionId, title) {
 // 章节拖拽
 var _dragSrc = null;
 function initChapterDrag() {
-  qsa('#split-left .card-item').forEach(function (item) {
+  qsa('#left-upper .card-item').forEach(function (item) {
     item.addEventListener('dragstart', function (e) { _dragSrc = item.dataset.sectionId; item.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
-    item.addEventListener('dragend', function () { item.classList.remove('dragging'); qsa('#split-left .card-item').forEach(function (i) { i.classList.remove('drag-over'); }); });
+    item.addEventListener('dragend', function () { item.classList.remove('dragging'); qsa('#left-upper .card-item').forEach(function (i) { i.classList.remove('drag-over'); }); });
     item.addEventListener('dragover', function (e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; if (item.dataset.sectionId !== _dragSrc) item.classList.add('drag-over'); });
     item.addEventListener('dragleave', function () { item.classList.remove('drag-over'); });
     item.addEventListener('drop', async function (e) {
@@ -1559,9 +1462,8 @@ async function aiGenerateForModule() {
     loadM4();
   } else if ((state.currentModule === 'writing' || state.currentModule === 'chapters') && state.currentSectionId) {
     // V4: 章节生成通过 Story Elf 对话完成
-    StoryElf.toggle();
     var chatInput = document.getElementById('elf-chat-input');
-    if (chatInput) { chatInput.value = '请根据 M5 意图卡生成当前章节的正文内容'; StoryElf.sendChat(); }
+    if (chatInput) { chatInput.value = '请根据 M5 意图卡生成当前章节的正文内容'; chatInput.focus(); StoryElf.sendChat(); }
   }
   refreshPipelineGuide(wid);
 }
@@ -1571,14 +1473,12 @@ async function aiPolishForModule() {
   if (!wid) return;
   if (state.currentModule === 'writing' && sid) {
     // V4: 润色通过 Story Elf 对话完成
-    StoryElf.toggle();
     var polishInput = document.getElementById('elf-chat-input');
-    if (polishInput) { polishInput.value = '请帮我润色优化当前章节的内容'; StoryElf.sendChat(); }
+    if (polishInput) { polishInput.value = '请帮我润色优化当前章节的内容'; polishInput.focus(); StoryElf.sendChat(); }
   } else {
     // 对于非 M6 模块，polish = 用当前编辑器内容调用
-    StoryElf.toggle();
     var inp = document.getElementById('elf-chat-input');
-    if (inp) { inp.value = t('prompt.ai_polish_confirm'); StoryElf.sendChat(); }
+    if (inp) { inp.value = t('prompt.ai_polish_confirm'); inp.focus(); StoryElf.sendChat(); }
   }
 }
 
@@ -1706,10 +1606,6 @@ function setThreePanelMode() {
 // Story Elf 行为覆盖
 // ============================================================
 StoryElf.setPage('write');
-StoryElf.setActions([
-  { label: '检', title: '检查', onClick: function () { StoryElf.toggle(); if (state.currentSectionId) loadLintToElf(); } },
-  { label: '议', title: '建议', onClick: function () { StoryElf.toggle(); var inp = document.getElementById('elf-chat-input'); if (inp) { inp.value = t('prompt.ai_polish_confirm'); StoryElf.sendChat(); } } },
-]);
 
 StoryElf.sendChat = function () {
   var msg = StoryElf.getInput();
@@ -1772,12 +1668,74 @@ StoryElf.sendChat = function () {
   });
 };
 
-async function loadLintToElf() {
-  var wid = state.currentWorkId, sid = state.currentSectionId;
-  if (!wid || !sid) return;
-  // V4: 一致性校验通过 Story Elf 对话完成
-  var checkInput = document.getElementById('elf-chat-input');
-  if (checkInput) { checkInput.value = '请帮我检查当前章节与世界设定、大纲和伏笔的一致性'; StoryElf.sendChat(); }
+// ============================================================
+// 左栏垂直分割 — Story Elf 嵌入模式
+// ============================================================
+var _leftPanelMode = 'full'; // 'full' | 'split'
+
+/** M0/M1/M2: Elf 撑满左栏；M3-M6: 上下分割（卡片列表 + Elf 对话） */
+function setLeftPanelMode(mode) {
+  _leftPanelMode = mode;
+  var upper = qs('#left-upper');
+  var divider = qs('#left-hdivider');
+  var lower = qs('#left-lower');
+
+  if (mode === 'full') {
+    if (upper) { upper.innerHTML = ''; upper.style.display = 'none'; }
+    if (divider) divider.style.display = 'none';
+    if (lower) lower.style.flex = '1';
+  } else {
+    if (upper) upper.style.display = '';
+    if (divider) divider.style.display = '';
+    if (lower) lower.style.flex = '1';
+    applyLeftPanelSplit();
+  }
+}
+
+/** 应用左栏上下分割比例 */
+function applyLeftPanelSplit() {
+  var upper = qs('#left-upper');
+  var divider = qs('#left-hdivider');
+  var container = qs('#split-left');
+  if (!upper || !divider || !container) return;
+  var upperPct = state.leftPanelUpperPct || 40;
+  var totalH = container.offsetHeight;
+  var dividerH = 8;
+  var availH = Math.max(totalH - dividerH, 100);
+  upper.style.height = (availH * upperPct / 100) + 'px';
+  upper.style.flex = 'none';
+}
+
+/** 左栏水平分隔线拖拽 */
+function initLeftPanelHDrag() {
+  var container = qs('#split-left');
+  var divider = qs('#left-hdivider');
+  if (!container || !divider) return;
+
+  divider.addEventListener('mousedown', function (e) {
+    e.preventDefault();
+    divider.classList.add('active');
+    var startY = e.clientY;
+    var startPct = state.leftPanelUpperPct || 40;
+
+    function mv(ev) {
+      var ch = container.offsetHeight;
+      var delta = ((ev.clientY - startY) / ch) * 100;
+      var newPct = Math.max(15, Math.min(85, startPct + delta));
+      state.leftPanelUpperPct = newPct;
+      applyLeftPanelSplit();
+    }
+
+    function up() {
+      divider.classList.remove('active');
+      document.removeEventListener('mousemove', mv);
+      document.removeEventListener('mouseup', up);
+      saveState();
+    }
+
+    document.addEventListener('mousemove', mv);
+    document.addEventListener('mouseup', up);
+  });
 }
 
 // ============================================================
@@ -1817,46 +1775,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveModuleContent(); }
   });
 
-  // Story Elf Hint 对话泡：槽位聚焦 → 打字机呈现 hint；blur → 淡出
-  var slotEditor = qs('#slot-editor');
-  var _hintBlurTimer = null;
-  if (slotEditor) {
-    slotEditor.addEventListener('focusin', function (e) {
-      var ta = e.target;
-      if (ta.tagName === 'TEXTAREA' && ta.dataset.hint) {
-        if (_hintBlurTimer) { clearTimeout(_hintBlurTimer); _hintBlurTimer = null; }
-        StoryElf.showHintBubble(ta.dataset.hint, { slotId: ta.dataset.slotId || '' });
-      }
-    });
-    slotEditor.addEventListener('focusout', function (e) {
-      if (e.target.tagName === 'TEXTAREA') {
-        _hintBlurTimer = setTimeout(function () {
-          _hintBlurTimer = null;
-          StoryElf.hideHintBubble();
-        }, 150);
-      }
-    });
-  }
-
-  // 自由编辑区 hint（与槽位 hint 同样的机制）
-  var freeArea = qs('#slot-free-area');
-  if (freeArea) {
-    freeArea.addEventListener('focusin', function (e) {
-      var ta = e.target;
-      if (ta.tagName === 'TEXTAREA' && ta.dataset.hint) {
-        if (_hintBlurTimer) { clearTimeout(_hintBlurTimer); _hintBlurTimer = null; }
-        StoryElf.showHintBubble(ta.dataset.hint, { slotId: 'free-zone' });
-      }
-    });
-    freeArea.addEventListener('focusout', function (e) {
-      if (e.target.tagName === 'TEXTAREA') {
-        _hintBlurTimer = setTimeout(function () {
-          _hintBlurTimer = null;
-          StoryElf.hideHintBubble();
-        }, 150);
-      }
-    });
-  }
+  // 将 Story Elf 嵌入左栏下半部
+  var lower = qs('#left-lower');
+  if (lower) StoryElf.mount(lower);
+  initLeftPanelHDrag();
+  setLeftPanelMode('full'); // 初始默认（作品未选择时）
 
   if (typeof userToken !== 'undefined' && userToken) {
     await loadUserConfig();

@@ -101,13 +101,6 @@ function switchLang(lang) {
   });
   if (typeof state !== 'undefined' && state.currentWorkId) {
     refreshPipelineGuide(state.currentWorkId);
-    // refresh rotating hint for current module
-    if (typeof loadRotatingHint === 'function') {
-      var m = state.currentModule;
-      if (m === 'original_concept') loadRotatingHint('m0');
-      else if (m === 'worldbuilding') loadRotatingHint('m1');
-      else if (m === 'outline') loadRotatingHint('m2');
-    }
     if (typeof switchModule === 'function') switchModule(state.currentModule);
   }
 }

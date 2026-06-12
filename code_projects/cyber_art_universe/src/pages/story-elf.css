@@ -1,6 +1,9 @@
-/* Story Elf — 自包含浮动 AI 助手组件样式（设计规格见 src/api/write/elf_chat.ts 头部注释） */
+/* Story Elf — AI 写作伴侣组件样式 v2.7 */
 
-/* 浮动小精灵 */
+/* ============================================================
+ * 浮动模式（默认）— read.html, work.html, index.html
+ * ============================================================ */
+
 #story-elf {
   position: fixed;
   z-index: 200;
@@ -10,18 +13,7 @@
   user-select: none;
 }
 
-.elf-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  cursor: grab;
-}
-
-.elf-body:active {
-  cursor: grabbing;
-}
-
+/* 头像 */
 .elf-avatar {
   width: 150px;
   height: 150px;
@@ -32,6 +24,7 @@
   justify-content: center;
   overflow: hidden;
   transition: transform 0.2s;
+  flex-shrink: 0;
 }
 
 .elf-avatar:hover {
@@ -45,122 +38,36 @@
   display: block;
 }
 
-.elf-actions {
-  display: flex;
-  gap: 4px;
-}
-
-.elf-action-btn {
-  width: 36px;
-  height: 22px;
-  border-radius: 11px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  color: var(--text-dim);
-  font-size: 0.65rem;
-  cursor: pointer;
-  transition: all 0.15s;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.elf-action-btn:hover {
-  border-color: var(--cyan);
-  color: var(--cyan);
-  background: rgba(6, 182, 212, 0.08);
-}
-
-/* 对话框 */
-.elf-dialog {
-  position: absolute;
-  right: 165px;
-  bottom: 0;
-  width: 300px;
-  max-height: 400px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-  animation: elf-in 0.2s ease;
-}
-
-@keyframes elf-in {
-  from { opacity: 0; transform: translateX(8px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-.elf-dialog-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--cyan);
-}
-
-.elf-dialog-close {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 1rem;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.elf-dialog-close:hover {
-  color: var(--text);
-  background: var(--bg-hover);
-}
-
-/* 对话历史按钮 */
-.elf-dialog-history-btn {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  cursor: pointer;
-  line-height: 1;
-  padding: 0;
-  margin-right: 2px;
-}
-
-.elf-dialog-history-btn:hover {
-  color: var(--text);
-  background: var(--bg-hover);
-}
-
-/* 消息区 */
+/* 消息区 — 浮动模式: 默认隐藏，toggle 后显示；嵌入模式始终可见 */
 .elf-chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0.5rem;
-  display: flex;
+  display: none;  /* 浮动模式默认隐藏，.elf-embedded 覆盖 */
   flex-direction: column;
   gap: 0.4rem;
   min-height: 120px;
   max-height: 360px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  width: 300px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 4px;
 }
 
+/* 输入栏 — 浮动模式: 默认隐藏；嵌入模式始终可见 */
 .elf-chat-input-row {
-  display: flex;
+  display: none;  /* 浮动模式默认隐藏，.elf-embedded 覆盖 */
   gap: 0.3rem;
   padding: 0.4rem 0.5rem;
-  border-top: 1px solid var(--border);
+  align-items: flex-end;
+  width: 300px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
 }
 
-.elf-chat-input-row input {
+/* textarea 输入框 */
+.elf-chat-input {
   flex: 1;
   padding: 0.35rem 0.5rem;
   border-radius: 6px;
@@ -168,13 +75,36 @@
   background: var(--bg);
   color: var(--text);
   font-size: 0.75rem;
+  line-height: 1.5;
   outline: none;
+  resize: none;
+  min-height: 60px;
+  max-height: 120px;
+  font-family: inherit;
 }
 
-.elf-chat-input-row input:focus {
+.elf-chat-input:focus {
   border-color: var(--accent-light);
 }
 
+/* 发送按钮 */
+.elf-send-btn {
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--accent);
+  color: var(--text-on-accent, #fff);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.elf-send-btn:hover {
+  background: var(--accent-light);
+}
+
+/* 消息泡泡 */
 .elf-chat-msg {
   padding: 0.5rem 0.65rem;
   border-radius: 10px;
@@ -212,187 +142,82 @@
   opacity: 1;
 }
 
-/* 对话列表面板 */
-.elf-session-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0.4rem;
-  min-height: 120px;
-  max-height: 360px;
-}
+/* ============================================================
+ * 嵌入模式 — write.html 左栏
+ * 通过 .elf-embedded class 激活
+ * ============================================================ */
 
-.elf-new-session-btn {
-  display: block;
+#story-elf.elf-embedded {
+  position: static;
   width: 100%;
-  padding: 0.4rem;
-  margin-bottom: 0.3rem;
-  border: 1px dashed var(--border);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--cyan);
-  font-size: 0.75rem;
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.15s;
-}
-
-.elf-new-session-btn:hover {
-  background: rgba(6, 182, 212, 0.08);
-  border-color: var(--cyan);
-}
-
-.elf-session-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.45rem 0.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.15s;
-  margin-bottom: 2px;
-}
-
-.elf-session-item:hover {
-  background: var(--bg-hover);
-}
-
-.elf-session-item.active {
-  background: rgba(6, 182, 212, 0.1);
-  border-left: 2px solid var(--cyan);
-}
-
-.elf-session-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.elf-session-title {
-  font-size: 0.78rem;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.elf-session-meta {
-  font-size: 0.65rem;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-.elf-session-del {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 0.7rem;
-  cursor: pointer;
-  line-height: 1;
-  opacity: 0;
-  transition: opacity 0.15s;
-  flex-shrink: 0;
-}
-
-.elf-session-item:hover .elf-session-del {
-  opacity: 1;
-}
-
-.elf-session-del:hover {
-  color: var(--error);
-  background: rgba(239, 68, 68, 0.1);
-}
-
-/* Hint 对话泡 */
-.elf-hint-bubble {
-  position: absolute;
-  bottom: 160px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 300px;
-  max-height: 250px;
-  overflow-y: auto;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.65rem 0.75rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-  z-index: 201;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  animation: elf-hint-in 0.2s ease;
+  align-items: stretch;
+  z-index: auto;
 }
 
-.elf-hint-bubble.hint-fade-out {
-  animation: elf-hint-out 0.15s ease forwards;
-}
-
-@keyframes elf-hint-in {
-  from { opacity: 0; transform: translateX(-50%) translateY(4px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-@keyframes elf-hint-out {
-  from { opacity: 1; transform: translateX(-50%) translateY(0); }
-  to   { opacity: 0; transform: translateX(-50%) translateY(4px); }
-}
-
-.elf-hint-content {
-  font-size: 0.78rem;
-  line-height: 1.6;
-  color: var(--cyan);
-}
-
-.elf-hint-content p {
-  margin: 0 0 0.3rem;
-}
-
-.elf-hint-content p:last-child {
+/* 嵌入模式: 消息区撑满剩余空间，允许滚动 */
+#story-elf.elf-embedded .elf-chat-messages {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  padding: 0.5rem 0.75rem;
+  width: auto;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   margin-bottom: 0;
 }
 
-.elf-hint-content strong {
-  color: var(--text);
+/* 嵌入模式: 头像缩小到 50px，头朝右 (scaleX 翻转) */
+#story-elf.elf-embedded .elf-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  flex-shrink: 0;
 }
 
-.elf-hint-content code {
-  background: var(--bg-hover);
-  padding: 0.1rem 0.3rem;
-  border-radius: 3px;
-  font-size: 0.72rem;
+#story-elf.elf-embedded .elf-avatar:hover {
+  transform: scale(1.08);
 }
 
-.elf-hint-content a {
-  color: var(--cyan);
+#story-elf.elf-embedded .elf-img {
+  transform: scaleX(-1);
 }
 
-.elf-hint-content em {
-  color: var(--text-muted);
+/* 嵌入模式: 输入栏固定底部 */
+#story-elf.elf-embedded .elf-chat-input-row {
+  display: flex;
+  flex-shrink: 0;
+  padding: 0.5rem 0.75rem;
+  gap: 0.5rem;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--bg);
+  width: auto;
 }
 
-.elf-hint-close {
-  position: absolute;
-  top: 4px;
-  right: 8px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  cursor: pointer;
-  line-height: 1;
-  padding: 0;
+/* 嵌入模式: textarea 自适应 */
+#story-elf.elf-embedded .elf-chat-input {
+  font-size: 0.78rem;
+  min-height: 60px;
+  max-height: 120px;
 }
 
-.elf-hint-close:hover {
-  color: var(--text);
-  background: var(--bg-hover);
+/* 嵌入模式: 发送按钮 */
+#story-elf.elf-embedded .elf-send-btn {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  align-self: flex-end;
 }
 
-/* Working Block — Elf's intermediate progress (default: open, collapsible) */
+/* ============================================================
+ * Working Block — Elf 中间步骤（共用于两种模式）
+ * ============================================================ */
+
 .elf-working-block {
   margin: 4px 0;
   border: 1px solid var(--border);
@@ -478,5 +303,4 @@
 
 .elf-process-step.error {
   color: var(--error);
-}
 }

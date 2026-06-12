@@ -6,6 +6,11 @@
   <title>Write — Story Forger — Cyber Art Universe</title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="/story-elf.css">
+  <style>
+    /* 防止 Elf 挂载前闪烁：Write 页嵌入模式下才显示 */
+    #story-elf { display: none; }
+    #story-elf.elf-embedded { display: flex; }
+  </style>
 </head>
 <body data-page="write">
   <div id="global-nav"></div>
@@ -53,7 +58,11 @@
   <!-- 三栏写作区：左参考 / 中自由编辑 / 右模板槽位 -->
   <div id="split-view" class="split-view" style="display:none">
     <div class="split-left" id="split-left">
-      <div class="left-panel-empty"></div>
+      <div class="left-upper" id="left-upper">
+        <div class="left-panel-empty"></div>
+      </div>
+      <div class="left-hdivider" id="left-hdivider" style="display:none"></div>
+      <div class="left-lower" id="left-lower"></div>
     </div>
     <div class="split-divider" id="split-divider-1"></div>
     <div class="split-mid" id="split-mid">
@@ -87,11 +96,6 @@
   <template id="tmpl-error"><div class="error" style="padding:1rem;font-size:0.8rem"><span class="err-msg"></span></div></template>
   <template id="tmpl-chat-msg-user"><div class="chat-msg chat-user"></div></template>
   <template id="tmpl-chat-msg-ai"><div class="chat-msg chat-ai"></div></template>
-  <template id="tmpl-rotating-hint">
-    <div class="rotating-hint">
-      <p class="hint-text"></p>
-    </div>
-  </template>
   <template id="tmpl-entity-card-item">
     <div class="card-item" data-entity-id="">
       <span class="card-item-name"></span>

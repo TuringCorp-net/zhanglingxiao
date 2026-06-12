@@ -1,69 +1,43 @@
 /**
- * Story Elf — 自包含浮动 AI 助手组件
+ * Story Elf — AI 写作伴侣组件
+ *
+ * v2.7 重构:
+ *   - 支持双模式: 浮动模式(非 write 页面) + 嵌入模式(write 页面左栏)
+ *   - 移除: 拖拽移动、Hint 对话泡、操作按钮
+ *   - 新增: mount() 嵌入模式 API、消息 DOM 上限 50 条
+ *   - 输入框: textarea 动态高度 (3-6行)，模仿 Claude Code 体验
  *
  * 覆盖需求:
- *   SF-053: Story Elf 浮动组件 — 自包含 JS，可拖拽，位置跨页面保持 (localStorage)
- *           <script src="/story-elf.js"> 即可使用，window.StoryElf API 暴露
- *   SF-054: Context-Aware 上下文感知 — StoryElf.setContext({page, work_id, ...})
- *   SF-072: Hint 对话泡 — 槽位聚焦时打字机效果逐字呈现 hint markdown
- *           数据来自模板 JSON SlotDef.hint 字段（前端直接消费 JSON 结构）
- *           ~40ms/字 + 标点智能停顿，markdown 渐进渲染
- *           与左侧聊天窗口（#elf-dialog）是两套独立系统
- *   SF-055: Write 侧写作精灵 — 一致性检查、建议、对话式润色
- *   SF-056: Read 侧伴读精灵 — 浮动形象 + 对话框，⏳ AI 后端待实现
- *
- * 组件架构（四大模块）:
- *   1. 浮动小精灵 UI — 拖拽移动 + 位置 localStorage 持久化
- *   2. 对话泡 (Hint Bubble) — hint 渲染 + requestAnimationFrame 打字机效果
- *   3. 聊天窗口 (#elf-dialog) — 与 AI 对话，独立于对话泡
- *   4. 动作按钮 — 检查/建议等快捷操作，write.js 通过 setActions() 注入
- *
- * Hint 对话泡设计意图：
- *   将槽位提示从 textarea placeholder 中移出，改为 Story Elf 以"对话泡"呈现
- *   - 槽位界面干净：所有 textarea 不设 placeholder hint
- *   - 对话感：用户点击槽位时 Elf 弹出对话泡，逐字显示
- *   - 提示常驻：即便槽位已有内容，提示也不消失（不像 placeholder 输入即隐藏）
- *
- * Hint 交互流程:
- *   用户聚焦槽位 → 对话泡出现 → 逐字打字 (~40ms/字, 标点+200ms/~100ms)
- *   → 用户边看边输入 → blur → 对话泡消失
- *   切换槽位时中断当前动画立即开始新的；手动关闭后可重新聚焦触发
+ *   SF-053: Story Elf 组件 — window.StoryElf API
+ *   SF-054: Context-Aware — StoryElf.setContext({page, work_id, ...})
+ *   SF-055: Write 侧写作精灵 — write.js 覆盖 sendChat
+ *   SF-056: Read 侧伴读精灵 — 默认 sendChat
  *
  * Session 由服务端统一管理（API Agent 和前端用户共用）。
  */
-
 
 (function () {
   'use strict';
 
   // ============================================================
-  // HTML
+  // 常量
+  // ============================================================
+  var MAX_DOM_MSGS = 50;       // DOM 渲染消息上限
+  var MAX_INPUT_HEIGHT = 120;  // textarea 最大高度 px (~6行)
+  var MIN_INPUT_HEIGHT = 60;   // textarea 最小高度 px (~3行)
+
+  // ============================================================
+  // HTML — 精简版，无 hint 对话泡，无操作按钮
   // ============================================================
   var ELF_HTML = ''
     + '<div id="story-elf">'
-    + '  <div class="elf-dialog" id="elf-dialog" style="display:none">'
-    + '    <div class="elf-dialog-header">'
-    + '      <span>Story Elf</span>'
-    + '      <div style="display:flex;align-items:center;gap:2px">'
-    + '        <button class="elf-dialog-close" id="elf-dialog-close">×</button>'
-    + '      </div>'
-    + '    </div>'
-    + '    <div class="elf-chat-messages" id="elf-chat-messages"></div>'
-    + '    <div class="elf-chat-input-row">'
-    + '      <input id="elf-chat-input" placeholder="Ask Story Elf..." onkeydown="if(event.key===\'Enter\')StoryElf.sendChat()">'
-    + '      <button class="btn btn-primary btn-sm" id="elf-send-btn" style="padding:0.3rem 0.6rem;font-size:0.7rem">' + t('elf.send', 'Send') + '</button>'
-    + '    </div>'
+    + '  <div class="elf-avatar" title="Story Elf">'
+    + '    <img src="/assets/story-elf.png" alt="Story Elf" class="elf-img">'
     + '  </div>'
-    + '  <div class="elf-hint-bubble" id="elf-hint-bubble" style="display:none">'
-    + '    <button class="elf-hint-close" id="elf-hint-close">&times;</button>'
-    + '    <div class="elf-hint-content" id="elf-hint-content"></div>'
-    + '  </div>'
-    + '  <div class="elf-body" id="elf-body">'
-    + '    <div class="elf-avatar" title="Story Elf">'
-    + '      <img src="/assets/story-elf.png" alt="Story Elf" class="elf-img">'
-    + '    </div>'
-    + '    <div class="elf-actions" id="elf-actions">'
-    + '    </div>'
+    + '  <div class="elf-chat-messages" id="elf-chat-messages"></div>'
+    + '  <div class="elf-chat-input-row">'
+    + '    <textarea id="elf-chat-input" class="elf-chat-input" placeholder="Ask Story Elf..." rows="1"></textarea>'
+    + '    <button class="elf-send-btn" id="elf-send-btn">' + (typeof t === 'function' ? t('elf.send', 'Send') : 'Send') + '</button>'
     + '  </div>'
     + '</div>';
 
@@ -73,16 +47,17 @@
     while (wrapper.firstChild) document.body.appendChild(wrapper.firstChild);
     restorePosition();
     bindEvents();
+    initTextarea();
   });
 
   // ============================================================
-  // 位置持久化
+  // 位置持久化（仅浮动模式使用）
   // ============================================================
   var POS_KEY = 'sf_elf_pos';
 
   function restorePosition() {
     var elf = document.getElementById('story-elf');
-    if (!elf) return;
+    if (!elf || elf.classList.contains('elf-embedded')) return;
     var saved;
     try { saved = JSON.parse(localStorage.getItem(POS_KEY)); } catch (x) {}
     elf.style.left = (saved && saved.l) || (window.innerWidth - 250) + 'px';
@@ -96,8 +71,7 @@
   }
 
   // ============================================================
-  // 对话管理 — 每个 (work, page) 只有一个永续对话
-  // 页面加载时从服务端加载历史消息；无需 Session ID
+  // 对话管理 — 每个 (work, page) 一个永续对话
   // ============================================================
   var _messages = [];     // 用户+AI 消息（供 sendChat 发送）
   var _workId = '';       // 关联的作品 ID
@@ -124,10 +98,14 @@
     return false;
   }
 
-  // 渲染消息到聊天区（只显示 user + 有 content 的 assistant 消息）
+  // 渲染消息到聊天区（只显示 user + 有 content 的 assistant 消息，上限 MAX_DOM_MSGS）
   function _renderMessages() {
     StoryElf.clearMessages();
-    _messages.forEach(function (m) {
+    // DOM 渲染上限: 取最后 N 条
+    var renderList = _messages.length > MAX_DOM_MSGS
+      ? _messages.slice(-MAX_DOM_MSGS)
+      : _messages;
+    renderList.forEach(function (m) {
       if (m.role === 'user') {
         _renderMsgDOM(m.content, 'user');
       } else if (m.role === 'assistant' && m.content) {
@@ -135,7 +113,7 @@
       }
     });
     var msgs = document.getElementById('elf-chat-messages');
-    if (msgs && _messages.length) msgs.scrollTop = msgs.scrollHeight;
+    if (msgs) msgs.scrollTop = msgs.scrollHeight;
   }
 
   function _renderMsgDOM(text, role) {
@@ -153,17 +131,9 @@
     });
   }
 
-  function _escapeHTML(str) {
-    var div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
   // ============================================================
   // 消息渲染
   // ============================================================
-
-  // 消息内容渲染：AI/step 消息尝试 Markdown，user 消息纯文本
   function _renderMessageContent(div, text, role) {
     if (role === 'user') {
       div.textContent = text;
@@ -177,7 +147,7 @@
   }
 
   // ============================================================
-  // Agent 步骤展示 — 工作块
+  // Agent 步骤展示 — 工作块（保持不变）
   // ============================================================
   var _TOOL_LABELS = {
     'read_module': '读取模块',
@@ -194,7 +164,6 @@
     return _TOOL_LABELS[toolName] || toolName;
   }
 
-  // Ensure working block styles are injected once
   var _workingBlockStylesInjected = false;
   function _injectWorkingBlockStyles() {
     if (_workingBlockStylesInjected) return;
@@ -219,7 +188,6 @@
   function _addSteps(steps) {
     if (!steps || !steps.length) return;
 
-    // Only show working block if there are actual process steps (not just 'done')
     var hasProcess = steps.some(function (s) {
       return s.type === 'text_delta' || s.type === 'tool_call' || s.type === 'tool_result' || s.type === 'error';
     });
@@ -233,20 +201,18 @@
     var block = document.createElement('div');
     block.className = 'elf-working-block';
 
-    // Header — click to collapse/expand
     var header = document.createElement('div');
     header.className = 'elf-working-header';
-    header.innerHTML = '<span>⚙ Story Elf 工作中...</span><span class=\"elf-working-toggle\">▾</span>';
+    header.innerHTML = '<span>⚙ Story Elf 工作中...</span><span class="elf-working-toggle">▾</span>';
     header.addEventListener('click', function () {
       block.classList.toggle('elf-working-collapsed');
     });
     block.appendChild(header);
 
-    // Body — default open
     var body = document.createElement('div');
     body.className = 'elf-working-body';
 
-    // 1) Checklist cards (checklist_write results) — pinned at top
+    // Checklist cards (checklist_write results) — pinned at top
     var lastChecklist = null;
     steps.forEach(function (s) {
       if (s.type === 'tool_result' && s.tool === 'checklist_write' && s.summary) {
@@ -272,7 +238,7 @@
       body.appendChild(card);
     }
 
-    // 2) Process steps — intermediate messages + tool calls + results
+    // Process steps
     steps.forEach(function (s) {
       if (s.type === 'text_delta') {
         var line = document.createElement('div');
@@ -304,166 +270,130 @@
   }
 
   // ============================================================
-  // 拖动
+  // Textarea 动态高度（模仿 Claude Code）
   // ============================================================
-  var drag = { moved: false, sx: 0, sy: 0, ox: 0, oy: 0 };
+  function initTextarea() {
+    var inputEl = document.getElementById('elf-chat-input');
+    if (!inputEl) return;
+
+    // Enter 发送，Shift+Enter 换行
+    inputEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        StoryElf.sendChat();
+      }
+    });
+
+    // 自动撑高
+    inputEl.addEventListener('input', function () {
+      this.style.height = 'auto';
+      var newH = Math.min(this.scrollHeight, MAX_INPUT_HEIGHT);
+      this.style.height = Math.max(newH, MIN_INPUT_HEIGHT) + 'px';
+    });
+  }
+
+  // ============================================================
+  // 事件绑定（浮动模式: 拖拽 + toggle；嵌入模式: 仅 send 按钮）
+  // ============================================================
+  var _drag = { moved: false, sx: 0, sy: 0, ox: 0, oy: 0 };
 
   function bindEvents() {
-    var body = document.getElementById('elf-body');
-    if (body) body.addEventListener('mousedown', onDragStart);
-
-    var closeBtn = document.getElementById('elf-dialog-close');
-    if (closeBtn) closeBtn.addEventListener('click', function () {
-      document.getElementById('elf-dialog').style.display = 'none';
-    });
-
-    var hintCloseBtn = document.getElementById('elf-hint-close');
-    if (hintCloseBtn) hintCloseBtn.addEventListener('click', function () {
-      _hideHintBubble();
-    });
-
     var sendBtn = document.getElementById('elf-send-btn');
     if (sendBtn) sendBtn.addEventListener('click', function () { StoryElf.sendChat(); });
+
+    // 浮动模式: 头像拖拽 + 点击 toggle
+    var avatar = document.querySelector('#story-elf .elf-avatar');
+    if (avatar) {
+      avatar.addEventListener('mousedown', function (e) {
+        var elf = document.getElementById('story-elf');
+        if (!elf || elf.classList.contains('elf-embedded')) return;
+        if (e.target.closest('textarea') || e.target.closest('input') || e.target.closest('button')) return;
+        e.preventDefault();
+        var r = elf.getBoundingClientRect();
+        _drag = { moved: false, sx: e.clientX, sy: e.clientY, ox: e.clientX - r.left, oy: e.clientY - r.top };
+        elf.style.left = r.left + 'px';
+        elf.style.top = r.top + 'px';
+        document.addEventListener('mousemove', onFloatDragMove);
+        document.addEventListener('mouseup', onFloatDragUp);
+      });
+    }
   }
 
-  function onDragStart(e) {
-    if (e.target.closest('.elf-action-btn') || e.target.closest('.elf-dialog') || e.target.closest('input')) return;
-    e.preventDefault();
+  function onFloatDragMove(e) {
+    if (Math.abs(e.clientX - _drag.sx) > 3 || Math.abs(e.clientY - _drag.sy) > 3) _drag.moved = true;
+    if (!_drag.moved) return;
     var elf = document.getElementById('story-elf');
-    var r = elf.getBoundingClientRect();
-    drag = { moved: false, sx: e.clientX, sy: e.clientY, ox: e.clientX - r.left, oy: e.clientY - r.top };
-    elf.style.left = r.left + 'px';
-    elf.style.top = r.top + 'px';
-    document.addEventListener('mousemove', onDragMove);
-    document.addEventListener('mouseup', onDragUp);
+    elf.style.left = Math.max(0, Math.min(window.innerWidth - 170, e.clientX - _drag.ox)) + 'px';
+    elf.style.top  = Math.max(0, Math.min(window.innerHeight - 220, e.clientY - _drag.oy)) + 'px';
   }
 
-  function onDragMove(e) {
-    if (Math.abs(e.clientX - drag.sx) > 3 || Math.abs(e.clientY - drag.sy) > 3) drag.moved = true;
-    if (!drag.moved) return;
-    var elf = document.getElementById('story-elf');
-    elf.style.left = Math.max(0, Math.min(window.innerWidth - 170, e.clientX - drag.ox)) + 'px';
-    elf.style.top  = Math.max(0, Math.min(window.innerHeight - 220, e.clientY - drag.oy)) + 'px';
-  }
-
-  function onDragUp() {
-    document.removeEventListener('mousemove', onDragMove);
-    document.removeEventListener('mouseup', onDragUp);
-    if (drag.moved) { savePosition(); }
-    else { StoryElf.toggle(); }
-    drag.moved = false;
-  }
-
-  // ============================================================
-  // Hint 对话泡 —— 打字机效果引擎（独立于左侧聊天窗口）
-  // ============================================================
-  var _hintState = {
-    timer: null,
-    cancelled: false,
-    activeSlotId: null,
-    visible: false,
-    _hideTimer: null,
-  };
-
-  function _stopHintTypewriter() {
-    _hintState.cancelled = true;
-    if (_hintState.timer) {
-      clearTimeout(_hintState.timer);
-      _hintState.timer = null;
-    }
-  }
-
-  function _startHintTypewriter(el, rawMd) {
-    _stopHintTypewriter();
-    _hintState.cancelled = false;
-    el.innerHTML = '';
-    var i = 0;
-    var speed = 40;
-
-    function tick() {
-      if (_hintState.cancelled) return;
-      if (i < rawMd.length) {
-        i++;
-        var partial = rawMd.substring(0, i);
-        try {
-          el.innerHTML = marked.parse(partial);
-        } catch(e) {
-          el.textContent = partial;
-        }
-        var ch = rawMd[i - 1];
-        var delay = speed;
-        if ('。！？.!?'.indexOf(ch) >= 0) delay += 200;
-        else if ('，、；：,.;:'.indexOf(ch) >= 0) delay += 100;
-        _hintState.timer = setTimeout(tick, delay);
-      } else {
-        _hintState.timer = null;
-      }
-    }
-    tick();
-  }
-
-  function _showHintBubble(rawMd, opts) {
-    // 暂时屏蔽 hint 对话泡（大部分填写已由 Story Elf 完成，hint 价值降低）
-    // TODO: 后续决定是否彻底移除
-    return;
-    opts = opts || {};
-    if (!rawMd || !rawMd.trim()) return;
-    if (_hintState._hideTimer) {
-      clearTimeout(_hintState._hideTimer);
-      _hintState._hideTimer = null;
-    }
-    _stopHintTypewriter();
-    var bubble = document.getElementById('elf-hint-bubble');
-    var content = document.getElementById('elf-hint-content');
-    if (!bubble || !content) return;
-    bubble.classList.remove('hint-fade-out');
-    bubble.style.display = 'block';
-    _hintState.visible = true;
-    _hintState.activeSlotId = (opts && opts.slotId) || '';
-    _startHintTypewriter(content, rawMd.trim());
-  }
-
-  function _hideHintBubble() {
-    _stopHintTypewriter();
-    var bubble = document.getElementById('elf-hint-bubble');
-    if (!bubble || bubble.style.display === 'none') return;
-    bubble.classList.add('hint-fade-out');
-    _hintState._hideTimer = setTimeout(function () {
-      if (!bubble) return;
-      bubble.style.display = 'none';
-      bubble.classList.remove('hint-fade-out');
-      _hintState.visible = false;
-      _hintState.activeSlotId = null;
-      _hintState._hideTimer = null;
-    }, 150);
+  function onFloatDragUp() {
+    document.removeEventListener('mousemove', onFloatDragMove);
+    document.removeEventListener('mouseup', onFloatDragUp);
+    if (_drag.moved) { savePosition(); }
+    else { StoryElf._floatToggle(); }
+    _drag.moved = false;
   }
 
   // ============================================================
   // 公共 API
   // ============================================================
   window.StoryElf = {
-    // 加载永续对话历史（Write/Read 页面在 DOM ready 后调用）
-    loadConversation: function (workId, page) { return _loadConversation(workId, page); },
+    /**
+     * mount(container: HTMLElement | null)
+     *
+     * 切换运行模式:
+     *   mount(containerEl) → 嵌入模式: #story-elf 移入 container，添加 .elf-embedded
+     *   mount(null)        → 浮动模式: #story-elf 移回 body，移除 .elf-embedded
+     */
+    mount: function (container) {
+      var elf = document.getElementById('story-elf');
+      if (!elf) return;
 
-    toggle: function () {
-      var d = document.getElementById('elf-dialog');
-      if (!d) return;
-      var wasHidden = d.style.display === 'none' || !d.style.display;
-      d.style.display = wasHidden ? 'flex' : 'none';
-      if (wasHidden) {
-        // 打开时滚动到最新消息
-        setTimeout(function () {
-          var msgs = document.getElementById('elf-chat-messages');
-          if (msgs) msgs.scrollTop = msgs.scrollHeight;
-        }, 0);
+      if (container) {
+        // 嵌入模式: 头像移到 input-row 内（底部左对齐）
+        var avatar = elf.querySelector('.elf-avatar');
+        var inputRow = elf.querySelector('.elf-chat-input-row');
+        if (avatar && inputRow) {
+          inputRow.insertBefore(avatar, inputRow.firstChild);
+        }
+        container.appendChild(elf);
+        elf.classList.add('elf-embedded');
+        // 清理浮动模式的 inline style
+        elf.style.left = '';
+        elf.style.top = '';
+        // 确保 textarea 高度正确
+        var inp = document.getElementById('elf-chat-input');
+        if (inp) { inp.style.height = 'auto'; inp.style.height = MIN_INPUT_HEIGHT + 'px'; }
+      } else {
+        // 浮动模式: 头像移出 input-row，作为 #story-elf 的第一个子元素
+        var avatar = elf.querySelector('.elf-avatar');
+        var msgs = elf.querySelector('#elf-chat-messages');
+        if (avatar && msgs) {
+          elf.insertBefore(avatar, msgs);
+        }
+        document.body.appendChild(elf);
+        elf.classList.remove('elf-embedded');
+        restorePosition();
+        // 恢复浮动模式默认隐藏状态（仅隐藏消息和输入栏，头像保持可见）
+        if (msgs) msgs.style.display = 'none';
+        var inputRow = elf.querySelector('.elf-chat-input-row');
+        if (inputRow) inputRow.style.display = 'none';
       }
     },
 
+    // 加载永续对话历史
+    loadConversation: function (workId, page) { return _loadConversation(workId, page); },
+
+    // 添加消息（同时追加到 DOM 和 _messages 数组）
     addMessage: function (text, role) {
       _renderMsgDOM(text, role);
-      // 追加到内存（供 sendChat 发送）
       if (role === 'user' || role === 'assistant') {
         _messages.push({ role: role, content: text });
+      }
+      // 如果 DOM 消息超出上限，重新渲染（截断尾部）
+      if (_messages.length > MAX_DOM_MSGS + 10) {
+        _renderMessages();
       }
     },
 
@@ -479,20 +409,23 @@
 
     clearInput: function () {
       var inp = document.getElementById('elf-chat-input');
-      if (inp) inp.value = '';
+      if (inp) {
+        inp.value = '';
+        // 重置高度
+        inp.style.height = MIN_INPUT_HEIGHT + 'px';
+      }
     },
 
-    // 默认 sendChat — 用于 Read 侧伴读精灵。Write 页面会覆盖此函数。
+    // 默认 sendChat — Read 侧伴读精灵。Write 页面会覆盖此函数。
     sendChat: function () {
       var msg = StoryElf.getInput();
       if (!msg) return;
       StoryElf.addMessage(msg, 'user');
       StoryElf.clearInput();
       var currentMessages = getMessages();
-      StoryElf.addMessage(t('label.ai_thinking', 'Story Elf thinking...'), 'system');
-      var ctx = StoryElf.getContext() || {};
       var token = _getToken();
       var lang = _getLang();
+      var ctx = StoryElf.getContext() || {};
       fetch('/api/write/elf/chat?lang=' + lang, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
@@ -511,34 +444,20 @@
           _addSteps(data.data.steps);
           StoryElf.addMessage(data.data.reply, 'assistant');
         } else {
-          StoryElf.addMessage(t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later'), 'assistant');
+          StoryElf.addMessage((typeof t === 'function' ? t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later') : 'AI is temporarily unavailable, please try again later'), 'assistant');
         }
       }).catch(function () {
         var msgs = document.getElementById('elf-chat-messages');
         var last = msgs && msgs.lastChild;
         if (last && last.textContent === '...') last.remove();
-        StoryElf.addMessage(t('elf.network_error', 'Network error, please try again later'), 'assistant');
-      });
-    },
-
-    setActions: function (buttons) {
-      var el = document.getElementById('elf-actions');
-      if (!el) return;
-      el.innerHTML = '';
-      buttons.forEach(function (b) {
-        var btn = document.createElement('button');
-        btn.className = 'elf-action-btn';
-        btn.textContent = b.label;
-        btn.title = b.title || '';
-        btn.addEventListener('click', b.onClick);
-        el.appendChild(btn);
+        StoryElf.addMessage((typeof t === 'function' ? t('elf.network_error', 'Network error, please try again later') : 'Network error, please try again later'), 'assistant');
       });
     },
 
     setPage: function (type) {
       var input = document.getElementById('elf-chat-input');
       if (input) input.placeholder = type === 'write'
-        ? t('elf.write_placeholder', 'Ask AI to polish this...')
+        ? (typeof t === 'function' ? t('elf.write_placeholder', 'Ask AI to polish this...') : 'Ask AI to polish this...')
         : '和 Story Elf 聊聊这部作品...';
     },
 
@@ -546,12 +465,24 @@
     setContext: function (ctx) { StoryElf._ctx = ctx; },
     getContext: function () { return StoryElf._ctx; },
 
-    // Hint 对话泡 API
-    showHintBubble: function (rawMd, opts) { _showHintBubble(rawMd, opts); },
-    hideHintBubble: function () { _hideHintBubble(); },
-    setActiveSlot: function (slotId) { _hintState.activeSlotId = slotId; },
-
     getMessages: getMessages,
     addSteps: _addSteps,
+
+    /** 浮动模式: 切换消息区和输入栏的显示/隐藏 */
+    _floatToggle: function () {
+      var elf = document.getElementById('story-elf');
+      if (!elf || elf.classList.contains('elf-embedded')) return;
+      var msgs = document.getElementById('elf-chat-messages');
+      var inputRow = elf.querySelector('.elf-chat-input-row');
+      var isHidden = msgs && (msgs.style.display === 'none' || !msgs.style.display);
+      if (msgs) msgs.style.display = isHidden ? 'flex' : 'none';
+      if (inputRow) inputRow.style.display = isHidden ? 'flex' : 'none';
+      if (isHidden) {
+        // 打开时滚动到底部
+        setTimeout(function () {
+          if (msgs) msgs.scrollTop = msgs.scrollHeight;
+        }, 0);
+      }
+    },
   };
 })();
