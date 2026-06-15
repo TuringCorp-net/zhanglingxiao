@@ -203,6 +203,7 @@ function initReaderSplitView(mode) {
   loadReaderLayoutState();
   _readerLeftPanel.setMode(mode);
   _readerLeftPanel.initDrag();
+  initReaderVerticalDrag();
 
   var lower = document.getElementById('left-lower');
   if (lower && typeof StoryElf !== 'undefined') {
@@ -223,6 +224,38 @@ function applyReaderGridColumns() {
   if (!container) return;
   var leftPct = _readerLayoutState.leftPct || 30;
   container.style.gridTemplateColumns = leftPct + '% 8px ' + (100 - leftPct) + '% 0px 0%';
+}
+
+/** Reader 左右分屏竖向分隔线拖拽 */
+function initReaderVerticalDrag() {
+  var container = document.getElementById('split-view');
+  var divider = document.getElementById('split-divider-1');
+  if (!container || !divider) return;
+
+  divider.addEventListener('mousedown', function (e) {
+    e.preventDefault();
+    divider.classList.add('active');
+    var startX = e.clientX;
+    var startPct = _readerLayoutState.leftPct || 30;
+
+    function mv(ev) {
+      var cw = container.offsetWidth;
+      var delta = ((ev.clientX - startX) / cw) * 100;
+      var newPct = Math.max(15, Math.min(50, startPct + delta));
+      _readerLayoutState.leftPct = newPct;
+      applyReaderGridColumns();
+    }
+
+    function up() {
+      divider.classList.remove('active');
+      document.removeEventListener('mousemove', mv);
+      document.removeEventListener('mouseup', up);
+      saveReaderLayoutState();
+    }
+
+    document.addEventListener('mousemove', mv);
+    document.addEventListener('mouseup', up);
+  });
 }
 
 // — 分类标签映射 —
