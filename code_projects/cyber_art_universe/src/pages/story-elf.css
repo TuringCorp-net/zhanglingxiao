@@ -172,12 +172,13 @@
   margin-bottom: 0;
 }
 
-/* 嵌入模式: 头像缩小到 70px，头朝右 (scaleX 翻转) */
+/* 嵌入模式: 头像缩小到 70px，头朝右 (scaleX 翻转)，底部对齐 */
 #story-elf.elf-embedded .elf-avatar {
   width: 70px;
   height: 70px;
   border-radius: 10px;
   flex-shrink: 0;
+  align-self: flex-end;
 }
 
 #story-elf.elf-embedded .elf-avatar:hover {
@@ -194,6 +195,7 @@
   flex-shrink: 0;
   padding: 0.5rem 0.75rem;
   gap: 0.5rem;
+  align-items: stretch;
   border: none;
   border-radius: 0;
   background: var(--bg);
@@ -207,11 +209,10 @@
   max-height: 120px;
 }
 
-/* 嵌入模式: 发送按钮 */
+/* 嵌入模式: 发送按钮（高度随 textarea 自动撑满） */
 #story-elf.elf-embedded .elf-send-btn {
   padding: 0.4rem 0.75rem;
   font-size: 0.75rem;
-  align-self: flex-end;
 }
 
 /* ============================================================
