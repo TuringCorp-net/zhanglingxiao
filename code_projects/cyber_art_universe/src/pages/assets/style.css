@@ -128,7 +128,7 @@ body[data-page="index"] .footer {
 .read-brand-wrap {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--cyan); }
@@ -317,7 +317,7 @@ ul, ol { list-style: none; }
 .read-header .container-narrow {
   display: flex; align-items: center; justify-content: space-between;
 }
-.read-breadcrumb { font-size: 0.85rem; color: var(--text-dim); }
+.read-breadcrumb { font-size: 0.85rem; color: var(--text-dim); word-spacing: 0.35rem; }
 .read-breadcrumb a { color: var(--text-dim); }
 .read-breadcrumb span { color: var(--text); }
 .font-controls { display: flex; gap: 0.3rem; }
