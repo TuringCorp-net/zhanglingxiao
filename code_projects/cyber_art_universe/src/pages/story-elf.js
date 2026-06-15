@@ -276,6 +276,9 @@
     var inputEl = document.getElementById('elf-chat-input');
     if (!inputEl) return;
 
+    // 初始化 textarea + 按钮高度
+    _syncInputHeight(inputEl);
+
     // Enter 发送，Shift+Enter 换行
     inputEl.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -284,12 +287,21 @@
       }
     });
 
-    // 自动撑高
+    // 自动撑高（textarea + 按钮同步）
     inputEl.addEventListener('input', function () {
-      this.style.height = 'auto';
-      var newH = Math.min(this.scrollHeight, MAX_INPUT_HEIGHT);
-      this.style.height = Math.max(newH, MIN_INPUT_HEIGHT) + 'px';
+      _syncInputHeight(this);
     });
+  }
+
+  /** textarea 动态高度 + 按钮同步 */
+  function _syncInputHeight(textarea) {
+    textarea.style.height = 'auto';
+    var newH = Math.min(textarea.scrollHeight, MAX_INPUT_HEIGHT);
+    newH = Math.max(newH, MIN_INPUT_HEIGHT);
+    textarea.style.height = newH + 'px';
+    // 按钮同步高度
+    var sendBtn = document.getElementById('elf-send-btn');
+    if (sendBtn) sendBtn.style.height = newH + 'px';
   }
 
   // ============================================================
@@ -362,9 +374,9 @@
         // 清理浮动模式的 inline style
         elf.style.left = '';
         elf.style.top = '';
-        // 确保 textarea 高度正确
+        // 确保 textarea + 按钮高度正确
         var inp = document.getElementById('elf-chat-input');
-        if (inp) { inp.style.height = 'auto'; inp.style.height = MIN_INPUT_HEIGHT + 'px'; }
+        if (inp) _syncInputHeight(inp);
       } else {
         // 浮动模式: 头像移出 input-row，作为 #story-elf 的第一个子元素
         var avatar = elf.querySelector('.elf-avatar');
@@ -411,8 +423,8 @@
       var inp = document.getElementById('elf-chat-input');
       if (inp) {
         inp.value = '';
-        // 重置高度
-        inp.style.height = MIN_INPUT_HEIGHT + 'px';
+        // 重置 textarea + 按钮高度
+        _syncInputHeight(inp);
       }
     },
 
