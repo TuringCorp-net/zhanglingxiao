@@ -67,8 +67,7 @@ body {
 body[data-page="write"] {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 }
 body[data-page="write"] .footer {
   margin-top: 0;
