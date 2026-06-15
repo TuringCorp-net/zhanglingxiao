@@ -134,6 +134,11 @@ body[data-page="index"] .footer {
   background: var(--bg-card);
   flex-shrink: 0;
 }
+.read-brand-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
 a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--cyan); }
 img { max-width: 100%; display: block; }
