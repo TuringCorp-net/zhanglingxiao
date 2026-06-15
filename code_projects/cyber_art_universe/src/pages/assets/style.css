@@ -125,7 +125,7 @@ body[data-page="index"] .footer {
   padding: 0.5rem 2rem 0;
 }
 /* Read 侧面包屑头部（嵌入 split-view 上方或 split-mid 顶部） */
-.read-header-inline {
+.read-header.read-header-inline {
   display: flex;
   justify-content: space-between;
   align-items: center;
