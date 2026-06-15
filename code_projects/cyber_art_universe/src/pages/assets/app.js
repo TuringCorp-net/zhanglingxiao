@@ -230,13 +230,42 @@ function categoryLabel(c) {
   return t('category.' + c, '');
 }
 
+// — 作品卡片点击：直接解析目标章节，避免中间跳转 —
+function openWork(workId) {
+  // 1) 检查 localStorage 上次阅读位置（同步，立即跳转）
+  var sectionId = null;
+  try {
+    var data = JSON.parse(localStorage.getItem('sf_last_read') || '{}');
+    sectionId = data[workId] || null;
+  } catch (e) {}
+
+  if (sectionId) {
+    window.location.href = '/read.html?work=' + workId + '&section=' + sectionId;
+    return false;
+  }
+
+  // 2) 没有记录 → 异步获取第一章
+  fetch('/api/content/' + workId + '/outline')
+    .then(function (r) { return r.json(); })
+    .then(function (outlineData) {
+      var sections = (outlineData && outlineData.data && outlineData.data.sections) || [];
+      var firstId = sections.length > 0 ? sections[0].id : '';
+      window.location.href = '/read.html?work=' + workId + (firstId ? '&section=' + firstId : '');
+    })
+    .catch(function () {
+      window.location.href = '/read.html?work=' + workId;
+    });
+
+  return false; // 阻止 <a> 默认跳转
+}
+
 // — 作品卡片 —
 function renderWorkCard(w) {
   const tags = (w.tags || []).slice(0, 3).map(t => `<span class="tag">#${t}</span>`).join('');
   const initial = (w.title || '?')[0];
   const cat = categoryLabel(w.category);
   return `
-  <a href="/read.html?work=${w.id}" class="work-card">
+  <a href="/read.html?work=${w.id}" class="work-card" onclick="return openWork('${w.id}')">
     <div class="work-card-left"><div class="work-cover">${initial}</div></div>
     <div class="work-card-body">
       <h3>${escHtml(w.title)}</h3>
