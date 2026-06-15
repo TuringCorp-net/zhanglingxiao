@@ -63,14 +63,76 @@ body {
   min-height: 100vh;
 }
 
-/* Write 页面: flex 列自适应，split-view 填充剩余空间 */
-body[data-page="write"] {
+/* Write / Read 页面: flex 列自适应，split-view 填充剩余空间 */
+body[data-page="write"],
+body[data-page="read"],
+body[data-page="work"],
+body[data-page="index"] {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
-body[data-page="write"] .footer {
+body[data-page="write"] .footer,
+body[data-page="read"] .footer,
+body[data-page="work"] .footer,
+body[data-page="index"] .footer {
   margin-top: 0;
+}
+
+/* — Read 侧阅读区（嵌入 split-mid 内的章节正文） — */
+.split-mid .read-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem 2rem 1rem;
+  font-size: var(--read-size, 16px);
+  line-height: 1.85;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+.split-mid .chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+.split-mid .chapter-info {
+  padding: 0 2rem 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+/* Read 侧目录/作品列表（嵌入 split-mid） */
+.split-mid .category-bar {
+  flex-shrink: 0;
+}
+.split-mid .work-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+}
+.split-mid .work-hero {
+  padding: 1.5rem 2rem 0.5rem;
+}
+.split-mid .chapter-list {
+  padding: 0.5rem 2rem;
+}
+.split-mid .section-header {
+  padding: 0.5rem 2rem 0;
+}
+/* Read 侧面包屑头部（嵌入 split-view 上方或 split-mid 顶部） */
+.read-header-inline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+  flex-shrink: 0;
 }
 a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--cyan); }

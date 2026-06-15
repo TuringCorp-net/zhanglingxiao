@@ -5,13 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>作品详情 — Cyber Art Universe</title>
   <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/story-elf.css">
 </head>
-<body>
-  <div id="global-nav"></div>
+<body data-page="work">
+  <!-- 轻量面包屑导航（无 Read/Write 标签，沉浸式阅读体验） -->
+  <div class="read-header-inline">
+    <div class="read-breadcrumb">
+      <a href="/">首页</a> › <span id="bc-title">加载中...</span>
+    </div>
+    <a href="/" style="font-size:0.78rem;color:var(--text-muted)">← 返回目录</a>
+  </div>
 
-  <div class="container">
-    <a href="javascript:history.back()" class="back-link">← 返回</a>
-    <div id="work-detail"><div class="loading">加载中...</div></div>
+  <!-- 两栏布局：左 章节目录+Elf / 右 作品详情 -->
+  <div id="split-view" class="split-view">
+    <div class="split-left" id="split-left">
+      <div class="left-upper" id="left-upper">
+        <div class="left-panel-empty"></div>
+      </div>
+      <div class="left-hdivider" id="left-hdivider" style="display:none"></div>
+      <div class="left-lower" id="left-lower"></div>
+    </div>
+    <div class="split-divider" id="split-divider-1"></div>
+    <div class="split-mid" id="split-mid">
+      <div id="work-detail" style="overflow-y:auto;flex:1"><div class="loading">加载中...</div></div>
+    </div>
+    <div class="split-divider" id="split-divider-2" style="display:none"></div>
+    <div class="split-right" style="display:none"></div>
   </div>
 
   <footer class="footer">
@@ -25,47 +44,75 @@
   <script src="/i18n-data.js"></script>
   <script src="/story-elf.js"></script>
   <script>
-    initPage();
     const workId = getParam('id');
 
-    document.addEventListener('DOMContentLoaded', async () => {
+    document.addEventListener('DOMContentLoaded', async function () {
       if (!workId) {
         document.getElementById('work-detail').innerHTML = '<div class="error">缺少作品 ID</div>';
         return;
       }
 
-      const [workData, outlineData] = await Promise.all([
-        api(`/api/content/${workId}`),
-        api(`/api/content/${workId}/outline`)
-      ]);
+      // 初始化分栏 + Elf 嵌入（split 模式：章节列表 + Elf）
+      initReaderSplitView('split');
+
+      var workData, outlineData;
+      try {
+        var results = await Promise.all([
+          api('/api/content/' + workId),
+          api('/api/content/' + workId + '/outline')
+        ]);
+        workData = results[0];
+        outlineData = results[1];
+      } catch (e) {
+        document.getElementById('work-detail').innerHTML = '<div class="error">加载失败</div>';
+        return;
+      }
 
       if (!workData) {
         document.getElementById('work-detail').innerHTML = '<div class="error">作品不存在</div>';
         return;
       }
 
-      const w = workData.data;
-      document.title = `${w.title} — Cyber Art Universe`;
+      var w = workData.data;
+      document.title = w.title + ' — Cyber Art Universe';
+      document.getElementById('bc-title').textContent = w.title;
+
       StoryElf.setContext({ page: 'read', work_id: workId, work_title: w.title });
+      StoryElf.setPage('read');
 
-      const tags = (w.tags || []).map(t => `<span class="tag">#${t}</span>`).join(' ');
+      var tags = (w.tags || []).map(function (t) { return '<span class="tag">#' + t + '</span>'; }).join(' ');
 
-      document.getElementById('work-detail').innerHTML = `
-        <div class="work-hero">
-          <h1>${escHtml(w.title)}</h1>
-          <div class="meta">${escHtml(w.author)} · ${typeLabel(w.type)} · ${statusLabel(w.status)} · ${formatDate(w.updated_at)} 更新</div>
-          ${w.summary ? `<div class="desc">${escHtml(w.summary)}</div>` : ''}
-          <div class="tag-list">${tags}</div>
-        </div>
+      // 作品详情渲染到 split-mid
+      document.getElementById('work-detail').innerHTML = ''
+        + '<div class="work-hero">'
+        + '<h1>' + escHtml(w.title) + '</h1>'
+        + '<div class="meta">' + escHtml(w.author) + ' · ' + typeLabel(w.type) + ' · ' + statusLabel(w.status) + ' · ' + formatDate(w.updated_at) + ' 更新</div>'
+        + (w.summary ? '<div class="desc">' + escHtml(w.summary) + '</div>' : '')
+        + '<div class="tag-list">' + tags + '</div>'
+        + '</div>'
+        + '<div class="section-header"><h2>目录</h2></div>'
+        + '<div class="chapter-list" id="chapters"></div>'
+        + '<div class="section-header"><h2>角色</h2></div>'
+        + '<div id="entities-area"><div class="empty">暂无角色信息</div></div>'
+        + '';
 
-        <div class="section-header"><h2>目录</h2></div>
-        <div class="chapter-list" id="chapters"></div>
+      // 章节列表 → 左栏上部
+      var leftUpper = document.getElementById('left-upper');
+      if (outlineData && outlineData.data.sections && outlineData.data.sections.length > 0) {
+        var sections = outlineData.data.sections;
+        leftUpper.innerHTML = '<div class="card-list" style="padding:0.5rem 0">'
+          + sections.map(function (s) {
+            return '<a href="/read.html?work=' + workId + '&section=' + s.id + '" class="card-item" style="width:100%;text-decoration:none;color:inherit">'
+              + '<span class="card-item-name">' + escHtml(s.title) + '</span>'
+              + '<span class="card-item-meta">' + (s.word_count || 0) + '字</span>'
+              + '</a>';
+          }).join('')
+          + '</div>';
+      } else {
+        leftUpper.innerHTML = '<div class="left-panel-empty">暂无章节</div>';
+      }
 
-        <div class="section-header"><h2>角色</h2></div>
-        <div id="entities-area"><div class="empty">暂无角色信息</div></div>
-      `;
-
-      // 章节列表
+      // 同时也在 split-mid 保留一份章节目录（向下兼容）
       if (outlineData && outlineData.data.sections) {
         document.getElementById('chapters').innerHTML = renderChapterList(outlineData.data.sections, workId);
       } else {
@@ -73,13 +120,15 @@
       }
 
       // 实体列表（角色等）
-      const entityData = await api(`/api/content/${workId}/entities?limit=50`);
-      if (entityData && entityData.data && entityData.data.length > 0) {
-        const eHtml = entityData.data.map(e => `
-          <span class="tag" style="margin:0.2rem;">${escHtml(e.name)} (${typeLabel(e.type)})</span>
-        `).join('');
-        document.getElementById('entities-area').innerHTML = eHtml || '<div class="empty">暂无角色信息</div>';
-      }
+      try {
+        var entityData = await api('/api/content/' + workId + '/entities?limit=50');
+        if (entityData && entityData.data && entityData.data.length > 0) {
+          var eHtml = entityData.data.map(function (e) {
+            return '<span class="tag" style="margin:0.2rem;">' + escHtml(e.name) + ' (' + typeLabel(e.type) + ')</span>';
+          }).join('');
+          document.getElementById('entities-area').innerHTML = eHtml || '<div class="empty">暂无角色信息</div>';
+        }
+      } catch (e) {}
     });
   </script>
 </body>

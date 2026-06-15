@@ -7,27 +7,44 @@
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="/story-elf.css">
 </head>
-<body>
-  <div class="read-header">
-    <div class="container-narrow">
-      <div class="read-breadcrumb">
-        <a href="/">首页</a> › <a id="bc-work" href="#">加载中...</a> › <span id="bc-section">加载中...</span>
-      </div>
-      <div class="font-controls">
-        <button onclick="setFontSize('small')" title="小">A-</button>
-        <button class="active" onclick="setFontSize('normal')" title="中">A</button>
-        <button onclick="setFontSize('large')" title="大">A+</button>
-      </div>
+<body data-page="read">
+  <!-- 轻量面包屑导航（无 Read/Write 标签，沉浸式阅读体验） -->
+  <div class="read-header read-header-inline">
+    <div class="read-breadcrumb">
+      <a href="/">首页</a> › <a id="bc-work" href="#">加载中...</a> › <span id="bc-section">加载中...</span>
+    </div>
+    <div class="font-controls">
+      <button onclick="setFontSize('small')" title="小">A-</button>
+      <button class="active" onclick="setFontSize('normal')" title="中">A</button>
+      <button onclick="setFontSize('large')" title="大">A+</button>
     </div>
   </div>
 
-  <div class="container-narrow">
-    <div id="content" class="read-content"><div class="loading">加载中...</div></div>
-
-    <div class="chapter-nav" id="chapter-nav"></div>
-
-    <div class="chapter-info" id="chapter-info"></div>
+  <!-- 两栏布局：左 章节列表+Elf / 右 章节正文 -->
+  <div id="split-view" class="split-view">
+    <div class="split-left" id="split-left">
+      <div class="left-upper" id="left-upper">
+        <div class="left-panel-empty"></div>
+      </div>
+      <div class="left-hdivider" id="left-hdivider" style="display:none"></div>
+      <div class="left-lower" id="left-lower"></div>
+    </div>
+    <div class="split-divider" id="split-divider-1"></div>
+    <div class="split-mid" id="split-mid">
+      <div id="content" class="read-content"><div class="loading">加载中...</div></div>
+      <div class="chapter-nav" id="chapter-nav"></div>
+      <div class="chapter-info" id="chapter-info"></div>
+    </div>
+    <div class="split-divider" id="split-divider-2" style="display:none"></div>
+    <div class="split-right" style="display:none"></div>
   </div>
+
+  <footer class="footer">
+    <div class="container">
+      <span>Powered by <a href="https://turingcorp.net">TuringCorp.net</a>. All rights reserved. <a href="#" onclick="alert('Terms of Use 即将上线');return false">Terms of Use</a></span>
+      <a href="/.well-known/agent-manifest.json">Agent Entry</a>
+    </div>
+  </footer>
 
   <script src="/assets/app.js"></script>
   <script src="/i18n-data.js"></script>
@@ -35,39 +52,76 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     initPage();
-    const workId = getParam('work');
-    const sectionId = getParam('section');
+    var workId = getParam('work');
+    var sectionId = getParam('section');
 
     if (!workId || !sectionId) {
       document.getElementById('content').innerHTML = '<div class="error">缺少作品 ID 或章节 ID</div>';
     }
 
     function setFontSize(size) {
-      const sizes = { small: '15px', normal: '16px', large: '18px' };
+      var sizes = { small: '15px', normal: '16px', large: '18px' };
       document.querySelector('.read-content').style.setProperty('--read-size', sizes[size]);
-      document.querySelectorAll('.font-controls button').forEach(b => b.classList.remove('active'));
-      document.querySelector(`.font-controls button[onclick="setFontSize('${size}')"]`).classList.add('active');
+      document.querySelectorAll('.font-controls button').forEach(function (b) { b.classList.remove('active'); });
+      document.querySelector('.font-controls button[onclick="setFontSize(\'' + size + '\')"]').classList.add('active');
     }
 
-    document.addEventListener('DOMContentLoaded', async () => {
+    document.addEventListener('DOMContentLoaded', async function () {
+      // 初始化分栏 + Elf 嵌入（split 模式：章节列表 + Elf）
+      initReaderSplitView('split');
+
+      // 加载大纲 → 左栏章节列表
+      var outline, workTitle = workId;
+      try {
+        var workData = await api('/api/content/' + workId);
+        workTitle = workData ? workData.data.title : workId;
+      } catch (e) {}
+
+      try {
+        var outlineData = await api('/api/content/' + workId + '/outline');
+        outline = outlineData;
+      } catch (e) {}
+
+      var leftUpper = document.getElementById('left-upper');
+      if (outline && outline.data && outline.data.sections && outline.data.sections.length > 0) {
+        var sections = outline.data.sections;
+        leftUpper.innerHTML = '<div class="card-list" style="padding:0.5rem 0">'
+          + sections.map(function (s) {
+            var isActive = s.id === sectionId ? ' active' : '';
+            return '<a href="/read.html?work=' + workId + '&section=' + s.id + '"'
+              + ' class="card-item' + isActive + '" style="width:100%;text-decoration:none;color:inherit">'
+              + '<span class="card-item-name">' + escHtml(s.title) + '</span>'
+              + '<span class="card-item-meta">' + (s.word_count || 0) + '字</span>'
+              + '</a>';
+          }).join('')
+          + '</div>';
+      } else {
+        leftUpper.innerHTML = '<div class="left-panel-empty">暂无章节</div>';
+      }
+
       // 加载章节内容
-      const data = await api(`/api/content/${workId}/sections/${sectionId}?mode=full`);
+      var data;
+      try {
+        data = await api('/api/content/' + workId + '/sections/' + sectionId + '?mode=full');
+      } catch (e) {
+        document.getElementById('content').innerHTML = '<div class="error">加载失败</div>';
+        return;
+      }
+
       if (!data) {
         document.getElementById('content').innerHTML = '<div class="error">加载失败</div>';
         return;
       }
 
-      const section = data.data;
-      document.title = `${section.title} — ${document.title.split(' — ')[1] || 'Cyber Art Universe'}`;
+      var section = data.data;
+      document.title = section.title + ' — ' + (document.title.split(' — ')[1] || 'Cyber Art Universe');
 
-      // 面包屑 — 加载作品名
-      const workData = await api(`/api/content/${workId}`);
-      const workTitle = workData ? workData.data.title : workId;
+      // 面包屑
       document.getElementById('bc-work').textContent = workTitle;
-      document.getElementById('bc-work').href = `/work.html?id=${workId}`;
+      document.getElementById('bc-work').href = '/work.html?id=' + workId;
       document.getElementById('bc-section').textContent = section.title;
 
-      // Story Elf 上下文：告诉 Elf 读者正在读哪部作品的哪一章
+      // Story Elf 上下文
       StoryElf.setContext({
         page: 'read',
         work_id: workId,
@@ -75,24 +129,24 @@
         section_id: sectionId,
         section_title: section.title,
       });
+      StoryElf.setPage('read');
 
       // 渲染正文
-      const body = section.body || '（暂无正文内容）';
+      var body = section.body || '（暂无正文内容）';
       document.getElementById('content').innerHTML = marked.parse(body);
 
-      // 章节导航
-      const outline = await api(`/api/content/${workId}/outline`);
+      // 章节导航（prev/next）
       if (outline && outline.data.sections) {
-        const sections = outline.data.sections;
-        const idx = sections.findIndex(s => s.id === sectionId);
-        let navHtml = '';
+        var sections = outline.data.sections;
+        var idx = sections.findIndex(function (s) { return s.id === sectionId; });
+        var navHtml = '';
         if (idx > 0) {
-          navHtml += `<a href="/read.html?work=${workId}&section=${sections[idx-1].id}" class="btn btn-ghost">← ${escHtml(sections[idx-1].title)}</a>`;
+          navHtml += '<a href="/read.html?work=' + workId + '&section=' + sections[idx-1].id + '" class="btn btn-ghost">← ' + escHtml(sections[idx-1].title) + '</a>';
         } else {
           navHtml += '<span></span>';
         }
         if (idx < sections.length - 1) {
-          navHtml += `<a href="/read.html?work=${workId}&section=${sections[idx+1].id}" class="btn btn-ghost">${escHtml(sections[idx+1].title)} →</a>`;
+          navHtml += '<a href="/read.html?work=' + workId + '&section=' + sections[idx+1].id + '" class="btn btn-ghost">' + escHtml(sections[idx+1].title) + ' →</a>';
         } else {
           navHtml += '<span></span>';
         }
@@ -100,18 +154,11 @@
       }
 
       // 章节信息
-      document.getElementById('chapter-info').innerHTML = `
-        <div class="info-row">${section.word_count || 0} 字</div>
-        ${section.section_summary ? `<div class="info-row">${escHtml(section.section_summary)}</div>` : ''}
-        ${section.entities_involved && section.entities_involved.length ? `<div class="info-row">${section.entities_involved.map(escHtml).join('、')}</div>` : ''}
-      `;
+      document.getElementById('chapter-info').innerHTML = ''
+        + '<div class="info-row">' + (section.word_count || 0) + ' 字</div>'
+        + (section.section_summary ? '<div class="info-row">' + escHtml(section.section_summary) + '</div>' : '')
+        + (section.entities_involved && section.entities_involved.length ? '<div class="info-row">' + section.entities_involved.map(escHtml).join('、') + '</div>' : '');
     });
   </script>
-  <footer class="footer">
-    <div class="container">
-      <span>Powered by <a href="https://turingcorp.net">TuringCorp.net</a>. All rights reserved. <a href="#" onclick="alert('Terms of Use 即将上线');return false">Terms of Use</a></span>
-      <a href="/.well-known/agent-manifest.json">Agent Entry</a>
-    </div>
-  </footer>
 </body>
 </html>

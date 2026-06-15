@@ -90,6 +90,115 @@ function initElfPosition() {
 }
 document.addEventListener('DOMContentLoaded', function () { setTimeout(initElfPosition, 0); });
 
+// ============================================================
+// Reader Split-View 布局（index / work / read 页面共用）
+// ============================================================
+var _readerLayoutState = {
+  leftPanelUpperPct: 40,
+};
+
+function loadReaderLayoutState() {
+  try {
+    var saved = JSON.parse(localStorage.getItem('sf_reader_v1') || '{}');
+    Object.assign(_readerLayoutState, { leftPanelUpperPct: 40 }, saved);
+  } catch (e) {}
+}
+
+function saveReaderLayoutState() {
+  try {
+    localStorage.setItem('sf_reader_v1', JSON.stringify(_readerLayoutState));
+  } catch (e) {}
+}
+
+function setReaderLeftPanelMode(mode) {
+  _readerLayoutState._mode = mode;
+  var upper = document.getElementById('left-upper');
+  var divider = document.getElementById('left-hdivider');
+  var lower = document.getElementById('left-lower');
+
+  if (mode === 'full') {
+    if (upper) { upper.innerHTML = ''; upper.style.display = 'none'; }
+    if (divider) divider.style.display = 'none';
+    if (lower) lower.style.flex = '1';
+  } else {
+    if (upper) upper.style.display = '';
+    if (divider) divider.style.display = '';
+    if (lower) lower.style.flex = '1';
+    applyReaderLeftPanelSplit();
+  }
+}
+
+function applyReaderLeftPanelSplit() {
+  var upper = document.getElementById('left-upper');
+  var divider = document.getElementById('left-hdivider');
+  var container = document.getElementById('split-left');
+  if (!upper || !divider || !container) return;
+  var upperPct = _readerLayoutState.leftPanelUpperPct || 40;
+  var totalH = container.offsetHeight;
+  var dividerH = 8;
+  var availH = Math.max(totalH - dividerH, 100);
+  upper.style.height = (availH * upperPct / 100) + 'px';
+  upper.style.flex = 'none';
+}
+
+function initReaderLeftPanelHDrag() {
+  var container = document.getElementById('split-left');
+  var divider = document.getElementById('left-hdivider');
+  if (!container || !divider) return;
+
+  divider.addEventListener('mousedown', function (e) {
+    e.preventDefault();
+    divider.classList.add('active');
+    var startY = e.clientY;
+    var startPct = _readerLayoutState.leftPanelUpperPct || 40;
+
+    function mv(ev) {
+      var ch = container.offsetHeight;
+      var delta = ((ev.clientY - startY) / ch) * 100;
+      var newPct = Math.max(15, Math.min(85, startPct + delta));
+      _readerLayoutState.leftPanelUpperPct = newPct;
+      applyReaderLeftPanelSplit();
+    }
+
+    function up() {
+      divider.classList.remove('active');
+      document.removeEventListener('mousemove', mv);
+      document.removeEventListener('mouseup', up);
+      saveReaderLayoutState();
+    }
+
+    document.addEventListener('mousemove', mv);
+    document.addEventListener('mouseup', up);
+  });
+}
+
+/** 初始化 Reader 分栏布局 + Elf 嵌入 */
+function initReaderSplitView(mode) {
+  loadReaderLayoutState();
+  setReaderLeftPanelMode(mode);
+  initReaderLeftPanelHDrag();
+
+  var lower = document.getElementById('left-lower');
+  if (lower && typeof StoryElf !== 'undefined') {
+    StoryElf.mount(lower);
+  }
+
+  // 隐藏右栏和第二条分隔线（Reader 页面都是两栏模式）
+  var d2 = document.getElementById('split-divider-2');
+  var right = document.querySelector('.split-right');
+  if (d2) d2.style.display = 'none';
+  if (right) right.style.display = 'none';
+  applyReaderGridColumns();
+}
+
+/** Reader 两栏 Grid: 左栏 + 分隔线 + 中栏撑满 */
+function applyReaderGridColumns() {
+  var container = document.getElementById('split-view');
+  if (!container) return;
+  var leftPct = _readerLayoutState.leftPct || 30;
+  container.style.gridTemplateColumns = leftPct + '% 8px ' + (100 - leftPct) + '% 0px 0%';
+}
+
 // — 分类标签映射 —
 function categoryLabel(c) {
   return t('category.' + c, '');
