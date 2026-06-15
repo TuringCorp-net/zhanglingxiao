@@ -63,13 +63,15 @@ body {
   min-height: 100vh;
 }
 
-/* Write / Read 页面: flex 列自适应，split-view 填充剩余空间 */
+/* Write / Read 页面: flex 列自适应，split-view 填充剩余空间。
+   height:100vh 给 flex 容器确定高度让 flex:1 生效；
+   不加 overflow:hidden，内容超出时自然出滚动条。 */
 body[data-page="write"],
 body[data-page="read"],
 body[data-page="index"] {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
 }
 body[data-page="write"] .footer,
 body[data-page="read"] .footer,
