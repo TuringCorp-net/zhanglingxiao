@@ -1669,74 +1669,17 @@ StoryElf.sendChat = function () {
 };
 
 // ============================================================
-// 左栏垂直分割 — Story Elf 嵌入模式
+// 左栏垂直分割 — 通过共享工厂创建（createLeftPanelSplit 定义在 app.js）
 // ============================================================
-var _leftPanelMode = 'full'; // 'full' | 'split'
+var _leftPanel = createLeftPanelSplit({
+  getPct: function () { return state.leftPanelUpperPct; },
+  setPct: function (v) { state.leftPanelUpperPct = v; },
+  onSave: saveState,
+});
 
-/** M0/M1/M2: Elf 撑满左栏；M3-M6: 上下分割（卡片列表 + Elf 对话） */
-function setLeftPanelMode(mode) {
-  _leftPanelMode = mode;
-  var upper = qs('#left-upper');
-  var divider = qs('#left-hdivider');
-  var lower = qs('#left-lower');
-
-  if (mode === 'full') {
-    if (upper) { upper.innerHTML = ''; upper.style.display = 'none'; }
-    if (divider) divider.style.display = 'none';
-    if (lower) lower.style.flex = '1';
-  } else {
-    if (upper) upper.style.display = '';
-    if (divider) divider.style.display = '';
-    if (lower) lower.style.flex = '1';
-    applyLeftPanelSplit();
-  }
-}
-
-/** 应用左栏上下分割比例 */
-function applyLeftPanelSplit() {
-  var upper = qs('#left-upper');
-  var divider = qs('#left-hdivider');
-  var container = qs('#split-left');
-  if (!upper || !divider || !container) return;
-  var upperPct = state.leftPanelUpperPct || 40;
-  var totalH = container.offsetHeight;
-  var dividerH = 8;
-  var availH = Math.max(totalH - dividerH, 100);
-  upper.style.height = (availH * upperPct / 100) + 'px';
-  upper.style.flex = 'none';
-}
-
-/** 左栏水平分隔线拖拽 */
-function initLeftPanelHDrag() {
-  var container = qs('#split-left');
-  var divider = qs('#left-hdivider');
-  if (!container || !divider) return;
-
-  divider.addEventListener('mousedown', function (e) {
-    e.preventDefault();
-    divider.classList.add('active');
-    var startY = e.clientY;
-    var startPct = state.leftPanelUpperPct || 40;
-
-    function mv(ev) {
-      var ch = container.offsetHeight;
-      var delta = ((ev.clientY - startY) / ch) * 100;
-      var newPct = Math.max(15, Math.min(85, startPct + delta));
-      state.leftPanelUpperPct = newPct;
-      applyLeftPanelSplit();
-    }
-
-    function up() {
-      divider.classList.remove('active');
-      document.removeEventListener('mousemove', mv);
-      document.removeEventListener('mouseup', up);
-      saveState();
-    }
-
-    document.addEventListener('mousemove', mv);
-    document.addEventListener('mouseup', up);
-  });
-}
+function setLeftPanelMode(mode) { _leftPanel.setMode(mode); }
+function applyLeftPanelSplit() { _leftPanel.applySplit(); }
+function initLeftPanelHDrag() { _leftPanel.initDrag(); }
 
 // ============================================================
 // 初始化

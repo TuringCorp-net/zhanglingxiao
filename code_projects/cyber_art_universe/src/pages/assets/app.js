@@ -91,6 +91,84 @@ function initElfPosition() {
 document.addEventListener('DOMContentLoaded', function () { setTimeout(initElfPosition, 0); });
 
 // ============================================================
+// 左栏垂直分割 — 共享工厂（Write / Read 页面共用）
+// ============================================================
+
+/**
+ * 创建左栏垂直分割管理器。
+ * 返回 { setMode, applySplit, initDrag } 三个方法。
+ *
+ * @param {object} opts
+ * @param {function} opts.getPct  - () => number  获取 upper 百分比
+ * @param {function} opts.setPct  - (v) => void   设置 upper 百分比
+ * @param {function} opts.onSave  - () => void    拖拽结束回调（持久化）
+ */
+function createLeftPanelSplit(opts) {
+  function setMode(mode) {
+    var upper = document.getElementById('left-upper');
+    var divider = document.getElementById('left-hdivider');
+    var lower = document.getElementById('left-lower');
+
+    if (mode === 'full') {
+      if (upper) { upper.innerHTML = ''; upper.style.display = 'none'; }
+      if (divider) divider.style.display = 'none';
+      if (lower) lower.style.flex = '1';
+    } else {
+      if (upper) upper.style.display = '';
+      if (divider) divider.style.display = '';
+      if (lower) lower.style.flex = '1';
+      applySplit();
+    }
+  }
+
+  function applySplit() {
+    var upper = document.getElementById('left-upper');
+    var divider = document.getElementById('left-hdivider');
+    var container = document.getElementById('split-left');
+    if (!upper || !divider || !container) return;
+    var upperPct = opts.getPct() || 40;
+    var totalH = container.offsetHeight;
+    var dividerH = 8;
+    var availH = Math.max(totalH - dividerH, 100);
+    upper.style.height = (availH * upperPct / 100) + 'px';
+    upper.style.flex = 'none';
+  }
+
+  function initDrag() {
+    var container = document.getElementById('split-left');
+    var divider = document.getElementById('left-hdivider');
+    if (!container || !divider) return;
+
+    divider.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      divider.classList.add('active');
+      var startY = e.clientY;
+      var startPct = opts.getPct() || 40;
+
+      function mv(ev) {
+        var ch = container.offsetHeight;
+        var delta = ((ev.clientY - startY) / ch) * 100;
+        var newPct = Math.max(15, Math.min(85, startPct + delta));
+        opts.setPct(newPct);
+        applySplit();
+      }
+
+      function up() {
+        divider.classList.remove('active');
+        document.removeEventListener('mousemove', mv);
+        document.removeEventListener('mouseup', up);
+        if (opts.onSave) opts.onSave();
+      }
+
+      document.addEventListener('mousemove', mv);
+      document.addEventListener('mouseup', up);
+    });
+  }
+
+  return { setMode: setMode, applySplit: applySplit, initDrag: initDrag };
+}
+
+// ============================================================
 // Reader Split-View 布局（index / work / read 页面共用）
 // ============================================================
 var _readerLayoutState = {
@@ -110,73 +188,21 @@ function saveReaderLayoutState() {
   } catch (e) {}
 }
 
-function setReaderLeftPanelMode(mode) {
-  _readerLayoutState._mode = mode;
-  var upper = document.getElementById('left-upper');
-  var divider = document.getElementById('left-hdivider');
-  var lower = document.getElementById('left-lower');
+var _readerLeftPanel = createLeftPanelSplit({
+  getPct: function () { return _readerLayoutState.leftPanelUpperPct; },
+  setPct: function (v) { _readerLayoutState.leftPanelUpperPct = v; },
+  onSave: saveReaderLayoutState,
+});
 
-  if (mode === 'full') {
-    if (upper) { upper.innerHTML = ''; upper.style.display = 'none'; }
-    if (divider) divider.style.display = 'none';
-    if (lower) lower.style.flex = '1';
-  } else {
-    if (upper) upper.style.display = '';
-    if (divider) divider.style.display = '';
-    if (lower) lower.style.flex = '1';
-    applyReaderLeftPanelSplit();
-  }
-}
-
-function applyReaderLeftPanelSplit() {
-  var upper = document.getElementById('left-upper');
-  var divider = document.getElementById('left-hdivider');
-  var container = document.getElementById('split-left');
-  if (!upper || !divider || !container) return;
-  var upperPct = _readerLayoutState.leftPanelUpperPct || 40;
-  var totalH = container.offsetHeight;
-  var dividerH = 8;
-  var availH = Math.max(totalH - dividerH, 100);
-  upper.style.height = (availH * upperPct / 100) + 'px';
-  upper.style.flex = 'none';
-}
-
-function initReaderLeftPanelHDrag() {
-  var container = document.getElementById('split-left');
-  var divider = document.getElementById('left-hdivider');
-  if (!container || !divider) return;
-
-  divider.addEventListener('mousedown', function (e) {
-    e.preventDefault();
-    divider.classList.add('active');
-    var startY = e.clientY;
-    var startPct = _readerLayoutState.leftPanelUpperPct || 40;
-
-    function mv(ev) {
-      var ch = container.offsetHeight;
-      var delta = ((ev.clientY - startY) / ch) * 100;
-      var newPct = Math.max(15, Math.min(85, startPct + delta));
-      _readerLayoutState.leftPanelUpperPct = newPct;
-      applyReaderLeftPanelSplit();
-    }
-
-    function up() {
-      divider.classList.remove('active');
-      document.removeEventListener('mousemove', mv);
-      document.removeEventListener('mouseup', up);
-      saveReaderLayoutState();
-    }
-
-    document.addEventListener('mousemove', mv);
-    document.addEventListener('mouseup', up);
-  });
-}
+function setReaderLeftPanelMode(mode) { _readerLeftPanel.setMode(mode); }
+function applyReaderLeftPanelSplit() { _readerLeftPanel.applySplit(); }
+function initReaderLeftPanelHDrag() { _readerLeftPanel.initDrag(); }
 
 /** 初始化 Reader 分栏布局 + Elf 嵌入 */
 function initReaderSplitView(mode) {
   loadReaderLayoutState();
-  setReaderLeftPanelMode(mode);
-  initReaderLeftPanelHDrag();
+  _readerLeftPanel.setMode(mode);
+  _readerLeftPanel.initDrag();
 
   var lower = document.getElementById('left-lower');
   if (lower && typeof StoryElf !== 'undefined') {
