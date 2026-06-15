@@ -66,7 +66,6 @@ body {
 /* Write / Read 页面: flex 列自适应，split-view 填充剩余空间 */
 body[data-page="write"],
 body[data-page="read"],
-body[data-page="work"],
 body[data-page="index"] {
   display: flex;
   flex-direction: column;
@@ -74,7 +73,6 @@ body[data-page="index"] {
 }
 body[data-page="write"] .footer,
 body[data-page="read"] .footer,
-body[data-page="work"] .footer,
 body[data-page="index"] .footer {
   margin-top: 0;
 }

@@ -11,16 +11,16 @@
   <!-- 轻量面包屑导航（无 Read/Write 标签，沉浸式阅读体验） -->
   <div class="read-header read-header-inline">
     <div class="read-breadcrumb">
-      <a href="/">首页</a> › <a id="bc-work" href="#">加载中...</a> › <span id="bc-section">加载中...</span>
+      <a href="/">首页</a> › <span id="bc-work">加载中...</span><span id="bc-section-wrap"> › <span id="bc-section"></span></span>
     </div>
-    <div class="font-controls">
+    <div class="font-controls" id="font-controls" style="display:none">
       <button onclick="setFontSize('small')" title="小">A-</button>
       <button class="active" onclick="setFontSize('normal')" title="中">A</button>
       <button onclick="setFontSize('large')" title="大">A+</button>
     </div>
   </div>
 
-  <!-- 两栏布局：左 章节列表+Elf / 右 章节正文 -->
+  <!-- 两栏布局：左 章节列表+Elf / 右 内容（作品详情 或 章节正文） -->
   <div id="split-view" class="split-view">
     <div class="split-left" id="split-left">
       <div class="left-upper" id="left-upper">
@@ -31,9 +31,9 @@
     </div>
     <div class="split-divider" id="split-divider-1"></div>
     <div class="split-mid" id="split-mid">
-      <div id="content" class="read-content"><div class="loading">加载中...</div></div>
-      <div class="chapter-nav" id="chapter-nav"></div>
-      <div class="chapter-info" id="chapter-info"></div>
+      <div id="mid-content" class="read-content"><div class="loading">加载中...</div></div>
+      <div class="chapter-nav" id="chapter-nav" style="display:none"></div>
+      <div class="chapter-info" id="chapter-info" style="display:none"></div>
     </div>
     <div class="split-divider" id="split-divider-2" style="display:none"></div>
     <div class="split-right" style="display:none"></div>
@@ -55,8 +55,8 @@
     var workId = getParam('work');
     var sectionId = getParam('section');
 
-    if (!workId || !sectionId) {
-      document.getElementById('content').innerHTML = '<div class="error">缺少作品 ID 或章节 ID</div>';
+    if (!workId) {
+      document.getElementById('mid-content').innerHTML = '<div class="error">缺少作品 ID</div>';
     }
 
     function setFontSize(size) {
@@ -67,24 +67,38 @@
     }
 
     document.addEventListener('DOMContentLoaded', async function () {
-      // 初始化分栏 + Elf 嵌入（split 模式：章节列表 + Elf）
+      if (!workId) return;
+
+      // 初始化分栏 + Elf 嵌入
       initReaderSplitView('split');
 
-      // 加载大纲 → 左栏章节列表
-      var outline, workTitle = workId;
+      StoryElf.setPage('read');
+
+      // 加载作品信息 + 大纲
+      var workData, outlineData;
       try {
-        var workData = await api('/api/content/' + workId);
-        workTitle = workData ? workData.data.title : workId;
+        var results = await Promise.all([
+          api('/api/content/' + workId),
+          api('/api/content/' + workId + '/outline')
+        ]);
+        workData = results[0];
+        outlineData = results[1];
       } catch (e) {}
 
-      try {
-        var outlineData = await api('/api/content/' + workId + '/outline');
-        outline = outlineData;
-      } catch (e) {}
+      if (!workData) {
+        document.getElementById('mid-content').innerHTML = '<div class="error">作品不存在</div>';
+        return;
+      }
 
+      var w = workData.data;
+      var workTitle = w.title;
+      document.title = workTitle + ' — Cyber Art Universe';
+      document.getElementById('bc-work').textContent = workTitle;
+
+      // 渲染左栏章节列表（两种模式共用）
+      var sections = (outlineData && outlineData.data && outlineData.data.sections) ? outlineData.data.sections : [];
       var leftUpper = document.getElementById('left-upper');
-      if (outline && outline.data && outline.data.sections && outline.data.sections.length > 0) {
-        var sections = outline.data.sections;
+      if (sections.length > 0) {
         leftUpper.innerHTML = '<div class="card-list" style="padding:0.5rem 0">'
           + sections.map(function (s) {
             var isActive = s.id === sectionId ? ' active' : '';
@@ -99,65 +113,101 @@
         leftUpper.innerHTML = '<div class="left-panel-empty">暂无章节</div>';
       }
 
-      // 加载章节内容
-      var data;
-      try {
-        data = await api('/api/content/' + workId + '/sections/' + sectionId + '?mode=full');
-      } catch (e) {
-        document.getElementById('content').innerHTML = '<div class="error">加载失败</div>';
-        return;
-      }
+      if (sectionId) {
+        // ======== 模式 1：章节阅读 ========
+        document.getElementById('font-controls').style.display = '';
 
-      if (!data) {
-        document.getElementById('content').innerHTML = '<div class="error">加载失败</div>';
-        return;
-      }
+        var section;
+        try {
+          var sectionData = await api('/api/content/' + workId + '/sections/' + sectionId + '?mode=full');
+          section = sectionData ? sectionData.data : null;
+        } catch (e) {}
 
-      var section = data.data;
-      document.title = section.title + ' — ' + (document.title.split(' — ')[1] || 'Cyber Art Universe');
-
-      // 面包屑
-      document.getElementById('bc-work').textContent = workTitle;
-      document.getElementById('bc-work').href = '/work.html?id=' + workId;
-      document.getElementById('bc-section').textContent = section.title;
-
-      // Story Elf 上下文
-      StoryElf.setContext({
-        page: 'read',
-        work_id: workId,
-        work_title: workTitle,
-        section_id: sectionId,
-        section_title: section.title,
-      });
-      StoryElf.setPage('read');
-
-      // 渲染正文
-      var body = section.body || '（暂无正文内容）';
-      document.getElementById('content').innerHTML = marked.parse(body);
-
-      // 章节导航（prev/next）
-      if (outline && outline.data.sections) {
-        var sections = outline.data.sections;
-        var idx = sections.findIndex(function (s) { return s.id === sectionId; });
-        var navHtml = '';
-        if (idx > 0) {
-          navHtml += '<a href="/read.html?work=' + workId + '&section=' + sections[idx-1].id + '" class="btn btn-ghost">← ' + escHtml(sections[idx-1].title) + '</a>';
-        } else {
-          navHtml += '<span></span>';
+        if (!section) {
+          document.getElementById('mid-content').innerHTML = '<div class="error">章节不存在</div>';
+          return;
         }
-        if (idx < sections.length - 1) {
-          navHtml += '<a href="/read.html?work=' + workId + '&section=' + sections[idx+1].id + '" class="btn btn-ghost">' + escHtml(sections[idx+1].title) + ' →</a>';
-        } else {
-          navHtml += '<span></span>';
-        }
-        document.getElementById('chapter-nav').innerHTML = navHtml;
-      }
 
-      // 章节信息
-      document.getElementById('chapter-info').innerHTML = ''
-        + '<div class="info-row">' + (section.word_count || 0) + ' 字</div>'
-        + (section.section_summary ? '<div class="info-row">' + escHtml(section.section_summary) + '</div>' : '')
-        + (section.entities_involved && section.entities_involved.length ? '<div class="info-row">' + section.entities_involved.map(escHtml).join('、') + '</div>' : '');
+        document.title = section.title + ' — ' + workTitle + ' — Cyber Art Universe';
+        document.getElementById('bc-section').textContent = section.title;
+        document.getElementById('bc-section-wrap').style.display = '';
+
+        StoryElf.setContext({
+          page: 'read',
+          work_id: workId,
+          work_title: workTitle,
+          section_id: sectionId,
+          section_title: section.title,
+        });
+
+        // 渲染正文
+        document.getElementById('mid-content').innerHTML = marked.parse(section.body || '（暂无正文内容）');
+
+        // prev/next 导航
+        if (sections.length > 0) {
+          var idx = sections.findIndex(function (s) { return s.id === sectionId; });
+          var navHtml = '';
+          if (idx > 0) {
+            navHtml += '<a href="/read.html?work=' + workId + '&section=' + sections[idx-1].id + '" class="btn btn-ghost">← ' + escHtml(sections[idx-1].title) + '</a>';
+          } else { navHtml += '<span></span>'; }
+          if (idx < sections.length - 1) {
+            navHtml += '<a href="/read.html?work=' + workId + '&section=' + sections[idx+1].id + '" class="btn btn-ghost">' + escHtml(sections[idx+1].title) + ' →</a>';
+          } else { navHtml += '<span></span>'; }
+          document.getElementById('chapter-nav').style.display = '';
+          document.getElementById('chapter-nav').innerHTML = navHtml;
+        }
+
+        // 章节信息
+        document.getElementById('chapter-info').style.display = '';
+        document.getElementById('chapter-info').innerHTML = ''
+          + '<div class="info-row">' + (section.word_count || 0) + ' 字</div>'
+          + (section.section_summary ? '<div class="info-row">' + escHtml(section.section_summary) + '</div>' : '')
+          + (section.entities_involved && section.entities_involved.length ? '<div class="info-row">' + section.entities_involved.map(escHtml).join('、') + '</div>' : '');
+
+      } else {
+        // ======== 模式 2：作品详情（原 work.html） ========
+        document.getElementById('bc-section-wrap').style.display = 'none';
+
+        StoryElf.setContext({
+          page: 'read',
+          work_id: workId,
+          work_title: workTitle,
+        });
+
+        var tags = (w.tags || []).map(function (t) { return '<span class="tag">#' + t + '</span>'; }).join(' ');
+
+        var midHtml = ''
+          + '<div class="work-hero">'
+          + '<h1>' + escHtml(w.title) + '</h1>'
+          + '<div class="meta">' + escHtml(w.author) + ' · ' + typeLabel(w.type) + ' · ' + statusLabel(w.status) + ' · ' + formatDate(w.updated_at) + ' 更新</div>'
+          + (w.summary ? '<div class="desc">' + escHtml(w.summary) + '</div>' : '')
+          + '<div class="tag-list">' + tags + '</div>'
+          + '</div>'
+          + '<div class="section-header"><h2>目录</h2></div>'
+          + '<div class="chapter-list" id="detail-chapters"></div>'
+          + '<div class="section-header"><h2>角色</h2></div>'
+          + '<div id="entities-area"><div class="empty">暂无角色信息</div></div>';
+
+        document.getElementById('mid-content').innerHTML = midHtml;
+
+        // 作品详情中的章节目录
+        if (sections.length > 0) {
+          document.getElementById('detail-chapters').innerHTML = renderChapterList(sections, workId);
+        } else {
+          document.getElementById('detail-chapters').innerHTML = '<div class="empty">暂无章节</div>';
+        }
+
+        // 实体列表
+        try {
+          var entityData = await api('/api/content/' + workId + '/entities?limit=50');
+          if (entityData && entityData.data && entityData.data.length > 0) {
+            var eHtml = entityData.data.map(function (e) {
+              return '<span class="tag" style="margin:0.2rem;">' + escHtml(e.name) + ' (' + typeLabel(e.type) + ')</span>';
+            }).join('');
+            document.getElementById('entities-area').innerHTML = eHtml || '<div class="empty">暂无角色信息</div>';
+          }
+        } catch (e) {}
+      }
     });
   </script>
 </body>

@@ -236,7 +236,7 @@ function renderWorkCard(w) {
   const initial = (w.title || '?')[0];
   const cat = categoryLabel(w.category);
   return `
-  <a href="/work.html?id=${w.id}" class="work-card">
+  <a href="/read.html?work=${w.id}" class="work-card">
     <div class="work-card-left"><div class="work-cover">${initial}</div></div>
     <div class="work-card-body">
       <h3>${escHtml(w.title)}</h3>
