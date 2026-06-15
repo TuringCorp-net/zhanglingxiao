@@ -125,15 +125,6 @@ body[data-page="index"] .footer {
   padding: 0.5rem 2rem 0;
 }
 /* Read 侧面包屑头部（嵌入 split-view 上方或 split-mid 顶部） */
-.read-header.read-header-inline {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-card);
-  flex-shrink: 0;
-}
 .read-brand-wrap {
   display: flex;
   align-items: baseline;
@@ -316,6 +307,12 @@ ul, ol { list-style: none; }
   background: rgba(var(--bg-rgb), 0.9); backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   padding: 0.6rem 0;
+  flex-shrink: 0;
+}
+.read-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .read-header .container-narrow {
   display: flex; align-items: center; justify-content: space-between;
