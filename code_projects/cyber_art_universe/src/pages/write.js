@@ -1686,6 +1686,7 @@ function initLeftPanelHDrag() { _leftPanel.initDrag(); }
 // ============================================================
 document.addEventListener('DOMContentLoaded', async function () {
   qs('#global-nav').innerHTML = renderNav();
+  if (typeof CAU !== 'undefined') CAU.updateLoginButton();
   loadState();
   initSplitDrag();
 

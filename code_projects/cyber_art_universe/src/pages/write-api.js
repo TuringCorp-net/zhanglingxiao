@@ -8,7 +8,7 @@
  */
 
 
-const USER_TOKEN_KEY = 'sf_user_token';
+const USER_TOKEN_KEY = 'cau_token';
 const LANG_KEY = 'sf_lang';
 const BILINGUAL_KEY = 'sf_bilingual';
 let userToken = localStorage.getItem(USER_TOKEN_KEY) || '';
