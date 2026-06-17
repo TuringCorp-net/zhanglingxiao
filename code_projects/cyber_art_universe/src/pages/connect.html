@@ -36,7 +36,7 @@
       <!-- Step 1: 输入邮箱和密钥 -->
       <div id="step-input">
         <h1 class="auth-title">Cyber <span>Art</span> Universe</h1>
-        <p class="auth-subtitle">Enter your email and key. We'll figure out the rest.</p>
+        <p class="auth-subtitle">Sign in or create an account — automatically routed.</p>
 
         <div class="form-group">
           <label for="email">Email</label>
@@ -122,7 +122,6 @@
           const action = data.data.action;
 
           if (action === 'login') {
-            // 状态 A：已注册 + 密码正确 → 直接登录
             CAU.setToken(data.data.token);
             CAU.setUser(data.data.user);
             CAU.updateLoginButton();
@@ -130,7 +129,6 @@
             setTimeout(function() { location.href = '/'; }, 800);
 
           } else if (action === 'new_account') {
-            // 状态 C：未注册 → 展示确认
             pendingEmail = email;
             pendingKey = key;
             pendingName = data.data.suggested_cyber_name;
@@ -142,17 +140,20 @@
             btn.textContent = 'Continue';
 
           } else if (action === 'registered') {
-            // 状态 D：注册成功
             CAU.setToken(data.data.token);
             CAU.setUser(data.data.user);
             CAU.updateLoginButton();
             showDone('Account created!', 'Check your email for the verification code.');
             setTimeout(function() { location.href = '/verify-email.html'; }, 1000);
+
+          } else if (action === 'wrong_key') {
+            showErr(data.data.message || 'Incorrect key. Please try again or recover your account.');
+            btn.disabled = false;
+            btn.textContent = 'Continue';
           }
 
-        } else if (resp.status === 401) {
-          // 状态 B：密码错误
-          showErr(data.data?.message || 'Incorrect key.');
+        } else if (resp.status === 429) {
+          showErr(data.error?.message || 'Too many attempts. Please wait.');
           btn.disabled = false;
           btn.textContent = 'Continue';
         }

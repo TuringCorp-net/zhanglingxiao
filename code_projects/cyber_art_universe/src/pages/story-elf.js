@@ -77,7 +77,7 @@
   var _workId = '';       // 关联的作品 ID
   var _page = 'write';    // 当前页面类型
 
-  function _getToken() { return localStorage.getItem('sf_user_token') || ''; }
+  function _getToken() { return localStorage.getItem('cau_token') || ''; }
   function _getLang() { return localStorage.getItem('sf_lang') || 'zh'; }
 
   // 从服务端加载永续对话历史

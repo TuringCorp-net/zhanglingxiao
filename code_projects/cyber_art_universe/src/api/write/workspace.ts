@@ -33,12 +33,18 @@ export async function listMyWorks(env: Env, request: Request): Promise<Response>
 
   let whereClause = '';
   const bindings: (string | number)[] = [];
+
+  // 只返回当前用户的作品
+  const userId = env.currentUser?.id || extractUserToken(request);
+  whereClause = 'WHERE user_token = ?';
+  bindings.push(userId);
+
   if (status) {
-    whereClause = 'WHERE status = ?';
+    whereClause += ' AND status = ?';
     bindings.push(status);
   } else {
     // 默认不返回已删除的作品（status = 'deleted'）
-    whereClause = "WHERE status != 'deleted'";
+    whereClause += " AND status != 'deleted'";
   }
 
   const countResult = await env.DB.prepare(
@@ -86,13 +92,13 @@ export async function createDraftWork(env: Env, request: Request): Promise<Respo
     httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
   });
 
-  const userToken = extractUserToken(request);
+  const userId = env.currentUser?.id || extractUserToken(request);
 
   await env.DB.prepare(`
     INSERT INTO works (id, title, type, category, author, user_token, creation_attribution, audience, tags, status, summary, r2_object_key, version, created_at, updated_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?, 1, ?, ?)
   `).bind(
-    id, body.title, body.type || 'novel', body.category || '', body.author, userToken,
+    id, body.title, body.type || 'novel', body.category || '', body.author, userId,
     body.creation_attribution || 'original', audience, tags,
     body.summary || null, r2Key, now, now
   ).run();
