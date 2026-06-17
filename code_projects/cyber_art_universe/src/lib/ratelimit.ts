@@ -13,11 +13,13 @@ export async function checkEmailRateLimit(request: Request, env: Env): Promise<n
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
   const ipHash = await sha256(ip);
 
+  // 用 JS 计算 cutoff（避免 SQLite datetime() 与 ISO 8601 格式不兼容）
+  const cutoff = new Date(Date.now() - 3600000).toISOString();
   const recent = await env.DB.prepare(
     `SELECT created_at FROM email_verifications
-     WHERE ip_hash = ? AND created_at > datetime('now', '-1 hour')
+     WHERE ip_hash = ? AND created_at > ?
      ORDER BY created_at DESC LIMIT 1`
-  ).bind(ipHash).first<{ created_at: string }>();
+  ).bind(ipHash, cutoff).first<{ created_at: string }>();
 
   if (!recent) return null; // 通过
 
