@@ -65,28 +65,6 @@ export async function handleUpdateMe(env: Env, request: Request): Promise<Respon
     values.push(newName);
   }
 
-  // 修改邮箱（需要重新验证）
-  if (body.email && String(body.email).trim().toLowerCase() !== user.email) {
-    const newEmail = String(body.email).trim().toLowerCase();
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
-      return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_EMAIL, 'Invalid email format')), {
-        status: 400, headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    const existingEmail = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(newEmail).first();
-    if (existingEmail) {
-      return new Response(JSON.stringify(jsonError(ErrorCodes.EMAIL_ALREADY_REGISTERED, 'Email is already registered')), {
-        status: 409, headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    updates.push('email = ?');
-    values.push(newEmail);
-    updates.push('email_verified = 0'); // 新邮箱需要重新验证
-  }
-
   if (updates.length === 0) {
     return new Response(JSON.stringify(jsonSuccess({
       id: user.id,
@@ -102,19 +80,6 @@ export async function handleUpdateMe(env: Env, request: Request): Promise<Respon
   values.push(user.id);
 
   await env.DB.prepare(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`).bind(...values).run();
-
-  // 如果修改了邮箱，发送新验证码
-  if (body.email && String(body.email).trim().toLowerCase() !== user.email) {
-    const { generateVerificationCode, storeVerificationCode } = await import('../../lib/ratelimit');
-    const { sendVerificationEmail } = await import('../../lib/email');
-    const { sha256 } = await import('../../lib/auth');
-    const newEmail = String(body.email).trim().toLowerCase();
-    const code = generateVerificationCode();
-    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-    const ipHash = await sha256(ip);
-    await storeVerificationCode(env, newEmail, code, ipHash, 'verify');
-    await sendVerificationEmail(env, newEmail, code);
-  }
 
   // 重新查询更新后的用户
   const updatedUser = await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(user.id).first<Record<string, unknown>>();

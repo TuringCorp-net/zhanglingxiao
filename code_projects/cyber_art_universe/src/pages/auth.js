@@ -163,7 +163,7 @@
         if (resp.ok) {
           setUser(resp.data);
           btn.textContent = resp.data.cyber_name;
-          btn.title = '个人设置';
+          btn.title = (typeof t === 'function') ? t('settings.personal_settings') : '个人设置';
           btn.onclick = function() { openSettingsModal(); };
           return;
         }
@@ -215,10 +215,39 @@
   var _connectTpl = null;
   var _settingsTpl = null;
 
+  // — i18n 快捷函数（如果 t() 未加载则原样返回 key 用于调试） —
+  function T(key) {
+    return (typeof t === 'function') ? t(key) : key;
+  }
+
+  // — 对容器内元素应用 data-i18n / data-i18n-placeholder / data-i18n-title —
+  function applyI18n(container) {
+    if (typeof t !== 'function') return;
+    var els = container.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < els.length; i++) {
+      var key = els[i].getAttribute('data-i18n');
+      var text = t(key);
+      if (text) els[i].textContent = text;
+    }
+    var phs = container.querySelectorAll('[data-i18n-placeholder]');
+    for (var j = 0; j < phs.length; j++) {
+      var phKey = phs[j].getAttribute('data-i18n-placeholder');
+      var phText = t(phKey);
+      if (phText) phs[j].setAttribute('placeholder', phText);
+    }
+    var titles = container.querySelectorAll('[data-i18n-title]');
+    for (var k = 0; k < titles.length; k++) {
+      var tKey = titles[k].getAttribute('data-i18n-title');
+      var tText = t(tKey);
+      if (tText) titles[k].setAttribute('title', tText);
+    }
+  }
+
   function openModal(html) {
     var overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
     overlay.innerHTML = html;
+    applyI18n(overlay);
     overlay.addEventListener('click', function(e) {
       if (e.target === overlay) overlay.remove();
     });
@@ -256,32 +285,32 @@
       key = document.getElementById('mc-key').value;
       var btn = document.getElementById('mc-btn-go');
       document.getElementById('mc-msg').style.display='none';
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('Please enter a valid email address.'); return; }
-      if (key.length<8) { showErr('Key must be at least 8 characters.'); return; }
-      btn.disabled=true; btn.textContent='Checking...';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr(T('connect.err_invalid_email')); return; }
+      if (key.length<8) { showErr(T('connect.err_key_short')); return; }
+      btn.disabled=true; btn.textContent=T('connect.checking');
       try {
         var resp = await fetch('/api/auth/connect', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:email,key:key}) });
         var data = await resp.json();
-        if (!resp.ok && resp.status!==401) { showErr(data.error?.message||'Something went wrong.'); btn.disabled=false; btn.textContent='Continue'; return; }
+        if (!resp.ok && resp.status!==401) { showErr(data.error?.message||T('connect.err_unknown')); btn.disabled=false; btn.textContent=T('connect.continue_btn'); return; }
         if (data.ok) {
           var action = data.data.action;
           if (action==='login') { CAU.setToken(data.data.token); CAU.setUser(data.data.user); CAU.updateLoginButton(); overlay.remove(); }
-          else if (action==='new_account') { document.getElementById('mc-step-input').style.display='none'; document.getElementById('mc-step-confirm').style.display='block'; document.getElementById('mc-confirm-msg').textContent='No account found for '+email+'. Your Cyber Name will be « '+data.data.suggested_cyber_name+' ». You can change it later.'; btn.disabled=false; btn.textContent='Continue'; }
+          else if (action==='new_account') { document.getElementById('mc-step-input').style.display='none'; document.getElementById('mc-step-confirm').style.display='block'; document.getElementById('mc-confirm-msg').textContent=T('connect.new_account_msg').replace('{email}',email).replace('{name}',data.data.suggested_cyber_name); btn.disabled=false; btn.textContent=T('connect.continue_btn'); }
           else if (action==='registered') { CAU.setToken(data.data.token); CAU.setUser(data.data.user); CAU.updateLoginButton(); overlay.remove(); location.href='/verify-email.html'; }
-          else if (action==='wrong_key') { showErr(data.data.message||'Incorrect key.'); btn.disabled=false; btn.textContent='Continue'; }
-        } else if (resp.status===429) { showErr(data.error?.message||'Too many attempts.'); btn.disabled=false; btn.textContent='Continue'; }
-      } catch(e) { showErr('Network error.'); btn.disabled=false; btn.textContent='Continue'; }
+          else if (action==='wrong_key') { showErr(data.data.message||T('connect.err_incorrect_key')); btn.disabled=false; btn.textContent=T('connect.continue_btn'); }
+        } else if (resp.status===429) { showErr(data.error?.message||T('connect.err_too_many')); btn.disabled=false; btn.textContent=T('connect.continue_btn'); }
+      } catch(e) { showErr(T('connect.err_network')); btn.disabled=false; btn.textContent=T('connect.continue_btn'); }
     }
 
     async function doConfirm() {
       var btn = document.getElementById('mc-btn-confirm');
-      btn.disabled=true; btn.textContent='Creating...';
+      btn.disabled=true; btn.textContent=T('connect.creating');
       try {
         var resp = await fetch('/api/auth/connect', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:email,key:key,confirm:true}) });
         var data = await resp.json();
         if (data.ok) { CAU.setToken(data.data.token); CAU.setUser(data.data.user); CAU.updateLoginButton(); overlay.remove(); location.href='/verify-email.html'; }
-        else { showErr(data.error?.message||'Failed.'); btn.disabled=false; btn.textContent='Yes, create my account'; }
-      } catch(e) { showErr('Network error.'); btn.disabled=false; btn.textContent='Yes, create my account'; }
+        else { showErr(data.error?.message||T('connect.err_create_failed')); btn.disabled=false; btn.textContent=T('connect.create_account_btn'); }
+      } catch(e) { showErr(T('connect.err_network')); btn.disabled=false; btn.textContent=T('connect.create_account_btn'); }
     }
 
     function resetForm() { document.getElementById('mc-step-input').style.display='block'; document.getElementById('mc-step-confirm').style.display='none'; document.getElementById('mc-msg').style.display='none'; }
@@ -300,7 +329,7 @@
       document.getElementById('ms-content').style.display = 'block';
 
       document.getElementById('ms-cyber-name').textContent = u.cyber_name;
-      document.getElementById('ms-class').textContent = u.class==='apprentice'?'Apprentice':u.class;
+      document.getElementById('ms-class').textContent = u.class==='apprentice'?T('settings.class_apprentice'):u.class;
       document.getElementById('ms-karma').textContent = '✦ ' + u.karma;
       document.getElementById('ms-energy').textContent = '⚡ ' + u.energy + '/' + u.energy_cap;
       document.getElementById('ms-email-display').value = u.email;
@@ -312,27 +341,14 @@
         var newName = document.getElementById('ms-new-name').value.trim();
         var errEl = document.getElementById('ms-err-name'); errEl.style.display='none';
         if (!newName) return;
-        if (newName.length<3) { errEl.textContent='At least 3 characters'; errEl.style.display='block'; return; }
+        if (newName.length<3) { errEl.textContent=T('settings.err_name_short'); errEl.style.display='block'; return; }
         try {
           await CAU.updateMe({ cyber_name: newName });
-          document.getElementById('ms-ok-name').textContent='Changed! Next login use: '+newName;
+          document.getElementById('ms-ok-name').textContent=T('settings.name_changed').replace('{name}',newName);
           document.getElementById('ms-ok-name').style.display='block';
           document.getElementById('ms-cyber-name').textContent = newName;
           CAU.updateLoginButton();
-        } catch(e) { errEl.textContent=e.message||'Failed'; errEl.style.display='block'; }
-      };
-
-      // 修改邮箱
-      document.getElementById('ms-btn-email').onclick = async function() {
-        var newEmail = document.getElementById('ms-new-email').value.trim();
-        var errEl = document.getElementById('ms-err-email'); errEl.style.display='none';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) { errEl.textContent='Invalid email format'; errEl.style.display='block'; return; }
-        try {
-          await CAU.updateMe({ email: newEmail });
-          document.getElementById('ms-ok-email').textContent='Email changed. Verification code sent.';
-          document.getElementById('ms-ok-email').style.display='block';
-          setTimeout(function(){ location.href='/verify-email.html'; }, 1500);
-        } catch(e) { errEl.textContent=e.message||'Failed'; errEl.style.display='block'; }
+        } catch(e) { errEl.textContent=e.message||T('settings.err_change_failed'); errEl.style.display='block'; }
       };
 
       // 登出
@@ -341,7 +357,7 @@
       };
 
     } catch(e) {
-      document.getElementById('ms-loading').textContent = 'Failed to load profile.';
+      document.getElementById('ms-loading').textContent = T('settings.err_load_failed');
     }
   };
 })();

@@ -379,7 +379,16 @@ async function deleteWork(workId) {
     }
     renderWorkspaceCards();
   } else {
-    alert(t('ws.delete_failed') + (data && data.error ? ': ' + data.error : ''));
+    var errMsg = '';
+    if (data && data.error) {
+      // 根据错误码查 i18n 表，找不到则 fallback 到后端返回的 message
+      if (data.error.code === 'WORK_STATUS_CONFLICT') {
+        errMsg = t('ws.error_published_delete');
+      } else {
+        errMsg = data.error.message;
+      }
+    }
+    alert(t('ws.delete_failed') + (errMsg ? ': ' + errMsg : ''));
   }
 }
 

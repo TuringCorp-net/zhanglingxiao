@@ -94,18 +94,6 @@
         </div>
 
         <div class="settings-card">
-          <h2 class="settings-title">修改邮箱</h2>
-          <p style="font-size:0.8125rem;color:var(--text-dim);margin-bottom:12px">当前邮箱：${escapeHtml(user.email)}（修改后需重新验证）</p>
-          <div class="form-group">
-            <label for="new_email">新邮箱</label>
-            <input type="email" id="new_email" placeholder="new@example.com">
-            <div class="error-msg" id="err-email"></div>
-          </div>
-          <button class="btn btn-primary" id="btn-email" onclick="changeEmail()">修改邮箱</button>
-          <div class="success-msg" id="succ-email"></div>
-        </div>
-
-        <div class="settings-card">
           <button class="btn btn-danger" onclick="doLogout()">登出</button>
         </div>
       `;
@@ -126,26 +114,6 @@
         succ.textContent = 'Cyber Name 已修改。下次登录请使用新名称。';
         succ.style.display = 'block';
         setTimeout(function() { location.reload(); }, 1500);
-      } catch (e) {
-        err.textContent = e.message || '修改失败';
-        err.style.display = 'block';
-      }
-    }
-
-    async function changeEmail() {
-      const newEmail = document.getElementById('new_email').value.trim();
-      const err = document.getElementById('err-email');
-      const succ = document.getElementById('succ-email');
-      err.style.display = 'none';
-      succ.style.display = 'none';
-
-      if (!newEmail.includes('@')) { err.textContent = '请输入有效邮箱'; err.style.display = 'block'; return; }
-
-      try {
-        await CAU.updateMe({ email: newEmail });
-        succ.textContent = '邮箱已修改。验证码已发送至新邮箱，请查收并验证。';
-        succ.style.display = 'block';
-        setTimeout(function() { location.href = '/verify-email.html'; }, 2000);
       } catch (e) {
         err.textContent = e.message || '修改失败';
         err.style.display = 'block';

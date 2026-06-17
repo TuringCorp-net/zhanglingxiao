@@ -191,7 +191,7 @@ export async function deleteMyWork(env: Env, _request: Request, id: string): Pro
     });
   }
   if (row.status === 'published') {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_STATUS_CONFLICT, 'Published works cannot be deleted. Unpublish it first.')), {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_STATUS_CONFLICT, 'Cannot delete a published work. Unpublish it first.')), {
       status: 409, headers: { 'Content-Type': 'application/json' },
     });
   }

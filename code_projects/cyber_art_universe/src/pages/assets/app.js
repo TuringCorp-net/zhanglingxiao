@@ -61,10 +61,14 @@ function renderNav() {
   </nav>`;
 }
 
-// — 语言切换（共享版本，Write 页面会被 write-api.js 覆盖） —
+// — 语言切换（全局唯一入口，所有页面共用） —
 function switchLang(lang) {
   if (typeof currentLang !== 'undefined' && lang === currentLang) return;
   localStorage.setItem('sf_lang', lang);
+  // Write 页面：保存当前状态再刷新，避免丢失工作上下文
+  if (typeof state !== 'undefined' && state.currentWorkId) {
+    try { localStorage.setItem('sf_desk_v3_lang_switch', JSON.stringify({ cw: state.currentWorkId })); } catch (_) {}
+  }
   location.reload();
 }
 

@@ -36,7 +36,7 @@
     + '  </div>'
     + '  <div class="elf-chat-messages" id="elf-chat-messages"></div>'
     + '  <div class="elf-chat-input-row">'
-    + '    <textarea id="elf-chat-input" class="elf-chat-input" placeholder="Ask Story Elf..." rows="1"></textarea>'
+    + '    <textarea id="elf-chat-input" class="elf-chat-input" placeholder="' + (typeof t === 'function' ? t('elf.ask_placeholder', 'Ask Story Elf...') : 'Ask Story Elf...') + '" rows="1"></textarea>'
     + '    <button class="elf-send-btn" id="elf-send-btn">' + (typeof t === 'function' ? t('elf.send', 'Send') : 'Send') + '</button>'
     + '  </div>'
     + '</div>';
@@ -203,7 +203,7 @@
 
     var header = document.createElement('div');
     header.className = 'elf-working-header';
-    header.innerHTML = '<span>⚙ Story Elf 工作中...</span><span class="elf-working-toggle">▾</span>';
+    header.innerHTML = '<span>' + (typeof t === 'function' ? t('elf.working', '⚙ Story Elf working...') : '⚙ Story Elf working...') + '</span><span class="elf-working-toggle">▾</span>';
     header.addEventListener('click', function () {
       block.classList.toggle('elf-working-collapsed');
     });
@@ -470,7 +470,7 @@
       var input = document.getElementById('elf-chat-input');
       if (input) input.placeholder = type === 'write'
         ? (typeof t === 'function' ? t('elf.write_placeholder', 'Ask AI to polish this...') : 'Ask AI to polish this...')
-        : '和 Story Elf 聊聊这部作品...';
+        : (typeof t === 'function' ? t('elf.read_placeholder', '和 Story Elf 聊聊这部作品...') : '和 Story Elf 聊聊这部作品...');
     },
 
     _ctx: null,

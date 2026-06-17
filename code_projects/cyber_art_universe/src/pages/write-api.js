@@ -83,24 +83,8 @@ function hDelete(path) {
   return fetchWithRetry(`${path}${sep}${langParam()}`, {
     method: 'DELETE',
     headers: { 'Authorization': `Bearer ${userToken}` },
-  }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  }).then(r => r.json())
     .catch(err => { console.error('hDelete error:', path, err.message || err); return null; });
 }
 
-// — 语言切换 —
-
-function switchLang(lang) {
-  if (lang === currentLang) return;
-  currentLang = lang;
-  localStorage.setItem(LANG_KEY, currentLang);
-  // 更新 pill toggle 状态
-  const knob = qs('.lang-knob');
-  if (knob) knob.classList.toggle('right', lang === 'en');
-  qsa('.lang-opt').forEach(opt => {
-    opt.classList.toggle('active', opt.textContent.trim() === (lang === 'zh' ? 'CN' : 'EN'));
-  });
-  if (typeof state !== 'undefined' && state.currentWorkId) {
-    refreshPipelineGuide(state.currentWorkId);
-    if (typeof switchModule === 'function') switchModule(state.currentModule);
-  }
-}
+// — 语言切换（统一由 app.js switchLang + location.reload() 处理） —
