@@ -1508,46 +1508,6 @@ async function saveModuleContent(silent) {
   }
 }
 
-async function aiGenerateForModule() {
-  var wid = state.currentWorkId;
-  if (!wid) return;
-  if (!confirm(t('prompt.ai_chapter_confirm'))) return; // TODO: per-module confirm messages
-
-  var mid = getModuleId();
-  if (state.currentModule === 'worldbuilding') {
-    cacheClear([mid]);
-    await hPost('/api/write/module/' + mid + '/generate', { work_id: wid, bilingual: typeof bilingual !== 'undefined' ? bilingual : true });
-    loadM1();
-  } else if (state.currentModule === 'outline') {
-    cacheClear([mid]);
-    await hPost('/api/write/module/' + mid + '/generate?overwrite=true', { work_id: wid, num_chapters: 5 });
-    loadM2();
-  } else if (state.currentModule === 'foreshadowing') {
-    cacheClear([mid, 'm4_strategy_' + wid, 'list_' + wid + '_m4_card']);
-    await hPost('/api/write/module/m4_strategy_' + wid + '/generate', { work_id: wid });
-    loadM4();
-  } else if ((state.currentModule === 'writing' || state.currentModule === 'chapters') && state.currentSectionId) {
-    // V4: 章节生成通过 Story Elf 对话完成
-    var chatInput = document.getElementById('elf-chat-input');
-    if (chatInput) { chatInput.value = '请根据 M5 意图卡生成当前章节的正文内容'; chatInput.focus(); StoryElf.sendChat(); }
-  }
-  refreshPipelineGuide(wid);
-}
-
-async function aiPolishForModule() {
-  var wid = state.currentWorkId, sid = state.currentSectionId;
-  if (!wid) return;
-  if (state.currentModule === 'writing' && sid) {
-    // V4: 润色通过 Story Elf 对话完成
-    var polishInput = document.getElementById('elf-chat-input');
-    if (polishInput) { polishInput.value = '请帮我润色优化当前章节的内容'; polishInput.focus(); StoryElf.sendChat(); }
-  } else {
-    // 对于非 M6 模块，polish = 用当前编辑器内容调用
-    var inp = document.getElementById('elf-chat-input');
-    if (inp) { inp.value = t('prompt.ai_polish_confirm'); inp.focus(); StoryElf.sendChat(); }
-  }
-}
-
 async function generateOutline(workId) {
   if (!confirm(t('prompt.outline_confirm'))) return;
   cacheClear(['m2_' + workId]); // 大纲 regenerate 后缓存失效
