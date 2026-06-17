@@ -1,0 +1,31 @@
+<!-- Connect Modal Template — 由 auth.js 加载并注入交互逻辑 -->
+<div class="modal-card">
+  <h2>Cyber <span>Art</span> Universe</h2>
+
+  <!-- Step 1: 输入邮箱和密钥 -->
+  <div id="mc-step-input">
+    <p class="sub">Sign in or create an account — automatically routed.</p>
+
+    <div class="field">
+      <label for="mc-email">Email</label>
+      <input type="email" id="mc-email" placeholder="you@example.com" autocomplete="email" autofocus>
+    </div>
+
+    <div class="field">
+      <label for="mc-key">Key</label>
+      <input type="password" id="mc-key" placeholder="8–128 characters" minlength="8" maxlength="128" autocomplete="current-password">
+    </div>
+
+    <button class="btn btn-pri" id="mc-btn-go">Continue</button>
+  </div>
+
+  <!-- Step 2: 新用户确认 -->
+  <div id="mc-step-confirm" style="display:none">
+    <p class="sub" id="mc-confirm-msg" style="color:var(--accent-light,#a78bfa)"></p>
+    <button class="btn btn-pri" id="mc-btn-confirm">Yes, create my account</button>
+    <button class="btn btn-ghost" id="mc-btn-back">Go back</button>
+  </div>
+
+  <div class="msg msg-err" id="mc-msg"></div>
+  <div class="foot-link"><a href="/recover.html">Forgot your key?</a></div>
+</div>

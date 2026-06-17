@@ -1,0 +1,167 @@
+/* Modal 浮动层样式 — 由 auth.js 动态加载 */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modalFadeIn 0.15s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-card {
+  background: var(--surface, #1a1a2e);
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 420px;
+  width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  border: 1px solid var(--border, #333);
+  animation: modalSlideIn 0.2s ease;
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-card h2 {
+  font-size: 1.15rem;
+  margin: 0 0 4px;
+  color: var(--text, #e4e4e7);
+}
+
+.modal-card h2 span { color: var(--accent, #7c3aed); }
+
+.modal-card .sub {
+  font-size: 0.8125rem;
+  color: var(--text-dim, #71717a);
+  margin: 0 0 20px;
+}
+
+/* 表单 */
+.modal-card .field { margin-bottom: 14px; }
+
+.modal-card .field label {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--text-dim, #71717a);
+  margin-bottom: 4px;
+}
+
+.modal-card .field input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #333);
+  background: var(--bg, #0f0f1a);
+  color: var(--text, #e4e4e7);
+  font-size: 0.9375rem;
+  box-sizing: border-box;
+}
+
+.modal-card .field input:focus {
+  outline: none;
+  border-color: var(--accent, #7c3aed);
+}
+
+/* 按钮 */
+.modal-card .btn {
+  width: 100%;
+  padding: 11px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.modal-card .btn-pri {
+  background: var(--accent, #7c3aed);
+  color: #fff;
+}
+
+.modal-card .btn-pri:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modal-card .btn-ghost {
+  background: transparent;
+  color: var(--text-dim, #71717a);
+  margin-top: 6px;
+}
+
+.modal-card .btn-danger {
+  background: transparent;
+  color: var(--error, #ef4444);
+  border: 1px solid var(--error, #ef4444);
+  margin-top: 8px;
+}
+
+/* 消息 */
+.modal-card .msg {
+  font-size: 0.8125rem;
+  margin-top: 12px;
+  text-align: center;
+  display: none;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.modal-card .msg-err {
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--error, #ef4444);
+}
+
+.modal-card .msg-ok {
+  background: rgba(34, 197, 94, 0.08);
+  color: var(--success, #22c55e);
+}
+
+/* 状态统计 */
+.modal-card .stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.modal-card .stat-item {
+  background: var(--bg, #0f0f1a);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+}
+
+.modal-card .stat-val {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent, #7c3aed);
+}
+
+.modal-card .stat-lbl {
+  font-size: 0.6875rem;
+  color: var(--text-dim, #71717a);
+  margin-top: 2px;
+}
+
+.modal-card .foot-link {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 0.8125rem;
+  color: var(--text-dim, #71717a);
+}
+
+.modal-card .foot-link a {
+  color: var(--accent, #7c3aed);
+  text-decoration: none;
+}

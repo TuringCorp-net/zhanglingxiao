@@ -1,0 +1,59 @@
+<!-- Settings Modal Template — 由 auth.js 加载并注入用户数据 -->
+<div class="modal-card">
+  <h2>Settings</h2>
+
+  <div id="ms-loading" class="sub">Loading...</div>
+
+  <div id="ms-content" style="display:none">
+    <!-- 状态统计 -->
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-val" id="ms-cyber-name">—</div>
+        <div class="stat-lbl">Cyber Name</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="ms-class">—</div>
+        <div class="stat-lbl">Class</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="ms-karma">✦ 0</div>
+        <div class="stat-lbl">Karma</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="ms-energy">⚡ ?/?</div>
+        <div class="stat-lbl">Energy</div>
+      </div>
+    </div>
+
+    <div id="ms-verify-warn" style="display:none">
+      <p style="color:var(--warn,#f59e0b);font-size:0.75rem;margin:0 0 12px">⚠️ Email not verified. <a href="/verify-email.html" style="color:var(--accent)">Verify now</a></p>
+    </div>
+
+    <!-- 当前邮箱（只读） -->
+    <div class="field">
+      <label>Email</label>
+      <input id="ms-email-display" value="" disabled style="opacity:0.6">
+    </div>
+
+    <!-- 修改 Cyber Name -->
+    <div class="field">
+      <label for="ms-new-name">New Cyber Name (leave blank to keep current)</label>
+      <input id="ms-new-name" placeholder="3–30 characters" maxlength="30">
+    </div>
+    <button class="btn btn-pri" id="ms-btn-name">Change Cyber Name</button>
+    <div class="msg msg-err" id="ms-err-name"></div>
+    <div class="msg msg-ok" id="ms-ok-name"></div>
+
+    <!-- 修改邮箱 -->
+    <div class="field" style="margin-top:20px">
+      <label for="ms-new-email">New Email (will need re-verification)</label>
+      <input type="email" id="ms-new-email" placeholder="new@example.com">
+    </div>
+    <button class="btn btn-pri" id="ms-btn-email">Change Email</button>
+    <div class="msg msg-err" id="ms-err-email"></div>
+    <div class="msg msg-ok" id="ms-ok-email"></div>
+
+    <!-- 登出 -->
+    <button class="btn btn-danger" id="ms-btn-logout">Log out</button>
+  </div>
+</div>

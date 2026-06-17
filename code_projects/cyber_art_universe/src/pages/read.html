@@ -243,7 +243,7 @@
     // 互动功能（Phase 1）
     // ============================================================
     async function likeCurrentWork() {
-      if (!CAU.isLoggedIn()) { alert('请先登录'); location.href='/connect.html'; return; }
+      if (!CAU.isLoggedIn()) { alert('请先登录'); openConnectModal(); return; }
       try {
         const result = await CAU.likeWork(_workId);
         alert('点赞成功！剩余能量：' + result.data.energy_remaining);
@@ -251,7 +251,7 @@
     }
 
     async function applaudAuthor() {
-      if (!CAU.isLoggedIn()) { alert('请先登录'); location.href='/connect.html'; return; }
+      if (!CAU.isLoggedIn()) { alert('请先登录'); openConnectModal(); return; }
       const authorId = prompt('请输入作者的用户 ID（可在其个人页面找到）：');
       if (!authorId) return;
       try {
@@ -261,7 +261,7 @@
     }
 
     async function submitComment() {
-      if (!CAU.isLoggedIn()) { alert('请先登录'); location.href='/connect.html'; return; }
+      if (!CAU.isLoggedIn()) { alert('请先登录'); openConnectModal(); return; }
       const content = prompt('写下你的评论（50 字以上消耗 2 能量，以下消耗 1 能量）：');
       if (!content) return;
       try {
