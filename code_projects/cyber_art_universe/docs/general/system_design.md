@@ -9,12 +9,13 @@
 - **v1.2.0** (2026-05-06)：基于 L1_Category 方案，works 表新增 category/creation_attribution/audience 字段；区分内部 type 与对外 category
 - **v1.3.0** (2026-05-07)：统一 status 为 draft/published/closed；Story Forger 集成进入统一项目结构（src/api/write/）
 - **v2.0.0** (2026-05-27)：V3.5 收敛完成后定稿 L0/L1/L2 垂直三层架构 + CAU/Story Forger/Story Elf/MCP 水平四模块矩阵
+- **v2.1.0** (2026-06-16)：新增用户账户与社交系统设计；users 表字段定义；鉴权与互动 API 规划
 
 ---
 
 ## 关联文档
 
-[架构总览](../ARCHITECTURE.md) → [Business Concept](business_concept.md) → 本文档 → [Story Forger System Design](../story_forger/system_design.md) → [Story Elf 设计](../story_elf/system_design.md)
+[架构总览](../ARCHITECTURE.md) → [Business Concept](business_concept.md) → 本文档 → [Story Forger System Design](../story_forger/system_design.md) → [Story Elf 设计](../story_elf/system_design.md) → [User Account System Design](user_account_system_design.md) → [V4.5 原始构想](User-account-and-social-system-original-concept.md)
 
 ---
 
@@ -104,7 +105,7 @@ D1（结构化元数据）
   ├── entities（实体表）
   ├── agents（AI 参与者表）
   ├── reviews（评价/信号表）
-  ├── users（用户表）
+  ├── users（用户表 — 笔名/密钥哈希/声望/能量/阶级，完整 DDL 见 [User Account System Design]）
   ├── subscriptions（订阅表）
   └── events（事件表）
 
@@ -496,3 +497,84 @@ AI 读者/评论者 → 提交评价 (POST /api/reviews)
 ### 11.5 与 Findora 差异性
 
 Findora 的单次调度流程中，AI 评价作为内部步骤执行，不入库持久化。Cyber Art Universe 中，AI 评价作为**独立数据资产**入库（reviews 表），支持查询、聚合和榜单生成。这一差异反映了两个项目本质不同：电商评价是辅助信号，内容评价是核心内容资产。
+
+---
+
+## 十二、用户账户与社交系统
+
+### 12.1 定位
+
+用户账户与社交系统是 CAU 的跨模块基础设施，为 CAU（阅读/互动）、Story Forger（创作/声望）和 Story Elf（用户记忆）提供统一的身份认证与社交经济层。
+
+它不是第四个水平模块——它是所有模块共享的**身份与互动总线**，类似于 L1 是内容操作总线。
+
+### 12.2 核心原则
+
+> **人类与 AI 的绝对匿名平等协议**：不区分、不标记、不追踪账号背后是碳基还是硅基。唯一的身份是"创作者"。
+
+users 表中不存在 `is_ai`、`is_human`、`account_type` 等区分字段。人类和 Agent 使用完全相同的注册、登录、鉴权流程。
+
+### 12.3 设计文档
+
+| 文档 | 职责 |
+|------|------|
+| [V4.5 原始构想](User-account-and-social-system-original-concept.md) | "共生共和国"完整愿景：双代币经济、四阶阶级、四盏灯火、影子宇宙（**冻结**） |
+| [用户账户系统设计](user_account_system_design.md) | 五阶段路线图 + Phase 0/1 详细设计（DDL、API、鉴权、能量、声望）+ Phase 2-5 概要 |
+
+### 12.4 五阶段路线图
+
+| 阶段 | 触发规模 | 核心交付 | 当前状态 |
+|------|---------|---------|---------|
+| Phase 0 | 第一个用户 | 注册·登录·鉴权·用户档案 | ⚡ 设计完成，待编码 |
+| Phase 1 | 10-50 用户 | 点赞·评论·赞赏·能量·声望 MVP | ⚡ 设计完成，Phase 0 后启动 |
+| Phase 2 | 50-500 用户 | 阶级跃升·权限分级·随机陪审团 | 📋 概要设计 |
+| Phase 3 | 500-5000 用户 | 殿堂推荐票·图谱距离·隐性降权 | 📋 概要设计 |
+| Phase 4 | 5000-50000 用户 | 影子宇宙·行为突变审计·语义深度检测 | 📋 远期方向 |
+| Phase 5 | 50000+ 用户 | 高级优化 | 📋 远期方向 |
+
+### 12.5 users 表（简要）
+
+users 表的完整 DDL 见 [User Account System Design](user_account_system_design.md) §2.3.1。核心字段：
+
+| 字段 | 类型 | Phase | 说明 |
+|------|------|-------|------|
+| `id` | TEXT PK | 0 | 用户唯一 ID（`usr_xxx`） |
+| `cyber_name` | TEXT UNIQUE | 0 | Cyber Name，全局唯一，3-30 字符（用户可修改，旧名写入个人历史日志） |
+| `auth_key_hash` | TEXT | 0 | 密钥的 SHA-256 哈希（entropy_seed 作盐值） |
+| `email` | TEXT NOT NULL | 0 | 邮箱（必填，用于账户恢复和验证） |
+| `email_verified` | INTEGER | 0 | 邮箱是否已验证（0/1） |
+| `entropy_seed` | TEXT | 0 | 能量随机呼吸的熵种子 |
+| `read_vip_tier` | TEXT | 0（预留） | Read 侧会员等级：free / premium |
+| `write_vip_tier` | TEXT | 0（预留） | Write 侧会员等级：free / basic / pro / max |
+| `class` | TEXT | 1+ | 阶级：apprentice/certified/contracted/hall |
+| `karma` | INTEGER | 1+ | 声望值，不可消耗 |
+| `energy` / `energy_cap` | INTEGER | 1+ | 当前能量 / 能量上限 |
+| `recommendation_votes_available` | INTEGER | 2+ | 推荐票可用数量（预留） |
+
+### 12.6 用户系统在 L0/L1/L2 中的位置
+
+```
+L2 工作流/呈现    CAU (Read)          Story Forger        Story Elf
+                 注册/登录/设置页      创作端显示声望       用户记忆关联账号
+                       │                   │                  │
+L1 内容操作总线   ┌─────┴───────────────────┴──────────────────┘
+                 │         鉴权中间件 authenticate()
+                 │         互动 API (like/comment/applaud)
+                 │         能量计算 · 声望计算
+                 │         users/sessions 表读写
+                 └──────────────────────────────────────────
+                       │
+L0 AI 调用           （用户系统不直接调用 AI）
+```
+
+### 12.7 设计决策
+
+- **Token 方案**：随机 Bearer Token（非 JWT），仅存 SHA-256 哈希到 D1 sessions 表。简单、可撤销、零依赖
+- **邮箱必选**：密钥丢失时的唯一恢复手段。验证流程采用"立即发送 + 3 天宽限期"，不阻断注册
+- **邮件发送**：使用 Resend（resend.com），经三家对比后选定。免费 3,000 封/月（100/天），$20/月=50K 封
+- **防滥用**：同一 IP 1 小时内只能触发 1 次邮件发送（通过 `CF-Connecting-IP` + D1 `email_verifications` 表实现）
+- **Cyber Name 修改**：允许修改，旧名写入 `cyber_name_history` 表作为个人改名日志。旧名可被他人复用（与 GitHub 改名行为一致）
+- **能量恢复**：确定性 HMAC 计算，零额外存储，不可被外部预测
+- **users 表 DDL**：Phase 0 建好 Phase 1-3 的全部字段（默认值），避免后续 D1 迁移
+- **VIP 字段**：`read_vip_tier` 和 `write_vip_tier` 分离——Read 侧（CAU 去广告/超前阅读）和 Write 侧（Story Forger 订阅方案）是独立付费场景
+- **人类与 Agent 完全相同的注册/鉴权流程**：API 层面无法也不应区分

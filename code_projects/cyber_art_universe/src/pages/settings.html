@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设置 — Cyber Art Universe</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .settings-container { max-width: 520px; margin: 80px auto 40px; padding: 0 20px; }
+    .settings-card { background: var(--surface, #1a1a2e); border-radius: 12px; padding: 32px; border: 1px solid var(--border, #333); margin-bottom: 16px; }
+    .settings-title { font-size: 1.25rem; margin: 0 0 16px; color: var(--text, #e4e4e7); }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.875rem; color: var(--text-dim, #71717a); margin-bottom: 4px; }
+    .form-group input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border, #333); background: var(--bg, #0f0f1a); color: var(--text, #e4e4e7); font-size: 1rem; box-sizing: border-box; }
+    .form-group input:focus { outline: none; border-color: var(--accent, #7c3aed); }
+    .btn { padding: 10px 24px; border-radius: 8px; border: none; font-size: 0.9375rem; cursor: pointer; font-weight: 600; }
+    .btn-primary { background: var(--accent, #7c3aed); color: #fff; }
+    .btn-danger { background: transparent; color: var(--error, #ef4444); border: 1px solid var(--error, #ef4444); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .error-msg { color: var(--error, #ef4444); font-size: 0.8125rem; margin-top: 4px; display: none; }
+    .success-msg { color: var(--success, #22c55e); font-size: 0.875rem; display: none; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stat-item { background: var(--bg, #0f0f1a); border-radius: 8px; padding: 16px; text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: bold; color: var(--accent, #7c3aed); }
+    .stat-label { font-size: 0.75rem; color: var(--text-dim, #71717a); margin-top: 4px; }
+    .history-list { font-size: 0.8125rem; color: var(--text-dim, #71717a); }
+    .history-list div { padding: 4px 0; border-bottom: 1px solid var(--border, #333); }
+  </style>
+</head>
+<body data-page="settings">
+  <div id="global-nav"></div>
+
+  <div class="settings-container" id="content">
+    <div id="loading" style="text-align:center;padding:40px;color:var(--text-dim)">加载中...</div>
+  </div>
+
+  <script src="/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      CAU.updateNav();
+      if (!CAU.isLoggedIn()) { location.href = '/login.html'; return; }
+      await loadSettings();
+    });
+
+    async function loadSettings() {
+      try {
+        const resp = await CAU.getMe();
+        const user = resp.data;
+        renderSettings(user);
+      } catch (e) {
+        document.getElementById('loading').textContent = '加载失败：' + (e.message || '未知错误');
+      }
+    }
+
+    function renderSettings(user) {
+      document.getElementById('content').innerHTML = `
+        <div class="settings-card">
+          <h2 class="settings-title">账户状态</h2>
+          <div class="stats">
+            <div class="stat-item">
+              <div class="stat-value">${user.class === 'apprentice' ? '见习' : user.class}</div>
+              <div class="stat-label">阶级</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">✦ ${user.karma ?? 0}</div>
+              <div class="stat-label">声望</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">⚡ ${user.energy ?? '?'}/${user.energy_cap ?? '?'}</div>
+              <div class="stat-label">能量</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">${user.email_verified ? '✅' : '⚠️'}</div>
+              <div class="stat-label">邮箱验证</div>
+            </div>
+          </div>
+          ${!user.email_verified ? '<p style="color:var(--warn,#f59e0b);font-size:0.8125rem;margin-top:12px">⚠️ 邮箱未验证。3 天内完成验证以解锁完整功能。<a href="/verify-email.html" style="color:var(--accent)">去验证</a></p>' : ''}
+          <p style="font-size:0.75rem;color:var(--text-dim);margin-top:8px">用户 ID：${user.id}</p>
+        </div>
+
+        <div class="settings-card">
+          <h2 class="settings-title">修改 Cyber Name</h2>
+          <div class="form-group">
+            <label>当前 Cyber Name</label>
+            <input value="${escapeHtml(user.cyber_name)}" disabled style="opacity:0.6">
+          </div>
+          <div class="form-group">
+            <label for="new_name">新 Cyber Name（留空则不修改）</label>
+            <input id="new_name" placeholder="3-30 字符" maxlength="30">
+            <div class="error-msg" id="err-name"></div>
+          </div>
+          <button class="btn btn-primary" id="btn-name" onclick="changeName()">修改</button>
+          <div class="success-msg" id="succ-name"></div>
+        </div>
+
+        <div class="settings-card">
+          <h2 class="settings-title">修改邮箱</h2>
+          <p style="font-size:0.8125rem;color:var(--text-dim);margin-bottom:12px">当前邮箱：${escapeHtml(user.email)}（修改后需重新验证）</p>
+          <div class="form-group">
+            <label for="new_email">新邮箱</label>
+            <input type="email" id="new_email" placeholder="new@example.com">
+            <div class="error-msg" id="err-email"></div>
+          </div>
+          <button class="btn btn-primary" id="btn-email" onclick="changeEmail()">修改邮箱</button>
+          <div class="success-msg" id="succ-email"></div>
+        </div>
+
+        <div class="settings-card">
+          <button class="btn btn-danger" onclick="doLogout()">登出</button>
+        </div>
+      `;
+    }
+
+    async function changeName() {
+      const newName = document.getElementById('new_name').value.trim();
+      const err = document.getElementById('err-name');
+      const succ = document.getElementById('succ-name');
+      err.style.display = 'none';
+      succ.style.display = 'none';
+
+      if (!newName) return;
+      if (newName.length < 3) { err.textContent = '至少 3 个字符'; err.style.display = 'block'; return; }
+
+      try {
+        await CAU.updateMe({ cyber_name: newName });
+        succ.textContent = 'Cyber Name 已修改。下次登录请使用新名称。';
+        succ.style.display = 'block';
+        setTimeout(function() { location.reload(); }, 1500);
+      } catch (e) {
+        err.textContent = e.message || '修改失败';
+        err.style.display = 'block';
+      }
+    }
+
+    async function changeEmail() {
+      const newEmail = document.getElementById('new_email').value.trim();
+      const err = document.getElementById('err-email');
+      const succ = document.getElementById('succ-email');
+      err.style.display = 'none';
+      succ.style.display = 'none';
+
+      if (!newEmail.includes('@')) { err.textContent = '请输入有效邮箱'; err.style.display = 'block'; return; }
+
+      try {
+        await CAU.updateMe({ email: newEmail });
+        succ.textContent = '邮箱已修改。验证码已发送至新邮箱，请查收并验证。';
+        succ.style.display = 'block';
+        setTimeout(function() { location.href = '/verify-email.html'; }, 2000);
+      } catch (e) {
+        err.textContent = e.message || '修改失败';
+        err.style.display = 'block';
+      }
+    }
+
+    async function doLogout() {
+      await CAU.logout();
+      location.href = '/';
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

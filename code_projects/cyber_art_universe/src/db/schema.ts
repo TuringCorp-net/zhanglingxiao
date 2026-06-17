@@ -141,18 +141,59 @@ export interface FileVersion {
 }
 
 // ============================================================
+// 用户（User）— Phase 0
+// ============================================================
+export interface User {
+  id: string;
+  cyber_name: string;
+  auth_key_hash: string;
+  email: string;
+  email_verified: number;
+  entropy_seed: string;
+  class: string;
+  karma: number;
+  energy: number;
+  energy_cap: number;
+  last_energy_refill: string | null;
+  recommendation_votes_available: number;
+  last_vote_refill: string | null;
+  read_vip_tier: string;
+  write_vip_tier: string;
+  read_vip_expires_at: string | null;
+  write_vip_expires_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// ============================================================
+// 会话（Session）
+// ============================================================
+export interface Session {
+  id: string;
+  user_id: string;
+  token_hash: string;
+  created_at: string;
+  expires_at: string | null;
+  revoked: number;
+}
+
+// ============================================================
 // Workers Env 绑定
 // ============================================================
 export interface Env {
   DB: D1Database;
   WORKS_BUCKET: R2Bucket;
   ASSETS: Fetcher;
-  SELF: Fetcher;  // Service binding → 自己，供 Cron fan-out 内部调用
-  USER_TOKEN?: string;   // 用户 token（逗号分隔，未来替换为实时登录校验）
-  ADMIN_TOKEN?: string;  // 后台管理 token（固定值，Claude / 自动化任务使用）
-  AI_PROVIDER?: string;  // @deprecated 迁移到 CF_AIG_TOKEN + AI Gateway
-  AI_API_KEY?: string;    // @deprecated 迁移到 CF_AIG_TOKEN + AI Gateway
-  CF_AIG_TOKEN?: string;  // Cloudflare AI Gateway 认证 token
+  SELF: Fetcher;
+  RESEND_API_KEY?: string;   // Resend 邮件发送 API Key
+  TEST_MODE?: string;          // 测试模式：跳过 IP 限流 + 固定验证码 000000
+  USER_TOKEN?: string;        // @deprecated 迁移到用户实时登录系统
+  ADMIN_TOKEN?: string;       // 后台管理 token
+  AI_PROVIDER?: string;       // @deprecated
+  AI_API_KEY?: string;        // @deprecated
+  CF_AIG_TOKEN?: string;      // Cloudflare AI Gateway 认证 token
+  // currentUser 由鉴权中间件注入
+  currentUser?: User;
 }
 
 // ============================================================

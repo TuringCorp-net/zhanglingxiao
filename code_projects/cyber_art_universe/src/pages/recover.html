@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>恢复账户 — Cyber Art Universe</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .auth-container { max-width: 420px; margin: 120px auto 40px; padding: 0 20px; }
+    .auth-card { background: var(--surface, #1a1a2e); border-radius: 12px; padding: 32px; border: 1px solid var(--border, #333); }
+    .auth-title { font-size: 1.5rem; margin: 0 0 8px; color: var(--text, #e4e4e7); }
+    .auth-subtitle { font-size: 0.875rem; color: var(--text-dim, #71717a); margin: 0 0 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.875rem; color: var(--text-dim, #71717a); margin-bottom: 4px; }
+    .form-group input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border, #333); background: var(--bg, #0f0f1a); color: var(--text, #e4e4e7); font-size: 1rem; box-sizing: border-box; }
+    .form-group input:focus { outline: none; border-color: var(--accent, #7c3aed); }
+    .btn { width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 1rem; cursor: pointer; font-weight: 600; }
+    .btn-primary { background: var(--accent, #7c3aed); color: #fff; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .auth-footer { text-align: center; margin-top: 16px; font-size: 0.875rem; color: var(--text-dim, #71717a); }
+    .auth-footer a { color: var(--accent, #7c3aed); text-decoration: none; }
+    .error-msg { color: var(--error, #ef4444); font-size: 0.875rem; margin-top: 12px; display: none; text-align: center; }
+    .success-msg { color: var(--success, #22c55e); font-size: 0.875rem; margin-top: 12px; display: none; text-align: center; }
+    #step2, #step3 { display: none; }
+  </style>
+</head>
+<body data-page="recover">
+  <div id="global-nav"></div>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <h1 class="auth-title">恢复账户</h1>
+
+      <!-- 第 1 步：输入邮箱 -->
+      <div id="step1">
+        <p class="auth-subtitle">输入你的注册邮箱，我们将发送恢复验证码。</p>
+        <div class="form-group">
+          <label for="email">注册邮箱</label>
+          <input type="email" id="email" placeholder="user@example.com">
+        </div>
+        <button class="btn btn-primary" onclick="doRecover()">发送验证码</button>
+      </div>
+
+      <!-- 第 2 步：输入验证码和新密钥 -->
+      <div id="step2">
+        <p class="auth-subtitle">请输入收到的验证码，并设置新密钥。</p>
+        <div class="form-group">
+          <label for="code">验证码</label>
+          <input type="text" id="code" placeholder="6 位数字" maxlength="6" inputmode="numeric">
+        </div>
+        <div class="form-group">
+          <label for="new_key">新密钥</label>
+          <input type="password" id="new_key" placeholder="8-128 字符" minlength="8">
+        </div>
+        <button class="btn btn-primary" onclick="doConfirm()">重置密钥</button>
+      </div>
+
+      <div class="error-msg" id="err-msg"></div>
+      <div class="success-msg" id="success-msg"></div>
+    </div>
+
+    <div class="auth-footer">
+      <a href="/login.html">返回登录</a>
+    </div>
+  </div>
+
+  <script src="/auth.js"></script>
+  <script>
+    let currentEmail = '';
+
+    async function doRecover() {
+      const email = document.getElementById('email').value.trim();
+      const err = document.getElementById('err-msg');
+      err.style.display = 'none';
+
+      if (!email.includes('@')) {
+        err.textContent = '请输入有效的邮箱';
+        err.style.display = 'block';
+        return;
+      }
+
+      try {
+        await CAU.api('/api/auth/recover', {
+          method: 'POST',
+          body: JSON.stringify({ email: email }),
+        });
+        currentEmail = email;
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('step2').style.display = 'block';
+      } catch (e) {
+        err.textContent = e.message || '发送失败';
+        err.style.display = 'block';
+      }
+    }
+
+    async function doConfirm() {
+      const code = document.getElementById('code').value.trim();
+      const newKey = document.getElementById('new_key').value;
+      const err = document.getElementById('err-msg');
+      const succ = document.getElementById('success-msg');
+      err.style.display = 'none';
+
+      if (code.length !== 6) { err.textContent = '请输入 6 位验证码'; err.style.display = 'block'; return; }
+      if (newKey.length < 8) { err.textContent = '新密钥至少 8 个字符'; err.style.display = 'block'; return; }
+
+      try {
+        await CAU.api('/api/auth/recover-confirm', {
+          method: 'POST',
+          body: JSON.stringify({ email: currentEmail, code: code, new_key: newKey }),
+        });
+        succ.textContent = '密钥已重置。请用新密钥登录。';
+        succ.style.display = 'block';
+        document.getElementById('step2').style.display = 'none';
+        setTimeout(function() { location.href = '/login.html'; }, 2000);
+      } catch (e) {
+        err.textContent = e.message || '重置失败';
+        err.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

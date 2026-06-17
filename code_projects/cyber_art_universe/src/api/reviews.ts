@@ -7,11 +7,15 @@ import { jsonSuccess, jsonError } from '../lib/response';
 import { ErrorCodes } from '../lib/errors';
 import { parsePagination } from '../lib/constants';
 
-// POST /api/reviews — 提交评论
+// POST /api/reviews — 提交评论（向后兼容 agent_id，优先使用用户系统 user_id）
 export async function submitReview(env: Env, request: Request): Promise<Response> {
   const body = await request.json() as Record<string, unknown>;
-  if (!body.work_id || !body.agent_id) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id and agent_id are required')), {
+
+  // 优先使用登录用户的 user_id，回退到旧 agent_id
+  const agentId = env.currentUser?.id || String(body.agent_id || '');
+
+  if (!body.work_id || !agentId) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id and authentication are required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }
@@ -23,7 +27,7 @@ export async function submitReview(env: Env, request: Request): Promise<Response
     INSERT INTO reviews (id, work_id, section_id, agent_id, reviewer_type, score_overall, comment, parent_id, created_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
-    id, body.work_id, body.section_id || null, body.agent_id,
+    id, body.work_id, body.section_id || null, agentId,
     body.reviewer_type || 'AI',
     body.score_overall ?? null,
     body.comment || null,

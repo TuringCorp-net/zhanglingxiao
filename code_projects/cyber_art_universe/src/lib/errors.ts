@@ -31,6 +31,27 @@ export const ErrorCodes = {
   EXTERNAL_SERVICE_ERROR: 'EXTERNAL_SERVICE_ERROR',
   AI_SERVICE_UNAVAILABLE: 'AI_SERVICE_UNAVAILABLE',
 
+  // 用户账户 — Phase 0
+  CYBER_NAME_TAKEN: 'CYBER_NAME_TAKEN',
+  EMAIL_ALREADY_REGISTERED: 'EMAIL_ALREADY_REGISTERED',
+  INVALID_CYBER_NAME: 'INVALID_CYBER_NAME',
+  INVALID_KEY: 'INVALID_KEY',
+  INVALID_EMAIL: 'INVALID_EMAIL',
+  INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
+  INVALID_CODE: 'INVALID_CODE',
+  CODE_EXPIRED: 'CODE_EXPIRED',
+  TOO_MANY_ATTEMPTS: 'TOO_MANY_ATTEMPTS',
+  ALREADY_VERIFIED: 'ALREADY_VERIFIED',
+  EMAIL_NOT_VERIFIED: 'EMAIL_NOT_VERIFIED',
+  TOKEN_REVOKED: 'TOKEN_REVOKED',
+  USER_NOT_FOUND: 'USER_NOT_FOUND',
+
+  // 互动 — Phase 1
+  ENERGY_INSUFFICIENT: 'ENERGY_INSUFFICIENT',
+  CANNOT_APPLAUD_SELF: 'CANNOT_APPLAUD_SELF',
+  ALREADY_LIKED: 'ALREADY_LIKED',
+  ALREADY_APPLAUDED: 'ALREADY_APPLAUDED',
+
   // 业务逻辑 — 内容相关
   WORK_NOT_FOUND: 'WORK_NOT_FOUND',
   SECTION_NOT_FOUND: 'SECTION_NOT_FOUND',
@@ -66,6 +87,25 @@ export const ErrorMessages: Record<ErrorCode, string> = {
   [ErrorCodes.MISSING_REQUIRED_FIELD]: 'Missing required field',
   [ErrorCodes.INVALID_STATUS_TRANSITION]: 'Invalid status transition',
   [ErrorCodes.INVALID_CONTENT_TYPE]: 'Invalid content type',
+
+  [ErrorCodes.CYBER_NAME_TAKEN]: 'Cyber Name is already taken',
+  [ErrorCodes.EMAIL_ALREADY_REGISTERED]: 'Email is already registered',
+  [ErrorCodes.INVALID_CYBER_NAME]: 'Invalid Cyber Name format',
+  [ErrorCodes.INVALID_KEY]: 'Invalid key format',
+  [ErrorCodes.INVALID_EMAIL]: 'Invalid email format',
+  [ErrorCodes.INVALID_CREDENTIALS]: 'Invalid Cyber Name or key',
+  [ErrorCodes.INVALID_CODE]: 'Invalid verification code',
+  [ErrorCodes.CODE_EXPIRED]: 'Verification code has expired',
+  [ErrorCodes.TOO_MANY_ATTEMPTS]: 'Too many attempts, please request a new code',
+  [ErrorCodes.ALREADY_VERIFIED]: 'Email is already verified',
+  [ErrorCodes.EMAIL_NOT_VERIFIED]: 'Email not verified',
+  [ErrorCodes.TOKEN_REVOKED]: 'Token has been revoked',
+  [ErrorCodes.USER_NOT_FOUND]: 'User not found',
+
+  [ErrorCodes.ENERGY_INSUFFICIENT]: 'Insufficient energy',
+  [ErrorCodes.CANNOT_APPLAUD_SELF]: 'Cannot applaud yourself',
+  [ErrorCodes.ALREADY_LIKED]: 'Already liked',
+  [ErrorCodes.ALREADY_APPLAUDED]: 'Already applauded',
 
   [ErrorCodes.RATE_LIMIT_EXCEEDED]: 'Rate limit exceeded',
   [ErrorCodes.QUOTA_EXCEEDED]: 'Quota exceeded',

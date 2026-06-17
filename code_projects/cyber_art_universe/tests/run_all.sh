@@ -50,6 +50,7 @@ echo ""
 run_suite "L2 Prompt Assembly (121项)" "$SCRIPT_DIR/system/l2_prompt_verify.sh"
 run_suite "Perpetual Conversation (12项)" "$SCRIPT_DIR/system/conversation_test.sh"
 run_suite "V3/V4 Module API"            "$SCRIPT_DIR/system/v3_module_api.sh"
+run_suite "User Auth & Interaction"     "$SCRIPT_DIR/system/user_auth_interaction_test.sh"
 
 # Layer B — 阅读路径
 run_suite "Human Reading Path"         "$SCRIPT_DIR/human_test.sh"

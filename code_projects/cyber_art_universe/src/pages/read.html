@@ -37,6 +37,11 @@
       <div id="mid-content" class="read-content"><div class="loading">加载中...</div></div>
       <div class="chapter-nav" id="chapter-nav"></div>
       <div class="chapter-info" id="chapter-info"></div>
+      <div class="interaction-bar" id="interaction-bar" style="display:none;margin-top:16px;padding:12px 0;border-top:1px solid var(--border, #333);display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="likeCurrentWork()" style="padding:8px 16px;border-radius:8px;border:1px solid var(--accent,#7c3aed);background:transparent;color:var(--accent,#7c3aed);cursor:pointer;font-size:0.875rem">❤️ 点赞</button>
+        <button onclick="submitComment()" style="padding:8px 16px;border-radius:8px;border:1px solid var(--accent,#7c3aed);background:transparent;color:var(--accent,#7c3aed);cursor:pointer;font-size:0.875rem">💬 评论</button>
+        <button onclick="applaudAuthor()" style="padding:8px 16px;border-radius:8px;border:1px solid var(--success,#22c55e);background:transparent;color:var(--success,#22c55e);cursor:pointer;font-size:0.875rem">⭐ 赞赏</button>
+      </div>
     </div>
     <div class="split-divider" id="split-divider-2" style="display:none"></div>
     <div class="split-right" style="display:none"></div>
@@ -51,6 +56,7 @@
 
   <script src="/assets/app.js"></script>
   <script src="/i18n-data.js"></script>
+  <script src="/auth.js"></script>
   <script src="/story-elf.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
@@ -227,7 +233,42 @@
 
       // 加载首个章节（replaceState 避免多余的历史记录）
       loadChapter(sectionId, true);
+
+      // 初始化用户导航 + 互动栏
+      CAU.updateNav();
+      document.getElementById('interaction-bar').style.display = 'flex';
     });
+
+    // ============================================================
+    // 互动功能（Phase 1）
+    // ============================================================
+    async function likeCurrentWork() {
+      if (!CAU.isLoggedIn()) { alert('请先登录'); location.href='/login.html'; return; }
+      try {
+        const result = await CAU.likeWork(_workId);
+        alert('点赞成功！剩余能量：' + result.data.energy_remaining);
+      } catch (e) { alert(e.message || '点赞失败'); }
+    }
+
+    async function applaudAuthor() {
+      if (!CAU.isLoggedIn()) { alert('请先登录'); location.href='/login.html'; return; }
+      const authorId = prompt('请输入作者的用户 ID（可在其个人页面找到）：');
+      if (!authorId) return;
+      try {
+        const result = await CAU.applaudUser(authorId);
+        alert(result.data.message + '\n你的剩余能量：' + result.data.energy_remaining);
+      } catch (e) { alert(e.message || '赞赏失败'); }
+    }
+
+    async function submitComment() {
+      if (!CAU.isLoggedIn()) { alert('请先登录'); location.href='/login.html'; return; }
+      const content = prompt('写下你的评论（50 字以上消耗 2 能量，以下消耗 1 能量）：');
+      if (!content) return;
+      try {
+        const result = await CAU.submitComment(_workId, content, _sectionId);
+        alert('评论发表成功！剩余能量：' + result.data.energy_remaining);
+      } catch (e) { alert(e.message || '评论失败'); }
+    }
   </script>
 </body>
 </html>

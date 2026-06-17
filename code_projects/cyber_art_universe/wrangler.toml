@@ -29,6 +29,8 @@ service = "cyber_art_api"
 directory = "src/pages"
 
 [vars]
+# TEST_MODE — 测试模式 Secret（测试时通过 wrangler secret put TEST_MODE 设置为 "true"，
+#   生产环境不设此 Secret 即为正常模式。开启后：跳过 IP 限流 + 验证码 000000 直接通过）
 # CF_AIG_TOKEN is managed via Cloudflare Dashboard Secrets (AI Gateway 认证，详见 docs/story_elf/cloudflare_ai_gateway_guide.md)
 # AI_PROVIDER / AI_API_KEY 已废弃（迁移到 AI Gateway + BYOK），待所有调用方迁移完成后可删除
 

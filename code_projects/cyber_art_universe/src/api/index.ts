@@ -50,21 +50,35 @@ import { handleAgentManifest, handleLLMsTxt, handleOpenAPI } from './discovery';
 import { handleMCP } from './mcp';
 import { handleWriteRoute } from './write/index';
 import { discoverActiveUsers, processMemoriesForUser } from '../lib/l2/memory';
+import { authenticate as authMiddleware } from '../lib/auth';
+
+// Auth API handlers
+import { handleRegister } from './auth/register';
+import { handleLogin } from './auth/login';
+import { handleVerifyEmail, handleResendVerification } from './auth/verify-email';
+import { handleGetMe, handleUpdateMe } from './auth/me';
+import { handleLogout } from './auth/logout';
+import { handleRecover, handleRecoverConfirm } from './auth/recover';
+import { handleGetUser } from './auth/users';
 
 // ============================================================
-// 用户认证
-//   ADMIN_TOKEN — 后台固定 token，永久有效（Claude / 自动化任务）
-//   USER_TOKEN   — 用户 token，当前逗号分隔硬编码，未来替换为实时登录
+// 用户认证（Phase 0 升级版）
+//   1. 新用户系统：Bearer Token → D1 sessions 表 → users 表
+//   2. ADMIN_TOKEN — 后台 token，向后兼容
+//   3. 旧 USER_TOKEN — 向后兼容（逗号分隔，逐步迁移）
 // ============================================================
-function isAuthenticated(request: Request, env: Env): boolean {
+async function isAuthenticated(request: Request, env: Env): Promise<boolean> {
+  // 先试新鉴权
+  const authResult = await authMiddleware(request, env);
+  if (authResult === null) return true; // 新系统通过
+
+  // 回退到旧鉴权（向后兼容）
   const authHeader = request.headers.get('Authorization');
   if (!authHeader) return false;
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
 
-  // Admin token：固定值，独立校验，不随 USER_TOKEN 变化
   if (env.ADMIN_TOKEN && token === env.ADMIN_TOKEN.trim()) return true;
 
-  // User token：当前逗号分隔的硬编码列表（未来由实时登录系统替换）
   if (env.USER_TOKEN) {
     const validTokens = env.USER_TOKEN.split(',').map(t => t.trim()).filter(Boolean);
     if (validTokens.includes(token)) return true;
@@ -199,6 +213,34 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
       return likeReview(env, request, segments[1]);
     }
 
+    // ================================================================
+    // 互动端点（Phase 1：点赞/评论/赞赏）
+    // ================================================================
+
+    // 点赞
+    if (request.method === 'POST' && segments[0] === 'interactions' && segments[1] === 'like' && !segments[2]) {
+      const authErr = await authMiddleware(request, env);
+      if (authErr) return authErr;
+      const { handleLike } = await import('./interactions/like');
+      return handleLike(env, request);
+    }
+
+    // 评论
+    if (request.method === 'POST' && segments[0] === 'interactions' && segments[1] === 'comment' && !segments[2]) {
+      const authErr = await authMiddleware(request, env);
+      if (authErr) return authErr;
+      const { handleComment } = await import('./interactions/comment');
+      return handleComment(env, request);
+    }
+
+    // 赞赏
+    if (request.method === 'POST' && segments[0] === 'interactions' && segments[1] === 'applaud' && !segments[2]) {
+      const authErr = await authMiddleware(request, env);
+      if (authErr) return authErr;
+      const { handleApplaud } = await import('./interactions/applaud');
+      return handleApplaud(env, request);
+    }
+
     // 订阅 — 创建
     if (request.method === 'POST' && segments[0] === 'subscriptions' && !segments[1]) {
       return createSubscription(env, request);
@@ -215,6 +257,64 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     }
 
     // ================================================================
+    // Auth 端点（Phase 0：用户账户系统）
+    // ================================================================
+
+    // 注册
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'register' && !segments[2]) {
+      return handleRegister(env, request);
+    }
+
+    // 登录
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'login' && !segments[2]) {
+      return handleLogin(env, request);
+    }
+
+    // 登出（需鉴权）
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'logout' && !segments[2]) {
+      const authErr = await authMiddleware(request, env);
+      if (authErr) return authErr;
+      return handleLogout(env, request);
+    }
+
+    // 我的信息（需鉴权）
+    if (segments[0] === 'auth' && segments[1] === 'me' && !segments[2]) {
+      const authErr = await authMiddleware(request, env);
+      if (authErr) return authErr;
+      if (request.method === 'GET') return handleGetMe(env, request);
+      if (request.method === 'PUT') return handleUpdateMe(env, request);
+    }
+
+    // 邮箱验证（需鉴权）
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'verify-email' && !segments[2]) {
+      const authErr = await authMiddleware(request, env);
+      if (authErr) return authErr;
+      return handleVerifyEmail(env, request);
+    }
+
+    // 重新发送验证码（需鉴权）
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'resend-verification' && !segments[2]) {
+      const authErr = await authMiddleware(request, env);
+      if (authErr) return authErr;
+      return handleResendVerification(env, request);
+    }
+
+    // 账户恢复 — 发起
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'recover' && !segments[2]) {
+      return handleRecover(env, request);
+    }
+
+    // 账户恢复 — 确认
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'recover-confirm' && !segments[2]) {
+      return handleRecoverConfirm(env, request);
+    }
+
+    // 用户公开档案
+    if (request.method === 'GET' && segments[0] === 'users' && segments[1] && !segments[2]) {
+      return handleGetUser(env, request, segments[1]);
+    }
+
+    // ================================================================
     // 内部端点（Cron fan-out 分发，无需鉴权）
     // ================================================================
     if (segments[0] === 'internal' && segments[1] === 'cron-memory') {
@@ -224,7 +324,7 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     // Write 侧（Story Forger）
     // ================================================================
     if (segments[0] === 'write') {
-      if (!isAuthenticated(request, env)) {
+      if (!(await isAuthenticated(request, env))) {
         return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'Authentication required')), {
           status: 401, headers: { 'Content-Type': 'application/json' },
         });

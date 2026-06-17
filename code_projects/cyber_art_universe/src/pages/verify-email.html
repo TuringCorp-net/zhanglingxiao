@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>邮箱验证 — Cyber Art Universe</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .auth-container { max-width: 420px; margin: 120px auto 40px; padding: 0 20px; }
+    .auth-card { background: var(--surface, #1a1a2e); border-radius: 12px; padding: 32px; border: 1px solid var(--border, #333); text-align: center; }
+    .auth-title { font-size: 1.5rem; margin: 0 0 8px; color: var(--text, #e4e4e7); }
+    .auth-subtitle { font-size: 0.875rem; color: var(--text-dim, #71717a); margin: 0 0 24px; }
+    .code-input { width: 200px; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border, #333); background: var(--bg, #0f0f1a); color: var(--text, #e4e4e7); font-size: 1.5rem; text-align: center; letter-spacing: 8px; }
+    .code-input:focus { outline: none; border-color: var(--accent, #7c3aed); }
+    .btn { padding: 12px 32px; border-radius: 8px; border: none; font-size: 1rem; cursor: pointer; font-weight: 600; margin: 4px; }
+    .btn-primary { background: var(--accent, #7c3aed); color: #fff; }
+    .btn-secondary { background: transparent; color: var(--accent, #7c3aed); border: 1px solid var(--accent, #7c3aed); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .error-msg { color: var(--error, #ef4444); font-size: 0.875rem; margin-top: 12px; display: none; }
+    .success-msg { color: var(--success, #22c55e); font-size: 0.875rem; margin-top: 12px; display: none; }
+  </style>
+</head>
+<body data-page="verify-email">
+  <div id="global-nav"></div>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <h1 class="auth-title">验证你的邮箱</h1>
+      <p class="auth-subtitle" id="subtitle">验证码已发送至你的注册邮箱。请输入收到的 6 位数字验证码。</p>
+
+      <input type="text" class="code-input" id="code" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+
+      <div style="margin-top:20px">
+        <button class="btn btn-primary" id="btn-verify" onclick="doVerify()">验证</button>
+        <button class="btn btn-secondary" id="btn-resend" onclick="doResend()">重新发送</button>
+      </div>
+
+      <div class="error-msg" id="err-msg"></div>
+      <div class="success-msg" id="success-msg"></div>
+      <p style="color:var(--text-dim,#71717a);font-size:0.75rem;margin-top:16px">验证码 3 天内有效。未验证的账号可以阅读和写作，但不能发布内容。</p>
+    </div>
+  </div>
+
+  <script src="/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      CAU.updateNav();
+      if (!CAU.isLoggedIn()) { location.href = '/login.html'; }
+    });
+
+    async function doVerify() {
+      const code = document.getElementById('code').value.trim();
+      const err = document.getElementById('err-msg');
+      const btn = document.getElementById('btn-verify');
+      err.style.display = 'none';
+
+      if (code.length !== 6) {
+        err.textContent = '请输入 6 位验证码';
+        err.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '验证中...';
+
+      try {
+        await CAU.verifyEmail(code);
+        document.getElementById('success-msg').textContent = '邮箱验证成功！';
+        document.getElementById('success-msg').style.display = 'block';
+        setTimeout(function() { location.href = '/'; }, 1500);
+      } catch (e) {
+        err.textContent = e.message || '验证失败';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = '验证';
+      }
+    }
+
+    async function doResend() {
+      const err = document.getElementById('err-msg');
+      const btn = document.getElementById('btn-resend');
+      err.style.display = 'none';
+
+      btn.disabled = true;
+      btn.textContent = '发送中...';
+
+      try {
+        await CAU.resendVerification();
+        document.getElementById('subtitle').textContent = '新的验证码已发送。请输入收到的 6 位数字验证码。';
+        setTimeout(function() { btn.disabled = false; btn.textContent = '重新发送'; }, 60000); // 60 秒后可重发
+      } catch (e) {
+        err.textContent = e.message || '发送失败，请稍后重试';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = '重新发送';
+      }
+    }
+  </script>
+</body>
+</html>

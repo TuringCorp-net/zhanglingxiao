@@ -15,7 +15,10 @@ docs/
 │   ├── business_concept.md      # 商业概念：产品愿景、用户价值、商业模式
 │   ├── market_analysis.md       # 市场分析：竞品调研、市场机会
 │   ├── system_design.md         # 全局系统设计：整体架构、技术选型
-│   └── L1_Category.md           # 一级分类设计：内容分类体系
+│   ├── L1_Category.md           # 一级分类设计：内容分类体系
+│   ├── pricing.md               # 定价策略
+│   ├── User-account-and-social-system-original-concept.md  # V4.5 原始构想：共生共和国（冻结）
+│   └── user_account_system_design.md  # 用户账户系统设计：五阶段路线图 + Phase 0/1 详细设计
 │
 ├── cau/                         # CAU 阅读端
 │   └── original_concept.md      # 原始构想：项目的起源和愿景
@@ -127,6 +130,9 @@ Story Elf 是唯一同时服务于 CAU 和 Story Forger 的模块：
 ### 想了解项目全貌
 `ARCHITECTURE.md` → `general/business_concept.md` → `general/system_design.md`
 
+### 想了解用户账户与社交系统
+`general/User-account-and-social-system-original-concept.md`（V4.5 愿景） → `general/user_account_system_design.md`（五阶段路线图与详细设计）
+
 ### 想开发 CAU 阅读端
 `cau/original_concept.md`（SRS 需求 ID 见 `src/api/index.ts` + `src/api/works.ts` 等文件头部注释）
 
@@ -168,6 +174,8 @@ Story Elf 是唯一同时服务于 CAU 和 Story Forger 的模块：
 | `works` 表结构 | CAU + Story Forger |
 | `modules` 表结构（v3.0 新增，统一管理 M0-M8） | Story Forger + Story Elf |
 | `entities` 表结构 | CAU + Story Forger + Story Elf |
+| `users` 表结构 | CAU + Story Forger + Story Elf（用户系统是跨模块基础设施） |
+| `reviews` 表结构 | CAU + Story Forger |
 | 模板结构（SlotDef） | Story Forger + Story Elf |
 | API 路径 | Story Forger + Story Elf + 前端 |
 | 统一 Module API（`/api/write/module/{id}` 等，v3.0） | Story Forger + Story Elf + 前端 |
