@@ -1523,7 +1523,7 @@ async function aiGenerateForModule() {
     await hPost('/api/write/module/' + mid + '/generate?overwrite=true', { work_id: wid, num_chapters: 5 });
     loadM2();
   } else if (state.currentModule === 'foreshadowing') {
-    cacheClear([mid, 'm4_strategy_' + wid]);
+    cacheClear([mid, 'm4_strategy_' + wid, 'list_' + wid + '_m4_card']);
     await hPost('/api/write/module/m4_strategy_' + wid + '/generate', { work_id: wid });
     loadM4();
   } else if ((state.currentModule === 'writing' || state.currentModule === 'chapters') && state.currentSectionId) {
