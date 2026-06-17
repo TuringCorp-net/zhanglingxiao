@@ -42,7 +42,6 @@
   <script src="/story-elf.js"></script>
   <script>
     initPage();
-    CAU.updateNav();
     var CATEGORY_KEYS = ['', 'fantasy', 'science-fiction', 'romance', 'contemporary', 'adventure', 'mystery-thriller', 'historical', 'young-adult'];
     var USER_TOKEN_KEY = 'sf_user_token';
     var MY_WORKS_KEY = '__my_works__';
@@ -55,6 +54,7 @@
       StoryElf.setPage('read');
       renderCategoryBar();
       loadWorks(currentCategory);
+      CAU.updateLoginButton();  // Phase 0: 登录后按钮变为 Cyber Name
     });
 
     function hasUserToken() {

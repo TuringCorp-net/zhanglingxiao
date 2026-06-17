@@ -63,7 +63,7 @@
   <script src="/auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      CAU.updateNav();
+      CAU.updateLoginButton();
     });
 
     async function doRegister() {
@@ -101,7 +101,7 @@
             // 跳转到验证页面
             location.href = '/verify-email.html';
           } else {
-            CAU.updateNav();
+            CAU.updateLoginButton();
             location.href = '/';
           }
         }

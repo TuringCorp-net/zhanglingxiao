@@ -55,18 +55,19 @@ export async function sendEmail(env: Env, params: SendEmailParams): Promise<bool
 export async function sendVerificationEmail(env: Env, email: string, code: string): Promise<boolean> {
   return sendEmail(env, {
     to: email,
-    subject: '验证你的 Cyber Art Universe 账户',
-    text: `欢迎来到 Cyber Art Universe！\n\n你的验证码是：${code}\n\n验证码 3 天内有效。请在验证页面输入此验证码以激活你的账户。\n\n如果你没有注册 Cyber Art Universe 账户，请忽略此邮件。\n\n—— Cyber Art Universe 团队`,
-    html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto">
-      <h2 style="color:#7c3aed">Cyber Art Universe</h2>
-      <p>欢迎来到共生共和国！</p>
-      <p>你的验证码是：</p>
-      <div style="background:#f4f4f5;padding:16px;border-radius:8px;text-align:center;margin:16px 0">
-        <span style="font-size:32px;font-weight:bold;letter-spacing:8px;color:#7c3aed">${code}</span>
-      </div>
-      <p style="color:#71717a;font-size:14px">验证码 3 天内有效。</p>
-      <hr style="border:none;border-top:1px solid #e4e4e7;margin:24px 0">
-      <p style="color:#a1a1aa;font-size:12px">如果你没有注册 Cyber Art Universe 账户，请忽略此邮件。</p>
+    subject: 'Verify your Cyber Art Universe account',
+    text: `Cyber Art Universe\n\nYour verification code is: ${code}\n\nThis code is valid for 3 days. Enter it on the verification page to activate your account.\n\nIf you did not register for a Cyber Art Universe account, please ignore this email.\n\n—— Cyber Art Universe Team`,
+    html: `<div style="font-family:system-ui,-apple-system,sans-serif;max-width:480px;margin:0 auto;padding:32px">
+      <p style="font-size:1.25rem;margin:0 0 24px;color:#18181b">Cyber <span style="color:#7c3aed">Art</span> Universe</p>
+      <p style="color:#52525b;font-size:0.9375rem;margin:0 0 16px">Your verification code is:</p>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px">
+        <tr><td bgcolor="#1e1b2e" style="padding:20px;border-radius:8px;text-align:center;background-image:linear-gradient(135deg, #252033, #1e1b2e)">
+          <span style="font-size:32px;font-weight:700;letter-spacing:10px;color:#7c3aed;font-family:monospace">${code}</span>
+        </td></tr>
+      </table>
+      <p style="color:#71717a;font-size:0.8125rem;margin:0 0 24px">This code is valid for 3 days.</p>
+      <hr style="border:none;border-top:1px solid #d4d4d8;margin:0 0 16px">
+      <p style="color:#a1a1aa;font-size:0.75rem;margin:0">If you did not register for a Cyber Art Universe account, please ignore this email.</p>
     </div>`,
   });
 }
@@ -77,18 +78,19 @@ export async function sendVerificationEmail(env: Env, email: string, code: strin
 export async function sendRecoveryEmail(env: Env, email: string, code: string): Promise<boolean> {
   return sendEmail(env, {
     to: email,
-    subject: '重置你的 Cyber Art Universe 密钥',
-    text: `你请求了重置 Cyber Art Universe 账户的密钥。\n\n你的恢复验证码是：${code}\n\n验证码 3 天内有效。\n\n如果你没有请求重置密钥，请忽略此邮件。\n\n—— Cyber Art Universe 团队`,
-    html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto">
-      <h2 style="color:#7c3aed">Cyber Art Universe</h2>
-      <p>你请求了重置账户密钥。</p>
-      <p>你的恢复验证码是：</p>
-      <div style="background:#f4f4f5;padding:16px;border-radius:8px;text-align:center;margin:16px 0">
-        <span style="font-size:32px;font-weight:bold;letter-spacing:8px;color:#7c3aed">${code}</span>
-      </div>
-      <p style="color:#71717a;font-size:14px">验证码 3 天内有效。</p>
-      <hr style="border:none;border-top:1px solid #e4e4e7;margin:24px 0">
-      <p style="color:#a1a1aa;font-size:12px">如果你没有请求重置密钥，请忽略此邮件。</p>
+    subject: 'Reset your Cyber Art Universe key',
+    text: `You requested to reset your Cyber Art Universe account key.\n\nYour recovery code is: ${code}\n\nThis code is valid for 3 days.\n\nIf you did not request a key reset, please ignore this email.\n\n—— Cyber Art Universe Team`,
+    html: `<div style="font-family:system-ui,-apple-system,sans-serif;max-width:480px;margin:0 auto;padding:32px">
+      <p style="font-size:1.25rem;margin:0 0 24px;color:#18181b">Cyber <span style="color:#7c3aed">Art</span> Universe</p>
+      <p style="color:#52525b;font-size:0.9375rem;margin:0 0 16px">Your recovery code is:</p>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px">
+        <tr><td bgcolor="#1e1b2e" style="padding:20px;border-radius:8px;text-align:center;background-image:linear-gradient(135deg, #252033, #1e1b2e)">
+          <span style="font-size:32px;font-weight:700;letter-spacing:10px;color:#7c3aed;font-family:monospace">${code}</span>
+        </td></tr>
+      </table>
+      <p style="color:#71717a;font-size:0.8125rem;margin:0 0 24px">This code is valid for 3 days.</p>
+      <hr style="border:none;border-top:1px solid #d4d4d8;margin:0 0 16px">
+      <p style="color:#a1a1aa;font-size:0.75rem;margin:0">If you did not request a key reset, please ignore this email.</p>
     </div>`,
   });
 }

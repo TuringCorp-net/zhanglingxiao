@@ -54,7 +54,7 @@
   <script src="/auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      CAU.updateNav();
+      CAU.updateLoginButton();
     });
 
     async function doLogin() {
@@ -76,7 +76,7 @@
       try {
         const result = await CAU.login(cyber_name, key);
         if (result.ok) {
-          CAU.updateNav();
+          CAU.updateLoginButton();
           location.href = '/';
         }
       } catch (err) {

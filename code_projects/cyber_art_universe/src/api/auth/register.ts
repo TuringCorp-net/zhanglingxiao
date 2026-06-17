@@ -57,7 +57,12 @@ export async function handleRegister(env: Env, request: Request): Promise<Respon
   if (!isTestMode) {
     const rateLimitRemaining = await checkEmailRateLimit(request, env);
     if (rateLimitRemaining !== null) {
-      return new Response(JSON.stringify(jsonError(ErrorCodes.RATE_LIMIT_EXCEEDED, `Please wait ${Math.ceil(rateLimitRemaining / 60)} minutes before sending again`)), {
+      const mins = Math.floor(rateLimitRemaining / 60);
+    const secs = rateLimitRemaining % 60;
+    const waitMsg = mins > 0
+      ? `Please wait ${mins} min ${secs} sec before sending again`
+      : `Please wait ${secs} seconds before sending again`;
+    return new Response(JSON.stringify(jsonError(ErrorCodes.RATE_LIMIT_EXCEEDED, waitMsg)), {
         status: 429, headers: { 'Content-Type': 'application/json' },
       });
     }

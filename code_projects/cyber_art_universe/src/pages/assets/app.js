@@ -55,7 +55,7 @@ function renderNav() {
           <span class="lang-opt ${lang === 'zh' ? 'active' : ''}">CN</span>
           <span class="lang-opt ${lang === 'en' ? 'active' : ''}">EN</span>
         </div>
-        <button class="login-btn" onclick="${isWrite ? `var tk=prompt(t('prompt.token_debug'),typeof userToken!=='undefined'?userToken:'');if(tk){localStorage.setItem('sf_user_token',tk);location.reload()}` : `alert(t('prompt.login_coming'))`}" data-i18n="nav.login">${t('nav.login')}</button>
+        <button class="login-btn" id="nav-login-btn" onclick="${isWrite ? `var tk=prompt(t('prompt.token_debug'),typeof userToken!=='undefined'?userToken:'');if(tk){localStorage.setItem('sf_user_token',tk);location.reload()}` : `location.href='/login.html'`}" data-i18n="nav.login">${t('nav.login')}</button>
       </div>
     </div>
   </nav>`;

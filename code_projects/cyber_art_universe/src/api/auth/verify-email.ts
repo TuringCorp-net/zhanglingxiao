@@ -108,7 +108,12 @@ export async function handleResendVerification(env: Env, request: Request): Prom
   if (!isTestMode) {
     const rateLimitRemaining = await checkEmailRateLimit(request, env);
     if (rateLimitRemaining !== null) {
-      return new Response(JSON.stringify(jsonError(ErrorCodes.RATE_LIMIT_EXCEEDED, `Please wait ${Math.ceil(rateLimitRemaining / 60)} minutes before requesting a new code`)), {
+      const mins = Math.floor(rateLimitRemaining / 60);
+      const secs = rateLimitRemaining % 60;
+      const waitMsg = mins > 0
+        ? `Please wait ${mins} min ${secs} sec before requesting a new code`
+        : `Please wait ${secs} seconds before requesting a new code`;
+      return new Response(JSON.stringify(jsonError(ErrorCodes.RATE_LIMIT_EXCEEDED, waitMsg)), {
         status: 429, headers: { 'Content-Type': 'application/json' },
       });
     }

@@ -159,35 +159,33 @@
   }
 
   // ============================================================
-  // 全局导航更新
+  // 登录按钮更新（不改导航结构，只替换登录按钮内容）
   // ============================================================
-  function updateNav() {
-    const navEl = document.getElementById('global-nav');
-    if (!navEl) return;
+  async function updateLoginButton() {
+    const btn = document.getElementById('nav-login-btn');
+    if (!btn) return;
 
     const user = getUser();
     if (user && user.id) {
-      navEl.innerHTML = `
-        <div class="nav-left">
-          <a href="/" class="nav-brand">Cyber Art Universe</a>
-        </div>
-        <div class="nav-right">
-          <span class="nav-cyber-name">${escapeHtml(user.cyber_name)}</span>
-          <span class="nav-energy" title="能量">⚡ ${user.energy ?? '?'}</span>
-          <span class="nav-karma" title="声望">✦ ${user.karma ?? 0}</span>
-          <a href="/settings.html">设置</a>
-          <a href="#" onclick="CAU.logout().then(()=>location.reload());return false">登出</a>
-        </div>`;
-    } else {
-      navEl.innerHTML = `
-        <div class="nav-left">
-          <a href="/" class="nav-brand">Cyber Art Universe</a>
-        </div>
-        <div class="nav-right">
-          <a href="/login.html">登录</a>
-          <a href="/register.html">注册</a>
-        </div>`;
+      // 有本地 token → 向服务器验证是否仍然有效
+      try {
+        const resp = await getMe();
+        if (resp.ok) {
+          setUser(resp.data);
+          btn.textContent = resp.data.cyber_name;
+          btn.title = '个人设置';
+          btn.onclick = function() { location.href = '/settings.html'; };
+          return;
+        }
+      } catch (_) {
+        // token 无效（401）或网络错误 → 自动登出
+      }
+      clearToken();
     }
+    // 未登录 或 token 已失效
+    btn.textContent = (typeof t === 'function') ? t('nav.login') : '登录';
+    btn.title = '';
+    btn.onclick = function() { location.href = '/login.html'; };
   }
 
   function escapeHtml(str) {
@@ -209,6 +207,6 @@
     // Interactions
     likeWork, likeReview, submitComment, applaudUser,
     // UI
-    updateNav,
+    updateLoginButton,
   };
 })();
