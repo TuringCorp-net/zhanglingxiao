@@ -436,7 +436,6 @@ async function onWorkspaceChange(workId) {
   StoryElf.loadConversation(workId, 'write');
   qs('#split-view').style.display = 'grid';
   applyGridColumns();
-  cacheClear();
   _cacheReady = false;
 
   // 更新 UI + 关闭浮出层
@@ -502,6 +501,22 @@ var _cacheReady = false;
 async function preWarmCache(workId) {
   var singletons = ['m0', 'm1', 'm2', 'm4_strategy'];
   var cardLists = ['m3_card', 'm4_card', 'm5_intent', 'm6_chapter'];
+
+  // 检查全部模块是否已在 localStorage 中有缓存（如之前访问过该作品）
+  var miss = false;
+  var sKeys = singletons.map(function (t) { return t + '_' + workId; });
+  var cKeys = cardLists.map(function (t) { return 'list_' + workId + '_' + t; });
+  var allKeys = sKeys.concat(cKeys);
+  for (var i = 0; i < allKeys.length; i++) {
+    if (!cacheGet(allKeys[i])) { miss = true; break; }
+  }
+
+  if (!miss) {
+    // 全部命中 localStorage → 无需 API 请求，直接恢复
+    _cacheReady = true;
+    return;
+  }
+
   await Promise.all(
     singletons.map(function (t) { return loadModule(t + '_' + workId); })
       .concat(cardLists.map(function (t) { return loadModuleList(workId, t); }))
@@ -567,19 +582,61 @@ function updateElfContext() {
 }
 
 // ============================================================
-// 模块数据缓存 —— 首次 pipeline 加载后复用，避免切模块时重复请求
+// 模块数据缓存 —— 内存 + localStorage (per workId) 双层缓存
+// 切作品不清 localStorage，切回来时秒恢复，无需重复 API 请求
 // ============================================================
 var _moduleCache = {};
 
+function _lsKey() {
+  return 'sf_pipe_' + (state.currentWorkId || '');
+}
+
 function cacheGet(key) {
-  return _moduleCache[key] || null;
+  // 1. 内存命中
+  if (_moduleCache[key]) return _moduleCache[key];
+  // 2. localStorage 恢复（切回之前访问过的作品时）
+  try {
+    var stored = JSON.parse(localStorage.getItem(_lsKey()) || '{}');
+    if (stored.d && stored.d[key]) {
+      _moduleCache[key] = stored.d[key];
+      return stored.d[key];
+    }
+  } catch (_) {}
+  return null;
 }
+
 function cacheSet(key, data) {
-  if (data) _moduleCache[key] = data;
+  if (!data) return;
+  _moduleCache[key] = data;
+  // 同步写 localStorage（per workId，不阻塞 UI）
+  try {
+    var ck = _lsKey();
+    if (!ck) return;
+    var stored = JSON.parse(localStorage.getItem(ck) || '{}');
+    stored.d = stored.d || {};
+    stored.d[key] = data;
+    stored.ts = Date.now();
+    localStorage.setItem(ck, JSON.stringify(stored));
+  } catch (_) {}
 }
+
 function cacheClear(keys) {
-  if (!keys) { _moduleCache = {}; return; }
-  (keys || []).forEach(function (k) { delete _moduleCache[k]; });
+  // 无参数 = 数据变更导致当前作品缓存全部失效：内存 + localStorage 同步清除
+  if (!keys) {
+    _moduleCache = {};
+    try { if (state.currentWorkId) localStorage.removeItem(_lsKey()); } catch (_) {}
+    return;
+  }
+  // 指定 key = 精确失效（AI 生成/保存失败等）：内存 + localStorage 同步清除
+  (keys || []).forEach(function (k) {
+    delete _moduleCache[k];
+    try {
+      var ck = _lsKey();
+      if (!ck) return;
+      var stored = JSON.parse(localStorage.getItem(ck) || '{}');
+      if (stored.d) { delete stored.d[k]; localStorage.setItem(ck, JSON.stringify(stored)); }
+    } catch (_) {}
+  });
 }
 
 // ============================================================
@@ -633,7 +690,7 @@ async function saveModule(moduleId, slots, freeContent) {
 
 // 加载 ModuleList
 async function loadModuleList(workId, type) {
-  var cacheKey = 'list_' + type;
+  var cacheKey = 'list_' + workId + '_' + type;
   var cached = cacheGet(cacheKey);
   if (cached) return cached;
   var data = await hGet('/api/write/modules?work_id=' + workId + '&type=' + type);

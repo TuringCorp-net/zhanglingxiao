@@ -150,6 +150,7 @@
 
   // ============================================================
   // 登录按钮更新（不改导航结构，只替换登录按钮内容）
+  // 先用 localStorage 缓存的用户名同步渲染，再异步验证，消除"登录"闪烁
   // ============================================================
   async function updateLoginButton() {
     const btn = document.getElementById('nav-login-btn');
@@ -157,17 +158,21 @@
 
     const user = getUser();
     if (user && user.id) {
-      // 有本地 token → 向服务器验证是否仍然有效
+      // ① 同步显示缓存的 Cyber Name（消除闪烁）
+      btn.textContent = user.cyber_name;
+      btn.title = (typeof t === 'function') ? t('settings.personal_settings') : '个人设置';
+      btn.onclick = function() { openSettingsModal(); };
+
+      // ② 异步向服务器验证 token 是否仍然有效
       try {
         const resp = await getMe();
         if (resp.ok) {
           setUser(resp.data);
-          btn.textContent = resp.data.cyber_name;
-          btn.title = (typeof t === 'function') ? t('settings.personal_settings') : '个人设置';
-          btn.onclick = function() { openSettingsModal(); };
+          btn.textContent = resp.data.cyber_name; // 更新为最新值（如中途改过名）
           return;
         }
       } catch (_) {}
+      // token 失效 → 回退到未登录
       clearToken();
     }
     // 未登录 或 token 已失效
