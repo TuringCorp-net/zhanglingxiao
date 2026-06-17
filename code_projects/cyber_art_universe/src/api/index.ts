@@ -53,8 +53,7 @@ import { discoverActiveUsers, processMemoriesForUser } from '../lib/l2/memory';
 import { authenticate as authMiddleware } from '../lib/auth';
 
 // Auth API handlers
-import { handleRegister } from './auth/register';
-import { handleLogin } from './auth/login';
+import { handleConnect } from './auth/connect';
 import { handleVerifyEmail, handleResendVerification } from './auth/verify-email';
 import { handleGetMe, handleUpdateMe } from './auth/me';
 import { handleLogout } from './auth/logout';
@@ -260,14 +259,9 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     // Auth 端点（Phase 0：用户账户系统）
     // ================================================================
 
-    // 注册
-    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'register' && !segments[2]) {
-      return handleRegister(env, request);
-    }
-
-    // 登录
-    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'login' && !segments[2]) {
-      return handleLogin(env, request);
+    // 统一登录/注册（v2：用邮箱 + 密钥，自动识别）
+    if (request.method === 'POST' && segments[0] === 'auth' && segments[1] === 'connect' && !segments[2]) {
+      return handleConnect(env, request);
     }
 
     // 登出（需鉴权）

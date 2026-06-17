@@ -38,7 +38,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', async function() {
       CAU.updateLoginButton();
-      if (!CAU.isLoggedIn()) { location.href = '/login.html'; return; }
+      if (!CAU.isLoggedIn()) { location.href = '/connect.html'; return; }
       await loadSettings();
     });
 

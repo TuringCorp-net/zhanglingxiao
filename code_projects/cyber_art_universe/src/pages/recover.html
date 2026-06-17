@@ -60,7 +60,7 @@
     </div>
 
     <div class="auth-footer">
-      <a href="/login.html">返回登录</a>
+      <a href="/connect.html">返回登录</a>
     </div>
   </div>
 
@@ -111,7 +111,7 @@
         succ.textContent = '密钥已重置。请用新密钥登录。';
         succ.style.display = 'block';
         document.getElementById('step2').style.display = 'none';
-        setTimeout(function() { location.href = '/login.html'; }, 2000);
+        setTimeout(function() { location.href = '/connect.html'; }, 2000);
       } catch (e) {
         err.textContent = e.message || '重置失败';
         err.style.display = 'block';

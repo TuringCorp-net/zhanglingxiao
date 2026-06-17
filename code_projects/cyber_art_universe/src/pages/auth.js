@@ -64,26 +64,16 @@
   }
 
   // ============================================================
-  // Auth 操作
+  // Auth 操作（v2：统一 connect）
   // ============================================================
-  async function register(cyberName, key, email) {
-    const data = await api('/api/auth/register', {
+  async function connect(email, key, confirm) {
+    const body = { email: email, key: key };
+    if (confirm) body.confirm = true;
+    const data = await api('/api/auth/connect', {
       method: 'POST',
-      body: JSON.stringify({ cyber_name: cyberName, key: key, email: email }),
+      body: JSON.stringify(body),
     });
-    if (data.ok) {
-      setToken(data.data.token);
-      setUser(data.data.user);
-    }
-    return data;
-  }
-
-  async function login(cyberName, key) {
-    const data = await api('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ cyber_name: cyberName, key: key }),
-    });
-    if (data.ok) {
+    if (data.ok && (data.data.action === 'login' || data.data.action === 'registered')) {
       setToken(data.data.token);
       setUser(data.data.user);
     }
@@ -185,7 +175,7 @@
     // 未登录 或 token 已失效
     btn.textContent = (typeof t === 'function') ? t('nav.login') : '登录';
     btn.title = '';
-    btn.onclick = function() { location.href = '/login.html'; };
+    btn.onclick = function() { location.href = '/connect.html'; };
   }
 
   function escapeHtml(str) {
@@ -202,7 +192,7 @@
     getToken, setToken, clearToken,
     getUser, setUser, isLoggedIn,
     // Auth
-    api, register, login, logout, getMe, updateMe,
+    api, connect, logout, getMe, updateMe,
     verifyEmail, resendVerification,
     // Interactions
     likeWork, likeReview, submitComment, applaudUser,
