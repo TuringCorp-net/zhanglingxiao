@@ -276,9 +276,9 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
     if (ctx) ctx.waitUntil(agentTask);
 
     // SSE 流：从 sharedSteps 取数据推送，客户端断开时安静退出
+    let delivered = 0;
     const stream = new ReadableStream({
       async pull(controller) {
-        let delivered = 0;
         while (delivered < sharedSteps.length) {
           const step = sharedSteps[delivered++];
           try {

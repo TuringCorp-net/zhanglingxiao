@@ -291,12 +291,13 @@
 
     _workingBlock = document.createElement('div');
     _workingBlock.className = 'elf-working-block';
+    var block = _workingBlock; // 闭包捕获，避免 _finishWorkingBlock 后引用变 null
 
     var header = document.createElement('div');
     header.className = 'elf-working-header';
     header.innerHTML = '<span>' + (typeof t === 'function' ? t('elf.working', '⚙ Story Elf 工作中...') : '⚙ Story Elf 工作中...') + '</span><span class="elf-working-toggle">▾</span>';
     header.addEventListener('click', function () {
-      _workingBlock.classList.toggle('elf-working-collapsed');
+      block.classList.toggle('elf-working-collapsed');
     });
     _workingBlock.appendChild(header);
 
