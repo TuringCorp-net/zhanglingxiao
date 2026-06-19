@@ -187,10 +187,10 @@ export interface Env {
   SELF: Fetcher;
   RESEND_API_KEY?: string;   // Resend 邮件发送 API Key
   TEST_MODE?: string;          // 测试模式：跳过 IP 限流 + 固定验证码 000000
-  USER_TOKEN?: string;        // @deprecated 迁移到用户实时登录系统
-  ADMIN_TOKEN?: string;       // 后台管理 token
-  AI_PROVIDER?: string;       // @deprecated
-  AI_API_KEY?: string;        // @deprecated
+  USER_TOKEN?: string;        // @deprecated 已迁移到 Phase 0 用户系统（authMiddleware + sessions 表）
+  ADMIN_TOKEN?: string;       // @deprecated 仅用于 auth.ts 启动引导（首个 admin 用户创建前的临时通道）
+  AI_PROVIDER?: string;       // @deprecated 已迁移到 Cloudflare AI Gateway
+  AI_API_KEY?: string;        // @deprecated 已迁移到 Cloudflare AI Gateway
   CF_AIG_TOKEN?: string;      // Cloudflare AI Gateway 认证 token
   // currentUser 由鉴权中间件注入
   currentUser?: User;

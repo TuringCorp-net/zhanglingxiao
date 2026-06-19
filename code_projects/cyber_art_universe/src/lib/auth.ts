@@ -1,6 +1,9 @@
 /**
  * 鉴权中间件 — Phase 0
  * 从 Bearer Token 解析用户身份，注入 env.currentUser
+ *
+ * 这是全系统唯一的用户身份识别入口。所有需要知道"当前用户是谁"的代码，
+ * 都应在鉴权中间件运行后读取 env.currentUser，不再直接解析 Authorization header。
  */
 import { Env, User } from '../db/schema';
 import { jsonError } from './response';
@@ -37,6 +40,29 @@ export async function authenticate(request: Request, env: Env): Promise<Response
   ).bind(tokenHash).first<{ user_id: string }>();
 
   if (!session) {
+    // ── 启动引导：ADMIN_TOKEN 作为首个 admin 用户创建前的临时通道 ──
+    // 部署后应尽快通过 API 注册 admin 用户并在 D1 中设置 class='admin'，
+    // 然后删除 Cloudflare Secret 中的 ADMIN_TOKEN。
+    if (env.ADMIN_TOKEN && token === env.ADMIN_TOKEN.trim()) {
+      env.currentUser = {
+        id: 'usr_bootstrap_admin',
+        cyber_name: 'Bootstrap Admin',
+        auth_key_hash: '',
+        email: '',
+        email_verified: 0,
+        entropy_seed: '',
+        class: 'admin',
+        karma: 0, energy: 0, energy_cap: 0,
+        last_energy_refill: null,
+        recommendation_votes_available: 0,
+        last_vote_refill: null,
+        read_vip_tier: '', write_vip_tier: '',
+        read_vip_expires_at: null, write_vip_expires_at: null,
+        created_at: '', updated_at: '',
+      };
+      return null;
+    }
+
     return new Response(JSON.stringify(jsonError(ErrorCodes.TOKEN_REVOKED, 'Invalid or revoked token')), {
       status: 401, headers: { 'Content-Type': 'application/json' },
     });
@@ -86,3 +112,15 @@ async function sha256(input: string): Promise<string> {
 }
 
 export { sha256 };
+
+/**
+ * 获取当前用户标识（user UUID）。
+ *
+ * 替代旧 extractUserToken()。鉴权中间件运行后，env.currentUser 必然已设置，
+ * 下游代码统一通过此函数获取用户标识，不再直接解析 Authorization header。
+ *
+ * @returns 用户 UUID（如 usr_xxx），未鉴权时返回 'anonymous'
+ */
+export function getUserId(env: Env): string {
+  return env.currentUser?.id || 'anonymous';
+}

@@ -4,6 +4,8 @@
  * 覆盖需求 (Story Elf SRS):
  *   SE-080: AI 用量记录 — recordAIUsage() 写入 D1 ai_usage_log 表 + console.log
  *   SE-081: 用户级用量统计 — user_token 字段区分用户
+ *
+ * ⚠️ extractUserToken 已删除。获取用户标识请用 auth.ts 的 getUserId(env)。
  */
 
 import { Env } from '../db/schema';
@@ -44,16 +46,4 @@ export async function recordAIUsage(env: Env, record: AIUsageRecord): Promise<vo
   ).bind(id, record.work_id, record.user_token, record.page, record.model,
     record.tokens_in, record.tokens_out, record.cache_hit, record.cache_miss, Date.now()
   ).run();
-}
-
-/**
- * 从 Authorization header 提取用户标识（完整 token）。
- * 目前为开发和测试阶段，token 硬编码在环境变量中。
- * 未来实现用户注册后，token 由服务端生成（一次性展示，用户保管），
- * 服务端只存 hash(token) 做验证，token 本身即为用户标识。
- */
-export function extractUserToken(request: Request): string {
-  const auth = request.headers.get('Authorization') || '';
-  const token = auth.startsWith('Bearer ') ? auth.slice(7) : auth;
-  return token || 'anonymous';
 }

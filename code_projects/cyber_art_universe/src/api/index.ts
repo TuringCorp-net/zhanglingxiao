@@ -61,29 +61,13 @@ import { handleRecover, handleRecoverConfirm } from './auth/recover';
 import { handleGetUser } from './auth/users';
 
 // ============================================================
-// 用户认证（Phase 0 升级版）
-//   1. 新用户系统：Bearer Token → D1 sessions 表 → users 表
-//   2. ADMIN_TOKEN — 后台 token，向后兼容
-//   3. 旧 USER_TOKEN — 向后兼容（逗号分隔，逐步迁移）
+// 用户认证 — Phase 0 鉴权中间件（唯一入口）
+// Bearer Token → D1 sessions 表 → users 表 → env.currentUser
+// ADMIN_TOKEN 仅用于首个 admin 用户创建前的启动引导（见 auth.ts）
 // ============================================================
 async function isAuthenticated(request: Request, env: Env): Promise<boolean> {
-  // 先试新鉴权
   const authResult = await authMiddleware(request, env);
-  if (authResult === null) return true; // 新系统通过
-
-  // 回退到旧鉴权（向后兼容）
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader) return false;
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
-
-  if (env.ADMIN_TOKEN && token === env.ADMIN_TOKEN.trim()) return true;
-
-  if (env.USER_TOKEN) {
-    const validTokens = env.USER_TOKEN.split(',').map(t => t.trim()).filter(Boolean);
-    if (validTokens.includes(token)) return true;
-  }
-
-  return false;
+  return authResult === null;
 }
 
 // ============================================================

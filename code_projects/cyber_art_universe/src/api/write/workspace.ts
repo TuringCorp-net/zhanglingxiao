@@ -23,9 +23,9 @@ import { parsePagination } from '../../lib/constants';
 import { buildWorkFrontmatter, writeWorkContent, readWorkContent, workR2Key, sectionR2Key, writeSectionContent, readSectionMarkdown, workContentPath } from '../../lib/l1/work-content';
 
 // GET /api/write/works
-import { extractUserToken } from '../../lib/telemetry';
+import { getUserId } from '../../lib/auth';
 
-// user_token 从 Authorization header 提取，用于归属权校验
+// user_token 由鉴权中间件注入的 env.currentUser 确定，用于归属权校验
 export async function listMyWorks(env: Env, request: Request): Promise<Response> {
   const url = new URL(request.url);
   const { page, limit, offset } = parsePagination(url);
@@ -35,7 +35,7 @@ export async function listMyWorks(env: Env, request: Request): Promise<Response>
   const bindings: (string | number)[] = [];
 
   // 只返回当前用户的作品
-  const userId = env.currentUser?.id || extractUserToken(request);
+  const userId = getUserId(env);
   whereClause = 'WHERE user_token = ?';
   bindings.push(userId);
 
@@ -92,7 +92,7 @@ export async function createDraftWork(env: Env, request: Request): Promise<Respo
     httpMetadata: { contentType: 'text/markdown; charset=utf-8' },
   });
 
-  const userId = env.currentUser?.id || extractUserToken(request);
+  const userId = getUserId(env);
 
   await env.DB.prepare(`
     INSERT INTO works (id, title, type, category, author, user_token, creation_attribution, audience, tags, status, summary, r2_object_key, version, created_at, updated_at)

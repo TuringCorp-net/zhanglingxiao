@@ -34,10 +34,11 @@ export function createTools(env: Env, workId: string, lang: string): L2ToolDef[]
 // 归属权校验辅助
 // ============================================================
 
-/** 校验 user_token 是否对指定 work 有操作权限。返回 null=通过，string=错误消息。 */
+/** 校验当前用户是否对指定 work 有操作权限。返回 null=通过，string=错误消息。 */
 async function checkWorkAccess(env: Env, workId: string, userToken: string, action: string): Promise<string | null> {
   if (!workId) return null;
-  if (userToken === 'admin-Tu') return null;
+  // 管理员用户（class='admin'）直接放行
+  if (env.currentUser?.class === 'admin') return null;
 
   try {
     const work = await env.DB.prepare(

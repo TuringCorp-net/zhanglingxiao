@@ -13,6 +13,7 @@
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
+import { getUserId } from '../../lib/auth';
 import { extractL1toL2, extractL2toL3IfDue } from '../../lib/l2/memory';
 
 // ============================================================
@@ -422,23 +423,17 @@ export async function handleMemoryReset(env: Env, request: Request): Promise<Res
 }
 
 // ============================================================
-// 读取端点（debug，admin token 鉴权）
+// 读取端点（debug，需管理员权限）
 // ============================================================
-
-function extractFullUserToken(request: Request): string {
-  const auth = request.headers.get('Authorization') || '';
-  return auth.startsWith('Bearer ') ? auth.slice(7) : '';
-}
 
 /**
  * GET /api/write/memory-test/read-l1
  * Query: work_id, page=write, date=today
- * 读取 L1 每日日志（需 admin token）。
+ * 读取 L1 每日日志（需管理员权限）。
  */
 export async function handleMemoryReadL1(env: Env, request: Request): Promise<Response> {
-  const token = extractFullUserToken(request);
-  if (!token || token !== (env.ADMIN_TOKEN?.trim() || '')) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'Admin token required')), {
+  if (env.currentUser?.class !== 'admin') {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'Admin permission required')), {
       status: 401, headers: { 'Content-Type': 'application/json' },
     });
   }
@@ -454,7 +449,8 @@ export async function handleMemoryReadL1(env: Env, request: Request): Promise<Re
     });
   }
 
-  const path = `users/${token}/memory-logs/${page}/${workId}/${date}.json`;
+  const userId = getUserId(env);
+  const path = `users/${userId}/memory-logs/${page}/${workId}/${date}.json`;
   try {
     const obj = await env.WORKS_BUCKET.get(path);
     if (!obj) {
@@ -476,24 +472,27 @@ export async function handleMemoryReadL1(env: Env, request: Request): Promise<Re
 
 /**
  * GET /api/write/memory-test/read-l2
- * Query: user_token (可选，默认从 Authorization 取)
- * 读取 STM final 内容（需 admin token，或传 user_token 参数）。
+ * Query: user_id (可选，默认取当前用户)
+ * 读取 STM final 内容（需管理员权限；admin 可通过 user_id 参数查看其他用户的记忆）。
  */
 export async function handleMemoryReadL2(env: Env, request: Request): Promise<Response> {
-  const adminToken = extractFullUserToken(request);
-  const isAdmin = adminToken && adminToken === (env.ADMIN_TOKEN?.trim() || '');
+  if (env.currentUser?.class !== 'admin') {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'Admin permission required')), {
+      status: 401, headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
   const url = new URL(request.url);
-  const userToken = url.searchParams.get('user_token') || adminToken;
+  const userId = url.searchParams.get('user_id') || getUserId(env);
 
-  if (!userToken) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'Authentication required')), {
+  if (!userId) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'user_id required')), {
       status: 401, headers: { 'Content-Type': 'application/json' },
     });
   }
 
   try {
-    const path = `users/${userToken}/stm/stm-final.md`;
+    const path = `users/${userId}/stm/stm-final.md`;
     const obj = await env.WORKS_BUCKET.get(path);
     if (!obj) {
       return new Response(JSON.stringify(jsonSuccess({ exists: false, path })), {
@@ -513,24 +512,27 @@ export async function handleMemoryReadL2(env: Env, request: Request): Promise<Re
 
 /**
  * GET /api/write/memory-test/read-l3
- * Query: user_token (可选，默认从 Authorization 取)
- * 读取 LTM final 内容（需 admin token，或传 user_token 参数）。
+ * Query: user_id (可选，默认取当前用户)
+ * 读取 LTM final 内容（需管理员权限；admin 可通过 user_id 参数查看其他用户的记忆）。
  */
 export async function handleMemoryReadL3(env: Env, request: Request): Promise<Response> {
-  const adminToken = extractFullUserToken(request);
-  const isAdmin = adminToken && adminToken === (env.ADMIN_TOKEN?.trim() || '');
+  if (env.currentUser?.class !== 'admin') {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'Admin permission required')), {
+      status: 401, headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
   const url = new URL(request.url);
-  const userToken = url.searchParams.get('user_token') || adminToken;
+  const userId = url.searchParams.get('user_id') || getUserId(env);
 
-  if (!userToken) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'Authentication required')), {
+  if (!userId) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'user_id required')), {
       status: 401, headers: { 'Content-Type': 'application/json' },
     });
   }
 
   try {
-    const path = `users/${userToken}/ltm/ltm-final.md`;
+    const path = `users/${userId}/ltm/ltm-final.md`;
     const obj = await env.WORKS_BUCKET.get(path);
     if (!obj) {
       return new Response(JSON.stringify(jsonSuccess({ exists: false, path })), {

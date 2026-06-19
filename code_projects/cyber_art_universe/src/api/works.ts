@@ -24,23 +24,7 @@ import {
   sectionR2Key,
 } from '../lib/l1/work-content';
 import { parsePagination } from '../lib/constants';
-
-// 验证 Bearer token（与 write 侧共享 USER_TOKEN secret，支持逗号分隔多 token）
-function isReadAuthenticated(request: Request, env: Env): boolean {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader || !env.USER_TOKEN) return false;
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
-  const validTokens = env.USER_TOKEN.split(',').map(t => t.trim()).filter(Boolean);
-  return validTokens.includes(token);
-}
-
-// 检查作品是否允许公开访问。非 published 状态需要认证。
-async function requirePublishedOrAuth(env: Env, request: Request, workId: string): Promise<boolean> {
-  const row = await env.DB.prepare('SELECT status FROM works WHERE id = ?').bind(workId).first<{ status: string }>();
-  if (!row) return false; // 不存在
-  if (row.status === 'published') return true; // 公开
-  return isReadAuthenticated(request, env); // draft/closed 需认证
-}
+import { optionalAuth } from '../lib/auth';
 
 // ============================================================
 // GET /api/catalog — 作品目录
@@ -95,6 +79,7 @@ export async function listWorks(env: Env, request: Request): Promise<Response> {
 // GET /api/content/{id} — 作品元数据
 // ============================================================
 export async function getWork(env: Env, request: Request, id: string): Promise<Response> {
+  await optionalAuth(request, env);
   const result = await env.DB.prepare('SELECT * FROM works WHERE id = ?').bind(id).first<Record<string, unknown>>();
   if (!result) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
@@ -103,7 +88,7 @@ export async function getWork(env: Env, request: Request, id: string): Promise<R
   }
 
   // 非 published 作品仅认证用户可访问
-  if (result.status !== 'published' && !isReadAuthenticated(request, env)) {
+  if (result.status !== 'published' && !env.currentUser) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
       status: 404, headers: { 'Content-Type': 'application/json' },
     });
@@ -143,6 +128,7 @@ export async function getWork(env: Env, request: Request, id: string): Promise<R
 // GET /api/content/{id}/outline — 作品大纲
 // ============================================================
 export async function getWorkOutline(env: Env, request: Request, id: string): Promise<Response> {
+  await optionalAuth(request, env);
   const work = await env.DB.prepare('SELECT id, title, status FROM works WHERE id = ?').bind(id).first<{ id: string; title: string; status: string }>();
   if (!work) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
@@ -151,7 +137,7 @@ export async function getWorkOutline(env: Env, request: Request, id: string): Pr
   }
 
   // 非 published 作品仅认证用户可访问
-  if (work.status !== 'published' && !isReadAuthenticated(request, env)) {
+  if (work.status !== 'published' && !env.currentUser) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
       status: 404, headers: { 'Content-Type': 'application/json' },
     });
@@ -180,6 +166,7 @@ export async function getWorkOutline(env: Env, request: Request, id: string): Pr
 // GET /api/content/{id}/sections/{section_id} — 章节内容
 // ============================================================
 export async function getSection(env: Env, request: Request, workId: string, sectionId: string): Promise<Response> {
+  await optionalAuth(request, env);
   // 检查作品访问权限
   const work = await env.DB.prepare('SELECT status FROM works WHERE id = ?').bind(workId).first<{ status: string }>();
   if (!work) {
@@ -187,7 +174,7 @@ export async function getSection(env: Env, request: Request, workId: string, sec
       status: 404, headers: { 'Content-Type': 'application/json' },
     });
   }
-  if (work.status !== 'published' && !isReadAuthenticated(request, env)) {
+  if (work.status !== 'published' && !env.currentUser) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
       status: 404, headers: { 'Content-Type': 'application/json' },
     });

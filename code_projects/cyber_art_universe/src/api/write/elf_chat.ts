@@ -58,7 +58,8 @@ import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import { AIError } from '../../lib/ai';
-import { recordAIUsage, extractUserToken } from '../../lib/telemetry';
+import { recordAIUsage } from '../../lib/telemetry';
+import { getUserId } from '../../lib/auth';
 import { extractLang } from '../../lib/l1/work-content';
 import { getOrBuildContextPackage } from '../../lib/l1/context-package';
 import type { WorkMeta, ContextOpts } from '../../lib/l1/types';
@@ -130,8 +131,10 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
     });
   }
 
-  const userToken = body.user_token || extractUserToken(request);
-  const isAdmin = userToken === (env.ADMIN_TOKEN?.trim() || '');
+  // 用户标识：统一由鉴权中间件注入的 env.currentUser 确定
+  const userToken = body.user_token || getUserId(env);
+  // 管理员：用户 class 为 admin 时拥有全部作品访问权限
+  const isAdmin = env.currentUser?.class === 'admin';
   const isDebug = body.debug === 'prompt';
 
   // Query work + ownership check
@@ -144,7 +147,10 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
     });
   }
 
-  if (!isAdmin && !isDebug && String(work.user_token || '') !== '' && String(work.user_token) !== userToken) {
+  // 归属权校验：仅检查作品的 user_token 是否匹配当前用户 UUID。
+  // work.user_token 为空时跳过校验（迁移前的旧作品兼容）。
+  const workUserToken = String(work.user_token || '');
+  if (!isAdmin && !isDebug && workUserToken !== '' && workUserToken !== userToken) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.WORK_NOT_FOUND, 'Work not found')), {
       status: 404, headers: { 'Content-Type': 'application/json' },
     });
@@ -312,8 +318,8 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
 // ============================================================
 
 export async function handlePutConversation(env: Env, request: Request): Promise<Response> {
-  const userToken = extractUserToken(request);
-  if (!userToken) {
+  const userToken = getUserId(env);
+  if (!userToken || userToken === 'anonymous') {
     return new Response(JSON.stringify(jsonError(ErrorCodes.AUTH_REQUIRED, 'auth required')), {
       status: 401, headers: { 'Content-Type': 'application/json' },
     });
@@ -350,8 +356,8 @@ export async function handleGetConversation(env: Env, request: Request): Promise
   const workId = url.searchParams.get('work_id');
   const page = url.searchParams.get('page') || 'write';
 
-  const userToken = extractUserToken(request);
-  if (!userToken || !workId) {
+  const userToken = getUserId(env);
+  if (!userToken || userToken === 'anonymous' || !workId) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'user_token and work_id required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });

@@ -10,7 +10,7 @@
 import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
-import { extractUserToken } from '../../lib/telemetry';
+import { getUserId } from '../../lib/auth';
 
 interface UserConfig {
   current_work_id?: string | null;
@@ -18,7 +18,7 @@ interface UserConfig {
 
 // GET /api/write/me/config
 export async function getUserConfig(env: Env, request: Request): Promise<Response> {
-  const userToken = extractUserToken(request);
+  const userToken = getUserId(env);
   const key = `users/${userToken}/config.json`;
   const obj = await env.WORKS_BUCKET.get(key);
   const config: UserConfig = obj ? JSON.parse(await obj.text()) : {};
@@ -29,7 +29,7 @@ export async function getUserConfig(env: Env, request: Request): Promise<Respons
 
 // PUT /api/write/me/config
 export async function updateUserConfig(env: Env, request: Request): Promise<Response> {
-  const userToken = extractUserToken(request);
+  const userToken = getUserId(env);
   const body = await request.json() as UserConfig;
   const key = `users/${userToken}/config.json`;
 
