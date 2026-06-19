@@ -1609,12 +1609,11 @@ StoryElf.setPage('write');
 StoryElf.sendChat = function () {
   var msg = StoryElf.getInput();
   if (!msg) return;
-  // 取消待执行的 auto-save，避免在 Elf 回复期间覆盖后端写入
   clearTimeout(_autoSaveTimer);
   StoryElf.addMessage(msg, 'user');
   StoryElf.clearInput();
-  var currentMessages = StoryElf.getMessages(); // 在添加占位消息前捕获，避免占位消息混入历史
-  StoryElf.addMessage(t('label.ai_thinking'), 'system'); // system 角色不持久化
+  var currentMessages = StoryElf.getMessages();
+  StoryElf.addMessage(t('label.ai_thinking'), 'system');
   var ctx = StoryElf.getContext() || {};
   var reqBody = {
     work_id: state.currentWorkId,
@@ -1623,53 +1622,93 @@ StoryElf.sendChat = function () {
     messages: currentMessages,
     context: { module: state.currentModule, section_title: ctx.section_title || state.currentSectionTitle, panel: ctx.panel },
   };
-  hPost('/api/write/elf/chat', reqBody).then(function (data) {
+
+  // SSE 流式请求
+  var token = localStorage.getItem('cau_token') || '';
+  fetch('/api/write/elf/chat?lang=' + (localStorage.getItem('sf_lang') || 'zh'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify(reqBody),
+  }).then(function (response) {
+    if (!response.ok) {
+      // 非流式错误 — 后端在 setup 阶段就失败了
+      return response.json().then(function (errData) {
+        var msgs = document.getElementById('elf-chat-messages');
+        var last = msgs && msgs.lastChild;
+        if (last) last.remove();
+        var errDiv = document.createElement('div');
+        errDiv.className = 'elf-chat-msg ai';
+        errDiv.style.color = 'var(--error)';
+        errDiv.textContent = t('prompt.ai_unavailable');
+        if (msgs) { msgs.appendChild(errDiv); msgs.scrollTop = msgs.scrollHeight; }
+      });
+    }
+
+    // SSE 流 — 逐步消费事件
+    var reader = response.body.getReader();
+    var decoder = new TextDecoder();
+    var buffer = '';
+    var msgs = document.getElementById('elf-chat-messages');
+
+    // 移除 "思考中" 占位
+    var last = msgs && msgs.lastChild;
+    if (last) last.remove();
+
+    function pump() {
+      return reader.read().then(function (_a) {
+        var done = _a.done, value = _a.value;
+        if (done) return;
+
+        buffer += decoder.decode(value, { stream: true });
+        // 按双换行分割 SSE 事件
+        var parts = buffer.split('\n\n');
+        buffer = parts.pop() || ''; // 最后一个可能不完整
+
+        parts.forEach(function (part) {
+          if (!part.trim()) return;
+          var lines = part.split('\n');
+          var eventType = '';
+          var dataStr = '';
+          lines.forEach(function (line) {
+            if (line.startsWith('event: ')) eventType = line.slice(7);
+            if (line.startsWith('data: ')) dataStr = line.slice(6);
+          });
+          if (!dataStr) return;
+
+          try {
+            var data = JSON.parse(dataStr);
+
+            if (eventType === 'step') {
+              StoryElf.appendStep(data);
+            } else if (eventType === 'done') {
+              // 最终回复
+              StoryElf.finishWorkingBlock();
+              StoryElf.addMessage(data.reply, 'assistant');
+              if (msgs) msgs.scrollTop = msgs.scrollHeight;
+            } else if (eventType === 'error') {
+              StoryElf.finishWorkingBlock();
+              var errDiv = document.createElement('div');
+              errDiv.className = 'elf-chat-msg ai';
+              errDiv.style.color = 'var(--error)';
+              errDiv.textContent = t('prompt.ai_unavailable');
+              if (msgs) { msgs.appendChild(errDiv); msgs.scrollTop = msgs.scrollHeight; }
+            }
+          } catch (e) { /* JSON 解析失败，跳过 */ }
+        });
+
+        return pump(); // 继续读取
+      }).catch(function (_err) {
+        // 流中断
+        StoryElf.finishWorkingBlock();
+      });
+    }
+
+    return pump();
+  }).catch(function () {
     var msgs = document.getElementById('elf-chat-messages');
     var last = msgs && msgs.lastChild;
     if (last) last.remove();
-    if (data && data.ok) {
-      // [DIAGNOSE] 工作块调试日志
-      var steps = data.data.steps || [];
-      console.log('[elf/sendChat] API 返回 steps 数量:', steps.length,
-        'types:', steps.map(function(s){return s.type;}).join(', '));
-      StoryElf.addSteps(steps);
-      StoryElf.addMessage(data.data.reply, 'assistant');
-      // addMessage 不会自动滚动，需手动滚到底部确保回复可见
-      if (msgs) msgs.scrollTop = msgs.scrollHeight;
-
-      // Elf 写入了模块 → 清除缓存 + 如果当前在对应模块则刷新编辑器
-      //
-      // TODO: 未来优化方向 (slot-level cache):
-      // 1. 将 _moduleCache 从模块级拆分为 slot 级，清除时只 invalidate 被写入的 slot
-      // 2. 后端 write_to_slot 返回实际写入的 slot 内容，前端直接更新 cache + DOM，
-      //    消除额外的 HTTP 请求和 R2 读取
-      (data.data.steps || []).forEach(function (s) {
-        if (s.type === 'tool_call' && s.tool === 'write_to_slot') {
-          var mt = s.params.module_type;
-          if (!mt) return;
-          // 将 module_type (如 "m2") 映射到前端模块名 (如 "outline")
-          var modMap = { m0: 'original_concept', m1: 'worldbuilding', m2: 'outline',
-            m3_card: 'characters', m4_card: 'foreshadowing',
-            m5_intent: 'chapters', m6_chapter: 'writing' };
-          var frontMod = modMap[mt];
-          if (frontMod) {
-            // 清除所有模块缓存。不能按 moduleType+workId 清——M3/M4/M5/M6
-            // 是多卡片/多章节结构，moduleId 是 UUID，与 type+workId 格式不匹配。
-            // 清全量缓存确保下次加载时从服务端拉取最新内容。
-            cacheClear();
-            var loadFn = { original_concept: loadM0, worldbuilding: loadM1, outline: loadM2,
-              characters: loadM3, foreshadowing: loadM4, chapters: loadM5, writing: loadM6 }[frontMod];
-            if (state.currentModule === frontMod && loadFn) loadFn();
-          }
-        }
-      });
-    } else {
-      var err = document.createElement('div');
-      err.className = 'elf-chat-msg ai';
-      err.style.color = 'var(--error)';
-      err.textContent = t('prompt.ai_unavailable');
-      if (msgs) { msgs.appendChild(err); msgs.scrollTop = msgs.scrollHeight; }
-    }
+    StoryElf.addMessage(t('prompt.ai_unavailable'), 'assistant');
   });
 };
 

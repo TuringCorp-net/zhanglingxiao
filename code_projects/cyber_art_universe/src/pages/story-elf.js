@@ -170,7 +170,7 @@
     _workingBlockStylesInjected = true;
     var style = document.createElement('style');
     style.textContent = ''
-      + '.elf-working-block { margin:6px 0; border:1px solid var(--border,#333); border-radius:6px; overflow:hidden; font-size:0.75rem; }'
+      + '.elf-working-block { flex-shrink:0; margin:6px 0; border:1px solid var(--border,#333); border-radius:6px; overflow:hidden; font-size:0.75rem; }'
       + '.elf-working-header { display:flex; justify-content:space-between; align-items:center; padding:5px 10px; background:var(--bg-hover,rgba(124,58,237,0.1)); cursor:pointer; color:var(--text-muted,#888); user-select:none; }'
       + '.elf-working-collapsed .elf-working-toggle { transform:rotate(-90deg); }'
       + '.elf-working-collapsed .elf-working-body { display:none; }'
@@ -273,6 +273,103 @@
     msgs.scrollTop = msgs.scrollHeight;
     console.log('[elf/_addSteps] working block appended. DOM children after:', msgs.children.length,
       'block visible:', block.offsetHeight > 0, 'block height:', block.offsetHeight);
+  }
+
+  // ============================================================
+  // SSE 流式步骤渲染 — 增量追加到工作块
+  // ============================================================
+  var _workingBlock = null;     // 当前工作块 DOM 引用
+  var _workingBlockBody = null; // 工作块 body 引用
+  var _workingChecklist = null; // checklist 卡片引用
+
+  function _initWorkingBlock() {
+    if (_workingBlock) return; // 已初始化
+    _injectWorkingBlockStyles();
+
+    var msgs = document.getElementById('elf-chat-messages');
+    if (!msgs) return;
+
+    _workingBlock = document.createElement('div');
+    _workingBlock.className = 'elf-working-block';
+
+    var header = document.createElement('div');
+    header.className = 'elf-working-header';
+    header.innerHTML = '<span>' + (typeof t === 'function' ? t('elf.working', '⚙ Story Elf 工作中...') : '⚙ Story Elf 工作中...') + '</span><span class="elf-working-toggle">▾</span>';
+    header.addEventListener('click', function () {
+      _workingBlock.classList.toggle('elf-working-collapsed');
+    });
+    _workingBlock.appendChild(header);
+
+    _workingBlockBody = document.createElement('div');
+    _workingBlockBody.className = 'elf-working-body';
+    _workingBlock.appendChild(_workingBlockBody);
+
+    msgs.appendChild(_workingBlock);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function _appendStep(step) {
+    if (!_workingBlock) _initWorkingBlock();
+    if (!_workingBlockBody) return;
+
+    var msgs = document.getElementById('elf-chat-messages');
+
+    if (step.type === 'text_delta') {
+      var line = document.createElement('div');
+      line.className = 'elf-process-msg';
+      _renderMessageContent(line, step.text, 'ai');
+      _workingBlockBody.appendChild(line);
+    } else if (step.type === 'tool_call') {
+      var line = document.createElement('div');
+      line.className = 'elf-process-step';
+      line.textContent = '🔧 ' + _toolLabel(step.tool);
+      _workingBlockBody.appendChild(line);
+    } else if (step.type === 'tool_result') {
+      if (step.tool === 'checklist_write') {
+        // 更新 checklist 卡片（替换旧卡片）
+        if (_workingChecklist) _workingChecklist.remove();
+        var summary = step.summary || '';
+        if (summary) {
+          var card = document.createElement('div');
+          card.className = 'elf-checklist';
+          var lines = summary.split('\n');
+          if (lines.length > 0) {
+            var title = document.createElement('div');
+            title.className = 'elf-checklist-title';
+            title.textContent = '📋 ' + lines[0];
+            card.appendChild(title);
+          }
+          if (lines.length > 1) {
+            var items = document.createElement('div');
+            items.className = 'elf-checklist-items';
+            items.textContent = lines.slice(1).join('\n');
+            card.appendChild(items);
+          }
+          // 插入到 body 最前面（卡片置顶）
+          _workingBlockBody.insertBefore(card, _workingBlockBody.firstChild);
+          _workingChecklist = card;
+        }
+      } else {
+        var line = document.createElement('div');
+        line.className = 'elf-process-step';
+        var summary = step.summary || '';
+        line.textContent = '✅ ' + (summary.length > 120 ? summary.substring(0, 120) + '...' : summary);
+        _workingBlockBody.appendChild(line);
+      }
+    } else if (step.type === 'error') {
+      var line = document.createElement('div');
+      line.className = 'elf-process-step error';
+      line.textContent = '❌ ' + (step.message || 'Unknown error');
+      _workingBlockBody.appendChild(line);
+    }
+
+    if (msgs) msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function _finishWorkingBlock() {
+    _workingBlock = null;
+    _workingBlockBody = null;
+    _workingChecklist = null;
   }
 
   // ============================================================
@@ -438,7 +535,7 @@
       }
     },
 
-    // 默认 sendChat — Read 侧伴读精灵。Write 页面会覆盖此函数。
+    // 默认 sendChat — Read 侧伴读精灵（SSE 流式）。Write 页面会覆盖此函数。
     sendChat: function () {
       var msg = StoryElf.getInput();
       if (!msg) return;
@@ -448,6 +545,10 @@
       var token = _getToken();
       var lang = _getLang();
       var ctx = StoryElf.getContext() || {};
+      var msgs = document.getElementById('elf-chat-messages');
+      // "..." 占位
+      StoryElf.addMessage('...', 'system');
+
       fetch('/api/write/elf/chat?lang=' + lang, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
@@ -458,22 +559,60 @@
           messages: currentMessages,
           context: { section_title: ctx.section_title },
         }),
-      }).then(function (r) { return r.json(); }).then(function (data) {
-        var msgs = document.getElementById('elf-chat-messages');
-        var last = msgs && msgs.lastChild;
-        if (last && last.textContent === '...') last.remove();
-        if (data && data.ok) {
-          _addSteps(data.data.steps);
-          StoryElf.addMessage(data.data.reply, 'assistant');
-          // addMessage 不会自动滚动，需手动滚到底部
-          if (msgs) msgs.scrollTop = msgs.scrollHeight;
-        } else {
-          StoryElf.addMessage((typeof t === 'function' ? t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later') : 'AI is temporarily unavailable, please try again later'), 'assistant');
+      }).then(function (response) {
+        if (!response.ok) {
+          return response.json().then(function () {
+            var l = msgs && msgs.lastChild;
+            if (l) l.remove();
+            StoryElf.addMessage((typeof t === 'function' ? t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later') : 'AI is temporarily unavailable, please try again later'), 'assistant');
+          });
         }
-      }).catch(function () {
-        var msgs = document.getElementById('elf-chat-messages');
+
+        var reader = response.body.getReader();
+        var decoder = new TextDecoder();
+        var buffer = '';
+
+        // 移除 "..." 占位
         var last = msgs && msgs.lastChild;
-        if (last && last.textContent === '...') last.remove();
+        if (last) last.remove();
+
+        function pump() {
+          return reader.read().then(function (_a) {
+            var done = _a.done, value = _a.value;
+            if (done) return;
+            buffer += decoder.decode(value, { stream: true });
+            var parts = buffer.split('\n\n');
+            buffer = parts.pop() || '';
+            parts.forEach(function (part) {
+              if (!part.trim()) return;
+              var lines = part.split('\n');
+              var eventType = '', dataStr = '';
+              lines.forEach(function (l) {
+                if (l.startsWith('event: ')) eventType = l.slice(7);
+                if (l.startsWith('data: ')) dataStr = l.slice(6);
+              });
+              if (!dataStr) return;
+              try {
+                var data = JSON.parse(dataStr);
+                if (eventType === 'step') {
+                  StoryElf.appendStep(data);
+                } else if (eventType === 'done') {
+                  StoryElf.finishWorkingBlock();
+                  StoryElf.addMessage(data.reply, 'assistant');
+                  if (msgs) msgs.scrollTop = msgs.scrollHeight;
+                } else if (eventType === 'error') {
+                  StoryElf.finishWorkingBlock();
+                  StoryElf.addMessage((typeof t === 'function' ? t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later') : 'AI is temporarily unavailable, please try again later'), 'assistant');
+                }
+              } catch (e) {}
+            });
+            return pump();
+          });
+        }
+        return pump();
+      }).catch(function () {
+        var l = msgs && msgs.lastChild;
+        if (l) l.remove();
         StoryElf.addMessage((typeof t === 'function' ? t('elf.network_error', 'Network error, please try again later') : 'Network error, please try again later'), 'assistant');
       });
     },
@@ -490,7 +629,10 @@
     getContext: function () { return StoryElf._ctx; },
 
     getMessages: getMessages,
-    addSteps: _addSteps,
+    addSteps: _addSteps,               // 批量渲染（旧兼容）
+    initWorkingBlock: _initWorkingBlock,   // SSE: 创建工作块
+    appendStep: _appendStep,               // SSE: 增量追加步骤
+    finishWorkingBlock: _finishWorkingBlock, // SSE: 工作完成
 
     /** 浮动模式: 切换消息区和输入栏的显示/隐藏 */
     _floatToggle: function () {

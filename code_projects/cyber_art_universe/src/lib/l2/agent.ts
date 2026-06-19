@@ -1,5 +1,6 @@
-// L2: Agent 执行循环
-// 核心 ~60 行：while LLM 返回 tool_calls → 执行工具 → 结果反馈 → 继续
+// L2: Agent 执行循环 (SSE 流式)
+// async generator：while LLM 返回 tool_calls → 执行工具 → yield step → 继续
+// 前端通过 SSE 逐步消费每个 step，实现"进展实时可见"
 
 import { Env } from '../../db/schema';
 import { callAI, type Message } from '../l0/aiGateway';
@@ -9,11 +10,10 @@ import { createTools } from './tools';
 import { assembleContext } from '../l1/context';
 import type { WorkMeta } from '../l1/types';
 
-/** Agent 循环的完整结果 */
-export interface AgentLoopResult {
+/** Agent 循环的最终结果（generator return 值，用于持久化） */
+export interface AgentLoopFinal {
   reply: string;
-  steps: AgentStep[];
-  messages: Message[];  // 完整 messages 数组（含 system prompt + 所有轮次），供 Session 持久化
+  messages: Message[];  // 完整 messages 数组（含 system prompt + 所有轮次），供 R2 持久化
   usage: {
     input: number;
     output: number;
@@ -35,33 +35,33 @@ export interface AgentDebugResult {
 }
 
 /**
- * Agent 执行循环
+ * Agent 执行循环（SSE 流式 async generator）
  *
  * 给定用户消息，在 while 循环中：
  *   1. LLM 返回文本 → 循环结束，文本即为最终回复
- *   2. LLM 返回 tool_calls → 执行工具 → 结果追加到 messages → 继续循环
+ *   2. LLM 返回 tool_calls → yield text_delta → 执行工具 → yield tool_call + tool_result → 继续
  *
+ * 每完成一步就 yield 对应的 AgentStep，前端通过 SSE 实时消费。
  * 最大迭代次数由 options.maxIterations 控制（默认 30）。
  */
-export async function agentLoop(
+export async function* agentLoop(
   env: Env,
   workMeta: WorkMeta,
   contextPkg: string,
   opts: AgentLoopOptions,
   conversationHistory: Message[],
   userMessage: string,
-  preBuiltSystemPrompt?: string,  // 复用已构建的 System Prompt（Session 后续轮次，由 session.ts 传入）
-): Promise<AgentLoopResult> {
+  preBuiltSystemPrompt?: string,
+): AsyncGenerator<AgentStep, AgentLoopFinal, undefined> {
   const maxIterations = opts.maxIterations || 30;
   const lang = opts.lang as 'zh' | 'en';
-  const steps: AgentStep[] = [];
   let totalInput = 0;
   let totalOutput = 0;
   let totalCacheHit = 0;
   let totalCacheMiss = 0;
   let lastModel = '';
 
-  // 1. System Prompt：有 preBuilt 则复用 ImmutablePrefix，否则首次构建
+  // 1. System Prompt
   const tools = createTools(env, opts.workId, lang);
   const toolDefs = tools.map(t => t.def);
 
@@ -93,11 +93,11 @@ export async function agentLoop(
     }
   }
 
-  // —— Mock 模式：不调 LLM，使用模拟回复（Session 测试用，完整走持久化流程）——
+  // —— Mock 模式 ——
   if (opts.mockReply) {
     messages.push({ role: 'assistant', content: opts.mockReply });
-    steps.push({ type: 'done', text: opts.mockReply });
-    return { reply: opts.mockReply, steps, messages, usage: { input: 0, output: 0, cacheHit: 0, cacheMiss: 0, model: 'mock' } };
+    yield { type: 'done', text: opts.mockReply };
+    return { reply: opts.mockReply, messages, usage: { input: 0, output: 0, cacheHit: 0, cacheMiss: 0, model: 'mock' } };
   }
 
   // 3. Agent 循环
@@ -116,15 +116,15 @@ export async function agentLoop(
       totalCacheMiss += result.usage.cacheMiss || 0;
     }
 
-    // 无 tool_calls → 循环结束，保存最终回复到 messages 中（确保 R2 持久化完整）
+    // 无 tool_calls → 循环结束
     if (!result.tool_calls || result.tool_calls.length === 0) {
       messages.push({ role: 'assistant', content: result.content });
-      steps.push({ type: 'done', text: result.content });
       reply = result.content;
+      yield { type: 'done', text: result.content };
       break;
     }
 
-    // 有 tool_calls → 执行工具（DeepSeek V4 要求回传 reasoning_content）
+    // 有 tool_calls → 执行工具
     const assistantMsg: Message = {
       role: 'assistant',
       content: result.content || '',
@@ -135,9 +135,9 @@ export async function agentLoop(
     }
     messages.push(assistantMsg);
 
-    // 将 assistant 的工具调用前的文本（如 "好的，让我先看看模板"）作为步骤传给前端
+    // 将 assistant 工具调用前的文本（如 "好的，让我先看看模板"）yield
     if (result.content) {
-      steps.push({ type: 'text_delta', text: result.content });
+      yield { type: 'text_delta', text: result.content };
     }
 
     for (const tc of result.tool_calls) {
@@ -149,7 +149,7 @@ export async function agentLoop(
       toolParams.work_id = opts.workId;
       toolParams._user_token = opts.userToken || '';
 
-      steps.push({ type: 'tool_call', tool: toolName, params: toolParams });
+      yield { type: 'tool_call', tool: toolName, params: toolParams };
 
       const tool = tools.find(t => t.def.function.name === toolName);
       let toolResult: string;
@@ -161,7 +161,7 @@ export async function agentLoop(
       }
 
       const summary = toolResult;
-      steps.push({ type: 'tool_result', tool: toolName, summary });
+      yield { type: 'tool_result', tool: toolName, summary };
 
       messages.push({ role: 'tool', tool_call_id: tc.id, content: toolResult });
     }
@@ -179,11 +179,11 @@ export async function agentLoop(
       totalOutput += finalResult.usage.output;
     }
     messages.push({ role: 'assistant', content: finalResult.content });
-    steps.push({ type: 'done', text: finalResult.content });
     reply = finalResult.content;
+    yield { type: 'done', text: finalResult.content };
   }
 
-  return { reply, steps, messages, usage: { input: totalInput, output: totalOutput, cacheHit: totalCacheHit, cacheMiss: totalCacheMiss, model: lastModel } };
+  return { reply, messages, usage: { input: totalInput, output: totalOutput, cacheHit: totalCacheHit, cacheMiss: totalCacheMiss, model: lastModel } };
 }
 
 /**
@@ -200,7 +200,6 @@ export async function agentDebug(
 ): Promise<AgentDebugResult> {
   const lang = opts.lang as 'zh' | 'en';
 
-  // 与 agentLoop 完全相同的构建路径
   const tools = createTools(env, opts.workId, lang);
   const toolDefs = tools.map(t => t.def);
 
@@ -209,17 +208,14 @@ export async function agentDebug(
     sectionTitle: opts.contextSectionTitle,
   });
 
-  // 使用分层构建，同时获得完整 prompt 和逐层数据
   const layers = await buildAgentSystemPromptLayers(env, ctxVars, toolDefs, opts.workId, opts.userToken);
 
-  // 构建 messages（与 agentLoop 相同）
   const messages: Message[] = [
     { role: 'system', content: layers.full },
     ...conversationHistory,
     { role: 'user', content: userMessage },
   ];
 
-  // 注入当前模块信息到 user message 前缀（与 agentLoop 相同）
   let userMessagePrefix = '';
   if (opts.contextModule || opts.contextSectionTitle) {
     const prefixParts: string[] = [];
