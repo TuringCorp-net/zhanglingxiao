@@ -80,18 +80,67 @@
   function _getToken() { return localStorage.getItem('cau_token') || ''; }
   function _getLang() { return localStorage.getItem('sf_lang') || 'zh'; }
 
-  // 从服务端加载永续对话历史
+  // 从 LLM messages 中提取 AgentStep，用于恢复工作块
+  function _extractStepsFromMessages(rawMessages) {
+    var steps = [];
+    for (var i = 0; i < rawMessages.length; i++) {
+      var m = rawMessages[i];
+      if (m.role === 'assistant' && m.tool_calls) {
+        // 工具调用前的文本 → text_delta
+        if (m.content) steps.push({ type: 'text_delta', text: m.content });
+        // 每个 tool_call → AgentStep
+        for (var j = 0; j < m.tool_calls.length; j++) {
+          var tc = m.tool_calls[j];
+          var toolName = tc.function.name;
+          var params = {};
+          try { params = JSON.parse(tc.function.arguments); } catch (e) {}
+          steps.push({ type: 'tool_call', tool: toolName, params: params });
+          // 查找对应的 tool_result
+          for (var k = i + 1; k < rawMessages.length; k++) {
+            if (rawMessages[k].role === 'tool' && rawMessages[k].tool_call_id === tc.id) {
+              steps.push({ type: 'tool_result', tool: toolName, summary: rawMessages[k].content });
+              break;
+            }
+          }
+        }
+      }
+    }
+    return steps;
+  }
+
+  // 从服务端加载永续对话历史（含工作块恢复）
   async function _loadConversation(workId, page) {
     _workId = workId;
     _page = page || 'write';
+    // 清理旧工作块（切换作品时）
+    var oldBlocks = document.querySelectorAll('#elf-chat-messages .elf-working-block');
+    for (var bi = 0; bi < oldBlocks.length; bi++) oldBlocks[bi].remove();
+    _finishWorkingBlock();
     try {
       var resp = await fetch('/api/write/elf/conversation?work_id=' + workId + '&page=' + _page + '&lang=' + _getLang(), {
         headers: { 'Authorization': 'Bearer ' + _getToken() }
       });
       var data = await resp.json();
       if (data && data.ok) {
-        _messages = (data.data.messages || []).slice();
+        var rawMessages = data.data.messages || [];
+        // 分离：干净对话消息 → _messages，中间步骤 → 工作块
+        _messages = [];
+        for (var i = 0; i < rawMessages.length; i++) {
+          var m = rawMessages[i];
+          if (m.role === 'user') {
+            _messages.push({ role: 'user', content: m.content });
+          } else if (m.role === 'assistant' && m.content && !m.tool_calls) {
+            // 仅最终回复（无 tool_calls）进入对话显示
+            _messages.push({ role: 'assistant', content: m.content });
+          }
+        }
         _renderMessages();
+        // 提取中间步骤并渲染为工作块
+        var steps = _extractStepsFromMessages(rawMessages);
+        if (steps.length > 0) {
+          // 工作块标记为已完成（非 live 状态）
+          _addSteps(steps);
+        }
         return true;
       }
     } catch (x) { console.error('加载对话失败:', x); }

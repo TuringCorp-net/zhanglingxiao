@@ -391,16 +391,10 @@ export async function handleGetConversation(env: Env, request: Request): Promise
     });
   }
 
-  // 仅返回对话消息（user + 最终 assistant），过滤中间执行步骤：
-  // 带 tool_calls 的 assistant 是工作块内容（如"好的，让我先看看模板"），
-  // 无 tool_calls 的 assistant 才是最终回复。
+  // 返回全部消息（含中间工具调用），前端自行分离对话消息与工作块步骤
   const displayMessages = messages
-    .filter(m => {
-      if (m.role === 'user') return true;
-      if (m.role === 'assistant' && m.content && !m.tool_calls) return true;
-      return false;
-    })
-    .slice(-50);
+    .filter(m => m.role !== 'system')
+    .slice(-200);
 
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId, page,
