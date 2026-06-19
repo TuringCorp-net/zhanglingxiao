@@ -80,7 +80,7 @@
   function _getToken() { return localStorage.getItem('cau_token') || ''; }
   function _getLang() { return localStorage.getItem('sf_lang') || 'zh'; }
 
-  // 从服务端加载永续对话历史（含工作块恢复）
+  // 从服务端加载永续对话历史（含按轮次的工作块恢复）
   async function _loadConversation(workId, page) {
     _workId = workId;
     _page = page || 'write';
@@ -94,12 +94,99 @@
       });
       var data = await resp.json();
       if (data && data.ok) {
-        // messages 已是干净对话（user + 最终 assistant），steps 是结构化 AgentStep[]
+        // messages 已是干净对话（user + 最终 assistant），rounds 按轮次对应
         _messages = (data.data.messages || []).slice();
         _renderMessages();
-        var steps = data.data.steps || [];
-        if (steps.length > 0) {
-          _addSteps(steps);
+
+        // 按轮次插入工作块：rounds[i] 的步骤插入到第 i 对 user→assistant 之间
+        var rounds = data.data.rounds || [];
+        if (rounds.length > 0) {
+          var msgsEl = document.getElementById('elf-chat-messages');
+          if (msgsEl) {
+            var children = msgsEl.children;
+            var roundIdx = 0;
+            // 遍历 DOM 子元素，在每个 assistant 消息前插入对应轮次的工作块
+            for (var ci = 0; ci < children.length && roundIdx < rounds.length; ci++) {
+              var child = children[ci];
+              // .elf-chat-msg.ai 是 assistant 消息
+              if (child.classList.contains('elf-chat-msg') && child.classList.contains('ai')) {
+                var steps = rounds[roundIdx];
+                if (steps && steps.length > 0) {
+                  _injectWorkingBlockStyles();
+                  var block = document.createElement('div');
+                  block.className = 'elf-working-block';
+
+                  var header = document.createElement('div');
+                  header.className = 'elf-working-header';
+                  header.innerHTML = '<span>' + (typeof t === 'function' ? t('elf.working', '⚙ Story Elf 工作中...') : '⚙ Story Elf 工作中...') + '</span><span class="elf-working-toggle">▾</span>';
+                  (function(b) {
+                    header.addEventListener('click', function () { b.classList.toggle('elf-working-collapsed'); });
+                  })(block);
+                  block.appendChild(header);
+
+                  var body = document.createElement('div');
+                  body.className = 'elf-working-body';
+
+                  // Checklist card
+                  var lastChecklist = null;
+                  steps.forEach(function (s) {
+                    if (s.type === 'tool_result' && s.tool === 'checklist_write' && s.summary) {
+                      lastChecklist = s.summary;
+                    }
+                  });
+                  if (lastChecklist) {
+                    var card = document.createElement('div');
+                    card.className = 'elf-checklist';
+                    var lines = lastChecklist.split('\n');
+                    if (lines.length > 0) {
+                      var ttl = document.createElement('div');
+                      ttl.className = 'elf-checklist-title';
+                      ttl.textContent = '📋 ' + lines[0];
+                      card.appendChild(ttl);
+                    }
+                    if (lines.length > 1) {
+                      var items = document.createElement('div');
+                      items.className = 'elf-checklist-items';
+                      items.textContent = lines.slice(1).join('\n');
+                      card.appendChild(items);
+                    }
+                    body.appendChild(card);
+                  }
+
+                  // Process steps
+                  steps.forEach(function (s) {
+                    if (s.type === 'text_delta') {
+                      var line = document.createElement('div');
+                      line.className = 'elf-process-msg';
+                      _renderMessageContent(line, s.text, 'ai');
+                      body.appendChild(line);
+                    } else if (s.type === 'tool_call') {
+                      var line = document.createElement('div');
+                      line.className = 'elf-process-step';
+                      line.textContent = '🔧 ' + _toolLabel(s.tool);
+                      body.appendChild(line);
+                    } else if (s.type === 'tool_result' && s.tool !== 'checklist_write') {
+                      var line = document.createElement('div');
+                      line.className = 'elf-process-step';
+                      var sum = s.summary || '';
+                      line.textContent = '✅ ' + (sum.length > 120 ? sum.substring(0, 120) + '...' : sum);
+                      body.appendChild(line);
+                    } else if (s.type === 'error') {
+                      var line = document.createElement('div');
+                      line.className = 'elf-process-step error';
+                      line.textContent = '❌ ' + (s.message || 'Unknown');
+                      body.appendChild(line);
+                    }
+                  });
+
+                  block.appendChild(body);
+                  // 插入到 assistant 消息之前
+                  msgsEl.insertBefore(block, child);
+                }
+                roundIdx++;
+              }
+            }
+          }
         }
         return true;
       }
