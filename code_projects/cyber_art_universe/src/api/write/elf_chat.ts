@@ -35,34 +35,23 @@ function convKey(userToken: string, workId: string, page: string): string {
   return `users/${userToken}/conversations/${workId}/${page}.json`;
 }
 
-/** R2 对话快照：messages 供 agent 续上下文，rounds 供前端按轮次渲染工作块 */
-interface ConversationSnapshot {
-  messages: Message[];
-  rounds: AgentStep[][];  // rounds[i] = 第 i 轮的工具调用步骤
-}
-
-async function loadConversation(env: Env, userToken: string, workId: string, page: string): Promise<ConversationSnapshot | null> {
+// R2 对话持久化：仅存 LLM messages 供 agent 续上下文。
+// 工作块（steps）仅通过 SSE 实时呈现，不做持久化。
+async function loadConversation(env: Env, userToken: string, workId: string, page: string): Promise<Message[] | null> {
   try {
     const obj = await env.WORKS_BUCKET.get(convKey(userToken, workId, page));
     if (!obj) return null;
     const raw = JSON.parse(await obj.text());
-    // 兼容旧格式（Message[] 或 {messages, steps}）
-    if (Array.isArray(raw)) return { messages: raw, rounds: [] };
-    if (!raw.rounds) {
-      // 旧格式 {messages, steps}: steps 是全部轮次混在一起的扁数组，无法拆分
-      // 作为单轮展示（后续新轮次会正确累积）
-      const legacyRounds: AgentStep[][] = raw.steps && raw.steps.length > 0 ? [raw.steps] : [];
-      return { messages: raw.messages || [], rounds: legacyRounds };
-    }
-    return { messages: raw.messages || [], rounds: raw.rounds || [] };
+    // 兼容旧格式：{messages, rounds/steps} 或纯 Message[]
+    if (Array.isArray(raw)) return raw as Message[];
+    return (raw.messages || []) as Message[];
   } catch {
     return null;
   }
 }
 
-async function saveConversation(env: Env, userToken: string, workId: string, page: string, messages: Message[], rounds: AgentStep[][]): Promise<void> {
-  const snapshot: ConversationSnapshot = { messages, rounds };
-  await env.WORKS_BUCKET.put(convKey(userToken, workId, page), JSON.stringify(snapshot), {
+async function saveConversation(env: Env, userToken: string, workId: string, page: string, messages: Message[]): Promise<void> {
+  await env.WORKS_BUCKET.put(convKey(userToken, workId, page), JSON.stringify(messages), {
     httpMetadata: { contentType: 'application/json' },
   });
 }
@@ -197,7 +186,7 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
 
     // —— Load / compress conversation ——
     const snapshot = await loadConversation(env, userToken, body.work_id, body.page);
-    let storedMessages: Message[] = snapshot?.messages || [];
+    let storedMessages: Message[] = snapshot || [];
     if (storedMessages.length > 0) {
       if (storedMessages[0].role === 'system') {
         storedMessages[0] = { role: 'system', content: systemPrompt };
@@ -249,11 +238,7 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
         // 持久化（前端是否还在线都执行）
         const persist: Promise<void>[] = [];
         if (userToken) {
-          // 累积 rounds：已有快照的 rounds + 本轮步骤为新的一轮
-          const prevRounds = snapshot?.rounds || [];
-          const allRounds = [...prevRounds, sharedSteps];
-          console.log(`[elf_chat] 持久化 rounds: 已有 ${prevRounds.length} 轮 + 本轮 ${sharedSteps.length} 步 → 共 ${allRounds.length} 轮`);
-          persist.push(saveConversation(env, userToken, body.work_id, body.page, agentFinal.messages, allRounds));
+          persist.push(saveConversation(env, userToken, body.work_id, body.page, agentFinal.messages));
         }
         persist.push(recordAIUsage(env, {
           work_id: body.work_id, user_token: userToken, page: body.page,
@@ -283,9 +268,7 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
           l1Messages.push({ role: 'assistant', content: agentFinal.reply });
           persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), l1Messages));
         }
-        console.log('[elf_chat] 开始持久化...');
         await Promise.all(persist);
-        console.log('[elf_chat] 持久化完成，通知前端 done');
       } catch (err) {
         agentErr = err as Error;
         console.error('[elf_chat] Agent error:', agentErr.message);
@@ -379,7 +362,7 @@ export async function handlePutConversation(env: Env, request: Request): Promise
   const page = body.page || 'write';
 
   try {
-    await saveConversation(env, userToken, body.work_id, page, body.messages, []); // PUT 恢复不携带 rounds
+    await saveConversation(env, userToken, body.work_id, page, body.messages);
     return new Response(JSON.stringify(jsonSuccess({ saved: true, work_id: body.work_id, page, count: body.messages.length })), {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -407,16 +390,16 @@ export async function handleGetConversation(env: Env, request: Request): Promise
     });
   }
 
-  const snapshot = await loadConversation(env, userToken, workId, page);
-  if (!snapshot || !snapshot.messages.length) {
-    return new Response(JSON.stringify(jsonSuccess({ messages: [], rounds: [], work_id: workId, page })), {
+  const messages = await loadConversation(env, userToken, workId, page);
+  if (!messages || !messages.length) {
+    return new Response(JSON.stringify(jsonSuccess({ messages: [], work_id: workId, page })), {
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  // 干净对话消息（user + 最终 assistant，不含中间 tool_calls）
+  // 仅返回干净对话（user + 最终 assistant），中间 tool_calls 不展示
   const displayMessages: Message[] = [];
-  for (const m of snapshot.messages) {
+  for (const m of messages) {
     if (m.role === 'user') {
       displayMessages.push(m);
     } else if (m.role === 'assistant' && m.content && !m.tool_calls) {
@@ -427,6 +410,5 @@ export async function handleGetConversation(env: Env, request: Request): Promise
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId, page,
     messages: displayMessages.slice(-50),
-    rounds: snapshot.rounds || [],
   })), { headers: { 'Content-Type': 'application/json' } });
 }
