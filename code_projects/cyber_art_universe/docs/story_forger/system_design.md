@@ -28,6 +28,7 @@
 | v2.5.0 | 2026-05-26 | 模板系统 JSON 化：LLM 输出统一为 `{"slots":{...}}` JSON 格式，Markdown 由 `renderTemplate()` 服务端组装。R2 双文件存储（`.json` 结构化数据 + `.md` clean Markdown）。前端直接消费 JSON 结构，不再依赖 `parseSlotTemplate` Markdown 解析。删除 `stripTemplateMarkers`。更新 §10.9 模板数据流。 |
 | v3.0.0 | 2026-05-27 | **统一数据架构**：系统收敛为 Module / ModuleList 两种结构。新增 `modules` D1 表统一管理 M0-M8 所有实例。API 收敛为 `/api/write/module/{id}` + `/api/write/modules` + `/api/write/module/{id}/generate` 三个端点。M0/M6 改为单槽位模板，全模块统一使用槽位编辑器（消除 text/slot 分支）。前端数据层收敛为 `loadModule`/`saveModule`/`loadModuleList`。M5 意图卡表单编辑器替换为 INTENT_TEMPLATE 槽位编辑器。Story Elf 上下文包改用 modules 表查询。缓存 key 统一为 module_id。 |
 | v3.1.0 | 2026-05-28 | **V4 版本历史 & Diff**：L1 层整理（template.ts / work-content.ts 移入 `src/lib/l1/`）。新增 `version.ts`（每次 PUT 自动版本快照，R2 `.versions/` 子目录 + D1 `file_versions` 表，默认 10 个版本可配置）+ `diff.ts`（JSON slot 级 + MD 行级对比）。API 新增 `GET /api/write/module/{id}/versions` 和 `GET /api/write/module/{id}/diff`。`src/lib/` 根目录收敛为 5 个文件（ai / response / errors / constants / telemetry）。 |
+| v3.2.0 | 2026-06-19 | **M4 伏笔策略总览合并到 M2**：删除 `m4_strategy` 单例模块（1 section / 1 slot，与 M2 第六节高度重叠）。M2 第六节「伏笔埋设总体规划」slot 升级为 L1 并吸收策略方向 + 跨章节布局职责。M4 成为纯卡片模块（`m4_card`），与 M3 人物卡完全对标。更新 guides、tools、MCP、discovery、context-package、前端 write.js/i18n。 |
 
 ---
 
@@ -477,42 +478,24 @@ M0 特殊规则：Story Elf 禁止修改。外部 AI/Agent 视为作者，可正
 > 以下为自由编辑区，可按需添加模板框架之外的内容。
 ```
 
-### M4：伏笔账本引擎
+### M4：伏笔卡引擎
 
-**产出**：Foreshadowing Ledger — 伏笔暗线的完整规划与追踪
+**产出**：Foreshadowing Hook Cards — 逐条伏笔暗线的独立管理。伏笔的总体规划（策略方向 + 跨章节布局）在 M2 第六节「伏笔埋设总体规划」中统一制定。
 
 **存储架构**（与 M3 人物卡统一）：
 
 | 内容 | 存储 |
 |------|------|
-| 伏笔策略总览 | `foreshadowing.md`（唯一文件） |
-| 每条伏笔条目 | D1 `entities(type=foreshadowing)` + R2 `foreshadowing/{id}.md` |
+| 每条伏笔条目 | D1 `modules(type=m4_card)` + R2 `foreshadowing/{id}.md` |
 
-> 每条伏笔条目是独立的 D1 实体 + R2 文件，与人物卡（`characters/{id}.md`）共享同一套 CRUD API（`/api/write/works/{id}/entities/`）。左面板为 D1 entity 列表，点击加载单文件到槽位编辑器。
+> 每条伏笔条目是独立的模块实例 + R2 文件，与人物卡（`characters/{id}.md`）共享同一套 CRUD API（`/api/write/module/{id}`）。左侧面板为卡片列表，点击加载单文件到槽位编辑器。
+
+**设计变更（v3.2）**：原 M4 伏笔策略总览（`m4_strategy`，单例模块，1 个 slot）已删除，其职责合并到 M2 第六节「伏笔埋设总体规划」。M4 成为纯卡片模块，与 M3 人物卡结构完全对标。
 
 **AI 参与方式**：
-- **规划角色**：基于 M1 世界观 + M2 长篇框架，AI 在模板内主动规划伏笔网络。可调用 createEntity API 逐条新增伏笔
+- **规划角色**：基于 M1 世界观 + M2 大纲（特别是第六节伏笔总体规划），AI 逐条创建伏笔卡片，填写每条伏笔的类型、强度、埋种章节、发展路径和回收计划
 - **校验角色**（M6）：一致性校验时正向检查伏笔执行情况
 - **不做**：AI 全盘扫描已写好的章节来"发现"伏笔
-
-**伏笔策略总览模板**（`foreshadowing.md`）：
-
-```markdown
-# 伏笔账本
-
-> 伏笔是横跨多个章节的暗线。好的伏笔让读者在回收时恍然大悟。
-> 每条伏笔条目通过左侧面板独立管理（新增 / 删除），点击条目在右侧编辑。
-
-## 一、伏笔策略总览
-
-<!-- hint:用一段话描述整部作品的伏笔策略 -->
-<!-- slot -->
-<!-- /slot -->
-
----
-
-> 以下为自由编辑区
-```
 
 **单条伏笔卡模板**（`foreshadowing/{id}.md`，与人物卡同款 `###` 槽位结构）：
 
@@ -1041,8 +1024,6 @@ Story Forger 的流水线本身就是一个结构化的创作步骤。将此流�
 │  works/{id}/{lang}/world_bible.json     ← M1 产出（JSON）    │
 │  works/{id}/{lang}/outline.md           ← M2 产出（clean MD） │
 │  works/{id}/{lang}/outline.json         ← M2 产出（JSON）    │
-│  works/{id}/{lang}/foreshadowing.md     ← M4 策略总览（MD）   │
-│  works/{id}/{lang}/foreshadowing.json   ← M4 策略总览（JSON） │
 │  works/{id}/{lang}/foreshadowing/*.md   ← M4 伏笔条目（MD）   │
 │  works/{id}/{lang}/foreshadowing/*.json ← M4 伏笔条目（JSON） │
 │  works/{id}/{lang}/characters/*.md      ← M3 人物卡（MD）     │
@@ -1345,8 +1326,7 @@ TemplateDef / SlotDef[]
 │  ├─ worldbuilding.ts        BIBLE_TEMPLATE                       │
 │  ├─ outline.ts              OUTLINE_TEMPLATE                     │
 │  ├─ character_card.ts       CHARACTER_TEMPLATE                   │
-│  ├─ foreshadowing.ts        FORESHADOWING_TEMPLATE               │
-│  └─ foreshadowing_card.ts   FORESHADOWING_CARD_SLOTS             │
+│  ├─ foreshadowing_card.ts   FORESHADOWING_CARD_SLOTS             │
 │                                                                   │
 │  interface SlotDef {                                             │
 │    id: string;              // 唯一标识                           │

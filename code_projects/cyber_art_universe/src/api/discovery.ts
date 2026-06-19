@@ -371,8 +371,9 @@ The \`type\` parameter and \`module_id\` format for each module:
 | \`m1\` | \`m1_{work_id}\` | Setting Bible — world rules, power system, themes, character system |
 | \`m2\` | \`m2_{work_id}\` | Story Framework Outline — plot phases, pacing, turning points |
 | \`m3_card\` | \`m3_card_{entity_id}\` | Character Card — personality, motivation, abilities, relationships, growth arc |
-| \`m4_strategy\` | \`m4_strategy_{work_id}\` | Foreshadowing Strategy — overall hook planning approach |
 | \`m4_card\` | \`m4_card_{entity_id}\` | Foreshadowing Hook Card — individual hook: plant → develop → payoff |
+
+(伏笔策略总览已合并到 M2 第六节「伏笔埋设总体规划」)
 | \`m5_intent\` | \`m5_intent_{section_id}\` | Chapter Intent Card — per-chapter writing blueprint (POV, conflict, structure) |
 | \`m6_chapter\` | \`m6_chapter_{section_id}\` | Chapter Content — full chapter prose |
 
@@ -387,7 +388,7 @@ Where \`{work_id}\`, \`{entity_id}\`, and \`{section_id}\` are UUIDs from the Wo
 | Parameter | In | Required | Type | Description |
 |-----------|-----|----------|------|-------------|
 | \`work_id\` | query | **yes** | string (UUID) | The work to list modules for |
-| \`type\` | query | no | string | Filter by module type. One of: \`m0\`, \`m1\`, \`m2\`, \`m3_card\`, \`m4_strategy\`, \`m4_card\`, \`m5_intent\`, \`m6_chapter\`. Omit to list all. |
+| \`type\` | query | no | string | Filter by module type. One of: \`m0\`, \`m1\`, \`m2\`, \`m3_card\`, \`m4_card\`, \`m5_intent\`, \`m6_chapter\`. Omit to list all. |
 
 Returns \`{ok: true, data: {work_id, type, modules: [{id, type, name, order_index, status}]}}\`
 
@@ -452,7 +453,6 @@ Additional optional parameters by type:
 |---------|-------------------|
 | \`m1\` | \`prompt?\` (string), \`style_notes?\` (string), \`bilingual?\` (boolean, default \`true\`) |
 | \`m2\` | \`num_chapters?\` (integer, default 5) |
-| \`m4_strategy\` | \`style_notes?\` (string) |
 | \`m5_intent\`, \`m6_chapter\` | \`section_id\` is auto-extracted from \`module_id\` |
 
 **Not supported** for \`m0\`, \`m3_card\`, \`m4_card\` — these are authored manually or created via entity endpoints.
@@ -529,8 +529,9 @@ Returns the module's positioning, template structure, writing tips, and special 
 | \`m1\` | Setting Bible — the work's highest constraint document. All M2-M6 creation must follow M1 rules. |
 | \`m2\` | Story Framework Outline — three/four-act structure, pacing, subplot planning |
 | \`m3_card\` | Character Card — **one card per character**. Fields: name, identity, personality, appearance, motivation, ability boundaries, growth arc, relationship network |
-| \`m4_strategy\` | Foreshadowing Strategy — overall hook planning approach. **One per work.** |
 | \`m4_card\` | Foreshadowing Hook Card — **one card per hook**. Plant → reinforce → partially reveal → payoff lifecycle |
+(伏笔策略总览已合并到 M2 第六节「伏笔埋设总体规划」)
+
 | \`m5_intent\` | Chapter Intent Card — **one card per chapter**. Writing blueprint: conflict to advance, info to reveal, suspense to create, emotional goal, POV character, opening hook, cliffhanger |
 | \`m6_chapter\` | Chapter Content — free Markdown prose. Write based on corresponding M5 intent card + M1 style guide |
 
@@ -707,7 +708,6 @@ This means external Agents do not need to learn per-module slot schemas — they
 - \`constraints.json\` — M1 constraint cache
 - \`outline.json\` + \`.md\` — M2
 - \`characters/{entity_id}.json\` + \`.md\` — M3 character cards
-- \`foreshadowing.json\` + \`.md\` — M4 strategy
 - \`foreshadowing/{entity_id}.json\` + \`.md\` — M4 hook cards
 - \`intents/{section_id}.json\` — M5 intent cards
 - \`chapters/{section_id}.json\` + \`.md\` — M6 chapter drafts
@@ -1154,7 +1154,7 @@ paths:
         - name: module_type
           in: path
           required: true
-          schema: { type: string, enum: [m0, m1, m2, m3_card, m4_strategy, m4_card, m5_intent, m6_chapter] }
+          schema: { type: string, enum: [m0, m1, m2, m3_card, m4_card, m5_intent, m6_chapter] }
         - name: lang
           in: query
           schema: { type: string, enum: [zh, en], default: zh }

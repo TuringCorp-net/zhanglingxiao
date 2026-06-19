@@ -38,7 +38,7 @@ def find_module_ids():
     ids = []
     # 单例模块
     for label, mid in [("M0", f"m0_{WORK_ID}"), ("M1", f"m1_{WORK_ID}"),
-                        ("M2", f"m2_{WORK_ID}"), ("M4_strategy", f"m4_strategy_{WORK_ID}")]:
+                        ("M2", f"m2_{WORK_ID}")]:
         ids.append((label, mid))
     # 卡片型模块取第一个
     for label, mtype in [("M3_card", "m3_card"), ("M4_card", "m4_card"), ("M5_intent", "m5_intent")]:

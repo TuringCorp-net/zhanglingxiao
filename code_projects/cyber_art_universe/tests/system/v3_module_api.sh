@@ -53,7 +53,7 @@ echo ""
 
 # ---- Step 2: List per type ----
 echo "--- Step 2: GET /api/write/modules?type=X (per type) ---"
-for TYPE in m0 m1 m2 m3_card m4_strategy m4_card m5_intent m6_chapter; do
+for TYPE in m0 m1 m2 m3_card m4_card m5_intent m6_chapter; do
   COUNT=$(api_get "/api/write/modules?work_id=$WORK_ID&type=$TYPE" | python3 -c "import json,sys; print(len(json.load(sys.stdin)['data']['modules']))")
   echo "  $TYPE: $COUNT module(s)"
 done

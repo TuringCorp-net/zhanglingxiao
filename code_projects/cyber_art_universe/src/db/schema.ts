@@ -102,7 +102,7 @@ export interface Subscription {
 export interface Module {
   id: string;           // module_id: 'm1_worldbuilding', 'm3_card_{uuid}', etc.
   work_id: string;
-  type: string;         // 'm0'|'m1'|'m2'|'m3_card'|'m4_strategy'|'m4_card'|'m5_intent'|'m6_chapter'
+  type: string;         // 'm0'|'m1'|'m2'|'m3_card'|'m4_card'|'m5_intent'|'m6_chapter'
   name: string;
   order_index: number;
   status: string;       // 'empty'|'in_progress'|'done'

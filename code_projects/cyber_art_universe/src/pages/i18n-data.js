@@ -105,7 +105,6 @@ var I18N = {
     load_failed:      { zh: '加载失败',    en: 'Load failed' },
     no_characters:    { zh: '暂无角色',    en: 'No characters' },
     no_foreshadowing: { zh: '暂无伏笔条目', en: 'No foreshadowing entries' },
-    fh_strategy:      { zh: '伏笔策略总览', en: 'Strategy Overview' },
     no_chapters:      { zh: '暂无章节',    en: 'No chapters' },
     no_summary:       { zh: '暂无简介',    en: 'No summary' },
     no_match:         { zh: '没有匹配的章节', en: 'No matching chapters' },

@@ -15,13 +15,21 @@
 
 ```
 Layer A — 离线验证（零 LLM 成本）         Layer B — 端到端验证（真实 LLM 调用）
-├── system/l2_prompt_verify.sh  121 项    ├── generate_slot / write_to_slot
-└── system/conversation_test.sh  12 项    ├── 多工具链 (read→generate→write)
-     └── 通过 mock_reply 模拟 AI 回复     ├── 多轮对话 + 历史传递
-        完整走永续对话持久化路径            └── checklist_write 工具
+├── system/l2_prompt_verify.sh  ~104 项   ├── generate_slot / write_to_slot
+├── system/conversation_test.sh   8 项    ├── 多工具链 (read→generate→write)
+├── system/v3_module_api.sh     ~20 项    ├── 多轮对话 + 历史传递
+└── 通过 mock_reply 模拟 AI 回复          └── checklist_write 工具
+    完整走永续对话持久化路径
 ```
 
 Layer A 覆盖 90%+ 的结构性验证。Layer B 在 LLM 流程稳定后再实施。
+
+### 专项测试（平时不跑）
+
+| 脚本 | 说明 | 为何单独运行 |
+|------|------|-------------|
+| `memory_verify.sh` | Memory 系统端到端验证 | 会产生 LLM 成本 + 修改生产环境 R2 记忆数据 |
+| `memory-eval` API | LLM-as-Judge 评估 8 个场景 | 真实 LLM token 成本，约 50K tokens/run |
 
 ## 文件结构
 
@@ -34,9 +42,10 @@ tests/
 ├── agent_test.sh                 # AI Agent 阅读路径验证
 └── system/
     ├── README.md                 # System test 约定
-    ├── l2_prompt_verify.sh       # L2 Prompt 组装验证（121 项，零 LLM 成本）
-    └── conversation_test.sh      # 永续对话验证（12 项，零 LLM 成本）
-    └── v3_module_api.sh          # V3/V4 Module API 闭环测试
+    ├── l2_prompt_verify.sh       # L2 Prompt 组装验证（~104 项，零 LLM 成本）
+    ├── conversation_test.sh      # 永续对话验证（8 项，零 LLM 成本）
+    ├── v3_module_api.sh          # V3/V4 Module API 闭环测试
+    └── memory_verify.sh          # Memory 系统专项验证（⚠️ 产生LLM成本，平时不跑）
 ```
 
 ## 一键运行
@@ -57,15 +66,19 @@ BASE_URL=https://cau.turingcorp.net TOKEN=admin-TuringCorp-13572468 WORK_ID=aa48
 
 | 套件 | 项数 | LLM 成本 | 说明 |
 |------|------|---------|------|
-| `l2_prompt_verify.sh` | 121 | 零 | System Prompt 5 层组装 + 动态信息隔离 + 层序 |
-| `conversation_test.sh` | 12 | 零 | 永续对话/消息持久化/作品隔离/Read-Write 隔离 |
+| `l2_prompt_verify.sh` | ~104 | 零 | System Prompt 5 层组装 + 动态信息隔离 + 层序 |
+| `conversation_test.sh` | 8 | 零 | 永续对话/消息持久化/作品隔离/Read-Write 隔离 |
 | `v3_module_api.sh` | ~20 | 零 | V3/V4 Module API CRUD + 版本/diff 闭环 |
 | `human_test.sh` | 5 | 零 | 人类阅读路径（Catalog/Browse/Section） |
 | `agent_test.sh` | 6 | 零 | AI Agent 阅读路径（Manifest/llms.txt/Catalog/Content） |
 
 ### system/l2_prompt_verify.sh — L2 Prompt 组装验证
 
-通过 `debug:prompt` 端点拦截 System Prompt，逐模块 × 逐层验证组装正确性。外循环 Layer 1-5 + 动态隔离 + 层序，内循环 M0-M6（8 个模块）。
+通过 `debug:prompt` 端点拦截 System Prompt，逐模块 × 逐层验证组装正确性。外循环 Layer 1-5 + 动态隔离 + 层序，内循环 M0-M6（7 个模块：m0/m1/m2/m3_card/m4_card/m5_intent/m6_chapter）。
+
+**Layer 2 上下文包卡片验证范围**：M3 人物卡 + M4 伏笔卡。M5 意图卡默认不组装到 Layer 2（`includeM5=false`），而是通过 user message prefix 按需注入当前选中章节的蓝图，减少上下文包体量。
+
+**Layer 5 Memory**：仅检查记忆层存在性与跨模块一致性，不验证具体记忆内容（记忆内容由专项 `memory_verify.sh` 单独验证）。
 
 ### system/conversation_test.sh — 永续对话验证
 
@@ -90,9 +103,13 @@ BASE_URL=https://cau.turingcorp.net TOKEN=admin-TuringCorp-13572468 WORK_ID=aa48
 
 ## 测试数据
 
-测试作品「镜中棋局」（`aa489993-1e7b-4804-b6af-723619b150b6`，fantasy，已发布），M0-M6 均有内容。
+测试作品「镜中棋局」（`aa489993-1e7b-4804-b6af-723619b150b6`，fantasy，已发布），M0-M6 均有内容（含 6 张人物卡 + 4 张伏笔卡）。
 
-记忆测试使用持久 fixtures（`users/memory-test-001/`），通过 `POST /api/write/memory-test/setup` 上传。
+### 记忆测试数据
+
+- Memory 专项测试使用持久 fixtures（`users/memory-test-001/`），通过 `POST /api/write/memory-test/setup` 创建
+- 创建后需手动触发 `extract-l2` 和 `extract-l3` 完成记忆提取
+- **仅在 Story Elf 记忆系统出现异常时运行**，详见 `tests/system/memory_verify.sh`
 
 ## 运行方式
 
@@ -113,9 +130,9 @@ TOKEN="admin-TuringCorp-13572468" WORK_ID="aa489993-1e7b-4804-b6af-723619b150b6"
 
 ## 状态
 
-- [x] L2 System Prompt 组装验证通过（121/121，含记忆层）
-- [x] Session 管理验证通过（31/31，含 mock_reply 机制）
-- [x] V3/V4 Module API 测试
+- [x] L2 System Prompt 组装验证通过（88/88）
+- [x] V3/V4 Module API 测试通过（10/10）
+- [x] Conversation 测试通过（8/8）
 - [x] human_test.sh / agent_test.sh
 - [x] `run_all.sh` 统一入口
 - [ ] 固化为 CI 测试用例

@@ -139,14 +139,14 @@ function createWritingGuideTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'get_writing_guide',
-        description: '获取指定模块或任务的写作指南，包括模块定位、模板结构、写作要点和特殊规则。在生成或修改任何内容之前调用此工具，确保输出符合规范。参数 module_type 可选: m0(原始构想), m1(世界观), m2(大纲), m3_card(人物卡), m4_strategy(伏笔策略), m4_card(伏笔卡), m5_intent(意图卡), m6_chapter(章节正文)',
+        description: '获取指定模块或任务的写作指南，包括模块定位、模板结构、写作要点和特殊规则。在生成或修改任何内容之前调用此工具，确保输出符合规范。参数 module_type 可选: m0(原始构想), m1(世界观), m2(大纲), m3_card(人物卡), m4_card(伏笔卡), m5_intent(意图卡), m6_chapter(章节正文)',
         parameters: {
           type: 'object',
           properties: {
             module_type: {
               type: 'string',
               description: '模块类型',
-              enum: ['m0', 'm1', 'm2', 'm3_card', 'm4_strategy', 'm4_card', 'm5_intent', 'm6_chapter'],
+              enum: ['m0', 'm1', 'm2', 'm3_card', 'm4_card', 'm5_intent', 'm6_chapter'],
             },
           },
           required: ['module_type'],
@@ -157,7 +157,7 @@ function createWritingGuideTool(env: Env): L2ToolDef {
     execute: async (params: Record<string, unknown>) => {
       const moduleType = params.module_type as string;
       if (!moduleType) {
-        return '❌ get_writing_guide 需要传入 module_type 参数。\n可选的类型: m0, m1, m2, m3_card, m4_strategy, m4_card, m5_intent, m6_chapter。\n例如: get_writing_guide({"module_type": "m3_card"}) 可以获取人物卡的写作指南。';
+        return '❌ get_writing_guide 需要传入 module_type 参数。\n可选的类型: m0, m1, m2, m3_card, m4_card, m5_intent, m6_chapter。\n例如: get_writing_guide({"module_type": "m3_card"}) 可以获取人物卡的写作指南。';
       }
       const lang = (params._lang as Lang) || 'zh';
       return getModuleGuide(moduleType, lang);
@@ -175,12 +175,12 @@ function createReadModuleTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'read_module',
-        description: '读取指定模块的当前内容。使用方式取决于模块类型：\n\n**单文件模块 (m0/m1/m2/m4_strategy)**：不传 module_id 直接用默认 ID 读取全部内容。\n\n**卡片类模块 (m3_card/m4_card/m5_intent/m6_chapter)**：分两步——① 不传 module_id → 获取卡片列表（仅 name + id）→ ② 选择目标卡片，传入 module_id → 获取该卡片的完整 slots + free_content。\n\n⚠️ 对于卡片类模块，请勿跳过第①步直接猜 module_id。拿到列表后选择合适的卡片，再传入 module_id 读取具体内容。',
+        description: '读取指定模块的当前内容。使用方式取决于模块类型：\n\n**单文件模块 (m0/m1/m2)**：不传 module_id 直接用默认 ID 读取全部内容。\n\n**卡片类模块 (m3_card/m4_card/m5_intent/m6_chapter)**：分两步——① 不传 module_id → 获取卡片列表（仅 name + id）→ ② 选择目标卡片，传入 module_id → 获取该卡片的完整 slots + free_content。\n\n⚠️ 对于卡片类模块，请勿跳过第①步直接猜 module_id。拿到列表后选择合适的卡片，再传入 module_id 读取具体内容。',
         parameters: {
           type: 'object',
           properties: {
-            module_type: { type: 'string', description: '模块类型', enum: ['m0', 'm1', 'm2', 'm3_card', 'm4_strategy', 'm4_card', 'm5_intent', 'm6_chapter'] },
-            module_id: { type: 'string', description: '可选：指定具体的模块 ID。不传则单文件模块(m0/m1/m2/m4_strategy)使用默认 ID，卡片类(m3_card/m4_card/m5_intent/m6_chapter)自动返回所有卡片' },
+            module_type: { type: 'string', description: '模块类型', enum: ['m0', 'm1', 'm2', 'm3_card', 'm4_card', 'm5_intent', 'm6_chapter'] },
+            module_id: { type: 'string', description: '可选：指定具体的模块 ID。不传则单文件模块(m0/m1/m2)使用默认 ID，卡片类(m3_card/m4_card/m5_intent/m6_chapter)自动返回所有卡片' },
           },
           required: ['module_type'],
         },
@@ -193,7 +193,7 @@ function createReadModuleTool(env: Env): L2ToolDef {
       const userToken = (params._user_token as string) || '';
 
       if (!moduleType) {
-        return '❌ read_module 需要传入 module_type 参数。\n可选的类型: m1, m2, m3_card, m4_strategy, m4_card, m5_intent, m6_chapter。\n例如: read_module({"module_type": "m1"}) 读取世界观设定。';
+        return '❌ read_module 需要传入 module_type 参数。\n可选的类型: m1, m2, m3_card, m4_card, m5_intent, m6_chapter。\n例如: read_module({"module_type": "m1"}) 读取世界观设定。';
       }
 
       const accessError = await checkWorkAccess(env, workId, userToken, '读取');
@@ -323,7 +323,7 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
         parameters: {
           type: 'object',
           properties: {
-            module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_strategy', 'm4_card', 'm5_intent', 'm6_chapter', 'm0'] },
+            module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_card', 'm5_intent', 'm6_chapter', 'm0'] },
             slot_values: { type: 'object', description: '槽位 ID 到内容的映射，如 {"power_system": "魔法体系分为三层..."}' },
             free_content: { type: 'string', description: '可选：自由写作区内容' },
             module_id: { type: 'string', description: '可选：模块 ID。不传则使用默认值' },
@@ -341,7 +341,7 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
 
       // 参数校验（教学式错误消息）
       if (!moduleType) {
-        return '❌ write_to_slot 需要传入 module_type 参数。\n可选的类型: m1, m2, m3_card, m4_strategy, m4_card, m5_intent, m6_chapter。\n例如: write_to_slot({"module_type": "m1", "slot_values": {"power_system": "..."}})';
+        return '❌ write_to_slot 需要传入 module_type 参数。\n可选的类型: m1, m2, m3_card, m4_card, m5_intent, m6_chapter。\n例如: write_to_slot({"module_type": "m1", "slot_values": {"power_system": "..."}})';
       }
 
       if (!slotValues || typeof slotValues !== 'object' || Object.keys(slotValues).length === 0) {
@@ -408,7 +408,7 @@ function createVersionHistoryTool(env: Env): L2ToolDef {
         parameters: {
           type: 'object',
           properties: {
-            module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_strategy', 'm4_card', 'm5_intent', 'm6_chapter'] },
+            module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_card', 'm5_intent', 'm6_chapter'] },
           },
           required: ['module_type'],
         },
@@ -474,7 +474,7 @@ function createVersionDiffTool(env: Env): L2ToolDef {
         parameters: {
           type: 'object',
           properties: {
-            module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_strategy', 'm4_card', 'm5_intent', 'm6_chapter'] },
+            module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_card', 'm5_intent', 'm6_chapter'] },
             v1: { type: 'string', description: '对比的起点版本。默认"previous"（上次修改前的版本）。可选: "previous", "current", 版本号(如1,2,3), 或具体版本ID' },
             v2: { type: 'string', description: '对比的终点版本。默认"current"（当前内容）。可选: "previous", "current", 版本号, 或具体版本ID' },
           },

@@ -103,12 +103,11 @@ export async function createDraftWork(env: Env, request: Request): Promise<Respo
     body.summary || null, r2Key, now, now
   ).run();
 
-  // 初始化作品所需的单例模块（M0/M1/M2/M4_strategy），否则 GET/PUT module API 会 404
+  // 初始化作品所需的单例模块（M0/M1/M2），否则 GET/PUT module API 会 404
   const singletonModules = [
     { suffix: 'm0', type: 'm0', name: '原始构想', jsonKey: 'original_concept.json', mdKey: 'original_concept.md' },
     { suffix: 'm1', type: 'm1', name: '世界观设定圣经', jsonKey: 'world_bible.json', mdKey: 'world_bible.md' },
     { suffix: 'm2', type: 'm2', name: '长篇框架大纲', jsonKey: 'outline.json', mdKey: 'outline.md' },
-    { suffix: 'm4_strategy', type: 'm4_strategy', name: '伏笔策略总览', jsonKey: 'foreshadowing.json', mdKey: 'foreshadowing.md' },
   ];
   for (const m of singletonModules) {
     await env.DB.prepare(

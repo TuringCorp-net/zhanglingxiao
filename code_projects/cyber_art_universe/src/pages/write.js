@@ -499,7 +499,7 @@ async function createNewWork() {
 var _cacheReady = false;
 
 async function preWarmCache(workId) {
-  var singletons = ['m0', 'm1', 'm2', 'm4_strategy'];
+  var singletons = ['m0', 'm1', 'm2'];
   var cardLists = ['m3_card', 'm4_card', 'm5_intent', 'm6_chapter'];
 
   // 检查全部模块是否已在 localStorage 中有缓存（如之前访问过该作品）
@@ -651,7 +651,7 @@ function getModuleId() {
     case 'worldbuilding':    return 'm1_' + wid;
     case 'outline':          return 'm2_' + wid;
     case 'characters':       return state.currentEntityId ? 'm3_card_' + state.currentEntityId : null;
-    case 'foreshadowing':    return state.currentFhId ? 'm4_card_' + state.currentFhId : 'm4_strategy_' + wid;
+    case 'foreshadowing':    return state.currentFhId ? 'm4_card_' + state.currentFhId : null;
     case 'chapters':         return state.currentSectionId ? 'm5_intent_' + state.currentSectionId : null;
     case 'writing':          return state.currentSectionId ? 'm6_chapter_' + state.currentSectionId : null;
     default: return null;
@@ -1171,19 +1171,11 @@ async function openEntityCard(entityId, name) {
 }
 
 // ============================================================
-// M4: 伏笔账本 — 与 M3 统一：左侧 entity 列表，右侧单文件编辑
+// M4: 伏笔卡 — 纯卡片模块（策略总览已合并到 M2 第六节）
 // ============================================================
 async function loadM4() {
   setLeftPanelMode('split');
   showTextEditor('');
-
-  // 加载策略总览
-  var data = await loadModule('m4_strategy_' + state.currentWorkId);
-  var template = (data && data.data && data.data.template) ? data.data.template : null;
-  if (template) {
-    template.free_content = (data && data.data) ? (data.data.free_content || '') : '';
-    showSlotEditor(template);
-  } else showTextEditor('');
 
   await renderFhCardList();
   var first = qs('#left-upper .card-item[data-entity-id]');
@@ -1199,26 +1191,7 @@ async function renderFhCardList() {
 
   var entities = (data.data.modules || []).map(function (m) { return { id: m.id.replace('m4_card_', ''), name: m.name, type: 'foreshadowing' }; });
 
-  // 策略总览入口（始终在顶部）
   var frag = document.createDocumentFragment();
-  var overviewCard = document.createElement('div');
-  overviewCard.style.cssText = 'padding:0.35rem 0.75rem;margin-bottom:0.4rem;font-size:0.78rem;cursor:pointer;border-radius:6px;border:1px solid var(--border);color:var(--cyan);';
-  overviewCard.textContent = '📋 ' + (t('label.fh_strategy') || '伏笔策略总览');
-  overviewCard.addEventListener('click', async function () {
-    // 保存当前卡片
-    var p = capturePayload();
-    if (p) {
-      var fp = fingerprint(p);
-      if (fp !== _lastSaved) { _pendingPayload = p; flushPendingPayload(); }
-    }
-    state.currentFhId = null;
-    var d = await loadModule('m4_strategy_' + state.currentWorkId);
-    var tpl = (d && d.data && d.data.template) ? d.data.template : null;
-    if (tpl) { tpl.free_content = (d && d.data) ? (d.data.free_content || '') : ''; showSlotEditor(tpl); }
-    // 只更新高亮
-    qsa('#left-upper .card-item[data-entity-id]').forEach(function (el) { el.classList.remove('active'); });
-  });
-  frag.appendChild(overviewCard);
 
   if (!entities.length) {
     var empty = document.createElement('div');
@@ -1670,7 +1643,7 @@ StoryElf.sendChat = function () {
           if (!mt) return;
           // 将 module_type (如 "m2") 映射到前端模块名 (如 "outline")
           var modMap = { m0: 'original_concept', m1: 'worldbuilding', m2: 'outline',
-            m3_card: 'characters', m4_strategy: 'foreshadowing', m4_card: 'foreshadowing',
+            m3_card: 'characters', m4_card: 'foreshadowing',
             m5_intent: 'chapters', m6_chapter: 'writing' };
           var frontMod = modMap[mt];
           if (frontMod) {

@@ -9,7 +9,7 @@ import { listWorks, getWork, getWorkOutline, getSection } from './works';
 import { listEntities, getEntity } from './entities';
 import { searchContent, retrieveInWork } from './search';
 import { createSubscription } from './subscriptions';
-import { getModule } from './write/module';
+import { getModule, listModules } from './write/module';
 import { extractLang } from '../lib/l1/work-content';
 
 // MCP 请求/响应类型
@@ -95,7 +95,8 @@ async function handleResourcesRead(env: Env, request: Request, params?: Record<s
       }
       case 'foreshadowing': {
         if (!sfParsed.workId) return mcpError('work_id required');
-        return getModule(env, request, `m4_strategy_${sfParsed.workId}`);
+        // M4 伏笔卡列表（伏笔策略总览已合并到 M2 第六节）
+        return listModules(env, new Request(`http://localhost/api/write/modules?work_id=${sfParsed.workId}&type=m4_card`));
       }
       case 'original_concept': {
         if (!sfParsed.workId) return mcpError('work_id required');

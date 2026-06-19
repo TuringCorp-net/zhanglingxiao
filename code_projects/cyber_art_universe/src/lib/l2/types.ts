@@ -38,7 +38,7 @@ export type AgentStep =
 
 /** generate_slot 工具参数 */
 export interface GenerateSlotParams {
-  module_type: string;       // 'm1' | 'm2' | 'm3_card' | 'm4_strategy' | 'm4_card' | 'm5_intent' | 'm6_chapter'
+  module_type: string;       // 'm1' | 'm2' | 'm3_card' | 'm4_card' | 'm5_intent' | 'm6_chapter'
   slot_id?: string;          // 可选：只生成指定 slot；不指定则生成整个模块
   instructions?: string;     // 额外指令（可选）
 }

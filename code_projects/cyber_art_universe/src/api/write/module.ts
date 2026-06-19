@@ -168,9 +168,9 @@ export const OUTLINE_TEMPLATE: TemplateDef = {
     {
       heading: { zh: '六、伏笔埋设总体规划', en: 'VI. Foreshadowing Master Plan' },
       slots: [
-        { id: 'foreshadowing_master', level: 2, label: { zh: '', en: '' }, hint: {
-          zh: '规划跨章节的伏笔布局。标注每条伏笔的类型、埋设章节、回收章节。详细追踪由 M4 伏笔账本管理，此处只需总体规划。',
-          en: 'Plan cross-chapter foreshadowing. Note each hook\'s type, planting chapter, and payoff chapter. Detailed tracking is managed by M4 Foreshadowing Ledger.',
+        { id: 'foreshadowing_master', level: 1, label: { zh: '', en: '' }, hint: {
+          zh: '整部作品的伏笔总体规划，代替旧的 M4 策略总览。\n\n第一部分 — 策略方向：伏笔整体是密集还是稀疏？以什么类型为主（身份/道具/对白/能力/事件/意象）？\n\n第二部分 — 跨章节布局：列出你计划埋设的主要伏笔线，每条标注类型、埋设章节、回收章节、大致的发展路径。\n\n详细追踪由 M4 伏笔卡逐条管理：每条伏笔一张卡，记录埋种→强化→部分揭示→回收的完整生命周期。此处只需总体规划。',
+          en: 'The overall foreshadowing plan for the entire work.\n\nPart 1 — Strategy: Dense or sparse? What hook types dominate (Identity/Prop/Dialogue/Ability/Event/Imagery)?\n\nPart 2 — Cross-chapter layout: List your planned major hook lines. Note each one\'s type, planting chapter, payoff chapter, and rough development path.\n\nDetailed tracking is handled per-hook by M4 Foreshadowing Cards — one card per hook, tracking the full lifecycle from planting through payoff. This section only needs the master plan.',
         } },
       ],
     },
@@ -245,22 +245,6 @@ export const CHARACTER_TEMPLATE: TemplateDef = {
     },
   ],
   outro: { zh: 'M3 自由编辑区', en: 'M3 Free editing zone' },
-};
-
-// --- M4: 伏笔策略总览 ---
-export const FORESHADOWING_TEMPLATE: TemplateDef = {
-  title: { zh: '伏笔账本', en: 'Foreshadowing Ledger' },
-  intro: {
-    zh: '伏笔是横跨多个章节的暗线。好的伏笔让读者在回收时恍然大悟。\n> 本文档帮助你在写作前主动规划伏笔网络，而非事后扫描。',
-    en: 'Foreshadowing is the art of planting clues across chapters. Great foreshadowing makes readers gasp in hindsight.\n> This document helps you proactively plan your foreshadowing network before writing — not scan chapters after the fact.',
-  },
-  sections: [{
-    heading: { zh: '一、伏笔策略总览', en: 'I. Foreshadowing Strategy Overview' },
-    slots: [
-      { id: 'fh_strategy', level: 1, label: { zh: '', en: '' }, hint: { zh: '用一段话描述整部作品的伏笔策略：密集还是稀疏？以什么类型的伏笔为主？', en: 'Describe your overall foreshadowing strategy in a paragraph: dense or sparse? What types dominate?' } },
-    ],
-  }],
-  outro: { zh: 'M4 自由编辑区', en: 'M4 Free editing zone' },
 };
 
 // --- M4_card: 伏笔条目卡槽位 ---
@@ -360,11 +344,6 @@ const MODULE_CONFIG: Record<string, ModuleConfig> = {
     jsonKeyFromModule: (m) => `characters/${m.id.replace('m3_card_', '')}.json`,
     mdKeyFromModule: (m) => `characters/${m.id.replace('m3_card_', '')}.md`,
   },
-  m4_strategy: {
-    tmpl: FORESHADOWING_TEMPLATE, isCard: false,
-    jsonKeyFromModule: () => 'foreshadowing.json',
-    mdKeyFromModule: () => 'foreshadowing.md',
-  },
   m4_card: {
     tmpl: null!, isCard: true, cardSlots: FORESHADOWING_CARD_SLOTS,
     jsonKeyFromModule: (m) => `foreshadowing/${m.id.replace('m4_card_', '')}.json`,
@@ -425,7 +404,7 @@ export async function createCard(env: Env, request: Request): Promise<Response> 
   }
 
   // Validate module type
-  const validTypes = ['m3_card', 'm4_card', 'm4_strategy', 'm5_intent', 'm6_chapter'];
+  const validTypes = ['m3_card', 'm4_card', 'm5_intent', 'm6_chapter'];
   if (!validTypes.includes(body.type)) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.INVALID_PARAMS, `type must be one of: ${validTypes.join(', ')}`)), {
       status: 400, headers: { 'Content-Type': 'application/json' },

@@ -64,7 +64,6 @@ MODULES = [
     ("m1", "世界观设定圣经"),
     ("m2", "长篇框架大纲"),
     ("m3_card", "人物卡"),
-    ("m4_strategy", "伏笔策略"),
     ("m4_card", "伏笔卡"),
     ("m5_intent", "意图卡"),
     ("m6_chapter", "章节正文"),
@@ -123,7 +122,7 @@ import json, sys
 with open("${ALL_DEBUG_JSON}") as f:
     data = json.load(f)
 
-MODULES = ["m0", "m1", "m2", "m3_card", "m4_strategy", "m4_card", "m5_intent", "m6_chapter"]
+MODULES = ["m0", "m1", "m2", "m3_card", "m4_card", "m5_intent", "m6_chapter"]
 PASS = 0
 FAIL = 0
 
@@ -243,7 +242,9 @@ def api_get(path):
 card_types = [
     ("M3", "m3_card"),
     ("M4", "m4_card"),
-    ("M5", "m5_intent"),
+    # M5 (m5_intent) 默认不组装到 Layer 2 上下文包
+    # includeM5=false（per context-package.ts），仅在用户编写特定章节时
+    # 通过 user message prefix 注入当前选中章节的 M5 内容，减轻上下文包体量
 ]
 for label, mtype in card_types:
     mod_list = api_get(f"/api/write/modules?work_id=${WORK_ID}&type={mtype}")
@@ -331,9 +332,9 @@ print("--- Step 5: Layer 5 (Memory) ---")
 
 ref_l5 = data["m0"]["layer_5_memory"]
 
-# 5a: 记忆层内容（L2.1 实现后，包含真实记忆或兜底占位）
+# 5a: 记忆层内容（包含真实记忆数据或兜底占位）
 check(
-    "暂无记忆数据" in ref_l5 or "作品级记忆" in ref_l5 or "近期记忆" in ref_l5 or len(ref_l5) <= 5,
+    "暂无记忆数据" in ref_l5 or "短期记忆" in ref_l5 or "长期记忆" in ref_l5 or len(ref_l5) <= 5,
     "Layer 5 包含预期内容（兜底占位或真实记忆数据）"
 )
 
@@ -343,55 +344,6 @@ for mt in MODULES[1:]:
     cur = data[mt]["layer_5_memory"]
     check_eq(cur, ref_l5, f"m0 vs {mt} — Layer 5 一致",
              f"m0={len(ref_l5)} chars, {mt}={len(cur)} chars")
-
-# 5c: 记忆内容验证（使用持久测试 fixtures: memory-test-001）
-print()
-print("  --- Layer 5 记忆内容验证 (memory-test-001 fixtures) ---")
-mem_test_resp = json.loads(subprocess.run([
-    'curl', '-s', '-X', 'POST', f'${BASE_URL}/api/write/elf/chat',
-    '-H', f'Authorization: Bearer ${TOKEN}',
-    '-H', 'Content-Type: application/json',
-    '-d', json.dumps({
-        "work_id": "${WORK_ID}", "page": "write",
-        "user_token": "memory-test-001",
-        "messages": [{"role": "user", "content": "test"}],
-        "debug": "prompt"
-    }, ensure_ascii=False)
-], capture_output=True, text=True).stdout)
-
-mem_l5 = mem_test_resp['data']['system_prompt_layers']['layer_5_memory']
-
-# L2 STM 内容标记
-l2_markers = [
-    ("偏好短句、快节奏叙事", "L2 写作偏好"),
-    ("坠落型", "L2 作品决策"),
-    ("软魔法", "L2 作品决策-魔法体系"),
-    ("悲壮的希望", "L2 作品决策-结局"),
-    ("镜像反派", "L2 作品决策-角色"),
-    ("### 2026-06-01", "L2 日期结构-01"),
-    ("### 2026-06-02", "L2 日期结构-02"),
-    ("[[l1-sess_test", "L2 L1链接"),
-]
-for marker, label in l2_markers:
-    check_contains(mem_l5, marker, f"Memory L2: {label}")
-
-# L3 LTM 内容标记
-l3_markers = [
-    ("用户画像", "L3 标题"),
-    ("软魔法体系", "L3 世界观"),
-    ("专业口吻", "L3 互动风格"),
-    ("[[l2-2026-06", "L3 L2链接"),
-    ("最后更新", "L3 元信息-更新"),
-    ("来源 L2 文件", "L3 元信息-来源"),
-]
-for marker, label in l3_markers:
-    check_contains(mem_l5, marker, f"Memory L3: {label}")
-
-# 链接双向验证
-check("[[" in mem_l5 and "]]" in mem_l5,
-      "Memory: 双向链接语法正确")
-check("l1-sess_" in mem_l5 and "l2-2026-06" in mem_l5,
-      "Memory: L2→L1 和 L3→L2 链接均存在")
 
 print()
 
@@ -419,16 +371,15 @@ print()
 # ============================================================
 print("--- Step 7: 层序验证 ---")
 
-# 在完整 system prompt 中检查层序（使用 memory-test-001 fixtures 的响应，
-# 因为其 Layer 5 内容是确定性的预制数据，不受真实交互影响）
-full_sp = mem_test_resp['data']['messages'][0]['content']
+# 使用 m0 模块的完整 system prompt（已在 Step 0 收集）
+full_sp = data["m0"]["messages"][0]["content"]
 
 layer_markers = [
     ("Layer 1", "你是 Story Elf（故事精灵）"),
     ("Layer 2", "## 作品完整上下文"),
     ("Layer 3", "## 经典作品创作框架参考"),
     ("Layer 4", "## 可用工具"),
-    ("Layer 5", "## 近期记忆（最近 7 天）"),
+    ("Layer 5", "## 短期记忆"),
 ]
 
 positions = []

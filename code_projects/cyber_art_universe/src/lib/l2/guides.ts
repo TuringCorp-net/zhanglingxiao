@@ -4,7 +4,7 @@
 // 指南文本维护在 prompts/guides/*.md 文件中，便于独立编辑。
 
 import { renderTemplateAsJson, renderCardAsJson, type Lang } from '../l1/template';
-import { BIBLE_TEMPLATE, OUTLINE_TEMPLATE, CHARACTER_TEMPLATE, FORESHADOWING_TEMPLATE, FORESHADOWING_CARD_SLOTS, INTENT_TEMPLATE, CHAPTER_TEMPLATE } from '../../api/write/module';
+import { BIBLE_TEMPLATE, OUTLINE_TEMPLATE, CHARACTER_TEMPLATE, FORESHADOWING_CARD_SLOTS, INTENT_TEMPLATE, CHAPTER_TEMPLATE } from '../../api/write/module';
 
 // ============================================================
 // 文字指导（从 .md 文件导入）
@@ -14,7 +14,6 @@ import m0Guide from './prompts/guides/m0.md';
 import m1Guide from './prompts/guides/m1.md';
 import m2Guide from './prompts/guides/m2.md';
 import m3CardGuide from './prompts/guides/m3_card.md';
-import m4StrategyGuide from './prompts/guides/m4_strategy.md';
 import m4CardGuide from './prompts/guides/m4_card.md';
 import m5IntentGuide from './prompts/guides/m5_intent.md';
 import m6ChapterGuide from './prompts/guides/m6_chapter.md';
@@ -24,7 +23,6 @@ const TEXT_GUIDES: Record<string, string> = {
   m1: m1Guide,
   m2: m2Guide,
   m3_card: m3CardGuide,
-  m4_strategy: m4StrategyGuide,
   m4_card: m4CardGuide,
   m5_intent: m5IntentGuide,
   m6_chapter: m6ChapterGuide,
@@ -43,7 +41,7 @@ const TEXT_GUIDES: Record<string, string> = {
 export function getModuleGuide(moduleType: string, lang: Lang): string {
   const textGuide = TEXT_GUIDES[moduleType];
   if (!textGuide) {
-    return `未知模块类型: ${moduleType}。支持: m0, m1, m2, m3_card, m4_strategy, m4_card, m5_intent, m6_chapter`;
+    return `未知模块类型: ${moduleType}。支持: m0, m1, m2, m3_card, m4_card, m5_intent, m6_chapter`;
   }
 
   const parts: string[] = [textGuide];
@@ -70,8 +68,6 @@ function renderTemplateStructure(moduleType: string, lang: Lang): string | null 
         return renderTemplateAsJson(OUTLINE_TEMPLATE, lang, 2);
       case 'm3_card':
         return renderTemplateAsJson(CHARACTER_TEMPLATE, lang, 2);
-      case 'm4_strategy':
-        return renderTemplateAsJson(FORESHADOWING_TEMPLATE, lang, 2);
       case 'm4_card':
         return renderCardAsJson('伏笔卡', FORESHADOWING_CARD_SLOTS, lang, 2);
       case 'm0':

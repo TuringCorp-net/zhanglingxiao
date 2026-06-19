@@ -174,29 +174,22 @@ async function buildM3Characters(env: Env, workId: string, lang: Lang): Promise<
 }
 
 async function buildM4Foreshadowing(env: Env, workId: string, lang: Lang): Promise<string> {
-  // V3: 从 modules 表读取伏笔策略 + 伏笔卡列表
-  const [strategyRaw, fhMods] = await Promise.all([
-    readR2(env, workId, lang, 'foreshadowing.md'),
-    env.DB.prepare(
-      "SELECT id, name, r2_md_key FROM modules WHERE work_id = ? AND type = 'm4_card' ORDER BY order_index ASC"
-    ).bind(workId).all<{ id: string; name: string; r2_md_key: string | null }>(),
-  ]);
+  // M4 伏笔卡：从 modules 表读取所有伏笔卡，不包含策略总览（已合并到 M2 第六节）
+  const fhMods = await env.DB.prepare(
+    "SELECT id, name, r2_md_key FROM modules WHERE work_id = ? AND type = 'm4_card' ORDER BY order_index ASC"
+  ).bind(workId).all<{ id: string; name: string; r2_md_key: string | null }>();
 
-  const parts: string[] = [];
-  if (strategyRaw) parts.push(strategyRaw);
+  if (!fhMods.results?.length) return '';
 
   // 并发拉取所有伏笔卡（R2 存储 clean Markdown，直接使用）
-  if (fhMods.results?.length) {
-    const cards = (await Promise.all(
-      fhMods.results.map(async m => {
-        if (!m.r2_md_key) return '';
-        return readR2(env, workId, lang, m.r2_md_key);
-      })
-    )).filter(Boolean);
-    parts.push(...cards);
-  }
+  const cards = (await Promise.all(
+    fhMods.results.map(async m => {
+      if (!m.r2_md_key) return '';
+      return readR2(env, workId, lang, m.r2_md_key);
+    })
+  )).filter(Boolean);
 
-  return parts.join('\n\n');
+  return cards.join('\n\n');
 }
 
 async function buildM5Intents(env: Env, workId: string, lang: Lang): Promise<string> {
