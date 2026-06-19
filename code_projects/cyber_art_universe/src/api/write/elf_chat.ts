@@ -283,7 +283,9 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
           l1Messages.push({ role: 'assistant', content: agentFinal.reply });
           persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), l1Messages));
         }
+        console.log('[elf_chat] 开始持久化...');
         await Promise.all(persist);
+        console.log('[elf_chat] 持久化完成，通知前端 done');
       } catch (err) {
         agentErr = err as Error;
         console.error('[elf_chat] Agent error:', agentErr.message);
