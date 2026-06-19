@@ -411,7 +411,10 @@
 
     clearMessages: function () {
       var msgs = document.getElementById('elf-chat-messages');
-      if (msgs) msgs.innerHTML = '';
+      if (!msgs) return;
+      // 仅清除聊天消息（.elf-chat-msg），保留工作块（.elf-working-block）
+      var toRemove = msgs.querySelectorAll('.elf-chat-msg');
+      for (var i = 0; i < toRemove.length; i++) { toRemove[i].remove(); }
     },
 
     getInput: function () {
@@ -455,6 +458,8 @@
         if (data && data.ok) {
           _addSteps(data.data.steps);
           StoryElf.addMessage(data.data.reply, 'assistant');
+          // addMessage 不会自动滚动，需手动滚到底部
+          if (msgs) msgs.scrollTop = msgs.scrollHeight;
         } else {
           StoryElf.addMessage((typeof t === 'function' ? t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later') : 'AI is temporarily unavailable, please try again later'), 'assistant');
         }

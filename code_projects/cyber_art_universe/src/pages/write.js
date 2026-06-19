@@ -1630,6 +1630,8 @@ StoryElf.sendChat = function () {
     if (data && data.ok) {
       StoryElf.addSteps(data.data.steps);
       StoryElf.addMessage(data.data.reply, 'assistant');
+      // addMessage 不会自动滚动，需手动滚到底部确保回复可见
+      if (msgs) msgs.scrollTop = msgs.scrollHeight;
 
       // Elf 写入了模块 → 清除缓存 + 如果当前在对应模块则刷新编辑器
       //
