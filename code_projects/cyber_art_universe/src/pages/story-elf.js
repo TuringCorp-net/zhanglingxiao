@@ -170,7 +170,7 @@
     _workingBlockStylesInjected = true;
     var style = document.createElement('style');
     style.textContent = ''
-      + '.elf-working-block { flex-shrink:0; margin:6px 0; border:1px solid var(--border,#333); border-radius:6px; overflow:hidden; font-size:0.75rem; }'
+      + '.elf-working-block { flex-shrink:0; align-self:flex-start; max-width:90%; width:100%; margin:6px 0; border:1px solid var(--border,#333); border-radius:6px; overflow:hidden; font-size:0.75rem; }'
       + '.elf-working-header { display:flex; justify-content:space-between; align-items:center; padding:5px 10px; background:var(--bg-hover,rgba(124,58,237,0.1)); cursor:pointer; color:var(--text-muted,#888); user-select:none; }'
       + '.elf-working-collapsed .elf-working-toggle { transform:rotate(-90deg); }'
       + '.elf-working-collapsed .elf-working-body { display:none; }'
