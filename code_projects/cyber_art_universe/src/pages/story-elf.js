@@ -186,17 +186,21 @@
   }
 
   function _addSteps(steps) {
-    if (!steps || !steps.length) return;
+    console.log('[elf/_addSteps] 收到 steps:', steps.length, '条');
+    if (!steps || !steps.length) { console.log('[elf/_addSteps] early return: no steps'); return; }
 
     var hasProcess = steps.some(function (s) {
       return s.type === 'text_delta' || s.type === 'tool_call' || s.type === 'tool_result' || s.type === 'error';
     });
-    if (!hasProcess) return;
+    console.log('[elf/_addSteps] hasProcess:', hasProcess,
+      'types:', steps.map(function(s){return s.type;}).join(', '));
+    if (!hasProcess) { console.log('[elf/_addSteps] early return: no process steps'); return; }
 
     _injectWorkingBlockStyles();
 
     var msgs = document.getElementById('elf-chat-messages');
-    if (!msgs) return;
+    if (!msgs) { console.log('[elf/_addSteps] early return: #elf-chat-messages not found'); return; }
+    console.log('[elf/_addSteps] #elf-chat-messages found, children before:', msgs.children.length);
 
     var block = document.createElement('div');
     block.className = 'elf-working-block';
@@ -267,6 +271,8 @@
     block.appendChild(body);
     msgs.appendChild(block);
     msgs.scrollTop = msgs.scrollHeight;
+    console.log('[elf/_addSteps] working block appended. DOM children after:', msgs.children.length,
+      'block visible:', block.offsetHeight > 0, 'block height:', block.offsetHeight);
   }
 
   // ============================================================
@@ -414,6 +420,7 @@
       if (!msgs) return;
       // 仅清除聊天消息（.elf-chat-msg），保留工作块（.elf-working-block）
       var toRemove = msgs.querySelectorAll('.elf-chat-msg');
+      console.log('[elf/clearMessages] 移除', toRemove.length, '条聊天消息, 保留工作块:', msgs.querySelectorAll('.elf-working-block').length, '个');
       for (var i = 0; i < toRemove.length; i++) { toRemove[i].remove(); }
     },
 

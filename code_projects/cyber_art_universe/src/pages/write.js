@@ -1628,7 +1628,11 @@ StoryElf.sendChat = function () {
     var last = msgs && msgs.lastChild;
     if (last) last.remove();
     if (data && data.ok) {
-      StoryElf.addSteps(data.data.steps);
+      // [DIAGNOSE] 工作块调试日志
+      var steps = data.data.steps || [];
+      console.log('[elf/sendChat] API 返回 steps 数量:', steps.length,
+        'types:', steps.map(function(s){return s.type;}).join(', '));
+      StoryElf.addSteps(steps);
       StoryElf.addMessage(data.data.reply, 'assistant');
       // addMessage 不会自动滚动，需手动滚到底部确保回复可见
       if (msgs) msgs.scrollTop = msgs.scrollHeight;
