@@ -540,8 +540,8 @@
       var lang = _getLang();
       var ctx = StoryElf.getContext() || {};
       var msgs = document.getElementById('elf-chat-messages');
-      // "..." 占位
-      StoryElf.addMessage('...', 'system');
+      // 立即显示工作块
+      StoryElf.initWorkingBlock();
 
       fetch('/api/write/elf/chat?lang=' + lang, {
         method: 'POST',
@@ -556,8 +556,7 @@
       }).then(function (response) {
         if (!response.ok) {
           return response.json().then(function () {
-            var l = msgs && msgs.lastChild;
-            if (l) l.remove();
+            StoryElf.finishWorkingBlock();
             StoryElf.addMessage((typeof t === 'function' ? t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later') : 'AI is temporarily unavailable, please try again later'), 'assistant');
           });
         }
@@ -565,10 +564,6 @@
         var reader = response.body.getReader();
         var decoder = new TextDecoder();
         var buffer = '';
-
-        // 移除 "..." 占位
-        var last = msgs && msgs.lastChild;
-        if (last) last.remove();
 
         function pump() {
           return reader.read().then(function (_a) {
@@ -605,8 +600,7 @@
         }
         return pump();
       }).catch(function () {
-        var l = msgs && msgs.lastChild;
-        if (l) l.remove();
+        StoryElf.finishWorkingBlock();
         StoryElf.addMessage((typeof t === 'function' ? t('elf.network_error', 'Network error, please try again later') : 'Network error, please try again later'), 'assistant');
       });
     },

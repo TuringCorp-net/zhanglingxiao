@@ -1613,7 +1613,8 @@ StoryElf.sendChat = function () {
   StoryElf.addMessage(msg, 'user');
   StoryElf.clearInput();
   var currentMessages = StoryElf.getMessages();
-  StoryElf.addMessage(t('label.ai_thinking'), 'system');
+  // 立即显示工作块，不等后端首次响应（避免 10-20s 空白等待）
+  StoryElf.initWorkingBlock();
   var ctx = StoryElf.getContext() || {};
   var reqBody = {
     work_id: state.currentWorkId,
@@ -1633,9 +1634,8 @@ StoryElf.sendChat = function () {
     if (!response.ok) {
       // 非流式错误 — 后端在 setup 阶段就失败了
       return response.json().then(function (errData) {
+        StoryElf.finishWorkingBlock();
         var msgs = document.getElementById('elf-chat-messages');
-        var last = msgs && msgs.lastChild;
-        if (last) last.remove();
         var errDiv = document.createElement('div');
         errDiv.className = 'elf-chat-msg ai';
         errDiv.style.color = 'var(--error)';
@@ -1649,10 +1649,6 @@ StoryElf.sendChat = function () {
     var decoder = new TextDecoder();
     var buffer = '';
     var msgs = document.getElementById('elf-chat-messages');
-
-    // 移除 "思考中" 占位
-    var last = msgs && msgs.lastChild;
-    if (last) last.remove();
 
     function pump() {
       return reader.read().then(function (_a) {
@@ -1705,9 +1701,7 @@ StoryElf.sendChat = function () {
 
     return pump();
   }).catch(function () {
-    var msgs = document.getElementById('elf-chat-messages');
-    var last = msgs && msgs.lastChild;
-    if (last) last.remove();
+    StoryElf.finishWorkingBlock();
     StoryElf.addMessage(t('prompt.ai_unavailable'), 'assistant');
   });
 };
