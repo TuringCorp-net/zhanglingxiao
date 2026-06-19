@@ -73,7 +73,7 @@ async function isAuthenticated(request: Request, env: Env): Promise<boolean> {
 // ============================================================
 // 路由分发
 // ============================================================
-async function handleRequest(request: Request, env: Env): Promise<Response> {
+async function handleRequest(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const url = new URL(request.url);
   const pathname = url.pathname;
 
@@ -307,7 +307,7 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
           status: 401, headers: { 'Content-Type': 'application/json' },
         });
       }
-      return handleWriteRoute(env, request, segments.slice(1));
+      return handleWriteRoute(env, request, segments.slice(1), ctx);
     }
 
     // 未匹配
@@ -354,8 +354,8 @@ async function handleInternalCronMemory(env: Env, request: Request): Promise<Res
 
 // ============================================================
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    return handleRequest(request, env);
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    return handleRequest(request, env, ctx);
   },
 
   // Cron 定时任务：每天凌晨 3:00 执行记忆提取（"睡眠"）

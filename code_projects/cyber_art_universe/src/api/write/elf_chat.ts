@@ -95,7 +95,7 @@ function sseError(message: string): string {
 // Main handler (SSE streaming)
 // ============================================================
 
-export async function handleElfChat(env: Env, request: Request): Promise<Response> {
+export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionContext): Promise<Response> {
   const body = await request.json() as ElfChatRequest;
   if (!body.work_id || !body.messages?.length || !body.page) {
     return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'work_id, messages, and page are required')), {
@@ -194,7 +194,9 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
     const conversationHistory = compressed.slice(1, -1);
     const latestUserMsg = compressed[compressed.length - 1].content;
 
-    // —— SSE Streaming Agent Loop ——
+    // —— SSE 流式 Agent Loop（ctx.waitUntil 保护断连）——
+    // 架构：Agent 在独立 Promise 中执行（agentTask），SSE 流只负责向前端推送。
+    // ctx.waitUntil(agentTask) 确保即使前端关闭连接，Agent 也继续运行到完成并持久化。
     const gen = agentLoop(
       env, workMeta, contextPkg,
       {
@@ -208,68 +210,97 @@ export async function handleElfChat(env: Env, request: Request): Promise<Respons
       preBuiltSystemPrompt,
     );
 
-    const allSteps: AgentStep[] = [];
+    const sharedSteps: AgentStep[] = [];
+    const notify = { fn: null as (() => void) | null };
+    let agentFinished = false;
+    let agentFinal: AgentLoopFinal | null = null;
+    let agentErr: Error | null = null;
     const encoder = new TextEncoder();
 
-    const stream = new ReadableStream({
-      async start(controller) {
-        try {
-          let stepResult: IteratorResult<AgentStep, AgentLoopFinal>;
+    // Agent 独立运行（不被流生命周期约束）
+    const agentTask = (async () => {
+      try {
+        let stepResult: IteratorResult<AgentStep, AgentLoopFinal>;
+        while (!(stepResult = await gen.next()).done) {
+          sharedSteps.push(stepResult.value);
+          if (notify.fn) { const resolve = notify.fn as () => void; notify.fn = null; resolve(); }
+        }
+        agentFinal = stepResult.value;
 
-          while (!(stepResult = await gen.next()).done) {
-            const step = stepResult.value;
-            allSteps.push(step);
-            controller.enqueue(encoder.encode(sseEvent(step)));
-          }
-
-          // Agent loop finished — send done event
-          const final = stepResult.value;
-          controller.enqueue(encoder.encode(sseDone({ reply: final.reply, usage: final.usage })));
-
-          // —— Post-stream persistence (non-blocking for the stream) ——
-          const persist: Promise<void>[] = [];
-
-          if (userToken) {
-            persist.push(saveConversation(env, userToken, body.work_id, body.page, final.messages));
-          }
-
-          persist.push(recordAIUsage(env, {
-            work_id: body.work_id, user_token: userToken, page: body.page,
-            model: final.usage.model,
-            tokens_in: final.usage.input, tokens_out: final.usage.output,
-            cache_hit: final.usage.cacheHit, cache_miss: final.usage.cacheMiss,
-          }));
-
-          if (userToken) {
-            const prefixParts: string[] = [];
-            if (opts.module) prefixParts.push(`[当前模块: ${opts.module}]`);
-            if (opts.sectionTitle) prefixParts.push(`[当前章节: ${opts.sectionTitle}]`);
-            const userPrefix = prefixParts.length > 0 ? prefixParts.join(' ') + '\n\n' : '';
-
-            const l1Messages: Message[] = [
-              ...allMessages.slice(0, -1),
-              { role: 'user', content: userPrefix + userMessage },
-            ];
-            for (const s of allSteps) {
-              if (s.type === 'tool_call') {
-                l1Messages.push({
-                  role: 'assistant', content: '',
-                  tool_calls: [{ id: 'l1', type: 'function', function: { name: s.tool, arguments: JSON.stringify(s.params) } }],
-                });
-              } else if (s.type === 'tool_result') {
-                l1Messages.push({ role: 'tool', tool_call_id: 'l1', content: s.summary });
-              }
+        // 持久化（前端是否还在线都执行）
+        const persist: Promise<void>[] = [];
+        if (userToken) {
+          persist.push(saveConversation(env, userToken, body.work_id, body.page, agentFinal.messages));
+        }
+        persist.push(recordAIUsage(env, {
+          work_id: body.work_id, user_token: userToken, page: body.page,
+          model: agentFinal.usage.model,
+          tokens_in: agentFinal.usage.input, tokens_out: agentFinal.usage.output,
+          cache_hit: agentFinal.usage.cacheHit, cache_miss: agentFinal.usage.cacheMiss,
+        }));
+        if (userToken) {
+          const prefixParts: string[] = [];
+          if (opts.module) prefixParts.push(`[当前模块: ${opts.module}]`);
+          if (opts.sectionTitle) prefixParts.push(`[当前章节: ${opts.sectionTitle}]`);
+          const userPrefix = prefixParts.length > 0 ? prefixParts.join(' ') + '\n\n' : '';
+          const l1Messages: Message[] = [
+            ...allMessages.slice(0, -1),
+            { role: 'user', content: userPrefix + userMessage },
+          ];
+          for (const s of sharedSteps) {
+            if (s.type === 'tool_call') {
+              l1Messages.push({
+                role: 'assistant', content: '',
+                tool_calls: [{ id: 'l1', type: 'function', function: { name: s.tool, arguments: JSON.stringify(s.params) } }],
+              });
+            } else if (s.type === 'tool_result') {
+              l1Messages.push({ role: 'tool', tool_call_id: 'l1', content: s.summary });
             }
-            l1Messages.push({ role: 'assistant', content: final.reply });
-            persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), l1Messages));
           }
+          l1Messages.push({ role: 'assistant', content: agentFinal.reply });
+          persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), l1Messages));
+        }
+        await Promise.all(persist);
+      } catch (err) {
+        agentErr = err as Error;
+        console.error('[elf_chat] Agent error:', agentErr.message);
+      } finally {
+        agentFinished = true;
+        if (notify.fn) { const resolve = notify.fn as () => void; notify.fn = null; resolve(); }
+      }
+    })();
 
-          await Promise.all(persist);
-          controller.close();
-        } catch (err) {
-          console.error('[elf_chat] Stream error:', (err as Error).message);
-          controller.enqueue(encoder.encode(sseError((err as Error).message)));
-          controller.close();
+    // keep Worker alive even if client disconnects
+    if (ctx) ctx.waitUntil(agentTask);
+
+    // SSE 流：从 sharedSteps 取数据推送，客户端断开时安静退出
+    const stream = new ReadableStream({
+      async pull(controller) {
+        let delivered = 0;
+        while (delivered < sharedSteps.length) {
+          const step = sharedSteps[delivered++];
+          try {
+            controller.enqueue(encoder.encode(sseEvent(step)));
+          } catch {
+            return; // client disconnected, stop delivering (agent continues)
+          }
+        }
+
+        if (agentFinished) {
+          if (agentErr) {
+            try { controller.enqueue(encoder.encode(sseError(agentErr.message))); } catch {}
+          } else if (agentFinal) {
+            try {
+              controller.enqueue(encoder.encode(sseDone({ reply: agentFinal.reply, usage: agentFinal.usage })));
+            } catch {}
+          }
+          try { controller.close(); } catch {}
+          return;
+        }
+
+        // 等待 Agent 产出新步骤
+        if (delivered >= sharedSteps.length) {
+          await new Promise<void>(resolve => { notify.fn = resolve; });
         }
       },
     });

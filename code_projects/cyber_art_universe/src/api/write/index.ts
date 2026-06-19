@@ -68,7 +68,7 @@ import { handleMemoryTestSetup, handleMemoryTestTeardown, handleMemoryExtractL2,
 import { handleMemoryEval, handleMemoryEvalResults } from './memory-eval';
 import { getUserConfig, updateUserConfig } from './user_config';
 
-export async function handleWriteRoute(env: Env, request: Request, segments: string[]): Promise<Response> {
+export async function handleWriteRoute(env: Env, request: Request, segments: string[], ctx?: ExecutionContext): Promise<Response> {
   const [resource, resourceId, subResource, subResourceId, action] = segments;
 
   // ================================================================
@@ -135,7 +135,7 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
     if (request.method === 'PUT') return handlePutConversation(env, request);
   }
   if (resource === 'elf' && resourceId === 'chat' && !subResource && !action) {
-    if (request.method === 'POST') return handleElfChat(env, request);
+    if (request.method === 'POST') return handleElfChat(env, request, ctx);
   }
 
   // ================================================================
