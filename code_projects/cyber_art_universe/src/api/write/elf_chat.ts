@@ -35,18 +35,28 @@ function convKey(userToken: string, workId: string, page: string): string {
   return `users/${userToken}/conversations/${workId}/${page}.json`;
 }
 
-async function loadConversation(env: Env, userToken: string, workId: string, page: string): Promise<Message[] | null> {
+/** R2 对话快照：messages 供 agent 续上下文，steps 供前端渲染工作块 */
+interface ConversationSnapshot {
+  messages: Message[];
+  steps: AgentStep[];
+}
+
+async function loadConversation(env: Env, userToken: string, workId: string, page: string): Promise<ConversationSnapshot | null> {
   try {
     const obj = await env.WORKS_BUCKET.get(convKey(userToken, workId, page));
     if (!obj) return null;
-    return JSON.parse(await obj.text()) as Message[];
+    const raw = JSON.parse(await obj.text());
+    // 兼容旧格式：可能只是 Message[]
+    if (Array.isArray(raw)) return { messages: raw, steps: [] };
+    return raw as ConversationSnapshot;
   } catch {
     return null;
   }
 }
 
-async function saveConversation(env: Env, userToken: string, workId: string, page: string, messages: Message[]): Promise<void> {
-  await env.WORKS_BUCKET.put(convKey(userToken, workId, page), JSON.stringify(messages), {
+async function saveConversation(env: Env, userToken: string, workId: string, page: string, messages: Message[], steps: AgentStep[]): Promise<void> {
+  const snapshot: ConversationSnapshot = { messages, steps };
+  await env.WORKS_BUCKET.put(convKey(userToken, workId, page), JSON.stringify(snapshot), {
     httpMetadata: { contentType: 'application/json' },
   });
 }
@@ -180,8 +190,9 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
     }
 
     // —— Load / compress conversation ——
-    let storedMessages = await loadConversation(env, userToken, body.work_id, body.page);
-    if (storedMessages && storedMessages.length > 0) {
+    const snapshot = await loadConversation(env, userToken, body.work_id, body.page);
+    let storedMessages: Message[] = snapshot?.messages || [];
+    if (storedMessages.length > 0) {
       if (storedMessages[0].role === 'system') {
         storedMessages[0] = { role: 'system', content: systemPrompt };
       }
@@ -232,7 +243,7 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
         // 持久化（前端是否还在线都执行）
         const persist: Promise<void>[] = [];
         if (userToken) {
-          persist.push(saveConversation(env, userToken, body.work_id, body.page, agentFinal.messages));
+          persist.push(saveConversation(env, userToken, body.work_id, body.page, agentFinal.messages, sharedSteps));
         }
         persist.push(recordAIUsage(env, {
           work_id: body.work_id, user_token: userToken, page: body.page,
@@ -356,7 +367,7 @@ export async function handlePutConversation(env: Env, request: Request): Promise
   const page = body.page || 'write';
 
   try {
-    await saveConversation(env, userToken, body.work_id, page, body.messages);
+    await saveConversation(env, userToken, body.work_id, page, body.messages, []);
     return new Response(JSON.stringify(jsonSuccess({ saved: true, work_id: body.work_id, page, count: body.messages.length })), {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -384,20 +395,26 @@ export async function handleGetConversation(env: Env, request: Request): Promise
     });
   }
 
-  const messages = await loadConversation(env, userToken, workId, page);
-  if (!messages || messages.length === 0) {
-    return new Response(JSON.stringify(jsonSuccess({ messages: [], work_id: workId, page })), {
+  const snapshot = await loadConversation(env, userToken, workId, page);
+  if (!snapshot || !snapshot.messages.length) {
+    return new Response(JSON.stringify(jsonSuccess({ messages: [], steps: [], work_id: workId, page })), {
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  // 返回全部消息（含中间工具调用），前端自行分离对话消息与工作块步骤
-  const displayMessages = messages
-    .filter(m => m.role !== 'system')
-    .slice(-200);
+  // 干净对话消息（user + 最终 assistant，不含中间 tool_calls）
+  const displayMessages: Message[] = [];
+  for (const m of snapshot.messages) {
+    if (m.role === 'user') {
+      displayMessages.push(m);
+    } else if (m.role === 'assistant' && m.content && !m.tool_calls) {
+      displayMessages.push(m);
+    }
+  }
 
   return new Response(JSON.stringify(jsonSuccess({
     work_id: workId, page,
-    messages: displayMessages,
+    messages: displayMessages.slice(-50),
+    steps: snapshot.steps || [],
   })), { headers: { 'Content-Type': 'application/json' } });
 }
