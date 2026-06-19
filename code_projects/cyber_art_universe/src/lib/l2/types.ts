@@ -20,7 +20,8 @@ export interface AgentLoopOptions {
   page: 'read' | 'write';
   userToken?: string;        // 用户标识（完整 token，用于 Session 持久化 + L2/L3 记忆 + 归属校验）
   sessionId?: string;        // Session ID（可选——不传则无状态模式）
-  mockReply?: string;        // 测试用：模拟 AI 回复，不调 LLM，但完整走 Session 持久化流程
+  mockReply?: string;        // 测试用：模拟 AI 回复，不调 LLM
+  mockSteps?: AgentStep[];   // 测试用：直接使用指定步骤作为 Agent 输出（走完整 SSE + 持久化流程）
   contextModule?: string;
   contextSectionTitle?: string;
   maxIterations?: number;    // 最大工具调用轮次，默认 30（支持复杂任务分解）

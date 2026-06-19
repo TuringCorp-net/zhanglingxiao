@@ -66,6 +66,7 @@ interface ElfChatRequest {
   page: 'read' | 'write';
   user_token?: string;
   mock_reply?: string;
+  mock_steps?: AgentStep[];  // 测试用：模拟多步骤 Agent 流程（走完整 SSE + 持久化）
   messages: ChatMessage[];
   context?: {
     module?: string;
@@ -202,6 +203,7 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
       {
         workId: body.work_id, lang, page: body.page, userToken,
         mockReply: body.mock_reply,
+        mockSteps: body.mock_steps,
         contextModule: opts.module,
         contextSectionTitle: opts.sectionTitle,
       },

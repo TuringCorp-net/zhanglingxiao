@@ -93,7 +93,18 @@ export async function* agentLoop(
     }
   }
 
-  // —— Mock 模式 ——
+  // —— Mock 模式（多步骤）——
+  if (opts.mockSteps && opts.mockSteps.length > 0) {
+    for (const step of opts.mockSteps) {
+      yield step;
+    }
+    const reply = opts.mockReply || 'Mock done.';
+    messages.push({ role: 'assistant', content: reply });
+    yield { type: 'done', text: reply };
+    return { reply, messages, usage: { input: 0, output: 0, cacheHit: 0, cacheMiss: 0, model: 'mock' } };
+  }
+
+  // —— Mock 模式（单步骤）——
   if (opts.mockReply) {
     messages.push({ role: 'assistant', content: opts.mockReply });
     yield { type: 'done', text: opts.mockReply };
