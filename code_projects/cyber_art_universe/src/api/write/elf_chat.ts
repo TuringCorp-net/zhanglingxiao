@@ -48,8 +48,13 @@ async function loadConversation(env: Env, userToken: string, workId: string, pag
     const raw = JSON.parse(await obj.text());
     // 兼容旧格式（Message[] 或 {messages, steps}）
     if (Array.isArray(raw)) return { messages: raw, rounds: [] };
-    if (!raw.rounds) return { messages: raw.messages || [], rounds: raw.steps ? [raw.steps] : [] };
-    return raw as ConversationSnapshot;
+    if (!raw.rounds) {
+      // 旧格式 {messages, steps}: steps 是全部轮次混在一起的扁数组，无法拆分
+      // 作为单轮展示（后续新轮次会正确累积）
+      const legacyRounds: AgentStep[][] = raw.steps && raw.steps.length > 0 ? [raw.steps] : [];
+      return { messages: raw.messages || [], rounds: legacyRounds };
+    }
+    return { messages: raw.messages || [], rounds: raw.rounds || [] };
   } catch {
     return null;
   }
@@ -245,7 +250,9 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
         const persist: Promise<void>[] = [];
         if (userToken) {
           // 累积 rounds：已有快照的 rounds + 本轮步骤为新的一轮
-          const allRounds = [...(snapshot?.rounds || []), sharedSteps];
+          const prevRounds = snapshot?.rounds || [];
+          const allRounds = [...prevRounds, sharedSteps];
+          console.log(`[elf_chat] 持久化 rounds: 已有 ${prevRounds.length} 轮 + 本轮 ${sharedSteps.length} 步 → 共 ${allRounds.length} 轮`);
           persist.push(saveConversation(env, userToken, body.work_id, body.page, agentFinal.messages, allRounds));
         }
         persist.push(recordAIUsage(env, {

@@ -100,6 +100,7 @@
 
         // 按轮次插入工作块：rounds[i] 的步骤插入到第 i 对 user→assistant 之间
         var rounds = data.data.rounds || [];
+        console.log('[elf/loadConv] rounds 数量:', rounds.length, '各轮步数:', rounds.map(function(r){return r.length;}));
         if (rounds.length > 0) {
           var msgsEl = document.getElementById('elf-chat-messages');
           if (msgsEl) {
