@@ -154,7 +154,13 @@ export async function* agentLoop(
     for (const tc of result.tool_calls) {
       const toolName = tc.function.name;
       let toolParams: Record<string, unknown>;
-      try { toolParams = JSON.parse(tc.function.arguments); } catch { toolParams = {}; }
+      try { toolParams = JSON.parse(tc.function.arguments); } catch {
+        // JSON 解析失败 → 给 LLM 一个可操作的错误反馈
+        const rawArgs = tc.function.arguments;
+        const preview = rawArgs.length > 200 ? rawArgs.substring(0, 200) + '…' : rawArgs;
+        messages.push({ role: 'tool', tool_call_id: tc.id, content: `❌ 工具调用 JSON 解析失败。\n\n可能原因：content 中包含未转义的特殊字符（如双引号 "、反斜杠 \\）。\n请在下次调用时对 Markdown 内容中的这些字符进行转义（\\" 和 \\\\）。\n\n收到的参数预览:\n${preview}` });
+        continue;
+      }
 
       toolParams._lang = lang;
       toolParams.work_id = opts.workId;

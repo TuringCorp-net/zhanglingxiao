@@ -313,6 +313,15 @@ function createCardTool(env: Env): L2ToolDef {
 // ============================================================
 // write_to_slot
 // ============================================================
+//
+// TODO: 内容保护层
+// 当前 LLM 手写 JSON 时，Markdown 中的特殊字符（引号、反斜杠等）可能未正确转义，
+// 导致 JSON.parse 在 agent.ts 中失败。单 slot 模式已大幅降低失败率，但未完全消除。
+// 未来应在此函数入口处添加一层保护：
+//   - 接收原始 arguments 字符串 + 已解析的 params
+//   - 若 params 为空（JSON.parse 失败），尝试从原始字符串中提取 content
+//   - 或：考虑将 content 放在 HTTP body 顶层字段，绕过 JSON 嵌套转义
+// 参考资料：OpenAI tool calling 规范、DeepSeek 官方文档
 
 function createWriteToSlotTool(env: Env): L2ToolDef {
   return {
@@ -320,33 +329,35 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'write_to_slot',
-        description: '将你生成的内容写入指定模块的槽位。所有写入自动走版本历史，可回滚。在写入前应先调用 get_writing_guide 了解模块规范，调用 read_module 了解当前状态。参数: module_type(模块类型), slot_values(槽位ID→内容的映射，key 必须严格使用 get_writing_guide 返回的模板 slot_id，不可自行发明), free_content(可选), module_id(可选，默认 {module_type}_{work_id})',
+        description: '将你生成的内容写入指定模块的单个槽位。每次调用只写一个槽位，写入自动走版本历史可回滚。写入前应先调用 get_writing_guide 了解模块的合法 slot_id 列表，调用 read_module 了解当前状态。参数: module_type(模块类型), slot_id(槽位ID，必须严格使用 get_writing_guide 返回的合法值), content(要写入的Markdown内容)',
         parameters: {
           type: 'object',
           properties: {
             module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_card', 'm5_intent', 'm6_chapter', 'm0'] },
-            slot_values: { type: 'object', description: '槽位 ID 到内容的映射，如 {"power_system": "魔法体系分为三层..."}' },
-            free_content: { type: 'string', description: '可选：自由写作区内容' },
-            module_id: { type: 'string', description: '可选：模块 ID。不传则使用默认值' },
+            slot_id: { type: 'string', description: '槽位 ID。必须严格使用 get_writing_guide 返回的合法 slot_id，不可自行发明' },
+            content: { type: 'string', description: '要写入该槽位的 Markdown 内容' },
+            free_content: { type: 'string', description: '可选：自由写作区内容（与槽位独立）' },
+            module_id: { type: 'string', description: '可选：模块 ID。不传则使用默认值 {module_type}_{work_id}' },
           },
-          required: ['module_type', 'slot_values'],
+          required: ['module_type', 'slot_id', 'content'],
         },
       },
     },
     is_mutating: true,
     execute: async (params: Record<string, unknown>) => {
       const moduleType = params.module_type as string;
+      const slotId = params.slot_id as string;
+      const content = params.content as string;
       const workId = params.work_id as string;
       const userToken = (params._user_token as string) || '';
-      const slotValues = params.slot_values as Record<string, string> | undefined;
 
       // 参数校验（教学式错误消息）
       if (!moduleType) {
-        return '❌ write_to_slot 需要传入 module_type 参数。\n可选的类型: m1, m2, m3_card, m4_card, m5_intent, m6_chapter。\n例如: write_to_slot({"module_type": "m1", "slot_values": {"power_system": "..."}})';
+        return '❌ write_to_slot 需要传入 module_type 参数。\n可选的类型: m1, m2, m3_card, m4_card, m5_intent, m6_chapter。\n例如: write_to_slot({"module_type": "m1", "slot_id": "power_system", "content": "## 力量体系\\n\\n..."})';
       }
 
-      if (!slotValues || typeof slotValues !== 'object' || Object.keys(slotValues).length === 0) {
-        return '❌ write_to_slot 需要传入 slot_values 参数。\nslot_values 是一个对象，key 是槽位 ID（必须严格使用 get_writing_guide 返回的模板 slot_id），value 是要写入的 Markdown 内容。\n例如: write_to_slot({"module_type": "m1", "slot_values": {"power_system": "## 力量体系\\n\\n..."}})';
+      if (!slotId || !content) {
+        return '❌ write_to_slot 需要传入 slot_id 和 content 参数。\nslot_id 是槽位 ID（必须严格使用 get_writing_guide 返回的合法值），content 是要写入的 Markdown 内容。\n例如: write_to_slot({"module_type": "m1", "slot_id": "power_system", "content": "## 力量体系\\n\\n..."})\n\n💡 提示：请先用 get_writing_guide("' + (moduleType || 'm1') + '") 获取该模块的合法 slot_id 列表。';
       }
 
       // 归属权校验
@@ -360,7 +371,7 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
 
       const moduleId = (params.module_id as string) || `${moduleType}_${workId}`;
 
-      const body: Record<string, unknown> = { slots: slotValues };
+      const body: Record<string, unknown> = { slots: { [slotId]: content } };
       if (params.free_content !== undefined) body.free_content = params.free_content;
 
       const url = `https://internal/api/write/module/${moduleId}?lang=${params._lang || 'zh'}`;
@@ -378,15 +389,13 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
 
       if (!data.ok) {
         const errMsg = (data as { error?: { message?: string } }).error?.message || JSON.stringify((data as { error?: { message?: string } }).error);
-        return `❌ 写入失败: ${errMsg}\n\n可能原因及修复建议:\n- 如果提示 "Module not found"：可能是不存在的卡片——请先用 create_card 创建，再用 write_to_slot 写入内容\n- 如果提示 slot ID 无效，说明你使用的槽位 ID 不在模板中。请调用 get_writing_guide("${moduleType}") 获取该模块的精确 slot_id 列表，然后重新写入\n- 如果模块确实不存在，请检查 work_id 是否正确`;
+        return `❌ 写入失败: ${errMsg}\n\n可能原因及修复建议:\n- 如果提示 "Module not found"：可能是不存在的卡片——请先用 create_card 创建，再用 write_to_slot 写入内容\n- 如果提示 slot ID 无效，说明你使用的 slot_id 不在模板中。请调用 get_writing_guide("${moduleType}") 获取该模块的合法 slot_id 列表，然后重新写入\n- 如果模块确实不存在，请检查 work_id 是否正确`;
       }
 
       const resultData = (data.data || {}) as Record<string, unknown>;
       const warnings = resultData.slot_warnings as string[] | undefined;
-      const writtenSlots = resultData.slots as Record<string, string> || {};
-      const writtenCount = Object.keys(writtenSlots).filter(k => writtenSlots[k]?.trim()).length;
 
-      let msg = `✅ 已写入 ${writtenCount} 个槽位到模块 ${moduleId}。版本历史已自动保存，可回滚。`;
+      let msg = `✅ 已将内容写入 ${moduleId} 的槽位 "${slotId}"。版本历史已自动保存，可回滚。`;
       if (warnings && warnings.length > 0) {
         msg += '\n\n' + warnings.join('\n');
       }
