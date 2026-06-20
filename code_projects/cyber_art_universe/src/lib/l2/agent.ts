@@ -249,9 +249,9 @@ export async function agentDebug(
       system_prompt_chars: layers.full.length,
       layer_sizes: {
         '1_persona': layers.layer_1_persona.length,
-        '2_context': layers.layer_2_context_package.length,
-        '3_references': layers.layer_3_references.length,
-        '4_tools': layers.layer_4_tools.length,
+        '2_references': layers.layer_2_references.length,
+        '3_tools': layers.layer_3_tools.length,
+        '4_context': layers.layer_4_context_package.length,
         '5_memory': layers.layer_5_memory.length,
       },
     },

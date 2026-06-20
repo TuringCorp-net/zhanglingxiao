@@ -20,69 +20,39 @@ import { extractL1toL2, extractL2toL3IfDue } from '../../lib/l2/memory';
 // 测试数据
 // ============================================================
 
-/** L1 Day 1：偏好讨论 + 作品决策 */
+/** L1 Day 1：偏好讨论 + 作品决策（新 MemoryLogFile 格式） */
 const TEST_L1_DAY1 = {
-  date: '2026-06-09',
-  page: 'write',
-  work_id: 'work_test_001',
   work_title: '测试作品·镜中棋局',
-  entries: [
-    {
-      timestamp: '2026-06-09T10:00:00.000Z',
-      messages: [
-        { role: 'user' as const, content: '帮我看看世界观设定，我想写一个镜像世界的奇幻故事' },
-        { role: 'tool_call' as const, tool: 'read_module', params: { module_type: 'm1' } },
-        { role: 'assistant' as const, content: '当前 M1 世界观还是空的。让我帮你开始构建。你心中有这个世界最特别的地方吗？' },
-        { role: 'user' as const, content: '我偏好软魔法体系——规则模糊但代价明确。不想搞那种"魔法科学"，更关注魔法对角色心理的影响。' },
-        { role: 'assistant' as const, content: '好的，软魔法体系。这种体系下，魔法更像是一种有生命的力量，而非可计算的工具。我来为 M1 的力量体系部分生成初稿。' },
-      ],
-    },
-    {
-      timestamp: '2026-06-09T14:30:00.000Z',
-      messages: [
-        { role: 'user' as const, content: '继续讨论主角设定。我希望主角是女性，沉默但细致，能力来自天赋+代价而非训练。' },
-        { role: 'assistant' as const, content: '这个设定很有力量。天赋+代价模式会让她的每一步成长都带着重量。她沉默是因为什么？是天性还是经历？' },
-        { role: 'user' as const, content: '天性。她的成长弧线应该是"坠落型"的，类似佛罗多——不是变强，而是在艰难中保持自我。不喜欢传统英雄型。' },
-        { role: 'assistant' as const, content: '坠落型弧线——在重压下不粉碎反而找到自己。这与软魔法体系很搭。我来记录这个决策。' },
-        { role: 'user' as const, content: '对了，结局不要大团圆。我倾向"悲壮的希望"——有代价的胜利，开放式的。' },
-        { role: 'assistant' as const, content: '悲壮的希望。这是很有质感的基调选择。我已经把这些记下来了。' },
-      ],
-    },
+  messages: [
+    { role: 'user' as const, content: '帮我看看世界观设定，我想写一个镜像世界的奇幻故事' },
+    { role: 'assistant' as const, content: '当前 M1 世界观还是空的。让我帮你开始构建。你心中有这个世界最特别的地方吗？', tool_calls: [{ id: 't1', type: 'function' as const, function: { name: 'read_module', arguments: '{"module_type":"m1"}' } }] },
+    { role: 'tool' as const, content: '{"slots":{}}', tool_call_id: 't1' },
+    { role: 'assistant' as const, content: '好的，软魔法体系。这种体系下，魔法更像是一种有生命的力量，而非可计算的工具。我来为 M1 的力量体系部分生成初稿。' },
+    { role: 'user' as const, content: '我偏好软魔法体系——规则模糊但代价明确。不想搞那种"魔法科学"，更关注魔法对角色心理的影响。' },
+    { role: 'user' as const, content: '继续讨论主角设定。我希望主角是女性，沉默但细致，能力来自天赋+代价而非训练。' },
+    { role: 'assistant' as const, content: '这个设定很有力量。天赋+代价模式会让她的每一步成长都带着重量。她沉默是因为什么？是天性还是经历？' },
+    { role: 'user' as const, content: '天性。她的成长弧线应该是"坠落型"的，类似佛罗多——不是变强，而是在艰难中保持自我。不喜欢传统英雄型。' },
+    { role: 'assistant' as const, content: '坠落型弧线——在重压下不粉碎反而找到自己。这与软魔法体系很搭。我来记录这个决策。' },
+    { role: 'user' as const, content: '对了，结局不要大团圆。我倾向"悲壮的希望"——有代价的胜利，开放式的。' },
+    { role: 'assistant' as const, content: '悲壮的希望。这是很有质感的基调选择。我已经把这些记下来了。' },
   ],
-  extracted_to_stm: false,
-  extracted_to_ltm: false,
 };
 
-/** L1 Day 2：更多偏好 + 反馈 */
+/** L1 Day 2：更多偏好 + 反馈（新 MemoryLogFile 格式） */
 const TEST_L1_DAY2 = {
-  date: '2026-06-10',
-  page: 'write',
-  work_id: 'work_test_001',
   work_title: '测试作品·镜中棋局',
-  entries: [
-    {
-      timestamp: '2026-06-10T09:00:00.000Z',
-      messages: [
-        { role: 'user' as const, content: '昨天讨论的角色设定我想再深化一下。主角需要一个镜像反派——与她对立的另一个女性角色，互为补充。' },
-        { role: 'tool_call' as const, tool: 'read_module', params: { module_type: 'm3' } },
-        { role: 'assistant' as const, content: '镜像反派是很强的叙事工具。她们在哪些维度上对立？目标、手段、还是价值观？' },
-        { role: 'user' as const, content: '目标相同但手段不同。主角选择承受代价，反派选择转移代价给他人。这反映她们对"力量"的理解不同。' },
-        { role: 'assistant' as const, content: '这个对立设置很精妙——不是简单的善恶对立，而是面对同一困境的两种回答。' },
-      ],
-    },
-    {
-      timestamp: '2026-06-10T11:00:00.000Z',
-      messages: [
-        { role: 'user' as const, content: '关于写作风格，我偏好短句、快节奏叙事。不喜欢冗长的环境描写，更喜欢用动作和对白来暗示氛围。' },
-        { role: 'user' as const, content: '对话风格方面，要简洁、潜台词丰富。人物说的和想的往往不一样，避免"说教感"。' },
-        { role: 'assistant' as const, content: '短句、快速、潜台词丰富。这种风格很适合你的坠落型主角——让行动胜过言语，让读者在留白中感受。' },
-        { role: 'user' as const, content: '对记忆系统的设计很认可，特别是 L3 用 Markdown 格式。另外，在技术讨论中希望被解释原理而非直接给结论。' },
-        { role: 'assistant' as const, content: '明白了。我会在技术决策时先讲清楚为什么，然后再实施。这也是你作为开发者的习惯。' },
-      ],
-    },
+  messages: [
+    { role: 'user' as const, content: '昨天讨论的角色设定我想再深化一下。主角需要一个镜像反派——与她对立的另一个女性角色，互为补充。' },
+    { role: 'assistant' as const, content: '镜像反派是很强的叙事工具。她们在哪些维度上对立？目标、手段、还是价值观？', tool_calls: [{ id: 't2', type: 'function' as const, function: { name: 'read_module', arguments: '{"module_type":"m3"}' } }] },
+    { role: 'tool' as const, content: '{"slots":{}}', tool_call_id: 't2' },
+    { role: 'user' as const, content: '目标相同但手段不同。主角选择承受代价，反派选择转移代价给他人。这反映她们对"力量"的理解不同。' },
+    { role: 'assistant' as const, content: '这个对立设置很精妙——不是简单的善恶对立，而是面对同一困境的两种回答。' },
+    { role: 'user' as const, content: '关于写作风格，我偏好短句、快节奏叙事。不喜欢冗长的环境描写，更喜欢用动作和对白来暗示氛围。' },
+    { role: 'user' as const, content: '对话风格方面，要简洁、潜台词丰富。人物说的和想的往往不一样，避免"说教感"。' },
+    { role: 'assistant' as const, content: '短句、快速、潜台词丰富。这种风格很适合你的坠落型主角——让行动胜过言语，让读者在留白中感受。' },
+    { role: 'user' as const, content: '对记忆系统的设计很认可，特别是 L3 用 Markdown 格式。另外，在技术讨论中希望被解释原理而非直接给结论。' },
+    { role: 'assistant' as const, content: '明白了。我会在技术决策时先讲清楚为什么，然后再实施。这也是你作为开发者的习惯。' },
   ],
-  extracted_to_stm: false,
-  extracted_to_ltm: false,
 };
 
 /** 已有的 STM final（模拟 STM 中已有一些旧记忆，测试合并效果） */
@@ -175,14 +145,14 @@ export async function handleMemoryTestSetup(env: Env, request: Request): Promise
 
     // L1 Day 1
     const l1Day1Key = `users/${token}/memory-logs/write/work_test_001/2026-06-09.json`;
-    await env.WORKS_BUCKET.put(l1Day1Key, JSON.stringify(TEST_L1_DAY1, null, 2), {
+    await env.WORKS_BUCKET.put(l1Day1Key, JSON.stringify(TEST_L1_DAY1), {
       httpMetadata: { contentType: 'application/json' },
     });
     files.push(l1Day1Key);
 
     // L1 Day 2
     const l1Day2Key = `users/${token}/memory-logs/write/work_test_001/2026-06-10.json`;
-    await env.WORKS_BUCKET.put(l1Day2Key, JSON.stringify(TEST_L1_DAY2, null, 2), {
+    await env.WORKS_BUCKET.put(l1Day2Key, JSON.stringify(TEST_L1_DAY2), {
       httpMetadata: { contentType: 'application/json' },
     });
     files.push(l1Day2Key);
@@ -226,7 +196,7 @@ export async function handleMemoryTestSetup(env: Env, request: Request): Promise
     return new Response(JSON.stringify(jsonSuccess({
       test_token: token,
       files_created: files,
-      note: '测试数据已就绪。可调用 extract-l2 手动触发 STM 合并，extract-l3 手动触发 LTM 合并。',
+      note: '测试数据已就绪（v2 MemoryLogFile 格式）。可调用 extract-l2 / extract-l3 手动触发提取。',
     })), {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -252,6 +222,8 @@ export async function handleMemoryTestTeardown(env: Env, request: Request): Prom
       `users/${token}/memory-logs/write/work_test_001/2026-06-10.json`,
       `users/${token}/stm/stm-final.md`,
       `users/${token}/stm/stm-memory/2026-06-08.md`,
+      `users/${token}/stm/.stm-processed.json`,
+      `users/${token}/stm/.ltm-processed.json`,
       `users/${token}/ltm/ltm-final.md`,
       `users/${token}/ltm/ltm-memory/2026-06-01.md`,
       `users/${token}/ltm/.extraction-state.json`,
@@ -289,7 +261,7 @@ export async function handleMemoryExtractL2(env: Env, request: Request): Promise
       users: result.users,
       note: result.sessions_extracted > 0
         ? `已为 ${result.users_processed} 个用户合并 STM（${result.sessions_extracted} 个会话）`
-        : '没有新的 L1 日志需要处理（所有日志已标记 extracted_to_stm 或近 2 天无活动）',
+        : '没有新的 L1 日志需要处理（近 2 天无活动或已被提取）',
     })), {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -355,34 +327,9 @@ export async function handleMemoryReset(env: Env, request: Request): Promise<Res
 
   const actions: string[] = [];
   try {
-    // 1. 重置所有 L1 文件的标志位
-    const l1Prefix = `users/${token}/memory-logs/`;
-    let cursor: string | undefined;
-    let l1Reset = 0;
-    do {
-      const listed = await env.WORKS_BUCKET.list({ prefix: l1Prefix, limit: 200, cursor });
-      for (const obj of listed.objects) {
-        try {
-          const file = await env.WORKS_BUCKET.get(obj.key);
-          if (!file) continue;
-          const log = JSON.parse(await file.text());
-          if (log.extracted_to_stm !== undefined) {
-            log.extracted_to_stm = false;
-            log.extracted_to_ltm = false;
-            await env.WORKS_BUCKET.put(obj.key, JSON.stringify(log, null, 2), {
-              httpMetadata: { contentType: 'application/json' },
-            });
-            l1Reset++;
-          }
-        } catch { /* skip corrupted */ }
-      }
-      cursor = listed.truncated ? listed.cursor : undefined;
-    } while (cursor);
-    actions.push(`重置 ${l1Reset} 个 L1 文件的标志位为 false`);
-
-    // 2. 删除 STM final + 存档
+    // 1. 删除 STM 全部数据（含 final、存档、追踪文件）
     const stmPrefix = `users/${token}/stm/`;
-    cursor = undefined;
+    let cursor: string | undefined;
     let stmDeleted = 0;
     do {
       const listed = await env.WORKS_BUCKET.list({ prefix: stmPrefix, limit: 200, cursor });

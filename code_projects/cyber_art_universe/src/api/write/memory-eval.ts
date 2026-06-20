@@ -274,7 +274,7 @@ function buildScenarios(): EvalScenario[] {
         const result = await callAI(env, [
           { role: 'system', content: compressPrompt },
           { role: 'user', content: userPrompt },
-        ], { model: 'deepseek-v4-flash', maxTokens: 2048, temperature: 0.3 });
+        ], { model: 'deepseek-v4-flash' });
         return {
           scenario: 'mosaic_light/L1_normal',
           run_at: new Date().toISOString(),
@@ -304,7 +304,7 @@ function buildScenarios(): EvalScenario[] {
         const result = await callAI(env, [
           { role: 'system', content: compressPrompt },
           { role: 'user', content: userPrompt },
-        ], { model: 'deepseek-v4-flash', maxTokens: 2048, temperature: 0.3 });
+        ], { model: 'deepseek-v4-flash' });
         return {
           scenario: 'mosaic_light/L2_tool_calls',
           run_at: new Date().toISOString(),
@@ -333,7 +333,7 @@ function buildScenarios(): EvalScenario[] {
         const result = await callAI(env, [
           { role: 'system', content: pairPrompt },
           { role: 'user', content: msgText },
-        ], { model: 'deepseek-v4-flash', maxTokens: 2048, temperature: 0.3 });
+        ], { model: 'deepseek-v4-flash' });
         return {
           scenario: 'mosaic_heavy/H1_decisions',
           run_at: new Date().toISOString(),
@@ -360,7 +360,7 @@ function buildScenarios(): EvalScenario[] {
         const result = await callAI(env, [
           { role: 'system', content: pairPrompt },
           { role: 'user', content: msgText },
-        ], { model: 'deepseek-v4-flash', maxTokens: 2048, temperature: 0.3 });
+        ], { model: 'deepseek-v4-flash' });
         return {
           scenario: 'mosaic_heavy/H2_repetitive',
           run_at: new Date().toISOString(),
@@ -418,15 +418,16 @@ function buildScenarios(): EvalScenario[] {
       id: 'ltm_merge/T1_merge',
       category: 'ltm_merge',
       name: 'T1 合并模式',
-      description: '跨作品模式的新 L1 + 现有 LTM → 验证画像增量更新（强化已有模式、添加新模式）',
+      description: '跨作品模式的 STM 存档 + 现有 LTM → 验证画像增量更新（强化已有模式、添加新模式）',
       run: async (env) => {
         const start = Date.now();
-        const output = await runLTMMerge(env, LTM_T1_L1, LTM_T1_EXISTING);
+        const stmArchives = [{ date: '2026-06-10', content: LTM_T1_L1 }];
+        const output = await runLTMMerge(env, stmArchives, LTM_T1_EXISTING);
         return {
           scenario: 'ltm_merge/T1_merge',
           run_at: new Date().toISOString(),
           system_prompt: ltmPromptMd,
-          user_prompt: `现有 LTM:\n${LTM_T1_EXISTING}\n\n新对话:\n${LTM_T1_L1}`,
+          user_prompt: `现有 LTM:\n${LTM_T1_EXISTING}\n\nSTM 存档:\n${LTM_T1_L1}`,
           output: output || '(LLM 返回空)',
           usage: undefined,
           latency_ms: Date.now() - start,
@@ -437,15 +438,16 @@ function buildScenarios(): EvalScenario[] {
       id: 'ltm_merge/T2_initial',
       category: 'ltm_merge',
       name: 'T2 初始画像',
-      description: '纯新对话，无现有 LTM → 验证初始画像提炼质量',
+      description: '纯新 STM 存档，无现有 LTM → 验证初始画像提炼质量',
       run: async (env) => {
         const start = Date.now();
-        const output = await runLTMMerge(env, LTM_T2_L1, '');
+        const stmArchives = [{ date: '2026-06-10', content: LTM_T2_L1 }];
+        const output = await runLTMMerge(env, stmArchives, '');
         return {
           scenario: 'ltm_merge/T2_initial',
           run_at: new Date().toISOString(),
           system_prompt: ltmPromptMd,
-          user_prompt: `(无现有 LTM)\n\n新对话:\n${LTM_T2_L1}`,
+          user_prompt: `(无现有 LTM)\n\nSTM 存档:\n${LTM_T2_L1}`,
           output: output || '(LLM 返回空)',
           usage: undefined,
           latency_ms: Date.now() - start,

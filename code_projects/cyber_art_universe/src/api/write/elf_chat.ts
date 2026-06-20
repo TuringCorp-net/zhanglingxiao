@@ -28,6 +28,37 @@ import { createTools } from '../../lib/l2/tools';
 import { assembleContext } from '../../lib/l1/context';
 
 // ============================================================
+// Tool 内容压缩（落盘前，不影响对话中的 LLM 上下文）
+// ============================================================
+
+const COMPACT_PREVIEW = 20;
+const COMPACT_THRESHOLD = 100;
+const COMPACT_MARKER = '…[此处已截断，以实际内容为准]';
+
+/**
+ * 压缩 messages 中的巨量 tool 内容，仅用于记忆提取落盘（saveDailyLog）。
+ * 不做 JSON 解析——直接按字符串长度截断。
+ * 对话恢复（saveConversation）保存完整内容，不受此函数影响。
+ */
+function compactMessages(messages: Message[]): Message[] {
+  return messages.map(msg => {
+    if (msg.role === 'assistant' && msg.tool_calls) {
+      const compacted = msg.tool_calls.map(tc => {
+        if (tc.function.arguments.length > COMPACT_THRESHOLD) {
+          return { ...tc, function: { ...tc.function, arguments: tc.function.arguments.substring(0, COMPACT_PREVIEW) + COMPACT_MARKER } };
+        }
+        return tc;
+      });
+      return { ...msg, tool_calls: compacted };
+    }
+    if (msg.role === 'tool' && msg.content && msg.content.length > COMPACT_THRESHOLD) {
+      return { ...msg, content: msg.content.substring(0, COMPACT_PREVIEW) + COMPACT_MARKER };
+    }
+    return msg;
+  });
+}
+
+// ============================================================
 // Conversation persistence (R2, per user+work+page)
 // ============================================================
 
@@ -235,10 +266,13 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
         }
         agentFinal = stepResult.value;
 
-        // 持久化（前端是否还在线都执行）
+        // 持久化前统一压缩 tool 内容
+        // 对话恢复 + 记忆提取 都走压缩版，减少 R2 体积和后续轮次的 token 消耗
         const persist: Promise<void>[] = [];
         if (userToken) {
-          persist.push(saveConversation(env, userToken, body.work_id, body.page, agentFinal.messages));
+          const compacted = compactMessages(agentFinal.messages);
+          persist.push(saveConversation(env, userToken, body.work_id, body.page, compacted));
+          persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), compacted.slice(1)));
         }
         persist.push(recordAIUsage(env, {
           work_id: body.work_id, user_token: userToken, page: body.page,
@@ -246,28 +280,6 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
           tokens_in: agentFinal.usage.input, tokens_out: agentFinal.usage.output,
           cache_hit: agentFinal.usage.cacheHit, cache_miss: agentFinal.usage.cacheMiss,
         }));
-        if (userToken) {
-          const prefixParts: string[] = [];
-          if (opts.module) prefixParts.push(`[当前模块: ${opts.module}]`);
-          if (opts.sectionTitle) prefixParts.push(`[当前章节: ${opts.sectionTitle}]`);
-          const userPrefix = prefixParts.length > 0 ? prefixParts.join(' ') + '\n\n' : '';
-          const l1Messages: Message[] = [
-            ...allMessages.slice(0, -1),
-            { role: 'user', content: userPrefix + userMessage },
-          ];
-          for (const s of sharedSteps) {
-            if (s.type === 'tool_call') {
-              l1Messages.push({
-                role: 'assistant', content: '',
-                tool_calls: [{ id: 'l1', type: 'function', function: { name: s.tool, arguments: JSON.stringify(s.params) } }],
-              });
-            } else if (s.type === 'tool_result') {
-              l1Messages.push({ role: 'tool', tool_call_id: 'l1', content: s.summary });
-            }
-          }
-          l1Messages.push({ role: 'assistant', content: agentFinal.reply });
-          persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), l1Messages));
-        }
         await Promise.all(persist);
       } catch (err) {
         agentErr = err as Error;

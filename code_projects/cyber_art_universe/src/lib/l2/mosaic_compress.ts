@@ -161,7 +161,7 @@ async function runLightCompressLLM(
       const result = await callAI(env, [
         { role: 'system', content: compressPrompt },
         { role: 'user', content: `Please compress the following ${messages.length} messages:\n\n${msgLines}` },
-      ], { model: config.model || 'deepseek-v4-flash', maxTokens: 2048, temperature: 0.3 });
+      ], { model: config.model || 'deepseek-v4-flash' });
       content = result.content || '';
     }
     return parseLightResult(content, messages);
@@ -238,7 +238,7 @@ async function runHeavyCompressLLM(
       const result = await callAI(env, [
         { role: 'system', content: pairPrompt },
         { role: 'user', content: inputText },
-      ], { model: config.model || 'deepseek-v4-flash', maxTokens: 2048, temperature: 0.3 });
+      ], { model: config.model || 'deepseek-v4-flash' });
       content = result.content || '';
     }
     return parseHeavyResult(content);

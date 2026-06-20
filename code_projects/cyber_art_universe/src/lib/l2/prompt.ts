@@ -34,11 +34,11 @@ async function loadReferencePackage(env: Env): Promise<string> {
 export interface SystemPromptLayers {
   /** 完整 system prompt（5 层拼接） */
   full: string;
-  /** 逐层内容 */
+  /** 逐层内容（按组装顺序：static → dynamic） */
   layer_1_persona: string;
-  layer_2_context_package: string;
-  layer_3_references: string;
-  layer_4_tools: string;
+  layer_2_references: string;
+  layer_3_tools: string;
+  layer_4_context_package: string;
   layer_5_memory: string;
 }
 
@@ -49,13 +49,13 @@ export interface SystemPromptLayers {
 /**
  * 构建 L2 Agent System Prompt（5 层结构）
  *
- * Layer 1: 统一人格（跨 Read/Write，来自 L1 scenarios + prompt 模板）
- * Layer 2: 上下文包（M0-M5）
- * Layer 3: 参考案例库（4 部经典作品框架分析）
- * Layer 4: 工具说明 + 行为建议
- * Layer 5: 作品级记忆（预留，当前为空）
+ * Layer 1: 统一人格（static，跨 Read/Write）
+ * Layer 2: 参考案例库（static，4 部经典作品框架分析）
+ * Layer 3: 工具说明 + 行为建议（static）
+ * Layer 4: 上下文包（dynamic，M0-M5，随写作进度变化）
+ * Layer 5: 记忆注入层（dynamic，STM+LTM，每日更新）
  *
- * 排列顺序：最静态在前（最大化 DeepSeek 缓存命中），最动态在后。
+ * 排列顺序：静态在前（最大化 DeepSeek 缓存命中），动态在后。
  */
 export async function buildAgentSystemPrompt(
   env: Env,
@@ -79,33 +79,33 @@ export async function buildAgentSystemPromptLayers(
   workId: string,
   userToken?: string,
 ): Promise<SystemPromptLayers> {
-  // —— Layer 1: 统一人格 ——
+  // —— Layer 1: 统一人格（static） ——
   let layer1 = '';
   const personaTemplate = getPromptTemplate('writer_companion');
   if (personaTemplate) {
     layer1 = renderTemplate(personaTemplate, vars);
   }
 
-  // —— Layer 2: 上下文包（M0-M5） ——
+  // —— Layer 2: 参考案例库（static） ——
   let layer2 = '';
-  if (vars.context_package) {
-    layer2 = `## 作品完整上下文\n\n${vars.context_package}`;
-  }
-
-  // —— Layer 3: 参考案例库 ——
-  let layer3 = '';
   const refPkg = await loadReferencePackage(env);
   if (refPkg) {
-    layer3 = `## 经典作品创作框架参考\n\n以下为 4 部经典作品按 Story Forger M1-M5 模板拆解的结构化分析。在作者需要灵感或参考创作手法时，你可以参考这些案例的框架结构。不需要强行套用——只在创作方向与参考案例相关时才借鉴。\n\n${refPkg}`;
+    layer2 = `## 经典作品创作框架参考\n\n以下为 4 部经典作品按 Story Forger M1-M5 模板拆解的结构化分析。在作者需要灵感或参考创作手法时，你可以参考这些案例的框架结构。不需要强行套用——只在创作方向与参考案例相关时才借鉴。\n\n${refPkg}`;
   }
 
-  // —— Layer 4: 工具说明 + 行为建议 ——
-  let layer4 = '';
+  // —— Layer 3: 工具说明 + 行为建议（static） ——
+  let layer3 = '';
   if (tools.length > 0) {
     const toolDescriptions = tools.map(t =>
       `- **${t.function.name}**: ${t.function.description}`
     ).join('\n');
-    layer4 = toolGuideTemplate.replace('{{tool_list}}', toolDescriptions);
+    layer3 = toolGuideTemplate.replace('{{tool_list}}', toolDescriptions);
+  }
+
+  // —— Layer 4: 上下文包（dynamic） ——
+  let layer4 = '';
+  if (vars.context_package) {
+    layer4 = `## 作品完整上下文\n\n${vars.context_package}`;
   }
 
   // —— Layer 5: 记忆注入层 ——
@@ -156,9 +156,9 @@ export async function buildAgentSystemPromptLayers(
   return {
     full,
     layer_1_persona: layer1,
-    layer_2_context_package: layer2,
-    layer_3_references: layer3,
-    layer_4_tools: layer4,
+    layer_2_references: layer2,
+    layer_3_tools: layer3,
+    layer_4_context_package: layer4,
     layer_5_memory: layer5,
   };
 }
