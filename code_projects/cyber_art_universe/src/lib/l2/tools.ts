@@ -72,6 +72,7 @@ function createChecklistTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'checklist_write',
+        strict: true,
         description: '创建或更新任务清单，用于追踪复杂多步骤任务的进度。当你面对需要分解为子任务的工作时，先用此工具写下计划，然后逐步执行并更新状态。参数: todos(任务列表，每项含 content 和 status), status 可选: pending/in_progress/completed',
         parameters: {
           type: 'object',
@@ -140,6 +141,7 @@ function createWritingGuideTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'get_writing_guide',
+        strict: true,
         description: '获取指定模块或任务的写作指南，包括模块定位、模板结构、写作要点和特殊规则。在生成或修改任何内容之前调用此工具，确保输出符合规范。参数 module_type 可选: m0(原始构想), m1(世界观), m2(大纲), m3_card(人物卡), m4_card(伏笔卡), m5_intent(意图卡), m6_chapter(章节正文)',
         parameters: {
           type: 'object',
@@ -176,6 +178,7 @@ function createReadModuleTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'read_module',
+        strict: true,
         description: '读取指定模块的当前内容。使用方式取决于模块类型：\n\n**单文件模块 (m0/m1/m2)**：不传 module_id 直接用默认 ID 读取全部内容。\n\n**卡片类模块 (m3_card/m4_card/m5_intent/m6_chapter)**：分两步——① 不传 module_id → 获取卡片列表（仅 name + id）→ ② 选择目标卡片，传入 module_id → 获取该卡片的完整 slots + free_content。\n\n⚠️ 对于卡片类模块，请勿跳过第①步直接猜 module_id。拿到列表后选择合适的卡片，再传入 module_id 读取具体内容。',
         parameters: {
           type: 'object',
@@ -266,6 +269,7 @@ function createCardTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'create_card',
+        strict: true,
         description: '创建一张新卡片（人物卡/伏笔卡/章节蓝图/章节）。当你需要新增角色、伏笔条目、章节蓝图或具体章节时使用。成功创建后可用 write_to_slot 填入内容。参数: work_id, type(模块类型: m3_card/m4_card/m5_intent/m6_chapter), name(卡片名称，如角色名/伏笔名/章节名，必填)',
         parameters: {
           type: 'object',
@@ -329,6 +333,7 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'write_to_slot',
+        strict: true,
         description: '将你生成的内容写入指定模块的单个槽位。每次调用只写一个槽位，写入自动走版本历史可回滚。写入前应先调用 get_writing_guide 了解模块的合法 slot_id 列表，调用 read_module 了解当前状态。参数: module_type(模块类型), slot_id(槽位ID，必须严格使用 get_writing_guide 返回的合法值), content(要写入的Markdown内容)',
         parameters: {
           type: 'object',
@@ -414,6 +419,7 @@ function createVersionHistoryTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'get_version_history',
+        strict: true,
         description: '查看指定模块的历史版本列表。在修改前可调用此工具了解最近的变更记录，避免重复劳动或冲突。参数 module_type 即可，无需版本 ID。返回最近 10 个版本的编号、时间和概要。',
         parameters: {
           type: 'object',
@@ -480,6 +486,7 @@ function createVersionDiffTool(env: Env): L2ToolDef {
       type: 'function',
       function: {
         name: 'get_version_diff',
+        strict: true,
         description: '对比模块两个版本之间的差异，查看具体修改了什么内容。v1/v2 可使用相对引用（无需 UUID）：默认 v1="previous"(上次修改前)、v2="current"(当前内容)。也可指定版本号如 v1=1（对比版本1与当前内容）。',
         parameters: {
           type: 'object',
