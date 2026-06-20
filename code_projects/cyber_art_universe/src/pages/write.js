@@ -1604,6 +1604,24 @@ function setThreePanelMode() {
 // ============================================================
 // Story Elf 行为覆盖
 // ============================================================
+
+// SSE write_to_slot 回调 — 刷新模块缓存，防止 auto-save 用旧数据覆盖
+window._onWriteToSlot = async function (summary) {
+  var moduleId = getModuleId();
+  if (!moduleId) return;
+  // 提取摘要中的 module_id（形如 "已写入 N 个槽位到模块 m1_xxx"）
+  // 如果是当前模块被写入，重新加载
+  cacheClear([moduleId]);
+  var fresh = await loadModule(moduleId);
+  if (fresh && fresh.ok) {
+    // 更新 _lastSaved 指纹，确保后续 auto-save 检测到内容与服务器一致
+    var mod = state.currentModule;
+    var slotsData = fresh.data?.slots || fresh.slots || {};
+    var freeContent = fresh.data?.free_content || fresh.free_content || '';
+    _lastSaved = fingerprint({ moduleId: moduleId, mod: mod, slots: slotsData, free_content: freeContent });
+  }
+};
+
 StoryElf.setPage('write');
 
 StoryElf.sendChat = function () {

@@ -350,6 +350,11 @@
         var summary = step.summary || '';
         line.textContent = '✅ ' + (summary.length > 120 ? summary.substring(0, 120) + '...' : summary);
         _workingBlockBody.appendChild(line);
+
+        // write_to_slot 写入成功 → 通知页面刷新模块缓存
+        if (step.tool === 'write_to_slot' && typeof _onWriteToSlot === 'function') {
+          _onWriteToSlot(step.summary);
+        }
       }
     } else if (step.type === 'error') {
       var line = document.createElement('div');
