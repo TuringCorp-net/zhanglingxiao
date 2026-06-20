@@ -334,17 +334,15 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
       function: {
         name: 'write_to_slot',
         strict: true,
-        description: '将你生成的内容写入指定模块的单个槽位。每次调用只写一个槽位，写入自动走版本历史可回滚。写入前应先调用 get_writing_guide 了解模块的合法 slot_id 列表，调用 read_module 了解当前状态。参数: module_type(模块类型), slot_id(槽位ID，必须严格使用 get_writing_guide 返回的合法值), content(要写入的Markdown内容)',
+        description: '将你在回复正文中输出的 Markdown 内容写入指定槽位。工作流程：① 先在回复正文中直接输出完整 Markdown（就像正常写文档一样，不需要 JSON 转义）② 再调用本工具，只传 module_type 和 slot_id。系统会自动从你的回复正文中提取内容写入。参数: module_type(模块类型), slot_id(槽位ID)',
         parameters: {
           type: 'object',
           properties: {
             module_type: { type: 'string', description: '模块类型', enum: ['m1', 'm2', 'm3_card', 'm4_card', 'm5_intent', 'm6_chapter', 'm0'] },
-            slot_id: { type: 'string', description: '槽位 ID。必须严格使用 get_writing_guide 返回的合法 slot_id，不可自行发明' },
-            content: { type: 'string', description: '要写入该槽位的 Markdown 内容' },
-            free_content: { type: 'string', description: '可选：自由写作区内容（与槽位独立）' },
+            slot_id: { type: 'string', description: '槽位 ID。必须严格使用 get_writing_guide 返回的合法 slot_id' },
             module_id: { type: 'string', description: '可选：模块 ID。不传则使用默认值 {module_type}_{work_id}' },
           },
-          required: ['module_type', 'slot_id', 'content'],
+          required: ['module_type', 'slot_id'],
         },
       },
     },
@@ -361,8 +359,8 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
         return '❌ write_to_slot 需要传入 module_type 参数。\n可选的类型: m1, m2, m3_card, m4_card, m5_intent, m6_chapter。\n例如: write_to_slot({"module_type": "m1", "slot_id": "power_system", "content": "## 力量体系\\n\\n..."})';
       }
 
-      if (!slotId || !content) {
-        return '❌ write_to_slot 需要传入 slot_id 和 content 参数。\nslot_id 是槽位 ID（必须严格使用 get_writing_guide 返回的合法值），content 是要写入的 Markdown 内容。\n例如: write_to_slot({"module_type": "m1", "slot_id": "power_system", "content": "## 力量体系\\n\\n..."})\n\n💡 提示：请先用 get_writing_guide("' + (moduleType || 'm1') + '") 获取该模块的合法 slot_id 列表。';
+      if (!slotId) {
+        return '❌ write_to_slot 需要传入 slot_id 参数。\n例如: write_to_slot({"module_type": "m1", "slot_id": "power_system"})\n\n💡 提示：请先在回复正文中输出要写入的完整 Markdown 内容，再调用本工具。系统会自动从你的回复正文中提取内容写入。合法 slot_id 列表请通过 get_writing_guide("' + (moduleType || 'm1') + '") 获取。';
       }
 
       // 归属权校验

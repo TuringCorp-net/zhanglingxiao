@@ -173,6 +173,15 @@ export async function* agentLoop(
       toolParams.work_id = opts.workId;
       toolParams._user_token = opts.userToken || '';
 
+      // write_to_slot: 内容从 assistant.content 提取，tool args 只传元信息
+      // LLM 先输出 Markdown 正文，再调工具 → Worker 自动拼合，绕过 JSON 转义
+      if (toolName === 'write_to_slot' && (!toolParams.content || !(toolParams.content as string).trim())) {
+        const lastMsg = messages[messages.length - 1];
+        if (lastMsg.role === 'assistant' && lastMsg.content) {
+          toolParams.content = lastMsg.content;
+        }
+      }
+
       yield { type: 'tool_call', tool: toolName, params: toolParams };
 
       const tool = tools.find(t => t.def.function.name === toolName);
