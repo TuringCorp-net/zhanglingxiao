@@ -238,7 +238,8 @@
       body.appendChild(card);
     }
 
-    // Process steps
+    // Process steps（批量模式：收集 write_to_slot 刷新）
+    var _pendingBatchParams = null;
     steps.forEach(function (s) {
       if (s.type === 'text_delta') {
         var line = document.createElement('div');
@@ -250,12 +251,17 @@
         line.className = 'elf-process-step';
         line.textContent = '🔧 ' + _toolLabel(s.tool);
         body.appendChild(line);
+        if (s.tool === 'write_to_slot') _pendingBatchParams = s.params;
       } else if (s.type === 'tool_result' && s.tool !== 'checklist_write') {
         var line = document.createElement('div');
         line.className = 'elf-process-step';
         var summary = s.summary || '';
         line.textContent = '✅ ' + (summary.length > 120 ? summary.substring(0, 120) + '...' : summary);
         body.appendChild(line);
+        if (s.tool === 'write_to_slot' && _pendingBatchParams && typeof _onWriteToSlot === 'function') {
+          _onWriteToSlot(_pendingBatchParams);
+          _pendingBatchParams = null;
+        }
       } else if (s.type === 'error') {
         var line = document.createElement('div');
         line.className = 'elf-process-step error';
@@ -320,9 +326,9 @@
       line.textContent = '🔧 ' + _toolLabel(step.tool);
       _workingBlockBody.appendChild(line);
 
-      // write_to_slot → 通知页面刷新模块缓存（与旧版单响应机制保持一致）
-      if (step.tool === 'write_to_slot' && typeof _onWriteToSlot === 'function') {
-        _onWriteToSlot(step.params);
+      // 暂存 write_to_slot 的 params，等 tool_result 时 R2 已写入完成再刷新
+      if (step.tool === 'write_to_slot') {
+        _pendingWriteParams = step.params;
       }
     } else if (step.type === 'tool_result') {
       if (step.tool === 'checklist_write') {
@@ -355,6 +361,12 @@
         var summary2 = step.summary || '';
         line2.textContent = '✅ ' + (summary2.length > 120 ? summary2.substring(0, 120) + '...' : summary2);
         _workingBlockBody.appendChild(line2);
+
+        // write_to_slot 完成（R2 已写入）→ 刷新模块缓存
+        if (step.tool === 'write_to_slot' && _pendingWriteParams && typeof _onWriteToSlot === 'function') {
+          _onWriteToSlot(_pendingWriteParams);
+          _pendingWriteParams = null;
+        }
       }
     } else if (step.type === 'error') {
       var line = document.createElement('div');
