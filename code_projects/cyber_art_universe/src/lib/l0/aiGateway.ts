@@ -99,7 +99,7 @@ const MODEL_PROVIDER: Record<string, string> = {
 };
 
 const DEFAULT_MODEL = 'deepseek-v4-flash';
-const DEFAULT_TIMEOUT = 30000;
+const DEFAULT_TIMEOUT = 120000; // 2min — DeepSeek 处理大上下文可能超 30s
 const DEFAULT_RETRIES = 2;
 
 // ============================================================

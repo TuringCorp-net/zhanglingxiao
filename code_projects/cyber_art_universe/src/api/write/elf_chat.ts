@@ -217,14 +217,12 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
 
     // —— Load / compress conversation ——
     const snapshot = await loadConversation(env, userToken, body.work_id, body.page);
-    let storedMessages: Message[] = snapshot || [];
-    if (storedMessages.length > 0) {
-      if (storedMessages[0].role === 'system') {
-        storedMessages[0] = { role: 'system', content: systemPrompt };
-      }
-    } else {
-      storedMessages = [{ role: 'system', content: systemPrompt }];
-    }
+    // System prompt 每次重新组装，不持久化。加载后 prepend 到历史前。
+    // 过滤旧数据中可能残留的 system 消息（向后兼容）。
+    const storedMessages: Message[] = [
+      { role: 'system', content: systemPrompt },
+      ...(snapshot || []).filter(m => m.role !== 'system'),
+    ];
     storedMessages.push({ role: 'user', content: userMessage });
 
     const compressed = await mosaicCompress(env, storedMessages, DEFAULT_MOSAIC_CONFIG);
@@ -271,7 +269,8 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
         const persist: Promise<void>[] = [];
         if (userToken) {
           const compacted = compactMessages(agentFinal.messages);
-          persist.push(saveConversation(env, userToken, body.work_id, body.page, compacted));
+          // 去掉 system prompt — 每次请求会重新组装，无需持久化
+          persist.push(saveConversation(env, userToken, body.work_id, body.page, compacted.slice(1)));
           persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), compacted.slice(1)));
         }
         persist.push(recordAIUsage(env, {
