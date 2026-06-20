@@ -319,6 +319,11 @@
       line.className = 'elf-process-step';
       line.textContent = '🔧 ' + _toolLabel(step.tool);
       _workingBlockBody.appendChild(line);
+
+      // write_to_slot → 通知页面刷新模块缓存（与旧版单响应机制保持一致）
+      if (step.tool === 'write_to_slot' && typeof _onWriteToSlot === 'function') {
+        _onWriteToSlot(step.params);
+      }
     } else if (step.type === 'tool_result') {
       if (step.tool === 'checklist_write') {
         // 更新 checklist 卡片（替换旧卡片）
@@ -345,16 +350,11 @@
           _workingChecklist = card;
         }
       } else {
-        var line = document.createElement('div');
-        line.className = 'elf-process-step';
-        var summary = step.summary || '';
-        line.textContent = '✅ ' + (summary.length > 120 ? summary.substring(0, 120) + '...' : summary);
-        _workingBlockBody.appendChild(line);
-
-        // write_to_slot 写入成功 → 通知页面刷新模块缓存
-        if (step.tool === 'write_to_slot' && typeof _onWriteToSlot === 'function') {
-          _onWriteToSlot(step.summary);
-        }
+        var line2 = document.createElement('div');
+        line2.className = 'elf-process-step';
+        var summary2 = step.summary || '';
+        line2.textContent = '✅ ' + (summary2.length > 120 ? summary2.substring(0, 120) + '...' : summary2);
+        _workingBlockBody.appendChild(line2);
       }
     } else if (step.type === 'error') {
       var line = document.createElement('div');
