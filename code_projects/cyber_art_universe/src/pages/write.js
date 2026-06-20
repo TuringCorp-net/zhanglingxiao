@@ -1398,7 +1398,8 @@ var _pendingPayload = null;  // 失焦时捕获的待发送数据
 var _lastSaved = '';         // 上次保存的 payload 指纹（用于去重）
 
 // 输入时防抖保存（5 秒无输入后触发。有变更才写，避免无效 R2 写入）
-function autoSave() {
+// TODO: 暂时禁用，待专题重构 — 与 write_to_slot 存在竞态覆盖问题
+function autoSave() { return;
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(function () {
     var p = capturePayload();
@@ -1417,7 +1418,7 @@ function fingerprint(p) {
 }
 
 // 失焦时同步捕获数据，异步发送（不阻塞 click 导航）
-function saveOnBlur() {
+function saveOnBlur() { return;  // 暂时禁用，与 autoSave 同理
   clearTimeout(_autoSaveTimer);
   _pendingPayload = capturePayload();
   if (_pendingPayload) {
