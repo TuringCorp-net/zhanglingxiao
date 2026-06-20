@@ -366,8 +366,7 @@ async function findL1KeysForDate(env: Env, userToken: string, date: string): Pro
 
 /**
  * 将 Message[] 格式化为 STM 提取用的可读文本。
- * 直接处理 LLM 原生消息格式。tool 内容已在落盘时被 compactMessages() 截断，
- * 此处直接原样输出即可，无需额外截断。
+ * 直接处理 LLM 原生消息格式。
  */
 function formatMessagesForSTM(messages: Message[], date: string, workTitle: string): string {
   const lines: string[] = [];
@@ -392,7 +391,7 @@ function formatMessagesForSTM(messages: Message[], date: string, workTitle: stri
         }
         break;
       case 'tool':
-        // tool result 已被 compactMessages 压缩，对 STM 有参考价值
+        // tool result 对 STM 有参考价值
         if (msg.content && msg.content.length > 0) {
           lines.push(`_[工具结果: ${msg.content.substring(0, 200)}]_`);
         }
