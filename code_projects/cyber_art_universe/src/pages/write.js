@@ -1546,22 +1546,34 @@ function showSaveConflictToast(msg) {
   setTimeout(function () { if (toast.parentNode) toast.remove(); }, 12000);
 }
 
-// 原地刷新单个 slot：拉取最新模块数据，只更新目标 textarea + preview，不重建 DOM
-// 调用方需确保缓存已过期（_onWriteToSlot 已精确清除了目标模块的缓存）
+// 原地刷新单个 slot：绕过缓存直接请求 API，只更新缓存中该 slot + DOM 中该 textarea/preview
 function refreshSlot(slotId) {
   var moduleId = getModuleId();
   if (!moduleId || !slotId) return Promise.resolve();
 
-  return loadModule(moduleId).then(function (data) {
-    if (!data || !data.data || !data.data.slots) return;
+  // 绕过 loadModule 的缓存检查，直接发 API 请求获取最新数据
+  return hGet('/api/write/module/' + moduleId).then(function (data) {
+    if (!data || !data.ok || !data.data || !data.data.slots) return;
     var newContent = data.data.slots[slotId];
     if (newContent === undefined) return;
 
+    // 原地更新缓存：只改这一个 slot，不清整个模块缓存
+    var cached = cacheGet(moduleId);
+    if (cached && cached.data) {
+      if (!cached.data.slots) cached.data.slots = {};
+      cached.data.slots[slotId] = newContent;
+      if (data.data.slot_timestamps) {
+        if (!cached.data.slot_timestamps) cached.data.slot_timestamps = {};
+        cached.data.slot_timestamps[slotId] = data.data.slot_timestamps[slotId];
+      }
+      cacheSet(moduleId, cached);
+    }
+
+    // 更新 DOM：只改该 slot 的 textarea + preview
     for (var i = 0; i < _textareaList.length; i++) {
       var ta = _textareaList[i];
       if (ta.dataset.slotId === slotId) {
         ta.value = newContent;
-        // 更新对应的 preview（textarea 的前一个兄弟节点）
         var preview = ta.previousElementSibling;
         if (preview && preview.classList.contains('slot-preview')) {
           try {
@@ -1721,17 +1733,16 @@ window._onWriteToSlot = function (params) {
   var frontMod = modMap[mt];
   if (!frontMod) return;
 
-  // 只清除被修改模块的缓存（M3-M6 用 params.module_id，M0-M2 用 workId 拼接）
   var targetModuleId = params.module_id || (mt + '_' + (state.currentWorkId || ''));
-  if (targetModuleId) cacheClear([targetModuleId]);
 
-  // 当前不在该模块 → 下次切过来自然取最新
+  // 当前不在该模块 → 清该模块缓存，下次切过来自然取最新
   if (state.currentModule !== frontMod) {
+    if (targetModuleId) cacheClear([targetModuleId]);
     _lastSaved = '';
     return;
   }
 
-  // 只在用户没动过该槽位时才原地刷新（动了则由 AutoSave 的 409 处理冲突）
+  // 用户在该模块 → 不清缓存，refreshSlot 内部做原地 slot 级更新
   if (sid) {
     var curModuleId = getModuleId();
     var cached = curModuleId ? cacheGet(curModuleId) : null;
@@ -1749,7 +1760,7 @@ window._onWriteToSlot = function (params) {
     }
   }
 
-  // 用户没动过 → 原地刷新该槽位（cache 已在上面精确清除，loadModule 会走 API）
+  // 用户没动过 → 原地刷新该槽位（refreshSlot 绕过缓存直拉 API，只更新这一个 slot）
   refreshSlot(sid).then(function () {
     var p = capturePayload();
     if (p) _lastSaved = fingerprint(p);
