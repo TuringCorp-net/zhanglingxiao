@@ -11,7 +11,7 @@ import { getModule, updateModule } from '../../api/write/module';
 import { type Lang, workContentPath } from '../l1/work-content';
 import { getModuleGuide } from './guides';
 import { saveChecklist } from './memory';
-import { listVersions } from '../l1/version';
+import { listVersions, getVersion } from '../l1/version';
 import { diffWithCurrent } from '../l1/diff';
 
 // ============================================================
@@ -19,12 +19,16 @@ import { diffWithCurrent } from '../l1/diff';
 // ============================================================
 
 export function createTools(env: Env, workId: string, lang: string): L2ToolDef[] {
+  // Agent Loop 级别的时间戳缓存：read_module 存，write_to_slot 取
+  // 确保 LLM 基于"读到的时间戳"做冲突检测，而非"写入前那一刻的时间戳"
+  const timestampCache = new Map<string, Record<string, number>>();
+
   return [
     createChecklistTool(env),
     createWritingGuideTool(env),
-    createReadModuleTool(env),
+    createReadModuleTool(env, timestampCache),
     createCardTool(env),
-    createWriteToSlotTool(env),
+    createWriteToSlotTool(env, timestampCache),
     createVersionHistoryTool(env),
     createVersionDiffTool(env),
   ];
@@ -172,19 +176,20 @@ function createWritingGuideTool(env: Env): L2ToolDef {
 // read_module
 // ============================================================
 
-function createReadModuleTool(env: Env): L2ToolDef {
+function createReadModuleTool(env: Env, timestampCache: Map<string, Record<string, number>>): L2ToolDef {
   return {
     def: {
       type: 'function',
       function: {
         name: 'read_module',
         strict: true,
-        description: '读取指定模块的当前内容。使用方式取决于模块类型：\n\n**单文件模块 (m0/m1/m2)**：不传 module_id 直接用默认 ID 读取全部内容。\n\n**卡片类模块 (m3_card/m4_card/m5_intent/m6_chapter)**：分两步——① 不传 module_id → 获取卡片列表（仅 name + id）→ ② 选择目标卡片，传入 module_id → 获取该卡片的完整 slots + free_content。\n\n⚠️ 对于卡片类模块，请勿跳过第①步直接猜 module_id。拿到列表后选择合适的卡片，再传入 module_id 读取具体内容。',
+        description: '读取指定模块的内容。默认读取当前版本；传 version_id 可读取历史版本。使用方式取决于模块类型：\n\n**单文件模块 (m0/m1/m2)**：不传 module_id 直接用默认 ID 读取全部内容。\n\n**卡片类模块 (m3_card/m4_card/m5_intent/m6_chapter)**：分两步——① 不传 module_id → 获取卡片列表（仅 name + id）→ ② 选择目标卡片，传入 module_id → 获取该卡片的完整 slots + free_content。\n\n⚠️ 对于卡片类模块，请勿跳过第①步直接猜 module_id。拿到列表后选择合适的卡片，再传入 module_id 读取具体内容。\n\n📜 version_id 参数：不传读当前版本；传 "previous" 读上一个版本；传数字版本号如 "52" 读该版本完整快照。版本号可通过 get_version_history 获取。',
         parameters: {
           type: 'object',
           properties: {
             module_type: { type: 'string', description: '模块类型', enum: ['m0', 'm1', 'm2', 'm3_card', 'm4_card', 'm5_intent', 'm6_chapter'] },
             module_id: { type: 'string', description: '可选：指定具体的模块 ID。不传则单文件模块(m0/m1/m2)使用默认 ID，卡片类(m3_card/m4_card/m5_intent/m6_chapter)自动返回所有卡片' },
+            version_id: { type: 'string', description: '可选：读取指定历史版本的完整内容。支持 "previous"（上一次修改前的版本）或数字版本号如 "52"。不传则读取当前版本。版本号可通过 get_version_history 获取。注意：version_id 仅对具体模块有意义，卡片列表模式（不传 module_id 的卡片类）下无效。' },
           },
           required: ['module_type'],
         },
@@ -204,6 +209,79 @@ function createReadModuleTool(env: Env): L2ToolDef {
       if (accessError) return accessError;
 
       const lang = (params._lang as string) || 'zh';
+
+      // ── 版本读取分支 ──
+      // 当 version_id 传入时，读取历史版本快照而非当前内容
+      const versionId = params.version_id as string | undefined;
+      if (versionId) {
+        const moduleId = (params.module_id as string) || `${moduleType}_${workId}`;
+
+        // 查询模块元信息（r2_json_key + name）
+        const mod = await env.DB.prepare(
+          'SELECT id, work_id, type, r2_json_key, name FROM modules WHERE id = ?'
+        ).bind(moduleId).first<{ id: string; work_id: string; type: string; r2_json_key: string | null; name: string | null }>();
+
+        if (!mod || !mod.r2_json_key) {
+          return `❌ 模块 ${moduleId} 不存在或尚未创建，无法读取历史版本。\n请确认 module_type 和 module_id 正确。你可以先用 get_version_history({"module_type": "${moduleType}"}) 查看该模块的版本列表。`;
+        }
+
+        const jsonKey = workContentPath(mod.work_id, lang as 'zh' | 'en', mod.r2_json_key);
+
+        // 解析 version_id 引用（与 get_version_diff 一致）
+        const vers = await listVersions(env, jsonKey);
+        let resolvedVersionId: string;
+
+        if (versionId === 'previous') {
+          if (vers.length === 0) {
+            return `❌ 模块 ${moduleType} 没有历史版本。"previous" 不可用——此模块可能尚未被修改过。\n💡 去掉 version_id 参数即可读取当前内容。`;
+          }
+          resolvedVersionId = vers[0].id; // listVersions 按 version_num DESC 排列，第一个即最新
+        } else {
+          const num = parseInt(versionId, 10);
+          if (!isNaN(num) && num > 0) {
+            const found = vers.find(v => v.version_num === num);
+            if (!found) {
+              return `❌ 版本号 ${num} 不存在。可用版本号范围: 1-${vers.length}。\n💡 可通过 get_version_history({"module_type": "${moduleType}"}) 查看完整版本列表。`;
+            }
+            resolvedVersionId = found.id;
+          } else {
+            // 兜底：当作版本 UUID 直接使用
+            resolvedVersionId = versionId;
+          }
+        }
+
+        // 获取版本完整快照
+        const snapshot = await getVersion(env, jsonKey, resolvedVersionId);
+        if (snapshot === null) {
+          return `❌ 版本 ${versionId} 的快照不存在或已被清理。\n系统默认保留最近 10 个版本，该版本可能已被自动清理。`;
+        }
+
+        // 解析快照并格式化（与当前版本读取保持一致的输出格式）
+        const moduleName = mod.name || moduleType;
+        const isJson = jsonKey.endsWith('.json');
+
+        if (isJson) {
+          try {
+            const parsed = JSON.parse(snapshot);
+            const slots = parsed.slots || {};
+            const freeContent = parsed.free_content || '';
+
+            let summary = `📜 历史版本: ${moduleName} (${moduleType})\n\n`;
+            if (Object.keys(slots as object).length > 0) {
+              summary += `=== 结构化槽位 ===\n${JSON.stringify(slots, null, 2)}\n\n`;
+            }
+            if (freeContent) {
+              summary += `=== 自由写作区 ===\n${freeContent}`;
+            }
+            return summary || `版本 ${versionId} 的内容为空（新模块，尚未填写任何内容）。`;
+          } catch {
+            // JSON 解析失败，降级为纯文本返回
+            return `📜 历史版本: ${moduleName} (${moduleType})\n\n${snapshot}`;
+          }
+        } else {
+          return `📜 历史版本: ${moduleName} (${moduleType})\n\n${snapshot}`;
+        }
+      }
 
       // 卡片类模块：自动列出所有卡片并返回完整内容
       const CARD_TYPES = ['m3_card', 'm4_card', 'm5_intent', 'm6_chapter'];
@@ -239,7 +317,14 @@ function createReadModuleTool(env: Env): L2ToolDef {
         return `❌ 读取模块失败: ${errMsg}\n\n可能原因及修复建议:\n- 如果 module_id 不正确，请确认该模块的真实 ID。你可以不传 module_id，系统会自动使用默认 ID（格式: {module_type}_{work_id}）\n- 对于卡片类模块（m3_card/m4_card/m5_intent/m6_chapter），不传 module_id 会自动返回所有卡片\n- 如果模块确实不存在，说明该作品下还没有创建此模块`;
       }
 
-      const result = (data.data || {}) as Record<string, unknown>;
+      // 存储 slot_timestamps 到 Agent Loop 级别缓存，供 write_to_slot 做冲突检测
+      const resultData = data.data as Record<string, unknown> | undefined;
+      if (resultData?.slot_timestamps) {
+        const cacheKey = `${moduleType}:${(params.module_id as string) || `${moduleType}_${workId}`}`;
+        timestampCache.set(cacheKey, resultData.slot_timestamps as Record<string, number>);
+      }
+
+      const result = resultData || {};
       const slots = result.slots || {};
       const freeContent = result.free_content || '';
       const moduleName = result.name || moduleType;
@@ -327,14 +412,14 @@ function createCardTool(env: Env): L2ToolDef {
 //   - 或：考虑将 content 放在 HTTP body 顶层字段，绕过 JSON 嵌套转义
 // 参考资料：OpenAI tool calling 规范、DeepSeek 官方文档
 
-function createWriteToSlotTool(env: Env): L2ToolDef {
+function createWriteToSlotTool(env: Env, timestampCache: Map<string, Record<string, number>>): L2ToolDef {
   return {
     def: {
       type: 'function',
       function: {
         name: 'write_to_slot',
         strict: true,
-        description: '将你在回复正文中输出的 Markdown 内容写入指定槽位。工作流程：① 先在回复正文中直接输出完整 Markdown（就像正常写文档一样，不需要 JSON 转义）② 再调用本工具，只传 module_type 和 slot_id。系统会自动从你的回复正文中提取内容写入。参数: module_type(模块类型), slot_id(槽位ID)',
+        description: '将你在回复正文中输出的 Markdown 内容写入指定槽位。工作流程：① 在回复正文中以 markdown 代码块输出要写入的完整内容（用 ```markdown ``` 包裹），② 再调用本工具，只传 module_type 和 slot_id。系统会自动从代码块中提取纯内容写入。\n\n示例回复格式：\n```markdown\n## 二、社会组织与结构\n### 2.1 弯月大陆基础格局\n...完整设定内容...\n```\n\n💡 重要：代码块中只放要写入槽位的纯 Markdown 内容，不要放对话性文字（如"好的"、"以下是内容"、"现在调用工具写入"等）。这些对话性文字可以写在代码块外面。参数: module_type(模块类型), slot_id(槽位ID)',
         parameters: {
           type: 'object',
           properties: {
@@ -377,6 +462,32 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
       const body: Record<string, unknown> = { slots: { [slotId]: content } };
       if (params.free_content !== undefined) body.free_content = params.free_content;
 
+      // 乐观并发控制：携带时间戳基线（从 Agent Loop 级缓存获取，或即时读取）
+      const cacheKey = `${moduleType}:${moduleId}`;
+      let prevTimestamps = timestampCache.get(cacheKey);
+      if (!prevTimestamps) {
+        // LLM 未先调用 read_module → 即时读取当前 R2 时间戳作为基线
+        try {
+          const modRow = await env.DB.prepare(
+            'SELECT work_id, r2_json_key FROM modules WHERE id = ?'
+          ).bind(moduleId).first<{ work_id: string; r2_json_key: string | null }>();
+          if (modRow?.r2_json_key) {
+            const jsonKey = workContentPath(modRow.work_id, lang as 'zh' | 'en', modRow.r2_json_key);
+            const obj = await env.WORKS_BUCKET.get(jsonKey);
+            if (obj) {
+              const r2Data = JSON.parse(await obj.text());
+              if (r2Data.slot_timestamps) {
+                prevTimestamps = r2Data.slot_timestamps as Record<string, number>;
+                timestampCache.set(cacheKey, prevTimestamps);
+              }
+            }
+          }
+        } catch { /* 读取失败则不带时间戳，updateModule 将返回 400 */ }
+      }
+      if (prevTimestamps) {
+        body._prev_slot_timestamps = prevTimestamps;
+      }
+
       const url = `https://internal/api/write/module/${moduleId}?lang=${params._lang || 'zh'}`;
       const req = new Request(url, {
         method: 'PUT',
@@ -391,7 +502,19 @@ function createWriteToSlotTool(env: Env): L2ToolDef {
       const data = await response.json() as Record<string, unknown>;
 
       if (!data.ok) {
+        const errCode = (data as { error?: { code?: string } }).error?.code;
         const errMsg = (data as { error?: { message?: string } }).error?.message || JSON.stringify((data as { error?: { message?: string } }).error);
+
+        // 409 冲突：时间戳不匹配 → 教学式错误，引导 LLM 重新读取
+        if (errCode === 'CONTENT_STALE') {
+          return `❌ 写入冲突：${errMsg}\n\n这说明在你准备修改期间，该模块的内容已被其他人（可能是作者在前端编辑）修改。\n\n👉 你需要：① 重新调用 read_module 获取最新内容和时间戳 ② 基于最新内容重新生成你的修改 ③ 再次调用 write_to_slot 写入。`;
+        }
+
+        // 400 缺少时间戳：向后兼容处理，引导 LLM 先读
+        if (errCode === 'MISSING_TIMESTAMPS') {
+          return `❌ 写入前需要先获取模块的时间戳基线。\n\n👉 请先调用 read_module({"module_type": "${moduleType}"${params.module_id ? `, "module_id": "${params.module_id}"` : ''}}) 获取当前内容，确认无误后再调用 write_to_slot 写入。`;
+        }
+
         return `❌ 写入失败: ${errMsg}\n\n可能原因及修复建议:\n- 如果提示 "Module not found"：可能是不存在的卡片——请先用 create_card 创建，再用 write_to_slot 写入内容\n- 如果提示 slot ID 无效，说明你使用的 slot_id 不在模板中。请调用 get_writing_guide("${moduleType}") 获取该模块的合法 slot_id 列表，然后重新写入\n- 如果模块确实不存在，请检查 work_id 是否正确`;
       }
 

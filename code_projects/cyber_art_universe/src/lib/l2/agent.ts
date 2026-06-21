@@ -175,10 +175,27 @@ export async function* agentLoop(
 
       // write_to_slot: 内容从 assistant.content 提取，tool args 只传元信息
       // LLM 先输出 Markdown 正文，再调工具 → Worker 自动拼合，绕过 JSON 转义
+      //
+      // 为防止对话性文字（"好的"、"现在调用工具写入——"等）污染槽位内容，
+      // 优先从 ```markdown ``` 代码块中提取纯内容；无代码块则 fallback 全文。
       if (toolName === 'write_to_slot' && (!toolParams.content || !(toolParams.content as string).trim())) {
-        const lastMsg = messages[messages.length - 1];
-        if (lastMsg.role === 'assistant' && lastMsg.content) {
-          toolParams.content = lastMsg.content;
+        // 从后往前查找最近的 assistant 消息（处理多 tool_call 场景：前面的 tool result
+        // 已 push 进 messages，messages[last] 可能不是 assistant 消息）
+        let assistantContent = '';
+        for (let i = messages.length - 1; i >= 0; i--) {
+          if (messages[i].role === 'assistant' && messages[i].content) {
+            assistantContent = messages[i].content as string;
+            break;
+          }
+        }
+        if (assistantContent) {
+          let content = assistantContent;
+          // 尝试从 markdown/md 代码块中提取纯内容（非贪婪匹配第一个代码块）
+          const codeBlockMatch = content.match(/```(?:markdown|md)?\s*\n([\s\S]*?)\n\s*```/);
+          if (codeBlockMatch && codeBlockMatch[1].trim().length > 0) {
+            content = codeBlockMatch[1];
+          }
+          toolParams.content = content;
         }
       }
 

@@ -76,9 +76,11 @@ export interface TemplateJsonResult {
   slots: Record<string, string>;
 }
 
-/** R2 .json 存储格式 — 仅 slots，free_content 存储于独立 .free.md 文件 */
+/** R2 .json 存储格式 — slots + 槽位级乐观锁时间戳，free_content 存储于独立 .free.md 文件 */
 export interface R2SlotData {
   slots: Record<string, string>;
+  /** 每个 slot 的最后修改时间（毫秒时间戳），用于乐观并发冲突检测 */
+  slot_timestamps: Record<string, number>;
 }
 
 // ============================================================

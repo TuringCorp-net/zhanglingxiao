@@ -383,6 +383,26 @@ async function readR2Json(env: Env, key: string): Promise<R2SlotData | null> {
   } catch { return null; }
 }
 
+/**
+ * 从 R2 数据中提取 slot 时间戳，用于乐观并发冲突检测。
+ * 若数据中尚无时间戳（首次访问无时间戳的 R2 文件），返回全 0 哨兵值。
+ * 全 0 时间戳在冲突检测中会被视为"无基线"，任何写入均放行。
+ * 首次成功写入后，真实时间戳持久化到 R2，冲突检测正式生效。
+ */
+function resolveSlotTimestamps(data: R2SlotData | null): Record<string, number> {
+  if (data?.slot_timestamps && Object.keys(data.slot_timestamps).length > 0) {
+    return data.slot_timestamps;
+  }
+  // 首次访问：返回哨兵值 0（冲突检测中 0 = 无基线，放行）
+  const ts: Record<string, number> = {};
+  if (data?.slots) {
+    for (const key of Object.keys(data.slots)) {
+      ts[key] = 0;
+    }
+  }
+  return ts;
+}
+
 async function readR2Text(env: Env, key: string): Promise<string> {
   if (!key) return '';
   try {
@@ -487,6 +507,8 @@ export async function getModule(env: Env, request: Request, moduleId: string): P
   const name = (mod.type === 'm3_card') ? mod.name : undefined;
   const isEmpty = !slotData && !md && !freeContent;
 
+  const timestamps = resolveSlotTimestamps(slotData);
+
   // 卡片模式（M4_card）
   if (cfg.isCard && cfg.cardSlots) {
     const cardJson = buildCardJson(mod.name, cfg.cardSlots, lang, 2, slotData);
@@ -496,6 +518,7 @@ export async function getModule(env: Env, request: Request, moduleId: string): P
       editor_type: 'slot', is_card: true,
       card: cardJson,
       slots: slotData?.slots || {},
+      slot_timestamps: timestamps,
       free_content: freeContent,
       rendered_md: md,
       is_template: isEmpty,
@@ -510,6 +533,7 @@ export async function getModule(env: Env, request: Request, moduleId: string): P
     editor_type: 'slot',
     template,
     slots: slotData?.slots || {},
+    slot_timestamps: timestamps,
     free_content: freeContent,
     rendered_md: md,
     is_template: isEmpty,
@@ -546,6 +570,8 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     free_content?: string;
     _prev_slots?: Record<string, string>;
     _prev_free_content?: string;
+    _prev_slot_timestamps?: Record<string, number>;
+    _debug_skip_conflict_check?: boolean;
   };
   const hasSlots = body.slots && typeof body.slots === 'object' && Object.keys(body.slots).length > 0;
   const hasFreeContent = body.free_content !== undefined;
@@ -586,10 +612,49 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   const jsonKey = r2Path(mod.work_id, lang, jsonRelKey);
   const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
 
+  // ── 乐观并发控制：强制时间戳 + 冲突检测 ──
+  // 读取当前 R2 内容（一次读取，复用于冲突检测 + 快照 + 合并）
+  const existingR2 = (hasSlots && jsonKey) ? await readR2Json(env, jsonKey) : null;
+
+  if (hasSlots) {
+    const isDebugBypass = body._debug_skip_conflict_check === true && env.TEST_MODE === 'true';
+
+    if (!isDebugBypass && !body._prev_slot_timestamps) {
+      return new Response(JSON.stringify(jsonError(
+        'MISSING_TIMESTAMPS',
+        '缺少 _prev_slot_timestamps 参数。写入操作必须先通过 GET 获取模块的 slot_timestamps，然后原样传入。如果你是通过 Story Elf 写入，请先调用 read_module。'
+      )), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    if (body._prev_slot_timestamps && jsonKey) {
+      const currentTimestamps = resolveSlotTimestamps(existingR2);
+      const prevTimestamps = body._prev_slot_timestamps;
+      const staleSlots: string[] = [];
+
+      for (const slotId of Object.keys(body.slots!)) {
+        const prevTs = prevTimestamps[slotId] || 0;
+        const currTs = currentTimestamps[slotId] || 0;
+        // prevTs === 0：该 slot 在基线中不存在（新增）→ 放行
+        // currTs === 0：该 slot 在 R2 中不存在（首次写入）→ 放行
+        // 否则必须完全匹配
+        if (prevTs !== 0 && currTs !== 0 && prevTs !== currTs) {
+          staleSlots.push(slotId);
+        }
+      }
+
+      if (staleSlots.length > 0) {
+        return new Response(JSON.stringify(jsonError(
+          'CONTENT_STALE',
+          `以下槽位已被修改（可能由 Story Elf 或另一端编辑导致）：${staleSlots.join(', ')}。请刷新获取最新内容后再试。注意：刷新页面将丢失当前未保存的编辑。`
+        )), { status: 409, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+  }
+
   // V4: 旧内容快照
   const prevJsonContent = body._prev_slots
-    ? JSON.stringify({ slots: body._prev_slots }, null, 2)
-    : ((hasSlots && jsonKey) ? await readR2Text(env, jsonKey) : null);
+    ? JSON.stringify({ slots: body._prev_slots, slot_timestamps: resolveSlotTimestamps(existingR2) }, null, 2)
+    : (existingR2 ? JSON.stringify({ slots: existingR2.slots, slot_timestamps: resolveSlotTimestamps(existingR2) }, null, 2) : null);
   const prevFreeContent = body._prev_free_content !== undefined
     ? body._prev_free_content
     : ((hasFreeContent && freeKey) ? await readR2Text(env, freeKey) : null);
@@ -603,24 +668,30 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
 
   const currentFreeContent = hasFreeContent ? body.free_content! : await readR2Text(env, freeKey);
 
-  // 写 slots → .json（合并，非替换）
+  // 写 slots → .json（合并，非替换）+ 更新时间戳
   let mergedSlots: Record<string, string> = {};
+  let updatedTimestamps: Record<string, number> = {};
   if (hasSlots) {
     if (jsonKey) {
-      const existing = await readR2Json(env, jsonKey);
-      mergedSlots = { ...(existing?.slots || {}), ...body.slots! };
+      mergedSlots = { ...(existingR2?.slots || {}), ...body.slots! };
     } else {
       mergedSlots = body.slots!;
     }
-    await env.WORKS_BUCKET.put(jsonKey, JSON.stringify({ slots: mergedSlots }, null, 2), {
+    // 更新被修改 slot 的时间戳（只更新本次写入涉及的 slot）
+    updatedTimestamps = { ...resolveSlotTimestamps(existingR2) };
+    const writeTime = Date.now();
+    for (const slotId of Object.keys(body.slots!)) {
+      updatedTimestamps[slotId] = writeTime;
+    }
+    await env.WORKS_BUCKET.put(jsonKey, JSON.stringify({ slots: mergedSlots, slot_timestamps: updatedTimestamps }, null, 2), {
       httpMetadata: { contentType: 'application/json' },
     });
   }
 
   await touchModule(env, moduleId);
 
-  // V4 自动版本快照
-  const newJsonContent = hasSlots ? JSON.stringify({ slots: mergedSlots }, null, 2) : '';
+  // V4 自动版本快照（含 slot_timestamps，确保对比准确）
+  const newJsonContent = hasSlots ? JSON.stringify({ slots: mergedSlots, slot_timestamps: updatedTimestamps }, null, 2) : '';
   const newFreeContent = hasFreeContent ? body.free_content! : '';
   if (hasSlots && prevJsonContent && prevJsonContent !== newJsonContent) {
     await createSnapshot(env, mod.work_id, jsonKey, prevJsonContent);
@@ -632,12 +703,15 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   const currentSlotData = hasSlots ? { slots: mergedSlots } : await readR2Json(env, jsonKey);
   const currentSlots = currentSlotData?.slots || {};
 
+  const currentTimestamps = hasSlots ? updatedTimestamps : resolveSlotTimestamps(currentSlotData);
+
   if (cfg.isCard && cfg.cardSlots) {
     const cardJson = buildCardJson(mod.name, cfg.cardSlots, lang, 2, { slots: currentSlots });
     return new Response(JSON.stringify(jsonSuccess({
       module_id: moduleId, lang, saved: true,
       ...(slotWarnings.length > 0 ? { slot_warnings: slotWarnings } : {}),
       is_card: true, card: cardJson, slots: currentSlots,
+      slot_timestamps: currentTimestamps,
       free_content: currentFreeContent,
     })), { headers: { 'Content-Type': 'application/json' } });
   }
@@ -648,6 +722,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     module_id: moduleId, lang, saved: true,
     ...(slotWarnings.length > 0 ? { slot_warnings: slotWarnings } : {}),
     template, slots: currentSlots,
+    slot_timestamps: currentTimestamps,
     free_content: currentFreeContent,
   })), { headers: { 'Content-Type': 'application/json' } });
 }

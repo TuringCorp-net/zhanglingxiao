@@ -59,7 +59,7 @@ function hPut(path, body) {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${userToken}` },
     body: JSON.stringify(body),
-  }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  }).then(r => r.json().then(data => ({ ok: r.ok, status: r.status, ...data })))
     .catch(err => { console.error('hPut error:', path, err.message || err); return null; });
 }
 

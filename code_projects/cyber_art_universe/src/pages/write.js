@@ -594,10 +594,16 @@ function _lsKey() {
 function cacheGet(key) {
   // 1. 内存命中
   if (_moduleCache[key]) return _moduleCache[key];
-  // 2. localStorage 恢复（切回之前访问过的作品时）
+  // 2. localStorage 恢复（带 24h TTL 过期检查）
   try {
     var stored = JSON.parse(localStorage.getItem(_lsKey()) || '{}');
     if (stored.d && stored.d[key]) {
+      // 超过 24 小时则视为过期，清理并返回 null
+      if (stored.ts && (Date.now() - stored.ts > 86400000)) {
+        delete stored.d[key];
+        localStorage.setItem(_lsKey(), JSON.stringify(stored));
+        return null;
+      }
       _moduleCache[key] = stored.d[key];
       return stored.d[key];
     }
@@ -677,13 +683,25 @@ async function saveModule(moduleId, slots, freeContent) {
   var body = { slots: slots || {}, free_content: freeContent || '' };
   if (cached && cached.data) {
     if (cached.data.slots) body._prev_slots = cached.data.slots;
+    if (cached.data.slot_timestamps) body._prev_slot_timestamps = cached.data.slot_timestamps;
     if (cached.data.free_content !== undefined) body._prev_free_content = cached.data.free_content;
   }
   var resp = await hPut('/api/write/module/' + moduleId, body);
   if (resp && resp.ok) {
     cacheSet(moduleId, resp);
+    _lastSaved = fingerprint({ moduleId: moduleId, mod: state.currentModule, slots: slots, free_content: freeContent || '' });
+  } else if (resp && resp.status === 409) {
+    // 冲突：内容被 Story Elf 或其他端修改
+    var errMsg = (resp.error && resp.error.message) || '内容已被更新，请刷新页面获取最新内容。';
+    showSaveConflictToast(errMsg);
+    _lastSaved = '';  // 阻止后续 autoSave 重复尝试
+  } else if (resp && resp.status === 400 && resp.error && resp.error.code === 'MISSING_TIMESTAMPS') {
+    // 缓存来自旧版前端（无时间戳）→ 清缓存后重载
+    cacheClear([moduleId]);
+    reloadCurrentModule();
   } else {
     cacheClear([moduleId]);
+    _lastSaved = '';
   }
   return resp;
 }
@@ -1398,8 +1416,8 @@ var _pendingPayload = null;  // 失焦时捕获的待发送数据
 var _lastSaved = '';         // 上次保存的 payload 指纹（用于去重）
 
 // 输入时防抖保存（5 秒无输入后触发。有变更才写，避免无效 R2 写入）
-// TODO: 暂时禁用，待专题重构 — 与 write_to_slot 存在竞态覆盖问题
-function autoSave() { return;
+// 冲突检测由服务端 _prev_slot_timestamps 比对保证安全
+function autoSave() {
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(function () {
     var p = capturePayload();
@@ -1418,7 +1436,8 @@ function fingerprint(p) {
 }
 
 // 失焦时同步捕获数据，异步发送（不阻塞 click 导航）
-function saveOnBlur() { return;  // 暂时禁用，与 autoSave 同理
+// 冲突检测由服务端 _prev_slot_timestamps 比对保证安全
+function saveOnBlur() {
   clearTimeout(_autoSaveTimer);
   _pendingPayload = capturePayload();
   if (_pendingPayload) {
@@ -1480,6 +1499,26 @@ async function saveModuleContent(silent) {
     await sendPayload(p);
     // fingerprint 在 sendPayload 成功后内部更新
   }
+}
+
+// 保存冲突提示 toast（内容被 Story Elf 或其他端修改）
+function showSaveConflictToast(msg) {
+  var toast = document.createElement('div');
+  toast.className = 'save-conflict-toast';
+  toast.textContent = msg || '内容已被更新，请刷新页面获取最新内容。注意：刷新将丢失当前未保存的编辑。';
+  toast.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#b91c1c;color:#fff;padding:12px 24px;border-radius:8px;z-index:99999;font-size:14px;max-width:480px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.4);cursor:pointer;';
+  toast.addEventListener('click', function () { toast.remove(); });
+  document.body.appendChild(toast);
+  setTimeout(function () { if (toast.parentNode) toast.remove(); }, 12000);
+}
+
+// 时间戳缺失时重新加载当前模块
+function reloadCurrentModule() {
+  var loadFn = {
+    original_concept: loadM0, worldbuilding: loadM1, outline: loadM2,
+    characters: loadM3, foreshadowing: loadM4, chapters: loadM5, writing: loadM6
+  }[state.currentModule];
+  if (loadFn) loadFn();
 }
 
 async function generateOutline(workId) {
@@ -1606,10 +1645,11 @@ function setThreePanelMode() {
 // Story Elf 行为覆盖
 // ============================================================
 
-// SSE write_to_slot 回调 — 清除缓存 + 刷新当前模块编辑器
-// 与旧版单响应机制保持一致：收到 tool_call 时立即刷新，不等 tool_result
+// SSE write_to_slot 回调 — 清缓存 + 只检查被 Story Elf 修改的那个槽位
+// 若用户没动过该槽位 → 静默刷新；若用户动过 → 冲突检测交给 AutoSave 的 409 机制
 window._onWriteToSlot = function (params) {
   var mt = params.module_type;
+  var sid = params.slot_id;
   if (!mt) return;
 
   // module_type → 前端模块名映射
@@ -1621,23 +1661,50 @@ window._onWriteToSlot = function (params) {
   var frontMod = modMap[mt];
   if (!frontMod) return;
 
-  // 清除所有模块缓存（M3/M4/M5/M6 是多卡片结构，无法精确清除）
+  // 先取当前模块的缓存内容（用于槽位比对），再清缓存（强制后续加载走 API）
+  var moduleId = getModuleId();
+  var cachedSlots = null;
+  if (sid && moduleId) {
+    var cached = cacheGet(moduleId);
+    if (cached && cached.data && cached.data.slots) {
+      cachedSlots = cached.data.slots;
+    }
+  }
+
   cacheClear();
 
-  // 如果用户当前正在查看被写入的模块，重新加载编辑器
   var loadFn = {
     original_concept: loadM0, worldbuilding: loadM1, outline: loadM2,
     characters: loadM3, foreshadowing: loadM4, chapters: loadM5, writing: loadM6
   }[frontMod];
-  if (state.currentModule === frontMod && loadFn) {
+
+  // 当前不在该模块 → 下次切过来自然取最新
+  if (state.currentModule !== frontMod || !loadFn) {
+    _lastSaved = '';
+    return;
+  }
+
+  // 用户正在该模块 → 只检查被 Story Elf 修改的那一个槽位
+  var slotModified = false;
+  if (sid && cachedSlots) {
+    for (var i = 0; i < _textareaList.length; i++) {
+      var ta = _textareaList[i];
+      if (ta.dataset.slotId === sid) {
+        slotModified = (ta.value !== (cachedSlots[sid] || ''));
+        break;
+      }
+    }
+  }
+
+  if (slotModified) {
+    // 用户动过这个槽位 → 不重载，冲突检测交给 AutoSave 的 409 机制
+    _lastSaved = '';
+  } else {
+    // 用户没动过 → 静默刷新
     loadFn().then(function () {
-      // 更新 _lastSaved 指纹，防止后续 auto-save 用旧缓存覆盖新内容
       var p = capturePayload();
       if (p) _lastSaved = fingerprint(p);
     });
-  } else {
-    // 当前不在该模块，下一次切换到该模块时会自然加载最新内容（缓存已清）
-    _lastSaved = '';
   }
 };
 
@@ -1762,6 +1829,19 @@ function initLeftPanelHDrag() { _leftPanel.initDrag(); }
 document.addEventListener('DOMContentLoaded', async function () {
   qs('#global-nav').innerHTML = renderNav();
   if (typeof CAU !== 'undefined') CAU.updateLoginButton();
+
+  // 清除所有 localStorage 模块缓存（确保每次打开页面都是最新数据）
+  (function clearAllModuleCaches() {
+    var toRemove = [];
+    for (var i = localStorage.length - 1; i >= 0; i--) {
+      var key = localStorage.key(i);
+      if (key && key.indexOf('sf_pipe_') === 0) toRemove.push(key);
+    }
+    for (var j = 0; j < toRemove.length; j++) {
+      localStorage.removeItem(toRemove[j]);
+    }
+  })();
+
   loadState();
   initSplitDrag();
 
