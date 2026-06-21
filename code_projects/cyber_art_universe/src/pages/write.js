@@ -1448,15 +1448,12 @@ function initChapterDrag() {
 var _autoSaveTimer = null;
 var _pendingPayload = null;  // 失焦时捕获的待发送数据
 var _lastSaved = '';         // 上次保存的 payload 指纹（用于去重）
-var _reloading = false;      // _onWriteToSlot 正在刷新模块，阻止假保存
 
 // 输入时防抖保存（5 秒无输入后触发。有变更才写，避免无效 R2 写入）
 // 冲突检测由服务端 _prev_slot_timestamps 比对保证安全
 function autoSave() {
-  if (_reloading) return;  // _onWriteToSlot 重载中，不触发
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(function () {
-    if (_reloading) return;
     var p = capturePayload();
     if (!p) return;
     var fp = fingerprint(p);
@@ -1475,7 +1472,6 @@ function fingerprint(p) {
 // 失焦时同步捕获数据，异步发送（不阻塞 click 导航）
 // 冲突检测由服务端 _prev_slot_timestamps 比对保证安全
 function saveOnBlur() {
-  if (_reloading) return;  // _onWriteToSlot 重载中，不触发
   clearTimeout(_autoSaveTimer);
   _pendingPayload = capturePayload();
   if (_pendingPayload) {
@@ -1548,6 +1544,34 @@ function showSaveConflictToast(msg) {
   toast.addEventListener('click', function () { toast.remove(); });
   document.body.appendChild(toast);
   setTimeout(function () { if (toast.parentNode) toast.remove(); }, 12000);
+}
+
+// 原地刷新单个 slot：拉取最新模块数据，只更新目标 textarea + preview，不重建 DOM
+// 调用方需确保缓存已过期（_onWriteToSlot 已精确清除了目标模块的缓存）
+function refreshSlot(slotId) {
+  var moduleId = getModuleId();
+  if (!moduleId || !slotId) return Promise.resolve();
+
+  return loadModule(moduleId).then(function (data) {
+    if (!data || !data.data || !data.data.slots) return;
+    var newContent = data.data.slots[slotId];
+    if (newContent === undefined) return;
+
+    for (var i = 0; i < _textareaList.length; i++) {
+      var ta = _textareaList[i];
+      if (ta.dataset.slotId === slotId) {
+        ta.value = newContent;
+        // 更新对应的 preview（textarea 的前一个兄弟节点）
+        var preview = ta.previousElementSibling;
+        if (preview && preview.classList.contains('slot-preview')) {
+          try {
+            preview.innerHTML = newContent ? marked.parse(newContent) : '<span class="slot-preview-empty"></span>';
+          } catch (e) { preview.textContent = newContent; }
+        }
+        break;
+      }
+    }
+  });
 }
 
 // 时间戳缺失时重新加载当前模块
@@ -1683,14 +1707,12 @@ function setThreePanelMode() {
 // Story Elf 行为覆盖
 // ============================================================
 
-// SSE write_to_slot 回调 — 清缓存 + 只检查被 Story Elf 修改的那个槽位
-// 若用户没动过该槽位 → 静默刷新；若用户动过 → 冲突检测交给 AutoSave 的 409 机制
+// SSE write_to_slot 回调 — 精确清目标模块缓存 + 原地刷新被修改的槽位
 window._onWriteToSlot = function (params) {
   var mt = params.module_type;
   var sid = params.slot_id;
   if (!mt) return;
 
-  // module_type → 前端模块名映射
   var modMap = {
     m0: 'original_concept', m1: 'worldbuilding', m2: 'outline',
     m3_card: 'characters', m4_card: 'foreshadowing',
@@ -1699,53 +1721,39 @@ window._onWriteToSlot = function (params) {
   var frontMod = modMap[mt];
   if (!frontMod) return;
 
-  // 先取当前模块的缓存内容（用于槽位比对），再清缓存（强制后续加载走 API）
-  var moduleId = getModuleId();
-  var cachedSlots = null;
-  if (sid && moduleId) {
-    var cached = cacheGet(moduleId);
-    if (cached && cached.data && cached.data.slots) {
-      cachedSlots = cached.data.slots;
-    }
-  }
-
-  cacheClear();
-
-  var loadFn = {
-    original_concept: loadM0, worldbuilding: loadM1, outline: loadM2,
-    characters: loadM3, foreshadowing: loadM4, chapters: loadM5, writing: loadM6
-  }[frontMod];
+  // 只清除被修改模块的缓存（M3-M6 用 params.module_id，M0-M2 用 workId 拼接）
+  var targetModuleId = params.module_id || (mt + '_' + (state.currentWorkId || ''));
+  if (targetModuleId) cacheClear([targetModuleId]);
 
   // 当前不在该模块 → 下次切过来自然取最新
-  if (state.currentModule !== frontMod || !loadFn) {
+  if (state.currentModule !== frontMod) {
     _lastSaved = '';
     return;
   }
 
-  // 用户正在该模块 → 只检查被 Story Elf 修改的那一个槽位
-  var slotModified = false;
-  if (sid && cachedSlots) {
+  // 只在用户没动过该槽位时才原地刷新（动了则由 AutoSave 的 409 处理冲突）
+  if (sid) {
+    var curModuleId = getModuleId();
+    var cached = curModuleId ? cacheGet(curModuleId) : null;
+    var cachedSlots = (cached && cached.data && cached.data.slots) || {};
+    var currentVal = '';
     for (var i = 0; i < _textareaList.length; i++) {
-      var ta = _textareaList[i];
-      if (ta.dataset.slotId === sid) {
-        slotModified = (ta.value !== (cachedSlots[sid] || ''));
+      if (_textareaList[i].dataset.slotId === sid) {
+        currentVal = _textareaList[i].value;
         break;
       }
     }
+    if (currentVal !== (cachedSlots[sid] || '')) {
+      _lastSaved = '';  // 用户动过 → 不刷新，交给 409
+      return;
+    }
   }
 
-  if (slotModified) {
-    // 用户动过这个槽位 → 不重载，冲突检测交给 AutoSave 的 409 机制
-    _lastSaved = '';
-  } else {
-    // 用户没动过 → 静默刷新（设置 _reloading 标志阻止 DOM 销毁触发的假保存）
-    _reloading = true;
-    loadFn().then(function () {
-      var p = capturePayload();
-      if (p) _lastSaved = fingerprint(p);
-      _reloading = false;
-    });
-  }
+  // 用户没动过 → 原地刷新该槽位（cache 已在上面精确清除，loadModule 会走 API）
+  refreshSlot(sid).then(function () {
+    var p = capturePayload();
+    if (p) _lastSaved = fingerprint(p);
+  });
 };
 
 StoryElf.setPage('write');
