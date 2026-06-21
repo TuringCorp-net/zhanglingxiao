@@ -677,11 +677,14 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
     } else {
       mergedSlots = body.slots!;
     }
-    // 更新被修改 slot 的时间戳（只更新本次写入涉及的 slot）
+    // 只更新内容实际发生变化的 slot 的时间戳（避免假冲突）
     updatedTimestamps = { ...resolveSlotTimestamps(existingR2) };
     const writeTime = Date.now();
     for (const slotId of Object.keys(body.slots!)) {
-      updatedTimestamps[slotId] = writeTime;
+      const oldContent = (existingR2?.slots || {})[slotId] || '';
+      if (oldContent !== body.slots![slotId]) {
+        updatedTimestamps[slotId] = writeTime;
+      }
     }
     await env.WORKS_BUCKET.put(jsonKey, JSON.stringify({ slots: mergedSlots, slot_timestamps: updatedTimestamps }, null, 2), {
       httpMetadata: { contentType: 'application/json' },
