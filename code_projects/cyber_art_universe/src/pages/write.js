@@ -611,38 +611,113 @@ function cacheGet(key) {
   return null;
 }
 
-function cacheSet(key, data) {
-  if (!data) return;
-  _moduleCache[key] = data;
-  // 同步写 localStorage（per workId，不阻塞 UI）
-  try {
-    var ck = _lsKey();
-    if (!ck) return;
-    var stored = JSON.parse(localStorage.getItem(ck) || '{}');
-    stored.d = stored.d || {};
-    stored.d[key] = data;
-    stored.ts = Date.now();
-    localStorage.setItem(ck, JSON.stringify(stored));
-  } catch (_) {}
-}
-
-function cacheClear(keys) {
-  // 无参数 = 数据变更导致当前作品缓存全部失效：内存 + localStorage 同步清除
-  if (!keys) {
-    _moduleCache = {};
-    try { if (state.currentWorkId) localStorage.removeItem(_lsKey()); } catch (_) {}
-    return;
-  }
-  // 指定 key = 精确失效（AI 生成/保存失败等）：内存 + localStorage 同步清除
-  (keys || []).forEach(function (k) {
-    delete _moduleCache[k];
+// 缓存写入：
+//   cacheSet(moduleId, fullData)         — 完整模块数据
+//   cacheSet(moduleId, slotId, content)   — 只更新一个 slot 的内容
+//   cacheSet(moduleId, slotId, content, timestamp) — 同时更新 slot 内容 + 时间戳
+function cacheSet(moduleId, data, slotId, timestamp) {
+  if (slotId !== undefined) {
+    // Slot 级写入：原地更新缓存中该 slot 的内容（和时间戳，如果给了）
+    var existing = _moduleCache[moduleId];
+    if (!existing || !existing.data) return;
+    if (!existing.data.slots) existing.data.slots = {};
+    existing.data.slots[slotId] = data;
+    if (timestamp !== undefined) {
+      if (!existing.data.slot_timestamps) existing.data.slot_timestamps = {};
+      existing.data.slot_timestamps[slotId] = timestamp;
+    }
+    // 同步 localStorage
     try {
       var ck = _lsKey();
       if (!ck) return;
       var stored = JSON.parse(localStorage.getItem(ck) || '{}');
-      if (stored.d) { delete stored.d[k]; localStorage.setItem(ck, JSON.stringify(stored)); }
+      if (stored.d && stored.d[moduleId] && stored.d[moduleId].data) {
+        var sd = stored.d[moduleId].data;
+        if (!sd.slots) sd.slots = {};
+        sd.slots[slotId] = data;
+        if (timestamp !== undefined) {
+          if (!sd.slot_timestamps) sd.slot_timestamps = {};
+          sd.slot_timestamps[slotId] = timestamp;
+        }
+        stored.ts = Date.now();
+        localStorage.setItem(ck, JSON.stringify(stored));
+      }
     } catch (_) {}
-  });
+    return;
+  }
+
+  // 完整模块数据写入
+  if (!data) return;
+  _moduleCache[moduleId] = data;
+  try {
+    var ck2 = _lsKey();
+    if (!ck2) return;
+    var s = JSON.parse(localStorage.getItem(ck2) || '{}');
+    s.d = s.d || {};
+    s.d[moduleId] = data;
+    s.ts = Date.now();
+    localStorage.setItem(ck2, JSON.stringify(s));
+  } catch (_) {}
+}
+
+// 缓存失效：
+//   cacheClear()                  — 清整个作品所有模块
+//   cacheClear([k1, k2])          — 清指定模块（数组，兼容旧调用）
+//   cacheClear(moduleId)           — 清一个模块
+//   cacheClear(moduleId, slotId)   — 只清一个模块中一个 slot
+function cacheClear(moduleId, slotId) {
+  // cacheClear() — 无参数，清全部
+  if (!moduleId) {
+    _moduleCache = {};
+    try { if (state.currentWorkId) localStorage.removeItem(_lsKey()); } catch (_) {}
+    return;
+  }
+
+  // cacheClear([k1, k2]) — 数组，清指定模块（兼容旧调用方）
+  if (Array.isArray(moduleId)) {
+    moduleId.forEach(function (k) {
+      delete _moduleCache[k];
+      try {
+        var ck = _lsKey();
+        if (!ck) return;
+        var stored = JSON.parse(localStorage.getItem(ck) || '{}');
+        if (stored.d) { delete stored.d[k]; localStorage.setItem(ck, JSON.stringify(stored)); }
+      } catch (_) {}
+    });
+    return;
+  }
+
+  // cacheClear(moduleId) 或 cacheClear(moduleId, slotId)
+  if (typeof moduleId === 'string') {
+    if (slotId) {
+      // Slot 级清除
+      var cached = _moduleCache[moduleId];
+      if (cached && cached.data) {
+        if (cached.data.slots) delete cached.data.slots[slotId];
+        if (cached.data.slot_timestamps) delete cached.data.slot_timestamps[slotId];
+      }
+      try {
+        var ck = _lsKey();
+        if (!ck) return;
+        var stored = JSON.parse(localStorage.getItem(ck) || '{}');
+        if (stored.d && stored.d[moduleId] && stored.d[moduleId].data) {
+          var sd = stored.d[moduleId].data;
+          if (sd.slots) delete sd.slots[slotId];
+          if (sd.slot_timestamps) delete sd.slot_timestamps[slotId];
+          localStorage.setItem(ck, JSON.stringify(stored));
+        }
+      } catch (_) {}
+    } else {
+      // 模块级清除
+      delete _moduleCache[moduleId];
+      try {
+        var ck = _lsKey();
+        if (!ck) return;
+        var stored = JSON.parse(localStorage.getItem(ck) || '{}');
+        if (stored.d) { delete stored.d[moduleId]; localStorage.setItem(ck, JSON.stringify(stored)); }
+      } catch (_) {}
+    }
+  }
 }
 
 // ============================================================
@@ -731,10 +806,10 @@ async function saveModule(moduleId, slots, freeContent) {
     _lastSaved = '';  // 阻止后续 autoSave 重复尝试
   } else if (resp && resp.status === 400 && resp.error && resp.error.code === 'MISSING_TIMESTAMPS') {
     // 缓存来自旧版前端（无时间戳）→ 清缓存后重载
-    cacheClear([moduleId]);
+    cacheClear(moduleId);
     reloadCurrentModule();
   } else {
-    cacheClear([moduleId]);
+    cacheClear(moduleId);
     _lastSaved = '';
   }
   return resp;
@@ -1546,30 +1621,21 @@ function showSaveConflictToast(msg) {
   setTimeout(function () { if (toast.parentNode) toast.remove(); }, 12000);
 }
 
-// 原地刷新单个 slot：绕过缓存直接请求 API，只更新缓存中该 slot + DOM 中该 textarea/preview
+// 原地刷新单个 slot：绕过缓存拉 API，用 cacheSet(moduleId, content, slotId, ts) 更新缓存
 function refreshSlot(slotId) {
   var moduleId = getModuleId();
   if (!moduleId || !slotId) return Promise.resolve();
 
-  // 绕过 loadModule 的缓存检查，直接发 API 请求获取最新数据
   return hGet('/api/write/module/' + moduleId).then(function (data) {
     if (!data || !data.ok || !data.data || !data.data.slots) return;
     var newContent = data.data.slots[slotId];
     if (newContent === undefined) return;
 
-    // 原地更新缓存：只改这一个 slot，不清整个模块缓存
-    var cached = cacheGet(moduleId);
-    if (cached && cached.data) {
-      if (!cached.data.slots) cached.data.slots = {};
-      cached.data.slots[slotId] = newContent;
-      if (data.data.slot_timestamps) {
-        if (!cached.data.slot_timestamps) cached.data.slot_timestamps = {};
-        cached.data.slot_timestamps[slotId] = data.data.slot_timestamps[slotId];
-      }
-      cacheSet(moduleId, cached);
-    }
+    // Slot 级缓存写入
+    cacheSet(moduleId, newContent, slotId,
+      data.data.slot_timestamps ? data.data.slot_timestamps[slotId] : undefined);
 
-    // 更新 DOM：只改该 slot 的 textarea + preview
+    // 更新 DOM
     for (var i = 0; i < _textareaList.length; i++) {
       var ta = _textareaList[i];
       if (ta.dataset.slotId === slotId) {
@@ -1597,7 +1663,7 @@ function reloadCurrentModule() {
 
 async function generateOutline(workId) {
   if (!confirm(t('prompt.outline_confirm'))) return;
-  cacheClear(['m2_' + workId]); // 大纲 regenerate 后缓存失效
+  cacheClear('m2_' + workId); // 大纲 regenerate 后缓存失效
   await hPost('/api/write/module/m2_' + workId + '/generate?overwrite=true', { work_id: workId, num_chapters: 5 });
   loadM6();
   refreshPipelineGuide(workId);
@@ -1737,7 +1803,7 @@ window._onWriteToSlot = function (params) {
 
   // 当前不在该模块 → 清该模块缓存，下次切过来自然取最新
   if (state.currentModule !== frontMod) {
-    if (targetModuleId) cacheClear([targetModuleId]);
+    if (targetModuleId) cacheClear(targetModuleId);
     _lastSaved = '';
     return;
   }
