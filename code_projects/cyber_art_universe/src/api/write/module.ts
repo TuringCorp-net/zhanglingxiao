@@ -671,6 +671,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   // 写 slots → .json（合并，非替换）+ 更新时间戳
   let mergedSlots: Record<string, string> = {};
   let updatedTimestamps: Record<string, number> = {};
+  let slotsActuallyChanged = false;
   if (hasSlots) {
     if (jsonKey) {
       mergedSlots = { ...(existingR2?.slots || {}), ...body.slots! };
@@ -684,11 +685,15 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
       const oldContent = (existingR2?.slots || {})[slotId] || '';
       if (oldContent !== body.slots![slotId]) {
         updatedTimestamps[slotId] = writeTime;
+        slotsActuallyChanged = true;
       }
     }
-    await env.WORKS_BUCKET.put(jsonKey, JSON.stringify({ slots: mergedSlots, slot_timestamps: updatedTimestamps }, null, 2), {
-      httpMetadata: { contentType: 'application/json' },
-    });
+    // 内容确实变了才写 R2（节省 R2 写入成本）
+    if (slotsActuallyChanged) {
+      await env.WORKS_BUCKET.put(jsonKey, JSON.stringify({ slots: mergedSlots, slot_timestamps: updatedTimestamps }, null, 2), {
+        httpMetadata: { contentType: 'application/json' },
+      });
+    }
   }
 
   await touchModule(env, moduleId);

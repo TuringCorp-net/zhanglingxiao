@@ -678,14 +678,48 @@ async function loadModule(moduleId) {
 }
 
 // 保存 Module（V4: 携带修改前内容，服务端零 R2 读取即可生成历史快照）
+// 保存 Module — 只发内容实际变化的 slot（slot 级 diff）
 async function saveModule(moduleId, slots, freeContent) {
   var cached = cacheGet(moduleId);
-  var body = { slots: slots || {}, free_content: freeContent || '' };
-  if (cached && cached.data) {
-    if (cached.data.slots) body._prev_slots = cached.data.slots;
-    if (cached.data.slot_timestamps) body._prev_slot_timestamps = cached.data.slot_timestamps;
-    if (cached.data.free_content !== undefined) body._prev_free_content = cached.data.free_content;
+  var body = { slots: {}, free_content: freeContent || '' };
+
+  // Slot 级 diff：只发与缓存内容不同的 slot
+  var cachedSlots = (cached && cached.data && cached.data.slots) ? cached.data.slots : {};
+  var changedSlots = {};
+  var changedTimestamps = {};
+  Object.keys(slots).forEach(function (sid) {
+    if (slots[sid] !== (cachedSlots[sid] || '')) {
+      changedSlots[sid] = slots[sid];
+    }
+  });
+  body.slots = changedSlots;
+  if (Object.keys(changedSlots).length === 0 && (freeContent || '') === (cached && cached.data ? (cached.data.free_content || '') : '')) {
+    // 没有任何变化 → 不发请求
+    _lastSaved = fingerprint({ moduleId: moduleId, mod: state.currentModule, slots: slots, free_content: freeContent || '' });
+    return { ok: true, skipped: true };
   }
+
+  // 只发变更 slot 的快照和时间戳基线
+  if (cached && cached.data) {
+    var prevChanged = {};
+    Object.keys(changedSlots).forEach(function (sid) {
+      if (cachedSlots[sid] !== undefined) prevChanged[sid] = cachedSlots[sid];
+    });
+    if (Object.keys(prevChanged).length > 0) body._prev_slots = prevChanged;
+
+    if (cached.data.slot_timestamps) {
+      Object.keys(changedSlots).forEach(function (sid) {
+        if (cached.data.slot_timestamps[sid] !== undefined) {
+          changedTimestamps[sid] = cached.data.slot_timestamps[sid];
+        }
+      });
+      if (Object.keys(changedTimestamps).length > 0) body._prev_slot_timestamps = changedTimestamps;
+    }
+    if (cached.data.free_content !== undefined && freeContent !== undefined && freeContent !== cached.data.free_content) {
+      body._prev_free_content = cached.data.free_content;
+    }
+  }
+
   var resp = await hPut('/api/write/module/' + moduleId, body);
   if (resp && resp.ok) {
     cacheSet(moduleId, resp);
@@ -1414,12 +1448,15 @@ function initChapterDrag() {
 var _autoSaveTimer = null;
 var _pendingPayload = null;  // 失焦时捕获的待发送数据
 var _lastSaved = '';         // 上次保存的 payload 指纹（用于去重）
+var _reloading = false;      // _onWriteToSlot 正在刷新模块，阻止假保存
 
 // 输入时防抖保存（5 秒无输入后触发。有变更才写，避免无效 R2 写入）
 // 冲突检测由服务端 _prev_slot_timestamps 比对保证安全
 function autoSave() {
+  if (_reloading) return;  // _onWriteToSlot 重载中，不触发
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(function () {
+    if (_reloading) return;
     var p = capturePayload();
     if (!p) return;
     var fp = fingerprint(p);
@@ -1438,6 +1475,7 @@ function fingerprint(p) {
 // 失焦时同步捕获数据，异步发送（不阻塞 click 导航）
 // 冲突检测由服务端 _prev_slot_timestamps 比对保证安全
 function saveOnBlur() {
+  if (_reloading) return;  // _onWriteToSlot 重载中，不触发
   clearTimeout(_autoSaveTimer);
   _pendingPayload = capturePayload();
   if (_pendingPayload) {
@@ -1700,10 +1738,12 @@ window._onWriteToSlot = function (params) {
     // 用户动过这个槽位 → 不重载，冲突检测交给 AutoSave 的 409 机制
     _lastSaved = '';
   } else {
-    // 用户没动过 → 静默刷新
+    // 用户没动过 → 静默刷新（设置 _reloading 标志阻止 DOM 销毁触发的假保存）
+    _reloading = true;
     loadFn().then(function () {
       var p = capturePayload();
       if (p) _lastSaved = fingerprint(p);
+      _reloading = false;
     });
   }
 };
