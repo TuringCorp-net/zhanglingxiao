@@ -53,7 +53,6 @@ export async function* agentLoop(
   opts: AgentLoopOptions,
   conversationHistory: Message[],
   userMessage: string,
-  preBuiltSystemPrompt?: string,
 ): AsyncGenerator<AgentStep, AgentLoopFinal, undefined> {
   const maxIterations = opts.maxIterations || 30;
   const lang = opts.lang as 'zh' | 'en';
@@ -71,7 +70,7 @@ export async function* agentLoop(
     module: opts.contextModule,
     sectionTitle: opts.contextSectionTitle,
   });
-  const systemPrompt = preBuiltSystemPrompt || await buildAgentSystemPrompt(env, ctxVars, toolDefs, opts.workId, opts.userToken);
+  const systemPrompt = await buildAgentSystemPrompt(env, ctxVars, toolDefs, opts.workId, opts.userToken);
 
   // 2. 构建初始 messages
   const messages: Message[] = [
