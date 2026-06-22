@@ -14,7 +14,8 @@ import { jsonrepair } from 'jsonrepair';
 /** Agent 循环的最终结果（generator return 值，用于持久化） */
 export interface AgentLoopFinal {
   reply: string;
-  messages: Message[];  // 完整 messages 数组（含 system prompt + 所有轮次），供 R2 持久化
+  messages: Message[];  // 完整 messages 数组（含 system prompt + 所有轮次），供 Agent Loop 内使用
+  persistMessages: Message[];  // 持久化专用：仅含 user + assistant 最终回复（无 tool_calls/tool_results）
   usage: {
     input: number;
     output: number;
@@ -79,7 +80,13 @@ export async function* agentLoop(
     { role: 'user', content: userMessage },
   ];
 
-  // 注入当前模块信息到 user message 前缀
+  // 持久化专用数组：仅含 user 消息 + assistant 最终回复（无 tool_calls）
+  // 跨 Agent Loop 的多轮对话中，不需要 tool_call / tool_result
+  const persistMessages: Message[] = [
+    ...conversationHistory,
+  ];
+
+  // 2.1 注入当前模块信息到 user message 前缀
   let userMessagePrefix = '';
   if (opts.contextModule || opts.contextSectionTitle) {
     const prefixParts: string[] = [];
@@ -93,6 +100,8 @@ export async function* agentLoop(
       }
     }
   }
+  // 前缀注入完成 → 将当前轮 user 消息记入持久化数组
+  persistMessages.push({ role: 'user', content: messages[messages.length - 1].content as string });
 
   // —— Mock 模式（多步骤）——
   if (opts.mockSteps && opts.mockSteps.length > 0) {
@@ -102,14 +111,14 @@ export async function* agentLoop(
     const reply = opts.mockReply || 'Mock done.';
     messages.push({ role: 'assistant', content: reply });
     yield { type: 'done', text: reply };
-    return { reply, messages, usage: { input: 0, output: 0, cacheHit: 0, cacheMiss: 0, model: 'mock' } };
+    return { reply, messages, persistMessages: [{ role: 'assistant', content: reply }], usage: { input: 0, output: 0, cacheHit: 0, cacheMiss: 0, model: 'mock' } };
   }
 
   // —— Mock 模式（单步骤）——
   if (opts.mockReply) {
     messages.push({ role: 'assistant', content: opts.mockReply });
     yield { type: 'done', text: opts.mockReply };
-    return { reply: opts.mockReply, messages, usage: { input: 0, output: 0, cacheHit: 0, cacheMiss: 0, model: 'mock' } };
+    return { reply: opts.mockReply, messages, persistMessages: [{ role: 'assistant', content: opts.mockReply }], usage: { input: 0, output: 0, cacheHit: 0, cacheMiss: 0, model: 'mock' } };
   }
 
   // 3. Agent 循环
@@ -128,15 +137,16 @@ export async function* agentLoop(
       totalCacheMiss += result.usage.cacheMiss || 0;
     }
 
-    // 无 tool_calls → 循环结束
+    //3.1 无 tool_calls → 循环结束
     if (!result.tool_calls || result.tool_calls.length === 0) {
       messages.push({ role: 'assistant', content: result.content });
+      persistMessages.push({ role: 'assistant', content: result.content });
       reply = result.content;
       yield { type: 'done', text: result.content };
       break;
     }
 
-    // 有 tool_calls → 执行工具
+    //3.2 有 tool_calls → 执行工具
     const assistantMsg: Message = {
       role: 'assistant',
       content: result.content || '',
@@ -217,7 +227,7 @@ export async function* agentLoop(
     }
   }
 
-  // 达到最大迭代次数 → 强制 LLM 总结
+  //4 达到最大迭代次数 → 强制 LLM 总结
   if (!reply) {
     const summaryPrompt = lang === 'en'
       ? 'Based on all the tool call results above, please give the author a complete response.'
@@ -233,7 +243,7 @@ export async function* agentLoop(
     yield { type: 'done', text: finalResult.content };
   }
 
-  return { reply, messages, usage: { input: totalInput, output: totalOutput, cacheHit: totalCacheHit, cacheMiss: totalCacheMiss, model: lastModel } };
+  return { reply, messages, persistMessages, usage: { input: totalInput, output: totalOutput, cacheHit: totalCacheHit, cacheMiss: totalCacheMiss, model: lastModel } };
 }
 
 /**

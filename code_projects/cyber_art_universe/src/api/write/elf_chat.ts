@@ -235,12 +235,11 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
         }
         agentFinal = stepResult.value;
 
-        // 持久化前统一压缩 tool 内容
-        // 持久化（去掉 system prompt）
+        // 持久化：仅保留 user + assistant 最终回复（persistMessages 不含 tool_calls/tool_results）
         const persist: Promise<void>[] = [];
         if (userToken) {
-          persist.push(saveConversation(env, userToken, body.work_id, body.page, agentFinal.messages.slice(1)));
-          persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), agentFinal.messages.slice(1)));
+          persist.push(saveConversation(env, userToken, body.work_id, body.page, agentFinal.persistMessages));
+          persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), agentFinal.persistMessages));
         }
         persist.push(recordAIUsage(env, {
           work_id: body.work_id, user_token: userToken, page: body.page,
