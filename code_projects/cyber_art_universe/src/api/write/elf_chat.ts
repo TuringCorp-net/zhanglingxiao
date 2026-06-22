@@ -228,7 +228,9 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
       try {
         let stepResult: IteratorResult<AgentStep, AgentLoopFinal>;
         while (!(stepResult = await gen.next()).done) {
-          sharedSteps.push(stepResult.value);
+          const step = stepResult.value;
+          sharedSteps.push(step);
+          console.log(`[SSE agent] step ${sharedSteps.length}: type=${step.type} tool=${(step as any).tool || '-'}`);
           if (notify.fn) { const resolve = notify.fn as () => void; notify.fn = null; resolve(); }
         }
         agentFinal = stepResult.value;
@@ -259,17 +261,19 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
     // keep Worker alive even if client disconnects
     if (ctx) ctx.waitUntil(agentTask);
 
-    // SSE 流：从 sharedSteps 取数据推送，客户端断开时安静退出
+    // SSE 流：逐条推送（每次 pull 只发一个 step，立即返回，stream 会再调 pull）
     let delivered = 0;
     const stream = new ReadableStream({
       async pull(controller) {
-        while (delivered < sharedSteps.length) {
+        if (delivered < sharedSteps.length) {
           const step = sharedSteps[delivered++];
+          console.log(`[SSE pull] delivering #${delivered}: type=${step.type} tool=${(step as any).tool || '-'}`);
           try {
             controller.enqueue(encoder.encode(sseEvent(step)));
           } catch {
-            return; // client disconnected, stop delivering (agent continues)
+            console.log('[SSE pull] client disconnected');
           }
+          return;
         }
 
         if (agentFinished) {
@@ -284,10 +288,7 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
           return;
         }
 
-        // 等待 Agent 产出新步骤
-        if (delivered >= sharedSteps.length) {
-          await new Promise<void>(resolve => { notify.fn = resolve; });
-        }
+        await new Promise<void>(resolve => { notify.fn = resolve; });
       },
     });
 
