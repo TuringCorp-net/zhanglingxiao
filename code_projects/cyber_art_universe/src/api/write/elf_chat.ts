@@ -23,9 +23,6 @@ import type { AgentStep } from '../../lib/l2/types';
 import type { Message } from '../../lib/l0/aiGateway';
 import { mosaicCompress, DEFAULT_MOSAIC_CONFIG } from '../../lib/l2/mosaic_compress';
 import { saveDailyLog } from '../../lib/l2/memory';
-import { buildAgentSystemPrompt } from '../../lib/l2/prompt';
-import { createTools } from '../../lib/l2/tools';
-import { assembleContext } from '../../lib/l1/context';
 
 // ============================================================
 // Conversation persistence (R2, per user+work+page)
@@ -158,15 +155,6 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
     });
   }
 
-  const tools = createTools(env, body.work_id, lang as 'zh' | 'en');
-  const toolDefs = tools.map(t => t.def);
-  const ctxVars = assembleContext(workMeta, lang, contextPkg, {
-    module: opts.module,
-    sectionTitle: opts.sectionTitle,
-  });
-
-  const systemPrompt = await buildAgentSystemPrompt(env, ctxVars, toolDefs, body.work_id, userToken);
-
   try {
     // —— Debug mode ——
     if (isDebug) {
@@ -184,20 +172,10 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
       })), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
     }
 
-    // —— Load / compress conversation ——
+    // —— Load conversation ——
     const snapshot = await loadConversation(env, userToken, body.work_id, body.page);
-    // System prompt 每次重新组装，不持久化。加载后 prepend 到历史前。
-    // 过滤旧数据中可能残留的 system 消息（向后兼容）。
-    const storedMessages: Message[] = [
-      { role: 'system', content: systemPrompt },
-      ...(snapshot || []).filter(m => m.role !== 'system'),
-    ];
-    storedMessages.push({ role: 'user', content: userMessage });
-
-    const compressed = await mosaicCompress(env, storedMessages, DEFAULT_MOSAIC_CONFIG);
-    const preBuiltSystemPrompt = compressed[0].content;
-    const conversationHistory = compressed.slice(1, -1);
-    const latestUserMsg = compressed[compressed.length - 1].content;
+    // 过滤旧数据中可能残留的 system 消息（向后兼容）
+    const conversationHistory = (snapshot || []).filter(m => m.role !== 'system');
 
     // —— SSE 流式 Agent Loop（ctx.waitUntil 保护断连）——
     // 架构：Agent 在独立 Promise 中执行（agentTask），SSE 流只负责向前端推送。
@@ -212,8 +190,7 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
         contextSectionTitle: opts.sectionTitle,
       },
       conversationHistory,
-      latestUserMsg,
-      preBuiltSystemPrompt,
+      userMessage,
     );
 
     const sharedSteps: AgentStep[] = [];
@@ -235,11 +212,12 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
         }
         agentFinal = stepResult.value;
 
-        // 持久化：仅保留 user + assistant 最终回复（persistMessages 不含 tool_calls/tool_results）
+        // Mosaic 压缩（基于对话轮次）+ 持久化
+        const forPersistence = await mosaicCompress(env, agentFinal.persistMessages, DEFAULT_MOSAIC_CONFIG);
         const persist: Promise<void>[] = [];
         if (userToken) {
-          persist.push(saveConversation(env, userToken, body.work_id, body.page, agentFinal.persistMessages));
-          persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), agentFinal.persistMessages));
+          persist.push(saveConversation(env, userToken, body.work_id, body.page, forPersistence));
+          persist.push(saveDailyLog(env, userToken, body.page, body.work_id, String(work.title || ''), forPersistence));
         }
         persist.push(recordAIUsage(env, {
           work_id: body.work_id, user_token: userToken, page: body.page,
