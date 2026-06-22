@@ -211,7 +211,7 @@ export async function* agentLoop(
       }
 
       const summary = toolResult;
-      yield { type: 'tool_result', tool: toolName, summary };
+      yield { type: 'tool_result', tool: toolName, summary, params: toolParams };
 
       messages.push({ role: 'tool', tool_call_id: tc.id, content: toolResult });
     }

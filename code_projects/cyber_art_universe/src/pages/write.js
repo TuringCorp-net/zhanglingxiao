@@ -1624,18 +1624,23 @@ function showSaveConflictToast(msg) {
 // 原地刷新单个 slot：绕过缓存拉 API，用 cacheSet(moduleId, content, slotId, ts) 更新缓存
 function refreshSlot(slotId) {
   var moduleId = getModuleId();
-  if (!moduleId || !slotId) return Promise.resolve();
+  console.log('[refreshSlot] 开始 slotId=' + slotId + ' moduleId=' + moduleId);
+  if (!moduleId || !slotId) { console.log('[refreshSlot] 缺少 moduleId 或 slotId，跳过'); return Promise.resolve(); }
 
   return hGet('/api/write/module/' + moduleId).then(function (data) {
-    if (!data || !data.ok || !data.data || !data.data.slots) return;
+    console.log('[refreshSlot] API 返回 ok=' + (data && data.ok) + ' slots数=' + (data && data.data && data.data.slots ? Object.keys(data.data.slots).length : 0));
+    if (!data || !data.ok || !data.data || !data.data.slots) { console.log('[refreshSlot] API 数据无效，跳过'); return; }
     var newContent = data.data.slots[slotId];
-    if (newContent === undefined) return;
+    if (newContent === undefined) { console.log('[refreshSlot] slot ' + slotId + ' 在 API 响应中不存在'); return; }
+    console.log('[refreshSlot] 得到新内容，长度=' + newContent.length);
 
     // Slot 级缓存写入
-    cacheSet(moduleId, newContent, slotId,
-      data.data.slot_timestamps ? data.data.slot_timestamps[slotId] : undefined);
+    var ts = data.data.slot_timestamps ? data.data.slot_timestamps[slotId] : undefined;
+    cacheSet(moduleId, newContent, slotId, ts);
+    console.log('[refreshSlot] cacheSet 完成 ts=' + ts);
 
     // 更新 DOM
+    var found = false;
     for (var i = 0; i < _textareaList.length; i++) {
       var ta = _textareaList[i];
       if (ta.dataset.slotId === slotId) {
@@ -1646,9 +1651,12 @@ function refreshSlot(slotId) {
             preview.innerHTML = newContent ? marked.parse(newContent) : '<span class="slot-preview-empty"></span>';
           } catch (e) { preview.textContent = newContent; }
         }
+        found = true;
+        console.log('[refreshSlot] DOM 更新完成，preview 可见=' + (preview && preview.style.display !== 'none'));
         break;
       }
     }
+    if (!found) console.log('[refreshSlot] ⚠️ 未找到 data-slot-id=' + slotId + ' 的 textarea！_textareaList 长度=' + _textareaList.length);
   });
 }
 
@@ -1789,7 +1797,9 @@ function setThreePanelMode() {
 window._onWriteToSlot = function (params) {
   var mt = params.module_type;
   var sid = params.slot_id;
-  if (!mt) return;
+  console.log('[onWriteToSlot] 收到 SSE 事件', JSON.stringify({ module_type: mt, slot_id: sid, currentModule: state.currentModule, currentWorkId: state.currentWorkId }));
+
+  if (!mt) { console.log('[onWriteToSlot] 缺少 module_type，跳过'); return; }
 
   var modMap = {
     m0: 'original_concept', m1: 'worldbuilding', m2: 'outline',
@@ -1797,12 +1807,14 @@ window._onWriteToSlot = function (params) {
     m5_intent: 'chapters', m6_chapter: 'writing'
   };
   var frontMod = modMap[mt];
-  if (!frontMod) return;
+  if (!frontMod) { console.log('[onWriteToSlot] 未知 module_type:', mt); return; }
 
   var targetModuleId = params.module_id || (mt + '_' + (state.currentWorkId || ''));
+  console.log('[onWriteToSlot] frontMod=' + frontMod + ' targetModuleId=' + targetModuleId);
 
   // 当前不在该模块 → 清该模块缓存，下次切过来自然取最新
   if (state.currentModule !== frontMod) {
+    console.log('[onWriteToSlot] 用户不在该模块 (current=' + state.currentModule + ')，清缓存后返回');
     if (targetModuleId) cacheClear(targetModuleId);
     _lastSaved = '';
     return;
@@ -1811,7 +1823,9 @@ window._onWriteToSlot = function (params) {
   // 用户在该模块 → 不清缓存，refreshSlot 内部做原地 slot 级更新
   if (sid) {
     var curModuleId = getModuleId();
+    console.log('[onWriteToSlot] 用户在该模块 curModuleId=' + curModuleId);
     var cached = curModuleId ? cacheGet(curModuleId) : null;
+    console.log('[onWriteToSlot] 缓存命中:', !!cached, cached ? 'slots数=' + Object.keys(cached.data?.slots || {}).length : '');
     var cachedSlots = (cached && cached.data && cached.data.slots) || {};
     var currentVal = '';
     for (var i = 0; i < _textareaList.length; i++) {
@@ -1820,14 +1834,19 @@ window._onWriteToSlot = function (params) {
         break;
       }
     }
-    if (currentVal !== (cachedSlots[sid] || '')) {
-      _lastSaved = '';  // 用户动过 → 不刷新，交给 409
+    var cachedVal = cachedSlots[sid] || '';
+    console.log('[onWriteToSlot] slot=' + sid + ' cachedLen=' + cachedVal.length + ' currentLen=' + currentVal.length + ' same=' + (currentVal === cachedVal));
+    if (currentVal !== cachedVal) {
+      console.log('[onWriteToSlot] 用户动过该槽位，不刷新');
+      _lastSaved = '';
       return;
     }
   }
 
-  // 用户没动过 → 原地刷新该槽位（refreshSlot 绕过缓存直拉 API，只更新这一个 slot）
+  // 用户没动过 → 原地刷新该槽位
+  console.log('[onWriteToSlot] 调用 refreshSlot(' + sid + ')');
   refreshSlot(sid).then(function () {
+    console.log('[onWriteToSlot] refreshSlot 完成');
     var p = capturePayload();
     if (p) _lastSaved = fingerprint(p);
   });
@@ -1835,105 +1854,17 @@ window._onWriteToSlot = function (params) {
 
 StoryElf.setPage('write');
 
-StoryElf.sendChat = function () {
-  var msg = StoryElf.getInput();
-  if (!msg) return;
-  clearTimeout(_autoSaveTimer);
-  StoryElf.addMessage(msg, 'user');
-  StoryElf.clearInput();
-  var currentMessages = StoryElf.getMessages();
-  // 立即显示工作块，不等后端首次响应（避免 10-20s 空白等待）
-  StoryElf.initWorkingBlock();
-  var ctx = StoryElf.getContext() || {};
-  var reqBody = {
-    work_id: state.currentWorkId,
-    section_id: state.currentSectionId || undefined,
-    page: 'write',
-    messages: currentMessages,
-    context: { module: state.currentModule, section_title: ctx.section_title || state.currentSectionTitle, panel: ctx.panel },
-  };
-
-  // SSE 流式请求
-  var token = localStorage.getItem('cau_token') || '';
-  fetch('/api/write/elf/chat?lang=' + (localStorage.getItem('sf_lang') || 'zh'), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-    body: JSON.stringify(reqBody),
-  }).then(function (response) {
-    if (!response.ok) {
-      // 非流式错误 — 后端在 setup 阶段就失败了
-      return response.json().then(function (errData) {
-        StoryElf.finishWorkingBlock();
-        var msgs = document.getElementById('elf-chat-messages');
-        var errDiv = document.createElement('div');
-        errDiv.className = 'elf-chat-msg ai';
-        errDiv.style.color = 'var(--error)';
-        errDiv.textContent = t('prompt.ai_unavailable');
-        if (msgs) { msgs.appendChild(errDiv); msgs.scrollTop = msgs.scrollHeight; }
-      });
+// 注入 Write 页差异配置，不再覆盖 sendChat
+StoryElf.init({
+  getWorkId: function () { return state.currentWorkId; },
+  beforeSend: function () { clearTimeout(_autoSaveTimer); },
+  contextModule: function () { return state.currentModule; },
+  onToolResult: function (step) {
+    if (step.tool === 'write_to_slot' && step.params && typeof _onWriteToSlot === 'function') {
+      _onWriteToSlot(step.params);
     }
-
-    // SSE 流 — 逐步消费事件
-    var reader = response.body.getReader();
-    var decoder = new TextDecoder();
-    var buffer = '';
-    var msgs = document.getElementById('elf-chat-messages');
-
-    function pump() {
-      return reader.read().then(function (_a) {
-        var done = _a.done, value = _a.value;
-        if (done) return;
-
-        buffer += decoder.decode(value, { stream: true });
-        // 按双换行分割 SSE 事件
-        var parts = buffer.split('\n\n');
-        buffer = parts.pop() || ''; // 最后一个可能不完整
-
-        parts.forEach(function (part) {
-          if (!part.trim()) return;
-          var lines = part.split('\n');
-          var eventType = '';
-          var dataStr = '';
-          lines.forEach(function (line) {
-            if (line.startsWith('event: ')) eventType = line.slice(7);
-            if (line.startsWith('data: ')) dataStr = line.slice(6);
-          });
-          if (!dataStr) return;
-
-          try {
-            var data = JSON.parse(dataStr);
-
-            if (eventType === 'step') {
-              StoryElf.appendStep(data);
-            } else if (eventType === 'done') {
-              // 最终回复
-              StoryElf.finishWorkingBlock();
-              StoryElf.addMessage(data.reply, 'assistant');
-              if (msgs) msgs.scrollTop = msgs.scrollHeight;
-            } else if (eventType === 'error') {
-              StoryElf.finishWorkingBlock();
-              var errDiv = document.createElement('div');
-              errDiv.className = 'elf-chat-msg ai';
-              errDiv.style.color = 'var(--error)';
-              errDiv.textContent = t('prompt.ai_unavailable');
-              if (msgs) { msgs.appendChild(errDiv); msgs.scrollTop = msgs.scrollHeight; }
-            }
-          } catch (e) { /* JSON 解析失败，跳过 */ }
-        });
-
-        return pump(); // 继续读取
-      }).catch(function (_err) {
-        // 流中断
-        StoryElf.finishWorkingBlock();
-      });
-    }
-
-    return pump();
-  }).catch(function () {
-    StoryElf.finishWorkingBlock();
-    StoryElf.addMessage(t('prompt.ai_unavailable'), 'assistant');
-  });
-};
+  },
+});
 
 // ============================================================
 // 左栏垂直分割 — 通过共享工厂创建（createLeftPanelSplit 定义在 app.js）

@@ -77,6 +77,14 @@
   var _workId = '';       // 关联的作品 ID
   var _page = 'write';    // 当前页面类型
 
+  // 页面级配置：Read 页和 Write 页通过 init() 注入差异
+  var _config = {
+    getWorkId: function () { return (StoryElf.getContext() || {}).work_id; },
+    beforeSend: null,
+    contextModule: null,
+    onToolResult: null,
+  };
+
   function _getToken() { return localStorage.getItem('cau_token') || ''; }
   function _getLang() { return localStorage.getItem('sf_lang') || 'zh'; }
 
@@ -238,8 +246,7 @@
       body.appendChild(card);
     }
 
-    // Process steps（批量模式：收集 write_to_slot 刷新）
-    var _pendingBatchParams = null;
+    // Process steps（批量模式）
     steps.forEach(function (s) {
       if (s.type === 'text_delta') {
         var line = document.createElement('div');
@@ -251,17 +258,14 @@
         line.className = 'elf-process-step';
         line.textContent = '🔧 ' + _toolLabel(s.tool);
         body.appendChild(line);
-        if (s.tool === 'write_to_slot') _pendingBatchParams = s.params;
       } else if (s.type === 'tool_result' && s.tool !== 'checklist_write') {
         var line = document.createElement('div');
         line.className = 'elf-process-step';
         var summary = s.summary || '';
         line.textContent = '✅ ' + (summary.length > 120 ? summary.substring(0, 120) + '...' : summary);
         body.appendChild(line);
-        if (s.tool === 'write_to_slot' && _pendingBatchParams && typeof _onWriteToSlot === 'function') {
-          _onWriteToSlot(_pendingBatchParams);
-          _pendingBatchParams = null;
-        }
+        // 通知 onToolResult 回调（Write 页用于 _onWriteToSlot）
+        if (_config.onToolResult) _config.onToolResult(s);
       } else if (s.type === 'error') {
         var line = document.createElement('div');
         line.className = 'elf-process-step error';
@@ -326,10 +330,6 @@
       line.textContent = '🔧 ' + _toolLabel(step.tool);
       _workingBlockBody.appendChild(line);
 
-      // 暂存 write_to_slot 的 params，等 tool_result 时 R2 已写入完成再刷新
-      if (step.tool === 'write_to_slot') {
-        _pendingWriteParams = step.params;
-      }
     } else if (step.type === 'tool_result') {
       if (step.tool === 'checklist_write') {
         // 更新 checklist 卡片（替换旧卡片）
@@ -362,11 +362,6 @@
         line2.textContent = '✅ ' + (summary2.length > 120 ? summary2.substring(0, 120) + '...' : summary2);
         _workingBlockBody.appendChild(line2);
 
-        // write_to_slot 完成（R2 已写入）→ 刷新模块缓存
-        if (step.tool === 'write_to_slot' && _pendingWriteParams && typeof _onWriteToSlot === 'function') {
-          _onWriteToSlot(_pendingWriteParams);
-          _pendingWriteParams = null;
-        }
       }
     } else if (step.type === 'error') {
       var line = document.createElement('div');
@@ -473,6 +468,14 @@
      *   mount(containerEl) → 嵌入模式: #story-elf 移入 container，添加 .elf-embedded
      *   mount(null)        → 浮动模式: #story-elf 移回 body，移除 .elf-embedded
      */
+    /** 页面初始化：注入差异配置（Read 页调用 setContext，Write 页调用 init） */
+    init: function (opts) {
+      if (opts.getWorkId) _config.getWorkId = opts.getWorkId;
+      if (opts.beforeSend !== undefined) _config.beforeSend = opts.beforeSend;
+      if (opts.contextModule !== undefined) _config.contextModule = opts.contextModule;
+      if (opts.onToolResult !== undefined) _config.onToolResult = opts.onToolResult;
+    },
+
     mount: function (container) {
       var elf = document.getElementById('story-elf');
       if (!elf) return;
@@ -546,10 +549,11 @@
       }
     },
 
-    // 默认 sendChat — Read 侧伴读精灵（SSE 流式）。Write 页面会覆盖此函数。
+    // 统一 sendChat — Read 侧 + Write 侧共用。差异通过 init({...}) 注入。
     sendChat: function () {
       var msg = StoryElf.getInput();
       if (!msg) return;
+      if (_config.beforeSend) _config.beforeSend();
       StoryElf.addMessage(msg, 'user');
       StoryElf.clearInput();
       var currentMessages = getMessages();
@@ -557,18 +561,21 @@
       var lang = _getLang();
       var ctx = StoryElf.getContext() || {};
       var msgs = document.getElementById('elf-chat-messages');
-      // 立即显示工作块
       StoryElf.initWorkingBlock();
+
+      var mod = typeof _config.contextModule === 'function' ? _config.contextModule() : _config.contextModule;
+      var reqCtx = { section_title: ctx.section_title };
+      if (mod) reqCtx.module = mod;
 
       fetch('/api/write/elf/chat?lang=' + lang, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
         body: JSON.stringify({
-          work_id: ctx.work_id,
+          work_id: _config.getWorkId(),
           section_id: ctx.section_id || undefined,
           page: ctx.page || 'read',
           messages: currentMessages,
-          context: { section_title: ctx.section_title },
+          context: reqCtx,
         }),
       }).then(function (response) {
         if (!response.ok) {
@@ -602,6 +609,10 @@
                 var data = JSON.parse(dataStr);
                 if (eventType === 'step') {
                   StoryElf.appendStep(data);
+                  // 通知页面 onToolResult 回调（Write 页用于处理 write_to_slot）
+                  if (_config.onToolResult && data.type === 'tool_result') {
+                    _config.onToolResult(data);
+                  }
                 } else if (eventType === 'done') {
                   StoryElf.finishWorkingBlock();
                   StoryElf.addMessage(data.reply, 'assistant');
@@ -610,7 +621,7 @@
                   StoryElf.finishWorkingBlock();
                   StoryElf.addMessage((typeof t === 'function' ? t('elf.ai_unavailable', 'AI is temporarily unavailable, please try again later') : 'AI is temporarily unavailable, please try again later'), 'assistant');
                 }
-              } catch (e) {}
+              } catch (e) { console.error('[SSE] JSON parse error, eventType=' + eventType + ' err=' + (e.message || e) + ' preview=' + dataStr.substring(0, 200)); }
             });
             return pump();
           });

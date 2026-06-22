@@ -32,7 +32,7 @@ export interface AgentLoopOptions {
 export type AgentStep =
   | { type: 'thinking'; text: string }
   | { type: 'tool_call'; tool: string; params: Record<string, unknown> }
-  | { type: 'tool_result'; tool: string; summary: string }
+  | { type: 'tool_result'; tool: string; summary: string; params: Record<string, unknown> }
   | { type: 'text_delta'; text: string }
   | { type: 'done'; text: string }
   | { type: 'error'; message: string };
