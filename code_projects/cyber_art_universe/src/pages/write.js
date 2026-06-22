@@ -431,7 +431,6 @@ async function onWorkspaceChange(workId) {
   // 2. 切换到新作品
   state.currentWorkId = workId;
   state.currentModule = null;  // 阻止 switchModule 内部重复保存（capturePayload 返回 null）
-  _lastSaved = '';
   saveUserConfig();
   StoryElf.loadConversation(workId, 'write');
   qs('#split-view').style.display = 'grid';
@@ -533,15 +532,12 @@ async function switchModule(module) {
   if (_switchLock === module) return;
   _switchLock = module;
 
-  // 切换前保存当前模块（异步发，不阻塞 UI）
+  // 切换前保存当前模块（异步发，不阻塞 UI；saveModule 做 slot 级 diff 判断是否真的变更）
   clearTimeout(_autoSaveTimer);
   var p = capturePayload();
   if (p) {
-    var fp = fingerprint(p);
-    if (fp !== _lastSaved) {
-      _pendingPayload = p;
-      flushPendingPayload();  // 异步发送，不 await
-    }
+    _pendingPayload = p;
+    flushPendingPayload();  // 异步发送，不 await
   }
 
   state.currentModule = module;
@@ -770,9 +766,11 @@ async function saveModule(moduleId, slots, freeContent) {
   body.slots = changedSlots;
   if (Object.keys(changedSlots).length === 0 && (freeContent || '') === (cached && cached.data ? (cached.data.free_content || '') : '')) {
     // 没有任何变化 → 不发请求
-    _lastSaved = fingerprint({ moduleId: moduleId, mod: state.currentModule, slots: slots, free_content: freeContent || '' });
+    console.log('[saveModule] 无变更，跳过保存');
     return { ok: true, skipped: true };
   }
+
+  console.log('[saveModule] 检测到变更 slots: ' + Object.keys(changedSlots).join(', '));
 
   // 只发变更 slot 的快照和时间戳基线
   if (cached && cached.data) {
@@ -798,19 +796,16 @@ async function saveModule(moduleId, slots, freeContent) {
   var resp = await hPut('/api/write/module/' + moduleId, body);
   if (resp && resp.ok) {
     cacheSet(moduleId, resp);
-    _lastSaved = fingerprint({ moduleId: moduleId, mod: state.currentModule, slots: slots, free_content: freeContent || '' });
   } else if (resp && resp.status === 409) {
     // 冲突：内容被 Story Elf 或其他端修改
     var errMsg = (resp.error && resp.error.message) || '内容已被更新，请刷新页面获取最新内容。';
     showSaveConflictToast(errMsg);
-    _lastSaved = '';  // 阻止后续 autoSave 重复尝试
   } else if (resp && resp.status === 400 && resp.error && resp.error.code === 'MISSING_TIMESTAMPS') {
     // 缓存来自旧版前端（无时间戳）→ 清缓存后重载
     cacheClear(moduleId);
     reloadCurrentModule();
   } else {
     cacheClear(moduleId);
-    _lastSaved = '';
   }
   return resp;
 }
@@ -1275,12 +1270,9 @@ async function renderEntityCardList() {
 }
 
 async function openEntityCard(entityId, name) {
-  // 切换前保存当前卡片
+  // 切换前保存当前卡片（saveModule 做 slot 级 diff 判断是否真的变更）
   var p = capturePayload();
-  if (p) {
-    var fp = fingerprint(p);
-    if (fp !== _lastSaved) { _pendingPayload = p; flushPendingPayload(); }
-  }
+  if (p) { _pendingPayload = p; flushPendingPayload(); }
 
   state.currentEntityId = entityId;
   var data = await loadModule('m3_card_' + entityId);
@@ -1346,12 +1338,9 @@ async function renderFhCardList() {
 }
 
 async function openFhCard(entityId, name) {
-  // 切换前保存当前卡片
+  // 切换前保存当前卡片（saveModule 做 slot 级 diff 判断是否真的变更）
   var p = capturePayload();
-  if (p) {
-    var fp = fingerprint(p);
-    if (fp !== _lastSaved) { _pendingPayload = p; flushPendingPayload(); }
-  }
+  if (p) { _pendingPayload = p; flushPendingPayload(); }
 
   state.currentFhId = entityId;
   var data = await loadModule('m4_card_' + entityId);
@@ -1522,26 +1511,17 @@ function initChapterDrag() {
 // ============================================================
 var _autoSaveTimer = null;
 var _pendingPayload = null;  // 失焦时捕获的待发送数据
-var _lastSaved = '';         // 上次保存的 payload 指纹（用于去重）
 
-// 输入时防抖保存（5 秒无输入后触发。有变更才写，避免无效 R2 写入）
+// 输入时防抖保存（5 秒无输入后触发；saveModule 做 slot 级 diff，无变更则跳过）
 // 冲突检测由服务端 _prev_slot_timestamps 比对保证安全
 function autoSave() {
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(function () {
     var p = capturePayload();
     if (!p) return;
-    var fp = fingerprint(p);
-    if (fp !== _lastSaved) {
-      _pendingPayload = p;
-      flushPendingPayload();
-    }
+    _pendingPayload = p;
+    flushPendingPayload();
   }, 5000);
-}
-
-// 生成 payload 指纹（JSON 序列化，用于变更检测）
-function fingerprint(p) {
-  return JSON.stringify(p);
 }
 
 // 失焦时同步捕获数据，异步发送（不阻塞 click 导航）
@@ -1575,19 +1555,16 @@ var _saving = false;  // 防止并发 sendPayload 产生重复快照
 
 // V3 统一保存：module_id → PUT /api/write/module/{id}
 async function sendPayload(p) {
-  if (_saving) { _pendingPayload = p; return; }
+  if (_saving) { console.log('[sendPayload] 正在保存中，排队'); _pendingPayload = p; return; }
+  console.log('[sendPayload] 开始保存 mod=' + (p.mod || '?'));
   _saving = true;
   try {
     var resp = await saveModule(p.moduleId, p.slots, p.free_content);
-    if (resp && resp.ok) {
-      _lastSaved = fingerprint(p);
-    } else {
+    if (!resp || !resp.ok) {
       console.error('[sendPayload] FAILED mod=' + p.mod + (resp ? ' HTTP ' + (resp.status || '') : ' network'));
-      _lastSaved = '';
     }
   } catch (e) {
     console.error('[sendPayload] FAILED mod=' + p.mod, e);
-    _lastSaved = '';
   } finally {
     _saving = false;
     // 发送期间堆积的新 payload，立即发送
@@ -1606,7 +1583,6 @@ async function saveModuleContent(silent) {
   var p = capturePayload();
   if (p) {
     await sendPayload(p);
-    // fingerprint 在 sendPayload 成功后内部更新
   }
 }
 
@@ -1816,7 +1792,6 @@ window._onWriteToSlot = function (params) {
   if (state.currentModule !== frontMod) {
     console.log('[onWriteToSlot] 用户不在该模块 (current=' + state.currentModule + ')，清缓存后返回');
     if (targetModuleId) cacheClear(targetModuleId);
-    _lastSaved = '';
     return;
   }
 
@@ -1838,18 +1813,13 @@ window._onWriteToSlot = function (params) {
     console.log('[onWriteToSlot] slot=' + sid + ' cachedLen=' + cachedVal.length + ' currentLen=' + currentVal.length + ' same=' + (currentVal === cachedVal));
     if (currentVal !== cachedVal) {
       console.log('[onWriteToSlot] 用户动过该槽位，不刷新');
-      _lastSaved = '';
       return;
     }
   }
 
   // 用户没动过 → 原地刷新该槽位
   console.log('[onWriteToSlot] 调用 refreshSlot(' + sid + ')');
-  refreshSlot(sid).then(function () {
-    console.log('[onWriteToSlot] refreshSlot 完成');
-    var p = capturePayload();
-    if (p) _lastSaved = fingerprint(p);
-  });
+  refreshSlot(sid);
 };
 
 StoryElf.setPage('write');
