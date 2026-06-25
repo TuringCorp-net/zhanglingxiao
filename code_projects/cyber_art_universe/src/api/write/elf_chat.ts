@@ -207,7 +207,6 @@ export async function handleElfChat(env: Env, request: Request, ctx?: ExecutionC
         while (!(stepResult = await gen.next()).done) {
           const step = stepResult.value;
           sharedSteps.push(step);
-          console.log(`[SSE agent] step ${sharedSteps.length}: type=${step.type} tool=${(step as any).tool || '-'}`);
           if (notify.fn) { const resolve = notify.fn as () => void; notify.fn = null; resolve(); }
         }
         agentFinal = stepResult.value;
