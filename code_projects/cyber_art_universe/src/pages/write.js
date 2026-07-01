@@ -29,24 +29,22 @@ var state = {
   currentEntityId: null,
   currentFhId: null,
   chapterFilter: 'all',
-  leftPct: 33,            // 左栏百分比
-  midPct: 34,             // 中栏百分比，右栏 = 100 - left - mid
-  leftPanelUpperPct: 40,  // 左栏上半部百分比 (卡片区)
+  aiDrawerOpen: true,       // AI Drawer 默认展开
+  kbActiveL1: null,         // 当前选中的一级标签索引
+  kbActiveL2: null,         // 当前选中的二级标签索引
 };
 
 function loadState() {
   try {
     var saved = JSON.parse(localStorage.getItem('sf_desk_v3') || '{}');
-    Object.assign(state, { chapterFilter: 'all', leftPct: 33, midPct: 34, leftPanelUpperPct: 40 }, saved);
+    Object.assign(state, { chapterFilter: 'all', aiDrawerOpen: true, kbActiveL1: null, kbActiveL2: null }, saved);
   } catch (e) {}
 }
 function saveState() {
   try {
     localStorage.setItem('sf_desk_v3', JSON.stringify({
-      leftPct: state.leftPct,
-      midPct: state.midPct,
       chapterFilter: state.chapterFilter,
-      leftPanelUpperPct: state.leftPanelUpperPct,
+      aiDrawerOpen: state.aiDrawerOpen,
     }));
   } catch (e) {}
 }
@@ -374,7 +372,7 @@ async function deleteWork(workId) {
     if (state.currentWorkId === workId) {
       state.currentWorkId = null;
       saveUserConfig();
-      qs('#split-view').style.display = 'none';
+      qs('#main-canvas').style.display = 'none';
       qs('#pipeline-guide').style.display = 'none';
     }
     renderWorkspaceCards();
@@ -409,7 +407,7 @@ function updateWorkspaceBtn() {
 // 选择作品 — 与原 onWorkspaceChange() 逻辑完全一致，仅改为接收 workId 参数
 async function onWorkspaceChange(workId) {
   if (!workId) {
-    qs('#split-view').style.display = 'none';
+    qs('#main-canvas').style.display = 'none';
     qs('#pipeline-guide').style.display = 'none';
     return;
   }
@@ -433,8 +431,7 @@ async function onWorkspaceChange(workId) {
   state.currentModule = null;  // 阻止 switchModule 内部重复保存（capturePayload 返回 null）
   saveUserConfig();
   StoryElf.loadConversation(workId, 'write');
-  qs('#split-view').style.display = 'grid';
-  applyGridColumns();
+  qs('#main-canvas').style.display = 'flex';
   _cacheReady = false;
 
   // 更新 UI + 关闭浮出层
@@ -563,6 +560,7 @@ async function switchModule(module) {
     case 'chapters': await loadM5(); break;
     case 'writing': await loadM6(); break;
   }
+  generateKBTabs();  // 生成知识库标签
   updateElfContext();
   _switchLock = null; // 切换完成后重置锁
 }
@@ -1011,34 +1009,20 @@ function removeSlotGroup(btn) {
   }
 }
 
-// 显示/切换编辑器类型（三栏：左=参考 / 中=自由编辑 / 右=模板）
+// 显示/切换编辑器类型（v3.3: 主画布 + 知识库 Drawer 模式）
 function showSlotEditor(templateData) {
-  setThreePanelMode();
   var te = qs('#writing-editor');
-  var se = qs('#slot-editor');
-  var fe = qs('#form-editor');
   var fz = qs('#slot-free-zone');
   if (te) te.style.display = 'none';
-  if (fe) fe.style.display = 'none';
-  if (fz) fz.style.display = ''; // 用 CSS 的 flex，不清空
-  if (se) {
-    se.style.display = 'flex';
-    se.style.flexDirection = 'column';
-    se.style.overflowY = 'auto';
-    se.style.flex = '1';
-    renderSlotEditor(templateData);
-  }
+  if (fz) fz.style.display = '';
+  renderSlotEditor(templateData);
 }
 
 function showTextEditor(val) {
   _textareaList = [];  // 清空槽位引用，防止残留数据污染其他模块保存
   _templateData = null;
   var te = qs('#writing-editor');
-  var se = qs('#slot-editor');
-  var fe = qs('#form-editor');
   var fz = qs('#slot-free-zone');
-  if (se) se.style.display = 'none';
-  if (fe) fe.style.display = 'none';
   if (fz) fz.style.display = 'none';
   if (te) {
     te.style.display = 'block';
@@ -1047,14 +1031,11 @@ function showTextEditor(val) {
 }
 
 function showFormEditor(intentData) {
-  setThreePanelMode();
   var te = qs('#writing-editor');
-  var se = qs('#slot-editor');
-  var fe = qs('#form-editor');
   var fz = qs('#slot-free-zone');
+  var fe = qs('#form-editor');
   if (te) te.style.display = 'none';
-  if (se) se.style.display = 'none';
-  if (fz) { fz.style.display = ''; }
+  if (fz) fz.style.display = '';
   if (!fe) return;
   fe.style.display = 'block';
 
@@ -1183,13 +1164,10 @@ function serializeFormContent() {
 // M0: 原始构想
 // ============================================================
 async function loadM0() {
-  setLeftPanelMode('full');
-
   var moduleId = 'm0_' + state.currentWorkId;
   var data = await loadModule(moduleId);
-  // M0 单槽位 → 两栏 + 纯文本编辑
+  // M0 单槽位 → 纯文本编辑
   var content = (data && data.data && data.data.slots && data.data.slots.content) ? data.data.slots.content : '';
-  setTwoPanelMode();
   showTextEditor(content);
 }
 
@@ -1197,7 +1175,6 @@ async function loadM0() {
 // M1: 世界观
 // ============================================================
 async function loadM1() {
-  setLeftPanelMode('full');
   var data = await loadModule('m1_' + state.currentWorkId);
   if (data && data.data && data.data.template) {
     data.data.template.free_content = data.data.free_content || '';
@@ -1211,7 +1188,6 @@ async function loadM1() {
 // M2: 主线剧情
 // ============================================================
 async function loadM2() {
-  setLeftPanelMode('full');
   var data = await loadModule('m2_' + state.currentWorkId);
   if (data && data.data && data.data.template) {
     data.data.template.free_content = data.data.free_content || '';
@@ -1225,48 +1201,18 @@ async function loadM2() {
 // M3: 人物卡
 // ============================================================
 async function loadM3() {
-  setLeftPanelMode('split');
   showTextEditor('');
-
   await renderEntityCardList();
   // 默认选中第一个角色
-  var first = qs('#left-upper .card-item[data-entity-id]');
+  var first = qs('#kb-card-list-view .card-item[data-entity-id]');
   if (first) first.click();
 }
 
 async function renderEntityCardList() {
-  var left = qs('#left-upper');
-  left.innerHTML = '';
   var data = await loadModuleList(state.currentWorkId, 'm3_card');
-  left.innerHTML = '';
-  if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
-
-  var entities = (data.data.modules || []).map(function (m) { return { id: m.id.replace('m3_card_', ''), name: m.name, type: 'character' }; });
-  if (!entities.length) { left.innerHTML = '<div class="left-panel-empty">' + t('label.no_characters') + '</div>'; return; }
-
-  var byType = {};
-  entities.forEach(function (e) { var t = e.type || 'other'; if (!byType[t]) byType[t] = []; byType[t].push(e); });
-  var frag = document.createDocumentFragment();
-  Object.keys(byType).forEach(function (type) {
-    var title = document.createElement('div');
-    title.style.cssText = 'font-size:0.7rem;color:var(--text-muted);padding:0.5rem 0 0.2rem 0.2rem;width:100%;';
-    title.textContent = t('entity_type.' + type) || type;
-    frag.appendChild(title);
-    var list = document.createElement('div');
-    list.className = 'card-list';
-    byType[type].forEach(function (e) {
-      var card = qs('#tmpl-entity-card-item').content.cloneNode(true);
-      var root = card.querySelector('.card-item');
-      root.dataset.entityId = e.id;
-      if (state.currentEntityId === e.id) root.classList.add('active');
-      root.addEventListener('click', function () { openEntityCard(e.id, e.name); });
-      card.querySelector('.card-item-name').textContent = e.name;
-      card.querySelector('.card-item-meta').textContent = (e.description || '').substring(0, 30);
-      list.appendChild(card);
-    });
-    frag.appendChild(list);
-  });
-  left.appendChild(frag);
+  var entities = (data && data.ok && data.data.modules || []).map(function (m) { return { id: m.id.replace('m3_card_', ''), name: m.name, type: 'character' }; });
+  if (_kbCardListData) _kbCardListData['m3_card'] = entities;
+  // 不再直接渲染到 DOM，由 generateKBTabs + Drawer 管理
 }
 
 async function openEntityCard(entityId, name) {
@@ -1282,59 +1228,29 @@ async function openEntityCard(entityId, name) {
     showSlotEditor(template);
   }
 
-  // 只更新高亮，不重建整个列表 DOM
-  qsa('#left-upper .card-item[data-entity-id]').forEach(function (el) {
+  // 更新 Drawer 内卡片列表高亮
+  qsa('#kb-card-list-view .card-item[data-entity-id]').forEach(function (el) {
     el.classList.toggle('active', el.dataset.entityId === entityId);
   });
   updateElfContext();
+  generateKBTabs();  // 刷新知识库标签（模板 section 标签现在可用）
 }
 
 // ============================================================
 // M4: 伏笔卡 — 纯卡片模块（策略总览已合并到 M2 第六节）
 // ============================================================
 async function loadM4() {
-  setLeftPanelMode('split');
   showTextEditor('');
-
   await renderFhCardList();
-  var first = qs('#left-upper .card-item[data-entity-id]');
+  var first = qs('#kb-card-list-view .card-item[data-entity-id]');
   if (first) first.click();
 }
 
 async function renderFhCardList() {
-  var left = qs('#left-upper');
-  left.innerHTML = '';
   var data = await loadModuleList(state.currentWorkId, 'm4_card');
-  left.innerHTML = '';
-  if (!data || !data.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
-
-  var entities = (data.data.modules || []).map(function (m) { return { id: m.id.replace('m4_card_', ''), name: m.name, type: 'foreshadowing' }; });
-
-  var frag = document.createDocumentFragment();
-
-  if (!entities.length) {
-    var empty = document.createElement('div');
-    empty.className = 'left-panel-empty';
-    empty.style.cssText = 'padding:1rem;';
-    empty.textContent = t('label.no_foreshadowing') || '暂无伏笔条目';
-    frag.appendChild(empty);
-  }
-
-  // 伏笔条目卡片（与 M3 人物卡同款）
-  var list = document.createElement('div');
-  list.className = 'card-list';
-  entities.forEach(function (e) {
-    var card = qs('#tmpl-entity-card-item').content.cloneNode(true);
-    var root = card.querySelector('.card-item');
-    root.dataset.entityId = e.id;
-    if (state.currentFhId === e.id) root.classList.add('active');
-    root.addEventListener('click', function () { openFhCard(e.id, e.name); });
-    card.querySelector('.card-item-name').textContent = e.name;
-    card.querySelector('.card-item-meta').textContent = (e.description || '').substring(0, 30);
-    list.appendChild(card);
-  });
-  frag.appendChild(list);
-  left.appendChild(frag);
+  var entities = (data && data.ok && data.data.modules || []).map(function (m) { return { id: m.id.replace('m4_card_', ''), name: m.name, type: 'foreshadowing' }; });
+  if (_kbCardListData) _kbCardListData['m4_card'] = entities;
+  // 不再直接渲染到 DOM，由 generateKBTabs + Drawer 管理
 }
 
 async function openFhCard(entityId, name) {
@@ -1355,101 +1271,54 @@ async function openFhCard(entityId, name) {
   }
   if (template) showSlotEditor(template);
 
-  // 只更新高亮，不重建整个列表 DOM
-  qsa('#left-upper .card-item[data-entity-id]').forEach(function (el) {
+  // 更新 Drawer 内卡片列表高亮
+  qsa('#kb-card-list-view .card-item[data-entity-id]').forEach(function (el) {
     el.classList.toggle('active', el.dataset.entityId === entityId);
   });
   updateElfContext();
+  generateKBTabs();  // 刷新知识库标签（模板 section 标签现在可用）
 }
 
 // ============================================================
 // M5 / M6: 章节蓝图 / 逐章编写
 // ============================================================
 async function loadM5() {
-  setLeftPanelMode('split');
-  setThreePanelMode();
-  // 显示自由编辑区（中栏），隐藏右侧槽位编辑器（M5 用表单编辑器）
+  // 显示自由编辑区
   var te = qs('#writing-editor');
-  var se = qs('#slot-editor');
   var fz = qs('#slot-free-zone');
   if (te) te.style.display = 'none';
-  if (se) se.style.display = 'none';
   if (fz) fz.style.display = '';
 
   await loadChapterCardList();
   // 默认选中第一章
-  var first = qs('#left-upper .chapter-card[data-section-id]');
+  var first = qs('#kb-card-list-view .chapter-card[data-section-id]');
   if (first) first.click();
 }
 
 async function loadM6() {
-  setLeftPanelMode('split');
-  setTwoPanelMode();
   showTextEditor(''); // 占位，openChapter 会填入内容
-
   await loadChapterCardList();
-  var first = qs('#left-upper .chapter-card[data-section-id]');
+  var first = qs('#kb-card-list-view .chapter-card[data-section-id]');
   if (first) first.click();
 }
 
 async function loadChapterCardList() {
-  var left = qs('#left-upper');
-  left.innerHTML = '';
-
-  // V3: 从 modules 表获取章节列表（已缓存）
+  // 从 modules 表获取章节列表（已缓存）
   var modList = await loadModuleList(state.currentWorkId, state.currentModule === 'chapters' ? 'm5_intent' : 'm6_chapter');
 
-  left.innerHTML = '';
-  if (!modList || !modList.ok) { left.appendChild(errorHTML(t('label.load_failed'))); return; }
+  if (!modList || !modList.ok) {
+    if (_kbCardListData) _kbCardListData[state.currentModule === 'chapters' ? 'm5_intent' : 'm6_chapter'] = [];
+    return;
+  }
 
   var sections = (modList.data.modules || []).map(function (m) {
     var sid = m.id.replace(/^m[56]_(intent|chapter)_/, '');
     return { id: sid, title: m.name, order_index: m.order_index,
       section_summary: null, word_count: 0, version: m.status === 'done' ? 2 : (m.status === 'in_progress' ? 1 : 0) };
   });
-  if (!sections.length) {
-    var wid = state.currentWorkId;
-    left.innerHTML = '<div class="left-panel-empty">' + t('label.no_chapters')
-      + '<div style="margin-top:0.5rem"><button class="btn btn-ghost btn-sm" onclick="generateOutline(\'' + wid + '\')">' + t('action.generate_outline') + '</button></div></div>';
-    return;
-  }
-
-  // 筛选按钮
-  var filterDiv = document.createElement('div');
-  filterDiv.className = 'chapter-filters';
-  ['all', 'draft', 'done'].forEach(function (f) {
-    var btn = document.createElement('button');
-    btn.className = 'chapter-filter-btn' + (state.chapterFilter === f ? ' active' : '');
-    btn.textContent = t('chapter_filter.' + f);
-    btn.addEventListener('click', function () { state.chapterFilter = f; saveState(); loadChapterCardList(); });
-    filterDiv.appendChild(btn);
-  });
-  left.appendChild(filterDiv);
-
-  var filtered = sections;
-  if (state.chapterFilter === 'draft') filtered = sections.filter(function (s) { return s.version < 2; });
-  else if (state.chapterFilter === 'done') filtered = sections.filter(function (s) { return s.version >= 2 && s.word_count > 0; });
-
-  if (!filtered.length) { left.appendChild(document.createTextNode(t('label.no_match'))); return; }
-
-  var list = document.createElement('div');
-  list.className = 'card-list';
-  filtered.forEach(function (s) {
-    var stIcon = s.version === 0 ? (s.word_count > 0 ? '[draft]' : '[new]') : (s.word_count > 0 ? '[done]' : '[planned]');
-    var card = qs('#tmpl-chapter-card-item').content.cloneNode(true);
-    var root = card.querySelector('.card-item');
-    root.dataset.sectionId = s.id;
-    if (state.currentSectionId === s.id) root.classList.add('active');
-    root.addEventListener('click', function () { openChapter(s.id, s.title); });
-    card.querySelector('.card-status').textContent = stIcon;
-    card.querySelector('.card-item-name').textContent = s.title;
-    card.querySelector('.card-item-meta').textContent = (s.word_count || 0) + '字';
-    list.appendChild(card);
-  });
-  left.appendChild(list);
-
-  // 拖拽排序（仅 M6）
-  if (state.currentModule === 'writing') initChapterDrag();
+  if (_kbCardListData) _kbCardListData[state.currentModule === 'chapters' ? 'm5_intent' : 'm6_chapter'] = sections;
+  // 不再直接渲染到 DOM，由 generateKBTabs + Drawer 管理
+  // 拖拽排序状态保留，在 Drawer 渲染时由 initChapterDrag 处理
 }
 
 async function openChapter(sectionId, title) {
@@ -1472,27 +1341,27 @@ async function openChapter(sectionId, title) {
       if (freeArea2) freeArea2.value = '';
     }
   } else {
-    // M6: 章节正文 — 单槽位，两栏 + 纯文本编辑
+    // M6: 章节正文 — 单槽位，纯文本编辑
     var moduleId6 = 'm6_chapter_' + sectionId;
     var data6 = await loadModule(moduleId6);
     var chapterContent = (data6 && data6.data && data6.data.slots && data6.data.slots.content) ? data6.data.slots.content : '';
-    setTwoPanelMode();
     showTextEditor(chapterContent);
   }
 
-  // 刷新左侧列表以高亮当前选中
+  // 刷新 KB Drawer 内卡片列表高亮
   if (state.currentModule === 'chapters' || state.currentModule === 'writing') {
     loadChapterCardList();
   }
   updateElfContext();
+  generateKBTabs();  // 刷新知识库标签（M5 意图卡模板 section 现在可用）
 }
 
-// 章节拖拽
+// 章节拖拽（在 Drawer 的卡片列表视图中激活）
 var _dragSrc = null;
 function initChapterDrag() {
-  qsa('#left-upper .card-item').forEach(function (item) {
+  qsa('#kb-card-list-view .card-item').forEach(function (item) {
     item.addEventListener('dragstart', function (e) { _dragSrc = item.dataset.sectionId; item.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
-    item.addEventListener('dragend', function () { item.classList.remove('dragging'); qsa('#left-upper .card-item').forEach(function (i) { i.classList.remove('drag-over'); }); });
+    item.addEventListener('dragend', function () { item.classList.remove('dragging'); qsa('#kb-card-list-view .card-item').forEach(function (i) { i.classList.remove('drag-over'); }); });
     item.addEventListener('dragover', function (e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; if (item.dataset.sectionId !== _dragSrc) item.classList.add('drag-over'); });
     item.addEventListener('dragleave', function () { item.classList.remove('drag-over'); });
     item.addEventListener('drop', async function (e) {
@@ -1670,99 +1539,350 @@ function renderBibleContent(md) {
 }
 
 // ============================================================
-// Split Divider Drag
+// AI Drawer 管理
 // ============================================================
-function initSplitDrag() {
-  var container = qs('#split-view');
-  if (!container) return;
-
-  // 分隔线 #1（左 | 中）：右栏不动，左和中分配剩余空间
-  var d1 = qs('#split-divider-1');
-  if (d1) {
-    d1.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      d1.classList.add('active');
-      var startX = e.clientX;
-      var startLeft = state.leftPct;
-      var fixedRight = 100 - state.leftPct - state.midPct; // 右栏不动
-      function mv(ev) {
-        var cw = container.offsetWidth;
-        var delta = ((ev.clientX - startX) / cw) * 100;
-        var newLeft = Math.max(15, Math.min(100 - fixedRight - 15, startLeft + delta));
-        state.leftPct = newLeft;
-        state.midPct = 100 - fixedRight - newLeft;
-        applyGridColumns();
-      }
-      function up() {
-        d1.classList.remove('active');
-        document.removeEventListener('mousemove', mv);
-        document.removeEventListener('mouseup', up);
-        saveState();
-      }
-      document.addEventListener('mousemove', mv);
-      document.addEventListener('mouseup', up);
+function initAIDrawer() {
+  var toggle = qs('#ai-drawer-toggle');
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      state.aiDrawerOpen = !state.aiDrawerOpen;
+      applyAIDrawerState();
+      saveState();
     });
   }
-
-  // 分隔线 #2（中 | 右）：左栏不动，中和右分配剩余空间
-  var d2 = qs('#split-divider-2');
-  if (d2) {
-    d2.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      d2.classList.add('active');
-      var startX = e.clientX;
-      var startMid = state.midPct;
-      var fixedLeft = state.leftPct; // 左栏不动
-      function mv(ev) {
-        var cw = container.offsetWidth;
-        var delta = ((ev.clientX - startX) / cw) * 100;
-        var newMid = Math.max(15, Math.min(100 - fixedLeft - 15, startMid + delta));
-        state.midPct = newMid;
-        applyGridColumns();
-      }
-      function up() {
-        d2.classList.remove('active');
-        document.removeEventListener('mousemove', mv);
-        document.removeEventListener('mouseup', up);
-        saveState();
-      }
-      document.addEventListener('mousemove', mv);
-      document.addEventListener('mouseup', up);
-    });
-  }
+  applyAIDrawerState();
 }
 
-var _panelMode = 'three'; // 'two' | 'three'
-
-function applyGridColumns() {
-  var container = qs('#split-view');
-  if (!container) return;
-  if (_panelMode === 'two') {
-    container.style.gridTemplateColumns = state.leftPct + '% 8px ' + (100 - state.leftPct) + '% 0px 0%';
+function applyAIDrawerState() {
+  var drawer = qs('#ai-drawer');
+  if (!drawer) return;
+  if (state.aiDrawerOpen) {
+    drawer.classList.add('open');
   } else {
-    var right = 100 - state.leftPct - state.midPct;
-    container.style.gridTemplateColumns = state.leftPct + '% 8px ' + state.midPct + '% 8px ' + Math.max(15, right) + '%';
+    drawer.classList.remove('open');
   }
 }
 
-/** M0/M6 两栏模式 */
-function setTwoPanelMode() {
-  _panelMode = 'two';
-  var d2 = qs('#split-divider-2');
-  var right = qs('.split-right');
-  if (d2) d2.style.display = 'none';
-  if (right) right.style.display = 'none';
-  applyGridColumns();
+// ============================================================
+// 知识库标签系统（Layer 2 — 右侧浮动标签 + 二级面板 + 内容 Drawer）
+// ============================================================
+var _kbTabs = [];          // [{ type, label, cardType?, sectionIndex?, l2: [...] }]
+var _kbCardListData = {};  // { 'm3_card': [...], 'm4_card': [...], ... }
+
+// 当前模块的知识库标签数据
+function generateKBTabs() {
+  _kbTabs = [];
+  var mod = state.currentModule;
+  var wid = state.currentWorkId;
+  if (!mod || !wid) { renderKBTabBar(); return; }
+
+  // 一、卡片标签
+  var cardDefs = [];
+  switch (mod) {
+    case 'characters':    cardDefs.push({ type: 'm3_card', label: t('kb.characters') || '人物卡片' }); break;
+    case 'foreshadowing': cardDefs.push({ type: 'm4_card', label: t('kb.foreshadowing') || '伏笔卡片' }); break;
+    case 'chapters':      cardDefs.push({ type: 'm5_intent', label: t('kb.chapter_intents') || '章节蓝图' }); break;
+    case 'writing':       cardDefs.push({ type: 'm6_chapter', label: t('kb.chapter_cards') || '章节卡片' }); break;
+  }
+  cardDefs.forEach(function (d) {
+    _kbTabs.push({ type: 'card_list', label: d.label, cardType: d.type, l2: null });
+  });
+
+  // 二、模板 section 标签（从缓存中读取）
+  var templateModuleId = null;
+  switch (mod) {
+    case 'worldbuilding': templateModuleId = 'm1_' + wid; break;
+    case 'outline':       templateModuleId = 'm2_' + wid; break;
+    case 'characters':    templateModuleId = state.currentEntityId ? 'm3_card_' + state.currentEntityId : null; break;
+    case 'foreshadowing': templateModuleId = state.currentFhId ? 'm4_card_' + state.currentFhId : null; break;
+    case 'chapters':      templateModuleId = state.currentSectionId ? 'm5_intent_' + state.currentSectionId : null; break;
+  }
+
+  if (templateModuleId) {
+    var cached = cacheGet(templateModuleId);
+    var sections = (cached && cached.data && cached.data.template && cached.data.template.sections) || [];
+    sections.forEach(function (section, si) {
+      var l2List = (section.slots || []).map(function (s) {
+        return { type: 'slot', id: s.id, label: s.label, hint: s.hint, content: s.content };
+      });
+      _kbTabs.push({ type: 'template_section', label: section.heading || 'Section ' + (si + 1), sectionIndex: si, l2: l2List });
+    });
+  }
+
+  // 关闭知识库状态（切换模块时默认不自动打开）
+  closeKBContentDrawer();
+  closeKBSecondaryPanel();
+  state.kbActiveL1 = null;
+  state.kbActiveL2 = null;
+  renderKBTabBar();
 }
 
-/** M1-M5 三栏模式 */
-function setThreePanelMode() {
-  _panelMode = 'three';
-  var d2 = qs('#split-divider-2');
-  var right = qs('.split-right');
-  if (d2) d2.style.display = '';
-  if (right) right.style.display = '';
-  applyGridColumns();
+function renderKBTabBar() {
+  var bar = qs('#kb-tab-bar');
+  if (!bar) return;
+  bar.innerHTML = '';
+
+  if (_kbTabs.length === 0) {
+    bar.style.display = 'none';
+    return;
+  }
+  bar.style.display = 'flex';
+
+  _kbTabs.forEach(function (tab, i) {
+    var badge = document.createElement('div');
+    badge.className = 'kb-tab-badge';
+    if (state.kbActiveL1 === i) badge.classList.add('active');
+    badge.textContent = tab.label;
+    badge.addEventListener('click', function () { onKBTabClick(i); });
+    bar.appendChild(badge);
+  });
+}
+
+function onKBTabClick(tabIndex) {
+  state.kbActiveL1 = tabIndex;
+  state.kbActiveL2 = null;
+  var tab = _kbTabs[tabIndex];
+  if (!tab) return;
+
+  renderKBTabBar();
+
+  if (tab.l2 && tab.l2.length > 0) {
+    // 有二级标签 → 展开窄面板
+    openKBSecondaryPanel(tabIndex);
+  } else {
+    // 无二级标签（如卡片列表）→ 直接展开内容 Drawer
+    closeKBSecondaryPanel();
+    openKBContentDrawer(tabIndex, null);
+  }
+}
+
+function openKBSecondaryPanel(tabIndex) {
+  var panel = qs('#kb-secondary-panel');
+  if (!panel) return;
+  var tab = _kbTabs[tabIndex];
+  if (!tab || !tab.l2) return;
+
+  // 标题
+  var titleEl = qs('#kb-secondary-panel-title');
+  if (titleEl) titleEl.textContent = tab.label;
+
+  // 二级标签列表
+  var tabsEl = qs('#kb-secondary-tabs');
+  if (tabsEl) {
+    tabsEl.innerHTML = '';
+    tab.l2.forEach(function (l2Item, li) {
+      var el = document.createElement('div');
+      el.className = 'kb-secondary-tab';
+      if (state.kbActiveL2 === li) el.classList.add('active');
+      el.textContent = l2Item.label || l2Item.id;
+      el.addEventListener('click', function () {
+        state.kbActiveL2 = li;
+        // 更新二级标签高亮
+        qsa('#kb-secondary-tabs .kb-secondary-tab').forEach(function (t) { t.classList.remove('active'); });
+        el.classList.add('active');
+        openKBContentDrawer(tabIndex, li);
+      });
+      tabsEl.appendChild(el);
+    });
+  }
+
+  panel.style.display = 'flex';
+  requestAnimationFrame(function () { panel.classList.add('open'); });
+}
+
+function closeKBSecondaryPanel() {
+  var panel = qs('#kb-secondary-panel');
+  if (!panel) return;
+  panel.classList.remove('open');
+  setTimeout(function () {
+    if (!panel.classList.contains('open')) panel.style.display = 'none';
+  }, 250);
+  state.kbActiveL2 = null;
+}
+
+function openKBContentDrawer(tabIndex, l2Index) {
+  // 保存当前编辑内容
+  clearTimeout(_autoSaveTimer);
+  var p = capturePayload();
+  if (p) { _pendingPayload = p; flushPendingPayload(); }
+
+  var drawer = qs('#kb-content-drawer');
+  if (!drawer) return;
+
+  var tab = _kbTabs[tabIndex];
+  if (!tab) return;
+
+  // 标题
+  var titleEl = qs('#kb-drawer-title');
+  var title = tab.label;
+  if (l2Index !== null && tab.l2 && tab.l2[l2Index]) {
+    title += ' › ' + (tab.l2[l2Index].label || tab.l2[l2Index].id);
+  }
+  if (titleEl) titleEl.textContent = title;
+
+  // 清空之前的内容
+  var se = qs('#slot-editor');
+  var cl = qs('#kb-card-list-view');
+  var fe = qs('#form-editor');
+  if (se) se.style.display = 'none';
+  if (cl) cl.style.display = 'none';
+  if (fe) fe.style.display = 'none';
+
+  if (tab.type === 'card_list') {
+    renderCardListInDrawer(tab.cardType);
+    if (cl) cl.style.display = 'flex';
+  } else if (tab.type === 'template_section') {
+    if (l2Index !== null && tab.l2 && tab.l2[l2Index]) {
+      renderSingleSlotInDrawer(tab, l2Index);
+    } else {
+      renderSectionSlotsInDrawer(tab);
+    }
+    if (se) se.style.display = 'block';
+  }
+
+  drawer.style.display = 'flex';
+  requestAnimationFrame(function () { drawer.classList.add('open'); });
+}
+
+function closeKBContentDrawer() {
+  var drawer = qs('#kb-content-drawer');
+  if (!drawer) return;
+  drawer.classList.remove('open');
+  setTimeout(function () {
+    if (!drawer.classList.contains('open')) drawer.style.display = 'none';
+  }, 300);
+  state.kbActiveL1 = null;
+  state.kbActiveL2 = null;
+  renderKBTabBar();
+}
+
+// 在 Drawer 内渲染卡片列表
+function renderCardListInDrawer(cardType) {
+  var mods = _kbCardListData[cardType] || [];
+  var target = qs('#kb-card-list-view');
+  if (!target) return;
+  target.innerHTML = '';
+
+  if (mods.length === 0) {
+    target.innerHTML = '<div style="color:var(--text-muted);padding:2rem;text-align:center">' + (t('label.no_items') || '暂无条目') + '</div>';
+    return;
+  }
+
+  // 章节筛选按钮（仅 M5/M6）
+  if (cardType === 'm5_intent' || cardType === 'm6_chapter') {
+    var filterDiv = document.createElement('div');
+    filterDiv.className = 'chapter-filters';
+    ['all', 'draft', 'done'].forEach(function (f) {
+      var btn = document.createElement('button');
+      btn.className = 'chapter-filter-btn' + (state.chapterFilter === f ? ' active' : '');
+      btn.textContent = t('chapter_filter.' + f);
+      btn.addEventListener('click', function () {
+        state.chapterFilter = f; saveState();
+        renderCardListInDrawer(cardType);
+      });
+      filterDiv.appendChild(btn);
+    });
+    target.appendChild(filterDiv);
+
+    // 筛选
+    if (state.chapterFilter === 'draft') mods = mods.filter(function (s) { return s.version < 2; });
+    else if (state.chapterFilter === 'done') mods = mods.filter(function (s) { return s.version >= 2 && s.word_count > 0; });
+  }
+
+  mods.forEach(function (m) {
+    var entityId;
+    if (cardType === 'm5_intent' || cardType === 'm6_chapter') {
+      entityId = m.id.replace(/^m[56]_(intent|chapter)_/, '');
+    } else {
+      entityId = m.id.replace(/^m[34]_card_/, '');
+    }
+
+    var card = document.createElement('div');
+    if (cardType === 'm5_intent' || cardType === 'm6_chapter') {
+      card.className = 'card-item chapter-card';
+      card.dataset.sectionId = entityId;
+    } else {
+      card.className = 'card-item';
+      card.dataset.entityId = entityId;
+    }
+
+    var stIcon = '';
+    if (cardType === 'm5_intent' || cardType === 'm6_chapter') {
+      stIcon = '<span class="card-status">' + (m.version === 0 ? (m.word_count > 0 ? '[draft]' : '[new]') : (m.word_count > 0 ? '[done]' : '[planned]')) + '</span>';
+    }
+
+    card.innerHTML = stIcon + '<span class="card-item-name">' + escHtml(m.name) + '</span><span class="card-item-meta">' + ((cardType === 'm5_intent' || cardType === 'm6_chapter') ? (m.word_count || 0) + '字' : (m.description || '').substring(0, 30)) + '</span>';
+
+    card.addEventListener('click', function () {
+      switch (cardType) {
+        case 'm3_card': openEntityCard(entityId, m.name); break;
+        case 'm4_card': openFhCard(entityId, m.name); break;
+        case 'm5_intent':
+        case 'm6_chapter': openChapter(entityId, m.name); break;
+      }
+    });
+    target.appendChild(card);
+  });
+}
+
+// 在 Drawer 内渲染模板 section 的所有 slot
+function renderSectionSlotsInDrawer(tab) {
+  _textareaList = [];
+  var target = qs('#slot-groups');
+  if (!target) return;
+  target.innerHTML = '';
+
+  var templateModuleId = null;
+  var mod = state.currentModule;
+  var wid = state.currentWorkId;
+  switch (mod) {
+    case 'worldbuilding': templateModuleId = 'm1_' + wid; break;
+    case 'outline':       templateModuleId = 'm2_' + wid; break;
+    case 'characters':    templateModuleId = state.currentEntityId ? 'm3_card_' + state.currentEntityId : null; break;
+    case 'foreshadowing': templateModuleId = state.currentFhId ? 'm4_card_' + state.currentFhId : null; break;
+    case 'chapters':      templateModuleId = state.currentSectionId ? 'm5_intent_' + state.currentSectionId : null; break;
+  }
+
+  var cached = templateModuleId ? cacheGet(templateModuleId) : null;
+  var sections = cached && cached.data && cached.data.template ? cached.data.template.sections : null;
+  if (!sections || !sections[tab.sectionIndex]) return;
+
+  var section = sections[tab.sectionIndex];
+
+  // 渲染 section heading
+  if (section.heading) {
+    var hDiv = document.createElement('div');
+    hDiv.className = 'slot-framework';
+    try { hDiv.innerHTML = marked.parse('## ' + section.heading); } catch (e) { hDiv.textContent = section.heading; }
+    target.appendChild(hDiv);
+  }
+
+  // 渲染所有 slot（复用 renderSlotItem）
+  (section.slots || []).forEach(function (slot) {
+    renderSlotItem(target, slot);
+  });
+}
+
+// 在 Drawer 内渲染单个 slot
+function renderSingleSlotInDrawer(tab, l2Index) {
+  _textareaList = [];
+  var target = qs('#slot-groups');
+  if (!target) return;
+  target.innerHTML = '';
+
+  var l2Item = tab.l2[l2Index];
+  if (!l2Item) return;
+
+  // 渲染 label heading
+  if (l2Item.label) {
+    var hDiv = document.createElement('div');
+    hDiv.className = 'slot-framework';
+    try { hDiv.innerHTML = marked.parse('### ' + l2Item.label); } catch (e) { hDiv.textContent = l2Item.label; }
+    target.appendChild(hDiv);
+  }
+
+  var slot = { id: l2Item.id, label: '', hint: l2Item.hint, content: l2Item.content };
+  renderSlotItem(target, slot);
 }
 
 // ============================================================
@@ -1837,17 +1957,9 @@ StoryElf.init({
 });
 
 // ============================================================
-// 左栏垂直分割 — 通过共享工厂创建（createLeftPanelSplit 定义在 app.js）
+// 左栏垂直分割 — v3.3 已移除（三层覆盖式布局不再需要）
+// createLeftPanelSplit 工厂函数仍然在 app.js 中供其他页面使用
 // ============================================================
-var _leftPanel = createLeftPanelSplit({
-  getPct: function () { return state.leftPanelUpperPct; },
-  setPct: function (v) { state.leftPanelUpperPct = v; },
-  onSave: saveState,
-});
-
-function setLeftPanelMode(mode) { _leftPanel.setMode(mode); }
-function applyLeftPanelSplit() { _leftPanel.applySplit(); }
-function initLeftPanelHDrag() { _leftPanel.initDrag(); }
 
 // ============================================================
 // 初始化
@@ -1869,7 +1981,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   })();
 
   loadState();
-  initSplitDrag();
 
   // === 保存策略：失焦即存（主）+ 输入防抖（辅）+ Ctrl+S ===
   // 输入时防抖保存（打字中途也存，防止浏览器崩溃丢失）
@@ -1900,11 +2011,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveModuleContent(); }
   });
 
-  // 将 Story Elf 嵌入左栏下半部
-  var lower = qs('#left-lower');
-  if (lower) StoryElf.mount(lower);
-  initLeftPanelHDrag();
-  setLeftPanelMode('full'); // 初始默认（作品未选择时）
+  // 将 Story Elf 嵌入 AI Drawer（Drawer 模式）
+  var aiPanel = qs('#ai-drawer-panel');
+  if (aiPanel) StoryElf.mount(aiPanel, 'drawer');
+  initAIDrawer();
 
   if (typeof userToken !== 'undefined' && userToken) {
     await loadUserConfig();

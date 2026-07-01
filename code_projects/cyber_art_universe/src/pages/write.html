@@ -6,11 +6,6 @@
   <title>Write — Story Forger — Cyber Art Universe</title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="/story-elf.css">
-  <style>
-    /* 防止 Elf 挂载前闪烁：Write 页嵌入模式下才显示 */
-    #story-elf { display: none; }
-    #story-elf.elf-embedded { display: flex; }
-  </style>
 </head>
 <body data-page="write">
   <div id="global-nav"></div>
@@ -55,28 +50,55 @@
     </div>
   </div>
 
-  <!-- 三栏写作区：左参考 / 中自由编辑 / 右模板槽位 -->
-  <div id="split-view" class="split-view" style="display:none">
-    <div class="split-left" id="split-left">
-      <div class="left-upper" id="left-upper">
-        <div class="left-panel-empty"></div>
-      </div>
-      <div class="left-hdivider" id="left-hdivider" style="display:none"></div>
-      <div class="left-lower" id="left-lower"></div>
+  <!-- ============================================================
+   Layer 0: 主编辑画布（全宽，始终固定不动）
+   ============================================================ -->
+  <div id="main-canvas" class="main-canvas" style="display:none">
+    <textarea id="writing-editor" class="writing-editor" placeholder="从这里开始写作..."></textarea>
+    <div id="slot-free-zone" class="slot-free-zone" style="display:none">
+      <div class="slot-free-label">自由编辑区</div>
+      <textarea id="slot-free-area" class="writing-editor free-zone"
+        placeholder="随意书写，Story Elf 会帮你完善和拆解到模板中…"
+        data-hint="请随意书写，我可以帮你完善和拆解到模板中去。"></textarea>
     </div>
-    <div class="split-divider" id="split-divider-1"></div>
-    <div class="split-mid" id="split-mid">
-      <textarea id="writing-editor" class="writing-editor" placeholder="从这里开始写作..."></textarea>
-      <div id="slot-free-zone" class="slot-free-zone" style="display:none">
-        <div class="slot-free-label">自由编辑区</div>
-        <textarea id="slot-free-area" class="writing-editor free-zone" placeholder="随意书写，Story Elf 会帮你完善和拆解到模板中…" data-hint="请随意书写，我可以帮你完善和拆解到模板中去。"></textarea>
-      </div>
+  </div>
+
+  <!-- ============================================================
+   Layer 1: AI Chat 左侧 Drawer（默认展开，可收起到头像）
+   ============================================================ -->
+  <div id="ai-drawer" class="ai-drawer open">
+    <button id="ai-drawer-toggle" class="ai-drawer-toggle" title="Story Elf">
+      <img src="/assets/story-elf.png" alt="Story Elf" class="ai-drawer-toggle-img">
+    </button>
+    <div id="ai-drawer-panel" class="ai-drawer-panel"></div>
+  </div>
+
+  <!-- ============================================================
+   Layer 2: 知识库系统（右侧浮动标签 + 二级面板 + 内容 Drawer）
+   ============================================================ -->
+  <!-- 右侧浮动标签栏 -->
+  <div id="kb-tab-bar" class="kb-tab-bar" style="display:none"></div>
+
+  <!-- 二级标签窄面板 -->
+  <div id="kb-secondary-panel" class="kb-secondary-panel" style="display:none">
+    <div id="kb-secondary-panel-header" class="kb-secondary-panel-header">
+      <span id="kb-secondary-panel-title"></span>
+      <button class="kb-secondary-panel-close" onclick="closeKBSecondaryPanel()">&times;</button>
     </div>
-    <div class="split-divider" id="split-divider-2"></div>
-    <div class="split-right">
+    <div id="kb-secondary-tabs" class="kb-secondary-tabs"></div>
+  </div>
+
+  <!-- 内容 Drawer（70% 宽，覆盖式） -->
+  <div id="kb-content-drawer" class="kb-content-drawer" style="display:none">
+    <div class="kb-drawer-header">
+      <span id="kb-drawer-title" class="kb-drawer-title"></span>
+      <button class="kb-drawer-close" onclick="closeKBContentDrawer()">&times;</button>
+    </div>
+    <div id="kb-drawer-content" class="kb-drawer-content">
       <div id="slot-editor" class="slot-editor" style="display:none">
         <div id="slot-groups" class="slot-groups"></div>
       </div>
+      <div id="kb-card-list-view" class="kb-card-list-view" style="display:none"></div>
       <div id="form-editor" class="form-editor" style="display:none">
         <div id="form-fields"></div>
         <button id="form-save-btn" class="btn btn-primary btn-sm" style="margin:0.5rem;">保存意图卡</button>

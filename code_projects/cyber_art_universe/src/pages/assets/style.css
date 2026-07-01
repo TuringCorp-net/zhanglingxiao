@@ -677,26 +677,7 @@ ul, ol { list-style: none; }
   background: var(--accent); color: var(--text-on-accent);
   border-color: var(--accent);
 }
-/* 模板 Level 指示器（pipeline bar 右侧） */
-.level-indicator {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px; border-radius: 50%;
-  border: 2px solid var(--border); background: transparent;
-  color: var(--text-dim); font-size: 0.78rem; font-weight: 600;
-  cursor: pointer; user-select: none; flex-shrink: 0;
-  margin-left: 0.5rem;
-  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
-}
-.level-indicator:hover {
-  border-color: var(--accent-light); color: var(--text);
-  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.3);
-}
-.level-indicator.level-unlocked {
-  border-color: var(--accent-light); color: var(--accent-light);
-  background: rgba(var(--accent-rgb), 0.08);
-}
-  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.2);
-}
+/* 模板 Level 指示器（pipeline bar 右侧）— 已废弃，保留以防引用 */
 .pipeline-step.active .pipeline-id { color: inherit; opacity: 0.7; }
 .pipeline-step .pipeline-label { font-size: 0.75rem; }
 .pipeline-step .pipeline-id {
@@ -787,7 +768,7 @@ ul, ol { list-style: none; }
 
 /* — Slot Editor — */
 .slot-editor {
-  flex: 1; overflow-y: auto; padding: 0;
+  display: none;
 }
 .slot-groups { padding: 0.5rem 0; }
 
@@ -963,8 +944,6 @@ ul, ol { list-style: none; }
 .slot-free-zone textarea::-webkit-scrollbar-thumb { background: transparent; border-radius: 2px; }
 .slot-free-zone textarea:hover::-webkit-scrollbar-thumb,
 .slot-free-zone textarea:focus::-webkit-scrollbar-thumb { background: var(--text-muted); }
-  transition: background 0.2s, border-color 0.2s;
-}
 .slot-free-zone textarea:hover { border-color: var(--border); }
 .slot-free-zone textarea:focus {
   background: #050508; border-color: var(--cyan); outline: none;
@@ -972,7 +951,7 @@ ul, ol { list-style: none; }
 
 /* — Writing Editor (M0 / M6 自由文本) — */
 .writing-editor {
-  width: 100%; flex: 1; background: var(--bg); color: var(--text);
+  width: 100%; display: none; background: var(--bg); color: var(--text);
   border: none; padding: 1.5rem; font-family: var(--font); font-size: 0.95rem;
   line-height: 1.9; resize: none; outline: none;
   box-sizing: border-box; min-height: 20rem;
@@ -1043,6 +1022,233 @@ ul, ol { list-style: none; }
   padding: 0.4rem 0.6rem; border-radius: 6px;
   margin-bottom: 0.5rem; border: 1px dashed rgba(var(--accent-rgb), 0.3);
 }
+/* ============================================================
+   三层覆盖式布局（v3.3）
+   Layer 0: 主编辑画布 — 全宽固定
+   Layer 1: AI Chat 左 Drawer — 覆盖主画布
+   Layer 2: 知识库右 Drawer — 覆盖 AI Chat
+   ============================================================ */
+
+/* — Layer 0: 主编辑画布 — */
+.main-canvas {
+  position: relative;
+  z-index: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* — Layer 1: AI Chat 左侧 Drawer — */
+.ai-drawer {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: row;
+  pointer-events: none;
+  transform: translateX(calc(-100% + 78px)); /* 收起: 仅露头像 */
+  transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.ai-drawer.open {
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+.ai-drawer-toggle {
+  width: 70px; height: 70px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: all;
+  flex-shrink: 0;
+  margin: 16px 0 0 8px;
+  overflow: hidden;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.ai-drawer-toggle:hover { transform: scale(1.08); }
+
+.ai-drawer-toggle-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scaleX(-1);
+}
+
+.ai-drawer-panel {
+  width: min(70vw, 800px);
+  height: 100%;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* — Layer 2: 知识库标签栏（右边缘浮动标签） — */
+.kb-tab-bar {
+  position: fixed;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.kb-tab-badge {
+  padding: 6px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.15s;
+  user-select: none;
+  pointer-events: all;
+}
+.kb-tab-badge:hover {
+  background: rgba(var(--accent-rgb), 0.12);
+  border-color: var(--accent-light);
+  color: var(--text);
+}
+.kb-tab-badge.active {
+  background: rgba(var(--accent-rgb), 0.15);
+  border-color: var(--accent);
+  color: var(--accent-light);
+}
+
+/* — Layer 2: 二级标签窄面板 — */
+.kb-secondary-panel {
+  position: fixed;
+  right: 0; top: 0; bottom: 0;
+  width: 200px;
+  z-index: 21;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  box-shadow: -2px 0 16px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+}
+.kb-secondary-panel.open {
+  transform: translateX(0);
+}
+
+.kb-secondary-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 0.75rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.kb-secondary-panel-title {
+  font-size: 0.78rem; font-weight: 600; color: var(--text);
+}
+.kb-secondary-panel-close {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-muted); font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.kb-secondary-panel-close:hover { border-color: var(--error); color: var(--error); }
+
+.kb-secondary-tabs {
+  flex: 1; overflow-y: auto; padding: 0.5rem 0.75rem;
+}
+
+.kb-secondary-tab {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.12s;
+  margin-bottom: 2px;
+  user-select: none;
+}
+.kb-secondary-tab:hover { background: var(--bg-hover); color: var(--text); }
+.kb-secondary-tab.active { color: var(--cyan); background: rgba(var(--cyan-rgb), 0.08); }
+
+/* — Layer 2: 内容 Drawer（70% 宽，右侧滑出） — */
+.kb-content-drawer {
+  position: fixed;
+  right: 0; top: 0; bottom: 0;
+  width: min(70vw, 900px);
+  z-index: 22;
+  background: var(--bg);
+  border-left: 1px solid var(--border);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.kb-content-drawer.open {
+  transform: translateX(0);
+}
+
+.kb-drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  background: var(--bg-card);
+}
+.kb-drawer-title {
+  font-size: 0.88rem; font-weight: 600; color: var(--text);
+}
+.kb-drawer-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--bg-card);
+  color: var(--text-dim); font-size: 1.1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; flex-shrink: 0;
+}
+.kb-drawer-close:hover {
+  border-color: var(--error); color: var(--error);
+}
+
+.kb-drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+}
+.kb-drawer-content .slot-editor { display: block; }
+.kb-drawer-content .slot-groups { padding: 0; }
+.kb-drawer-content .slot-item { margin: 0 0 0.6rem; }
+.kb-drawer-content .slot-framework { padding: 0; }
+
+/* 卡片列表视图（Drawer 内） */
+.kb-card-list-view {
+  display: none;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+/* 主编辑画布内的自由编辑区 */
+.main-canvas .slot-free-zone {
+  padding: 0.5rem 1.5rem;
+  flex: 1; display: flex; flex-direction: column;
+}
+
 /* — Responsive — */
 @media (max-width: 640px) {
   .hero h1 { font-size: 1.6rem; }

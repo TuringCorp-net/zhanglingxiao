@@ -476,11 +476,31 @@
       if (opts.onToolResult !== undefined) _config.onToolResult = opts.onToolResult;
     },
 
-    mount: function (container) {
+    mount: function (container, mode) {
       var elf = document.getElementById('story-elf');
       if (!elf) return;
 
-      if (container) {
+      if (mode === 'drawer') {
+        // Drawer 模式: 左侧 AI Drawer 内的全高聊天面板
+        // 隐藏内部头像（由 ai-drawer-toggle 替代）
+        var avatar = elf.querySelector('.elf-avatar');
+        if (avatar) avatar.style.display = 'none';
+
+        container.appendChild(elf);
+        elf.classList.add('elf-drawer');
+        elf.classList.remove('elf-embedded');
+        elf.style.left = '';
+        elf.style.top = '';
+
+        // 消息区和输入栏始终可见
+        var msgs = elf.querySelector('#elf-chat-messages');
+        var inputRow = elf.querySelector('.elf-chat-input-row');
+        if (msgs) msgs.style.display = 'flex';
+        if (inputRow) inputRow.style.display = 'flex';
+
+        var inp = document.getElementById('elf-chat-input');
+        if (inp) _syncInputHeight(inp);
+      } else if (container) {
         // 嵌入模式: 头像移到 input-row 内（底部左对齐）
         var avatar = elf.querySelector('.elf-avatar');
         var inputRow = elf.querySelector('.elf-chat-input-row');
@@ -489,6 +509,7 @@
         }
         container.appendChild(elf);
         elf.classList.add('elf-embedded');
+        elf.classList.remove('elf-drawer');
         // 清理浮动模式的 inline style
         elf.style.left = '';
         elf.style.top = '';
@@ -504,6 +525,7 @@
         }
         document.body.appendChild(elf);
         elf.classList.remove('elf-embedded');
+        elf.classList.remove('elf-drawer');
         restorePosition();
         // 恢复浮动模式默认隐藏状态（仅隐藏消息和输入栏，头像保持可见）
         if (msgs) msgs.style.display = 'none';
