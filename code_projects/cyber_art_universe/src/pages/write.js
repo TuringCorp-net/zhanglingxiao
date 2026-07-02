@@ -1921,13 +1921,18 @@ function renderCardListInDrawer(cardType) {
     }
 
     var card = document.createElement('div');
+    var isActive = false;
     if (cardType === 'm5_intent' || cardType === 'm6_chapter') {
       card.className = 'card-item chapter-card';
       card.dataset.sectionId = entityId;
+      isActive = (state.currentSectionId === entityId);
     } else {
       card.className = 'card-item';
       card.dataset.entityId = entityId;
+      isActive = (cardType === 'm3_card' && state.currentEntityId === entityId)
+              || (cardType === 'm4_card' && state.currentFhId === entityId);
     }
+    if (isActive) card.classList.add('active');
     card.dataset.moduleId = moduleId;
 
     // 三点菜单按钮
