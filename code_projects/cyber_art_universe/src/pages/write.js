@@ -1625,10 +1625,17 @@ function generateKBTabs() {
     var cached = cacheGet(templateModuleId);
     var sections = (cached && cached.data && cached.data.template && cached.data.template.sections) || [];
     sections.forEach(function (section, si) {
-      var l2List = (section.slots || []).map(function (s) {
-        return { type: 'slot', id: s.id, label: s.label, hint: s.hint, content: s.content };
-      });
-      _kbTabs.push({ type: 'template_section', label: section.heading || 'Section ' + (si + 1), sectionIndex: si, l2: l2List });
+      var slotCount = (section.slots || []).length;
+      if (slotCount <= 1) {
+        // 单 slot section：不需要二级标签，点击一级直接展开内容 Drawer
+        _kbTabs.push({ type: 'template_section', label: section.heading || 'Section ' + (si + 1), sectionIndex: si, l2: null });
+      } else {
+        // 多 slot section：生成二级标签
+        var l2List = (section.slots || []).map(function (s) {
+          return { type: 'slot', id: s.id, label: s.label, hint: s.hint, content: s.content };
+        });
+        _kbTabs.push({ type: 'template_section', label: section.heading || 'Section ' + (si + 1), sectionIndex: si, l2: l2List });
+      }
     });
   }
 
