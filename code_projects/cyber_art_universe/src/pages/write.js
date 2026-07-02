@@ -2002,7 +2002,7 @@ function createNewCard() {
   var name = prompt(label + ' — 请输入名称（可后续修改）:');
   if (!name || !name.trim()) return;
 
-  hPost('/api/write/cards', { work_id: state.currentWorkId, type: cardType, name: name.trim() }).then(function (data) {
+  hPost('/api/write/modules', { work_id: state.currentWorkId, type: cardType, name: name.trim() }).then(function (data) {
     if (data && data.ok) {
       // 刷新卡片列表数据
       var listKey = cardType;
@@ -2033,7 +2033,7 @@ function createNewCard() {
 function deleteCard(moduleId, name, cardType) {
   if (!confirm(t('kb.delete_confirm').replace('{title}', name))) return;
 
-  hDelete('/api/write/cards/' + moduleId).then(function (data) {
+  hDelete('/api/write/module/' + moduleId).then(function (data) {
     if (data && data.ok) {
       cacheClear(moduleId);
       cacheClear('list_' + state.currentWorkId + '_' + cardType);

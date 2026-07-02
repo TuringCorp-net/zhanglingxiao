@@ -80,8 +80,8 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         module_list: 'GET /api/write/modules?work_id=X&type=Y',
         module_get: 'GET /api/write/module/{module_id}',
         module_put: 'PUT /api/write/module/{module_id}  — Body: {slots:{...}, free_content:"...", name:"..."}（rename 仅传 name）',
-        card_create: 'POST /api/write/cards  — Body: {work_id, type, name} 创建新卡片',
-        card_delete: 'DELETE /api/write/cards/{module_id}  — 删除卡片及其 R2 文件',
+        module_create: 'POST /api/write/modules  — Body: {work_id, type, name} 创建新模块/卡片',
+        module_delete: 'DELETE /api/write/module/{module_id}  — 删除模块及其 R2 文件',
         module_versions: 'GET /api/write/module/{module_id}/versions',
         module_diff: 'GET /api/write/module/{module_id}/diff?v1=X&v2=Y',
         elf_chat: 'POST /api/write/elf/chat',
@@ -361,7 +361,7 @@ Generation endpoints (\`POST .../generate\`) default to bilingual output (zh+en)
 
 ### Module API — Unified Read/Write for All Modules
 
-All 8 module types share 5 endpoints. Write prose to \`free_content\` — Story Elf handles structured decomposition into template slots.\n\n**Card CRUD**: Use \`POST /api/write/cards\` to create new cards. Use \`DELETE /api/write/cards/{id}\` to delete. Use \`PUT /api/write/module/{id}\` with \`{name: "..."}\` to rename.
+All 8 module types share 5 endpoints. Write prose to \`free_content\` — Story Elf handles structured decomposition into template slots.\n\n**Module CRUD**: Use \`POST /api/write/modules\` to create new modules/cards. Use \`DELETE /api/write/module/{id}\` to delete. Use \`PUT /api/write/module/{id}\` with \`{name: "..."}\` to rename.
 
 #### Module Types
 

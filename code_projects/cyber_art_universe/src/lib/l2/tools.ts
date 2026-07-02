@@ -378,7 +378,7 @@ function createCardTool(env: Env): L2ToolDef {
       if (!name) return '❌ create_card 需要传入 name 参数（卡片名称）';
 
       const { createCard } = await import('../../api/write/module');
-      const url = `https://internal/api/write/cards`;
+      const url = `https://internal/api/write/modules`;
       const req = new Request(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -427,7 +427,7 @@ function createDeleteModuleTool(env: Env): L2ToolDef {
       if (!moduleId) return '❌ delete_module 需要传入 module_id 参数';
 
       const { deleteModule } = await import('../../api/write/module');
-      const url = `https://internal/api/write/cards/${encodeURIComponent(moduleId)}`;
+      const url = `https://internal/api/write/module/${encodeURIComponent(moduleId)}`;
       const req = new Request(url, { method: 'DELETE' });
       try {
         const response = await deleteModule(env, req as any, moduleId);
