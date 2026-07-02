@@ -1877,7 +1877,10 @@ function renderCardListInDrawer(cardType) {
   }
 
   if (mods.length === 0) {
-    target.innerHTML += '<div style="color:var(--text-muted);padding:3rem 1rem;text-align:center;font-size:0.85rem">' + t('kb.no_cards') + '</div>';
+    target.innerHTML += '<div style="text-align:center;padding:3rem 1rem">'
+      + '<p style="color:var(--text-dim);font-size:0.95rem;margin-bottom:0.5rem">' + t('kb.no_cards') + '</p>'
+      + '<p style="color:var(--text-muted);font-size:0.78rem">' + t('kb.add_first_hint') + '</p>'
+      + '</div>';
     return;
   }
 
@@ -1989,15 +1992,17 @@ function createNewCard() {
   var cardType = addBtn ? addBtn.getAttribute('data-card-type') : null;
   if (!cardType) return;
 
-  var defaultNames = {
-    m3_card: '新角色',
-    m4_card: '新伏笔',
-    m5_intent: '新章节蓝图',
-    m6_chapter: '新章节',
+  var promptLabels = {
+    m3_card: t('kb.characters'),
+    m4_card: t('kb.foreshadowing'),
+    m5_intent: t('kb.chapter_intents'),
+    m6_chapter: t('kb.chapter_cards'),
   };
-  var name = defaultNames[cardType] || '新卡片';
+  var label = promptLabels[cardType] || cardType;
+  var name = prompt(label + ' — 请输入名称（可后续修改）:');
+  if (!name || !name.trim()) return;
 
-  hPost('/api/write/modules', { work_id: state.currentWorkId, type: cardType, name: name }).then(function (data) {
+  hPost('/api/write/modules', { work_id: state.currentWorkId, type: cardType, name: name.trim() }).then(function (data) {
     if (data && data.ok) {
       // 刷新卡片列表数据
       var listKey = cardType;
