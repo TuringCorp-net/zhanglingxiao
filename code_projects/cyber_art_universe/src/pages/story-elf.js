@@ -23,8 +23,6 @@
   // 常量
   // ============================================================
   var MAX_DOM_MSGS = 50;       // DOM 渲染消息上限
-  var MAX_INPUT_HEIGHT = 120;  // textarea 最大高度 px (~6行)
-  var MIN_INPUT_HEIGHT = 60;   // textarea 最小高度 px (~3行)
 
   // ============================================================
   // HTML — 精简版，无 hint 对话泡，无操作按钮
@@ -386,9 +384,6 @@
     var inputEl = document.getElementById('elf-chat-input');
     if (!inputEl) return;
 
-    // 初始化 textarea + 按钮高度
-    _syncInputHeight(inputEl);
-
     // Enter 发送，Shift+Enter 换行
     inputEl.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -396,24 +391,6 @@
         StoryElf.sendChat();
       }
     });
-
-    // 自动撑高（textarea + 按钮同步）
-    inputEl.addEventListener('input', function () {
-      _syncInputHeight(this);
-    });
-  }
-
-  /** textarea 动态高度 + 按钮同步（Drawer 模式下固定高度，不动态调整） */
-  function _syncInputHeight(textarea) {
-    var elf = document.getElementById('story-elf');
-    if (elf && elf.classList.contains('elf-drawer')) return;
-    textarea.style.height = 'auto';
-    var newH = Math.min(textarea.scrollHeight, MAX_INPUT_HEIGHT);
-    newH = Math.max(newH, MIN_INPUT_HEIGHT);
-    textarea.style.height = newH + 'px';
-    // 按钮同步高度
-    var sendBtn = document.getElementById('elf-send-btn');
-    if (sendBtn) sendBtn.style.height = newH + 'px';
   }
 
   // ============================================================
@@ -499,9 +476,6 @@
         var inputRow = elf.querySelector('.elf-chat-input-row');
         if (msgs) msgs.style.display = 'flex';
         if (inputRow) inputRow.style.display = 'flex';
-
-        var inp = document.getElementById('elf-chat-input');
-        if (inp) _syncInputHeight(inp);
       } else if (container) {
         // 嵌入模式: 头像移到 input-row 内（底部左对齐）
         var avatar = elf.querySelector('.elf-avatar');
@@ -515,9 +489,6 @@
         // 清理浮动模式的 inline style
         elf.style.left = '';
         elf.style.top = '';
-        // 确保 textarea + 按钮高度正确
-        var inp = document.getElementById('elf-chat-input');
-        if (inp) _syncInputHeight(inp);
       } else {
         // 浮动模式: 头像移出 input-row，作为 #story-elf 的第一个子元素
         var avatar = elf.querySelector('.elf-avatar');
@@ -568,8 +539,6 @@
       var inp = document.getElementById('elf-chat-input');
       if (inp) {
         inp.value = '';
-        // 重置 textarea + 按钮高度
-        _syncInputHeight(inp);
       }
     },
 
