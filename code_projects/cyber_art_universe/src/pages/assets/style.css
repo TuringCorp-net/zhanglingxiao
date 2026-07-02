@@ -1153,6 +1153,21 @@ ul, ol { list-style: none; }
   transform: scaleX(-1);
 }
 
+/* 面板收起按钮 — 浮动右上角，与 KB Drawer 关闭按钮同款 */
+.ai-drawer-close {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--bg-card);
+  color: var(--text-dim); font-size: 1.1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 12;
+  transition: all 0.15s;
+}
+.ai-drawer-close:hover {
+  border-color: var(--error); color: var(--error);
+}
+
 /* — Layer 2: 知识库标签栏（右边缘浮动标签） — */
 .kb-tab-bar {
   position: fixed;

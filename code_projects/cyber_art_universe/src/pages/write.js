@@ -1583,6 +1583,15 @@ function initAIDrawer() {
   applyAIDrawerState();
 }
 
+/** 收起 AI Drawer（面板右上角 × 按钮调用） */
+function collapseAIDrawer() {
+  if (state.aiDrawerOpen) {
+    state.aiDrawerOpen = false;
+    applyAIDrawerState();
+    saveState();
+  }
+}
+
 function applyAIDrawerState() {
   var drawer = qs('#ai-drawer');
   if (!drawer) { console.log('[DEBUG applyAIDrawerState] drawer element NOT FOUND'); return; }
