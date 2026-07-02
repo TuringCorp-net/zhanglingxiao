@@ -1313,7 +1313,9 @@ ul, ol { list-style: none; }
 /* 主编辑画布内的编辑器 — 居中记事本风格 */
 .main-canvas .writing-editor {
   display: block;
-  width: 70%;
+  width: 70vw;
+  max-width: calc(100% - 2rem);
+  margin: 0 auto;
   flex: 1;
   background: var(--text-input-bg);
   border: 1px solid var(--border);
@@ -1339,7 +1341,8 @@ ul, ol { list-style: none; }
 
 /* 自由编辑区 */
 .main-canvas .slot-free-zone {
-  width: 70%;
+  width: 70vw;
+  max-width: calc(100% - 2rem);
   margin: 0 auto;
   padding: 0;
   flex: 1; display: flex; flex-direction: column;
