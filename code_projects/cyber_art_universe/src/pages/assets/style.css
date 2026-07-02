@@ -39,6 +39,7 @@
   /* UI chrome */
   --border: #1e1e30;
   --ui-knob: #666;
+  --text-input-bg: #0d0d15;
 
   /* Dimensions */
   --radius: 10px;
@@ -1303,28 +1304,31 @@ ul, ol { list-style: none; }
   padding: 0.5rem 0;
 }
 
+/* 主编辑画布 — 上下各留 16px，内容区宽度 70%（左右各 15%） */
+.main-canvas {
+  padding: 16px 0;
+  align-items: center;
+}
+
 /* 主编辑画布内的编辑器 — 居中记事本风格 */
 .main-canvas .writing-editor {
   display: block;
-  max-width: 780px;
-  width: calc(100% - 3rem);
-  margin: 1.5rem auto;
-  min-height: 26rem;
-  background: var(--bg-card);
+  width: 70%;
+  flex: 1;
+  background: var(--text-input-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 2rem;
   font-size: 0.95rem;
   line-height: 1.9;
   box-sizing: border-box;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s;
 }
 .main-canvas .writing-editor:hover {
   border-color: var(--text-muted);
 }
 .main-canvas .writing-editor:focus {
   border-color: var(--accent-light);
-  background: #0d0d15;
   outline: none;
 }
 .main-canvas .writing-editor::placeholder {
@@ -1335,9 +1339,8 @@ ul, ol { list-style: none; }
 
 /* 自由编辑区 */
 .main-canvas .slot-free-zone {
-  max-width: 780px;
-  width: calc(100% - 3rem);
-  margin: 1.5rem auto;
+  width: 70%;
+  margin: 0 auto;
   padding: 0;
   flex: 1; display: flex; flex-direction: column;
 }
@@ -1346,22 +1349,20 @@ ul, ol { list-style: none; }
 }
 .main-canvas .slot-free-zone textarea {
   flex: 1;
-  min-height: 26rem;
-  background: var(--bg-card);
+  background: var(--text-input-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 2rem;
   font-size: 0.95rem;
   line-height: 1.9;
   box-sizing: border-box;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s;
 }
 .main-canvas .slot-free-zone textarea:hover {
   border-color: var(--text-muted);
 }
 .main-canvas .slot-free-zone textarea:focus {
   border-color: var(--accent-light);
-  background: #0d0d15;
   outline: none;
 }
 .main-canvas .slot-free-zone textarea::placeholder {
