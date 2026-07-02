@@ -1205,9 +1205,11 @@ async function loadM2() {
 async function loadM3() {
   showTextEditor('');
   await renderEntityCardList();
-  // 默认选中第一个角色
-  var first = qs('#kb-card-list-view .card-item[data-entity-id]');
-  if (first) first.click();
+  // 默认选中第一个角色（直接从数据调用，不依赖 DOM）
+  var cards = _kbCardListData['m3_card'] || [];
+  if (cards.length > 0) {
+    openEntityCard(cards[0].id, cards[0].name);
+  }
 }
 
 async function renderEntityCardList() {
@@ -1244,8 +1246,11 @@ async function openEntityCard(entityId, name) {
 async function loadM4() {
   showTextEditor('');
   await renderFhCardList();
-  var first = qs('#kb-card-list-view .card-item[data-entity-id]');
-  if (first) first.click();
+  // 默认选中第一个伏笔条目（直接从数据调用，不依赖 DOM）
+  var cards = _kbCardListData['m4_card'] || [];
+  if (cards.length > 0) {
+    openFhCard(cards[0].id, cards[0].name);
+  }
 }
 
 async function renderFhCardList() {
@@ -1292,16 +1297,21 @@ async function loadM5() {
   if (fz) fz.style.display = '';
 
   await loadChapterCardList();
-  // 默认选中第一章
-  var first = qs('#kb-card-list-view .chapter-card[data-section-id]');
-  if (first) first.click();
+  // 默认选中第一章蓝图（直接从数据调用，不依赖 DOM）
+  var cards = _kbCardListData['m5_intent'] || [];
+  if (cards.length > 0) {
+    openChapter(cards[0].id, cards[0].title);
+  }
 }
 
 async function loadM6() {
   showTextEditor(''); // 占位，openChapter 会填入内容
   await loadChapterCardList();
-  var first = qs('#kb-card-list-view .chapter-card[data-section-id]');
-  if (first) first.click();
+  // 默认选中第一章（直接从数据调用，不依赖 DOM）
+  var cards = _kbCardListData['m6_chapter'] || [];
+  if (cards.length > 0) {
+    openChapter(cards[0].id, cards[0].title);
+  }
 }
 
 async function loadChapterCardList() {
@@ -1643,10 +1653,10 @@ function generateKBTabs() {
   // 一、卡片标签
   var cardDefs = [];
   switch (mod) {
-    case 'characters':    cardDefs.push({ type: 'm3_card', label: t('kb.characters') || '人物卡片' }); break;
-    case 'foreshadowing': cardDefs.push({ type: 'm4_card', label: t('kb.foreshadowing') || '伏笔卡片' }); break;
-    case 'chapters':      cardDefs.push({ type: 'm5_intent', label: t('kb.chapter_intents') || '章节蓝图' }); break;
-    case 'writing':       cardDefs.push({ type: 'm6_chapter', label: t('kb.chapter_cards') || '章节卡片' }); break;
+    case 'characters':    cardDefs.push({ type: 'm3_card', label: t('kb.characters') }); break;
+    case 'foreshadowing': cardDefs.push({ type: 'm4_card', label: t('kb.foreshadowing') }); break;
+    case 'chapters':      cardDefs.push({ type: 'm5_intent', label: t('kb.chapter_intents') }); break;
+    case 'writing':       cardDefs.push({ type: 'm6_chapter', label: t('kb.chapter_cards') }); break;
   }
   cardDefs.forEach(function (d) {
     _kbTabs.push({ type: 'card_list', label: d.label, cardType: d.type, l2: null });
@@ -1806,9 +1816,17 @@ function openKBContentDrawer(tabIndex, l2Index) {
     if (se) se.style.display = 'block';
   }
 
-  // 显示 Preview/Edit 胶囊（仅模板内容，卡片列表不需要）
+  // 显示 Preview/Edit 胶囊（仅模板内容）/ +新增按钮（仅卡片列表）
   var modePill = qs('#kb-mode-pill');
+  var addBtn = qs('#kb-add-btn');
   if (modePill) modePill.style.display = (tab.type === 'card_list') ? 'none' : '';
+  if (addBtn) {
+    addBtn.style.display = (tab.type === 'card_list') ? '' : 'none';
+    if (tab.type === 'card_list') {
+      addBtn.textContent = t('kb.add_card');
+      addBtn.setAttribute('data-card-type', tab.cardType);
+    }
+  }
   // 默认预览模式
   _kbEditMode = false;
   applyKBEditMode();
@@ -1838,11 +1856,6 @@ function renderCardListInDrawer(cardType) {
   if (!target) return;
   target.innerHTML = '';
 
-  if (mods.length === 0) {
-    target.innerHTML = '<div style="color:var(--text-muted);padding:2rem;text-align:center">' + (t('label.no_items') || '暂无条目') + '</div>';
-    return;
-  }
-
   // 章节筛选按钮（仅 M5/M6）
   if (cardType === 'm5_intent' || cardType === 'm6_chapter') {
     var filterDiv = document.createElement('div');
@@ -1859,17 +1872,23 @@ function renderCardListInDrawer(cardType) {
     });
     target.appendChild(filterDiv);
 
-    // 筛选
     if (state.chapterFilter === 'draft') mods = mods.filter(function (s) { return s.version < 2; });
     else if (state.chapterFilter === 'done') mods = mods.filter(function (s) { return s.version >= 2 && s.word_count > 0; });
   }
 
+  if (mods.length === 0) {
+    target.innerHTML += '<div style="color:var(--text-muted);padding:3rem 1rem;text-align:center;font-size:0.85rem">' + t('kb.no_cards') + '</div>';
+    return;
+  }
+
   mods.forEach(function (m) {
-    var entityId;
+    var entityId, moduleId;
     if (cardType === 'm5_intent' || cardType === 'm6_chapter') {
       entityId = m.id.replace(/^m[56]_(intent|chapter)_/, '');
+      moduleId = m.id;
     } else {
       entityId = m.id.replace(/^m[34]_card_/, '');
+      moduleId = m.id;
     }
 
     var card = document.createElement('div');
@@ -1880,15 +1899,44 @@ function renderCardListInDrawer(cardType) {
       card.className = 'card-item';
       card.dataset.entityId = entityId;
     }
+    card.dataset.moduleId = moduleId;
+
+    // 三点菜单按钮
+    var menuBtn = document.createElement('button');
+    menuBtn.className = 'ws-card-menu-btn';
+    menuBtn.style.cssText = 'opacity:0;';
+    menuBtn.innerHTML = '&#8943;';
+    menuBtn.title = t('action.edit');
+    menuBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      showCardContextMenu(e, moduleId, m.name, cardType);
+    });
+    card.appendChild(menuBtn);
+
+    // 鼠标悬停显示菜单按钮
+    card.addEventListener('mouseenter', function () { menuBtn.style.opacity = '1'; });
+    card.addEventListener('mouseleave', function () { menuBtn.style.opacity = '0'; });
 
     var stIcon = '';
     if (cardType === 'm5_intent' || cardType === 'm6_chapter') {
       stIcon = '<span class="card-status">' + (m.version === 0 ? (m.word_count > 0 ? '[draft]' : '[new]') : (m.word_count > 0 ? '[done]' : '[planned]')) + '</span>';
     }
 
-    card.innerHTML = stIcon + '<span class="card-item-name">' + escHtml(m.name) + '</span><span class="card-item-meta">' + ((cardType === 'm5_intent' || cardType === 'm6_chapter') ? (m.word_count || 0) + '字' : (m.description || '').substring(0, 30)) + '</span>';
+    var nameSpan = document.createElement('span');
+    nameSpan.className = 'card-item-name';
+    nameSpan.textContent = m.name;
 
-    card.addEventListener('click', function () {
+    var metaSpan = document.createElement('span');
+    metaSpan.className = 'card-item-meta';
+    metaSpan.textContent = (cardType === 'm5_intent' || cardType === 'm6_chapter') ? (m.word_count || 0) + '字' : (m.description || '').substring(0, 30);
+
+    // 状态图标在名字前
+    if (stIcon) card.innerHTML += stIcon;
+    card.appendChild(nameSpan);
+    card.appendChild(metaSpan);
+
+    card.addEventListener('click', function (e) {
+      if (e.target === menuBtn) return; // 不触发卡片点击
       switch (cardType) {
         case 'm3_card': openEntityCard(entityId, m.name); break;
         case 'm4_card': openFhCard(entityId, m.name); break;
@@ -1897,6 +1945,110 @@ function renderCardListInDrawer(cardType) {
       }
     });
     target.appendChild(card);
+  });
+}
+
+// — 卡片三点菜单（删除）—
+var _cardMenuEl = null;
+function showCardContextMenu(e, moduleId, name, cardType) {
+  // 移除旧菜单
+  if (_cardMenuEl) _cardMenuEl.remove();
+
+  var menu = document.createElement('div');
+  menu.className = 'ws-card-menu';
+  menu.style.position = 'fixed';
+  menu.style.top = e.clientY + 'px';
+  menu.style.left = Math.min(e.clientX, window.innerWidth - 180) + 'px';
+  menu.style.zIndex = '225';
+
+  var delBtn = document.createElement('button');
+  delBtn.className = 'ws-card-menu-item ws-card-menu-item-danger';
+  delBtn.textContent = t('kb.delete_card');
+  delBtn.addEventListener('click', function () {
+    menu.remove();
+    _cardMenuEl = null;
+    deleteCard(moduleId, name, cardType);
+  });
+  menu.appendChild(delBtn);
+
+  document.body.appendChild(menu);
+  _cardMenuEl = menu;
+
+  // 点击其他地方关闭
+  setTimeout(function () {
+    document.addEventListener('click', function closeMenu() {
+      if (_cardMenuEl) { _cardMenuEl.remove(); _cardMenuEl = null; }
+      document.removeEventListener('click', closeMenu);
+    }, { once: true });
+  }, 0);
+}
+
+// — 卡片 CRUD —
+function createNewCard() {
+  var addBtn = qs('#kb-add-btn');
+  var cardType = addBtn ? addBtn.getAttribute('data-card-type') : null;
+  if (!cardType) return;
+
+  var defaultNames = {
+    m3_card: '新角色',
+    m4_card: '新伏笔',
+    m5_intent: '新章节蓝图',
+    m6_chapter: '新章节',
+  };
+  var name = defaultNames[cardType] || '新卡片';
+
+  hPost('/api/write/modules', { work_id: state.currentWorkId, type: cardType, name: name }).then(function (data) {
+    if (data && data.ok) {
+      // 刷新卡片列表数据
+      var listKey = cardType;
+      cacheClear('list_' + state.currentWorkId + '_' + cardType);
+      loadModuleList(state.currentWorkId, cardType).then(function (listData) {
+        if (listData && listData.ok) {
+          _kbCardListData[cardType] = listData.data.modules || [];
+          renderCardListInDrawer(cardType);
+          // 自动选中新创建的卡片
+          var mods = _kbCardListData[cardType] || [];
+          if (mods.length > 0) {
+            var newMod = mods[mods.length - 1];
+            var eid = newMod.id.replace(/^m[3456]_(card|intent|chapter)_/, '');
+            switch (cardType) {
+              case 'm3_card': openEntityCard(eid, newMod.name); break;
+              case 'm4_card': openFhCard(eid, newMod.name); break;
+              case 'm5_intent': case 'm6_chapter': openChapter(eid, newMod.name); break;
+            }
+          }
+          // 刷新标签（新卡片可能触发模板标签）
+          generateKBTabs();
+        }
+      });
+    }
+  });
+}
+
+function deleteCard(moduleId, name, cardType) {
+  if (!confirm(t('kb.delete_confirm').replace('{title}', name))) return;
+
+  hDelete('/api/write/module/' + moduleId).then(function (data) {
+    if (data && data.ok) {
+      cacheClear(moduleId);
+      cacheClear('list_' + state.currentWorkId + '_' + cardType);
+      // 如果删除的是当前选中的卡片，重置状态
+      if (cardType === 'm3_card' && moduleId === ('m3_card_' + (state.currentEntityId || ''))) {
+        state.currentEntityId = null;
+      } else if (cardType === 'm4_card' && moduleId === ('m4_card_' + (state.currentFhId || ''))) {
+        state.currentFhId = null;
+      } else if ((cardType === 'm5_intent' || cardType === 'm6_chapter') && moduleId === ('m' + cardType.substring(1) + '_' + (state.currentSectionId || ''))) {
+        state.currentSectionId = null;
+      }
+      // 刷新列表
+      loadModuleList(state.currentWorkId, cardType).then(function (listData) {
+        if (listData && listData.ok) {
+          _kbCardListData[cardType] = listData.data.modules || [];
+          renderCardListInDrawer(cardType);
+          generateKBTabs();
+        }
+      });
+    }
   });
 }
 

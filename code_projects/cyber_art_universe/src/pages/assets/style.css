@@ -484,6 +484,24 @@ ul, ol { list-style: none; }
   display: flex; align-items: center; gap: 0.5rem;
 }
 
+/* + 新增按钮（卡片列表 header） */
+.kb-add-btn {
+  padding: 0.25rem 0.65rem;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.kb-add-btn:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(var(--cyan-rgb), 0.06);
+}
+
 /* — Pipeline Bar（引导条 + 作品选择器） — */
 .pipeline-bar {
   display: flex; align-items: center; gap: 0.75rem;

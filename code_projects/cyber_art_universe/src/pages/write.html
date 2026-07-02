@@ -88,10 +88,11 @@
     <div class="kb-drawer-header">
       <span id="kb-drawer-title" class="kb-drawer-title"></span>
       <div class="kb-drawer-header-actions">
+        <button id="kb-add-btn" class="kb-add-btn" style="display:none" onmousedown="createNewCard()" data-i18n="kb.add_card">+ 新增</button>
         <div id="kb-mode-pill" class="kb-mode-pill" style="display:none" onmousedown="toggleKBEditMode()" title="切换预览/编辑模式">
           <span class="kb-mode-knob" id="kb-mode-knob"></span>
-          <span class="kb-mode-opt active" data-mode="preview" data-i18n="kb.preview">预览</span>
-          <span class="kb-mode-opt" data-mode="edit" data-i18n="kb.edit">编辑</span>
+          <span class="kb-mode-opt active" data-mode="preview" data-i18n="writing.preview">预览</span>
+          <span class="kb-mode-opt" data-mode="edit" data-i18n="writing.edit">编辑</span>
         </div>
         <button class="kb-drawer-close" onmousedown="closeKBContentDrawer()">&times;</button>
       </div>

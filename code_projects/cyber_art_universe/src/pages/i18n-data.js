@@ -70,6 +70,17 @@ var I18N = {
     done:  { zh: '已完成', en: 'Done' },
   },
 
+  kb: {
+    characters:      { zh: '人物卡片', en: 'Character Cards' },
+    foreshadowing:   { zh: '伏笔卡片', en: 'Foreshadowing Cards' },
+    chapter_intents: { zh: '章节蓝图', en: 'Chapter Intents' },
+    chapter_cards:   { zh: '章节卡片', en: 'Chapter Cards' },
+    no_cards:        { zh: '此模块还没有卡片', en: 'No cards yet in this module' },
+    add_card:        { zh: '+ 新增', en: '+ Add' },
+    delete_card:     { zh: '删除卡片', en: 'Delete Card' },
+    delete_confirm:  { zh: '确定删除 "{title}"？此操作不可恢复。', en: 'Delete "{title}"? This cannot be undone.' },
+  },
+
   writing: {
     preview:      { zh: '预览',   en: 'Preview' },
     edit:         { zh: '编辑',   en: 'Edit' },
