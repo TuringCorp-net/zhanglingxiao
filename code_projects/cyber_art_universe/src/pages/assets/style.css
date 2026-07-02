@@ -1153,16 +1153,22 @@ ul, ol { list-style: none; }
   transform: scaleX(-1);
 }
 
-/* 面板收起按钮 — 浮动右上角，与 KB Drawer 关闭按钮同款 */
+/* 面板收起按钮 — 浮动在面板右上角，与 KB Drawer 关闭按钮同款
+   仅面板展开时可见；面板滑出时跟随隐藏 */
 .ai-drawer-close {
   position: absolute;
-  top: 10px; right: 10px;
+  top: 10px;
+  left: calc(min(70vw, 800px) - 42px);  /* 面板右边缘 - 按钮宽 - 间距 */
   width: 32px; height: 32px; border-radius: 50%;
   border: 1px solid var(--border); background: var(--bg-card);
   color: var(--text-dim); font-size: 1.1rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   z-index: 12;
-  transition: all 0.15s;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, border-color 0.15s, color 0.15s;
+}
+.ai-drawer.open .ai-drawer-close {
+  opacity: 1; pointer-events: all;
 }
 .ai-drawer-close:hover {
   border-color: var(--error); color: var(--error);
