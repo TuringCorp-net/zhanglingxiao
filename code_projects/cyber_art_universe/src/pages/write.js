@@ -36,13 +36,13 @@ var state = {
 
 function loadState() {
   try {
-    var saved = JSON.parse(localStorage.getItem('sf_desk_v3') || '{}');
+    var saved = JSON.parse(localStorage.getItem('sf_desk_v4') || '{}');
     Object.assign(state, { chapterFilter: 'all', aiDrawerOpen: true, kbActiveL1: null, kbActiveL2: null }, saved);
   } catch (e) {}
 }
 function saveState() {
   try {
-    localStorage.setItem('sf_desk_v3', JSON.stringify({
+    localStorage.setItem('sf_desk_v4', JSON.stringify({
       chapterFilter: state.chapterFilter,
       aiDrawerOpen: state.aiDrawerOpen,
     }));
@@ -1555,6 +1555,7 @@ function updateDrawerBounds() {
 
   // 仅在可用高度 > 100px 时覆盖 CSS 默认值（top:0;bottom:0）
   // 防止 loadWorkspaces 之前 #main-canvas 未显示导致 footer 在顶部，计算出 0 高度
+  console.log('[DEBUG updateDrawerBounds] availHeight=' + availHeight.toFixed(1) + ' top=' + topBound.toFixed(1) + ' bot=' + botBound.toFixed(1) + ' window=' + window.innerHeight);
   if (availHeight > 100) {
     if (aiDrawer) {
       aiDrawer.style.top = topBound + 'px';
