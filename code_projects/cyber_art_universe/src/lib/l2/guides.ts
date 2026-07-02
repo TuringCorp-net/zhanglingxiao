@@ -4,7 +4,7 @@
 // 指南文本维护在 prompts/guides/*.md 文件中，便于独立编辑。
 
 import { renderTemplateAsJson, renderCardAsJson, type Lang } from '../l1/template';
-import { BIBLE_TEMPLATE, OUTLINE_TEMPLATE, CHARACTER_TEMPLATE, FORESHADOWING_CARD_SLOTS, INTENT_TEMPLATE, CHAPTER_TEMPLATE } from '../../api/write/module';
+import { BIBLE_TEMPLATE, OUTLINE_TEMPLATE, CHARACTER_TEMPLATE, FORESHADOWING_TEMPLATE, INTENT_TEMPLATE, CHAPTER_TEMPLATE } from '../../api/write/module';
 
 // ============================================================
 // 文字指导（从 .md 文件导入）
@@ -69,7 +69,7 @@ function renderTemplateStructure(moduleType: string, lang: Lang): string | null 
       case 'm3_card':
         return renderTemplateAsJson(CHARACTER_TEMPLATE, lang, 2);
       case 'm4_card':
-        return renderCardAsJson('伏笔卡', FORESHADOWING_CARD_SLOTS, lang, 2);
+        return renderTemplateAsJson(FORESHADOWING_TEMPLATE, lang, 2);
       case 'm0':
         // M0 无结构化模板，返回 null（纯文字指南足够）
         return null;

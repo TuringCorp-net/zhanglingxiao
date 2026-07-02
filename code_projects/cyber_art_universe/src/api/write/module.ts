@@ -23,7 +23,7 @@ import { Env } from '../../db/schema';
 import { jsonSuccess, jsonError } from '../../lib/response';
 import { ErrorCodes } from '../../lib/errors';
 import {
-  buildTemplateJson, buildCardJson,
+  buildTemplateJson,
   type TemplateDef, type SlotDef, type R2SlotData,
 } from '../../lib/l1/template';
 import { workContentPath, extractLang, type Lang } from '../../lib/l1/work-content';
@@ -247,22 +247,61 @@ export const CHARACTER_TEMPLATE: TemplateDef = {
   outro: { zh: 'M3 自由编辑区', en: 'M3 Free editing zone' },
 };
 
-// --- M4_card: 伏笔条目卡槽位 ---
-export const FORESHADOWING_CARD_SLOTS: SlotDef[] = [
+// --- M4_card: 伏笔条目卡 ---
+const _FH_SLOTS: SlotDef[] = [
   { id: 'fh_type',           level: 1, label: { zh: '伏笔类型', en: 'Hook Type' }, hint: { zh: '身份伏笔 / 道具伏笔 / 对白伏笔 / 能力伏笔 / 事件伏笔 / 意象伏笔', en: 'Identity / Prop / Dialogue / Ability / Event / Imagery' } },
   { id: 'fh_intensity',      level: 2, label: { zh: '伏笔强度', en: 'Hook Intensity' }, hint: { zh: '🔴 核心（贯穿全书）/ 🟡 重要（跨多章）/ 🟢 彩蛋（轻量）', en: '🔴 Core (throughout) / 🟡 Major (multi-chapter) / 🟢 Minor (Easter egg)' } },
   { id: 'fh_characters',     level: 1, label: { zh: '关联人物', en: 'Related Characters' }, hint: { zh: '此伏笔涉及的角色名', en: 'Characters involved in this hook' } },
   { id: 'fh_chapter_range',  level: 2, label: { zh: '关联章节范围', en: 'Chapter Range' }, hint: { zh: '第 ? 章 ～ 第 ? 章', en: 'ch? ~ ch?' } },
   { id: 'fh_m1_rule',        level: 2, label: { zh: '依赖的 M1 规则', en: 'Depends on M1 Rule' }, hint: { zh: '此伏笔依赖的世界规则', en: 'World rule this hook depends on' } },
-  { id: 'fh_plant_chapter',  level: 2, label: { zh: '埋种计划', en: 'Planting Plan' }, hint: { zh: '埋种章节：第 ? 章', en: 'Plant in Chapter: ch?' } },
-  { id: 'fh_plant_method',   level: 2, label: { zh: '埋种计划', en: 'Planting Plan' }, hint: { zh: '埋种方式：用什么方式让读者接触到这个伏笔？', en: 'Method: How will readers encounter this clue?' } },
-  { id: 'fh_dev_reinforce',  level: 2, label: { zh: '发展路径', en: 'Development Path' }, hint: { zh: '强化暗示：第 ? 章，如何再次暗示或加强', en: 'Reinforcement: ch?, how to reinforce' } },
-  { id: 'fh_dev_reveal',     level: 2, label: { zh: '发展路径', en: 'Development Path' }, hint: { zh: '部分揭示：第 ? 章，读者开始意识到什么？', en: 'Partial Reveal: ch?, what begins to surface?' } },
-  { id: 'fh_dev_misdirect',  level: 2, label: { zh: '发展路径', en: 'Development Path' }, hint: { zh: '误导/反转（可选）：第 ? 章，是否有意误导读者？', en: 'Misdirection (optional): ch?' } },
-  { id: 'fh_payoff_chapter', level: 2, label: { zh: '回收计划', en: 'Payoff Plan' }, hint: { zh: '回收章节：第 ? 章', en: 'Resolve in Chapter: ch?' } },
-  { id: 'fh_payoff_method',  level: 2, label: { zh: '回收计划', en: 'Payoff Plan' }, hint: { zh: '回收方式：如何让读者恍然大悟、拍案叫绝？', en: 'Method: How to make readers gasp?' } },
+  { id: 'fh_plant_chapter',  level: 2, label: { zh: '埋种章节', en: 'Plant Chapter' }, hint: { zh: '埋种章节：第 ? 章', en: 'Plant in Chapter: ch?' } },
+  { id: 'fh_plant_method',   level: 2, label: { zh: '埋种方式', en: 'Plant Method' }, hint: { zh: '用什么方式让读者接触到这个伏笔？', en: 'How will readers encounter this clue?' } },
+  { id: 'fh_dev_reinforce',  level: 2, label: { zh: '强化暗示', en: 'Reinforcement' }, hint: { zh: '第 ? 章，如何再次暗示或加强', en: 'ch?, how to reinforce' } },
+  { id: 'fh_dev_reveal',     level: 2, label: { zh: '部分揭示', en: 'Partial Reveal' }, hint: { zh: '第 ? 章，读者开始意识到什么？', en: 'ch?, what begins to surface?' } },
+  { id: 'fh_dev_misdirect',  level: 2, label: { zh: '误导/反转', en: 'Misdirection' }, hint: { zh: '（可选）第 ? 章，是否有意误导读者？', en: '(optional) ch?, misdirect?' } },
+  { id: 'fh_payoff_chapter', level: 2, label: { zh: '回收章节', en: 'Payoff Chapter' }, hint: { zh: '回收章节：第 ? 章', en: 'Resolve in Chapter: ch?' } },
+  { id: 'fh_payoff_method',  level: 2, label: { zh: '回收方式', en: 'Payoff Method' }, hint: { zh: '如何让读者恍然大悟、拍案叫绝？', en: 'How to make readers gasp?' } },
   { id: 'fh_status',         level: 2, label: { zh: '状态', en: 'Status' }, hint: { zh: '🌱 已规划 / 🌿 已埋种 / 🌳 发展中 / 💡 部分揭示 / ✅ 已回收', en: '🌱 Planned / 🌿 Planted / 🌳 Developing / 💡 Partially Revealed / ✅ Resolved' } },
 ];
+
+function _fhSlot(id: string): SlotDef {
+  return _FH_SLOTS.find(s => s.id === id)!;
+}
+
+export const FORESHADOWING_TEMPLATE: TemplateDef = {
+  title: { zh: '伏笔卡', en: 'Foreshadowing Card' },
+  intro: {
+    zh: '逐条管理伏笔暗线。每个伏笔一张卡，记录从埋种到回收的完整生命周期。',
+    en: 'Track each foreshadowing hook individually. One card per hook — record the full lifecycle from planting to payoff.',
+  },
+  sections: [
+    {
+      heading: { zh: '基本信息', en: 'Basic Info' },
+      slots: [_fhSlot('fh_type'), _fhSlot('fh_intensity')],
+    },
+    {
+      heading: { zh: '关联', en: 'References' },
+      slots: [_fhSlot('fh_characters'), _fhSlot('fh_chapter_range'), _fhSlot('fh_m1_rule')],
+    },
+    {
+      heading: { zh: '埋种', en: 'Planting' },
+      slots: [_fhSlot('fh_plant_chapter'), _fhSlot('fh_plant_method')],
+    },
+    {
+      heading: { zh: '发展', en: 'Development' },
+      slots: [_fhSlot('fh_dev_reinforce'), _fhSlot('fh_dev_reveal'), _fhSlot('fh_dev_misdirect')],
+    },
+    {
+      heading: { zh: '回收', en: 'Payoff' },
+      slots: [_fhSlot('fh_payoff_chapter'), _fhSlot('fh_payoff_method')],
+    },
+    {
+      heading: { zh: '状态', en: 'Status' },
+      slots: [_fhSlot('fh_status')],
+    },
+  ],
+  outro: { zh: 'M4 自由编辑区', en: 'M4 Free editing zone' },
+};
 
 // --- M5: 章节意图卡 ---
 export const INTENT_TEMPLATE: TemplateDef = {
@@ -317,45 +356,43 @@ export const CHAPTER_TEMPLATE: TemplateDef = {
 // ============================================================
 interface ModuleConfig {
   tmpl: TemplateDef;
-  isCard: boolean;
-  cardSlots?: SlotDef[];
   jsonKeyFromModule: (m: { id: string; r2_json_key?: string | null }) => string;
   mdKeyFromModule: (m: { id: string; r2_md_key?: string | null }) => string;
 }
 
 const MODULE_CONFIG: Record<string, ModuleConfig> = {
   m0: {
-    tmpl: ORIGINAL_CONCEPT_TEMPLATE, isCard: false,
+    tmpl: ORIGINAL_CONCEPT_TEMPLATE,
     jsonKeyFromModule: () => 'original_concept.json',
     mdKeyFromModule: () => 'original_concept.md',
   },
   m1: {
-    tmpl: BIBLE_TEMPLATE, isCard: false,
+    tmpl: BIBLE_TEMPLATE,
     jsonKeyFromModule: () => 'world_bible.json',
     mdKeyFromModule: () => 'world_bible.md',
   },
   m2: {
-    tmpl: OUTLINE_TEMPLATE, isCard: false,
+    tmpl: OUTLINE_TEMPLATE,
     jsonKeyFromModule: () => 'outline.json',
     mdKeyFromModule: () => 'outline.md',
   },
   m3_card: {
-    tmpl: CHARACTER_TEMPLATE, isCard: false,
+    tmpl: CHARACTER_TEMPLATE,
     jsonKeyFromModule: (m) => `characters/${m.id.replace('m3_card_', '')}.json`,
     mdKeyFromModule: (m) => `characters/${m.id.replace('m3_card_', '')}.md`,
   },
   m4_card: {
-    tmpl: null!, isCard: true, cardSlots: FORESHADOWING_CARD_SLOTS,
+    tmpl: FORESHADOWING_TEMPLATE,
     jsonKeyFromModule: (m) => `foreshadowing/${m.id.replace('m4_card_', '')}.json`,
     mdKeyFromModule: (m) => `foreshadowing/${m.id.replace('m4_card_', '')}.md`,
   },
   m5_intent: {
-    tmpl: INTENT_TEMPLATE, isCard: false,
+    tmpl: INTENT_TEMPLATE,
     jsonKeyFromModule: (m) => `intents/${m.id.replace('m5_intent_', '')}.json`,
     mdKeyFromModule: (m) => `intents/${m.id.replace('m5_intent_', '')}.md`,
   },
   m6_chapter: {
-    tmpl: CHAPTER_TEMPLATE, isCard: false,
+    tmpl: CHAPTER_TEMPLATE,
     jsonKeyFromModule: (m) => `chapters/${m.id.replace('m6_chapter_', '')}.json`,
     mdKeyFromModule: (m) => `chapters/${m.id.replace('m6_chapter_', '')}.md`,
   },
@@ -561,23 +598,7 @@ export async function getModule(env: Env, request: Request, moduleId: string): P
 
   const timestamps = resolveSlotTimestamps(slotData);
 
-  // 卡片模式（M4_card）
-  if (cfg.isCard && cfg.cardSlots) {
-    const cardJson = buildCardJson(mod.name, cfg.cardSlots, lang, 2, slotData);
-    return new Response(JSON.stringify(jsonSuccess({
-      module_id: mod.id, work_id: mod.work_id, type: mod.type,
-      name: mod.name, order_index: mod.order_index, status: mod.status,
-      editor_type: 'slot', is_card: true,
-      card: cardJson,
-      slots: slotData?.slots || {},
-      slot_timestamps: timestamps,
-      free_content: freeContent,
-      rendered_md: md,
-      is_template: isEmpty,
-    })), { headers: { 'Content-Type': 'application/json' } });
-  }
-
-  // 槽位编辑器模式
+  // 槽位编辑器模式（所有模块统一）
   const template = buildTemplateJson(cfg.tmpl, lang, 2, slotData);
   return new Response(JSON.stringify(jsonSuccess({
     module_id: mod.id, work_id: mod.work_id, type: mod.type,
@@ -649,9 +670,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   let slotWarnings: string[] = [];
   if (hasSlots && body.slots) {
     const validIds = new Set<string>();
-    if (cfg.isCard && cfg.cardSlots) {
-      cfg.cardSlots.forEach(s => validIds.add(s.id));
-    } else if (cfg.tmpl) {
+    if (cfg.tmpl) {
       cfg.tmpl.sections.forEach(sec => sec.slots.forEach(s => validIds.add(s.id)));
     }
     if (validIds.size > 0) {
@@ -775,17 +794,6 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   const currentSlots = currentSlotData?.slots || {};
 
   const currentTimestamps = hasSlots ? updatedTimestamps : resolveSlotTimestamps(currentSlotData);
-
-  if (cfg.isCard && cfg.cardSlots) {
-    const cardJson = buildCardJson(mod.name, cfg.cardSlots, lang, 2, { slots: currentSlots });
-    return new Response(JSON.stringify(jsonSuccess({
-      module_id: moduleId, lang, saved: true,
-      ...(slotWarnings.length > 0 ? { slot_warnings: slotWarnings } : {}),
-      is_card: true, card: cardJson, slots: currentSlots,
-      slot_timestamps: currentTimestamps,
-      free_content: currentFreeContent,
-    })), { headers: { 'Content-Type': 'application/json' } });
-  }
 
   const name = (mod.type === 'm3_card') ? mod.name : undefined;
   const template = buildTemplateJson(cfg.tmpl, lang, 2, { slots: currentSlots });
