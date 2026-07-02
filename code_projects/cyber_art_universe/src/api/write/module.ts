@@ -310,25 +310,47 @@ export const INTENT_TEMPLATE: TemplateDef = {
     zh: '每章写作前的创作意图规划。定义本章要推进什么冲突、揭示什么信息、制造什么悬念。',
     en: 'Creative intent planning before writing each chapter.',
   },
-  sections: [{
-    heading: { zh: '创作意图', en: 'Writing Intent' },
-    slots: [
-      { id: 'goal_advance_conflict', level: 1, label: { zh: '推进冲突', en: 'Advance Conflict' }, hint: { zh: '推进哪条剧情线（对应 M2 框架中的阶段/转折点）', en: 'Which plot line to advance' } },
-      { id: 'goal_reveal_info',      level: 1, label: { zh: '揭示信息', en: 'Reveal Info' }, hint: { zh: '本章要交代什么信息给读者', en: 'What info to reveal to readers' } },
-      { id: 'goal_create_suspense',  level: 1, label: { zh: '制造悬念', en: 'Create Suspense' }, hint: { zh: '本章要制造什么悬念', en: 'What suspense to create' } },
-      { id: 'emotional_goal',       level: 1, label: { zh: '情绪目标', en: 'Emotional Goal' }, hint: { zh: '希望读者产生什么情绪', en: 'Desired emotional response' } },
-      { id: 'pov_character',        level: 1, label: { zh: '视角角色', en: 'POV Character' }, hint: { zh: '本章以谁的视角展开', en: 'Whose POV' } },
-      { id: 'pov_strategy',         level: 2, label: { zh: '视角策略', en: 'POV Strategy' }, hint: { zh: '固定单一/多线交替/不可靠叙述者/全知', en: 'Single/multi/unreliable/omniscient' } },
-      { id: 'scene_type',           level: 2, label: { zh: '场景类型', en: 'Scene Type' }, hint: { zh: 'Wonder/一切尽失/终场/认知冲击', en: 'Scene type' } },
-      { id: 'structure_opening',    level: 1, label: { zh: '开篇钩子', en: 'Opening Hook' }, hint: { zh: '用什么抓住读者', en: 'What hooks the reader' } },
-      { id: 'structure_reversal',   level: 2, label: { zh: '反转点',   en: 'Reversal Point' }, hint: { zh: '本章的意外/转折', en: 'Twist or turning point' } },
-      { id: 'structure_cliffhanger',level: 1, label: { zh: '章末卡点', en: 'Cliffhanger' }, hint: { zh: '用什么让读者想继续读下一章', en: 'End-of-chapter hook' } },
-      { id: 'foreshadowing_triggered', level: 2, label: { zh: '伏笔触发', en: 'Foreshadowing Triggered' }, hint: { zh: '格式: hook_id:action', en: 'Format: hook_id:action' } },
-      { id: 'characters_involved',  level: 1, label: { zh: '出场人物', en: 'Characters Involved' }, hint: { zh: '逗号分隔的角色名或 ID', en: 'Comma-separated character names' } },
-      { id: 'estimated_words',      level: 2, label: { zh: '预估字数', en: 'Estimated Words' }, hint: { zh: '本章预估字数', en: 'Estimated word count' } },
-      { id: 'style_notes',          level: 2, label: { zh: '风格备注', en: 'Style Notes' }, hint: { zh: '本章的特殊风格要求', en: 'Special style notes' } },
-    ],
-  }],
+  sections: [
+    {
+      heading: { zh: '目标与冲突', en: 'Goals & Conflict' },
+      slots: [
+        { id: 'goal_advance_conflict', level: 1, label: { zh: '推进冲突', en: 'Advance Conflict' }, hint: { zh: '推进哪条剧情线（对应 M2 框架中的阶段/转折点）', en: 'Which plot line to advance' } },
+        { id: 'goal_reveal_info',      level: 1, label: { zh: '揭示信息', en: 'Reveal Info' }, hint: { zh: '本章要交代什么信息给读者', en: 'What info to reveal to readers' } },
+        { id: 'goal_create_suspense',  level: 1, label: { zh: '制造悬念', en: 'Create Suspense' }, hint: { zh: '本章要制造什么悬念', en: 'What suspense to create' } },
+      ],
+    },
+    {
+      heading: { zh: '情绪与视角', en: 'Emotion & POV' },
+      slots: [
+        { id: 'emotional_goal',       level: 1, label: { zh: '情绪目标', en: 'Emotional Goal' }, hint: { zh: '希望读者产生什么情绪', en: 'Desired emotional response' } },
+        { id: 'pov_character',        level: 1, label: { zh: '视角角色', en: 'POV Character' }, hint: { zh: '本章以谁的视角展开', en: 'Whose POV' } },
+        { id: 'pov_strategy',         level: 2, label: { zh: '视角策略', en: 'POV Strategy' }, hint: { zh: '固定单一/多线交替/不可靠叙述者/全知', en: 'Single/multi/unreliable/omniscient' } },
+        { id: 'scene_type',           level: 2, label: { zh: '场景类型', en: 'Scene Type' }, hint: { zh: 'Wonder/一切尽失/终场/认知冲击', en: 'Scene type' } },
+      ],
+    },
+    {
+      heading: { zh: '结构框架', en: 'Structure' },
+      slots: [
+        { id: 'structure_opening',    level: 1, label: { zh: '开篇钩子', en: 'Opening Hook' }, hint: { zh: '用什么抓住读者', en: 'What hooks the reader' } },
+        { id: 'structure_reversal',   level: 2, label: { zh: '反转点',   en: 'Reversal Point' }, hint: { zh: '本章的意外/转折', en: 'Twist or turning point' } },
+        { id: 'structure_cliffhanger',level: 1, label: { zh: '章末卡点', en: 'Cliffhanger' }, hint: { zh: '用什么让读者想继续读下一章', en: 'End-of-chapter hook' } },
+      ],
+    },
+    {
+      heading: { zh: '伏笔与人物', en: 'Foreshadowing & Characters' },
+      slots: [
+        { id: 'foreshadowing_triggered', level: 2, label: { zh: '伏笔触发', en: 'Foreshadowing Triggered' }, hint: { zh: '格式: hook_id:action', en: 'Format: hook_id:action' } },
+        { id: 'characters_involved',  level: 1, label: { zh: '出场人物', en: 'Characters Involved' }, hint: { zh: '逗号分隔的角色名或 ID', en: 'Comma-separated character names' } },
+      ],
+    },
+    {
+      heading: { zh: '写作参数', en: 'Writing Parameters' },
+      slots: [
+        { id: 'estimated_words',      level: 2, label: { zh: '预估字数', en: 'Estimated Words' }, hint: { zh: '本章预估字数', en: 'Estimated word count' } },
+        { id: 'style_notes',          level: 2, label: { zh: '风格备注', en: 'Style Notes' }, hint: { zh: '本章的特殊风格要求', en: 'Special style notes' } },
+      ],
+    },
+  ],
   outro: { zh: 'M5 自由编辑区', en: 'M5 Free editing zone' },
 };
 
