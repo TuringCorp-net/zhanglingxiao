@@ -1674,6 +1674,20 @@ function applyAIDrawerState() {
 var _kbTabs = [];          // [{ type, label, cardType?, sectionIndex?, l2: [...] }]
 var _kbCardListData = {};  // { 'm3_card': [...], 'm4_card': [...], ... }
 
+// 从缓存中统一读取 sections（兼容 template.sections 和 card.slots 两种格式）
+function getCachedSections(cached) {
+  if (!cached || !cached.data) return [];
+  // template 格式（M3 人物卡等）
+  if (cached.data.template && cached.data.template.sections) {
+    return cached.data.template.sections;
+  }
+  // card 格式（M4 伏笔卡等）: 扁平 slots → 单个 section
+  if (cached.data.card && cached.data.card.slots) {
+    return [{ heading: cached.data.card.name || '', slots: cached.data.card.slots }];
+  }
+  return [];
+}
+
 // 当前模块的知识库标签数据
 function generateKBTabs() {
   _kbTabs = [];
@@ -1705,7 +1719,7 @@ function generateKBTabs() {
 
   if (templateModuleId) {
     var cached = cacheGet(templateModuleId);
-    var sections = (cached && cached.data && cached.data.template && cached.data.template.sections) || [];
+    var sections = getCachedSections(cached);
     sections.forEach(function (section, si) {
       var slotCount = (section.slots || []).length;
       if (slotCount <= 1) {
@@ -2107,7 +2121,7 @@ function renderSectionSlotsInDrawer(tab) {
   }
 
   var cached = templateModuleId ? cacheGet(templateModuleId) : null;
-  var sections = cached && cached.data && cached.data.template ? cached.data.template.sections : null;
+  var sections = getCachedSections(cached);
   if (!sections || !sections[tab.sectionIndex]) return;
 
   var section = sections[tab.sectionIndex];
