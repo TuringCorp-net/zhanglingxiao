@@ -76,7 +76,7 @@ var I18N = {
     chapter_intents: { zh: '章节蓝图', en: 'Chapter Intents' },
     chapter_cards:   { zh: '章节卡片', en: 'Chapter Cards' },
     no_cards:        { zh: '此模块还没有卡片', en: 'No cards yet in this module' },
-    add_first_hint:  { zh: '点击右上角「+ 新增」来创建第一张卡片', en: 'Click "+ Add" above to create the first card' },
+    add_first_hint:  { zh: '请点击右侧标签，打开卡片列表后新建第一张卡片', en: 'Open the card list tab on the right and create the first card' },
     add_card:        { zh: '+ 新增', en: '+ Add' },
     delete_card:     { zh: '删除卡片', en: 'Delete Card' },
     delete_confirm:  { zh: '确定删除 "{title}"？此操作不可恢复。', en: 'Delete "{title}"? This cannot be undone.' },

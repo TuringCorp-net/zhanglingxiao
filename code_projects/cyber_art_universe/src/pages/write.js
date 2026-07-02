@@ -1013,6 +1013,7 @@ function removeSlotGroup(btn) {
 
 // 显示/切换编辑器类型（v3.3: 主画布 + 知识库 Drawer 模式）
 function showSlotEditor(templateData) {
+  clearNoCardsHint();
   var te = qs('#writing-editor');
   var fz = qs('#slot-free-zone');
   if (te) te.style.display = 'none';
@@ -1021,6 +1022,7 @@ function showSlotEditor(templateData) {
 }
 
 function showTextEditor(val) {
+  clearNoCardsHint();
   _textareaList = [];  // 清空槽位引用，防止残留数据污染其他模块保存
   _templateData = null;
   var te = qs('#writing-editor');
@@ -1203,12 +1205,12 @@ async function loadM2() {
 // M3: 人物卡
 // ============================================================
 async function loadM3() {
-  showTextEditor('');
   await renderEntityCardList();
-  // 默认选中第一个角色（直接从数据调用，不依赖 DOM）
   var cards = _kbCardListData['m3_card'] || [];
   if (cards.length > 0) {
     openEntityCard(cards[0].id, cards[0].name);
+  } else {
+    showNoCardsHint('kb.characters');
   }
 }
 
@@ -1244,12 +1246,13 @@ async function openEntityCard(entityId, name) {
 // M4: 伏笔卡 — 纯卡片模块（策略总览已合并到 M2 第六节）
 // ============================================================
 async function loadM4() {
-  showTextEditor('');
   await renderFhCardList();
   // 默认选中第一个伏笔条目（直接从数据调用，不依赖 DOM）
   var cards = _kbCardListData['m4_card'] || [];
   if (cards.length > 0) {
     openFhCard(cards[0].id, cards[0].name);
+  } else {
+    showNoCardsHint('kb.foreshadowing');
   }
 }
 
@@ -1290,27 +1293,29 @@ async function openFhCard(entityId, name) {
 // M5 / M6: 章节蓝图 / 逐章编写
 // ============================================================
 async function loadM5() {
-  // 显示自由编辑区
-  var te = qs('#writing-editor');
-  var fz = qs('#slot-free-zone');
-  if (te) te.style.display = 'none';
-  if (fz) fz.style.display = '';
-
   await loadChapterCardList();
   // 默认选中第一章蓝图（直接从数据调用，不依赖 DOM）
   var cards = _kbCardListData['m5_intent'] || [];
   if (cards.length > 0) {
+    // 显示自由编辑区
+    var te = qs('#writing-editor');
+    var fz = qs('#slot-free-zone');
+    if (te) te.style.display = 'none';
+    if (fz) fz.style.display = '';
     openChapter(cards[0].id, cards[0].title);
+  } else {
+    showNoCardsHint('kb.chapter_intents');
   }
 }
 
 async function loadM6() {
-  showTextEditor(''); // 占位，openChapter 会填入内容
   await loadChapterCardList();
   // 默认选中第一章（直接从数据调用，不依赖 DOM）
   var cards = _kbCardListData['m6_chapter'] || [];
   if (cards.length > 0) {
     openChapter(cards[0].id, cards[0].title);
+  } else {
+    showNoCardsHint('kb.chapter_cards');
   }
 }
 
@@ -1576,6 +1581,32 @@ function updateDrawerBounds() {
       kbDrawer.style.bottom = (window.innerHeight - botBound) + 'px';
     }
   }
+}
+
+// — 无卡片提示（M3/M4/M5/M6 无卡片时锁住编辑区） —
+function showNoCardsHint(cardI18nKey) {
+  var te = qs('#writing-editor');
+  var fz = qs('#slot-free-zone');
+  if (te) { te.style.display = 'none'; }
+  if (fz) { fz.style.display = 'none'; }
+
+  // 在主画布中显示提示
+  var canvas = qs('#main-canvas');
+  // 清除旧提示
+  var old = document.getElementById('no-cards-hint');
+  if (old) old.remove();
+
+  var div = document.createElement('div');
+  div.id = 'no-cards-hint';
+  div.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-muted);padding:2rem;text-align:center';
+  div.innerHTML = '<p style="font-size:0.95rem;color:var(--text-dim);margin-bottom:0.5rem">' + t('kb.no_cards') + '</p>'
+    + '<p style="font-size:0.78rem;color:var(--text-muted)">' + t('kb.add_first_hint') + '</p>';
+  canvas.appendChild(div);
+}
+
+function clearNoCardsHint() {
+  var old = document.getElementById('no-cards-hint');
+  if (old) old.remove();
 }
 
 // ============================================================
