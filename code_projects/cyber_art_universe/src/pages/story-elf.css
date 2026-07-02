@@ -123,7 +123,16 @@
   align-self: flex-start;
   background: var(--bg-hover);
   color: var(--text-dim);
+  font-size: var(--md-font-size, 0.82rem);
+  line-height: var(--md-line-height, 1.6);
 }
+/* AI 消息内 Markdown 元素统一间距 */
+.elf-chat-msg.ai p { margin: var(--md-p-margin, 0.5rem 0); }
+.elf-chat-msg.ai h1, .elf-chat-msg.ai h2, .elf-chat-msg.ai h3 { margin: var(--md-heading-margin, 0.3rem 0 0.1rem); }
+.elf-chat-msg.ai ul, .elf-chat-msg.ai ol { margin: var(--md-list-margin, 0.2rem 0); padding-left: var(--md-list-padding, 1.2rem); }
+.elf-chat-msg.ai code { background: var(--md-code-bg, rgba(var(--accent-rgb), 0.1)); padding: var(--md-code-padding, 0.1rem 0.3rem); border-radius: var(--md-code-radius, 3px); font-size: var(--md-code-font-size, 0.78rem); }
+.elf-chat-msg.ai pre { background: var(--md-pre-bg, rgba(0,0,0,0.2)); padding: var(--md-pre-padding, 0.4rem 0.6rem); border-radius: var(--md-pre-radius, 4px); overflow-x: auto; }
+.elf-chat-msg.ai pre code { background: none; padding: 0; }
 
 /* Agent 步骤消息 */
 .elf-chat-msg.step {
@@ -141,6 +150,15 @@
   color: var(--error);
   opacity: 1;
 }
+
+/* 工作块内的 Markdown 消息也统一 */
+.elf-process-msg { font-size: var(--md-font-size, 0.82rem); line-height: var(--md-line-height, 1.6); }
+.elf-process-msg p { margin: var(--md-p-margin, 0.5rem 0); }
+.elf-process-msg h1, .elf-process-msg h2, .elf-process-msg h3 { margin: var(--md-heading-margin, 0.3rem 0 0.1rem); }
+.elf-process-msg ul, .elf-process-msg ol { margin: var(--md-list-margin, 0.2rem 0); padding-left: var(--md-list-padding, 1.2rem); }
+.elf-process-msg code { background: var(--md-code-bg, rgba(var(--accent-rgb), 0.1)); padding: var(--md-code-padding, 0.1rem 0.3rem); border-radius: var(--md-code-radius, 3px); font-size: var(--md-code-font-size, 0.78rem); }
+.elf-process-msg pre { background: var(--md-pre-bg, rgba(0,0,0,0.2)); padding: var(--md-pre-padding, 0.4rem 0.6rem); border-radius: var(--md-pre-radius, 4px); overflow-x: auto; }
+.elf-process-msg pre code { background: none; padding: 0; }
 
 /* ============================================================
  * 嵌入模式 — write.html 左栏
