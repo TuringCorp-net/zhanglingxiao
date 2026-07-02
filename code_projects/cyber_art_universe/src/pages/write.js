@@ -2033,7 +2033,7 @@ function createNewCard() {
 function deleteCard(moduleId, name, cardType) {
   if (!confirm(t('kb.delete_confirm').replace('{title}', name))) return;
 
-  hDelete('/api/write/module/' + moduleId).then(function (data) {
+  hDelete('/api/write/cards/' + moduleId).then(function (data) {
     if (data && data.ok) {
       cacheClear(moduleId);
       cacheClear('list_' + state.currentWorkId + '_' + cardType);

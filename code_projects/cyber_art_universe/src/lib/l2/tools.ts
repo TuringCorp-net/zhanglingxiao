@@ -427,7 +427,7 @@ function createDeleteModuleTool(env: Env): L2ToolDef {
       if (!moduleId) return '❌ delete_module 需要传入 module_id 参数';
 
       const { deleteModule } = await import('../../api/write/module');
-      const url = `https://internal/api/write/module/${encodeURIComponent(moduleId)}`;
+      const url = `https://internal/api/write/cards/${encodeURIComponent(moduleId)}`;
       const req = new Request(url, { method: 'DELETE' });
       try {
         const response = await deleteModule(env, req as any, moduleId);

@@ -119,6 +119,8 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   if (resource === 'module' && resourceId && !subResource && !subResourceId) {
     if (request.method === 'GET') return getModule(env, request, resourceId);
     if (request.method === 'PUT') return updateModule(env, request, resourceId);
+  }
+  if (resource === 'cards' && resourceId && !subResource) {
     if (request.method === 'DELETE') return deleteModule(env, request, resourceId);
   }
   if (resource === 'module' && resourceId && subResource === 'versions' && !subResourceId) {
