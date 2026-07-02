@@ -467,6 +467,58 @@ export async function createCard(env: Env, request: Request): Promise<Response> 
 }
 
 // ============================================================
+// DELETE /api/write/module/{module_id}
+// 删除模块的 D1 记录及其 R2 文件
+// ============================================================
+export async function deleteModule(env: Env, request: Request, moduleId: string): Promise<Response> {
+  const mod = await env.DB.prepare(
+    'SELECT id, work_id, type, r2_json_key, r2_md_key FROM modules WHERE id = ?'
+  ).bind(moduleId).first<{
+    id: string; work_id: string; type: string;
+    r2_json_key: string | null; r2_md_key: string | null;
+  }>();
+
+  if (!mod) {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.NOT_FOUND, 'Module not found')), {
+      status: 404, headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 删除 R2 文件（.json / .md / .free.md / .versions/）
+  const cfg = MODULE_CONFIG[mod.type];
+  if (cfg) {
+    const jsonRelKey = cfg.jsonKeyFromModule(mod as any);
+    if (jsonRelKey) {
+      const lang = extractLang(request);
+      const jsonKey = r2Path(mod.work_id, lang, jsonRelKey);
+      const freeKey = r2Path(mod.work_id, lang, freeKeyFromJsonKey(jsonRelKey));
+      const mdKey = r2Path(mod.work_id, lang, jsonRelKey.replace(/\.json$/, '.md'));
+      // 删除主文件（忽略不存在的文件）
+      try { await env.WORKS_BUCKET.delete(jsonKey); } catch (_) {}
+      try { await env.WORKS_BUCKET.delete(freeKey); } catch (_) {}
+      try { await env.WORKS_BUCKET.delete(mdKey); } catch (_) {}
+      // 删除版本快照目录
+      const versionsPrefix = r2Path(mod.work_id, lang, '.versions/' + jsonRelKey.replace(/\.json$/, '') + '/');
+      try {
+        const list = await env.WORKS_BUCKET.list({ prefix: versionsPrefix });
+        for (const obj of list.objects) {
+          try { await env.WORKS_BUCKET.delete(obj.key); } catch (_) {}
+        }
+      } catch (_) {}
+    }
+  }
+
+  // 删除 D1 记录
+  await env.DB.prepare('DELETE FROM modules WHERE id = ?').bind(moduleId).run();
+  // 删除版本记录
+  await env.DB.prepare('DELETE FROM file_versions WHERE module_id = ?').bind(moduleId).run();
+
+  return new Response(JSON.stringify(jsonSuccess({ deleted: moduleId })), {
+    status: 200, headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+// ============================================================
 // GET /api/write/module/{module_id}
 // ============================================================
 export async function getModule(env: Env, request: Request, moduleId: string): Promise<Response> {
@@ -568,6 +620,7 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   const body = await request.json() as {
     slots?: Record<string, string>;
     free_content?: string;
+    name?: string;
     _prev_slots?: Record<string, string>;
     _prev_free_content?: string;
     _prev_slot_timestamps?: Record<string, number>;
@@ -575,9 +628,19 @@ export async function updateModule(env: Env, request: Request, moduleId: string)
   };
   const hasSlots = body.slots && typeof body.slots === 'object' && Object.keys(body.slots).length > 0;
   const hasFreeContent = body.free_content !== undefined;
+  const hasName = typeof body.name === 'string' && body.name.trim().length > 0;
+
+  // 重命名
+  if (hasName && !hasSlots && !hasFreeContent) {
+    await env.DB.prepare('UPDATE modules SET name = ?, updated_at = ? WHERE id = ?')
+      .bind(body.name!.trim(), new Date().toISOString(), moduleId).run();
+    return new Response(JSON.stringify(jsonSuccess({ id: moduleId, name: body.name!.trim() })), {
+      status: 200, headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
   if (!hasSlots && !hasFreeContent) {
-    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'slots or free_content is required')), {
+    return new Response(JSON.stringify(jsonError(ErrorCodes.MISSING_REQUIRED_FIELD, 'slots, free_content, or name is required')), {
       status: 400, headers: { 'Content-Type': 'application/json' },
     });
   }

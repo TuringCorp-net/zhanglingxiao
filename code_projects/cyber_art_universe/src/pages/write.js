@@ -1877,7 +1877,7 @@ function renderCardListInDrawer(cardType) {
   }
 
   if (mods.length === 0) {
-    target.innerHTML += '<div style="text-align:center;padding:3rem 1rem">'
+    target.innerHTML += '<div style="text-align:center;padding:3rem 1rem;width:100%">'
       + '<p style="color:var(--text-dim);font-size:0.95rem;margin-bottom:0.5rem">' + t('kb.no_cards') + '</p>'
       + '<p style="color:var(--text-muted);font-size:0.78rem">' + t('kb.add_first_hint') + '</p>'
       + '</div>';
@@ -2002,7 +2002,7 @@ function createNewCard() {
   var name = prompt(label + ' — 请输入名称（可后续修改）:');
   if (!name || !name.trim()) return;
 
-  hPost('/api/write/modules', { work_id: state.currentWorkId, type: cardType, name: name.trim() }).then(function (data) {
+  hPost('/api/write/cards', { work_id: state.currentWorkId, type: cardType, name: name.trim() }).then(function (data) {
     if (data && data.ok) {
       // 刷新卡片列表数据
       var listKey = cardType;

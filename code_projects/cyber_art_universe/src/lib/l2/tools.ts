@@ -28,6 +28,7 @@ export function createTools(env: Env, workId: string, lang: string): L2ToolDef[]
     createWritingGuideTool(env),
     createReadModuleTool(env, timestampCache),
     createCardTool(env),
+    createDeleteModuleTool(env),
     createWriteToSlotTool(env, timestampCache),
     createVersionHistoryTool(env),
     createVersionDiffTool(env),
@@ -394,6 +395,47 @@ function createCardTool(env: Env): L2ToolDef {
         return `❌ 创建失败: ${JSON.stringify(data.error)}`;
       } catch (err) {
         return `❌ 创建卡片时出错: ${(err as Error).message}`;
+      }
+    },
+  };
+}
+
+// ============================================================
+// delete_module — 删除模块（卡片/蓝图/章节）
+// ============================================================
+
+function createDeleteModuleTool(env: Env): L2ToolDef {
+  return {
+    def: {
+      type: 'function',
+      function: {
+        name: 'delete_module',
+        strict: true,
+        description: '删除一个模块（人物卡/伏笔卡/章节蓝图/章节）。不可恢复，请谨慎使用。需要先通过 read_module 获取 module_id。参数: module_id(要删除的模块 ID，如 m3_card_xxx)',
+        parameters: {
+          type: 'object',
+          properties: {
+            module_id: { type: 'string', description: '要删除的模块 ID，如 m3_card_xxx' },
+          },
+          required: ['module_id'],
+        },
+      },
+    },
+    is_mutating: true,
+    execute: async (params: Record<string, unknown>) => {
+      const moduleId = (params.module_id as string) || '';
+      if (!moduleId) return '❌ delete_module 需要传入 module_id 参数';
+
+      const { deleteModule } = await import('../../api/write/module');
+      const url = `https://internal/api/write/module/${encodeURIComponent(moduleId)}`;
+      const req = new Request(url, { method: 'DELETE' });
+      try {
+        const response = await deleteModule(env, req as any, moduleId);
+        const data = await response.json() as Record<string, unknown>;
+        if (data.ok) return `✅ 模块已删除: ${moduleId}`;
+        return `❌ 删除失败: ${JSON.stringify(data.error)}`;
+      } catch (err) {
+        return `❌ 删除模块时出错: ${(err as Error).message}`;
       }
     },
   };

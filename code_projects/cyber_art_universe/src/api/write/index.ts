@@ -59,7 +59,7 @@ import {
   createSection, updateSection, deleteSection,
   getWorkConfig, updateWorkConfig,
 } from './workspace';
-import { getModule, updateModule, listModules, createCard, listModuleVersions, diffModuleVersions } from './module';
+import { getModule, updateModule, deleteModule, listModules, createCard, listModuleVersions, diffModuleVersions } from './module';
 import { handleElfChat, handleGetConversation, handlePutConversation } from './elf_chat';
 import { getModuleGuide } from '../../lib/l2/guides';
 import { jsonSuccess } from '../../lib/response';
@@ -119,6 +119,7 @@ export async function handleWriteRoute(env: Env, request: Request, segments: str
   if (resource === 'module' && resourceId && !subResource && !subResourceId) {
     if (request.method === 'GET') return getModule(env, request, resourceId);
     if (request.method === 'PUT') return updateModule(env, request, resourceId);
+    if (request.method === 'DELETE') return deleteModule(env, request, resourceId);
   }
   if (resource === 'module' && resourceId && subResource === 'versions' && !subResourceId) {
     if (request.method === 'GET') return listModuleVersions(env, request, resourceId);
