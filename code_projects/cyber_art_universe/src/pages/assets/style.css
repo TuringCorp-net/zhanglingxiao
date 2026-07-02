@@ -1087,12 +1087,14 @@ ul, ol { list-style: none; }
 }
 
 /* — Layer 1: AI Chat 左侧 Drawer — */
+/* 收起时仅右下角露出头像；JS updateDrawerBounds() 设置精确 top/bottom */
 .ai-drawer {
   position: fixed;
   left: 0; top: 0; bottom: 0;
   z-index: 10;
   display: flex;
   flex-direction: row;
+  align-items: stretch;
   pointer-events: none;
   overflow: hidden;
   transform: translateX(calc(-100% + 78px)); /* 收起: 仅露头像 */
@@ -1103,8 +1105,10 @@ ul, ol { list-style: none; }
   pointer-events: all;
 }
 
+/* 头像 — 左下角对齐 */
 .ai-drawer-toggle {
   width: 70px; height: 70px;
+  align-self: flex-end;
   border-radius: 12px;
   border: none;
   background: transparent;
@@ -1112,7 +1116,7 @@ ul, ol { list-style: none; }
   cursor: pointer;
   pointer-events: all;
   flex-shrink: 0;
-  margin: 16px 0 0 8px;
+  margin: 0 0 16px 8px;
   overflow: hidden;
   transition: transform 0.2s, opacity 0.2s;
 }
@@ -1127,7 +1131,6 @@ ul, ol { list-style: none; }
 
 .ai-drawer-panel {
   width: min(70vw, 800px);
-  height: 100%;
   background: var(--bg-card);
   border-right: 1px solid var(--border);
   box-shadow: 4px 0 24px rgba(0,0,0,0.4);

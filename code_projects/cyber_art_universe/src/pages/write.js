@@ -2085,7 +2085,12 @@ document.addEventListener('DOMContentLoaded', async function () {
   initAIDrawer();
 
   // 动态计算 Drawer 边界（Pipeline 下 ↔ Footer 上）
-  updateDrawerBounds();
+  // 双 rAF 确保 renderNav() 和 Story Elf mount 完成后布局已稳定
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      updateDrawerBounds();
+    });
+  });
   window.addEventListener('resize', updateDrawerBounds);
 
   if (typeof userToken !== 'undefined' && userToken) {
