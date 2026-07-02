@@ -62,7 +62,7 @@ export const BIBLE_TEMPLATE: TemplateDef = {
   },
   sections: [
     {
-      heading: { zh: '一、世界规则与边界', en: 'I. World Rules & Boundaries' },
+      heading: { zh: '世界规则与边界', en: 'World Rules & Boundaries' },
       slots: [
         { id: 'power_system',    level: 1, label: { zh: '力量/技术体系', en: 'Power / Technology System' }, hint: { zh: '描述这个世界的力量来源、等级划分、使用规则与代价', en: 'Describe the source of power, hierarchy, usage rules, and costs in this world' } },
         { id: 'social_structure', level: 2, label: { zh: '社会组织与结构', en: 'Social Organization & Structure' }, hint: { zh: '国家、势力、阶层、家族等社会组织形态', en: 'Nations, factions, classes, clans, and other social structures' } },
@@ -70,7 +70,7 @@ export const BIBLE_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '二、核心主题与价值观', en: 'II. Core Themes & Values' },
+      heading: { zh: '核心主题与价值观', en: 'Core Themes & Values' },
       slots: [
         { id: 'central_thesis',   level: 1, label: { zh: '核心命题', en: 'Central Thesis' }, hint: { zh: '作品要传达的核心思想或问题', en: 'The core idea or question the work seeks to convey' } },
         { id: 'emotional_tone',   level: 2, label: { zh: '情感基调', en: 'Emotional Tone' }, hint: { zh: '整体的情感色彩：黑暗/希望/悲壮/轻松 等', en: 'Overall emotional register: dark / hopeful / tragic / lighthearted, etc.' } },
@@ -78,7 +78,7 @@ export const BIBLE_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '三、角色体系', en: 'III. Character System' },
+      heading: { zh: '角色体系', en: 'Character System' },
       slots: [
         { id: 'protagonist',             level: 1, label: { zh: '主角', en: 'Protagonist' }, hint: { zh: '姓名、身份、核心动机、能力边界、成长弧线', en: 'Name, identity, core motivation, ability boundaries, growth arc' } },
         { id: 'supporting_characters',  level: 2, label: { zh: '核心配角', en: 'Key Supporting Characters' }, hint: { zh: '与主角的关系、各自动机、在主线中的作用', en: 'Relationship to protagonist, individual motivations, role in the main plot' } },
@@ -86,14 +86,14 @@ export const BIBLE_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '四、场景与资源', en: 'IV. Settings & Resources' },
+      heading: { zh: '场景与资源', en: 'Settings & Resources' },
       slots: [
         { id: 'major_locations', level: 2, label: { zh: '主要地点', en: 'Major Locations' }, hint: { zh: '关键场景的地理位置、特征、叙事功能', en: 'Geography, features, and narrative function of key settings' } },
         { id: 'key_items',       level: 2, label: { zh: '关键道具/技能', en: 'Key Items / Artifacts' }, hint: { zh: '可被反复使用的叙事资源（MacGuffin、圣物、核心能力等）', en: 'Reusable narrative resources (MacGuffins, relics, core abilities, etc.)' } },
       ],
     },
     {
-      heading: { zh: '五、承诺清单', en: 'V. Promise Checklist' },
+      heading: { zh: '承诺清单', en: 'Promise Checklist' },
       slots: [
         { id: 'promise_checklist', level: 2, label: { zh: '', en: '' }, hint: {
           zh: '列出你对读者的承诺——可以是一条，也可以是多条。每条一句话概括。例如：\n1) 主角终将复仇\n2) 隐藏身份会被揭穿\n3) 两个敌对势力终有一战\n承诺是你与读者之间的契约——一旦写下，后续必须兑现。',
@@ -102,7 +102,7 @@ export const BIBLE_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '六、禁区与风格', en: 'VI. Boundaries & Style' },
+      heading: { zh: '禁区与风格', en: 'Boundaries & Style' },
       slots: [
         { id: 'content_red_lines', level: 1, label: { zh: '内容禁区', en: 'Content Red Lines' }, hint: { zh: '绝对不能触碰的内容主题', en: 'Themes and content that must never be touched' } },
         { id: 'language_style',    level: 2, label: { zh: '语言风格', en: 'Language Style' }, hint: { zh: '叙事语言的风格定位：简洁/华丽/口语化/文学性 等', en: 'Prose style: concise / ornate / colloquial / literary, etc.' } },
@@ -122,7 +122,7 @@ export const OUTLINE_TEMPLATE: TemplateDef = {
   },
   sections: [
     {
-      heading: { zh: '一、故事概览', en: 'I. Story Overview' },
+      heading: { zh: '故事概览', en: 'Story Overview' },
       slots: [
         { id: 'one_line_pitch', level: 1, label: { zh: '一句话梗概', en: 'One-Line Pitch' }, hint: { zh: '用一句话概括整个故事，类似电梯演讲', en: 'Summarize the entire story in one sentence — an elevator pitch' } },
         { id: 'story_type',     level: 2, label: { zh: '故事类型', en: 'Story Type' }, hint: { zh: '王道RPG / 悬疑推理 / 史诗奇幻 / 都市情感 / 科幻冒险 ...', en: 'Hero\'s Journey / Mystery-Thriller / Epic Fantasy / Urban Drama / Sci-Fi Adventure ...' } },
@@ -130,7 +130,7 @@ export const OUTLINE_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '二、主线阶段划分', en: 'II. Main Plot — Act Structure' },
+      heading: { zh: '主线阶段划分', en: 'Main Plot — Act Structure' },
       slots: [
         { id: 'main_plot', level: 1, label: { zh: '', en: '' }, hint: {
           zh: '描述你的故事主线结构。可以参考三幕式（开端建立冲突 → 发展升级张力 → 高潮爆发回收 → 结局沉淀余韵），也可以自由安排你的结构。\n\n包含：各阶段的章节范围、核心事件、阶段目标、关键转折。',
@@ -139,7 +139,7 @@ export const OUTLINE_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '三、支线规划', en: 'III. Subplot Planning' },
+      heading: { zh: '支线规划', en: 'Subplot Planning' },
       slots: [
         { id: 'subplots', level: 2, label: { zh: '', en: '' }, hint: {
           zh: '列出你的支线。每条简述：与主线关系、独立价值、预计章节数。',
@@ -148,7 +148,7 @@ export const OUTLINE_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '四、节奏规划', en: 'IV. Pacing Plan' },
+      heading: { zh: '节奏规划', en: 'Pacing Plan' },
       slots: [
         { id: 'pacing', level: 2, label: { zh: '', en: '' }, hint: {
           zh: '规划各阶段的节奏和情绪曲线。节奏比字数更重要——让高潮和低谷自然交替，给读者喘息的空间。',
@@ -157,7 +157,7 @@ export const OUTLINE_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '五、关键转折点', en: 'V. Key Turning Points' },
+      heading: { zh: '关键转折点', en: 'Key Turning Points' },
       slots: [
         { id: 'turning_points', level: 2, label: { zh: '', en: '' }, hint: {
           zh: '列出所有不可逆的情节转折，标注预计所在章节。每一个转折点都应该让读者从此用不同的眼光看待这个故事。',
@@ -166,7 +166,7 @@ export const OUTLINE_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '六、伏笔埋设总体规划', en: 'VI. Foreshadowing Master Plan' },
+      heading: { zh: '伏笔埋设总体规划', en: 'Foreshadowing Master Plan' },
       slots: [
         { id: 'foreshadowing_master', level: 1, label: { zh: '', en: '' }, hint: {
           zh: '整部作品的伏笔总体规划，代替旧的 M4 策略总览。\n\n第一部分 — 策略方向：伏笔整体是密集还是稀疏？以什么类型为主（身份/道具/对白/能力/事件/意象）？\n\n第二部分 — 跨章节布局：列出你计划埋设的主要伏笔线，每条标注类型、埋设章节、回收章节、大致的发展路径。\n\n详细追踪由 M4 伏笔卡逐条管理：每条伏笔一张卡，记录埋种→强化→部分揭示→回收的完整生命周期。此处只需总体规划。',
@@ -187,7 +187,7 @@ export const CHARACTER_TEMPLATE: TemplateDef = {
   },
   sections: [
     {
-      heading: { zh: '一、基本信息', en: 'I. Basic Information' },
+      heading: { zh: '基本信息', en: 'Basic Information' },
       slots: [
         { id: 'name',          level: 1, label: { zh: '姓名', en: 'Name' }, hint: { zh: '角色的姓名', en: 'The character\'s full name' } },
         { id: 'identity',      level: 1, label: { zh: '身份/职业', en: 'Identity / Occupation' }, hint: { zh: '角色的社会身份和职业', en: 'The character\'s social identity and profession' } },
@@ -197,7 +197,7 @@ export const CHARACTER_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '二、性格与动机', en: 'II. Personality & Motivation' },
+      heading: { zh: '性格与动机', en: 'Personality & Motivation' },
       slots: [
         { id: 'core_personality', level: 1, label: { zh: '核心性格', en: 'Core Personality' }, hint: { zh: '3-5 个关键词描述性格特征', en: '3-5 keywords describing personality traits' } },
         { id: 'inner_motivation', level: 1, label: { zh: '内在动机', en: 'Inner Motivation' }, hint: { zh: '这个角色真正想要的是什么？深层驱动力', en: 'What does this character truly want? Deep driving force' } },
@@ -207,7 +207,7 @@ export const CHARACTER_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '三、能力与限制', en: 'III. Abilities & Limitations' },
+      heading: { zh: '能力与限制', en: 'Abilities & Limitations' },
       slots: [
         { id: 'skills',          level: 2, label: { zh: '能力/技能', en: 'Skills / Abilities' }, hint: { zh: '角色擅长什么，与世界观的力量体系如何关联', en: 'What is the character good at? How does it relate to the world\'s power system?' } },
         { id: 'ability_boundaries', level: 2, label: { zh: '能力边界', en: 'Ability Boundaries' }, hint: { zh: '角色不能做什么（受 Setting Bible 世界规则约束）', en: 'What can the character NOT do (constrained by the Setting Bible\'s world rules)?' } },
@@ -217,7 +217,7 @@ export const CHARACTER_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '四、关系网络', en: 'IV. Relationship Network' },
+      heading: { zh: '关系网络', en: 'Relationship Network' },
       slots: [
         { id: 'rel_protagonist', level: 1, label: { zh: '与主角的关系', en: 'Relationship with Protagonist' }, hint: { zh: '描述此角色与主角之间的关系：是盟友？师徒？对手？', en: 'Describe the relationship with the protagonist: ally, mentor, rival?' } },
         { id: 'rel_others',      level: 2, label: { zh: '与其他核心人物的关系', en: 'Relationships with Other Key Characters' }, hint: { zh: '与主角之外的关键人物的关系', en: 'Relationships with key characters other than the protagonist' } },
@@ -226,7 +226,7 @@ export const CHARACTER_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '五、成长弧线', en: 'V. Growth Arc' },
+      heading: { zh: '成长弧线', en: 'Growth Arc' },
       slots: [
         { id: 'arc_type',      level: 1, label: { zh: '弧线类型', en: 'Arc Type' }, hint: { zh: '成长(growth) / 堕落(fall) / 救赎(redemption) / 悲剧(tragic) / 觉醒(awakening) / 稳定(steady)', en: 'growth / fall / redemption / tragic / awakening / steady' } },
         { id: 'starting_state', level: 2, label: { zh: '起点状态', en: 'Starting State' }, hint: { zh: '角色在故事开始时的处境和心理状态', en: 'The character\'s situation and mental state at the beginning of the story' } },
@@ -235,7 +235,7 @@ export const CHARACTER_TEMPLATE: TemplateDef = {
       ],
     },
     {
-      heading: { zh: '六、语言与行为特征', en: 'VI. Speech & Behavioral Traits' },
+      heading: { zh: '语言与行为特征', en: 'Speech & Behavioral Traits' },
       slots: [
         { id: 'catchphrases',    level: 2, label: { zh: '口头禅/说话风格', en: 'Catchphrases / Speaking Style' }, hint: { zh: '此角色的标志性语言风格、口头禅', en: 'Signature speech patterns, catchphrases' } },
         { id: 'gestures',        level: 2, label: { zh: '习惯动作', en: 'Habitual Gestures' }, hint: { zh: '此角色不自觉的身体语言、习惯性动作', en: 'Unconscious body language, habitual movements' } },
