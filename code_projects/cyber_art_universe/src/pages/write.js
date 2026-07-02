@@ -1539,6 +1539,28 @@ function renderBibleContent(md) {
 }
 
 // ============================================================
+// Drawer 边界计算 — 夹在 Pipeline 下边界 与 Footer 上边界之间
+// ============================================================
+function updateDrawerBounds() {
+  var pipelineBar = qs('#pipeline-bar');
+  var footer = qs('.footer');
+  var aiDrawer = qs('#ai-drawer');
+  var kbDrawer = qs('#kb-content-drawer');
+
+  var topBound = pipelineBar ? pipelineBar.getBoundingClientRect().bottom : 80;
+  var botBound = footer ? footer.getBoundingClientRect().top : window.innerHeight;
+
+  if (aiDrawer) {
+    aiDrawer.style.top = topBound + 'px';
+    aiDrawer.style.bottom = (window.innerHeight - botBound) + 'px';
+  }
+  if (kbDrawer) {
+    kbDrawer.style.top = topBound + 'px';
+    kbDrawer.style.bottom = (window.innerHeight - botBound) + 'px';
+  }
+}
+
+// ============================================================
 // AI Drawer 管理
 // ============================================================
 function initAIDrawer() {
@@ -1556,6 +1578,7 @@ function initAIDrawer() {
 function applyAIDrawerState() {
   var drawer = qs('#ai-drawer');
   if (!drawer) return;
+  updateDrawerBounds();  // 展开时刷新边界
   if (state.aiDrawerOpen) {
     drawer.classList.add('open');
   } else {
@@ -1735,6 +1758,7 @@ function openKBContentDrawer(tabIndex, l2Index) {
     if (se) se.style.display = 'block';
   }
 
+  updateDrawerBounds();  // 打开前刷新边界
   drawer.style.display = 'flex';
   requestAnimationFrame(function () { drawer.classList.add('open'); });
 }
@@ -2011,6 +2035,10 @@ document.addEventListener('DOMContentLoaded', async function () {
   var aiPanel = qs('#ai-drawer-panel');
   if (aiPanel) StoryElf.mount(aiPanel, 'drawer');
   initAIDrawer();
+
+  // 动态计算 Drawer 边界（Pipeline 下 ↔ Footer 上）
+  updateDrawerBounds();
+  window.addEventListener('resize', updateDrawerBounds);
 
   if (typeof userToken !== 'undefined' && userToken) {
     await loadUserConfig();
