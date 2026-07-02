@@ -1303,10 +1303,71 @@ ul, ol { list-style: none; }
   padding: 0.5rem 0;
 }
 
-/* 主编辑画布内的自由编辑区 */
+/* 主编辑画布内的编辑器 — 居中记事本风格 */
+.main-canvas .writing-editor {
+  display: block;
+  max-width: 780px;
+  width: calc(100% - 3rem);
+  margin: 1.5rem auto;
+  min-height: 26rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  box-sizing: border-box;
+  transition: border-color 0.2s, background 0.2s;
+}
+.main-canvas .writing-editor:hover {
+  border-color: var(--text-muted);
+}
+.main-canvas .writing-editor:focus {
+  border-color: var(--accent-light);
+  background: #0d0d15;
+  outline: none;
+}
+.main-canvas .writing-editor::placeholder {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* 自由编辑区 */
 .main-canvas .slot-free-zone {
-  padding: 0.5rem 1.5rem;
+  max-width: 780px;
+  width: calc(100% - 3rem);
+  margin: 1.5rem auto;
+  padding: 0;
   flex: 1; display: flex; flex-direction: column;
+}
+.main-canvas .slot-free-zone .slot-free-label {
+  display: none;  /* 用 textarea placeholder 代替 */
+}
+.main-canvas .slot-free-zone textarea {
+  flex: 1;
+  min-height: 26rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  box-sizing: border-box;
+  transition: border-color 0.2s, background 0.2s;
+}
+.main-canvas .slot-free-zone textarea:hover {
+  border-color: var(--text-muted);
+}
+.main-canvas .slot-free-zone textarea:focus {
+  border-color: var(--accent-light);
+  background: #0d0d15;
+  outline: none;
+}
+.main-canvas .slot-free-zone textarea::placeholder {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
 }
 
 /* — Responsive — */
