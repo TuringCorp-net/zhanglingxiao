@@ -1765,6 +1765,13 @@ function openKBContentDrawer(tabIndex, l2Index) {
     if (se) se.style.display = 'block';
   }
 
+  // 显示 Preview/Edit 胶囊（仅模板内容，卡片列表不需要）
+  var modePill = qs('#kb-mode-pill');
+  if (modePill) modePill.style.display = (tab.type === 'card_list') ? 'none' : '';
+  // 默认预览模式
+  _kbEditMode = false;
+  applyKBEditMode();
+
   updateDrawerBounds();  // 打开前刷新边界
   drawer.style.display = 'flex';
   requestAnimationFrame(function () { drawer.classList.add('open'); });
@@ -1890,7 +1897,32 @@ function renderSectionSlotsInDrawer(tab) {
   });
 }
 
-// 在 Drawer 内渲染单个 slot
+// KB Drawer Preview / Edit 模式切换
+var _kbEditMode = false;  // false=预览, true=编辑
+
+function toggleKBEditMode() {
+  _kbEditMode = !_kbEditMode;
+  applyKBEditMode();
+}
+
+function applyKBEditMode() {
+  var drawer = qs('#kb-content-drawer');
+  var pill = qs('#kb-mode-pill');
+  var knob = qs('#kb-mode-knob');
+  if (!drawer) return;
+
+  if (_kbEditMode) {
+    drawer.classList.add('edit-mode');
+    if (pill) { pill.querySelector('[data-mode="preview"]').classList.remove('active'); pill.querySelector('[data-mode="edit"]').classList.add('active'); }
+    if (knob) knob.classList.add('right');
+  } else {
+    drawer.classList.remove('edit-mode');
+    if (pill) { pill.querySelector('[data-mode="edit"]').classList.remove('active'); pill.querySelector('[data-mode="preview"]').classList.add('active'); }
+    if (knob) knob.classList.remove('right');
+  }
+}
+
+// 在 Drawer 内渲染单个 slot（去掉冗余的二级标题，Header 已显示）
 function renderSingleSlotInDrawer(tab, l2Index) {
   _textareaList = [];
   var target = qs('#slot-groups');
@@ -1900,14 +1932,7 @@ function renderSingleSlotInDrawer(tab, l2Index) {
   var l2Item = tab.l2[l2Index];
   if (!l2Item) return;
 
-  // 渲染 label heading
-  if (l2Item.label) {
-    var hDiv = document.createElement('div');
-    hDiv.className = 'slot-framework';
-    try { hDiv.innerHTML = marked.parse('### ' + l2Item.label); } catch (e) { hDiv.textContent = l2Item.label; }
-    target.appendChild(hDiv);
-  }
-
+  // 不再渲染 label heading（Drawer Header 已显示路径）
   var slot = { id: l2Item.id, label: '', hint: l2Item.hint, content: l2Item.content };
   renderSlotItem(target, slot);
 }

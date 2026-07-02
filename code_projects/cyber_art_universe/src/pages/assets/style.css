@@ -425,6 +425,47 @@ ul, ol { list-style: none; }
 .lang-opt.active { color: var(--text-on-accent); }
 .lang-pill:hover { border-color: var(--ui-knob); }
 
+/* — KB Drawer: Preview / Edit pill toggle（与 lang-pill 同款设计） — */
+.kb-mode-pill {
+  position: relative;
+  display: inline-flex; align-items: center;
+  height: 28px; width: 96px;
+  border-radius: 28px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  cursor: pointer; user-select: none;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.kb-mode-knob {
+  position: absolute; top: 1px; left: 1px;
+  width: 46px; height: 24px;
+  border-radius: 24px;
+  background: var(--ui-knob);
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.kb-mode-knob.right { transform: translateX(48px); }
+.kb-mode-opt {
+  flex: 1; text-align: center;
+  font-size: 0.68rem; font-weight: 600; font-family: var(--font);
+  color: var(--text-muted); z-index: 1;
+  transition: color 0.2s;
+}
+.kb-mode-opt.active { color: var(--text-on-accent); }
+.kb-mode-pill:hover { border-color: var(--ui-knob); }
+
+/* KB Drawer 编辑模式：显示 textarea，隐藏 preview */
+.kb-content-drawer .slot-preview { display: block; }
+.kb-content-drawer .slot-textarea { display: none; }
+.kb-content-drawer.edit-mode .slot-preview { display: none; }
+.kb-content-drawer.edit-mode .slot-textarea { display: block; }
+
+/* KB Drawer header 操作区 */
+.kb-drawer-header-actions {
+  display: flex; align-items: center; gap: 0.5rem;
+}
+
 /* — Pipeline Bar（引导条 + 作品选择器） — */
 .pipeline-bar {
   display: flex; align-items: center; gap: 0.75rem;

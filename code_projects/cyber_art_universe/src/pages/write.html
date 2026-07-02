@@ -86,7 +86,14 @@
   <div id="kb-content-drawer" class="kb-content-drawer" style="display:none">
     <div class="kb-drawer-header">
       <span id="kb-drawer-title" class="kb-drawer-title"></span>
-      <button class="kb-drawer-close" onclick="closeKBContentDrawer()">&times;</button>
+      <div class="kb-drawer-header-actions">
+        <div id="kb-mode-pill" class="kb-mode-pill" style="display:none" onclick="toggleKBEditMode()" title="切换预览/编辑模式">
+          <span class="kb-mode-knob" id="kb-mode-knob"></span>
+          <span class="kb-mode-opt active" data-mode="preview">预览</span>
+          <span class="kb-mode-opt" data-mode="edit">编辑</span>
+        </div>
+        <button class="kb-drawer-close" onclick="closeKBContentDrawer()">&times;</button>
+      </div>
     </div>
     <div id="kb-drawer-content" class="kb-drawer-content">
       <div id="slot-editor" class="slot-editor" style="display:none">
