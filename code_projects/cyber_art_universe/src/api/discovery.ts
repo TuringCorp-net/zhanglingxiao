@@ -424,20 +424,55 @@ Key response fields:
 | \`module_id\` | path | **yes** | string | Module ID |
 | \`lang\` | query | no | string | \`"zh"\` (default) or \`"en"\` |
 
-Request body:
+Request body（三个字段独立使用，可任意组合）:
 \`\`\`json
-{
-  "free_content": "Your complete Markdown prose here...\\n\\nWrite naturally — Story Elf will help decompose your prose into structured template slots."
-}
+// 方式1: 写入自由编辑区（Agent 推荐方式）
+{ "free_content": "写出自然的 Markdown 正文，Story Elf 负责拆解到模板槽位。" }
+
+// 方式2: 直接填槽位
+{ "slots": { "power_system": "这个世界有三种力量...", "taboos_costs": "..." } }
+
+// 方式3: 重命名卡片
+{ "name": "张三（修订版）" }
+
+// 组合使用
+{ "slots": { "power_system": "..." }, "free_content": "...", "name": "..." }
 \`\`\`
 
-For external AI Agents, write prose to \`free_content\`. This is the same workflow human authors use: write freely in the editing zone, then Story Elf analyzes the content and suggests how to fill individual template slots. This keeps the Agent's job simple (write good prose) and lets the platform handle structure.
+- 只传 \`name\` 时，仅重命名，不修改内容。
+- 只传 \`slots\` 和/或 \`free_content\` 时，仅更新内容。
+- 每个卡片有自己独立的 \`free_content\`（M3 有 3 张人物卡 → 3 个独立的自由编辑区）。
 
 Returns \`{ok: true, data: {module_id, lang, saved: true, template, slots, free_content, rendered_md}}\`
 
 ---
 
-**POST /api/write/module/{module_id}/generate** — AI generate module content
+**POST /api/write/modules** — 创建新模块/卡片
+
+Body:
+\`\`\`json
+{ "work_id": "<UUID>", "type": "m3_card", "name": "张三" }
+\`\`\`
+
+| 字段 | 必填 | 说明 |
+|------|------|------|
+| \`work_id\` | **是** | 作品 ID |
+| \`type\` | **是** | \`m3_card\` / \`m4_card\` / \`m5_intent\` / \`m6_chapter\` |
+| \`name\` | **是** | 卡片名称（角色名/伏笔主题/章节标题等） |
+
+创建后卡片 \`status\` 为 \`"empty"\`。返回 201 + 新模块的 id/type/name/status。
+
+---
+
+**DELETE /api/write/module/{module_id}** — 删除模块/卡片
+
+无 Body。通过 \`module_id\` 定位。删除 D1 记录 + R2 文件（.json / .md / .free.md / 版本快照）。不可恢复。
+
+Returns \`{ok: true, data: {deleted: "<module_id>"}}\`
+
+---
+
+**POST /api/write/module/{module_id}/generate** — AI 生成模块内容
 
 | Parameter | In | Required | Type | Description |
 |-----------|-----|----------|------|-------------|
@@ -462,8 +497,6 @@ Additional optional parameters by type:
 Returns \`{ok: true, data: {template, rendered_md, ...}}\`
 
 ---
-
-
 
 **GET /api/write/module/{module_id}/versions** — List version history
 
