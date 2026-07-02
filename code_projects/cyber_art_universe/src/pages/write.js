@@ -1882,9 +1882,10 @@ function renderSectionSlotsInDrawer(tab) {
   if (!sections || !sections[tab.sectionIndex]) return;
 
   var section = sections[tab.sectionIndex];
+  var slotCount = (section.slots || []).length;
 
-  // 渲染 section heading
-  if (section.heading) {
+  // 多 slot 时保留 section heading（用于分隔不同 slot）；单 slot 时去掉（Header 已显示）
+  if (slotCount > 1 && section.heading) {
     var hDiv = document.createElement('div');
     hDiv.className = 'slot-framework';
     try { hDiv.innerHTML = marked.parse('## ' + section.heading); } catch (e) { hDiv.textContent = section.heading; }
@@ -1893,6 +1894,8 @@ function renderSectionSlotsInDrawer(tab) {
 
   // 渲染所有 slot（复用 renderSlotItem）
   (section.slots || []).forEach(function (slot) {
+    // 单 slot 时不显示其 label（与 section heading 重复）
+    if (slotCount <= 1) slot = { id: slot.id, label: '', hint: slot.hint, content: slot.content };
     renderSlotItem(target, slot);
   });
 }
@@ -1910,6 +1913,14 @@ function applyKBEditMode() {
   var pill = qs('#kb-mode-pill');
   var knob = qs('#kb-mode-knob');
   if (!drawer) return;
+
+  // 设置多语言文本
+  if (pill) {
+    var prevOpt = pill.querySelector('[data-mode="preview"]');
+    var editOpt = pill.querySelector('[data-mode="edit"]');
+    if (prevOpt) prevOpt.textContent = t('writing.preview');
+    if (editOpt) editOpt.textContent = t('writing.edit');
+  }
 
   if (_kbEditMode) {
     drawer.classList.add('edit-mode');

@@ -455,11 +455,12 @@ ul, ol { list-style: none; }
 .kb-mode-opt.active { color: var(--text-on-accent); }
 .kb-mode-pill:hover { border-color: var(--ui-knob); }
 
-/* KB Drawer 编辑模式：显示 textarea，隐藏 preview */
-.kb-content-drawer .slot-preview { display: block; }
-.kb-content-drawer .slot-textarea { display: none; }
-.kb-content-drawer.edit-mode .slot-preview { display: none; }
-.kb-content-drawer.edit-mode .slot-textarea { display: block; }
+/* KB Drawer 编辑模式：显示 textarea，隐藏 preview
+   !important 覆盖 renderSlotItem() 设置的内联 style="display:none" */
+.kb-content-drawer .slot-preview { display: block !important; }
+.kb-content-drawer .slot-textarea { display: none !important; }
+.kb-content-drawer.edit-mode .slot-preview { display: none !important; }
+.kb-content-drawer.edit-mode .slot-textarea { display: block !important; }
 
 /* KB Drawer header 操作区 */
 .kb-drawer-header-actions {
