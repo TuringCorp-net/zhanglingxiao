@@ -1083,7 +1083,7 @@ ul, ol { list-style: none; }
   min-height: 300px;
   overflow: hidden;
   background: var(--bg);
-  padding: 16px 15vw;
+  padding: 16px 10vw;
 }
 
 /* — Layer 1: AI Chat 左侧 Drawer — */
