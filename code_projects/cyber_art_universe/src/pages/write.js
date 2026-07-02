@@ -1592,6 +1592,14 @@ function applyAIDrawerState() {
 var _kbTabs = [];          // [{ type, label, cardType?, sectionIndex?, l2: [...] }]
 var _kbCardListData = {};  // { 'm3_card': [...], 'm4_card': [...], ... }
 
+// 剥离模板 heading 中的编号前缀（如 "一、" "二、" "I." "II."）
+function cleanHeading(h) {
+  if (!h) return h;
+  return h.replace(/^[一二三四五六七八九十]+[、，,.]\s*/, '')
+          .replace(/^[IVX]+[.、]\s*/i, '')
+          .replace(/^\d+[.、,]\s*/, '');
+}
+
 // 当前模块的知识库标签数据
 function generateKBTabs() {
   _kbTabs = [];
@@ -1628,13 +1636,13 @@ function generateKBTabs() {
       var slotCount = (section.slots || []).length;
       if (slotCount <= 1) {
         // 单 slot section：不需要二级标签，点击一级直接展开内容 Drawer
-        _kbTabs.push({ type: 'template_section', label: section.heading || 'Section ' + (si + 1), sectionIndex: si, l2: null });
+        _kbTabs.push({ type: 'template_section', label: cleanHeading(section.heading) || 'Section ' + (si + 1), sectionIndex: si, l2: null });
       } else {
         // 多 slot section：生成二级标签
         var l2List = (section.slots || []).map(function (s) {
           return { type: 'slot', id: s.id, label: s.label, hint: s.hint, content: s.content };
         });
-        _kbTabs.push({ type: 'template_section', label: section.heading || 'Section ' + (si + 1), sectionIndex: si, l2: l2List });
+        _kbTabs.push({ type: 'template_section', label: cleanHeading(section.heading) || 'Section ' + (si + 1), sectionIndex: si, l2: l2List });
       }
     });
   }
