@@ -1904,6 +1904,11 @@ function renderSectionSlotsInDrawer(tab) {
 var _kbEditMode = false;  // false=预览, true=编辑
 
 function toggleKBEditMode() {
+  // 切换前保存当前编辑内容（双保险：blur 也会触发，但 mousedown 先于 blur）
+  clearTimeout(_autoSaveTimer);
+  var p = capturePayload();
+  if (p) { _pendingPayload = p; flushPendingPayload(); }
+
   _kbEditMode = !_kbEditMode;
   applyKBEditMode();
 }
