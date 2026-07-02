@@ -432,6 +432,8 @@ async function onWorkspaceChange(workId) {
   saveUserConfig();
   StoryElf.loadConversation(workId, 'write');
   qs('#main-canvas').style.display = 'flex';
+  // main-canvas 显示后 footer 推到页面底部，刷新 Drawer 边界
+  updateDrawerBounds();
   _cacheReady = false;
 
   // 更新 UI + 关闭浮出层
@@ -1549,14 +1551,19 @@ function updateDrawerBounds() {
 
   var topBound = pipelineBar ? pipelineBar.getBoundingClientRect().bottom : 80;
   var botBound = footer ? footer.getBoundingClientRect().top : window.innerHeight;
+  var availHeight = botBound - topBound;
 
-  if (aiDrawer) {
-    aiDrawer.style.top = topBound + 'px';
-    aiDrawer.style.bottom = (window.innerHeight - botBound) + 'px';
-  }
-  if (kbDrawer) {
-    kbDrawer.style.top = topBound + 'px';
-    kbDrawer.style.bottom = (window.innerHeight - botBound) + 'px';
+  // 仅在可用高度 > 100px 时覆盖 CSS 默认值（top:0;bottom:0）
+  // 防止 loadWorkspaces 之前 #main-canvas 未显示导致 footer 在顶部，计算出 0 高度
+  if (availHeight > 100) {
+    if (aiDrawer) {
+      aiDrawer.style.top = topBound + 'px';
+      aiDrawer.style.bottom = (window.innerHeight - botBound) + 'px';
+    }
+    if (kbDrawer) {
+      kbDrawer.style.top = topBound + 'px';
+      kbDrawer.style.bottom = (window.innerHeight - botBound) + 'px';
+    }
   }
 }
 
@@ -1577,13 +1584,37 @@ function initAIDrawer() {
 
 function applyAIDrawerState() {
   var drawer = qs('#ai-drawer');
-  if (!drawer) return;
+  if (!drawer) { console.log('[DEBUG applyAIDrawerState] drawer element NOT FOUND'); return; }
   updateDrawerBounds();  // 展开时刷新边界
   if (state.aiDrawerOpen) {
     drawer.classList.add('open');
   } else {
     drawer.classList.remove('open');
   }
+  // 诊断日志
+  var panel = qs('#ai-drawer-panel');
+  var elf = document.getElementById('story-elf');
+  var rect = drawer.getBoundingClientRect();
+  var panelRect = panel ? panel.getBoundingClientRect() : null;
+  var msgs = document.getElementById('elf-chat-messages');
+  console.log('[DEBUG applyAIDrawerState]', JSON.stringify({
+    aiDrawerOpen: state.aiDrawerOpen,
+    hasOpenClass: drawer.classList.contains('open'),
+    drawerRect_w: rect.width, drawerRect_h: rect.height,
+    drawerInlineTop: drawer.style.top,
+    drawerInlineBottom: drawer.style.bottom,
+    drawerCSStop: getComputedStyle(drawer).top,
+    drawerCSSbottom: getComputedStyle(drawer).bottom,
+    drawerCSSheight: getComputedStyle(drawer).height,
+    panelHeight: panelRect ? panelRect.height : 'null',
+    panelWidth: panelRect ? panelRect.width : 'null',
+    elfInDOM: !!elf,
+    elfParentId: elf && elf.parentElement ? elf.parentElement.id : 'none',
+    elfPosition: elf ? getComputedStyle(elf).position : 'no-elf',
+    elfHeight: elf ? getComputedStyle(elf).height : 'no-elf',
+    msgsDisplay: msgs ? getComputedStyle(msgs).display : 'none',
+    msgsHeight: msgs ? getComputedStyle(msgs).height : 'none',
+  }));
 }
 
 // ============================================================
@@ -2088,10 +2119,14 @@ document.addEventListener('DOMContentLoaded', async function () {
   // 双 rAF 确保 renderNav() 和 Story Elf mount 完成后布局已稳定
   requestAnimationFrame(function () {
     requestAnimationFrame(function () {
+      console.log('[DEBUG DOMContentLoaded] double rAF fired, calling updateDrawerBounds');
       updateDrawerBounds();
     });
   });
-  window.addEventListener('resize', updateDrawerBounds);
+  window.addEventListener('resize', function () {
+    console.log('[DEBUG resize] fired');
+    updateDrawerBounds();
+  });
 
   if (typeof userToken !== 'undefined' && userToken) {
     await loadUserConfig();

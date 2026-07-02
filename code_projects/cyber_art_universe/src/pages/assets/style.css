@@ -1087,37 +1087,45 @@ ul, ol { list-style: none; }
 }
 
 /* — Layer 1: AI Chat 左侧 Drawer — */
-/* 收起时仅右下角露出头像；JS updateDrawerBounds() 设置精确 top/bottom */
+/* 面板滑入/滑出；头像 absolute 固定左下角始终可见 */
 .ai-drawer {
   position: fixed;
   left: 0; top: 0; bottom: 0;
   z-index: 10;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
   pointer-events: none;
+}
+
+.ai-drawer-panel {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: min(70vw, 800px);
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  transform: translateX(calc(-100% + 78px)); /* 收起: 仅露头像 */
+  transform: translateX(-100%);
   transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.ai-drawer.open {
+.ai-drawer.open .ai-drawer-panel {
   transform: translateX(0);
   pointer-events: all;
 }
 
-/* 头像 — 左下角对齐 */
+/* 头像 — 绝对定位左下角，始终可见 */
 .ai-drawer-toggle {
+  position: absolute;
+  bottom: 16px; left: 8px;
   width: 70px; height: 70px;
-  align-self: flex-end;
   border-radius: 12px;
   border: none;
   background: transparent;
   padding: 0;
   cursor: pointer;
   pointer-events: all;
-  flex-shrink: 0;
-  margin: 0 0 16px 8px;
   overflow: hidden;
+  z-index: 11;
   transition: transform 0.2s, opacity 0.2s;
 }
 .ai-drawer-toggle:hover { transform: scale(1.08); }
@@ -1127,17 +1135,6 @@ ul, ol { list-style: none; }
   object-fit: cover;
   display: block;
   transform: scaleX(-1);
-}
-
-.ai-drawer-panel {
-  width: min(70vw, 800px);
-  background: var(--bg-card);
-  border-right: 1px solid var(--border);
-  box-shadow: 4px 0 24px rgba(0,0,0,0.4);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  flex-shrink: 0;
 }
 
 /* — Layer 2: 知识库标签栏（右边缘浮动标签） — */
