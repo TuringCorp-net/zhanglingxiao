@@ -1049,6 +1049,7 @@ ul, ol { list-style: none; }
   display: flex;
   flex-direction: row;
   pointer-events: none;
+  overflow: hidden;
   transform: translateX(calc(-100% + 78px)); /* 收起: 仅露头像 */
   transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -1132,59 +1133,46 @@ ul, ol { list-style: none; }
   color: var(--accent-light);
 }
 
-/* — Layer 2: 二级标签窄面板 — */
-.kb-secondary-panel {
+/* — Layer 2: 二级标签栏（浮动在一级标签左侧） — */
+.kb-l2-tab-bar {
   position: fixed;
-  right: 0; top: 0; bottom: 0;
-  width: 200px;
-  z-index: 21;
-  background: var(--bg-card);
-  border-left: 1px solid var(--border);
-  box-shadow: -2px 0 16px rgba(0,0,0,0.3);
-  display: flex;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: none;
   flex-direction: column;
-  overflow-y: auto;
-  transform: translateX(100%);
-  transition: transform 0.25s ease;
-}
-.kb-secondary-panel.open {
-  transform: translateX(0);
+  gap: 5px;
+  align-items: flex-end;
+  pointer-events: none;
 }
 
-.kb-secondary-panel-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0.75rem 0.75rem 0.5rem;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.kb-secondary-panel-title {
-  font-size: 0.78rem; font-weight: 600; color: var(--text);
-}
-.kb-secondary-panel-close {
-  width: 24px; height: 24px; border-radius: 50%;
-  border: 1px solid var(--border); background: transparent;
-  color: var(--text-muted); font-size: 0.9rem; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
-}
-.kb-secondary-panel-close:hover { border-color: var(--error); color: var(--error); }
-
-.kb-secondary-tabs {
-  flex: 1; overflow-y: auto; padding: 0.5rem 0.75rem;
-}
-
-.kb-secondary-tab {
-  padding: 0.4rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
+.kb-l2-tab-badge {
+  padding: 5px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  font-size: 0.68rem;
   color: var(--text-dim);
   cursor: pointer;
-  transition: all 0.12s;
-  margin-bottom: 2px;
+  white-space: nowrap;
+  max-width: 88px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.15s;
   user-select: none;
+  pointer-events: all;
 }
-.kb-secondary-tab:hover { background: var(--bg-hover); color: var(--text); }
-.kb-secondary-tab.active { color: var(--cyan); background: rgba(var(--cyan-rgb), 0.08); }
+.kb-l2-tab-badge:hover {
+  background: rgba(var(--cyan-rgb), 0.12);
+  border-color: var(--cyan);
+  color: var(--text);
+}
+.kb-l2-tab-badge.active {
+  background: rgba(var(--cyan-rgb), 0.15);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
 
 /* — Layer 2: 内容 Drawer（70% 宽，右侧滑出） — */
 .kb-content-drawer {
@@ -1197,6 +1185,7 @@ ul, ol { list-style: none; }
   box-shadow: -4px 0 24px rgba(0,0,0,0.4);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   transform: translateX(100%);
   transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }

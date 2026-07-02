@@ -1657,46 +1657,41 @@ function onKBTabClick(tabIndex) {
 }
 
 function openKBSecondaryPanel(tabIndex) {
-  var panel = qs('#kb-secondary-panel');
-  if (!panel) return;
+  var bar = qs('#kb-l2-tab-bar');
+  if (!bar) return;
   var tab = _kbTabs[tabIndex];
   if (!tab || !tab.l2) return;
 
-  // 标题
-  var titleEl = qs('#kb-secondary-panel-title');
-  if (titleEl) titleEl.textContent = tab.label;
+  // 计算 L2 标签栏偏移量（排在 L1 标签左侧）
+  var l1Bar = qs('#kb-tab-bar');
+  var l1Badges = l1Bar ? l1Bar.querySelectorAll('.kb-tab-badge') : [];
+  var maxL1Width = 0;
+  l1Badges.forEach(function (b) { maxL1Width = Math.max(maxL1Width, b.offsetWidth); });
+  bar.style.right = (maxL1Width + 8) + 'px';
 
-  // 二级标签列表
-  var tabsEl = qs('#kb-secondary-tabs');
-  if (tabsEl) {
-    tabsEl.innerHTML = '';
-    tab.l2.forEach(function (l2Item, li) {
-      var el = document.createElement('div');
-      el.className = 'kb-secondary-tab';
-      if (state.kbActiveL2 === li) el.classList.add('active');
-      el.textContent = l2Item.label || l2Item.id;
-      el.addEventListener('click', function () {
-        state.kbActiveL2 = li;
-        // 更新二级标签高亮
-        qsa('#kb-secondary-tabs .kb-secondary-tab').forEach(function (t) { t.classList.remove('active'); });
-        el.classList.add('active');
-        openKBContentDrawer(tabIndex, li);
-      });
-      tabsEl.appendChild(el);
+  bar.innerHTML = '';
+  tab.l2.forEach(function (l2Item, li) {
+    var badge = document.createElement('div');
+    badge.className = 'kb-l2-tab-badge';
+    if (state.kbActiveL2 === li) badge.classList.add('active');
+    badge.textContent = l2Item.label || l2Item.id;
+    badge.addEventListener('click', function () {
+      state.kbActiveL2 = li;
+      // 更新高亮
+      qsa('#kb-l2-tab-bar .kb-l2-tab-badge').forEach(function (b) { b.classList.remove('active'); });
+      badge.classList.add('active');
+      openKBContentDrawer(tabIndex, li);
     });
-  }
+    bar.appendChild(badge);
+  });
 
-  panel.style.display = 'flex';
-  requestAnimationFrame(function () { panel.classList.add('open'); });
+  bar.style.display = 'flex';
 }
 
 function closeKBSecondaryPanel() {
-  var panel = qs('#kb-secondary-panel');
-  if (!panel) return;
-  panel.classList.remove('open');
-  setTimeout(function () {
-    if (!panel.classList.contains('open')) panel.style.display = 'none';
-  }, 250);
+  var bar = qs('#kb-l2-tab-bar');
+  if (!bar) return;
+  bar.style.display = 'none';
   state.kbActiveL2 = null;
 }
 
@@ -1751,6 +1746,7 @@ function closeKBContentDrawer() {
   setTimeout(function () {
     if (!drawer.classList.contains('open')) drawer.style.display = 'none';
   }, 300);
+  closeKBSecondaryPanel();  // 同时关闭 L2 标签栏
   state.kbActiveL1 = null;
   state.kbActiveL2 = null;
   renderKBTabBar();
