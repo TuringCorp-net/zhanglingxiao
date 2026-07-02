@@ -336,11 +336,11 @@
   margin-bottom: 0;
 }
 
-/* Drawer 模式: 输入栏固定底部 */
+/* Drawer 模式: 输入栏固定底部，左留白给头像 */
 #story-elf.elf-drawer .elf-chat-input-row {
   display: flex;
   flex-shrink: 0;
-  padding: 0.5rem 1rem 0.75rem;
+  padding: 0.5rem 1rem 0.75rem 86px;
   gap: 0.5rem;
   align-items: stretch;
   border: none;
