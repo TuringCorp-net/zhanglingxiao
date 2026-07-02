@@ -1267,8 +1267,33 @@ ul, ol { list-style: none; }
 }
 .kb-drawer-content .slot-editor { display: block; }
 .kb-drawer-content .slot-groups { padding: 0; }
-.kb-drawer-content .slot-item { margin: 0 0 0.6rem; }
+.kb-drawer-content .slot-item { margin: 0; }
 .kb-drawer-content .slot-framework { padding: 0; }
+
+/* Drawer 内 preview: 无边框无圆角，融入背景 */
+.kb-drawer-content .slot-preview {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  min-height: auto;
+  cursor: default;
+}
+.kb-drawer-content .slot-preview:hover { border: none; }
+
+/* Drawer 内 textarea: 无边框，微妙背景色区分 */
+.kb-drawer-content .slot-textarea {
+  border: none;
+  border-radius: 0;
+  padding: 0.5rem 0;
+  background: transparent;
+  min-height: 6rem;
+}
+.kb-drawer-content .slot-textarea:hover { border: none; }
+.kb-drawer-content .slot-textarea:focus {
+  border: none;
+  outline: none;
+  background: #0d0d15;
+}
 
 /* 卡片列表视图（Drawer 内） */
 .kb-card-list-view {
