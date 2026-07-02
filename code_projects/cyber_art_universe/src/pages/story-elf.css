@@ -354,11 +354,14 @@
 
 #story-elf.elf-drawer .elf-chat-input {
   font-size: 0.78rem;
-  min-height: 56px;
-  max-height: 120px;
+  height: 70px;
+  min-height: 70px;
+  max-height: 70px;
+  resize: none;
 }
 
 #story-elf.elf-drawer .elf-send-btn {
+  height: 70px;
   padding: 0.4rem 0.75rem;
   font-size: 0.75rem;
 }

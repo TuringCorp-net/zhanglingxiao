@@ -403,8 +403,10 @@
     });
   }
 
-  /** textarea 动态高度 + 按钮同步 */
+  /** textarea 动态高度 + 按钮同步（Drawer 模式下固定高度，不动态调整） */
   function _syncInputHeight(textarea) {
+    var elf = document.getElementById('story-elf');
+    if (elf && elf.classList.contains('elf-drawer')) return;
     textarea.style.height = 'auto';
     var newH = Math.min(textarea.scrollHeight, MAX_INPUT_HEIGHT);
     newH = Math.max(newH, MIN_INPUT_HEIGHT);
