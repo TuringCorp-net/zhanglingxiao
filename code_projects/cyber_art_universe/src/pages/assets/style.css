@@ -1073,6 +1073,7 @@ ul, ol { list-style: none; }
    ============================================================ */
 
 /* — Layer 0: 主编辑画布 — */
+/* 左右 padding 15vw → 内容区正好 70vw，与 Drawer 参照系一致 */
 .main-canvas {
   position: relative;
   z-index: 0;
@@ -1082,6 +1083,7 @@ ul, ol { list-style: none; }
   min-height: 300px;
   overflow: hidden;
   background: var(--bg);
+  padding: 16px 15vw;
 }
 
 /* — Layer 1: AI Chat 左侧 Drawer — */
@@ -1304,18 +1306,10 @@ ul, ol { list-style: none; }
   padding: 0.5rem 0;
 }
 
-/* 主编辑画布 — 上下各留 16px，内容区宽度 70%（左右各 15%） */
-.main-canvas {
-  padding: 16px 0;
-  align-items: center;
-}
-
-/* 主编辑画布内的编辑器 — 居中记事本风格 */
+/* 主编辑画布内的编辑器 — 填满父容器（宽度由 main-canvas padding 统一控制） */
 .main-canvas .writing-editor {
   display: block;
-  width: 70vw;
-  max-width: calc(100% - 2rem);
-  margin: 0 auto;
+  width: 100%;
   flex: 1;
   background: var(--text-input-bg);
   border: 1px solid var(--border);
@@ -1341,9 +1335,7 @@ ul, ol { list-style: none; }
 
 /* 自由编辑区 */
 .main-canvas .slot-free-zone {
-  width: 70vw;
-  max-width: calc(100% - 2rem);
-  margin: 0 auto;
+  width: 100%;
   padding: 0;
   flex: 1; display: flex; flex-direction: column;
 }
