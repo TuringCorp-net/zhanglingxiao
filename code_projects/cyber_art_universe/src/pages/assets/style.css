@@ -40,6 +40,16 @@
   --border: #1e1e30;
   --ui-knob: #666;
   --text-input-bg: #0d0d15;
+
+  /* 卡片交互统一 */
+  --card-bg: transparent;
+  --card-bg-hover: var(--bg-hover);
+  --card-bg-active: rgba(var(--accent-rgb), 0.1);
+  --card-border: var(--border);
+  --card-border-hover: var(--accent-light);
+  --card-border-active: var(--accent);
+  --card-shadow-hover: 0 4px 12px rgba(0,0,0,0.2);
+  --card-shadow-active: 0 0 12px rgba(var(--accent-rgb), 0.18);
   --elf-input-height: 70px;  /* 头像 / 输入框 / 发送按钮统一高度 */
 
   /* Markdown 渲染统一变量 */
@@ -612,20 +622,20 @@ ul, ol { list-style: none; }
 /* — 单张作品卡片 — */
 .ws-card {
   padding: 1rem; border-radius: 8px;
-  border: 1px solid var(--border);
-  background: transparent;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.15s;
   display: flex; flex-direction: column; gap: 0.35rem;
   min-height: 90px;
 }
 .ws-card:hover {
-  border-color: var(--accent-light); background: var(--bg-hover);
-  transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border-color: var(--card-border-hover); background: var(--card-bg-hover);
+  transform: translateY(-1px); box-shadow: var(--card-shadow-hover);
 }
 .ws-card.active {
-  background: rgba(var(--accent-rgb), 0.1); border-color: var(--accent);
-  box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.18);
+  background: var(--card-bg-active); border-color: var(--card-border-active);
+  box-shadow: var(--card-shadow-active);
 }
 
 .ws-card-title {
@@ -827,9 +837,9 @@ ul, ol { list-style: none; }
 
 /* — Card List — */
 .card-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.card-item { display: flex; flex-direction: column; gap: 0.25rem; width: 155px; min-height: 78px; padding: 0.5rem 0.6rem; font-size: 0.78rem; cursor: pointer; transition: background 0.1s, border-color 0.1s, box-shadow 0.15s; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); overflow: hidden; }
-.card-item:hover { background: var(--bg-hover); border-color: var(--accent-light); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-.card-item.active { background: rgba(var(--accent-rgb), 0.1); border-color: var(--accent); box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.15); }
+.card-item { display: flex; flex-direction: column; gap: 0.25rem; width: 155px; min-height: 78px; padding: 0.5rem 0.6rem; font-size: 0.78rem; cursor: pointer; transition: background 0.1s, border-color 0.1s, box-shadow 0.15s; border: 1px solid var(--card-border); border-radius: 8px; background: var(--card-bg); overflow: hidden; }
+.card-item:hover { background: var(--card-bg-hover); border-color: var(--card-border-hover); transform: translateY(-1px); box-shadow: var(--card-shadow-hover); }
+.card-item.active { background: var(--card-bg-active); border-color: var(--card-border-active); box-shadow: var(--card-shadow-active); }
 .card-item-name { font-weight: 600; color: var(--text); line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-item-meta { font-size: 0.65rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-status { font-size: 0.62rem; color: var(--cyan); flex-shrink: 0; }
