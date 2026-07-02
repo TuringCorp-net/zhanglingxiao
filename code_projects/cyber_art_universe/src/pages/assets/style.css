@@ -1106,18 +1106,20 @@ ul, ol { list-style: none; }
 }
 
 .kb-tab-badge {
-  padding: 6px 10px;
+  width: 76px;
+  padding: 7px 9px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-right: none;
   border-radius: 8px 0 0 8px;
   font-size: 0.7rem;
+  line-height: 1.35;
   color: var(--text-dim);
   cursor: pointer;
-  white-space: nowrap;
-  max-width: 96px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-align: center;
   transition: all 0.15s;
   user-select: none;
   pointer-events: all;
@@ -1147,18 +1149,20 @@ ul, ol { list-style: none; }
 }
 
 .kb-l2-tab-badge {
-  padding: 5px 8px;
+  width: 66px;
+  padding: 5px 6px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-right: none;
   border-radius: 6px 0 0 6px;
   font-size: 0.68rem;
+  line-height: 1.35;
   color: var(--text-dim);
   cursor: pointer;
-  white-space: nowrap;
-  max-width: 88px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-align: center;
   transition: all 0.15s;
   user-select: none;
   pointer-events: all;
