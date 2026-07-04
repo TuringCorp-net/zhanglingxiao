@@ -531,6 +531,9 @@ ul, ol { list-style: none; }
 .ws-btn:hover { border-color: var(--accent-light); color: var(--text); }
 .ws-btn.has-work { color: var(--text); border-color: var(--accent-light); }
 
+/* 卡片选择按钮（Pipeline 右侧） */
+#card-selector-btn { margin-left: auto; }
+
 /* — 作品集浮出层 — */
 .ws-overlay {
   position: fixed; inset: 0; z-index: 200;

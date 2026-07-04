@@ -16,6 +16,7 @@
     <div id="pipeline-guide" class="pipeline-guide" style="display:none">
       <div class="pipeline-steps" id="pipeline-steps"></div>
     </div>
+    <button id="card-selector-btn" class="ws-btn" style="display:none" onclick="openCardSelector()">选择卡片...</button>
   </div>
 
   <!-- 作品集浮出层 -->
@@ -46,6 +47,25 @@
             <button class="ws-card-menu-btn-cancel" onclick="cancelEditTitle()" data-i18n="action.cancel">取消</button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 卡片选择浮出层（M3-M6，复用 ws-modal 模式） -->
+  <div id="card-selector-overlay" class="ws-overlay" style="display:none" onclick="closeCardSelector(event)">
+    <div class="ws-modal" onclick="event.stopPropagation()">
+      <div class="ws-modal-header">
+        <h2 class="ws-modal-title" id="card-selector-title">卡片</h2>
+        <button class="ws-add-btn" id="card-selector-add-btn" onclick="showCardSelectorNewInput()" title="新增">+</button>
+      </div>
+      <div id="card-selector-new-row" class="ws-new-work-row" style="display:none">
+        <input id="card-selector-new-input" class="ws-new-work-input" placeholder="输入名称..." maxlength="80"
+          onkeydown="if(event.key==='Enter')confirmCardSelectorNew()">
+        <button class="ws-new-work-confirm" onclick="confirmCardSelectorNew()" data-i18n="action.confirm">确认</button>
+        <button class="ws-new-work-cancel" onclick="cancelCardSelectorNew()" data-i18n="action.cancel">取消</button>
+      </div>
+      <div id="card-selector-grid" class="ws-card-grid">
+        <div class="loading" style="padding:2rem;text-align:center;color:var(--text-muted)">加载中...</div>
       </div>
     </div>
   </div>

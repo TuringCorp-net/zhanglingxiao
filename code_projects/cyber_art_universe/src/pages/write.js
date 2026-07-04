@@ -32,19 +32,22 @@ var state = {
   aiDrawerOpen: true,       // AI Drawer 默认展开
   kbActiveL1: null,         // 当前选中的一级标签索引
   kbActiveL2: null,         // 当前选中的二级标签索引
+  currentCardName: '',      // 当前选中卡片名称（Pipeline 按钮显示用，不持久化）
 };
 
 function loadState() {
   try {
     var saved = JSON.parse(localStorage.getItem('sf_desk_v4') || '{}');
-    Object.assign(state, { chapterFilter: 'all', aiDrawerOpen: true, kbActiveL1: null, kbActiveL2: null }, saved);
+    // aiDrawerOpen / currentCardName 始终默认初始值，不从 localStorage 恢复
+    Object.assign(state, { chapterFilter: 'all', kbActiveL1: null, kbActiveL2: null }, saved);
+    state.aiDrawerOpen = true;
+    state.currentCardName = '';
   } catch (e) {}
 }
 function saveState() {
   try {
     localStorage.setItem('sf_desk_v4', JSON.stringify({
       chapterFilter: state.chapterFilter,
-      aiDrawerOpen: state.aiDrawerOpen,
     }));
   } catch (e) {}
 }
@@ -429,6 +432,8 @@ async function onWorkspaceChange(workId) {
   // 2. 切换到新作品
   state.currentWorkId = workId;
   state.currentModule = null;  // 阻止 switchModule 内部重复保存（capturePayload 返回 null）
+  state.currentCardName = '';
+  updateCardSelectorBtn();
   saveUserConfig();
   StoryElf.loadConversation(workId, 'write');
   qs('#main-canvas').style.display = 'flex';
@@ -544,6 +549,7 @@ async function switchModule(module) {
   state.currentSectionTitle = '';
   state.currentEntityId = null;
   state.currentFhId = null;
+  state.currentCardName = '';
 
   PIPELINE_STEPS.forEach(function (s) {
     var el = qs('.pipeline-step[data-module="' + s.module + '"]');
@@ -563,6 +569,7 @@ async function switchModule(module) {
     case 'writing': await loadM6(); break;
   }
   generateKBTabs();  // 生成知识库标签
+  updateCardSelectorBtn();  // 更新 Pipeline 右侧卡片选择按钮
   updateElfContext();
   _switchLock = null; // 切换完成后重置锁
 }
@@ -1227,6 +1234,7 @@ async function openEntityCard(entityId, name) {
   if (p) { _pendingPayload = p; flushPendingPayload(); }
 
   state.currentEntityId = entityId;
+  state.currentCardName = name;
   var data = await loadModule('m3_card_' + entityId);
   var template = (data && data.data && data.data.template) ? data.data.template : null;
   if (template) {
@@ -1240,6 +1248,7 @@ async function openEntityCard(entityId, name) {
   });
   updateElfContext();
   generateKBTabs();  // 刷新知识库标签（模板 section 标签现在可用）
+  updateCardSelectorBtn();
 }
 
 // ============================================================
@@ -1269,6 +1278,7 @@ async function openFhCard(entityId, name) {
   if (p) { _pendingPayload = p; flushPendingPayload(); }
 
   state.currentFhId = entityId;
+  state.currentCardName = name;
   var data = await loadModule('m4_card_' + entityId);
   var template = (data && data.data && data.data.template) ? data.data.template : null;
   if (template) {
@@ -1282,6 +1292,7 @@ async function openFhCard(entityId, name) {
   });
   updateElfContext();
   generateKBTabs();  // 刷新知识库标签（模板 section 标签现在可用）
+  updateCardSelectorBtn();
 }
 
 // ============================================================
@@ -1336,6 +1347,7 @@ async function loadChapterCardList() {
 async function openChapter(sectionId, title) {
   state.currentSectionId = sectionId;
   state.currentSectionTitle = title;
+  state.currentCardName = title;
 
   if (state.currentModule === 'chapters') {
     // M5: 意图卡 — V3 统一 API + 槽位编辑器
@@ -1366,6 +1378,7 @@ async function openChapter(sectionId, title) {
   }
   updateElfContext();
   generateKBTabs();  // 刷新知识库标签（M5 意图卡模板 section 现在可用）
+  updateCardSelectorBtn();
 }
 
 // 章节拖拽（在 Drawer 的卡片列表视图中激活）
@@ -1578,6 +1591,270 @@ function updateDrawerBounds() {
   }
 }
 
+// ============================================================
+// 卡片选择器（Pipeline 右侧弹出窗，方案3）
+// ============================================================
+
+/** 根据当前模块推导卡片类型 */
+function getCurrentCardType() {
+  switch (state.currentModule) {
+    case 'characters':    return 'm3_card';
+    case 'foreshadowing': return 'm4_card';
+    case 'chapters':      return 'm5_intent';
+    case 'writing':       return 'm6_chapter';
+    default:              return null;
+  }
+}
+
+/** 卡片选择器标题映射 */
+var _cardSelectorLabels = {
+  m3_card:    '人物卡片',
+  m4_card:    '伏笔卡片',
+  m5_intent:  '章节蓝图',
+  m6_chapter: '章节卡片',
+};
+
+/** 更新 Pipeline 右侧卡片选择按钮 */
+function updateCardSelectorBtn() {
+  var btn = qs('#card-selector-btn');
+  if (!btn) return;
+  var cardType = getCurrentCardType();
+  if (cardType && state.currentWorkId) {
+    btn.style.display = '';
+    if (state.currentCardName) {
+      btn.textContent = state.currentCardName;
+      btn.classList.add('has-work');
+    } else {
+      btn.textContent = t('label.select_card') || '选择卡片...';
+      btn.classList.remove('has-work');
+    }
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+/** 获取卡片列表中当前模块对应的卡片数据（从 _kbCardListData 读取） */
+function getCardListForCurrentModule() {
+  var cardType = getCurrentCardType();
+  if (!cardType) return [];
+  return _kbCardListData[cardType] || [];
+}
+
+/** 打开卡片选择器浮出层 */
+function openCardSelector() {
+  var overlay = qs('#card-selector-overlay');
+  if (!overlay) return;
+  overlay.style.display = 'flex';
+  renderCardSelectorGrid();
+}
+
+/** 关闭卡片选择器浮出层（e 可选：点击遮罩时有 event，程序化调用时无） */
+function closeCardSelector(e) {
+  if (e) {
+    if (e.target !== e.currentTarget) return; // 仅点击遮罩，忽略内部点击
+  }
+  var overlay = qs('#card-selector-overlay');
+  if (overlay) overlay.style.display = 'none';
+  cancelCardSelectorNew();
+}
+
+/** 渲染卡片选择器网格 */
+function renderCardSelectorGrid() {
+  var grid = qs('#card-selector-grid');
+  var titleEl = qs('#card-selector-title');
+  var cardType = getCurrentCardType();
+  if (!grid || !cardType) return;
+
+  if (titleEl) titleEl.textContent = _cardSelectorLabels[cardType] || '卡片';
+
+  var mods = _kbCardListData[cardType] || [];
+  if (mods.length === 0) {
+    grid.innerHTML = '<div class="ws-card-empty">暂无卡片，点击右上角 + 创建</div>';
+    return;
+  }
+
+  var currentId = null;
+  switch (cardType) {
+    case 'm3_card':    currentId = state.currentEntityId; break;
+    case 'm4_card':    currentId = state.currentFhId; break;
+    default:           currentId = state.currentSectionId; break;
+  }
+
+  var html = '';
+  mods.forEach(function (m) {
+    var eid, moduleId, metaText;
+    if (cardType === 'm5_intent' || cardType === 'm6_chapter') {
+      eid = m.id.replace(/^m[56]_(intent|chapter)_/, '');
+      moduleId = m.id;
+      metaText = (m.word_count || 0) + '字';
+    } else {
+      eid = m.id.replace(/^m[34]_card_/, '');
+      moduleId = m.id;
+      metaText = m.name || '';
+    }
+    var isActive = currentId === eid;
+    var displayName = m.name || m.title || eid;
+
+    html += '<div class="ws-card' + (isActive ? ' active' : '') + '" data-card-type="' + cardType + '" data-card-id="' + eid + '" data-card-name="' + escHtml(displayName) + '">'
+      + '<button class="ws-card-menu-btn" style="opacity:0" data-module-id="' + moduleId + '" data-card-name="' + escHtml(displayName) + '" data-card-type="' + cardType + '">&#8943;</button>'
+      + '<div class="ws-card-title">' + escHtml(displayName) + '</div>'
+      + '<div class="ws-card-meta"><span class="ws-card-status">' + escHtml(metaText) + '</span></div>'
+      + '</div>';
+  });
+  grid.innerHTML = html;
+
+  // 事件委托：点击卡片 → 选中
+  grid.querySelectorAll('.ws-card').forEach(function (card) {
+    card.addEventListener('click', function (e) {
+      if (e.target.classList.contains('ws-card-menu-btn')) return; // 不触发卡片选中
+      var ct = card.dataset.cardType;
+      var cid = card.dataset.cardId;
+      var cname = card.dataset.cardName;
+      if (ct && cid) selectCard(ct, cid, cname);
+    });
+  });
+
+  // 事件委托：三点按钮 → 右键菜单
+  grid.querySelectorAll('.ws-card-menu-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      showCardSelectorMenu(e, btn.dataset.moduleId, btn.dataset.cardName, btn.dataset.cardType);
+    });
+    // 悬停效果
+    var parentCard = btn.closest('.ws-card');
+    if (parentCard) {
+      parentCard.addEventListener('mouseenter', function () { btn.style.opacity = '1'; });
+      parentCard.addEventListener('mouseleave', function () { btn.style.opacity = '0'; });
+    }
+  });
+}
+
+/** 选择卡片 */
+function selectCard(cardType, id, name) {
+  switch (cardType) {
+    case 'm3_card': openEntityCard(id, name); break;
+    case 'm4_card': openFhCard(id, name); break;
+    case 'm5_intent':
+    case 'm6_chapter': openChapter(id, name); break;
+  }
+  state.currentCardName = name;
+  updateCardSelectorBtn();
+  closeCardSelector();
+}
+
+/** 显示卡片选择器新增输入行 */
+function showCardSelectorNewInput() {
+  var row = qs('#card-selector-new-row');
+  var inp = qs('#card-selector-new-input');
+  if (row) row.style.display = 'flex';
+  if (inp) { inp.value = ''; setTimeout(function () { inp.focus(); }, 50); }
+}
+
+/** 取消新增 */
+function cancelCardSelectorNew() {
+  var row = qs('#card-selector-new-row');
+  if (row) row.style.display = 'none';
+}
+
+/** 确认新增卡片 */
+function confirmCardSelectorNew() {
+  var inp = qs('#card-selector-new-input');
+  var cardType = getCurrentCardType();
+  if (!inp || !cardType) return;
+  var name = (inp.value || '').trim();
+  if (!name) return;
+
+  cancelCardSelectorNew();
+  hPost('/api/write/modules', { work_id: state.currentWorkId, type: cardType, name: name }).then(function (data) {
+    if (data && data.ok) {
+      cacheClear('list_' + state.currentWorkId + '_' + cardType);
+      loadModuleList(state.currentWorkId, cardType).then(function (listData) {
+        if (listData && listData.ok) {
+          _kbCardListData[cardType] = listData.data.modules || [];
+          renderCardSelectorGrid();
+          // 自动选中新创建的卡片
+          var mods = _kbCardListData[cardType] || [];
+          if (mods.length > 0) {
+            var newMod = mods[mods.length - 1];
+            var eid = newMod.id.replace(/^m[3456]_(card|intent|chapter)_/, '');
+            selectCard(cardType, eid, newMod.name || newMod.title || eid);
+          }
+          generateKBTabs();
+        }
+      });
+    }
+  });
+}
+
+/** 卡片选择器右键菜单 */
+function showCardSelectorMenu(e, moduleId, name, cardType) {
+  var old = document.getElementById('card-selector-menu');
+  if (old) old.remove();
+
+  var menu = document.createElement('div');
+  menu.id = 'card-selector-menu';
+  menu.className = 'ws-card-menu';
+  menu.style.position = 'fixed';
+  menu.style.top = e.clientY + 'px';
+  menu.style.left = Math.min(e.clientX, window.innerWidth - 180) + 'px';
+  menu.style.zIndex = '225';
+
+  var delBtn = document.createElement('button');
+  delBtn.className = 'ws-card-menu-item ws-card-menu-item-danger';
+  delBtn.textContent = t('kb.delete_card');
+  delBtn.addEventListener('click', function () {
+    menu.remove();
+    if (!confirm(t('kb.delete_confirm').replace('{title}', name))) return;
+    hDelete('/api/write/module/' + moduleId).then(function (data) {
+      if (data && data.ok) {
+        cacheClear(moduleId);
+        cacheClear('list_' + state.currentWorkId + '_' + cardType);
+        // 如果删除的是当前选中的卡片，重置状态
+        if (cardType === 'm3_card' && moduleId === ('m3_card_' + (state.currentEntityId || ''))) {
+          state.currentEntityId = null; state.currentCardName = '';
+        } else if (cardType === 'm4_card' && moduleId === ('m4_card_' + (state.currentFhId || ''))) {
+          state.currentFhId = null; state.currentCardName = '';
+        } else if ((cardType === 'm5_intent' || cardType === 'm6_chapter') && moduleId === ('m' + cardType.substring(1) + '_' + (state.currentSectionId || ''))) {
+          state.currentSectionId = null; state.currentCardName = '';
+        }
+        updateCardSelectorBtn();
+        loadModuleList(state.currentWorkId, cardType).then(function (listData) {
+          if (listData && listData.ok) {
+            _kbCardListData[cardType] = listData.data.modules || [];
+            renderCardSelectorGrid();
+            generateKBTabs();
+            // 如果删除了当前卡，检查是否需要显示无卡片提示
+            if (!state.currentCardName && cardType === getCurrentCardType()) {
+              var ctxMod = getCurrentCardType();
+              if (ctxMod) showNoCardsHint(getCardI18nKey(ctxMod));
+            }
+          }
+        });
+      }
+    });
+  });
+  menu.appendChild(delBtn);
+
+  document.body.appendChild(menu);
+  setTimeout(function () {
+    document.addEventListener('click', function closeMenu() {
+      var m = document.getElementById('card-selector-menu');
+      if (m) m.remove();
+      document.removeEventListener('click', closeMenu);
+    }, { once: true });
+  }, 0);
+}
+
+function getCardI18nKey(cardType) {
+  switch (cardType) {
+    case 'm3_card':    return 'kb.characters';
+    case 'm4_card':    return 'kb.foreshadowing';
+    case 'm5_intent':  return 'kb.chapter_intents';
+    case 'm6_chapter': return 'kb.chapter_cards';
+    default:           return null;
+  }
+}
+
 // — 无卡片提示（M3/M4/M5/M6 无卡片时锁住编辑区） —
 function showNoCardsHint(cardI18nKey) {
   var te = qs('#writing-editor');
@@ -1676,19 +1953,7 @@ function generateKBTabs() {
   var wid = state.currentWorkId;
   if (!mod || !wid) { renderKBTabBar(); return; }
 
-  // 一、卡片标签
-  var cardDefs = [];
-  switch (mod) {
-    case 'characters':    cardDefs.push({ type: 'm3_card', label: t('kb.characters') }); break;
-    case 'foreshadowing': cardDefs.push({ type: 'm4_card', label: t('kb.foreshadowing') }); break;
-    case 'chapters':      cardDefs.push({ type: 'm5_intent', label: t('kb.chapter_intents') }); break;
-    case 'writing':       cardDefs.push({ type: 'm6_chapter', label: t('kb.chapter_cards') }); break;
-  }
-  cardDefs.forEach(function (d) {
-    _kbTabs.push({ type: 'card_list', label: d.label, cardType: d.type, l2: null });
-  });
-
-  // 二、模板 section 标签（从缓存中读取）
+  // 模板 section 标签（从缓存中读取）
   var templateModuleId = null;
   switch (mod) {
     case 'worldbuilding': templateModuleId = 'm1_' + wid; break;

@@ -41,7 +41,7 @@ export function handleAgentManifest(_env: Env, _request: Request): Response {
         interactions: 'Like/comment/applaud — human & AI co-creating the attention economy',
       },
       write: {
-        unified_module: 'V4 Unified Module API — single GET/PUT interface for all M0-M8 modules. Agents write free_content Markdown, Story Elf handles structured decomposition.',
+        unified_module: 'V4 Unified Module API — single GET/PUT interface for all M0-M6 modules. Agents write free_content Markdown, Story Elf handles structured decomposition.',
         workspace: 'Work CRUD + publish/unpublish + preview + config + sections',
         elf_chat: 'Story Elf AI Chat — conversational writing assistant. Agent describes intent → Elf reads context → calls tools → returns results.',
         elf_conversation: 'Perpetual conversation — load dialogue history per work/page (no session management)',
@@ -750,7 +750,7 @@ This means external Agents do not need to learn per-module slot schemas — they
 - \`marketing/{section_id}_extract.json\` — Marketing extracts
 - \`.versions/{filename}/{uuid}.json\` — V4 version history snapshots (auto-created on each PUT)
 
-**D1 Core Tables**: \`works\`, \`modules\` (v3.0 — unified M0-M8 registry), \`sections\`, \`entities\`, \`file_versions\` (V4 — version metadata), \`events\`, \`reviews\`, \`subscriptions\`
+**D1 Core Tables**: \`works\`, \`modules\` (v3.0 — unified M0-M6 registry), \`sections\`, \`entities\`, \`file_versions\` (V4 — version metadata), \`events\`, \`reviews\`, \`subscriptions\`
 
 ---
 
@@ -830,7 +830,7 @@ tags:
   - name: Write - Workspace
     description: Workspace management (auth required)
   - name: Write - Module API
-    description: Unified M0-M8 module read/write/generate (auth required)
+    description: Unified M0-M6 module read/write/generate (auth required)
   - name: Write - Story Elf
     description: AI chat companion (auth required)
   - name: MCP
@@ -1119,7 +1119,7 @@ paths:
       summary: Delete section
       security: [{ BearerAuth: [] }]
 
-  # ===== Write - Module API (Unified M0-M8) =====
+  # ===== Write - Module API (Unified M0-M6) =====
   /api/write/modules:
     get:
       tags: [Write - Module API]

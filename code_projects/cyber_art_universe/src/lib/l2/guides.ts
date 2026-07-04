@@ -3,7 +3,7 @@
 // 指南不进 system prompt，由 LLM 按需通过工具调用获取（就近原则）。
 // 指南文本维护在 prompts/guides/*.md 文件中，便于独立编辑。
 
-import { renderTemplateAsJson, renderCardAsJson, type Lang } from '../l1/template';
+import { renderTemplateAsJson, type Lang } from '../l1/template';
 import { BIBLE_TEMPLATE, OUTLINE_TEMPLATE, CHARACTER_TEMPLATE, FORESHADOWING_TEMPLATE, INTENT_TEMPLATE, CHAPTER_TEMPLATE } from '../../api/write/module';
 
 // ============================================================
